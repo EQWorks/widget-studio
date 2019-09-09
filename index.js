@@ -4,6 +4,7 @@ import SplitPane from 'react-split-pane'
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import MUIDataTable from 'mui-datatables'
 import { cloneDeep } from 'lodash'
 
@@ -15,11 +16,19 @@ import Query from './query'
 
 
 const propTypes = {
-  views: PropTypes.array.isRequired,
-  viewsloading: PropTypes.bool.isRequired,
-  preview: PropTypes.bool.isRequired,
-  geoJoin: PropTypes.bool.isRequired,
-  onQuerySubmit: PropTypes.func.isRequired,
+  views: PropTypes.array,
+  viewsloading: PropTypes.bool,
+  preview: PropTypes.bool,
+  geoJoin: PropTypes.bool,
+  onQuerySubmit: PropTypes.func,
+}
+
+const defaultProps = {
+  views: null,
+  viewsloading: undefined,
+  preview: false,
+  geoJoin: false,
+  onQuerySubmit: null,
 }
 
 function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoin }) {
@@ -93,6 +102,9 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
     })
   }
 
+  const getMuiTheme = () =>
+    createMuiTheme({ overrides: { MUIDataTableSelectCell: { headerCell: { zIndex: 0 } } } })
+
   return (
     <SplitPane
       split='vertical'
@@ -100,7 +112,7 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
       defaultSize={200}
       style={{ height: 'inherit', position: 'inherit' }}
     >
-      <Views views={views} />
+      {views && (<Views views={views} />)}
       <SplitPane split='vertical' defaultSize='40%' minSize={500} maxSize={-200}>
         <Query
           mlModel={mlModel}
@@ -109,7 +121,7 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
           dataLoading={dataLoading}
           geoJoin={geoJoin}
         />
-        <div>
+        <MuiThemeProvider theme={getMuiTheme()}>
           <MUIDataTable
             title='Result'
             data={displayData}
@@ -120,11 +132,12 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
               elevation: 1,
             }}
           />
-        </div>
+        </MuiThemeProvider>
       </SplitPane>
     </SplitPane>
   )
 }
 
 ML.propTypes = propTypes
+ML.defaultProps = defaultProps
 export default withDragDropContext(ML)
