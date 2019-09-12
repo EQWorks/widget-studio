@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import MUIDataTable from 'mui-datatables'
-import { cloneDeep } from 'lodash'
+import produce from 'immer'
 
 import getAxios from '../../helpers/axios/api'
 import { withDragDropContext } from './dnd'
@@ -38,7 +38,7 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
     loading = viewsloading
   }
 
-  const mlModel = useMLModel(geoJoin)
+  const mlModel = useMLModel(views, geoJoin)
   // eslint-disable-next-line
   const [data, setData] = useState()
   const [dataLoading, setDataLoading] = useState(false)
@@ -91,16 +91,18 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
 
   const tableColumns = data && data[0] ? Object.keys(data[0]) : []
   // normalize data
-  const displayData = cloneDeep(data)
-  if (displayData) {
-    displayData.forEach((row) => {
-      Object.keys(row).forEach((key) => {
-        if (typeof row[key] === 'object') {
-          row[key] = JSON.stringify(row[key])
-        }
+  const displayData = produce(data, (draftData) => {
+    if (draftData) {
+      draftData.forEach((row) => {
+        Object.keys(row).forEach((key) => {
+          if (typeof row[key] === 'object') {
+            row[key] = JSON.stringify(row[key])
+          }
+        })
       })
-    })
-  }
+    }
+  })
+
 
   const getMuiTheme = () =>
     createMuiTheme({ overrides: { MUIDataTableSelectCell: { headerCell: { zIndex: 0 } } } })
@@ -112,8 +114,8 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
       defaultSize={200}
       style={{ height: 'inherit', position: 'inherit' }}
     >
-      {views && (<Views views={views} />)}
-      <SplitPane split='vertical' defaultSize='40%' minSize={500} maxSize={-200}>
+      <Views views={views} />
+      <SplitPane split='vertical' defaultSize='50%' minSize={500} maxSize={-200}>
         <Query
           mlModel={mlModel}
           runQuery={runQuery}
@@ -127,9 +129,8 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
             data={displayData}
             columns={tableColumns}
             options={{
-              responsive: 'scroll',
-              rowsPerPage: 9,
-              elevation: 1,
+              responsive: 'scrollFullHeight',
+              elevation: 0,
             }}
           />
         </MuiThemeProvider>
