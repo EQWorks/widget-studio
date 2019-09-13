@@ -16,22 +16,22 @@ import Query from './query'
 
 
 const propTypes = {
-  views: PropTypes.array,
+  views: PropTypes.object,
   viewsloading: PropTypes.bool,
-  preview: PropTypes.bool,
   geoJoin: PropTypes.bool,
+  noTitle: PropTypes.bool,
   onQuerySubmit: PropTypes.func,
 }
 
 const defaultProps = {
   views: null,
   viewsloading: undefined,
-  preview: false,
   geoJoin: false,
+  noTitle: false,
   onQuerySubmit: null,
 }
 
-function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoin }) {
+function ML({ onQuerySubmit, views: existingViews, viewsloading, geoJoin, noTitle }) {
   let [views, loading] = useMLViews(viewsloading)
   if (viewsloading !== undefined) {
     views = existingViews
@@ -44,8 +44,10 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
   const [dataLoading, setDataLoading] = useState(false)
 
   useEffect(() => {
-    window.document.title = 'Locus ML'
-  }, [])
+    if (!noTitle) {
+      window.document.title = 'Locus ML'
+    }
+  }, [noTitle])
 
   // eslint-disable-next-line
   const runQuery = (model, isPreview) => {
@@ -119,7 +121,6 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, preview, geoJoi
         <Query
           mlModel={mlModel}
           runQuery={runQuery}
-          preview={preview}
           dataLoading={dataLoading}
           geoJoin={geoJoin}
         />
