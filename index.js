@@ -9,7 +9,7 @@ import MUIDataTable from 'mui-datatables'
 import produce from 'immer'
 
 import getAxios from '../../helpers/axios/api'
-import { withDragDropContext } from './dnd'
+import { withDragDropContext } from '../../common-components/drag-n-drop/dnd'
 import { useMLViews, useMLModel } from './hooks'
 import Views from './views'
 import Query from './query'
