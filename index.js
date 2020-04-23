@@ -106,8 +106,7 @@ function ML({ onQuerySubmit, views: existingViews, viewsloading, geoJoin, noTitl
   })
 
 
-  const getMuiTheme = () =>
-    createMuiTheme({ overrides: { MUIDataTableSelectCell: { headerCell: { zIndex: 0 } } } })
+  const getMuiTheme = () => createMuiTheme({ overrides: { MUIDataTableSelectCell: { headerCell: { zIndex: 0 } } } })
 
   return (
     <SplitPane
