@@ -18,8 +18,7 @@
   "scripts": {
     "lint": "eslint src/",
     "build": "babel src --out-dir dist --copy-files",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "env $(print-env) start-storybook -p 6006"
   },
   "peerDependencies": {
     "@material-ui/core": "^4.11.0",
