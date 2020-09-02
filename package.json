@@ -1,6 +1,6 @@
 {
   "name": "ml-ui",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0-alpha.1",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -10,7 +10,6 @@
   ],
   "author": "dev@eqworks.com",
   "license": "UNLICENSED",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/EQWorks/ml-ui.git"
