@@ -1,6 +1,6 @@
 {
   "name": "ml-ui",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
