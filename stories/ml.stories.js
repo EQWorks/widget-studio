@@ -1,4 +1,8 @@
-import React from 'react'
+import React, { useState, forwardRef } from 'react'
+
+import Dialog from '@material-ui/core/Dialog'
+import CloseIcon from '@material-ui/icons/Close'
+import Slide from '@material-ui/core/Slide'
 
 import { action } from '@storybook/addon-actions'
 import axios from 'axios'
@@ -29,3 +33,17 @@ export default {
 export const normal = () => (
   <ML actions={actions} />
 )
+
+export const InDialog = () => {
+  /* eslint-disable-next-line */
+  const Transition = forwardRef((props, ref) => <Slide direction='up' ref={ref} {...props} />)
+  const [open, setOpen] = useState(false)
+  if (open) return (
+    <Dialog fullScreen open={open} TransitionComponent={Transition}>
+      <ML actions={actions} navIcon={<CloseIcon />} navIconOnClick={() => setOpen(false)} />
+    </Dialog>
+  )
+  return (
+    <button onClick={() => setOpen(true)}>Open Locus ML</button>
+  )
+}
