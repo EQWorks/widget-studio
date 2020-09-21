@@ -8,5 +8,6 @@ ignores: [
     "@babel/*",
     "@storybook/*",
     "size-limit",
-    "@size-limit/*"
+    "@size-limit/*",
+    "moment",
 ]
