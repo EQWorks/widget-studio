@@ -34,7 +34,7 @@ export const normal = () => (
   <ML actions={actions} />
 )
 export const normalWithDefaultView = () => (
-  <ML actions={actions} defaultView={{type: 'layer', id: {num: 1124, ref: 'layer_id'}}} />
+  <ML actions={actions} defaultView={{type: 'reports', id: {ref_value: 834, ref_key: 'report_id', name: 'reportwi'}}} />
 )
 
 export const InDialog = () => {
