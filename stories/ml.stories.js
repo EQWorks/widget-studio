@@ -33,6 +33,9 @@ export default {
 export const normal = () => (
   <ML actions={actions} />
 )
+export const normalWithDefaultView = () => (
+  <ML actions={actions} defaultView={{type: 'layer', id: {num: 1124, ref: 'layer_id'}}} />
+)
 
 export const InDialog = () => {
   /* eslint-disable-next-line */
