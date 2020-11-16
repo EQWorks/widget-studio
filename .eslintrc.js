@@ -16,9 +16,16 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
   ],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
   'parser': '@babel/eslint-parser',
   'parserOptions': {
-    ecmaVersion: 6,
+    'ecmaFeatures': {
+      jsx: true,
+    },
+    'ecmaVersion': 6,
     'sourceType': 'module',
   },
   'plugins': [
@@ -56,5 +63,7 @@ module.exports = {
     'no-trailing-spaces': [
       'error',
     ],
+    'object-curly-spacing': ['error', 'always'],
+    'array-bracket-spacing': ['error', 'never'],
   },
 }
