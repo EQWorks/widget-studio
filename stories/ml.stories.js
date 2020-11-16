@@ -34,7 +34,34 @@ export const normal = () => (
   <ML actions={actions} />
 )
 export const normalWithDefaultView = () => (
-  <ML actions={actions} defaultView={{type: 'reports', id: {ref_value: 834, ref_key: 'report_id', name: 'reportwi'}}} />
+  <ML
+    actions={actions}
+    defaultView={{
+      type: 'layer',
+      id: 'layer_1124_1'
+    }}
+    /** defaultView={{
+      type: 'logs',
+      id: 'logs_bcn_9234'
+    }}
+    defaultView={{
+      type: 'weather',
+      id: 'weather_hourly_point'
+    }}
+    defaultView={{
+      type: 'geo',
+      id: 'geo_ggid',
+    }}
+    defaultView={{
+      type: 'ext',
+      id: 'ext_42',
+    }}
+    defaultView={{
+      type: 'reports',
+      id: 'reportwi_1_4',
+      subtype: 'reportwi'
+    }}*/
+  />
 )
 
 export const InDialog = () => {
