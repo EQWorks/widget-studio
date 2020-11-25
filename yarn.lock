@@ -1201,6 +1201,16 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
+"@eqworks/lumen-table@^1.1.0":
+  version "1.1.0"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-table/1.1.0/d71c5511a477d31c35fc5519c192623d8472a786253d9cc94626131f307d7859#a193f2a8c6c0b9edaf0b24f05e7d3b6e2a90bcfe"
+  integrity sha512-NuCw/ESlbr+NGJ4m8jQ9oueeQgpzMdU4Ayi/uS2rW8FpRn26eR93zmgTMVO/oFsoK23K5ucEP+fEDfXzXO0hvA==
+  dependencies:
+    moment "^2.29.1"
+    prop-types "^15.7.2"
+    react-table "^7.6.0"
+    use-cached "^2.0.0"
+
 "@eqworks/react-labs@^1.10.1":
   version "1.10.1"
   resolved "https://npm.pkg.github.com/download/@eqworks/react-labs/1.10.1/912296a636112076a4fbc0c1b5b58ec803fc53ba983d02ef61eaf14861bc171e#e6268416761b457efc4ad0383ab93401d662ee35"
@@ -7678,6 +7688,11 @@ moment@^2.28.0:
   resolved "https://registry.npmjs.org/moment/-/moment-2.28.0.tgz#cdfe73ce01327cee6537b0fafac2e0f21a237d75"
   integrity sha512-Z5KOjYmnHyd/ukynmFd/WwyXHd7L4J9vTI/nn5Ap9AVUgaAE15VvQ9MOGmJJygEUklupqIrFnor/tjTwRU+tQw==
 
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -9187,6 +9202,11 @@ react-table@^7.5.1:
   version "7.6.0"
   resolved "https://registry.npmjs.org/react-table/-/react-table-7.6.0.tgz#83d765b96505b5332d108a2e0c27ab653f5a78c3"
   integrity sha512-16kRTypBWz9ZwLnPWA8hc3eIC64POzO9GaMBiKaCcVM+0QOQzt0G7ebzGUM8SW0CYUpVM+glv1kMXrWj9tr3Sw==
+
+react-table@^7.6.0:
+  version "7.6.2"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.6.2.tgz#b60932fa6d457c2bca0da49815cd6a8fe9451f77"
+  integrity sha512-urwNZTieb+xg/+BITUIrqdH5jZfJlw7rKVAAq25iXpBPwbQojLCEKJuGycLbVwn8fzU+Ovly3y8HHNaLNrPCvQ==
 
 react-textarea-autosize@^8.1.1:
   version "8.2.0"
