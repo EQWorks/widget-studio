@@ -11,10 +11,10 @@ import ML, { FO } from '../src'
 
 const api = axios.create({
   baseURL: [
-    process.env.API_HOST || 'http://localhost:3000',
-    process.env.API_STAGE,
+    process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
+    process.env.STORYBOOK_API_STAGE,
   ].filter(v => v).join('/'),
-  headers: { 'eq-api-jwt': process.env.JWT },
+  headers: { 'eq-api-jwt': process.env.STORYBOOK_JWT },
 })
 const actions = Object.entries(FO(api)).reduce((acc, [name, fn]) => {
   // inject storybook action call to all actions
