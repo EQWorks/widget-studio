@@ -1,13 +1,13 @@
-import React, { useState, forwardRef } from 'react'
-
-import Dialog from '@material-ui/core/Dialog'
-import CloseIcon from '@material-ui/icons/Close'
-import Slide from '@material-ui/core/Slide'
-
-import { action } from '@storybook/addon-actions'
+import React from 'react'
 import axios from 'axios'
 
-import ML, { FO } from '../src'
+import { action } from '@storybook/addon-actions'
+
+import { LoginContextProvider } from '@eqworks/common-login'
+
+// import ML, { FO } from '../src'
+import { FO } from '../src'
+import AuthML from '../src/auth-ml'
 
 const api = axios.create({
   baseURL: [
@@ -27,53 +27,43 @@ const actions = Object.entries(FO(api)).reduce((acc, [name, fn]) => {
 
 export default {
   title: 'LOCUS ML',
-  component: ML,
+  component: AuthML,
 }
 
 export const normal = () => (
-  <ML actions={actions} />
+  <LoginContextProvider>
+    <AuthML actions={actions} />
+  </LoginContextProvider>
 )
 export const normalWithDefaultView = () => (
-  <ML
-    actions={actions}
-    defaultView={{
-      type: 'layer',
-      id: 'layer_1124_1'
-    }}
-    /** defaultView={{
-      type: 'logs',
-      id: 'logs_bcn_9234'
-    }}
-    defaultView={{
-      type: 'weather',
-      id: 'weather_hourly_point'
-    }}
-    defaultView={{
-      type: 'geo',
-      id: 'geo_ggid',
-    }}
-    defaultView={{
-      type: 'ext',
-      id: 'ext_42',
-    }}
-    defaultView={{
-      type: 'reports',
-      id: 'reportwi_1_4',
-      subtype: 'reportwi'
-    }}*/
-  />
+  <LoginContextProvider>
+    <AuthML
+      actions={actions}
+      defaultView={{
+        type: 'layer',
+        id: 'layer_1124_1'
+      }}
+      /** defaultView={{
+        type: 'logs',
+        id: 'logs_bcn_9234'
+      }}
+      defaultView={{
+        type: 'weather',
+        id: 'weather_hourly_point'
+      }}
+      defaultView={{
+        type: 'geo',
+        id: 'geo_ggid',
+      }}
+      defaultView={{
+        type: 'ext',
+        id: 'ext_42',
+      }}
+      defaultView={{
+        type: 'reports',
+        id: 'reportwi_1_4',
+        subtype: 'reportwi'
+      }}*/
+    />
+  </LoginContextProvider>
 )
-
-export const InDialog = () => {
-  /* eslint-disable-next-line */
-  const Transition = forwardRef((props, ref) => <Slide direction='up' ref={ref} {...props} />)
-  const [open, setOpen] = useState(false)
-  if (open) return (
-    <Dialog fullScreen open={open} TransitionComponent={Transition}>
-      <ML actions={actions} navIcon={<CloseIcon />} navIconOnClick={() => setOpen(false)} />
-    </Dialog>
-  )
-  return (
-    <button onClick={() => setOpen(true)}>Open Locus ML</button>
-  )
-}
