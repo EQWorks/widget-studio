@@ -1201,10 +1201,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/common-login@^0.7.9-alpha.2":
-  version "0.7.9-alpha.2"
-  resolved "https://npm.pkg.github.com/download/@eqworks/common-login/0.7.9-alpha.2/109e01335a22575211d5e5118595963ffc3d4f7b05625689e46d1093254cd0da#13c5745340f8be679eee97dbd974ddacc9fe7800"
-  integrity sha512-rCmgWcuIv1HEBqUHleS1Q/bviSDVo6siawWgAnChDiIxzBiwn4cQx4dFrt4NMN8geNebowXRmCeHXu+WSo9+Dw==
+"@eqworks/common-login@^0.7.9-alpha.3":
+  version "0.7.9-alpha.3"
+  resolved "https://npm.pkg.github.com/download/@eqworks/common-login/0.7.9-alpha.3/a406e57cafedc5c0608c37c372e20364ac099ce50e37edf1ba7c15c16344a0e2#c5dc73bbf2ba63f46f7d7d6551f61793c278af24"
+  integrity sha512-1BnhUise/MDeTO+hFC7ilzyi1MMZy66jSFzaNHP8jr/LxRIT45g+OmVSiL3jAYPlG+3b4sT4b6YGMJpwyFUjpg==
   dependencies:
     cross-domain-storage "^2.0.5"
     moment-timezone "^0.5.31"

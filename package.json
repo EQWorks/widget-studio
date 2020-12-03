@@ -37,7 +37,7 @@
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@eqworks/common-login": "^0.7.9-alpha.2",
+    "@eqworks/common-login": "^0.7.9-alpha.3",
     "history": "^5.0.0",
     "@babel/cli": "^7.11.5",
     "@babel/core": "^7.11.5",
