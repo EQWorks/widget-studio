@@ -1,7 +1,7 @@
 import React from 'react'
 import { LoginContextProvider } from '@eqworks/common-login'
 
-import AuthML from '../src/auth-ml'
+import AuthML from '../src'
 
 
 export default {
