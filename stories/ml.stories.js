@@ -14,6 +14,12 @@ export const normal = () => (
     <AuthML />
   </LoginContextProvider>
 )
+export const normalWithLOCUSCrossLogin = () => (
+  /* NOTE: currently cross-login supports ml-ui dev-stage deploys only */
+  <LoginContextProvider>
+    <AuthML crossLoginLOCUS />
+  </LoginContextProvider>
+)
 export const normalWithDefaultView = () => (
   <LoginContextProvider>
     <AuthML
