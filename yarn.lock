@@ -1210,12 +1210,11 @@
     moment-timezone "^0.5.31"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-table@^1.1.0":
-  version "1.1.0"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-table/1.1.0/d71c5511a477d31c35fc5519c192623d8472a786253d9cc94626131f307d7859#a193f2a8c6c0b9edaf0b24f05e7d3b6e2a90bcfe"
-  integrity sha512-NuCw/ESlbr+NGJ4m8jQ9oueeQgpzMdU4Ayi/uS2rW8FpRn26eR93zmgTMVO/oFsoK23K5ucEP+fEDfXzXO0hvA==
+"@eqworks/lumen-table@1.2.0":
+  version "1.2.0"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-table/1.2.0/222936cbcd2a853300bdfc739e1b64b1d4164987c4b790ec18567cc5cc8141f1#6ce6f9c809a6352d63ca33ff646dd56b9d17b393"
+  integrity sha512-+Ow37h/ZgQCe1PwCSf7XtuuXkpEpRBssTuDLwHiKeu9P2KZXrVqsbIg40wrYEAW59DpgLEfrI9+RNvr2y533SA==
   dependencies:
-    moment "^2.29.1"
     prop-types "^15.7.2"
     react-table "^7.6.0"
     use-cached "^2.0.0"
@@ -7770,7 +7769,7 @@ moment-timezone@^0.5.31:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.29.1:
+"moment@>= 2.9.0":
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
