@@ -51,7 +51,8 @@ module.exports = {
       'never',
     ],
     'no-console': [
-      'warn'
+      'warn',
+      { allow: ['error'] }
     ],
     'comma-dangle': [
       'error',
