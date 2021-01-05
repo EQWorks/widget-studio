@@ -1240,15 +1240,16 @@
     react-table "^7.6.0"
     use-cached "^2.0.0"
 
-"@eqworks/react-labs@^1.10.1":
-  version "1.10.1"
-  resolved "https://npm.pkg.github.com/download/@eqworks/react-labs/1.10.1/912296a636112076a4fbc0c1b5b58ec803fc53ba983d02ef61eaf14861bc171e#e6268416761b457efc4ad0383ab93401d662ee35"
-  integrity sha512-L6McyshHsMh9Q9+cTbd/k4knjXLtPGknA/ZnCiBGZVkbsS6p2syEKwWVnaFlVVXpKLJdLo/nEEcZHT9H5ANt3A==
+"@eqworks/react-labs@^1.12.1-alpha.1":
+  version "1.12.1-alpha.1"
+  resolved "https://npm.pkg.github.com/download/@eqworks/react-labs/1.12.1-alpha.1/9e438898d1c16f8e45be5be54af60c123ef49e3c2f45480ccb7eec97154d3930#aa70945a2d4de16d5c04495005c36d903e40f070"
+  integrity sha512-pNyy2GqeajpUaUa1USCi1YNmWA0rdlVm358QKFmmF5QO7+gZnsiyyjjNnlf8+gh2aEnwCpnfrMzRRL9vMwYTmA==
   dependencies:
+    axios "^0.20.0"
     clsx "^1.1.1"
     prop-types "^15.7.2"
     react-slick "^0.26.1"
-    react-table "^7.5.1"
+    react-table "^7.6.0"
     slick-carousel "^1.8.1"
     use-cached "^2.0.0"
 
@@ -9359,11 +9360,6 @@ react-syntax-highlighter@^12.2.1:
     lowlight "1.12.1"
     prismjs "^1.8.4"
     refractor "^2.4.1"
-
-react-table@^7.5.1:
-  version "7.6.0"
-  resolved "https://registry.npmjs.org/react-table/-/react-table-7.6.0.tgz#83d765b96505b5332d108a2e0c27ab653f5a78c3"
-  integrity sha512-16kRTypBWz9ZwLnPWA8hc3eIC64POzO9GaMBiKaCcVM+0QOQzt0G7ebzGUM8SW0CYUpVM+glv1kMXrWj9tr3Sw==
 
 react-table@^7.6.0:
   version "7.6.2"
