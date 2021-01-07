@@ -1240,10 +1240,10 @@
     react-table "^7.6.0"
     use-cached "^2.0.0"
 
-"@eqworks/react-labs@^1.12.1-alpha.2":
-  version "1.12.1-alpha.2"
-  resolved "https://npm.pkg.github.com/download/@eqworks/react-labs/1.12.1-alpha.2/a37dc7099b9cd5d923fbeb65d173bcbc99929d6a79742a6875709d8cef36da4c#fe92f97e07d77fc6a644688bdf42fbbb4fc8c75e"
-  integrity sha512-rRKY+iUPZioImJ9NUwpcyoJClDAECMWAx3BhPn2UHmwQZahPvbsHu2ZZqPM6SAxvueFkE4+18ZdG8dfmuLtevQ==
+"@eqworks/react-labs@^1.12.1-alpha.4":
+  version "1.12.1-alpha.4"
+  resolved "https://npm.pkg.github.com/download/@eqworks/react-labs/1.12.1-alpha.4/24888e163b09d9ed5921ee371debc654e8290f911b1c4924a77fbdad7c507922#efc1e7f1c5b8d9b3661601762a1cf1e4cde5ee7e"
+  integrity sha512-iP1whVfZCHt8laGsPpiCF94Yvgj+QaWv45TG9xnkqjR3tWYmEBZfkbbjqFqDYdHvYiZc2mcBa1dHx7p2Bkqbaw==
   dependencies:
     axios "^0.20.0"
     clsx "^1.1.1"
