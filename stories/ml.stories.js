@@ -20,6 +20,14 @@ export const normalWithLOCUSCrossLogin = () => (
     <AuthML crossLoginLOCUS />
   </LoginContextProvider>
 )
+export const normalWithWLCu = () => (
+  <LoginContextProvider>
+    <AuthML
+      wl={4}
+      // cu={9533}
+    />
+  </LoginContextProvider>
+)
 export const normalWithDefaultView = () => (
   <LoginContextProvider>
     <AuthML
