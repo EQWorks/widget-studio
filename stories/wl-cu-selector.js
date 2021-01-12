@@ -37,6 +37,7 @@ const useWhiteLabels = () => {
   const { isError, error, isLoading, data = [] } = useQuery(
     _key,
     () => api.get('/whitelabel').then(({ data = [] }) => data),
+    { refetchOnWindowFocus: false }
   )
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const useCustomers = (wlID) => {
   const { isError, error, isLoading, data = [] } = useQuery(
     [_key, wlID],
     () => api.get('/customer', { params: { wlID } }).then(({ data = [] }) => data),
-    { enabled: wlID },
+    { enabled: wlID, refetchOnWindowFocus: false },
   )
 
   useEffect(() => {
@@ -70,12 +71,11 @@ const WlCuSelector = ({ wlState, cuState }) => {
   const [cu, setCu] = cuState
 
   const [, wlList] = useWhiteLabels()
-  const [, cuList = []] = useCustomers(parseInt(wl))
-
+  const [, cuList = []] = useCustomers(wl)
   const onChange = (ref) => ({ target: value }) => {
-    const v = parseInt(value.value)
+    const v = parseInt(value.value) || null
     ref === 'wl'
-      ?(setWl(v), setCu(0))
+      ?(setWl(v), setCu(null))
       : setCu(v)
   }
 
@@ -85,37 +85,41 @@ const WlCuSelector = ({ wlState, cuState }) => {
       <FormControl className={classes.form}>
         <InputLabel id='Whitelabel'>Whitelabel</InputLabel>
         <Select
-          value={`${wlList.length ? wl : 0}`}
+          value={`${wlList.length  &&  wl ? wl : 0}`}
           onChange={onChange('wl')}
           MenuProps={{ elevation: 1 }}
         >
           <MenuItem value={'0'}>All</MenuItem>
-          {wlList.map(({ whitelabelid, company }) => (
-            <MenuItem
-              key={whitelabelid}
-              value={`${whitelabelid}`}
-            >
-              {`${whitelabelid} - ${company}`}
-            </MenuItem>
-          ))}
+          {wlList
+            .sort((a,b) => a.whitelabelid - b.whitelabelid)
+            .map(({ whitelabelid, company }) => (
+              <MenuItem
+                key={whitelabelid}
+                value={`${whitelabelid}`}
+              >
+                {`${whitelabelid} - ${company}`}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       <FormControl className={classes.form}>
         <InputLabel id='Customer'>Customer</InputLabel>
         <Select
-          value={`${cuList.length ? cu : 0}`}
+          value={`${cuList.length && cu ? cu : 0}`}
           onChange={onChange('cu')}
           MenuProps={{ elevation: 1 }}
         >
           <MenuItem value={'0'}>All</MenuItem>
-          {cuList.map(({ agencyid, companyname }) => (
-            <MenuItem
-              key={agencyid}
-              value={`${agencyid}`}
-            >
-              {`${agencyid} - ${companyname}`}
-            </MenuItem>
-          ))}
+          {cuList
+            .sort((a,b) => a.agencyid - b.agencyid)
+            .map(({ agencyid, companyname }) => (
+              <MenuItem
+                key={agencyid}
+                value={`${agencyid}`}
+              >
+                {`${agencyid} - ${companyname}`}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </div>

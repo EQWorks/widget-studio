@@ -22,8 +22,8 @@ export const normalWithLOCUSCrossLogin = () => (
   </LoginContextProvider>
 )
 export const NormalWithWLCu = () => {
-  const wlState = useState(0)
-  const cuState = useState(0)
+  const wlState = useState(4)
+  const cuState = useState(null)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
