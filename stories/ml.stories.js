@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { LoginContextProvider } from '@eqworks/common-login'
 
+import WlCuSelector from './wl-cu-selector'
 import AuthML from '../src'
 
 
@@ -20,14 +21,23 @@ export const normalWithLOCUSCrossLogin = () => (
     <AuthML crossLoginLOCUS />
   </LoginContextProvider>
 )
-export const normalWithWLCu = () => (
-  <LoginContextProvider>
-    <AuthML
-      wl={4}
-      // cu={9533}
-    />
-  </LoginContextProvider>
-)
+export const NormalWithWLCu = () => {
+  const wlState = useState(0)
+  const cuState = useState(0)
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {/* wl/cu selector for dev purposes  */}
+      <WlCuSelector {...{ wlState, cuState }}/>
+      <LoginContextProvider>
+        <AuthML
+          wl={wlState[0]}
+          cu={cuState[0]}
+        />
+      </LoginContextProvider>
+    </div>)
+}
+
 export const normalWithDefaultView = () => (
   <LoginContextProvider>
     <AuthML
