@@ -14,7 +14,10 @@ import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    margin: 'auto'
+    padding: '5px',
+    backgroundColor: '#bdbdbd',
+    textAlign: 'center',
+    width: '100%'
   },
   form: {
     margin: theme.spacing(0,2),
