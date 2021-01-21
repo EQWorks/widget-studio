@@ -1231,14 +1231,22 @@
     moment-timezone "^0.5.31"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-table@1.3.0":
-  version "1.3.0"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-table/1.3.0/2f99439f374472031654377ffabc618a3a08b26af61cec2760d97fb111f0a79f#2a0825604c216d9aa5e9d20ee2761b1842294e64"
-  integrity sha512-phupkHXajfMsgonZdYU5kdbwszwMKrOM3kqkzTPpKJEhWdSx5Q5+vAvZSWg6tw3QxsLCMYY2dVzM0bZOqsdFvQ==
+"@eqworks/lumen-table@1.3.1":
+  version "1.3.1"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-table/1.3.1/8168343a66c04095a6d9a76f5abfe1dfac74ff57a0c0a2b8ea4dc0c491baf05a#1e68ae6ba77be0657cc0f7d0e412ab9d49f5cf05"
+  integrity sha512-rGJPLWW3OdSc0W3GL4iLoxx0Rubg+KAPR/M4Jb+hQACw9LiLI2FTdYSeUZNmVf5PMlSgWuWA5kFTX6zL1qIyGA==
   dependencies:
     prop-types "^15.7.2"
     react-table "^7.6.0"
     use-cached "^2.0.0"
+
+"@eqworks/lumen-ui@^1.0.0":
+  version "1.0.0"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-ui/1.0.0/bf1b6ba8f1c20e80a9f429b756beed6ab01d938d0d442f2595441622f6c429b2#eb62ea6c6acd6e1a7f71c37e25b28897f270e0ce"
+  integrity sha512-rhFtu1/T+wv41IkcVdGAVQXrSNVPbfi25boaTDG0P7hBqIT6QN22hKzSblsPaeQrw0sYCrFi7vpHQ88pKzc1eQ==
+  dependencies:
+    clsx "^1.1.1"
+    prop-types "^15.7.2"
 
 "@eqworks/react-labs@^1.12.1-alpha.5":
   version "1.12.1-alpha.5"
