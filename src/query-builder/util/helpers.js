@@ -95,6 +95,18 @@ const mapFalsy = {
   '': 'Unknown',
 }
 
+export const errorHandler = (error, key, setAlert) => {
+  if (error.response && error.response.data) {
+    console.error(error.response.data)
+    if (error.response.data.message) {
+      return setAlert({ status: true, message: `${key}: ${error.response.data.message}` })
+    }
+  } else {
+    console.error(error)
+  }
+  return setAlert({ status: true, message: `${key}: Fail to query, check console and network` })
+}
+
 export const formatCell = ({ value }) => {
   // value is falsey or boolean
   if (!value || !!value === value) {
