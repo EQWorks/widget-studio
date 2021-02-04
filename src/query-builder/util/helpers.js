@@ -54,7 +54,7 @@ export const getFilterIndex = ({ colKey, viewId, filters }) => filters
 export const updateAggCols = ({ prevView = {}, currentView, columns }) => {
   if (prevView.columns) {
     const aggCols = getSelectedAggCols({ viewId: prevView.view.id, columns })
-    if (aggCols.length > 1) {
+    if (aggCols.length) {
       currentView.columns = aggCols.reduce((acc, col) => {
         acc[col.key] = col
         return acc
