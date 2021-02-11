@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 // import { makeStyles } from '@material-ui/core/styles'
@@ -15,9 +15,11 @@ import {
   ScatterChart,
   PieChart,
 } from '@eqworks/chart-system'
-import { Typography, Switch } from '@eqworks/lumen-ui'
+import { Typography, Switch, Button } from '@eqworks/lumen-ui'
 import SelectColumns from './select-columns'
 import CustomSelect from './custom-select'
+import { downloadChart } from './helper'
+
 
 // const useStyles = makeStyles((theme) => ({
 // }))
@@ -32,6 +34,7 @@ const getChart = (type) => ({
 
 const EditMode = ({ type, results, xAxis, setXAxis, yAxis, setYAxis, columns, grouped, setGrouped }) => {
   // const classes = useStyles()
+  const chartRef = useRef(null)
   const [groupMode, setGroupMode] = useState('grouped')
   const [groupByKey, setGroupByKey] = useState('')
   const [layout, setLayout] = useState('vertical')
@@ -46,9 +49,11 @@ const EditMode = ({ type, results, xAxis, setXAxis, yAxis, setYAxis, columns, gr
     keys: yAxis,
     axisLeftLegendLabel: '[tbd]', // fine tune option
   }
+
   return (
     <div style={{ display: 'flex' }}>
-      <Paper style={{ height: 500, margin: '0 16px 16px 0', width: '75%' }}>
+      <Paper ref={chartRef} style={{ height: 500, margin: '0 16px 16px 0', width: '75%' }}>
+        <Button size='small' type='tertiary' onClick={() => downloadChart(chartRef)} > Download </Button>
         {(results.length && type) &&
            <Chart
              data={results} // has date?.convert to date object in barchart
