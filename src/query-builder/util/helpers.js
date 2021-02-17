@@ -42,6 +42,9 @@ export const getSelectedAggCols = ({ viewId, columns }) => {
 export const getColumnIndex = ({ colKey, viewId, columns }) => columns
   .findIndex((column) => {
     const { data, view } = getColumnData(column)
+    if (!data || !view) {
+      return -1
+    }
     return data.key === colKey && view.id === viewId
   })
 
