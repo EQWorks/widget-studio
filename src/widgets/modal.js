@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
-import { Typography } from '@eqworks/lumen-ui'
+import { Typography, Button } from '@eqworks/lumen-ui'
 import Icons from './icons'
 import SelectColumns from './select-columns'
 
@@ -36,9 +36,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, open }) => {
+const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }) => {
   const classes = useStyles()
-  const [isOpen, setIsOpen] = useState(open)
 
   const regexGeo = /(geo|fsa|lat|lon)/gi
   /** array of unique categories based on query columns
@@ -79,6 +78,12 @@ const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, colum
           <SelectColumns
             {...{ columnsData: columns, xAxis, setXAxis, yAxis, setYAxis }}
           />
+          <Button onClick={() => {
+            setIsOpen(false)
+            // setIsDone(true)
+          }}>
+          Done
+          </Button>
         </div>
       </Fade>
     </Modal>
@@ -88,10 +93,11 @@ const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, colum
 
 WidgetSelector.propTypes = {
   columns: PropTypes.array,
-  open: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
   xAxis: PropTypes.string.isRequired,
   setXAxis: PropTypes.func.isRequired,
-  yAxis: PropTypes.array.isRequired,
+  yAxis: PropTypes.string.isRequired,
   setYAxis: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   setType: PropTypes.func.isRequired,

@@ -6,7 +6,8 @@ import PropTypes from 'prop-types'
 import ResultsTable from '../components/table'
 import WidgetSelector from './modal'
 import EditMode from './edit-mode'
-// import { columns, results } from './data'
+import { Button } from '@eqworks/lumen-ui'
+import { Typography } from '@material-ui/core'
 
 
 // const useStyles = makeStyles((theme) => ({
@@ -17,18 +18,29 @@ const Widgets = ({ mlModel }) => {
 
   const { columns, resultState: { results } } = mlModel
   const [type, setType] = useState('')
-  const [grouped, setGrouped] = useState(false)
   const [xAxis, setXAxis] = useState('')
-  const [yAxis, setYAxis] = useState([])
+  const [yAxis, setYAxis] = useState('')
+  const [isOpen, setIsOpen] = useState(true)
+  const isDone = Boolean(xAxis && yAxis && type)
 
+  if(!results.length) {
+    return ( <Typography>run a query first</Typography>)
+  }
   return (
     <div style={{ overflow: 'auto', padding: 18, maxHeight: 'calc(100vh - 100px' }}>
       <WidgetSelector
-        {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, open: true }}
+        {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }}
       />
-      <EditMode
-        {...{ xAxis, setXAxis, yAxis, setYAxis, grouped, setGrouped, type, setType, columns, results }}
-      />
+
+      { isDone ?
+        <EditMode
+          {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, results }}
+        />
+        :
+        <div style={{ width: '100%', height: 500 }}>
+          <Button onClick={() => setIsOpen(true)}> + Add Chart</Button>
+        </div>
+      }
       <ResultsTable {...{ results }}/>
     </div>
   )

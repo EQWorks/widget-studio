@@ -8,14 +8,14 @@ import CustomSelect from './custom-select'
 const SelectColumns = ({ columnsData, xAxis, setXAxis, yAxis, setYAxis }) => (
   <Grid container direction='column' alignItems='center'>
     <CustomSelect
-      title='Axis X'
+      title='Key X'
       data={columnsData}
       chosenValue={xAxis}
       setChosenValue={setXAxis}
     />
     <CustomSelect
-      multi
-      title='Axis Y'
+      // multi
+      title='Key Y'
       data={columnsData}
       chosenValue={yAxis}
       setChosenValue={setYAxis}
@@ -27,7 +27,7 @@ SelectColumns.propTypes = {
   columnsData: PropTypes.array,
   xAxis: PropTypes.string.isRequired,
   setXAxis: PropTypes.func.isRequired,
-  yAxis: PropTypes.array.isRequired,
+  yAxis: PropTypes.string.isRequired,
   setYAxis: PropTypes.func.isRequired
 }
 SelectColumns.default = {
