@@ -1,3 +1,5 @@
+import React from 'react'
+
 
 /** ref https://levelup.gitconnected.com/draw-an-svg-to-canvas-and-download-it-as-image-in-javascript-f7f7713cf81f */
 
@@ -10,6 +12,7 @@ const download = (href, name) => {
   link.click()
   link.remove()
 }
+
 export const downloadChart = (nodeRef) => {
   if (nodeRef) {
     const svgElement = nodeRef.current.getElementsByTagName('svg')[0]
@@ -33,5 +36,28 @@ export const downloadChart = (nodeRef) => {
       download(jpeg, 'chart.jpeg')
     }
     image.src = blobURL
+  }
+}
+
+// reference https://blog.logrocket.com/error-handling-react-error-boundary/
+export class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError() {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI or check the link above for more options
+      return <h5>Something went wrong - start over 😭</h5>
+    }
+
+    // eslint-disable-next-line react/prop-types
+    return this.props.children
   }
 }

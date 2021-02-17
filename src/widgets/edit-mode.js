@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import Paper from '@material-ui/core/Paper'
 
 import { Typography, Button } from '@eqworks/lumen-ui'
-import { downloadChart } from './helper'
+import { downloadChart, ErrorBoundary } from './helper'
 import { getChart } from './components/charts'
 
 
@@ -23,7 +23,9 @@ const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
       <Paper ref={chartRef} style={{ height: 500, margin: '0 16px 16px 0', width: '75%' }}>
         <Button size='small' type='tertiary' onClick={() => downloadChart(chartRef)} > Download </Button>
         {(results.length && type) &&
-          <Chart data={results} {...props}/>
+          <ErrorBoundary>
+            <Chart data={results} {...props}/>
+          </ErrorBoundary>
         }
       </Paper>
       <Paper style={{ width: '25%', marginBottom: 16, padding: 16 }}>
