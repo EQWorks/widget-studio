@@ -42,7 +42,7 @@ export const downloadChart = (nodeRef) => {
 // reference https://blog.logrocket.com/error-handling-react-error-boundary/
 export class ErrorBoundary extends React.Component {
   constructor(props) {
-    super(props)
+    super(props) // fixed by adding "@types/react": "16.9.51" but depcheck complains
     this.state = { hasError: false }
   }
 

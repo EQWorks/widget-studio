@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }) => {
   const classes = useStyles()
 
-  const regexGeo = /(geo|fsa|lat|lon)/gi
+  // const regexGeo = /(geo|fsa|lat|lon)/gi
   /** array of unique categories based on query columns
    * looks like categories = ["Numeric", "String", "Geometry"]
    */
@@ -65,18 +65,18 @@ const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, colum
       <Fade in={isOpen}>
         <div className={classes.paper}>
           <Typography style={{ marginLeft: '25%' }}>
-            1. This data can be visualized with the following types of charts. Pick one:
+            Select what goes in your X and Y axis
+          </Typography>
+          <SelectColumns
+            {...{ columnsData: columns, xAxis, setXAxis, yAxis, setYAxis }}
+          />
+          <Typography style={{ marginLeft: '25%' }}>
+            This data can be visualized with the following types of charts. Pick one:
           </Typography>
           <Icons
           // categories={categories}
             setType={setType}
             current={type}
-          />
-          <Typography style={{ marginLeft: '25%' }}>
-            2. Select what goes in your X and Y axis
-          </Typography>
-          <SelectColumns
-            {...{ columnsData: columns, xAxis, setXAxis, yAxis, setYAxis }}
           />
           <Button onClick={() => {
             setIsOpen(false)

@@ -16,30 +16,28 @@ import { Typography } from '@material-ui/core'
 const Widgets = ({ mlModel }) => {
   // const classes = useStyles()
 
-  const { columns, resultState: { results } } = mlModel
+  const { resultState: { results, columns } } = mlModel
   const [type, setType] = useState('')
   const [xAxis, setXAxis] = useState('')
   const [yAxis, setYAxis] = useState('')
   const [isOpen, setIsOpen] = useState(true)
-  const isDone = Boolean(xAxis && yAxis && type)
+  const isDone = Boolean(xAxis && yAxis && type && !isOpen)
 
   if(!results.length) {
-    return ( <Typography>run a query first</Typography>)
+    return ( <Typography>Run or select a query first</Typography>)
   }
   return (
     <div style={{ overflow: 'auto', padding: 18, maxHeight: 'calc(100vh - 100px' }}>
       <WidgetSelector
         {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }}
       />
-
-      { isDone ?
+      {/* <div style={{ width: '100%', height: 500 }}> */}
+      <Button onClick={() => setIsOpen(true)}> + Chart</Button>
+      {/* </div> */}
+      { isDone &&
         <EditMode
           {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, results }}
         />
-        :
-        <div style={{ width: '100%', height: 500 }}>
-          <Button onClick={() => setIsOpen(true)}> + Add Chart</Button>
-        </div>
       }
       <ResultsTable {...{ results }}/>
     </div>
