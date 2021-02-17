@@ -6,8 +6,8 @@ import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
 import { Typography, Button } from '@eqworks/lumen-ui'
-import Icons from './icons'
-import SelectColumns from './select-columns'
+import Icons from './components/icons'
+import SelectColumns from './components/select-columns'
 
 
 const useStyles = makeStyles((theme) => ({

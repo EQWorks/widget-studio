@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import { Typography, Switch } from '@eqworks/lumen-ui'
-import CustomSelect from '../../custom-select'
+import CustomSelect from '../custom-select'
 
 // const useStyles = makeStyles((theme) => ({
 // }))
