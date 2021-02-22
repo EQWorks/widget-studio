@@ -57,7 +57,7 @@ const useCustomers = (wlID) => {
   const { isError, error, isLoading, data = [] } = useQuery(
     [_key, wlID],
     () => api.get('/customer', { params: { wlID } }).then(({ data = [] }) => data),
-    { enabled: wlID, refetchOnWindowFocus: false },
+    { enabled: Boolean(wlID), refetchOnWindowFocus: false },
   )
 
   useEffect(() => {
