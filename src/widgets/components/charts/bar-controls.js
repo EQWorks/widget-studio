@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormGroup from '@material-ui/core/FormGroup'
 import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
-import { Typography, Switch } from '@eqworks/lumen-ui'
+import { Typography } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
 import { isJson, parseBar, groupJson, parseLine } from './utils'
 
@@ -16,9 +15,9 @@ import { isJson, parseBar, groupJson, parseLine } from './utils'
 const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const [xAxis, setXAxis] = useState(_xAxis)
   const [yAxis, setYAxis] = useState([_yAxis])
-  const [groupMode, setGroupMode] = useState('grouped')
-  const [grouped, setGrouped] = useState(false)
-  const [groupByKey, setGroupByKey] = useState('')
+  const [groupMode, setGroupMode] = useState('group')
+  // const [grouped, setGrouped] = useState(false)
+  // const [groupByKey, setGroupByKey] = useState('')
   const [layout, setLayout] = useState('vertical')
   const [res, setRes] = useState(null)
   const [options, setOptions] = useState(null)
@@ -33,6 +32,7 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
       setJsonGroupedData(null)
       const [_options, _groupedData] = groupJson({ results, groupKey: xAxis, key: yAxis[0] })
       setOptions(_options)
+      !_options.includes(chosenKey) && setChosenKey('')
       setJsonGroupedData(_groupedData)
       setRes(parseLine({ data: _groupedData, type: json }))
       setReady(true)
@@ -53,35 +53,54 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   }, [chosenKey, json, jsonGroupedData])
 
   const isVertical = layout === 'vertical'
-  // if bar chart is grouped, props will be different
-  const groupedProps = {
-    groupByKey: groupByKey, //number of bars for each indexBy
-    valueKey: yAxis[0],
-    axisLeftLegendLabel: isVertical ? yAxis[0] : xAxis
-  }
-  const _props = {
-    keys: yAxis,
-    axisLeftLegendLabel: 'value', // TODO fine tune option
+
+  const x = res?.map((e) => e[json])
+  const y = res?.map(({ visits }) => visits)
+
+  const generateLayers = (xkey, ykey) => {
+    const x = []
+    const _y = {}
+    results.forEach((e) => {
+      x.push(e[xkey])
+      ykey.forEach((key) => {
+        _y[key]
+          ? _y[key].push(e[key])
+          : _y[key] = [e[key]]
+      })
+    })
+    const generateChartProps = (x, y, name) => ({
+      type: 'bar',
+      x: isVertical ? x : y,
+      y: isVertical ? y : x,
+      orientation: isVertical ? 'v' : 'h',
+      name,
+      showlegend: true,
+      hoverinfo: 'skip'
+    })
+
+    const data = []
+    const layers = Object.entries(_y)
+    for (let [name, ydata] of layers) {
+      data.push(generateChartProps(x, ydata, name))
+    }
+    return data
   }
 
+  const data = json
+    ? [{
+      type: 'bar',
+      x: isVertical ? x : y,
+      y: isVertical ? y : x,
+      orientation: isVertical ? 'v' : 'h',
+      name: yAxis[0],
+      showlegend: true,
+      hoverinfo: 'skip'
+    }]
+    : generateLayers(xAxis, yAxis)
   const props = {
-    ...(res
-      ? {
-        data: res,
-        indexBy: json,
-        groupMode: groupMode,
-        groupByKey: 'name', // util renames key so hardcoded for now
-        valueKey: 'visits', // util renames key
-        axisLeftLegendLabel: isVertical ? 'visits' : json,
-        axisBottomLegendLabel: isVertical ? json : 'visits',
-      }
-      : {
-        indexBy: xAxis,
-        axisBottomLegendLabel: isVertical ? xAxis : yAxis,
-        groupMode: groupMode, //when Y has more than one value
-        ...(grouped ? groupedProps : _props),
-      }),
-    layout: layout,
+    data,
+    layout: data.length > 1 ? { barmode: groupMode } : {},
+    style: { width: '100%', height: '90%' },
   }
 
   const getBarControls = () => {
@@ -120,11 +139,11 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
 
         <FormControl component='fieldset'>
           <RadioGroup aria-label='groupMode' name='group1' value={groupMode} onChange={({ target: { value } }) => setGroupMode(value)}>
-            <FormControlLabel value='grouped' control={<Radio />} label='Grouped' />
-            <FormControlLabel value='stacked' control={<Radio />} label='Stacked' />
+            <FormControlLabel value='group' control={<Radio />} label='Grouped' />
+            <FormControlLabel value='stack' control={<Radio />} label='Stacked' />
           </RadioGroup>
         </FormControl>
-        {!json &&
+        {/* {!json &&
         <>
           <FormGroup>
             <FormControlLabel
@@ -148,7 +167,7 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
           </>
           }
         </>
-        }
+        } */}
       </>
     )
   }
