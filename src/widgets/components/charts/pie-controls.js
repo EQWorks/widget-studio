@@ -52,13 +52,61 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
     }
   }, [options])
 
-  const props = {
-    ...(chosenKey
-      ? { data: r[chosenKey] }
-      : { indexBy: xAxis, dataKey: yAxis[0] }),
-    isDonut: isDonut,
-    // TODO learn more about other props and data grouping including tooltips
+
+  const data = [{
+    type: 'pie',
+    values: chosenKey
+      ? r[chosenKey].map(({ value }) => value)
+      : results.map((e) => e[yAxis[0]]),
+    labels: chosenKey
+      ? r[chosenKey].map(({ id }) => id)
+      : results.map((e) => e[xAxis]),
+    ...(isDonut? { hole: .5 } : {})
+  }]
+
+  const _options = options?.slice(0,3)
+  const _data = []
+  if (options && !chosenKey) {
+    _options.forEach((option, i) => {
+      _data.push({
+        type: 'pie',
+        domain: {
+          row: Math.ceil((i + 1) / 3),
+          column: i % 3 //3 charts per row
+        },
+        name: option,
+        hoverinfo: 'label+value+percent+name',
+        textinfo: 'none',
+        values: r[option].map(({ value }) => value),
+        labels: r[option].map(({ id }) => id),
+        ...(isDonut? { hole: .5 } : {})
+      })
+    })
   }
+  const positionX = [0.12, 0.5, 0.87, 0.12, 0.5, 0.87]
+  const positionY = [0.5, 0.5, 0.5, 2, 2, 2]
+  const props = {
+    data: _data.length ? _data : data,
+    ...(_data.length
+      ? {
+        layout: {
+          autosize: true,
+          grid: { rows: Math.ceil(_options.length / 3), columns: 3 },
+          annotations:
+            _options.map((option, i) => ({
+              font: { size: 15 },
+              text: option,
+              showarrow: false,
+              x: positionX[i],
+              y: positionY[i],
+            }))
+        }
+      }
+      : {}
+    ),
+    style: { width: '100%', height: '90%' }
+  }
+
   const getPieControls = () => {
     return (
       <>
@@ -79,7 +127,7 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
         {options &&
           <CustomSelect
             title='Group By'
-            data={options}
+            data={['All', ...options]}
             chosenValue={chosenKey}
             setChosenValue={setChosenKey}
           />

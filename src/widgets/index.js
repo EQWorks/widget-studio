@@ -9,17 +9,20 @@ import EditMode from './edit-mode'
 import { Button } from '@eqworks/lumen-ui'
 import { Typography } from '@material-ui/core'
 
+import { columns } from './columns.json'
+import { results } from './results.json'
 
 // const useStyles = makeStyles((theme) => ({
 // }))
 
-const Widgets = ({ mlModel }) => {
+const Widgets = () => {
+// const Widgets = ({ mlModel }) => {
   // const classes = useStyles()
 
-  const { resultState: { results, columns } } = mlModel
+  // const { resultState: { results, columns } } = mlModel
   const [type, setType] = useState('')
-  const [xAxis, setXAxis] = useState('')
-  const [yAxis, setYAxis] = useState('')
+  const [xAxis, setXAxis] = useState('address_region')
+  const [yAxis, setYAxis] = useState('converted_visits')
   const [isOpen, setIsOpen] = useState(true)
   const isDone = Boolean(xAxis && yAxis && type && !isOpen)
 

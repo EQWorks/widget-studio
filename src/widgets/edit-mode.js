@@ -2,10 +2,10 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 // import { makeStyles } from '@material-ui/core/styles'
-
+import Plot from 'react-plotly.js'
 import Paper from '@material-ui/core/Paper'
-import { Typography, Button } from '@eqworks/lumen-ui'
-import { downloadChart, ErrorBoundary } from './helper'
+import { Typography } from '@eqworks/lumen-ui'
+import { ErrorBoundary } from './helper'
 import { getChart } from './components/charts'
 
 
@@ -15,15 +15,14 @@ import { getChart } from './components/charts'
 const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
   // const classes = useStyles()
   const chartRef = useRef(null)
-  const { Chart, props, getControl, ready } = getChart(type || 'bar')({ columns, xAxis, yAxis, results })
+  const { props, getControl, ready } = getChart(type || 'bar')({ columns, xAxis, yAxis, results })
 
   return (
     <div style={{ display: 'flex' }}>
       <Paper ref={chartRef} style={{ height: 500, margin: '0 16px 16px 0', width: '75%', paddingBottom: 50 }}>
         {(ready) &&
           <ErrorBoundary>
-            <Button size='small' type='tertiary' onClick={() => downloadChart(chartRef)} > Download </Button>
-            <Chart data={results} {...props}/>
+            <Plot {...props} />
           </ErrorBoundary>
         }
       </Paper>
