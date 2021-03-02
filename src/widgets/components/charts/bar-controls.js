@@ -99,7 +99,15 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
     : generateLayers(xAxis, yAxis)
   const props = {
     data,
-    layout: data.length > 1 ? { barmode: groupMode } : {},
+    layout:{
+      yaxis: {
+        title: isVertical ? 'value' : json || xAxis,
+      },
+      xaxis: {
+        title: isVertical ? json || xAxis : 'value',
+      },
+      ...( data.length > 1 ? { barmode: groupMode } : {}),
+    },
     style: { width: '100%', height: '90%' },
   }
 

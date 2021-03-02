@@ -60,36 +60,77 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
         }
         return agg
       }, {})
+      // console.log(finalRes)
+      // {
+      //   "QC": {
+      //     "address_region": "QC", // xaxis
+      //     "converted_visits": 3208 //yaxis
+      //   },
+      //   "BC": {
+      //     "address_region": "BC", // xaxis
+      //     "converted_visits": 3208 //yaxis
+      //   }
+      // }
       setRes(Object.values(finalRes))
       setReady(true)
     }
   }, [json, results, xAxis, yAxis])
 
-  const props = {
-    ...( json &&
-       {
-         data: res,
-         indexBy: 'name',
-         xKey: json,
-         yKeys: ['visits'],
-         axisBottomLegendLabel: json,
-         axisLeftLegendLabel: yAxis[0],
-       }),
-    ...(!isDataSerie &&
-          {
-            data: res,
-            xKey: xAxis,
-            yKeys: yAxis,
-            axisBottomLegendLabel: xAxis,
-            axisLeftLegendLabel: 'value',
-          }),
+  const x = res?.map((e) => e[json])
+  const y = res?.map(({ visits }) => visits)
 
-    enableArea: area,
-    indexByValue: isDataSerie,
-    xScale: { type: 'point' },
-    // pointSize: 6,
-    // pointBorderWidth: 2
+  const generateLayers = (xkey, ykeys) => {
+    const x = []
+    const _y = {}
+    Object.values(res).forEach((e) => {
+      x.push(e[xkey])
+      ykeys.forEach((key) => {
+        _y[key]
+          ? _y[key].push(e[key])
+          : _y[key] = [e[key]]
+      })
+    })
+    const generateChartProps = (x, y, name) => ({
+      type: 'scatter',
+      x,
+      y,
+      name,
+      showlegend: true,
+      ...(area && { fill: 'tonexty' })
+    })
+
+    const data = []
+    const layers = Object.entries(_y)
+    for (let [name, ydata] of layers) {
+      data.push(generateChartProps(x, ydata, name))
+    }
+    return data
   }
+
+  const data = json
+    ? [{
+      type: 'scatter',
+      x,
+      y,
+      mode: 'lines+markers',
+      name: yAxis[0],
+      showlegend: true,
+      ...(area && { fill: 'tonexty' })
+    }]
+    : res && generateLayers(xAxis, yAxis)
+  const props = {
+    data,
+    layout:{
+      yaxis: {
+        title: 'value',
+      },
+      xaxis: {
+        title: json || xAxis,
+      },
+    },
+    style: { width: '100%', height: '90%' },
+  }
+
   const getLineControls = () => {
     return (
       <>
