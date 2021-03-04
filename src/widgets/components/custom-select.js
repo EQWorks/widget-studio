@@ -43,14 +43,23 @@ const CustomSelect = ({ data, chosenValue, setChosenValue, title, multi }) => {
           MenuProps={{ elevation: 1 }}
         >
           {typeof data[0] === 'object' ?
+          // data.map(({ name: key, category }) => (
+          //   <MenuItem key={key} value={key}>
+          //     <Checkbox checked={chosenValue === key} />
+          //     <ListItemText primary={`${key} (${category})`} />
+          //   </MenuItem>
+          // )
+          // )
+
             data.map(({ values, data, as }) => {
-            /** if agg, the key 'values' replace 'data' */
+              /** if agg, the key 'values' replace 'data' */
               const { key, category } = values?.[1].data || data
               return (<MenuItem key={key} value={key}>
                 <Checkbox checked={chosenValue === key || chosenValue == as} />
                 <ListItemText primary={`${as || key} (${category})`} />
               </MenuItem>)
             })
+
             : data.map((value) => (<MenuItem key={value} value={value}>{value}</MenuItem>))
           }
         </Select>
@@ -76,15 +85,24 @@ const CustomSelect = ({ data, chosenValue, setChosenValue, title, multi }) => {
         )}
         MenuProps={{ elevation: 1 }}
       >
-        {data.map(({ values, data, as }) => {
+        {typeof data[0] === 'object' ?
+        // data.map(({ name: key, category }) => {
+        //   return (<MenuItem key={key} value={key}>
+        //     <Checkbox checked={chosenValue.indexOf(key) > -1} />
+        //     <ListItemText primary={`${key} (${category})`} />
+        //   </MenuItem>)
+        // })
+
+          data.map(({ values, data, as }) => {
           /** if agg, the key 'values' replace 'data' */
-          const { key, category } = values?.[1].data || data
-          const columnName = as || key
-          return (<MenuItem key={columnName} value={columnName}>
-            <Checkbox checked={chosenValue.indexOf(columnName) > -1} />
-            <ListItemText primary={`${columnName} (${category})`} />
-          </MenuItem>)
-        })}
+            const { key, category } = values?.[1].data || data
+            const columnName = as || key
+            return (<MenuItem key={columnName} value={columnName}>
+              <Checkbox checked={chosenValue.indexOf(columnName) > -1} />
+              <ListItemText primary={`${columnName} (${category})`} />
+            </MenuItem>)
+          })
+          : data.map((value) => (<MenuItem key={value} value={value}>{value}</MenuItem>))}
       </Select>
     </FormControl>
   )

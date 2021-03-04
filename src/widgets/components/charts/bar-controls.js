@@ -6,7 +6,7 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import { Typography } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
-import { isJson, parseBar, groupJson, parseLine } from './utils'
+import { isJson, parseBar, groupJson, getChartData, getLayers } from './utils'
 
 
 // const useStyles = makeStyles((theme) => ({
@@ -16,99 +16,56 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const [xAxis, setXAxis] = useState(_xAxis)
   const [yAxis, setYAxis] = useState([_yAxis])
   const [groupMode, setGroupMode] = useState('group')
-  // const [grouped, setGrouped] = useState(false)
-  // const [groupByKey, setGroupByKey] = useState('')
   const [layout, setLayout] = useState('vertical')
-  const [res, setRes] = useState(null)
-  const [options, setOptions] = useState(null)
-  const [chosenKey, setChosenKey] = useState('')
-  const [jsonGroupedData, setJsonGroupedData] = useState(null)
-  const [ready, setReady] = useState(false)
+  const [groupedData, setGroupedData] = useState(null)
+  const [data, setData] = useState(null)
+  const [options, setOptions] = useState([])
+  const [chosenKey, setChosenKey] = useState([])
+  const [ready, setReady] = useState(true)
   const json = isJson(yAxis[0])
-
-  useEffect(() => {
-    if (json) {
-      setReady(false)
-      setJsonGroupedData(null)
-      const [_options, _groupedData] = groupJson({ results, groupKey: xAxis, key: yAxis[0] })
-      setOptions(_options)
-      !_options.includes(chosenKey) && setChosenKey('')
-      setJsonGroupedData(_groupedData)
-      setRes(parseLine({ data: _groupedData, type: json }))
-      setReady(true)
-    } else {
-      setRes(null)
-      setOptions(null)
-      setReady(true)
-      setChosenKey('')
-    }
-  }, [chosenKey, json, results, xAxis, yAxis])
-
-  useEffect(() => {
-    if (chosenKey) {
-      const finalRes = parseBar({ data: jsonGroupedData, key: chosenKey, type: json })
-      setRes(finalRes)
-      setReady(true)
-    }
-  }, [chosenKey, json, jsonGroupedData])
-
   const isVertical = layout === 'vertical'
 
-  const x = res?.map((e) => e[json])
-  const y = res?.map(({ visits }) => visits)
-
-  const generateLayers = (xkey, ykey) => {
-    const x = []
-    const _y = {}
-    results.forEach((e) => {
-      x.push(e[xkey])
-      ykey.forEach((key) => {
-        _y[key]
-          ? _y[key].push(e[key])
-          : _y[key] = [e[key]]
-      })
-    })
-    const generateChartProps = (x, y, name) => ({
-      type: 'bar',
-      x: isVertical ? x : y,
-      y: isVertical ? y : x,
-      orientation: isVertical ? 'v' : 'h',
-      name,
-      showlegend: true,
-      hoverinfo: 'skip'
-    })
-
-    const data = []
-    const layers = Object.entries(_y)
-    for (let [name, ydata] of layers) {
-      data.push(generateChartProps(x, ydata, name))
+  useEffect(() => {
+    const resultsCopy = JSON.parse(JSON.stringify(results))
+    if (json) {
+      setReady(false)
+      setGroupedData(null)
+      const [_options, _groupedData] = groupJson({ results: resultsCopy, groupKey: xAxis, key: yAxis[0] })
+      setOptions(_options)
+      setGroupedData(_groupedData)
+    } else {
+      setData(getChartData(resultsCopy, xAxis, yAxis, isVertical))
     }
-    return data
-  }
+  }, [isVertical, json, results, xAxis, yAxis])
 
-  const data = json
-    ? [{
-      type: 'bar',
-      x: isVertical ? x : y,
-      y: isVertical ? y : x,
-      orientation: isVertical ? 'v' : 'h',
-      name: yAxis[0],
-      showlegend: true,
-      hoverinfo: 'skip'
-    }]
-    : generateLayers(xAxis, yAxis)
+  useEffect(() => {
+    if (xAxis && yAxis.length) {
+      setChosenKey([]) // clear selected options on keys change
+    }
+  }, [xAxis, yAxis])
+
+  useEffect(() => {
+    if (json && groupedData) {
+      const _res = parseBar({ data: groupedData, keys: chosenKey })
+      setData(_res.map(({ x, y, name }) => getLayers({ x, y, name, isVertical })))
+      setReady(true)
+    }
+  }, [chosenKey, groupedData, isVertical, json])
+
   const props = {
     data,
     layout:{
+      autosize: true,
       yaxis: {
         title: isVertical ? 'value' : json || xAxis,
       },
       xaxis: {
         title: isVertical ? json || xAxis : 'value',
       },
-      ...( data.length > 1 ? { barmode: groupMode } : {}),
+      ...( data?.length > 1 ? { barmode: groupMode } : {}),
     },
     style: { width: '100%', height: '90%' },
+    useResizeHandler: true
   }
 
   const getBarControls = () => {
@@ -128,10 +85,11 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
           chosenValue={yAxis}
           setChosenValue={setYAxis}
         />
-        {options &&
+        {options.length > 1 &&
           <CustomSelect
+            multi
             title='Group By'
-            data={['All', ...options]}
+            data={options}
             chosenValue={chosenKey}
             setChosenValue={setChosenKey}
           />
@@ -145,37 +103,13 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
           </FormControl>
         </div>
 
+        {(yAxis.length > 1 || options.length > 1) &&
         <FormControl component='fieldset'>
           <RadioGroup aria-label='groupMode' name='group1' value={groupMode} onChange={({ target: { value } }) => setGroupMode(value)}>
             <FormControlLabel value='group' control={<Radio />} label='Grouped' />
             <FormControlLabel value='stack' control={<Radio />} label='Stacked' />
           </RadioGroup>
-        </FormControl>
-        {/* {!json &&
-        <>
-          <FormGroup>
-            <FormControlLabel
-              control={<Switch
-                checked={grouped}
-                onChange={({ target: { checked } }) => setGrouped(checked)}
-                name='grouped'
-              />}
-              label='Group data'
-            />
-          </FormGroup>
-          {grouped &&
-          <>
-            <Typography variant='caption'>(only first key will be used in Y Axis)</Typography>
-            <CustomSelect
-              title='Group By Key'
-              data={columns}
-              chosenValue={groupByKey}
-              setChosenValue={setGroupByKey}
-            />
-          </>
-          }
-        </>
-        } */}
+        </FormControl>}
       </>
     )
   }

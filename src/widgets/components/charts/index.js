@@ -1,9 +1,9 @@
-import {
-  BarChart,
-  LineChart,
-  // ScatterChart,
-  PieChart,
-} from '@eqworks/chart-system'
+// import {
+//   BarChart,
+//   LineChart,
+//   ScatterChart,
+//   PieChart,
+// } from '@eqworks/chart-system'
 import useBarControls from './bar-controls'
 import usePieControls from './pie-controls'
 import useLineControls from './line-controls'
@@ -12,15 +12,15 @@ import useLineControls from './line-controls'
 export const getChart = (type = 'bar') => ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const { Chart, useControl } = {
     bar: {
-      Chart: BarChart,
+      // Chart: BarChart,
       useControl: useBarControls,
     },
     pie: {
-      Chart: PieChart,
+      // Chart: PieChart,
       useControl: usePieControls,
     },
     line: {
-      Chart: LineChart,
+      // Chart: LineChart,
       useControl: useLineControls
     },
     // scatter: {

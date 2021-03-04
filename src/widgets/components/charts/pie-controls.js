@@ -20,9 +20,10 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
 
   useEffect(() => {
     if (yAxis[1]) {
+      const resultsCopy = JSON.parse(JSON.stringify(results))
       setReady(false)
       setChosenKey('')
-      const res = results.reduce((agg, element) => {
+      const res = resultsCopy.reduce((agg, element) => {
         const _groupKey = element[xAxis]
         const value = yAxis.map((key) => ({ id: key, value: element[key] }))
         if (agg[_groupKey]) {

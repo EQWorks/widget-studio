@@ -1,10 +1,10 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 // import { makeStyles } from '@material-ui/core/styles'
 import Plot from 'react-plotly.js'
 import Paper from '@material-ui/core/Paper'
-import { Typography } from '@eqworks/lumen-ui'
+import { Typography, Button } from '@eqworks/lumen-ui'
 import { ErrorBoundary } from './helper'
 import { getChart } from './components/charts'
 
@@ -15,6 +15,7 @@ import { getChart } from './components/charts'
 const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
   // const classes = useStyles()
   const chartRef = useRef(null)
+  const [num, setNum] = useState(0)
   const { props, getControl, ready } = getChart(type || 'bar')({ columns, xAxis, yAxis, results })
 
   return (
@@ -22,7 +23,11 @@ const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
       <Paper ref={chartRef} style={{ height: 500, margin: '0 16px 16px 0', width: '75%', paddingBottom: 50 }}>
         {(ready) &&
           <ErrorBoundary>
-            <Plot {...props} />
+            <Plot
+              revision={num}
+              {...props}
+            />
+            <Button onClick={() => setNum(num+1)} type='tertiary'>Resize</Button>
           </ErrorBoundary>
         }
       </Paper>
@@ -40,9 +45,7 @@ EditMode.propTypes = {
   columns: PropTypes.array,
   type: PropTypes.string.isRequired,
   xAxis: PropTypes.string.isRequired,
-  // setXAxis: PropTypes.func.isRequired,
   yAxis: PropTypes.string.isRequired,
-  // setYAxis: PropTypes.func.isRequired,
 }
 EditMode.default = {
   columns: [],

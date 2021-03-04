@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 // import { makeStyles } from '@material-ui/core/styles'
@@ -15,15 +15,22 @@ import { results } from './results.json'
 // const useStyles = makeStyles((theme) => ({
 // }))
 
-const Widgets = () => {
-// const Widgets = ({ mlModel }) => {
+// const Widgets = () => {
+const Widgets = ({ mlModel }) => {
   // const classes = useStyles()
 
   // const { resultState: { results, columns } } = mlModel
   const [type, setType] = useState('')
   const [xAxis, setXAxis] = useState('address_region')
-  const [yAxis, setYAxis] = useState('converted_visits')
+  const [yAxis, setYAxis] = useState('converted_visits_hod')
   const [isOpen, setIsOpen] = useState(true)
+
+  useEffect(() => {
+    return () => {
+      alert('you are going to lose these changes')
+    }
+  }, [])
+
   const isDone = Boolean(xAxis && yAxis && type && !isOpen)
 
   if(!results.length) {
