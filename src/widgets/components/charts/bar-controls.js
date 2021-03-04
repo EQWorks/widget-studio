@@ -6,7 +6,7 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 // import { Typography } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
-import { isJson, parseBar, groupJson, getChartData, getLayers } from './utils'
+import { isJson, parseData, groupJson, getChartData, getLayers } from './utils'
 
 
 // const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,13 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
       setOptions(_options)
       setGroupedData(_groupedData)
     } else {
-      setData(getChartData(resultsCopy, xAxis, yAxis, isVertical))
+      setData(getChartData({
+        results: resultsCopy,
+        groupKey: xAxis,
+        yKeys: yAxis,
+        isVertical,
+        type: 'bar'
+      }))
     }
   }, [isVertical, json, results, xAxis, yAxis])
 
@@ -46,8 +52,14 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
 
   useEffect(() => {
     if (json && groupedData) {
-      const _res = parseBar({ data: groupedData, keys: chosenKey })
-      setData(_res.map(({ x, y, name }) => getLayers({ x, y, name, isVertical })))
+      const _res = parseData({ data: groupedData, keys: chosenKey })
+      setData(_res.map(({ x, y, name }) => getLayers({
+        x,
+        y,
+        name,
+        type: 'bar',
+        isVertical,
+      })))
       setReady(true)
     }
   }, [chosenKey, groupedData, isVertical, json])

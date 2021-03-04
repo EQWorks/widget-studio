@@ -40,7 +40,7 @@ const getAxisValues = (current) => {
 }
 
 // for hod and dow only
-export const parseBar = ({ data, keys = [] }) => {
+export const parseData = ({ data, keys = [] }) => {
   const parsedData = []
   if (keys.length) {
     keys.forEach((key) => {
@@ -71,31 +71,6 @@ export const parseBar = ({ data, keys = [] }) => {
 }
 
 // for hod and dow only
-export const parseLine = ({ data, type }) => {
-  // to be able to use chart-system, data has to be:
-  const parsedData = []
-  Object.entries(data).forEach(([key, value]) => {
-    Object.entries(value).forEach(([_key, _value]) => {
-      parsedData.push({ name: key, [type]: _key, visits: _value })
-    })
-  })
-  return parsedData
-  /** parsedData:
-   * [{
-        "name": "SK",
-        "hour": "0",
-        "visits": 19
-      },
-      {
-        "name": "SK",
-        "hour": "1",
-        "visits": 19
-      }...
-    ]
-   */
-}
-
-// for hod and dow only
 export const isJson = (key = '') => {
   const isMatch = key.match(/(?<hour>hod)|(?<day>dow)/)
   if (!isMatch) return false
@@ -104,18 +79,38 @@ export const isJson = (key = '') => {
 }
 
 // each layer of Plot.data
-export const getLayers = ({ x, y, name, isVertical }) => ({
-  type: 'bar',
-  x: isVertical ? x : y,
-  y: isVertical ? y : x,
-  orientation: isVertical ? 'v' : 'h',
-  name,
-  showlegend: true,
-  // hoverinfo: 'skip'
-})
-
+export const getLayers = ({ x, y, name, type, isVertical = true, area = false }) => {
+  const base = {
+    type,
+    x,
+    y,
+    name,
+    showlegend: true,
+  }
+  switch (type) {
+  case 'bar': {
+    const _x = isVertical ? x : y
+    const _y = isVertical ? y : x
+    return {
+      ...base,
+      x: _x,
+      y: _y,
+      orientation: isVertical ? 'v' : 'h'
+    }
+  }
+  case 'scatter': {
+    return {
+      ...base,
+      mode: 'lines+markers',
+      ...(area && { fill: 'tonexty' })
+    }
+  }
+  default:
+    return base
+  }
+}
 // Plot.data with all layers
-export const getChartData = (results, groupKey, yKeys, isVertical) => {
+export const getChartData = ({ results, groupKey, yKeys, isVertical = true, area = false, type }) => {
   const sumData = {} /** {
     ON: {converted_visits: 100, converted_repeat_visits: 40},
     ...
@@ -143,6 +138,6 @@ export const getChartData = (results, groupKey, yKeys, isVertical) => {
     x.push(name)  // [ON, BC, SK ...]
     Object.entries(data).forEach(([key, value]) => (_y[key] = [..._y[key] || [], value]))
   }
-  const data = Object.entries(_y).map(([name, y]) => getLayers({ x, y, name, isVertical }))
+  const data = Object.entries(_y).map(([name, y]) => getLayers({ x, y, name, isVertical, area, type }))
   return data
 }

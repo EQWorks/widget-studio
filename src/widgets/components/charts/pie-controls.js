@@ -53,7 +53,12 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
     }
   }, [options])
 
-
+  const handleText = (str) => {
+    const size = str.length
+    return size > 12
+      ? `${str.slice(0, 12)}<br />${str.slice(9)}`
+      : str
+  }
   const data = [{
     type: 'pie',
     values: chosenKey
@@ -85,7 +90,7 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
     })
   }
   const positionX = [0.12, 0.5, 0.87, 0.12, 0.5, 0.87]
-  const positionY = [0.5, 0.5, 0.5, 2, 2, 2]
+  const positionY = [1.1, 1.1, 1.1, 2, 2, 2]
   const props = {
     data: _data.length ? _data : data,
     ...(_data.length
@@ -96,7 +101,7 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
           annotations:
             _options.map((option, i) => ({
               font: { size: 15 },
-              text: option,
+              text: handleText(option),
               showarrow: false,
               x: positionX[i],
               y: positionY[i],

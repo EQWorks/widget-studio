@@ -4,7 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
 import { Switch } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
-import { isJson, parseLine, groupJson } from './utils'
+import { isJson, parseData, groupJson, getLayers, getChartData } from './utils'
 
 
 // const useStyles = makeStyles((theme) => ({
@@ -13,116 +13,54 @@ import { isJson, parseLine, groupJson } from './utils'
 const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const [xAxis, setXAxis] = useState(_xAxis)
   const [yAxis, setYAxis] = useState([_yAxis])
-  // const [isDataSerie, setIsDataSerie] = useState(true)
-  const [res, setRes] = useState(null)
-  const [ready, setReady] = useState(false)
+  const [data, setData] = useState(null)
+  const [ready, setReady] = useState(true)
   const [area, setArea] = useState(false)
-  const [jsonGroupedData, setJsonGroupedData] = useState(null)
+  const [groupedData, setGroupedData] = useState(null)
   const json = isJson(yAxis[0])
 
   useEffect(() => {
+    const resultsCopy = JSON.parse(JSON.stringify(results))
     if (json) {
       setReady(false)
-      setJsonGroupedData(null)
-      // setIsDataSerie(true)
-      const [, _groupedData] = groupJson({ results, groupKey: xAxis, key: yAxis[0] })
-      setJsonGroupedData(_groupedData)
-    }
-    //  else {
-    // setReady(true)
-    // setRes(null)
-    // }
-  }, [json, results, xAxis, yAxis])
-
-  useEffect(() => {
-    if (jsonGroupedData) {
-      const finalRes = parseLine({ data: jsonGroupedData, type: json })
-      setRes(finalRes)
-      setReady(true)
-    }
-  }, [json, jsonGroupedData])
-
-  useEffect(() => {
-    if (!json && yAxis.length) {
-      setReady(false)
-      // setIsDataSerie(false)
-      const finalRes = results.reduce((agg, element) => {
-        const id = element[xAxis]
-        if (!agg[id]) {
-          agg[id] = { [xAxis]: id }
-          yAxis.forEach((key) => {
-            agg[id][key] = element[key]
-          })
-        } else {
-          yAxis.forEach((key) => {
-            agg[id][key] = agg[id][key] + element[key]
-          })
-        }
-        return agg
-      }, {})
-      // console.log(finalRes)
-      // {
-      //   "QC": {
-      //     "address_region": "QC", // xaxis
-      //     "converted_visits": 3208 //yaxis
-      //   },
-      //   "BC": {
-      //     "address_region": "BC", // xaxis
-      //     "converted_visits": 3208 //yaxis
-      //   }
-      // }
-      setRes(Object.values(finalRes))
-      setReady(true)
-    }
-  }, [json, results, xAxis, yAxis])
-
-  const x = res?.map((e) => e[json])
-  const y = res?.map(({ visits }) => visits)
-
-  const generateLayers = (xkey, ykeys) => {
-    const x = []
-    const _y = {}
-    Object.values(res).forEach((e) => {
-      x.push(e[xkey])
-      ykeys.forEach((key) => {
-        _y[key]
-          ? _y[key].push(e[key])
-          : _y[key] = [e[key]]
+      setGroupedData(null)
+      const [, _groupedData] = groupJson({
+        results: resultsCopy ,
+        groupKey: xAxis,
+        key: yAxis[0]
       })
-    })
-    const generateChartProps = (x, y, name) => ({
-      type: 'scatter',
-      x,
-      y,
-      name,
-      showlegend: true,
-      ...(area && { fill: 'tonexty' })
-    })
-
-    const data = []
-    const layers = Object.entries(_y)
-    for (let [name, ydata] of layers) {
-      data.push(generateChartProps(x, ydata, name))
+      setGroupedData(_groupedData)
+    } else {
+      setData(getChartData({
+        results: resultsCopy,
+        groupKey: xAxis,
+        yKeys: yAxis,
+        type: 'scatter',
+        area,
+      }))
     }
-    return data
-  }
+  }, [area, json, results, xAxis, yAxis])
 
-  const data = json
-    ? [{
-      type: 'scatter',
-      x,
-      y,
-      mode: 'lines+markers',
-      name: yAxis[0],
-      showlegend: true,
-      ...(area && { fill: 'tonexty' })
-    }]
-    : res && generateLayers(xAxis, yAxis)
+  useEffect(() => {
+    if (json && groupedData) {
+      const _res = parseData({ data: groupedData, keys: [] })
+      setData(_res.map(({ x, y, name }) => getLayers({
+        x,
+        y,
+        name,
+        type: 'scatter',
+        area,
+      })))
+      setReady(true)
+    }
+  }, [json, groupedData, area])
+
   const props = {
     data,
     layout:{
+      autosize: true,
       yaxis: {
-        title: 'value',
+        title: json ? yAxis[0] : 'value',
       },
       xaxis: {
         title: json || xAxis,
