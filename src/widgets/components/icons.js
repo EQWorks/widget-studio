@@ -31,9 +31,9 @@ const Icons = ({
     return (
       // <IconButton key={i} onClick={() => setType(type)} disabled={!isUsable}>
       <IconButton key={i} onClick={() => setType(type)} disabled={disabled}>
-        {/* <Component fontSize='large' color={isUsable ? 'primary' : 'disabled'}/> */}
         <Badge variant='dot' invisible={!current || type !== current} color='error'>
           <Component fontSize='large' color={disabled ? 'disabled' : 'primary'} />
+          {/* <Component fontSize='large' color={isUsable ? 'primary' : 'disabled'}/> */}
         </Badge>
       </IconButton>
     )

@@ -14,7 +14,6 @@ const SelectColumns = ({ columnsData, xAxis, setXAxis, yAxis, setYAxis }) => (
       setChosenValue={setXAxis}
     />
     <CustomSelect
-      // multi
       title='Key Y'
       data={columnsData}
       chosenValue={yAxis}
