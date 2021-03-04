@@ -109,14 +109,15 @@ export const getLayers = ({ x, y, name, type, isVertical = true, area = false })
     return base
   }
 }
-// Plot.data with all layers
-export const getChartData = ({ results, groupKey, yKeys, isVertical = true, area = false, type }) => {
+
+// group data that is NOT hod || dow
+export const sum = ({ results, groupKey, yKeys }) => {
   const sumData = {} /** {
     ON: {converted_visits: 100, converted_repeat_visits: 40},
     ...
     } */
   results.forEach((datum) => {
-    const _groupKey = datum[groupKey] // ON - value of region
+    const _groupKey = datum[groupKey] // ON - value of region{
     const current = sumData[_groupKey]
     if (current) {
       yKeys.forEach((key) => {
@@ -131,12 +132,27 @@ export const getChartData = ({ results, groupKey, yKeys, isVertical = true, area
       /** ON: {converted_visits: 100, converted_repeat_visits: 40} */
     }
   })
+  return sumData
+}
+
+// Plot.data with all layers
+export const getChartData = ({
+  sumData,
+  isVertical = true,
+  area = false,
+  type,
+  chosenKey = []
+}) => {
+  const shouldProcessAll = !chosenKey.length //if no chosen key, process all
   const x = []
   const _y = {}
   const layers = Object.entries(sumData)
   for (let [name, data] of layers) {
-    x.push(name)  // [ON, BC, SK ...]
-    Object.entries(data).forEach(([key, value]) => (_y[key] = [..._y[key] || [], value]))
+    const proceed = shouldProcessAll || chosenKey.includes(name)
+    if (proceed) {
+      x.push(name)  // [ON, BC, SK ...]
+      Object.entries(data).forEach(([key, value]) => (_y[key] = [..._y[key] || [], value]))
+    }
   }
   const data = Object.entries(_y).map(([name, y]) => getLayers({ x, y, name, isVertical, area, type }))
   return data

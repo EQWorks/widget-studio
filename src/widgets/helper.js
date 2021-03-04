@@ -12,7 +12,7 @@ const download = (href, name) => {
   link.click()
   link.remove()
 }
-
+// for nivo charts
 export const downloadChart = (nodeRef) => {
   if (nodeRef) {
     const svgElement = nodeRef.current.getElementsByTagName('svg')[0]
@@ -54,7 +54,7 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI or check the link above for more options
-      return <h5>Something went wrong - start over 😭</h5>
+      return <h5>Sorry - Something went wrong</h5>
     }
 
     // eslint-disable-next-line react/prop-types

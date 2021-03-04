@@ -4,7 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
 import { Switch } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
-import { isJson, parseData, groupJson, getLayers, getChartData } from './utils'
+import { isJson, parseData, groupJson, getLayers, getChartData, sum } from './utils'
 
 
 // const useStyles = makeStyles((theme) => ({
@@ -17,33 +17,44 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
   const [ready, setReady] = useState(true)
   const [area, setArea] = useState(false)
   const [groupedData, setGroupedData] = useState(null)
+  const [options, setOptions] = useState([])
+  const [chosenKey, setChosenKey] = useState([])
   const json = isJson(yAxis[0])
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(results))
-    if (json) {
-      setReady(false)
-      setGroupedData(null)
-      const [, _groupedData] = groupJson({
-        results: resultsCopy ,
-        groupKey: xAxis,
-        key: yAxis[0]
-      })
-      setGroupedData(_groupedData)
-    } else {
-      setData(getChartData({
-        results: resultsCopy,
-        groupKey: xAxis,
-        yKeys: yAxis,
-        type: 'scatter',
-        area,
-      }))
+    if(xAxis && yAxis.length) {
+      if (json) {
+        setReady(false)
+        setGroupedData(null)
+        const [_options, _groupedData] = groupJson({
+          results: resultsCopy ,
+          groupKey: xAxis,
+          key: yAxis[0]
+        })
+        setOptions(_options)
+        setGroupedData(_groupedData)
+      } else {
+        const _groupedData = sum({
+          results: resultsCopy,
+          groupKey: xAxis,
+          yKeys: yAxis,
+        })
+        setOptions(Object.keys(_groupedData))
+        setGroupedData(_groupedData)
+      }
     }
-  }, [area, json, results, xAxis, yAxis])
+  }, [area, chosenKey, json, results, xAxis, yAxis])
+
+  useEffect(() => {
+    if (xAxis && yAxis.length) {
+      setChosenKey([]) // clear selected options on keys change
+    }
+  }, [xAxis, yAxis])
 
   useEffect(() => {
     if (json && groupedData) {
-      const _res = parseData({ data: groupedData, keys: [] })
+      const _res = parseData({ data: groupedData, keys: chosenKey })
       setData(_res.map(({ x, y, name }) => getLayers({
         x,
         y,
@@ -53,7 +64,15 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
       })))
       setReady(true)
     }
-  }, [json, groupedData, area])
+    if (!json && groupedData) {
+      setData(getChartData({
+        sumData: groupedData,
+        type: 'scatter',
+        area,
+        chosenKey,
+      }))
+    }
+  }, [json, groupedData, area, chosenKey])
 
   const props = {
     data,
@@ -64,6 +83,7 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
       },
       xaxis: {
         title: json || xAxis,
+        ...((data && data[0].x.some((e) => e.length > 4) ) && { tickangle: 45, title: '' } )
       },
     },
     style: { width: '100%', height: '90%' },
@@ -72,7 +92,6 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
   const getLineControls = () => {
     return (
       <>
-        {/* <Typography>Data Key</Typography> */}
         <div style={{ marginBottom: 20 }}>
           <CustomSelect
             title='Key X'
@@ -88,14 +107,15 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
             setChosenValue={setYAxis}
           />
         </div>
-        {/* {options &&
+        {options.length > 1 &&
           <CustomSelect
+            multi
             title='Group By'
             data={options}
             chosenValue={chosenKey}
             setChosenValue={setChosenKey}
           />
-        } */}
+        }
         <FormGroup style={{ padding: '30px 0 20px 0' }}>
           <FormControlLabel
             control={<Switch

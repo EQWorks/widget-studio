@@ -6,7 +6,7 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 // import { Typography } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
-import { isJson, parseData, groupJson, getChartData, getLayers } from './utils'
+import { isJson, parseData, groupJson, getChartData, getLayers, sum } from './utils'
 
 
 // const useStyles = makeStyles((theme) => ({
@@ -34,13 +34,13 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
       setOptions(_options)
       setGroupedData(_groupedData)
     } else {
-      setData(getChartData({
+      const _groupedData = sum({
         results: resultsCopy,
         groupKey: xAxis,
         yKeys: yAxis,
-        isVertical,
-        type: 'bar'
-      }))
+      })
+      setOptions(Object.keys(_groupedData))
+      setGroupedData(_groupedData)
     }
   }, [isVertical, json, results, xAxis, yAxis])
 
@@ -61,6 +61,14 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
         isVertical,
       })))
       setReady(true)
+    }
+    if (!json && groupedData) {
+      setData(getChartData({
+        sumData: groupedData,
+        isVertical,
+        type: 'bar',
+        chosenKey,
+      }))
     }
   }, [chosenKey, groupedData, isVertical, json])
 
@@ -83,7 +91,6 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const getBarControls = () => {
     return (
       <>
-        {/* <Typography>Data Key</Typography> */}
         <div style={{ marginBottom: 20 }}>
           <CustomSelect
             title='Key X'
