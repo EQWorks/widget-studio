@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
-import { Typography, Switch } from '@eqworks/lumen-ui'
+import { Switch } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
 import { isJson, parseLine, groupJson } from './utils'
 
@@ -13,7 +13,7 @@ import { isJson, parseLine, groupJson } from './utils'
 const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const [xAxis, setXAxis] = useState(_xAxis)
   const [yAxis, setYAxis] = useState([_yAxis])
-  const [isDataSerie, setIsDataSerie] = useState(true)
+  // const [isDataSerie, setIsDataSerie] = useState(true)
   const [res, setRes] = useState(null)
   const [ready, setReady] = useState(false)
   const [area, setArea] = useState(false)
@@ -24,7 +24,7 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
     if (json) {
       setReady(false)
       setJsonGroupedData(null)
-      setIsDataSerie(true)
+      // setIsDataSerie(true)
       const [, _groupedData] = groupJson({ results, groupKey: xAxis, key: yAxis[0] })
       setJsonGroupedData(_groupedData)
     }
@@ -45,7 +45,7 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
   useEffect(() => {
     if (!json && yAxis.length) {
       setReady(false)
-      setIsDataSerie(false)
+      // setIsDataSerie(false)
       const finalRes = results.reduce((agg, element) => {
         const id = element[xAxis]
         if (!agg[id]) {
@@ -134,20 +134,22 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
   const getLineControls = () => {
     return (
       <>
-        <Typography>Data Key</Typography>
-        <CustomSelect
-          title='Axis X'
-          data={columns}
-          chosenValue={xAxis}
-          setChosenValue={setXAxis}
-        />
-        <CustomSelect
-          multi
-          title='Axis Y'
-          data={columns}
-          chosenValue={yAxis}
-          setChosenValue={setYAxis}
-        />
+        {/* <Typography>Data Key</Typography> */}
+        <div style={{ marginBottom: 20 }}>
+          <CustomSelect
+            title='Key X'
+            data={columns}
+            chosenValue={xAxis}
+            setChosenValue={setXAxis}
+          />
+          <CustomSelect
+            multi
+            title='Keys Y'
+            data={columns}
+            chosenValue={yAxis}
+            setChosenValue={setYAxis}
+          />
+        </div>
         {/* {options &&
           <CustomSelect
             title='Group By'
@@ -156,7 +158,7 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
             setChosenValue={setChosenKey}
           />
         } */}
-        <FormGroup>
+        <FormGroup style={{ padding: '30px 0 20px 0' }}>
           <FormControlLabel
             control={<Switch
               checked={area}

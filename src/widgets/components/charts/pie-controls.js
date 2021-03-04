@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
-import { Typography, Switch } from '@eqworks/lumen-ui'
+import { Switch } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
 
 // const useStyles = makeStyles((theme) => ({
@@ -111,20 +111,22 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const getPieControls = () => {
     return (
       <>
-        <Typography>Data Key</Typography>
-        <CustomSelect
-          title='Axis X'
-          data={columns}
-          chosenValue={xAxis}
-          setChosenValue={setXAxis}
-        />
-        <CustomSelect
-          multi
-          title='Axis Y'
-          data={columns}
-          chosenValue={yAxis}
-          setChosenValue={setYAxis}
-        />
+        {/* <Typography>Data Key</Typography> */}
+        <div style={{ marginBottom: 20 }}>
+          <CustomSelect
+            title='Key X'
+            data={columns}
+            chosenValue={xAxis}
+            setChosenValue={setXAxis}
+          />
+          <CustomSelect
+            multi
+            title='Keys Y'
+            data={columns}
+            chosenValue={yAxis}
+            setChosenValue={setYAxis}
+          />
+        </div>
         {options &&
           <CustomSelect
             title='Group By'
@@ -133,7 +135,7 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
             setChosenValue={setChosenKey}
           />
         }
-        <FormGroup>
+        <FormGroup style={{ padding: '30px 0 20px 0' }}>
           <FormControlLabel
             control={<Switch
               checked={isDonut}

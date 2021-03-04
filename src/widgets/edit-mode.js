@@ -32,7 +32,7 @@ const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
         }
       </Paper>
       <Paper style={{ width: '25%', marginBottom: 16, padding: 16 }}>
-        <Typography> Control Panel</Typography>
+        <Typography secondary={600} marginBottom={3} variant='h5'> Control Panel</Typography>
         {/* TODO Add title option in control and pass current state to getControl() */}
         {getControl()}
       </Paper>

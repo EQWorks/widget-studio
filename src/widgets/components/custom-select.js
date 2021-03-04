@@ -20,7 +20,8 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const CustomSelect = ({ data, chosenValue, setChosenValue, title, multi }) => {
+const CustomSelect = (props) => {
+  const { data, chosenValue, setChosenValue, title, multi, ...rest } = props
   const classes = useStyles()
   const handleChange = (setState) => ({ target: { value } }) => {
     setState(value === 'All' ? '' : value)
@@ -41,6 +42,7 @@ const CustomSelect = ({ data, chosenValue, setChosenValue, title, multi }) => {
             </div>
           )}
           MenuProps={{ elevation: 1 }}
+          {...rest}
         >
           {typeof data[0] === 'object' ?
           // data.map(({ name: key, category }) => (
@@ -84,6 +86,7 @@ const CustomSelect = ({ data, chosenValue, setChosenValue, title, multi }) => {
           </div>
         )}
         MenuProps={{ elevation: 1 }}
+        {...rest}
       >
         {typeof data[0] === 'object' ?
         // data.map(({ name: key, category }) => {

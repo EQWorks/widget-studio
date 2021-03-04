@@ -4,7 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
-import { Typography } from '@eqworks/lumen-ui'
+// import { Typography } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
 import { isJson, parseBar, groupJson, getChartData, getLayers } from './utils'
 
@@ -71,20 +71,22 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const getBarControls = () => {
     return (
       <>
-        <Typography>Data Key</Typography>
-        <CustomSelect
-          title='Axis X'
-          data={columns}
-          chosenValue={xAxis}
-          setChosenValue={setXAxis}
-        />
-        <CustomSelect
-          multi
-          title='Axis Y'
-          data={columns}
-          chosenValue={yAxis}
-          setChosenValue={setYAxis}
-        />
+        {/* <Typography>Data Key</Typography> */}
+        <div style={{ marginBottom: 20 }}>
+          <CustomSelect
+            title='Key X'
+            data={columns}
+            chosenValue={xAxis}
+            setChosenValue={setXAxis}
+          />
+          <CustomSelect
+            multi
+            title='Keys Y'
+            data={columns}
+            chosenValue={yAxis}
+            setChosenValue={setYAxis}
+          />
+        </div>
         {options.length > 1 &&
           <CustomSelect
             multi
@@ -94,7 +96,7 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
             setChosenValue={setChosenKey}
           />
         }
-        <div>
+        <div style={{ padding: '30px 0 20px 0' }}>
           <FormControl component='fieldset'>
             <RadioGroup aria-label='layout' name='layout1' value={layout} onChange={({ target: { value } }) => setLayout(value)}>
               <FormControlLabel value='vertical' control={<Radio />} label='Vertical' />
