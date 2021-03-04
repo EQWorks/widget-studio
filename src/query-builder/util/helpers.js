@@ -51,7 +51,7 @@ export const getColumnIndex = ({ colKey, viewId, columns }) => columns
 export const getFilterIndex = ({ colKey, viewId, filters }) => filters
   .findIndex(([{ expressions }]) => {
     const o = expressions[0]
-    return o.argA.key === colKey && o.argA.view.id === viewId
+    return o?.argA?.key === colKey && o?.argA?.view?.id === viewId
   })
 
 export const updateAggCols = ({ prevView = {}, currentView, columns }) => {
