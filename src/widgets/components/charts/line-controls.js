@@ -57,8 +57,13 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
 
   useEffect(() => {
     const specs = {
-      mode: 'lines+markers',
       type: 'scatter',
+      mode: 'lines+markers', // makes axis start far from 0
+      hovertemplate: '<b> %{fullData.name} </b>' +
+      // '<br> %{x}: %{y} ' +
+      '<br><b> %{xaxis.title.text}</b>: %{x} ' +
+      '<br><b> %{yaxis.title.text}</b>: %{y} <br>' +
+      '<extra></extra>',
       ...(area && { fill: 'tonexty' })
     }
     if (json && groupedData) {
@@ -79,16 +84,30 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
     }
   }, [json, groupedData, area, chosenKey])
 
+  const islongTickLabel = data && data[0].x.some((e) => e.length > 4)
   const props = {
     data,
     layout:{
       autosize: true,
+      hovermode: 'closest',
+      hoverlabel: { align: 'left', bgcolor: 'fff' },
+      colorway: ['#0062d9', '#f65b20', '#ffaa00', '#dd196b', '#9928b3', '#00b5c8', '#a8a8a8'],
       yaxis: {
-        title: json ? yAxis[0] : 'value',
+        title: {
+          text: json ? yAxis[0] : 'value',
+          standoff: 20,
+        },
+        automargin: true,
+        showline: true,
       },
       xaxis: {
-        title: json || xAxis,
-        ...((data && data[0].x.some((e) => e.length > 4) ) && { tickangle: 45, title: '' } )
+        title: {
+          text: json || xAxis,
+          standoff: 20
+        },
+        automargin: true,
+        tickangle: islongTickLabel ? 45 : 0,
+        rangemode: 'tozero'
       },
     },
     style: { width: '100%', height: '90%' },

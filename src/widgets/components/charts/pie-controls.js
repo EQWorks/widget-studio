@@ -54,7 +54,10 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
       values,
       labels,
       textposition: 'inside',
-      hoverinfo: 'label+value+percent+name',
+      hovertemplate:'<b>%{fullData.name}</b>' +
+      '<br><b>%{label}</b>: %{value} ' +
+      '<br><b>percent</b>: %{percent} ' +
+      '<extra></extra>',
       ...(isDonut? { hole: .5 } : {})
     }
     if (groupedData) {
@@ -69,7 +72,6 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
       setData((prevData) => {
         return prevData.slice(0, 3).map((chart, i) => {
           chart.domain =  {
-            // row: 0,
             column: i % 3 //3 charts per row
           }
           return chart
@@ -81,7 +83,7 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
       const multiLayout = {
         grid: { rows: 1, columns: 3 },
         annotations:
-          chosenKey.map((key, i) => ({
+          chosenKey.slice(0, 3).map((key, i) => ({
             font: { size: 15 },
             text: handleText(key),
             showarrow: false,
@@ -106,7 +108,9 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const props = {
     data,
     layout: {
+      colorway: ['#0062d9', '#f65b20', '#ffaa00', '#dd196b', '#9928b3', '#00b5c8', '#a8a8a8'],
       autosize: true,
+      hoverlabel: { align: 'left', bgcolor: 'fff' },
       ...multi,
     },
     style: { width: '100%', height: '90%' }

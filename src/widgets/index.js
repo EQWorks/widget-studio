@@ -21,13 +21,13 @@ const Widgets = ({ mlModel }) => {
 
   // const { resultState: { results, columns } } = mlModel
   const [type, setType] = useState('')
-  const [xAxis, setXAxis] = useState('address_region')
-  const [yAxis, setYAxis] = useState('converted_visits_hod')
+  const [xAxis, setXAxis] = useState('address_city')
+  const [yAxis, setYAxis] = useState('converted_visits')
   const [isOpen, setIsOpen] = useState(true)
 
   useEffect(() => {
     return () => {
-      alert('you are going to lose these changes')
+      confirm('you are going to lose these changes')
     }
   }, [])
 
@@ -41,13 +41,13 @@ const Widgets = ({ mlModel }) => {
       <WidgetSelector
         {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }}
       />
-      {/* <div style={{ width: '100%', height: 500 }}> */}
-      <Button onClick={() => setIsOpen(true)}> + Chart</Button>
-      {/* </div> */}
+      <div style={{ minHeight: isDone ? '100%' : 500 }}>
+        <Button onClick={() => setIsOpen(true)}> + Chart</Button>
+      </div>
       { isDone &&
-        <EditMode
-          {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, results }}
-        />
+      <EditMode
+        {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, results }}
+      />
       }
       <ResultsTable {...{ results }}/>
     </div>

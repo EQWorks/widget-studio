@@ -56,6 +56,11 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
     const specs = {
       type: 'bar',
       orientation: isVertical ? 'v' : 'h',
+      hovertemplate: '<b> %{fullData.name} </b>' +
+      // '<br> %{x}: %{y} ' +
+      '<br><b> %{xaxis.title.text}</b>: %{x} ' +
+      '<br><b> %{yaxis.title.text}</b>: %{y} <br>' +
+      '<extra></extra>',
       isVertical,
     }
     if (json && groupedData) {
@@ -76,15 +81,45 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
     }
   }, [chosenKey, groupedData, isVertical, json])
 
+  const islongTickLabel = (axis) => {
+    if (data && data[0]) {
+      return data[0][axis].some((e) => e.length > 4)
+    } else {
+      return false
+    }
+  }
+
+  const getTitle = (axis) => ({
+    x: isVertical ? json || xAxis : 'value',
+    y: isVertical ? 'value' : json || xAxis
+  }[axis])
+
   const props = {
     data,
     layout:{
       autosize: true,
+      hovermode: 'closest',
+      hoverlabel: { align: 'left', bgcolor: 'fff' },
+      colorway: ['#0062d9', '#f65b20', '#ffaa00', '#dd196b', '#9928b3', '#00b5c8', '#a8a8a8'],
       yaxis: {
-        title: isVertical ? 'value' : json || xAxis,
+        // visible: !islongTickLabel('y'),
+        title: {
+          text: getTitle('y'),
+          standoff: isVertical ? 5 : 20
+        },
+        automargin: true,
+        ticklen: 8,
+        showline: true,
       },
       xaxis: {
-        title: isVertical ? json || xAxis : 'value',
+        // visible: !islongTickLabel('x'),
+        title: {
+          text: getTitle('x'),
+          standoff: isVertical ? 5 : 20
+        },
+        automargin: true,
+        tickangle: islongTickLabel('x') ? 45 : 0,
+        ticklen: 8,
       },
       ...( data?.length > 1 ? { barmode: groupMode } : {}),
     },

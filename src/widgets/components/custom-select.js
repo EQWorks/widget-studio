@@ -13,7 +13,12 @@ import { Chip } from '@eqworks/lumen-ui'
 
 
 const useStyles = makeStyles(() => ({
-  form: { width: '50%' },
+  form: {
+    width: '50%',
+    maxHeight: 200,
+    overflowY: 'auto',
+    overflowX: 'hidden'
+  },
   chips: {
     display: 'flex',
     flexWrap: 'wrap',

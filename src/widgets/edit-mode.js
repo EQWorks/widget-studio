@@ -19,7 +19,7 @@ const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
 
   return (
     <div style={{ display: 'flex', marginTop: 10 }}>
-      <Paper style={{ minHeight: 500, margin: '0 16px 16px 0', width: '75%', paddingBottom: 50 }}>
+      <Paper style={{ minHeight: 500, margin: '0 16px 16px 0', width: '75%', padding: 10 }}>
         {(ready) &&
           <ErrorBoundary>
             <Plot
