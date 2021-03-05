@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react'
 
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
+import IconButton from '@material-ui/core/IconButton'
+import Clear from '@material-ui/icons/Clear'
 import { Switch } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
+
 import { isJson, parseData, groupJson, getLayers, getChartData, sum } from './utils'
 
 
@@ -110,13 +113,21 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
           />
         </div>
         {options.length > 1 &&
+        <>
           <CustomSelect
             multi
             title='Group By'
-            data={options}
+            data={options.sort()}
             chosenValue={chosenKey}
             setChosenValue={setChosenKey}
           />
+          <IconButton
+            size='small'
+            onClick={() => setChosenKey([])}
+          >
+            <Clear />
+          </IconButton>
+        </>
         }
         <FormGroup style={{ padding: '30px 0 20px 0' }}>
           <FormControlLabel

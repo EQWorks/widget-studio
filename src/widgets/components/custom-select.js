@@ -24,6 +24,7 @@ const CustomSelect = (props) => {
   const { data, chosenValue, setChosenValue, title, multi, ...rest } = props
   const classes = useStyles()
   const handleChange = (setState) => ({ target: { value } }) => {
+    // const _value = multi ? [] : '' // TODO plan better this option
     setState(value === 'All' ? '' : value)
   }
 

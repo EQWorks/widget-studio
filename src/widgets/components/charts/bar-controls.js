@@ -4,6 +4,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
+import IconButton from '@material-ui/core/IconButton'
+import Clear from '@material-ui/icons/Clear'
 import CustomSelect from '../custom-select'
 import { isJson, parseData, groupJson, getChartData, getLayers, sum } from './utils'
 
@@ -109,13 +111,21 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
           />
         </div>
         {options.length > 1 &&
-          <CustomSelect
-            multi
-            title='Group By'
-            data={options}
-            chosenValue={chosenKey}
-            setChosenValue={setChosenKey}
-          />
+          <>
+            <CustomSelect
+              multi
+              title='Group By'
+              data={options.sort()}
+              chosenValue={chosenKey}
+              setChosenValue={setChosenKey}
+            />
+            <IconButton
+              size='small'
+              onClick={() => setChosenKey([])}
+            >
+              <Clear />
+            </IconButton>
+          </>
         }
         <div style={{ padding: '30px 0 20px 0' }}>
           <FormControl component='fieldset'>

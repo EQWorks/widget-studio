@@ -168,3 +168,45 @@ export const getChartData = ({
   const data = Object.entries(_y).map(([name, y]) => getLayers({ x, y, name, specs }))
   return data
 }
+
+export const getPieChartData = ({
+  sumData,
+  chosenKey = [],
+  yKeys = [],
+}) => ({ specs }) => {
+  const shouldProcessAll = !chosenKey.length //if no chosen key, process all
+
+  let labels = []
+  let values = []
+  const finalData = []
+
+  if (yKeys.length > 1) {
+    chosenKey.forEach((key) => {
+      values = Object.values(sumData[key])
+      labels = Object.keys(sumData[key])
+      const _specs = {
+        ...specs,
+        name: key,
+        values,
+        labels
+      }
+      finalData.push(getLayers({ specs: _specs }))
+    })
+    return finalData
+  }
+
+  const pieData = Object.entries(sumData)
+  for (let [name, data] of pieData) {
+    const proceed = shouldProcessAll || chosenKey.includes(name)
+    if (proceed) {
+      labels.push(name)  // [ON, BC, SK ...]
+      values.push(Object.values(data)[0])
+    }
+  }
+  const _specs = {
+    ...specs,
+    values,
+    labels
+  }
+  return [getLayers({ specs: _specs })]
+}
