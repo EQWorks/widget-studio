@@ -53,24 +53,26 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
   }, [xAxis, yAxis])
 
   useEffect(() => {
+    const specs = {
+      mode: 'lines+markers',
+      type: 'scatter',
+      ...(area && { fill: 'tonexty' })
+    }
     if (json && groupedData) {
       const _res = parseData({ data: groupedData, keys: chosenKey })
       setData(_res.map(({ x, y, name }) => getLayers({
         x,
         y,
         name,
-        type: 'scatter',
-        area,
+        specs
       })))
       setReady(true)
     }
     if (!json && groupedData) {
       setData(getChartData({
         sumData: groupedData,
-        type: 'scatter',
-        area,
         chosenKey,
-      }))
+      })({ specs }))
     }
   }, [json, groupedData, area, chosenKey])
 

@@ -4,7 +4,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
-// import { Typography } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
 import { isJson, parseData, groupJson, getChartData, getLayers, sum } from './utils'
 
@@ -27,6 +26,7 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(results))
+    setGroupedData(null)
     if (json) {
       setReady(false)
       setGroupedData(null)
@@ -51,24 +51,26 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   }, [xAxis, yAxis])
 
   useEffect(() => {
+    const specs = {
+      type: 'bar',
+      orientation: isVertical ? 'v' : 'h',
+      isVertical,
+    }
     if (json && groupedData) {
       const _res = parseData({ data: groupedData, keys: chosenKey })
       setData(_res.map(({ x, y, name }) => getLayers({
         x,
         y,
         name,
-        type: 'bar',
-        isVertical,
+        specs,
       })))
       setReady(true)
     }
     if (!json && groupedData) {
       setData(getChartData({
         sumData: groupedData,
-        isVertical,
-        type: 'bar',
         chosenKey,
-      }))
+      })({ specs }))
     }
   }, [chosenKey, groupedData, isVertical, json])
 

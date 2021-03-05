@@ -4,6 +4,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
 import { Switch } from '@eqworks/lumen-ui'
 import CustomSelect from '../custom-select'
+import { getChartData, getLayers, sum } from './utils'
+
 
 // const useStyles = makeStyles((theme) => ({
 // }))
@@ -12,7 +14,8 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   const [xAxis, setXAxis] = useState(_xAxis)
   const [yAxis, setYAxis] = useState([_yAxis])
   const [isDonut, setIsDonut] = useState(false)
-  const [r, setR] = useState(null)
+  const [groupedData, setGroupedData] = useState(null)
+  const [data, setData] = useState(null)
 
   const [options, setOptions] = useState(null)
   const [chosenKey, setChosenKey] = useState('')
@@ -23,23 +26,15 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
       const resultsCopy = JSON.parse(JSON.stringify(results))
       setReady(false)
       setChosenKey('')
-      const res = resultsCopy.reduce((agg, element) => {
-        const _groupKey = element[xAxis]
-        const value = yAxis.map((key) => ({ id: key, value: element[key] }))
-        if (agg[_groupKey]) {
-          agg[_groupKey] = [...agg[_groupKey], ...value]
-        } else {
-          agg[_groupKey] = value
-        }
-        return agg
-      }, {})
-      /**res:
-       * [{id: yAxis[0], value: 10 }, {id: yAxis[1], value:5 }, {id: yAxis[2], value: 14 }...]
-       */
-      setOptions(Object.keys(res))
-      setR(res)
+      const _groupedData = sum({
+        results: resultsCopy,
+        groupKey: xAxis,
+        yKeys: yAxis,
+      })
+      setOptions(Object.keys(_groupedData))
+      setGroupedData(_groupedData)
     } else {
-      setR(null)
+      setGroupedData(null)
       setOptions('')
       setChosenKey('')
       setReady(true)
@@ -53,70 +48,77 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
     }
   }, [options])
 
-  const handleText = (str) => {
-    const size = str.length
-    return size > 12
-      ? `${str.slice(0, 12)}<br />${str.slice(9)}`
-      : str
-  }
-  const data = [{
-    type: 'pie',
-    values: chosenKey
-      ? r[chosenKey].map(({ value }) => value)
-      : results.map((e) => e[yAxis[0]]),
-    labels: chosenKey
-      ? r[chosenKey].map(({ id }) => id)
-      : results.map((e) => e[xAxis]),
-    ...(isDonut? { hole: .5 } : {})
-  }]
+  useEffect(() => {
+    let values
+    let labels
+    if (chosenKey) {
+      values = Object.values(groupedData[chosenKey])
+      labels = Object.keys(groupedData[chosenKey])
+    } else {
+      values = results.map((e) => e[yAxis[0]])
+      labels = results.map((e) => e[xAxis])
+    }
+    const specs = {
+      type: 'pie',
+      values,
+      labels,
+      textposition: 'inside',
+      hoverinfo: 'label+value+percent+name',
+      ...(isDonut? { hole: .5 } : {})
+    }
+    setData([getLayers({ name: chosenKey, specs })])
+  }, [chosenKey, groupedData, isDonut, options, results, xAxis, yAxis])
 
-  const _options = options?.slice(0,3)
-  const _data = []
-  if (options && !chosenKey) {
-    _options.forEach((option, i) => {
-      _data.push({
-        type: 'pie',
-        domain: {
-          row: Math.ceil((i + 1) / 3),
-          column: i % 3 //3 charts per row
-        },
-        name: option,
-        hoverinfo: 'label+value+percent+name',
-        textinfo: 'none',
-        values: r[option].map(({ value }) => value),
-        labels: r[option].map(({ id }) => id),
-        ...(isDonut? { hole: .5 } : {})
-      })
-    })
-  }
-  const positionX = [0.12, 0.5, 0.87, 0.12, 0.5, 0.87]
-  const positionY = [1.1, 1.1, 1.1, 2, 2, 2]
+  // const handleText = (str) => {
+  //   const size = str.length
+  //   return size > 12
+  //     ? `${str.slice(0, 12)}<br />${str.slice(9)}`
+  //     : str
+  // }
+
+
+  // const _options = options?.slice(0,3)
+  // const _data = []
+  // if (options && !chosenKey) {
+  //   _options.forEach((option, i) => {
+  //     _data.push({
+  //       type: 'pie',
+  //       domain: {
+  //         row: Math.ceil((i + 1) / 3),
+  //         column: i % 3 //3 charts per row
+  //       },
+  //       name: option,
+  //       hoverinfo: 'label+value+percent+name',
+  //       // textinfo: 'none',
+  //       textposition: 'inside',
+  //       values: r[option].map(({ value }) => value),
+  //       labels: r[option].map(({ id }) => id),
+  //       ...(isDonut? { hole: .5 } : {})
+  //     })
+  //   })
+  // }
+  // const positionX = [0.12, 0.5, 0.87, 0.12, 0.5, 0.87]
+  // const positionY = [1.1, 1.1, 1.1, 2, 2, 2]
   const props = {
-    data: _data.length ? _data : data,
-    ...(_data.length
-      ? {
-        layout: {
-          autosize: true,
-          grid: { rows: Math.ceil(_options.length / 3), columns: 3 },
-          annotations:
-            _options.map((option, i) => ({
-              font: { size: 15 },
-              text: handleText(option),
-              showarrow: false,
-              x: positionX[i],
-              y: positionY[i],
-            }))
-        }
-      }
-      : {}
-    ),
+    data,
+    layout: {
+      autosize: true,
+      // grid: { rows: Math.ceil(_options.length / 3), columns: 3 },
+      // annotations:
+      //   _options.map((option, i) => ({
+      //     font: { size: 15 },
+      //     text: handleText(option),
+      //     showarrow: false,
+      //     x: positionX[i],
+      //     y: positionY[i],
+      //   }))
+    },
     style: { width: '100%', height: '90%' }
   }
 
   const getPieControls = () => {
     return (
       <>
-        {/* <Typography>Data Key</Typography> */}
         <div style={{ marginBottom: 20 }}>
           <CustomSelect
             title='Key X'

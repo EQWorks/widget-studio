@@ -79,9 +79,14 @@ export const isJson = (key = '') => {
 }
 
 // each layer of Plot.data
-export const getLayers = ({ x, y, name, type, isVertical = true, area = false }) => {
+export const getLayers = ({
+  x = [],
+  y = [],
+  name = '',
+  specs = {},
+}) => {
+  const { type } = specs
   const base = {
-    type,
     x,
     y,
     name,
@@ -89,20 +94,29 @@ export const getLayers = ({ x, y, name, type, isVertical = true, area = false })
   }
   switch (type) {
   case 'bar': {
-    const _x = isVertical ? x : y
-    const _y = isVertical ? y : x
+    const _x = specs.isVertical ? x : y
+    const _y = specs.isVertical ? y : x
     return {
       ...base,
+      ...specs,
       x: _x,
       y: _y,
-      orientation: isVertical ? 'v' : 'h'
     }
+    // delete props.isVertical
+    // return props
   }
   case 'scatter': {
     return {
       ...base,
-      mode: 'lines+markers',
-      ...(area && { fill: 'tonexty' })
+      ...specs,
+    }
+  }
+  case 'pie': {
+    delete base.x
+    delete base.y
+    return {
+      ...base,
+      ...specs,
     }
   }
   default:
@@ -138,11 +152,8 @@ export const sum = ({ results, groupKey, yKeys }) => {
 // Plot.data with all layers
 export const getChartData = ({
   sumData,
-  isVertical = true,
-  area = false,
-  type,
   chosenKey = []
-}) => {
+}) => ({ specs }) => {
   const shouldProcessAll = !chosenKey.length //if no chosen key, process all
   const x = []
   const _y = {}
@@ -154,6 +165,6 @@ export const getChartData = ({
       Object.entries(data).forEach(([key, value]) => (_y[key] = [..._y[key] || [], value]))
     }
   }
-  const data = Object.entries(_y).map(([name, y]) => getLayers({ x, y, name, isVertical, area, type }))
+  const data = Object.entries(_y).map(([name, y]) => getLayers({ x, y, name, specs }))
   return data
 }

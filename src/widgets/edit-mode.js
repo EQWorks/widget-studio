@@ -14,16 +14,16 @@ import { getChart } from './components/charts'
 
 const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
   // const classes = useStyles()
-  const [revision, setRevision] = useState(0)
+  const [revision, setRevision] = useState(0) // if chart needs to be resized
   const { props, getControl, ready } = getChart(type || 'bar')({ columns, xAxis, yAxis, results })
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Paper style={{ height: 500, margin: '0 16px 16px 0', width: '75%', paddingBottom: 50 }}>
+    <div style={{ display: 'flex', marginTop: 10 }}>
+      <Paper style={{ minHeight: 500, margin: '0 16px 16px 0', width: '75%', paddingBottom: 50 }}>
         {(ready) &&
           <ErrorBoundary>
             <Plot
-              revision={revision} // if need to resize map
+              revision={revision} // if chart needs to be resized
               {...props}
             />
             <Button
