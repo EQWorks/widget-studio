@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(2, 0),
     },
   },
+  typography: { marginLeft: '25%' }
 }))
 
 const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }) => {
@@ -64,13 +65,13 @@ const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, colum
     >
       <Fade in={isOpen}>
         <div className={classes.paper}>
-          <Typography style={{ marginLeft: '25%' }}>
+          <Typography className={classes.typography}>
             Select what goes in your X and Y axis
           </Typography>
           <SelectColumns
             {...{ columnsData: columns, xAxis, setXAxis, yAxis, setYAxis }}
           />
-          <Typography style={{ marginLeft: '25%' }}>
+          <Typography className={classes.typography}>
             This data can be visualized with the following types of charts. Pick one:
           </Typography>
           <Icons

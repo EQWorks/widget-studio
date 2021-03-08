@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
+import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
 import IconButton from '@material-ui/core/IconButton'
@@ -10,10 +11,13 @@ import CustomSelect from '../custom-select'
 import { isJson, parseData, groupJson, getLayers, getChartData, sum } from './utils'
 
 
-// const useStyles = makeStyles((theme) => ({
-// }))
+const useStyles = makeStyles((theme) => ({
+  row1: { marginBottom: theme.spacing(2.5) },
+  row3: { padding: '30px 0 20px 0' },
+}))
 
 const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
+  const classes = useStyles()
   const [xAxis, setXAxis] = useState(_xAxis)
   const [yAxis, setYAxis] = useState([_yAxis])
   const [data, setData] = useState(null)
@@ -110,13 +114,12 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
         rangemode: 'tozero'
       },
     },
-    style: { width: '100%', height: '90%' },
   }
 
   const getLineControls = () => {
     return (
       <>
-        <div style={{ marginBottom: 20 }}>
+        <div className={classes.row1}>
           <CustomSelect
             title='Key X'
             data={columns}
@@ -148,7 +151,7 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
           </IconButton>
         </>
         }
-        <FormGroup style={{ padding: '30px 0 20px 0' }}>
+        <FormGroup className={classes.row3}>
           <FormControlLabel
             control={<Switch
               checked={area}

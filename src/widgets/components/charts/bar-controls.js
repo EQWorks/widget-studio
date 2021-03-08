@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
+import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
@@ -10,10 +11,13 @@ import CustomSelect from '../custom-select'
 import { isJson, parseData, groupJson, getChartData, getLayers, sum } from './utils'
 
 
-// const useStyles = makeStyles((theme) => ({
-// }))
+const useStyles = makeStyles((theme) => ({
+  row1: { marginBottom: theme.spacing(2.5) },
+  row3: { padding: '30px 0 20px 0' },
+}))
 
 const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
+  const classes = useStyles()
   const [xAxis, setXAxis] = useState(_xAxis)
   const [yAxis, setYAxis] = useState([_yAxis])
   const [groupMode, setGroupMode] = useState('group')
@@ -123,14 +127,13 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
       },
       ...( data?.length > 1 ? { barmode: groupMode } : {}),
     },
-    style: { width: '100%', height: '90%' },
-    useResizeHandler: true
+    useResizeHandler: true,
   }
 
   const getBarControls = () => {
     return (
       <>
-        <div style={{ marginBottom: 20 }}>
+        <div className={classes.row1}>
           <CustomSelect
             title='Key X'
             data={columns}
@@ -162,7 +165,7 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
             </IconButton>
           </>
         }
-        <div style={{ padding: '30px 0 20px 0' }}>
+        <div className={classes.row3}>
           <FormControl component='fieldset'>
             <RadioGroup aria-label='layout' name='layout1' value={layout} onChange={({ target: { value } }) => setLayout(value)}>
               <FormControlLabel value='vertical' control={<Radio />} label='Vertical' />

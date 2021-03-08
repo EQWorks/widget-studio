@@ -1,56 +1,93 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-// import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
 import ResultsTable from '../components/table'
 import WidgetSelector from './modal'
 import EditMode from './edit-mode'
-import { Button } from '@eqworks/lumen-ui'
-import { Typography } from '@material-ui/core'
+import { Button, Loader, Typography } from '@eqworks/lumen-ui'
+// import { columns } from './columns.json'
+// import { results } from './results.json'
 
-import { columns } from './columns.json'
-import { results } from './results.json'
+const useStyles = makeStyles((theme) => ({
+  warning: { textAlign: 'center', marginTop: theme.spacing(6) },
+  placeholder: { minHeight: ({ isDone }) => isDone ? '100%' : 500 },
+  content: {
+    overflow: 'auto',
+    padding: 18,
+    maxHeight: 'calc(100vh - 100px)'
+  }
+}))
 
-// const useStyles = makeStyles((theme) => ({
-// }))
-
-// const Widgets = () => {
 const Widgets = ({ mlModel }) => {
-  // const classes = useStyles()
-
-  // const { resultState: { results, columns } } = mlModel
+  const {
+    // resultLoading,
+    resultState: {
+      results,
+      columns
+    },
+    savedQueriesStates: {
+      selectedQuery: { saved },
+      savedQueries
+    },
+  } = mlModel
   const [type, setType] = useState('')
-  const [xAxis, setXAxis] = useState('address_city')
-  const [yAxis, setYAxis] = useState('converted_visits')
-  const [isOpen, setIsOpen] = useState(true)
+  const [xAxis, setXAxis] = useState('')
+  const [yAxis, setYAxis] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    return () => {
-      confirm('you are going to lose these changes')
+    if (results.length) {
+      setIsOpen(true)
     }
-  }, [])
+  }, [results])
+
+  // useEffect(() => {
+  //   return () => {
+  //     confirm('you are going to lose these changes')
+  //   }
+  // }, [])
 
   const isDone = Boolean(xAxis && yAxis && type && !isOpen)
 
-  if(!results.length) {
-    return ( <Typography>Run or select a query first</Typography>)
+  const classes = useStyles({ isDone })
+
+  const renderWarning = (message) => (
+    <div className={classes.warning}>
+      <Typography secondary={600} variant='subtitle1'>
+        {message}
+      </Typography>
+    </div>)
+
+  if (saved < 0) {
+    return renderWarning('Run or select a query from the list.')
   }
+  if (!savedQueries[saved].executions.length) { // there is a selected query but no executions
+    return renderWarning('This query has never been run, try running it first or select a different query from the list')
+  }
+
+  // if (results.length === 0 && !resultLoading  ) {
+  //   return renderWarning('The results for this query are empty')
+  // }
   return (
-    <div style={{ overflow: 'auto', padding: 18, maxHeight: 'calc(100vh - 100px' }}>
-      <WidgetSelector
-        {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }}
-      />
-      <div style={{ minHeight: isDone ? '100%' : 500 }}>
-        <Button onClick={() => setIsOpen(true)}> + Chart</Button>
-      </div>
-      { isDone &&
+    <>
+      <Loader backdrop action='circular' open={results.length === 0} />
+      <div className={classes.content}>
+        <WidgetSelector
+          {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }}
+        />
+        <div className={classes.placeholder}>
+          <Button onClick={() => setIsOpen(true)}> + Chart</Button>
+        </div>
+        { isDone &&
       <EditMode
         {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, results }}
       />
-      }
-      <ResultsTable {...{ results }}/>
-    </div>
+        }
+        <ResultsTable {...{ results }}/>
+      </div>
+    </>
   )
 }
 
