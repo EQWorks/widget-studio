@@ -7,8 +7,6 @@ import ResultsTable from '../components/table'
 import WidgetSelector from './modal'
 import EditMode from './edit-mode'
 import { Button, Loader, Typography } from '@eqworks/lumen-ui'
-// import { columns } from './columns.json'
-// import { results } from './results.json'
 
 const useStyles = makeStyles((theme) => ({
   warning: { textAlign: 'center', marginTop: theme.spacing(6) },
@@ -38,6 +36,9 @@ const Widgets = ({ mlModel }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
+    setXAxis('')
+    setYAxis('')
+    setType('')
     if (results.length) {
       setIsOpen(true)
     }

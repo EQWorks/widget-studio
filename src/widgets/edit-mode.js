@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 500,
     margin: '0 16px 16px 0',
     width: '75%',
-    padding: 10
+    padding: theme.spacing()
   },
   control: { width: '25%', marginBottom: 16, padding: 16 },
 }))
