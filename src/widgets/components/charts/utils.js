@@ -131,7 +131,9 @@ export const sum = ({ results, groupKey, yKeys }) => {
     ...
     } */
   results.forEach((datum) => {
-    const _groupKey = datum[groupKey] // ON - value of region{
+    const key = datum[groupKey]?.trim().toLowerCase() // ON - value of region{
+    // normalize keys
+    const _groupKey = key?.charAt(0).toUpperCase() + key.slice(1)
     const current = sumData[_groupKey]
     if (current) {
       yKeys.forEach((key) => {

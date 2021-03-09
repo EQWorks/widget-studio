@@ -68,6 +68,7 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
       '<br><b> %{xaxis.title.text}</b>: %{x} ' +
       '<br><b> %{yaxis.title.text}</b>: %{y} <br>' +
       '<extra></extra>',
+      connectgaps: true,
       ...(area && { fill: 'tonexty' })
     }
     if (json && groupedData) {

@@ -87,7 +87,7 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
 
   const islongTickLabel = (axis) => {
     if (data && data[0]) {
-      return data[0][axis].some((e) => e.length > 4)
+      return data[0][axis].some((e) => e?.length > 4)
     } else {
       return false
     }
@@ -129,7 +129,6 @@ const useBarControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
     },
     useResizeHandler: true,
   }
-
   const getBarControls = () => {
     return (
       <>

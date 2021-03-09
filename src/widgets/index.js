@@ -20,14 +20,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Widgets = ({ mlModel }) => {
   const {
-    // resultLoading,
+    resultLoading,
     resultState: {
       results,
       columns
     },
     savedQueriesStates: {
       selectedQuery: { saved },
-      savedQueries
+      savedQueries,
     },
   } = mlModel
   const [type, setType] = useState('')
@@ -61,19 +61,19 @@ const Widgets = ({ mlModel }) => {
       </Typography>
     </div>)
 
-  if (saved < 0) {
+  if (saved === -1 || !savedQueries[saved]) {
     return renderWarning('Run or select a query from the list.')
   }
-  if (!savedQueries[saved].executions.length) { // there is a selected query but no executions
+  if (savedQueries[saved].executions.length === 0) { // there is a selected query but no executions
     return renderWarning('This query has never been run, try running it first or select a different query from the list')
   }
+  if (results.length === 0 && !resultLoading  ) {
+    return renderWarning('No Results')
+  }
 
-  // if (results.length === 0 && !resultLoading  ) {
-  //   return renderWarning('The results for this query are empty')
-  // }
   return (
     <>
-      <Loader backdrop action='circular' open={results.length === 0} />
+      <Loader backdrop action='circular' open={results.length === 0 && resultLoading} />
       <div className={classes.content}>
         <WidgetSelector
           {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }}
