@@ -1,5 +1,6 @@
 
 import React from "react"
+import { ThemeProvider } from '@eqworks/react-labs'
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -7,5 +8,5 @@ export const parameters = {
 }
 
 export const decorators = [
-  (Story) =>  <Story />,
+  (Story) => (<ThemeProvider><Story /></ThemeProvider>),
 ]
