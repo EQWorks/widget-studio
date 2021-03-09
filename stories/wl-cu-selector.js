@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 // if merged into ml-codebase, add api into actions.js
 const api = axios.create({
   baseURL: [
-    process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
+    process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
     // process.env.STORYBOOK_API_STAGE,
     'mldev',
   ].filter(v => v).join('/'),

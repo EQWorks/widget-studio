@@ -82,8 +82,8 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
         })
       })
 
-      const positionX = [0.12, 0.5, 0.87, 0.12, 0.5, 0.87]
-      const positionY = [1.1, 1.1, 1.1, 2, 2, 2]
+      const positionX = [0.1, 0.5, 0.9, 0.12, 0.5, 0.87]
+      const positionY = [1.2, 1.2, 1.2, 2, 2, 2] // upper
       const multiLayout = {
         grid: { rows: 1, columns: 3 },
         annotations:
@@ -102,10 +102,16 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
   }, [chosenKey, yAxis, isDonut])
 
   const handleText = (str) => {
-    const size = str.length
-    return size > 12
-      ? `${str.slice(0, 12)}<br />${str.slice(9)}`
-      : str
+    // const size = str.length
+    //   ? `${_str.slice(0, 12)}<br />${_str.slice(12)}`
+    // return size > 12
+    //   : _str
+    const _str = str.replace(/[^A-Za-zÀ-ÿ &]+/g, '')
+      .trim()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(' ')
+    return _str
   }
 
 
