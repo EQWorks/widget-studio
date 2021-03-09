@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
 const api = axios.create({
   baseURL: [
     process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
-    process.env.STORYBOOK_API_STAGE,
+    // process.env.STORYBOOK_API_STAGE,
+    'mldev',
   ].filter(v => v).join('/'),
   headers: { 'eq-api-jwt': window.localStorage.getItem('auth_jwt') },
 })
