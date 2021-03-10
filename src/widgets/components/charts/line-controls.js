@@ -23,6 +23,7 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
   const [data, setData] = useState(null)
   const [ready, setReady] = useState(true)
   const [area, setArea] = useState(false)
+  const [multiAxis, setMultiAxis] = useState(false)
   const [groupedData, setGroupedData] = useState(null)
   const [options, setOptions] = useState([])
   const [chosenKey, setChosenKey] = useState([])
@@ -82,24 +83,39 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
       setReady(true)
     }
     if (!json && groupedData) {
-      setData(getChartData({
+      const _data = getChartData({
         sumData: groupedData,
         chosenKey,
-      })({ specs }))
+      })({ specs })
+      if (multiAxis) {
+        setData(_data
+          .slice(0, 2)
+          .map((d, i) => {
+            let _data = d
+            if (i === 1) {
+              _data = { ...d, yaxis: 'y2' }
+            }
+            return _data
+          })
+        )
+      } else {
+        setData(_data)
+      }
     }
-  }, [json, groupedData, area, chosenKey])
+  }, [json, groupedData, area, chosenKey, multiAxis])
 
   const islongTickLabel = data && data[0].x.some((e) => e.length > 4)
   const props = {
     data,
     layout:{
+      showlegend: multiAxis ? false : true,
       autosize: true,
       hovermode: 'closest',
       hoverlabel: { align: 'left', bgcolor: 'fff' },
       colorway: ['#0062d9', '#f65b20', '#ffaa00', '#dd196b', '#9928b3', '#00b5c8', '#a8a8a8'],
       yaxis: {
         title: {
-          text: json ? yAxis[0] : 'value',
+          text: json || multiAxis ? yAxis[0] : 'value',
           standoff: 20,
         },
         automargin: true,
@@ -114,9 +130,16 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
         tickangle: islongTickLabel ? 45 : 0,
         rangemode: 'tozero'
       },
+      ...(multiAxis && { yaxis2: {
+        overlaying: 'y',
+        side: 'right',
+        title: yAxis[1],
+        automargin: true,
+        type: 'linear',
+        showline: true,
+      } })
     },
   }
-
   const getLineControls = () => {
     return (
       <>
@@ -154,6 +177,7 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
         }
         <FormGroup className={classes.row3}>
           <FormControlLabel
+            style={{ marginBottom: 20 }}
             control={<Switch
               checked={area}
               onChange={({ target: { checked } }) => setArea(checked)}
@@ -161,6 +185,16 @@ const useLineControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => 
             />}
             label='Area'
           />
+          {(!json && yAxis.length > 1) &&
+          <FormControlLabel
+            control={<Switch
+              checked={multiAxis}
+              onChange={({ target: { checked } }) => setMultiAxis(checked)}
+              name='Multi Axis'
+            />}
+            label='Multi Axis'
+          />
+          }
         </FormGroup>
       </>
     )

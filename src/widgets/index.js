@@ -26,15 +26,16 @@ const Widgets = ({ mlModel }) => {
       columns
     },
     savedQueriesStates: {
-      selectedQuery: { saved },
-      savedQueries,
+      selectedQuery: { saved = -1, execution = -1 },
+      // savedQueries,
+      // queryExecutions,
     },
   } = mlModel
   const [type, setType] = useState('')
   const [xAxis, setXAxis] = useState('')
   const [yAxis, setYAxis] = useState('')
   const [isOpen, setIsOpen] = useState(false)
-
+  // return('hi')
   useEffect(() => {
     setXAxis('')
     setYAxis('')
@@ -61,12 +62,12 @@ const Widgets = ({ mlModel }) => {
       </Typography>
     </div>)
 
-  if (saved === -1 || !savedQueries[saved]) {
+  if (saved === -1 && execution === -1) {
     return renderWarning('Run or select a query from the list.')
   }
-  if (savedQueries[saved].executions.length === 0) { // there is a selected query but no executions
-    return renderWarning('This query has never been run, try running it first or select a different query from the list')
-  }
+  // if (savedQueries[saved].executions.length === 0 ) { // there is a selected query but no executions
+  //   return renderWarning('This query has never been run, try running it first or select a different query from the list')
+  // }
   if (results.length === 0 && !resultLoading  ) {
     return renderWarning('No Results')
   }
