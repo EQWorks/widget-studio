@@ -1,6 +1,7 @@
 import { createStore, action } from 'easy-peasy'
 
 import { viewsReducer } from './views-reducer'
+import { resultsReducer } from './results-reducer'
 
 
 const _action = (key) => action((state, payload) => { state[key] = payload })
@@ -27,6 +28,7 @@ export const store = createStore({
   ...viewsReducer,
 
   // // resultReducer
+  ...resultsReducer,
   // results: [],
   // queryString: '',
   // proMode: false,
