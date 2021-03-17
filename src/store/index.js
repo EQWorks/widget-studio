@@ -4,7 +4,13 @@ import { viewsReducer } from './views-reducer'
 import { resultsReducer } from './results-reducer'
 
 
-const _action = (key) => action((state, payload) => { state[key] = payload })
+const _action = (key) => action((state, payload) => {
+  let _payload = payload
+  if (typeof payload === 'function') {
+    _payload = payload(state[key])
+  }
+  return { ...state, [key]: _payload }
+})
 
 export const store = createStore({
   queryDrawer: true,
@@ -27,28 +33,9 @@ export const store = createStore({
   // viewState
   ...viewsReducer,
 
-  // // resultReducer
+  // resultReducer
   ...resultsReducer,
-  // results: [],
-  // queryString: '',
-  // proMode: false,
-  // isPreview: false,
-  // shouldFetch: false,
-  // model: {},
-  // //
-  // customerID: -1,
-  // whitelabelID: -1,
-  // queryHash: '',
-  // columnHash: '',
-  // resultColumns: [], // from columns
-  // cost: 1,
-  // executionID: -1,
-  // isInternal: false,
-  // isOrphaned: false,
-  // markup: { query: {}, views: [] },
-  // queryID: -1,
-  // status: '',
-  // statusTS: '',
+
 }, {
   disableImmer: true,
 })
