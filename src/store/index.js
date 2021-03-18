@@ -3,6 +3,7 @@ import { createStore, action } from 'easy-peasy'
 import { viewsReducer } from './views-reducer'
 import { resultsReducer } from './results-reducer'
 import { columnsActions } from './columns-actions'
+import { filtersActions } from './filters-actions'
 
 
 const _action = (key) => action((state, payload) => {
@@ -39,6 +40,9 @@ export const store = createStore({
 
   // columnsActions
   ...columnsActions,
+
+  // filtersActions
+  ...filtersActions,
 
 }, {
   disableImmer: true,
