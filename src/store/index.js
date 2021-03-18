@@ -4,6 +4,7 @@ import { viewsReducer } from './views-reducer'
 import { resultsReducer } from './results-reducer'
 import { columnsActions } from './columns-actions'
 import { filtersActions } from './filters-actions'
+import { queryActionHelpers } from './query-action-helpers'
 
 
 const _action = (key) => action((state, payload) => {
@@ -31,18 +32,20 @@ export const store = createStore({
   setGeoJoinColumn: _action('geoJoinColumn'),
   alert: { status: false, message: 'Error' },
   setAlert: _action('alert'),
+  // geoJoin,
+  geoJoin: false,
+  setGeoJoin: _action('geoJoin'),
 
-  // viewState
+  // views + results state
   ...viewsReducer,
-
-  // resultReducer
   ...resultsReducer,
 
-  // columnsActions
+  // columns + filters helpers
   ...columnsActions,
-
-  // filtersActions
   ...filtersActions,
+
+  // generateQuery + reset heleprs
+  ...queryActionHelpers,
 
 }, {
   disableImmer: true,
