@@ -58,16 +58,6 @@ const CustomSelect = (props) => {
               </MenuItem>
             )
             )
-
-          // data.map(({ values, data, as }) => {
-          // /** if agg, the key 'values' replace 'data' */
-          //   const { key, category } = values?.[1].data || data
-          //   return (<MenuItem key={key} value={key}>
-          //     <Checkbox checked={chosenValue === key || chosenValue == as} />
-          //     <ListItemText primary={`${as || key} (${category})`} />
-          //   </MenuItem>)
-          // })
-
             : data.map((value) => (<MenuItem key={value} value={value}>{value}</MenuItem>))
           }
         </Select>
@@ -101,16 +91,6 @@ const CustomSelect = (props) => {
               <ListItemText primary={`${key} (${category})`} />
             </MenuItem>)
           })
-
-          // data.map(({ values, data, as }) => {
-          // /** if agg, the key 'values' replace 'data' */
-          //   const { key, category } = values?.[1].data || data
-          //   const columnName = as || key
-          //   return (<MenuItem key={columnName} value={columnName}>
-          //     <Checkbox checked={chosenValue.indexOf(columnName) > -1} />
-          //     <ListItemText primary={`${columnName} (${category})`} />
-          //   </MenuItem>)
-          // })
           : data.map((value) => (<MenuItem key={value} value={value}>{value}</MenuItem>))}
       </Select>
     </FormControl>
