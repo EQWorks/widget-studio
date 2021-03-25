@@ -1,6 +1,7 @@
 import { createStore, action } from 'easy-peasy'
 
 import { viewsReducer } from './views-reducer'
+import { widgetsReducer } from './widgets-reducer'
 import { resultsReducer } from './results-reducer'
 import { columnsActions } from './columns-actions'
 import { filtersActions } from './filters-actions'
@@ -47,6 +48,8 @@ export const store = createStore({
   // generateQuery + reset heleprs
   ...queryActionHelpers,
 
+  // widgets
+  ...widgetsReducer
 }, {
   disableImmer: true,
 })
