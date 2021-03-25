@@ -6,6 +6,7 @@ import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
 import { Typography, Button } from '@eqworks/lumen-ui'
+import { useStoreDispatch } from 'easy-peasy'
 import Icons from './components/icons'
 import SelectColumns from './components/select-columns'
 
@@ -37,8 +38,9 @@ const useStyles = makeStyles((theme) => ({
   typography: { marginLeft: '25%' }
 }))
 
-const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }) => {
+const WidgetSelector = ({ xAxis, yAxis, type, columns, isOpen }) => {
   const classes = useStyles()
+  const dispatch = useStoreDispatch()
 
   // const regexGeo = /(geo|fsa|lat|lon)/gi
   /** array of unique categories based on query columns
@@ -58,7 +60,7 @@ const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, colum
     <Modal
       className={classes.modalContainer}
       open={isOpen}
-      onClose={() => setIsOpen(false)}
+      onClose={() => dispatch({ type: 'WIDGETS', payload: { isOpen: false } })}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 500 }}
@@ -69,18 +71,17 @@ const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, colum
             Select what goes in your X and Y axis
           </Typography>
           <SelectColumns
-            {...{ columnsData: columns, xAxis, setXAxis, yAxis, setYAxis }}
+            {...{ columnsData: columns, xAxis, yAxis }}
           />
           <Typography className={classes.typography}>
             This data can be visualized with the following types of charts. Pick one:
           </Typography>
           <Icons
           // categories={categories}
-            setType={setType}
             current={type}
           />
           <Button onClick={() => {
-            setIsOpen(false)
+            dispatch({ type: 'WIDGETS', payload: { isOpen: false } })
             // setIsDone(true)
           }}>
           Done
@@ -95,13 +96,9 @@ const WidgetSelector = ({ xAxis, setXAxis, yAxis, setYAxis, type, setType, colum
 WidgetSelector.propTypes = {
   columns: PropTypes.array,
   isOpen: PropTypes.bool.isRequired,
-  setIsOpen: PropTypes.func.isRequired,
   xAxis: PropTypes.string.isRequired,
-  setXAxis: PropTypes.func.isRequired,
   yAxis: PropTypes.string.isRequired,
-  setYAxis: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
-  setType: PropTypes.func.isRequired,
 }
 WidgetSelector.default = {
   results: [],

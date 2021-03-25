@@ -5,19 +5,19 @@ import Grid from '@material-ui/core/Grid'
 import CustomSelect from './custom-select'
 
 
-const SelectColumns = ({ columnsData, xAxis, setXAxis, yAxis, setYAxis }) => (
+const SelectColumns = ({ columnsData, xAxis, yAxis }) =>  (
   <Grid container direction='column' alignItems='center'>
     <CustomSelect
       title='Key X'
       data={columnsData}
       chosenValue={xAxis}
-      setChosenValue={setXAxis}
+      setChosenValue={'xAxis'}
     />
     <CustomSelect
       title='Key Y'
       data={columnsData}
       chosenValue={yAxis}
-      setChosenValue={setYAxis}
+      setChosenValue={'yAxis'}
     />
   </Grid>
 )
@@ -25,9 +25,9 @@ const SelectColumns = ({ columnsData, xAxis, setXAxis, yAxis, setYAxis }) => (
 SelectColumns.propTypes = {
   columnsData: PropTypes.array,
   xAxis: PropTypes.string.isRequired,
-  setXAxis: PropTypes.func.isRequired,
+  // setXAxis: PropTypes.func.isRequired,
   yAxis: PropTypes.string.isRequired,
-  setYAxis: PropTypes.func.isRequired
+  // setYAxis: PropTypes.func.isRequired
 }
 SelectColumns.default = {
   columnsData: [],

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
-
 import ResultsTable from '../components/table'
 import WidgetSelector from './modal'
 import EditMode from './edit-mode'
@@ -20,6 +19,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Widgets = ({ mlModel }) => {
   const {
+    widgetsDispatch,
+    widgetsState: {
+      type,
+      xAxis,
+      yAxis,
+      isOpen,
+    },
+    isDone,
     resultLoading,
     resultState: {
       results,
@@ -31,27 +38,16 @@ const Widgets = ({ mlModel }) => {
       // queryExecutions,
     },
   } = mlModel
-  const [type, setType] = useState('')
-  const [xAxis, setXAxis] = useState('')
-  const [yAxis, setYAxis] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
-  // return('hi')
-  useEffect(() => {
-    setXAxis('')
-    setYAxis('')
-    setType('')
-    if (results.length) {
-      setIsOpen(true)
-    }
-  }, [results])
 
   // useEffect(() => {
-  //   return () => {
-  //     confirm('you are going to lose these changes')
+  //   if (results.length && !isDone) {
+  //     // if () {
+  //     widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: true } })
+  //     // }
   //   }
-  // }, [])
+  // }, [widgetsDispatch, isDone, results])
 
-  const isDone = Boolean(xAxis && yAxis && type && !isOpen)
+
 
   const classes = useStyles({ isDone })
 
@@ -62,12 +58,17 @@ const Widgets = ({ mlModel }) => {
       </Typography>
     </div>)
 
-  if (saved === -1 && execution === -1) {
-    return renderWarning('Run or select a query from the list.')
-  }
+  /**PUTBACK */
+  // if (saved === -1 && execution === -1) {
+  //   return renderWarning('Run or select a query from the list.')
+  // }
+  /**PUTBACK */
+
+
   // if (savedQueries[saved].executions.length === 0 ) { // there is a selected query but no executions
   //   return renderWarning('This query has never been run, try running it first or select a different query from the list')
   // }
+
   if (results.length === 0 && !resultLoading  ) {
     return renderWarning('No Results')
   }
@@ -77,15 +78,15 @@ const Widgets = ({ mlModel }) => {
       <Loader backdrop action='circular' open={results.length === 0 && resultLoading} />
       <div className={classes.content}>
         <WidgetSelector
-          {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, isOpen, setIsOpen }}
+          {...{ xAxis, yAxis, type, columns, isOpen }}
         />
         <div className={classes.placeholder}>
-          <Button onClick={() => setIsOpen(true)}> + Chart</Button>
+          <Button onClick={() => widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: true } })}> + Chart</Button>
         </div>
         { isDone &&
-      <EditMode
-        {...{ xAxis, setXAxis, yAxis, setYAxis, type, setType, columns, results }}
-      />
+          <EditMode
+            {...{ xAxis, yAxis, type, columns, results }}
+          />
         }
         <ResultsTable {...{ results }}/>
       </div>

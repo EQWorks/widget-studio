@@ -10,6 +10,7 @@ import InsertChartIcon from '@material-ui/icons/InsertChart'
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 import Grid from '@material-ui/core/Grid'
 import Badge from '@material-ui/core/Badge'
+import { useStoreDispatch } from 'easy-peasy'
 
 
 const mapIcons = [
@@ -21,8 +22,9 @@ const mapIcons = [
 ]
 const Icons = ({
   // categories = [],
-  setType,
+  // setType,
   current }) => {
+  const dispatch = useStoreDispatch()
 
   const genClicableIcon = () => mapIcons.map(({ Component, type, disabled }, i) => {
     /** at least 2 categories */ //TODO is this a good idea? maybe can plot with only numbers, or strings....
@@ -30,7 +32,7 @@ const Icons = ({
 
     return (
       // <IconButton key={i} onClick={() => setType(type)} disabled={!isUsable}>
-      <IconButton key={i} onClick={() => setType(type)} disabled={disabled}>
+      <IconButton key={i} onClick={() => dispatch({ type: 'WIDGETS', payload: { type } })} disabled={disabled}>
         <Badge variant='dot' invisible={!current || type !== current} color='error'>
           <Component fontSize='large' color={disabled ? 'disabled' : 'primary'} />
           {/* <Component fontSize='large' color={isUsable ? 'primary' : 'disabled'}/> */}
@@ -50,7 +52,6 @@ const Icons = ({
 
 Icons.propTypes={
   // categories: PropTypes.array.isRequired,
-  setType: PropTypes.func.isRequired,
   current: PropTypes.string.isRequired,
 }
 
