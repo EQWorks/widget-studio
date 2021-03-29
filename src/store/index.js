@@ -49,7 +49,7 @@ export const store = createStore({
   ...queryActionHelpers,
 
   // widgets
-  ...widgetsReducer
+  widgets: widgetsReducer
 }, {
   disableImmer: true,
 })
