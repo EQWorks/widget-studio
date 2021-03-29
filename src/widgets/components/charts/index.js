@@ -1,36 +1,28 @@
-// import {
-//   BarChart,
-//   LineChart,
-//   ScatterChart,
-//   PieChart,
-// } from '@eqworks/chart-system'
 import useBarControls from './bar-controls'
 import usePieControls from './pie-controls'
 import useLineControls from './line-controls'
 
 
-export const getChart = (type = 'bar') => ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
-  const { Chart, useControl } = {
+export const getChart = (type) => ({ columns, results }) => {
+  const { useControl } = {
     bar: {
-      // Chart: BarChart,
       useControl: useBarControls,
     },
     pie: {
-      // Chart: PieChart,
       useControl: usePieControls,
     },
     line: {
-      // Chart: LineChart,
       useControl: useLineControls
     },
     // scatter: {
-    //   Chart: ScatterChart,
     //   useControl: useLineControls
     // },
-    // map: 'map',
+    // map: {
+    //   useControl: useMapControls
+    // },
   }[type]
 
-  const [props, getControl, ready] = useControl({ columns, xAxis: _xAxis, yAxis: _yAxis, results })
+  const [props, getControl, ready] = useControl({ columns, results })
 
-  return { Chart, props, getControl, ready }
+  return { props, getControl, ready }
 }

@@ -1,24 +1,43 @@
-import { action, reducer, computed, thunk, unstable_effectOn } from 'easy-peasy'
+import { reducer, computed } from 'easy-peasy'
 
 
-const initialResult = () => ({
+const initState = () => ({
   type: '',
   xAxis: '',
-  yAxis: '',
+  yAxis: [],
   isOpen: true,
-  // isDone: false
 })
 
 export const widgetsReducer = {
-  widgetsState: reducer(( prevResults = initialResult(), { payload, type: _type }) => {
-    if (_type === 'WIDGETS') return { ...prevResults, ...payload }
-    return { ...prevResults }
+  initState: reducer(( prevState = initState(), { payload, type: _type }) => {
+    if (_type === 'WIDGETS') {
+      return { ...prevState, ...payload }
+    }
+    return prevState
   }),
 
-  // updateIsDone: thunk((actions, payload, { dispatch } ) => {
-  //   dispatch({ type: 'WIDGETS', payload })
+  // controllers: reducer()
+
+  // this to be called when results change probably, but not sure yet
+  // widgetsClear: thunk((actions, payload, { dispatch } ) => {
+  //   dispatch({ type: 'WIDGETS', payload: initState() })
+  //   dispatch({ type: 'WIDGETS', payload: initState() }) // clear controllers
   // }),
 
+  isDone: computed(
+    [
+      (state) => state.initState.type,
+      (state) => state.initState.xAxis,
+      (state) => state.initState.yAxis,
+      (state) => state.initState.isOpen,
+    ],
+    (
+      type,
+      xAxis,
+      yAxis,
+      isOpen,
+    ) => Boolean(xAxis && yAxis && type && !isOpen)
+  ),
   // onWidgetsChange: unstable_effectOn(
   //   // Provide an array of "stateResolvers" to resolve the targeted state:
   //   [
@@ -40,18 +59,4 @@ export const widgetsReducer = {
   //     actions.updateIsDone({ isDone })
   //   }
   // ),
-  isDone: computed(
-    [
-      (state) => state.widgetsState.type,
-      (state) => state.widgetsState.xAxis,
-      (state) => state.widgetsState.yAxis,
-      (state) => state.widgetsState.isOpen,
-    ],
-    (
-      type,
-      xAxis,
-      yAxis,
-      isOpen,
-    ) => Boolean(xAxis && yAxis && type && !isOpen)
-  )
 }

@@ -6,6 +6,7 @@ import FormGroup from '@material-ui/core/FormGroup'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import { Switch } from '@eqworks/lumen-ui'
+import { useStoreState } from 'easy-peasy'
 import CustomSelect from '../custom-select'
 import { getPieChartData, sum } from './utils'
 
@@ -15,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
   row3: { padding: '30px 0 20px 0' },
 }))
 
-const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
+const usePieControls = ({ columns, results }) => {
   const classes = useStyles()
-  const [xAxis, setXAxis] = useState(_xAxis)
-  const [yAxis, setYAxis] = useState([_yAxis])
+  const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
+  const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
   const [isDonut, setIsDonut] = useState(false)
   const [groupedData, setGroupedData] = useState(null)
   const [data, setData] = useState(null)
@@ -133,14 +134,14 @@ const usePieControls = ({ columns, xAxis: _xAxis, yAxis: _yAxis, results }) => {
             title='Key X'
             data={columns}
             chosenValue={xAxis}
-            setChosenValue={setXAxis}
+            setChosenValue='xAxis'
           />
           <CustomSelect
             multi
             title='Keys Y'
             data={columns}
             chosenValue={yAxis}
-            setChosenValue={setYAxis}
+            setChosenValue='yAxis'
           />
         </div>
         {options.length > 1 &&

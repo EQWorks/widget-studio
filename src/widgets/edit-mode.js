@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Plot from 'react-plotly.js'
 import Paper from '@material-ui/core/Paper'
 import { Typography, Button } from '@eqworks/lumen-ui'
+import { useStoreState } from 'easy-peasy'
 import { ErrorBoundary } from './helper'
 import { getChart } from './components/charts'
 
@@ -20,10 +21,11 @@ const useStyles = makeStyles((theme) => ({
   control: { width: '25%', marginBottom: 16, padding: 16 },
 }))
 
-const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
+const EditMode = ({ results, columns }) => {
   const classes = useStyles()
   const [revision, setRevision] = useState(0) // if chart needs to be resized
-  const { props, getControl, ready } = getChart(type || 'bar')({ columns, xAxis, yAxis, results })
+  const type = useStoreState((state) => state.widgets.initState.type)
+  const { props, getControl, ready } = getChart(type)({ columns, results })
 
   return (
     <div className={classes.content}>
@@ -57,9 +59,6 @@ const EditMode = ({ type, results, xAxis, yAxis, columns }) => {
 EditMode.propTypes = {
   results: PropTypes.array,
   columns: PropTypes.array,
-  type: PropTypes.string.isRequired,
-  xAxis: PropTypes.string.isRequired,
-  yAxis: PropTypes.string.isRequired,
 }
 EditMode.default = {
   columns: [],

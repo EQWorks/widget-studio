@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 // import { makeStyles } from '@material-ui/core/styles'
 import TimelineIcon from '@material-ui/icons/Timeline'
@@ -10,7 +10,7 @@ import InsertChartIcon from '@material-ui/icons/InsertChart'
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 import Grid from '@material-ui/core/Grid'
 import Badge from '@material-ui/core/Badge'
-import { useStoreDispatch } from 'easy-peasy'
+import { useStoreDispatch, useStoreState } from 'easy-peasy'
 
 
 const mapIcons = [
@@ -20,18 +20,16 @@ const mapIcons = [
   { type: 'scatter', Component: ScatterPlotIcon, disabled: true, cat: ['Num', 'String', 'Date'], minAxis: 2 },
   { type: 'line', Component: TimelineIcon, disabled: false, cat: ['Date', 'Numeric', 'String'], minAxis: 2 },
 ]
-const Icons = ({
-  // categories = [],
-  // setType,
-  current }) => {
+const Icons = () => {
   const dispatch = useStoreDispatch()
+  const current = useStoreState((state) => state.widgets.initState.type)
 
   const genClicableIcon = () => mapIcons.map(({ Component, type, disabled }, i) => {
     /** at least 2 categories */ //TODO is this a good idea? maybe can plot with only numbers, or strings....
     // const isUsable = categories.length > 1 && cat.some((c) => categories.includes(c))
 
     return (
-      // <IconButton key={i} onClick={() => setType(type)} disabled={!isUsable}>
+      // <IconButton key={i} onClick={() => dispatch({ type: 'WIDGETS', payload: { type } })} disabled={!isUsable}>
       <IconButton key={i} onClick={() => dispatch({ type: 'WIDGETS', payload: { type } })} disabled={disabled}>
         <Badge variant='dot' invisible={!current || type !== current} color='error'>
           <Component fontSize='large' color={disabled ? 'disabled' : 'primary'} />
@@ -50,9 +48,6 @@ const Icons = ({
   )
 }
 
-Icons.propTypes={
-  // categories: PropTypes.array.isRequired,
-  current: PropTypes.string.isRequired,
-}
+// Icons.propTypes={}
 
 export default Icons

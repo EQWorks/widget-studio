@@ -6,7 +6,7 @@ import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
 import { Typography, Button } from '@eqworks/lumen-ui'
-import { useStoreDispatch } from 'easy-peasy'
+import { useStoreDispatch, useStoreState } from 'easy-peasy'
 import Icons from './components/icons'
 import SelectColumns from './components/select-columns'
 
@@ -38,9 +38,10 @@ const useStyles = makeStyles((theme) => ({
   typography: { marginLeft: '25%' }
 }))
 
-const WidgetSelector = ({ xAxis, yAxis, type, columns, isOpen }) => {
+const WidgetSelector = ({ columns }) => {
   const classes = useStyles()
-  const dispatch = useStoreDispatch()
+  const widgetsDispatch = useStoreDispatch()
+  const isOpen = useStoreState((state) => state.widgets.initState.isOpen)
 
   // const regexGeo = /(geo|fsa|lat|lon)/gi
   /** array of unique categories based on query columns
@@ -60,7 +61,7 @@ const WidgetSelector = ({ xAxis, yAxis, type, columns, isOpen }) => {
     <Modal
       className={classes.modalContainer}
       open={isOpen}
-      onClose={() => dispatch({ type: 'WIDGETS', payload: { isOpen: false } })}
+      onClose={() => widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: false } })}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 500 }}
@@ -71,18 +72,14 @@ const WidgetSelector = ({ xAxis, yAxis, type, columns, isOpen }) => {
             Select what goes in your X and Y axis
           </Typography>
           <SelectColumns
-            {...{ columnsData: columns, xAxis, yAxis }}
+            {...{ columnsData: columns }}
           />
           <Typography className={classes.typography}>
             This data can be visualized with the following types of charts. Pick one:
           </Typography>
-          <Icons
-          // categories={categories}
-            current={type}
-          />
+          <Icons/>
           <Button onClick={() => {
-            dispatch({ type: 'WIDGETS', payload: { isOpen: false } })
-            // setIsDone(true)
+            widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: false } })
           }}>
           Done
           </Button>
@@ -95,10 +92,6 @@ const WidgetSelector = ({ xAxis, yAxis, type, columns, isOpen }) => {
 
 WidgetSelector.propTypes = {
   columns: PropTypes.array,
-  isOpen: PropTypes.bool.isRequired,
-  xAxis: PropTypes.string.isRequired,
-  yAxis: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
 }
 WidgetSelector.default = {
   results: [],

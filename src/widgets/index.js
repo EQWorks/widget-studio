@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
+import { useStoreDispatch, useStoreState } from 'easy-peasy'
+import { Button, Loader, Typography } from '@eqworks/lumen-ui'
 import ResultsTable from '../components/table'
 import WidgetSelector from './modal'
 import EditMode from './edit-mode'
-import { Button, Loader, Typography } from '@eqworks/lumen-ui'
 
 const useStyles = makeStyles((theme) => ({
   warning: { textAlign: 'center', marginTop: theme.spacing(6) },
@@ -19,14 +20,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Widgets = ({ mlModel }) => {
   const {
-    widgetsDispatch,
-    widgetsState: {
-      type,
-      xAxis,
-      yAxis,
-      isOpen,
-    },
-    isDone,
     resultLoading,
     resultState: {
       results,
@@ -39,15 +32,8 @@ const Widgets = ({ mlModel }) => {
     },
   } = mlModel
 
-  // useEffect(() => {
-  //   if (results.length && !isDone) {
-  //     // if () {
-  //     widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: true } })
-  //     // }
-  //   }
-  // }, [widgetsDispatch, isDone, results])
-
-
+  const isDone = useStoreState((state) => state.widgets.isDone)
+  const widgetsDispatch = useStoreDispatch()
 
   const classes = useStyles({ isDone })
 
@@ -78,14 +64,14 @@ const Widgets = ({ mlModel }) => {
       <Loader backdrop action='circular' open={results.length === 0 && resultLoading} />
       <div className={classes.content}>
         <WidgetSelector
-          {...{ xAxis, yAxis, type, columns, isOpen }}
+          {...{ columns }}
         />
         <div className={classes.placeholder}>
           <Button onClick={() => widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: true } })}> + Chart</Button>
         </div>
         { isDone &&
           <EditMode
-            {...{ xAxis, yAxis, type, columns, results }}
+            {...{ columns, results }}
           />
         }
         <ResultsTable {...{ results }}/>

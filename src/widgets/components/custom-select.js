@@ -32,7 +32,12 @@ const CustomSelect = (props) => {
   const dispatch = useStoreDispatch()
   const handleChange = (key) => ({ target: { value } }) => {
     // const _value = multi ? [] : '' // TODO plan better this option
-    dispatch({ type: 'WIDGETS', payload: { [key]: value === 'All' ? '' : value } })
+    // dispatch({ type: 'WIDGETS', payload: { [key]: value === 'All' ? '' : value } })
+    let _value = value
+    if (key === 'yAxis' && !multi) {
+      _value = [value]
+    }
+    dispatch({ type: 'WIDGETS', payload: { [key]: _value } })
   }
 
   if (!multi) {
