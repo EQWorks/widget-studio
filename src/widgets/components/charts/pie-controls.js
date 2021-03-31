@@ -20,13 +20,14 @@ const usePieControls = ({ columns, results }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
-  const [isDonut, setIsDonut] = useState(false)
-  const [groupedData, setGroupedData] = useState(null)
   const [data, setData] = useState(null)
-  const [multi, setMulti] = useState({})
+  const [groupedData, setGroupedData] = useState(null)
   const [options, setOptions] = useState([])
   const [chosenKey, setChosenKey] = useState([])
   const [ready, setReady] = useState(false)
+
+  const [isDonut, setIsDonut] = useState(false)
+  const [multi, setMulti] = useState({})
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(results))

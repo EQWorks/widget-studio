@@ -22,7 +22,7 @@ export const getChart = (type) => ({ columns, results }) => {
     // },
   }[type]
 
-  const [props, getControl, ready] = useControl({ columns, results })
+  const [props, getControl] = useControl({ columns, results })
 
-  return { props, getControl, ready }
+  return { props, getControl }
 }

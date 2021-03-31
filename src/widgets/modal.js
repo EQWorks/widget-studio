@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const WidgetSelector = ({ columns }) => {
   const classes = useStyles()
-  const widgetsDispatch = useStoreDispatch()
+  const dispatch = useStoreDispatch()
   const isOpen = useStoreState((state) => state.widgets.initState.isOpen)
 
   // const regexGeo = /(geo|fsa|lat|lon)/gi
@@ -61,7 +61,7 @@ const WidgetSelector = ({ columns }) => {
     <Modal
       className={classes.modalContainer}
       open={isOpen}
-      onClose={() => widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: false } })}
+      onClose={() => dispatch({ type: 'WIDGETS', payload: { isOpen: false } })}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 500 }}
@@ -79,7 +79,7 @@ const WidgetSelector = ({ columns }) => {
           </Typography>
           <Icons/>
           <Button onClick={() => {
-            widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: false } })
+            dispatch({ type: 'WIDGETS', payload: { isOpen: false } })
           }}>
           Done
           </Button>

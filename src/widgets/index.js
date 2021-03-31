@@ -33,7 +33,7 @@ const Widgets = ({ mlModel }) => {
   } = mlModel
 
   const isDone = useStoreState((state) => state.widgets.isDone)
-  const widgetsDispatch = useStoreDispatch()
+  const dispatch = useStoreDispatch()
 
   const classes = useStyles({ isDone })
 
@@ -67,7 +67,7 @@ const Widgets = ({ mlModel }) => {
           {...{ columns }}
         />
         <div className={classes.placeholder}>
-          <Button onClick={() => widgetsDispatch({ type: 'WIDGETS', payload: { isOpen: true } })}> + Chart</Button>
+          <Button onClick={() => dispatch({ type: 'WIDGETS', payload: { isOpen: true } })}> + Chart</Button>
         </div>
         { isDone &&
           <EditMode

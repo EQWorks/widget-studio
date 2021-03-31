@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -7,9 +7,9 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
-import { useStoreState } from 'easy-peasy'
+import { useStoreState, useStoreActions } from 'easy-peasy'
 import CustomSelect from '../custom-select'
-import { isJson, parseData, groupJson, getChartData, getLayers, sum } from './utils'
+import { parseData, groupJson, getChartData, getLayers, sum } from './utils'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -18,45 +18,53 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const useBarControls = ({ columns, results }) => {
-  // const widgetsDispatch = useStoreDispatch()
+  const classes = useStyles()
+
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
-  const classes = useStyles()
-  const [groupMode, setGroupMode] = useState('group')
-  const [layout, setLayout] = useState('vertical')
-  const [groupedData, setGroupedData] = useState(null)
-  const [data, setData] = useState(null)
-  const [options, setOptions] = useState([])
-  const [chosenKey, setChosenKey] = useState([])
-  const [ready, setReady] = useState(true)
-  const json = isJson(yAxis[0])
+
+  const data = useStoreState((state) => state.widgets.controllers.data)
+  const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
+  const options = useStoreState((state) => state.widgets.controllers.options)
+  const chosenKey = useStoreState((state) => state.widgets.controllers.chosenKey)
+  const groupMode = useStoreState((state) => state.widgets.bar.groupMode)
+  const layout = useStoreState((state) => state.widgets.bar.layout)
+  const isJson = useStoreState((state) => state.widgets.isJson)
+
+  const handleDispatch = useStoreActions(actions => actions.widgets.handleDispatch)
+  const setBarState = useStoreActions(actions => actions.widgets.bar.update)
+
   const isVertical = layout === 'vertical'
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(results))
-    setGroupedData(null)
-    if (json) {
-      setReady(false)
-      setGroupedData(null)
+    handleDispatch({ groupedData: null })()
+    if (isJson) {
+      handleDispatch({ ready: false })()
       const [_options, _groupedData] = groupJson({ results: resultsCopy, groupKey: xAxis, key: yAxis[0] })
-      setOptions(_options)
-      setGroupedData(_groupedData)
+      handleDispatch({
+        options: _options,
+        groupedData: _groupedData,
+      })()
     } else {
       const _groupedData = sum({
         results: resultsCopy,
         groupKey: xAxis,
         yKeys: yAxis,
       })
-      setOptions(Object.keys(_groupedData))
-      setGroupedData(_groupedData)
+      handleDispatch({
+        options: Object.keys(_groupedData),
+        groupedData: _groupedData,
+      })()
     }
-  }, [isVertical, json, results, xAxis, yAxis])
+  }, [handleDispatch, isJson, isVertical, results, xAxis, yAxis])
 
   useEffect(() => {
     if (xAxis && yAxis.length) {
-      setChosenKey([]) // clear selected options on keys change
+      // TODO prevent from running on unmount...
+      handleDispatch({ chosenKey: [] })()
     }
-  }, [xAxis, yAxis])
+  }, [handleDispatch, xAxis, yAxis])
 
   useEffect(() => {
     const specs = {
@@ -69,23 +77,24 @@ const useBarControls = ({ columns, results }) => {
       '<extra></extra>',
       isVertical,
     }
-    if (json && groupedData) {
+    if (isJson && groupedData) {
       const _res = parseData({ data: groupedData, keys: chosenKey })
-      setData(_res.map(({ x, y, name }) => getLayers({
+      const _data = _res.map(({ x, y, name }) => getLayers({
         x,
         y,
         name,
         specs,
-      })))
-      setReady(true)
+      }))
+      handleDispatch({ data: _data, ready: true })()
     }
-    if (!json && groupedData) {
-      setData(getChartData({
+    if (!isJson && groupedData) {
+      const _data = getChartData({
         sumData: groupedData,
         chosenKey,
-      })({ specs }))
+      })({ specs })
+      handleDispatch({ data: _data })()
     }
-  }, [chosenKey, groupedData, isVertical, json])
+  }, [chosenKey, handleDispatch, groupedData, isJson, isVertical])
 
   const islongTickLabel = (axis) => {
     if (data && data[0]) {
@@ -96,8 +105,8 @@ const useBarControls = ({ columns, results }) => {
   }
 
   const getTitle = (axis) => ({
-    x: isVertical ? json || xAxis : 'value',
-    y: isVertical ? 'value' : json || xAxis
+    x: isVertical ? isJson || xAxis : 'value',
+    y: isVertical ? 'value' : isJson || xAxis
   }[axis])
 
   const props = {
@@ -139,14 +148,14 @@ const useBarControls = ({ columns, results }) => {
             title='Key X'
             data={columns}
             chosenValue={xAxis}
-            setChosenValue='xAxis'
+            setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
           />
           <CustomSelect
             multi
             title='Keys Y'
             data={columns}
             chosenValue={yAxis}
-            setChosenValue='yAxis'
+            setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
           />
         </div>
         {options.length > 1 &&
@@ -156,11 +165,11 @@ const useBarControls = ({ columns, results }) => {
               title='Group By'
               data={options.sort()}
               chosenValue={chosenKey}
-              setChosenValue={setChosenKey}
+              setChosenValue={handleDispatch({ key: 'chosenKey' })}
             />
             <IconButton
               size='small'
-              onClick={() => setChosenKey([])}
+              onClick={() => handleDispatch({ chosenKey: [] })()}
             >
               <Clear />
             </IconButton>
@@ -168,7 +177,7 @@ const useBarControls = ({ columns, results }) => {
         }
         <div className={classes.row3}>
           <FormControl component='fieldset'>
-            <RadioGroup aria-label='layout' name='layout1' value={layout} onChange={({ target: { value } }) => setLayout(value)}>
+            <RadioGroup aria-label='layout' name='layout1' value={layout} onChange={({ target: { value } }) => setBarState({ layout: value })}>
               <FormControlLabel value='vertical' control={<Radio />} label='Vertical' />
               <FormControlLabel value='horizontal' control={<Radio />} label='Horizontal' />
             </RadioGroup>
@@ -177,7 +186,7 @@ const useBarControls = ({ columns, results }) => {
 
         {(yAxis.length > 1 || options.length > 1) &&
         <FormControl component='fieldset'>
-          <RadioGroup aria-label='groupMode' name='group1' value={groupMode} onChange={({ target: { value } }) => setGroupMode(value)}>
+          <RadioGroup aria-label='groupMode' name='group1' value={groupMode} onChange={({ target: { value } }) => setBarState({ groupMode: value })}>
             <FormControlLabel value='group' control={<Radio />} label='Grouped' />
             <FormControlLabel value='stack' control={<Radio />} label='Stacked' />
           </RadioGroup>
@@ -185,7 +194,7 @@ const useBarControls = ({ columns, results }) => {
       </>
     )
   }
-  return [props, getBarControls, ready]
+  return [props, getBarControls]
 }
 
 export default useBarControls

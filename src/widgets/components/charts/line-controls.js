@@ -22,12 +22,13 @@ const useLineControls = ({ columns, results }) => {
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
   const [data, setData] = useState(null)
-  const [ready, setReady] = useState(true)
-  const [area, setArea] = useState(false)
-  const [multiAxis, setMultiAxis] = useState(false)
   const [groupedData, setGroupedData] = useState(null)
   const [options, setOptions] = useState([])
   const [chosenKey, setChosenKey] = useState([])
+  const [ready, setReady] = useState(true)
+
+  const [area, setArea] = useState(false)
+  const [multiAxis, setMultiAxis] = useState(false)
   const json = isJson(yAxis[0])
 
   useEffect(() => {

@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 
 import Grid from '@material-ui/core/Grid'
 import CustomSelect from './custom-select'
-import { useStoreState } from 'easy-peasy'
+import { useStoreState, useStoreDispatch } from 'easy-peasy'
 
 const SelectColumns = ({ columnsData }) =>  {
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
-
+  const dispatch = useStoreDispatch()
   /**
    * this component only takes single values
    * yAxis is always multi so we need to get the first enum
@@ -20,13 +20,19 @@ const SelectColumns = ({ columnsData }) =>  {
         title='Key X'
         data={columnsData}
         chosenValue={xAxis}
-        setChosenValue='xAxis'
+        setChosenValue={(value) => dispatch({
+          type: 'WIDGETS',
+          payload: { xAxis: value } }
+        )}
       />
       <CustomSelect
         title='Key Y'
         data={columnsData}
         chosenValue={yAxis[0] || ''}
-        setChosenValue='yAxis'
+        setChosenValue={(value) => dispatch({
+          type: 'WIDGETS',
+          payload: { yAxis: [value] }
+        })}
       />
     </Grid>
   )}

@@ -25,7 +25,8 @@ const EditMode = ({ results, columns }) => {
   const classes = useStyles()
   const [revision, setRevision] = useState(0) // if chart needs to be resized
   const type = useStoreState((state) => state.widgets.initState.type)
-  const { props, getControl, ready } = getChart(type)({ columns, results })
+  const ready = useStoreState((state) => state.widgets.controllers.ready)
+  const { props, getControl } = getChart(type)({ columns, results })
 
   return (
     <div className={classes.content}>

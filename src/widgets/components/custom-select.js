@@ -10,7 +10,6 @@ import Checkbox from '@material-ui/core/Checkbox'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { Chip } from '@eqworks/lumen-ui'
-import { useStoreDispatch } from 'easy-peasy'
 
 
 const useStyles = makeStyles(() => ({
@@ -29,16 +28,8 @@ const useStyles = makeStyles(() => ({
 const CustomSelect = (props) => {
   const { data, chosenValue, title, multi, setChosenValue, ...rest } = props
   const classes = useStyles()
-  const dispatch = useStoreDispatch()
-  const handleChange = (key) => ({ target: { value } }) => {
-    // const _value = multi ? [] : '' // TODO plan better this option
-    // dispatch({ type: 'WIDGETS', payload: { [key]: value === 'All' ? '' : value } })
-    let _value = value
-    if (key === 'yAxis' && !multi) {
-      _value = [value]
-    }
-    dispatch({ type: 'WIDGETS', payload: { [key]: _value } })
-  }
+
+  const handleChange = (fn) => ({ target: { value } }) => fn(value)
 
   if (!multi) {
     return (
