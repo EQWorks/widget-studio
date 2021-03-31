@@ -16,6 +16,7 @@ const initStateControllers = () => ({
 })
 
 export const widgetsReducer = {
+  /** this is just for the modal initial selections */
   initState: reducer(( prevState = initState(), { payload, type }) => {
     if (type === 'WIDGETS') {
       return { ...prevState, ...payload }
@@ -23,6 +24,7 @@ export const widgetsReducer = {
     return prevState
   }),
 
+  /** common states of each chart type */
   controllers: reducer(( prevState = initStateControllers(), { payload, type }) => {
     if (type === 'CONTROLLER') {
       return { ...prevState, ...payload }
@@ -30,7 +32,11 @@ export const widgetsReducer = {
     return prevState
   }),
 
-  /** has to be a curried function to work with the <Select/> but also as a regular dispatch */
+  /**
+   * just a regular dispatch to remove complexity from the components
+   * has to be a curried function to work with the <Select/>
+   * but also as a regular dispatch
+  */
   handleDispatch: thunk((actions, payload, { dispatch }) => (value = null) => {
     const { type = 'CONTROLLER', key } = payload
     if (value) {
@@ -40,11 +46,38 @@ export const widgetsReducer = {
     dispatch({ type, payload })
   }),
 
+  /** unique state of each chart type (maybe they can be grouped) */
   bar: {
     groupMode: 'group',
     layout: 'vertical',
     update: action((state, payload) =>  ({ ...state, ...payload }))
   },
+  line: {
+    area: false,
+    multiAxis: false,
+    update: action((state, payload) =>  ({ ...state, ...payload }))
+  },
+  pie: {
+    isDonut: false,
+    multi: {},
+    update: action((state, payload) =>  ({ ...state, ...payload })),
+    capData: thunk((actions, payload, { dispatch, getStoreState }) => {
+      const data = getStoreState()
+        .widgets
+        .controllers
+        .data
+        .slice(0, 3)
+        .map((chart, i) => {
+          chart.domain =  {
+            column: i % 3 //3 charts per row
+          }
+          return chart
+        })
+      dispatch({ type: 'CONTROLLER', payload: { data } })
+    })
+  },
+
+  /** checks if the selected yAxis is hod or dow */
   isJson: computed(
     [(state) => state.initState.yAxis],
     (yAxis) => isJson(yAxis[0])
@@ -54,8 +87,10 @@ export const widgetsReducer = {
   // widgetsClear: thunk((actions, payload, { dispatch } ) => {
   //   dispatch({ type: 'WIDGETS', payload: initState() })
   //   dispatch({ type: 'WIDGETS', payload: initState() }) // clear controllers
+  // add each chart update action here too, basically clear all states
   // }),
 
+  /** checks if all initial states have been filled */
   isDone: computed(
     [
       (state) => state.initState.type,
@@ -70,25 +105,4 @@ export const widgetsReducer = {
       isOpen,
     ) => Boolean(xAxis && yAxis && type && !isOpen)
   ),
-  // onWidgetsChange: unstable_effectOn(
-  //   // Provide an array of "stateResolvers" to resolve the targeted state:
-  //   [
-  //     (state) => state.widgetsState.type,
-  //     (state) => state.widgetsState.xAxis,
-  //     (state) => state.widgetsState.yAxis,
-  //     (state) => state.widgetsState.isOpen,
-  //   ],
-  //   // Provide a handler which will execute every time the targeted state changes:
-  //   (actions, change) => {
-  //     console.log(`%cfired ${Math.random()*100}`, 'background-color: purple')
-  //     const [
-  //       type,
-  //       xAxis,
-  //       yAxis,
-  //       isOpen,
-  //     ] = change.current
-  //     const isDone = Boolean(xAxis && yAxis && type && !isOpen)
-  //     actions.updateIsDone({ isDone })
-  //   }
-  // ),
 }

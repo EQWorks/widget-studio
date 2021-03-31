@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -6,7 +6,7 @@ import FormGroup from '@material-ui/core/FormGroup'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import { Switch } from '@eqworks/lumen-ui'
-import { useStoreState } from 'easy-peasy'
+import { useStoreState, useStoreActions } from 'easy-peasy'
 import CustomSelect from '../custom-select'
 import { getPieChartData, sum } from './utils'
 
@@ -20,37 +20,42 @@ const usePieControls = ({ columns, results }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
-  const [data, setData] = useState(null)
-  const [groupedData, setGroupedData] = useState(null)
-  const [options, setOptions] = useState([])
-  const [chosenKey, setChosenKey] = useState([])
-  const [ready, setReady] = useState(false)
 
-  const [isDonut, setIsDonut] = useState(false)
-  const [multi, setMulti] = useState({})
+  const data = useStoreState((state) => state.widgets.controllers.data)
+  const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
+  const options = useStoreState((state) => state.widgets.controllers.options)
+  const chosenKey = useStoreState((state) => state.widgets.controllers.chosenKey)
+  const isDonut = useStoreState((state) => state.widgets.pie.isDonut)
+  const multi = useStoreState((state) => state.widgets.pie.multi)
+
+  const handleDispatch = useStoreActions(actions => actions.widgets.handleDispatch)
+  const setPieState = useStoreActions(actions => actions.widgets.pie.update)
+  const capData = useStoreActions(actions => actions.widgets.pie.capData)
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(results))
-    setReady(false)
-    setChosenKey([])
+    handleDispatch({ ready: false })()
+    // setChosenKey([])
     const _groupedData = sum({
       results: resultsCopy,
       groupKey: xAxis,
       yKeys: yAxis,
     })
-    setOptions(Object.keys(_groupedData))
-    setGroupedData(_groupedData)
-  }, [results, xAxis, yAxis])
+    handleDispatch({
+      options: Object.keys(_groupedData),
+      groupedData: _groupedData,
+    })()
+  }, [handleDispatch, results, xAxis, yAxis])
 
   useEffect(() => {
     if (options.length) {
       if (yAxis.length > 1) {
-        setChosenKey([options[0]])
+        handleDispatch({ chosenKey: [options[0]] })()
       } else {
-        setChosenKey([])
+        handleDispatch({ chosenKey: [] })()
       }
     }
-  }, [options, yAxis])
+  }, [handleDispatch, options, yAxis])
 
   useEffect(() => {
     let values
@@ -67,23 +72,23 @@ const usePieControls = ({ columns, results }) => {
       ...(isDonut? { hole: .5 } : {})
     }
     if (groupedData) {
-      setData(getPieChartData({ sumData: groupedData, chosenKey, yKeys: yAxis })({ specs }))
+      const _data = getPieChartData({
+        sumData: groupedData,
+        chosenKey,
+        yKeys: yAxis
+      })({ specs })
+      handleDispatch({ data: _data })()
     }
-    setReady(true)
-  }, [chosenKey, groupedData, isDonut, options, results, xAxis, yAxis])
+    handleDispatch({ ready: true })()
+  }, [chosenKey, groupedData, handleDispatch, isDonut, options, results, xAxis, yAxis])
 
   useEffect(() => {
-    // creates grid
+    /** logic to create grid view */
     if (chosenKey.length > 1 && yAxis.length > 1) {
-      setData((prevData) => {
-        return prevData.slice(0, 3).map((chart, i) => {
-          chart.domain =  {
-            column: i % 3 //3 charts per row
-          }
-          return chart
-        })
-      })
-
+      /** to avoid too many re-render this logic was moved to capData()
+       * it should cap the data length at 3 for the side by side view
+       */
+      capData()
       const positionX = [0.1, 0.5, 0.9, 0.12, 0.5, 0.87]
       const positionY = [1.2, 1.2, 1.2, 2, 2, 2] // upper
       const multiLayout = {
@@ -97,11 +102,11 @@ const usePieControls = ({ columns, results }) => {
             y: positionY[i],
           }))
       }
-      setMulti(multiLayout)
+      setPieState({ multi: multiLayout })
     } else {
-      setMulti({})
+      setPieState({ multi: {} })
     }
-  }, [chosenKey, yAxis, isDonut])
+  }, [chosenKey, yAxis, isDonut, handleDispatch, setPieState, capData])
 
   const handleText = (str) => {
     // const size = str.length
@@ -135,14 +140,14 @@ const usePieControls = ({ columns, results }) => {
             title='Key X'
             data={columns}
             chosenValue={xAxis}
-            setChosenValue='xAxis'
+            setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
           />
           <CustomSelect
             multi
             title='Keys Y'
             data={columns}
             chosenValue={yAxis}
-            setChosenValue='yAxis'
+            setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
           />
         </div>
         {options.length > 1 &&
@@ -152,11 +157,11 @@ const usePieControls = ({ columns, results }) => {
             title='Group By'
             data={options.sort()}
             chosenValue={chosenKey}
-            setChosenValue={setChosenKey}
+            setChosenValue={handleDispatch({ key: 'chosenKey' })}
           />
           <IconButton
             size='small'
-            onClick={() => setChosenKey(yAxis.length > 1 ? [options[0]] : [])}
+            onClick={() => handleDispatch({ chosenKey: yAxis.length > 1 ? [options[0]] : [] })()}
           >
             <Clear />
           </IconButton>
@@ -166,7 +171,7 @@ const usePieControls = ({ columns, results }) => {
           <FormControlLabel
             control={<Switch
               checked={isDonut}
-              onChange={({ target: { checked } }) => setIsDonut(checked)}
+              onChange={({ target: { checked } }) => setPieState({ isDonut: checked })}
               name='style'
             />}
             label='Donut'
@@ -175,7 +180,7 @@ const usePieControls = ({ columns, results }) => {
       </>
     )
   }
-  return [props, getPieControls, ready]
+  return [props, getPieControls]
 }
 
 export default usePieControls

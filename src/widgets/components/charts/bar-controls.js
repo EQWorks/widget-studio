@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 
 const useBarControls = ({ columns, results }) => {
   const classes = useStyles()
-
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
 
@@ -61,8 +60,8 @@ const useBarControls = ({ columns, results }) => {
 
   useEffect(() => {
     if (xAxis && yAxis.length) {
-      // TODO prevent from running on unmount...
-      handleDispatch({ chosenKey: [] })()
+      // TODO prevent from running on re-mount...
+      handleDispatch({ chosenKey: [] })() // clear selected options on keys change
     }
   }, [handleDispatch, xAxis, yAxis])
 
@@ -98,7 +97,7 @@ const useBarControls = ({ columns, results }) => {
 
   const islongTickLabel = (axis) => {
     if (data && data[0]) {
-      return data[0][axis].some((e) => e?.length > 4)
+      return data[0][axis]?.some((e) => e?.length > 4)
     } else {
       return false
     }

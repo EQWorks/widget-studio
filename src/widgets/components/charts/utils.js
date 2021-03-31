@@ -1,7 +1,7 @@
-// for hod and dow only
+/** group data for hod and dow only */
 export const groupJson = ({ results, groupKey, key }) => {
-  //groupkey = 'report_id'
-  //key = 'converted_visits_dow'
+  // groupkey = 'report_id'
+  // key = 'converted_visits_dow'
   const reducer = (data, datum) => {
     const _groupKey = datum[groupKey] // 3369 - value of report_id
     const currentObj = datum[key] // the json to be aggregated
@@ -39,7 +39,7 @@ const getAxisValues = (current) => {
   return { x, y }
 }
 
-// for hod and dow only
+/** get the grouped data and transform to plotly expected structure */
 export const parseData = ({ data, keys = [] }) => {
   const parsedData = []
   if (keys.length) {
@@ -70,7 +70,7 @@ export const parseData = ({ data, keys = [] }) => {
    */
 }
 
-// for hod and dow only
+/** check if selected column is a json like hod and dow */
 export const isJson = (key = '') => {
   const isMatch = key.match(/(?<hour>hod)|(?<day>dow)/)
   if (!isMatch) return false
@@ -78,7 +78,7 @@ export const isJson = (key = '') => {
   return hour ? 'hour' : 'day'
 }
 
-// each layer of Plot.data
+/** generates each layer of Plot.data */
 export const getLayers = ({
   x = [],
   y = [],
@@ -124,15 +124,18 @@ export const getLayers = ({
   }
 }
 
-// group data that is NOT hod || dow
+/** group data that is NOT hod || dow */
+// TODO plan for other query-functions-data
+// like AVG where this grouping by sum here won't work well...
 export const sum = ({ results, groupKey, yKeys }) => {
   const sumData = {} /** {
-    ON: {converted_visits: 100, converted_repeat_visits: 40},
-    ...
-    } */
+    * ON: {converted_visits: 100, converted_repeat_visits: 40},
+    * ...
+    * }
+    */
   results.forEach((datum) => {
-    const key = datum[groupKey]?.toString().trim().toLowerCase() // ON - value of region{
-    // normalize keys
+    const key = datum[groupKey]?.toString().trim().toLowerCase() /** ON - value of region */
+    /**  normalize keys */
     const _groupKey = key && key.charAt(0).toUpperCase() + key.slice(1)
     const current = sumData[_groupKey]
     if (current) {
@@ -151,7 +154,11 @@ export const sum = ({ results, groupKey, yKeys }) => {
   return sumData
 }
 
-// Plot.data with all layers
+/**
+ * normalizes data that is not of json type
+ * generates each layer of Plot.data by
+ * chaining to getLayers above for line and bar
+ */
 export const getChartData = ({
   sumData,
   chosenKey = []
@@ -171,6 +178,11 @@ export const getChartData = ({
   return data
 }
 
+/**
+ * normalizes data that is not of json type
+ * generates each layer of Plot.data by
+ * chaining to getLayers above for pie
+ */
 export const getPieChartData = ({
   sumData,
   chosenKey = [],

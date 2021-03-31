@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -6,10 +6,10 @@ import FormGroup from '@material-ui/core/FormGroup'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import { Switch } from '@eqworks/lumen-ui'
-import { useStoreState } from 'easy-peasy'
+import { useStoreState, useStoreActions } from 'easy-peasy'
 import CustomSelect from '../custom-select'
 
-import { isJson, parseData, groupJson, getLayers, getChartData, sum } from './utils'
+import { parseData, groupJson, getLayers, getChartData, sum } from './utils'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,46 +21,53 @@ const useLineControls = ({ columns, results }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
-  const [data, setData] = useState(null)
-  const [groupedData, setGroupedData] = useState(null)
-  const [options, setOptions] = useState([])
-  const [chosenKey, setChosenKey] = useState([])
-  const [ready, setReady] = useState(true)
 
-  const [area, setArea] = useState(false)
-  const [multiAxis, setMultiAxis] = useState(false)
-  const json = isJson(yAxis[0])
+  const data = useStoreState((state) => state.widgets.controllers.data)
+  const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
+  const options = useStoreState((state) => state.widgets.controllers.options)
+  const chosenKey = useStoreState((state) => state.widgets.controllers.chosenKey)
+  const area= useStoreState((state) => state.widgets.line.area)
+  const multiAxis = useStoreState((state) => state.widgets.line.multiAxis)
+  const isJson = useStoreState((state) => state.widgets.isJson)
+
+  const handleDispatch = useStoreActions(actions => actions.widgets.handleDispatch)
+  const setLineState = useStoreActions(actions => actions.widgets.line.update)
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(results))
     if(xAxis && yAxis.length) {
-      if (json) {
-        setReady(false)
-        setGroupedData(null)
+      if (isJson) {
+        handleDispatch({ ready: false })()
+        // setGroupedData(null)
         const [_options, _groupedData] = groupJson({
           results: resultsCopy ,
           groupKey: xAxis,
           key: yAxis[0]
         })
-        setOptions(_options)
-        setGroupedData(_groupedData)
+        handleDispatch({
+          options: _options,
+          groupedData: _groupedData,
+        })()
       } else {
         const _groupedData = sum({
           results: resultsCopy,
           groupKey: xAxis,
           yKeys: yAxis,
         })
-        setOptions(Object.keys(_groupedData))
-        setGroupedData(_groupedData)
+        handleDispatch({
+          options: Object.keys(_groupedData),
+          groupedData: _groupedData,
+        })()
       }
     }
-  }, [area, chosenKey, json, results, xAxis, yAxis])
+  }, [area, chosenKey, handleDispatch, isJson, results, xAxis, yAxis])
 
   useEffect(() => {
     if (xAxis && yAxis.length) {
-      setChosenKey([]) // clear selected options on keys change
+      // TODO prevent from running on re-mount...
+      handleDispatch({ chosenKey: [] })() // clear selected options on keys change
     }
-  }, [xAxis, yAxis])
+  }, [handleDispatch, xAxis, yAxis])
 
   useEffect(() => {
     const specs = {
@@ -74,23 +81,23 @@ const useLineControls = ({ columns, results }) => {
       connectgaps: true,
       ...(area && { fill: 'tonexty' })
     }
-    if (json && groupedData) {
+    if (isJson && groupedData) {
       const _res = parseData({ data: groupedData, keys: chosenKey })
-      setData(_res.map(({ x, y, name }) => getLayers({
+      const _data = _res.map(({ x, y, name }) => getLayers({
         x,
         y,
         name,
         specs
-      })))
-      setReady(true)
+      }))
+      handleDispatch({ data: _data, ready: true })()
     }
-    if (!json && groupedData) {
+    if (!isJson && groupedData) {
       const _data = getChartData({
         sumData: groupedData,
         chosenKey,
       })({ specs })
       if (multiAxis) {
-        setData(_data
+        handleDispatch({ data: _data
           .slice(0, 2)
           .map((d, i) => {
             let _data = d
@@ -99,14 +106,14 @@ const useLineControls = ({ columns, results }) => {
             }
             return _data
           })
-        )
+        })()
       } else {
-        setData(_data)
+        handleDispatch({ data: _data })()
       }
     }
-  }, [json, groupedData, area, chosenKey, multiAxis])
+  }, [isJson, groupedData, area, chosenKey, multiAxis, handleDispatch])
 
-  const islongTickLabel = data && data[0].x.some((e) => e.length > 4)
+  const islongTickLabel = data && data[0].x?.some((e) => e.length > 4)
   const props = {
     data,
     layout:{
@@ -117,7 +124,7 @@ const useLineControls = ({ columns, results }) => {
       colorway: ['#0062d9', '#f65b20', '#ffaa00', '#dd196b', '#9928b3', '#00b5c8', '#a8a8a8'],
       yaxis: {
         title: {
-          text: json || multiAxis ? yAxis[0] : 'value',
+          text: isJson || multiAxis ? yAxis[0] : 'value',
           standoff: 20,
         },
         automargin: true,
@@ -125,7 +132,7 @@ const useLineControls = ({ columns, results }) => {
       },
       xaxis: {
         title: {
-          text: json || xAxis,
+          text: isJson || xAxis,
           standoff: 20
         },
         automargin: true,
@@ -150,14 +157,14 @@ const useLineControls = ({ columns, results }) => {
             title='Key X'
             data={columns}
             chosenValue={xAxis}
-            setChosenValue='xAxis'
+            setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
           />
           <CustomSelect
             multi
             title='Keys Y'
             data={columns}
             chosenValue={yAxis}
-            setChosenValue='yAxis'
+            setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
           />
         </div>
         {options.length > 1 &&
@@ -167,11 +174,11 @@ const useLineControls = ({ columns, results }) => {
             title='Group By'
             data={options.sort()}
             chosenValue={chosenKey}
-            setChosenValue={setChosenKey}
+            setChosenValue={handleDispatch({ key: 'chosenKey' })}
           />
           <IconButton
             size='small'
-            onClick={() => setChosenKey([])}
+            onClick={() => handleDispatch({ chosenKey: [] })()}
           >
             <Clear />
           </IconButton>
@@ -182,16 +189,16 @@ const useLineControls = ({ columns, results }) => {
             style={{ marginBottom: 20 }}
             control={<Switch
               checked={area}
-              onChange={({ target: { checked } }) => setArea(checked)}
+              onChange={({ target: { checked } }) => setLineState({ area: checked })}
               name='Area'
             />}
             label='Area'
           />
-          {(!json && yAxis.length > 1) &&
+          {(!isJson && yAxis.length > 1) &&
           <FormControlLabel
             control={<Switch
               checked={multiAxis}
-              onChange={({ target: { checked } }) => setMultiAxis(checked)}
+              onChange={({ target: { checked } }) => setLineState({ multiAxis: checked })}
               name='Multi Axis'
             />}
             label='Multi Axis'
@@ -201,7 +208,7 @@ const useLineControls = ({ columns, results }) => {
       </>
     )
   }
-  return [props, getLineControls, ready]
+  return [props, getLineControls]
 }
 
 export default useLineControls

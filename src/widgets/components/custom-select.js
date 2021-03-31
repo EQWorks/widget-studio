@@ -101,7 +101,7 @@ CustomSelect.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
-  setChosenValue: PropTypes.string.isRequired,
+  setChosenValue: PropTypes.func.isRequired,
   title: PropTypes.string,
   multi: PropTypes.bool,
 }
