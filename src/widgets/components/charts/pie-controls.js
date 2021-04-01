@@ -51,8 +51,6 @@ const usePieControls = ({ columns, results }) => {
     if (options.length) {
       if (yAxis.length > 1) {
         handleDispatch({ chosenKey: [options[0]] })()
-      } else {
-        handleDispatch({ chosenKey: [] })()
       }
     }
   }, [handleDispatch, options, yAxis])
@@ -137,14 +135,14 @@ const usePieControls = ({ columns, results }) => {
       <>
         <div className={classes.row1}>
           <CustomSelect
-            title='Key X'
+            title='Column 1'
             data={columns}
             chosenValue={xAxis}
             setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
           />
           <CustomSelect
             multi
-            title='Keys Y'
+            title='Columns 2'
             data={columns}
             chosenValue={yAxis}
             setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}

@@ -17,7 +17,7 @@ const SelectColumns = ({ columnsData }) =>  {
   return (
     <Grid container direction='column' alignItems='center'>
       <CustomSelect
-        title='Key X'
+        title='Column 1'
         data={columnsData}
         chosenValue={xAxis}
         setChosenValue={(value) => dispatch({
@@ -26,7 +26,7 @@ const SelectColumns = ({ columnsData }) =>  {
         )}
       />
       <CustomSelect
-        title='Key Y'
+        title='Column 2'
         data={columnsData}
         chosenValue={yAxis[0] || ''}
         setChosenValue={(value) => dispatch({

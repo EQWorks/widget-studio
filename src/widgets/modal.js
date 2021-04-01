@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   typography: { marginLeft: '25%' }
 }))
 
-const WidgetSelector = ({ columns }) => {
+const WidgetSelector = ({ columns, loaderIsOpen }) => {
   const classes = useStyles()
   const dispatch = useStoreDispatch()
   const isOpen = useStoreState((state) => state.widgets.initState.isOpen)
@@ -66,7 +66,7 @@ const WidgetSelector = ({ columns }) => {
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 500 }}
     >
-      <Fade in={isOpen}>
+      <Fade in={isOpen && !loaderIsOpen}>
         <div className={classes.paper}>
           <Typography className={classes.typography}>
             Select what goes in your X and Y axis
@@ -92,9 +92,11 @@ const WidgetSelector = ({ columns }) => {
 
 WidgetSelector.propTypes = {
   columns: PropTypes.array,
+  loaderIsOpen: PropTypes.bool
 }
 WidgetSelector.default = {
   results: [],
+  loaderIsOpen: true
 }
 
 export default WidgetSelector

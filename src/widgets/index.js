@@ -44,12 +44,9 @@ const Widgets = ({ mlModel }) => {
       </Typography>
     </div>)
 
-  /**PUTBACK */
-  // if (saved === -1 && execution === -1) {
-  //   return renderWarning('Run or select a query from the list.')
-  // }
-  /**PUTBACK */
-
+  if (saved === -1 && execution === -1) {
+    return renderWarning('Run or select a query from the list.')
+  }
 
   // if (savedQueries[saved].executions.length === 0 ) { // there is a selected query but no executions
   //   return renderWarning('This query has never been run, try running it first or select a different query from the list')
@@ -59,12 +56,13 @@ const Widgets = ({ mlModel }) => {
     return renderWarning('No Results')
   }
 
+  const loaderIsOpen = results.length === 0 && resultLoading
   return (
     <>
-      <Loader backdrop action='circular' open={results.length === 0 && resultLoading} />
+      <Loader backdrop action='circular' open={loaderIsOpen} />
       <div className={classes.content}>
         <WidgetSelector
-          {...{ columns }}
+          {...{ columns, loaderIsOpen }}
         />
         <div className={classes.placeholder}>
           <Button onClick={() => dispatch({ type: 'WIDGETS', payload: { isOpen: true } })}> + Chart</Button>

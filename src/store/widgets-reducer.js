@@ -1,4 +1,4 @@
-import { reducer, computed, action, thunk } from 'easy-peasy'
+import { reducer, computed, action, thunk, thunkOn } from 'easy-peasy'
 import { isJson } from '../widgets/components/charts/utils'
 
 const initState = () => ({
@@ -8,11 +8,11 @@ const initState = () => ({
   isOpen: true,
 })
 const initStateControllers = () => ({
-  data: null,
-  groupedData: null,
-  options: [],
-  chosenKey: [],
-  ready: true
+  data: null, // the final plotly data prop format
+  groupedData: null, // data agg stage but not ready to be passed to plotly
+  options: [], // based on xAxis
+  chosenKey: [], // this value is reset when x||yaxis changes
+  ready: true // when data parsing is done
 })
 
 export const widgetsReducer = {
@@ -46,7 +46,7 @@ export const widgetsReducer = {
     dispatch({ type, payload })
   }),
 
-  /** unique state of each chart type (maybe they can be grouped) */
+  /** unique state of each chart type (maybe they can be grouped if not adding more) */
   bar: {
     groupMode: 'group',
     layout: 'vertical',
@@ -83,13 +83,6 @@ export const widgetsReducer = {
     (yAxis) => isJson(yAxis[0])
   ),
 
-  // this to be called when results change probably, but not sure yet
-  // widgetsClear: thunk((actions, payload, { dispatch } ) => {
-  //   dispatch({ type: 'WIDGETS', payload: initState() })
-  //   dispatch({ type: 'WIDGETS', payload: initState() }) // clear controllers
-  // add each chart update action here too, basically clear all states
-  // }),
-
   /** checks if all initial states have been filled */
   isDone: computed(
     [
@@ -105,4 +98,29 @@ export const widgetsReducer = {
       isOpen,
     ) => Boolean(xAxis && yAxis && type && !isOpen)
   ),
+
+  /** called when results change to reset all states */
+  reset: thunk((actions, payload, { dispatch } ) => {
+    dispatch({ type: 'WIDGETS', payload: initState() })
+    dispatch({ type: 'CONTROLLER', payload: initStateControllers() })
+    const initSpecific = {
+      bar: { groupMode: 'group',layout: 'vertical' },
+      pie: { isDonut: false, multi: {} },
+      line: { area: false, multiAxis: false }
+    }
+    Object.keys(initSpecific).forEach((type) => {
+      actions[type].update(initSpecific[type])
+    })
+  }),
+
+  /** listener to clear chosenKey on axis change like an useEffect */
+  onAxisChange: thunkOn(
+    () => 'WIDGETS', // 👈 the targetResolver function
+    (actions, target) => { // handler
+      const { xAxis, yAxis } = target.payload
+      if (xAxis || yAxis) {
+        actions.handleDispatch({ chosenKey: [] })()
+      }
+    },
+  )
 }

@@ -63,13 +63,6 @@ const useLineControls = ({ columns, results }) => {
   }, [area, chosenKey, handleDispatch, isJson, results, xAxis, yAxis])
 
   useEffect(() => {
-    if (xAxis && yAxis.length) {
-      // TODO prevent from running on re-mount...
-      handleDispatch({ chosenKey: [] })() // clear selected options on keys change
-    }
-  }, [handleDispatch, xAxis, yAxis])
-
-  useEffect(() => {
     const specs = {
       type: 'scatter',
       mode: 'lines+markers', // makes axis start far from 0
@@ -154,14 +147,14 @@ const useLineControls = ({ columns, results }) => {
       <>
         <div className={classes.row1}>
           <CustomSelect
-            title='Key X'
+            title='Column 1'
             data={columns}
             chosenValue={xAxis}
             setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
           />
           <CustomSelect
             multi
-            title='Keys Y'
+            title='Columns 2'
             data={columns}
             chosenValue={yAxis}
             setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
