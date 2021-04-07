@@ -33,9 +33,12 @@ export const store = createStore({
   setGeoJoinColumn: _action('geoJoinColumn'),
   alert: { status: false, message: 'Error' },
   setAlert: _action('alert'),
-  // geoJoin,
+  // geoJoin
   geoJoin: false,
   setGeoJoin: _action('geoJoin'),
+  // defaultView
+  defaultView: {},
+  setDefaultView: _action('defaultView'),
 
   // views + results state
   ...viewsReducer,
