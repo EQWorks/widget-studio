@@ -7,6 +7,8 @@ import { columnsActions } from './columns-actions'
 import { filtersActions } from './filters-actions'
 import { queryActionHelpers } from './query-action-helpers'
 
+import { MLViews } from './api-actions/views'
+
 
 const _action = (key) => action((state, payload) => {
   let _payload = payload
@@ -17,6 +19,9 @@ const _action = (key) => action((state, payload) => {
 })
 
 export const store = createStore({
+  // api - useMLViews:
+  ...MLViews,
+
   queryDrawer: true,
   setQueryDrawer: _action('queryDrawer'),
   mode: { edit: true, read: false, isEditing: -1 },
