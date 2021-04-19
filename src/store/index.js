@@ -19,53 +19,56 @@ const _action = (key) => action((state, payload) => {
 })
 
 export const store = createStore({
-  // api - useMLViews:
-  ...MLViews,
-
-  queryDrawer: true,
-  setQueryDrawer: _action('queryDrawer'),
-  mode: { edit: true, read: false, isEditing: -1 },
-  setMode: _action('mode'),
-  columns: [],
-  setColumns: _action('columns'),
-  filters: [],
-  setFilters: _action('filters'),
-  views: {},
-  setViews: _action('views'),
-  viewColorMap: {},
-  setColorMap: _action('viewColorMap'),
-  geoJoinColumn: {},
-  setGeoJoinColumn: _action('geoJoinColumn'),
-  alert: { status: false, message: 'Error' },
-  setAlert: _action('alert'),
-  // geoJoin
-  geoJoin: false,
-  setGeoJoin: _action('geoJoin'),
-
   access: { wl: '', cu: '' },
+  queryDrawer: true,
+  mode: { edit: true, read: false, isEditing: -1 },
+  alert: { status: false, message: 'Error' },
+
   setAccess: _action('access'),
+  setQueryDrawer: _action('queryDrawer'),
+  setMode: _action('mode'),
+  setAlert: _action('alert'),
+
   onWlCuChange: thunkOn(
     (actions) => actions.setAccess,
-    (actions) => {
-      actions.reset()
-      actions.viewTypeControlsReset()
-      actions.handleViewsDispatch({
-        type: 'NEW_ACCESS',
-        payload: {},
-      })
+    (actions, { payload: { meta: { defaultView } } }) => {
+      if (!defaultView.id) {
+        actions.builder.helpers.reset()
+        actions.builder.views.viewTypeControlsReset()
+        actions.builder.views.handleViewsDispatch({
+          type: 'NEW_ACCESS',
+          payload: {},
+        })
+      }
     }
   ),
 
-  // views + results state
-  ...viewsReducer,
-  ...resultsReducer,
-
-  // columns + filters helpers
-  ...columnsActions,
-  ...filtersActions,
-
-  // generateQuery + reset heleprs
-  ...queryActionHelpers,
+  // query builder
+  builder: {
+    views: {
+      views: {},
+      viewColorMap: {},
+      setViews: _action('views'),
+      setColorMap: _action('viewColorMap'),
+      // api - useMLViews:
+      ...MLViews,
+      ...viewsReducer,
+    },
+    filters: {
+      filters: [],
+      setFilters: _action('filters'),
+      ...filtersActions,
+    },
+    columns: {
+      columns: [],
+      geoJoinColumn: {},
+      setColumns: _action('columns'),
+      setGeoJoinColumn: _action('geoJoinColumn'),
+      ...columnsActions,
+    },
+    helpers: { ...queryActionHelpers },
+    results: { ...resultsReducer },
+  },
 
   // widgets
   widgets: widgetsReducer
