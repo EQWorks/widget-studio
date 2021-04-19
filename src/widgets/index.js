@@ -20,10 +20,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Widgets = ({ mlModel }) => {
   const {
-    resultLoading,
-    resultState: {
-      results,
-      columns
+    builder: {
+      resultLoading,
+      results: {
+        resultState: {
+          results,
+          columns
+        },
+      },
     },
     savedQueriesStates: {
       selectedQuery: { saved = -1, execution = -1 },
