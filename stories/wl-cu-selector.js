@@ -78,7 +78,7 @@ const WlCuSelector = ({ wlState, cuState }) => {
   const onChange = (ref) => ({ target: value }) => {
     const v = parseInt(value.value) || null
     ref === 'wl'
-      ?(setWl(v), setCu(null))
+      ? (setWl(v), setCu(null))
       : setCu(v)
   }
 
