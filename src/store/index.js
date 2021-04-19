@@ -41,9 +41,6 @@ export const store = createStore({
   // geoJoin
   geoJoin: false,
   setGeoJoin: _action('geoJoin'),
-  // defaultView
-  defaultView: {},
-  setDefaultView: _action('defaultView'),
 
   // views + results state
   ...viewsReducer,
