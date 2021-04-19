@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/ml-ui",
-  "version": "1.0.2",
+  "version": "1.0.1-alpha.2",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
