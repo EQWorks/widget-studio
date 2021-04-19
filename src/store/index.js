@@ -1,4 +1,4 @@
-import { createStore, action } from 'easy-peasy'
+import { createStore, action, thunkOn } from 'easy-peasy'
 
 import { viewsReducer } from './views-reducer'
 import { widgetsReducer } from './widgets-reducer'
@@ -41,6 +41,20 @@ export const store = createStore({
   // geoJoin
   geoJoin: false,
   setGeoJoin: _action('geoJoin'),
+
+  access: { wl: '', cu: '' },
+  setAccess: _action('access'),
+  onWlCuChange: thunkOn(
+    (actions) => actions.setAccess,
+    (actions) => {
+      actions.reset()
+      actions.viewTypeControlsReset()
+      actions.handleViewsDispatch({
+        type: 'NEW_ACCESS',
+        payload: {},
+      })
+    }
+  ),
 
   // views + results state
   ...viewsReducer,
