@@ -8,6 +8,7 @@ import { filtersActions } from './filters-actions'
 import { queryActionHelpers } from './query-action-helpers'
 
 import { MLViews } from './api-actions/views'
+import { savedQueriesStates } from './saved-queries'
 
 
 const _action = (key) => action((state, payload) => {
@@ -69,6 +70,9 @@ export const store = createStore({
     helpers: { ...queryActionHelpers },
     results: { ...resultsReducer },
   },
+
+  // saved queries
+  savedQueries: { ...savedQueriesStates },
 
   // widgets
   widgets: widgetsReducer
