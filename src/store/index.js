@@ -1,8 +1,8 @@
 import { createStore, thunkOn } from 'easy-peasy'
 
 import { builder } from './builder'
+import { queries } from './saved-queries'
 import { widgetsReducer } from './widgets-reducer'
-import { savedQueriesStates } from './saved-queries'
 import { _action } from './store-util'
 
 
@@ -22,7 +22,7 @@ export const store = createStore({
     (actions, { payload: { meta: { defaultView } } }) => {
       if (!defaultView.id) {
         actions.builder.reset()
-        actions.savedQueries.reset()
+        actions.queries.reset()
         actions.builder.viewTypeControlsReset()
         actions.builder.handleViewsDispatch({
           type: 'NEW_ACCESS',
@@ -34,10 +34,8 @@ export const store = createStore({
 
   /* -- query builder -- */
   builder,
-
   /* -- saved queries -- */
-  savedQueries: { ...savedQueriesStates },
-
+  queries,
   /* -- widgets -- */
   widgets: widgetsReducer,
 }, {
