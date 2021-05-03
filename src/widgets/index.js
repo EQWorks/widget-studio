@@ -27,7 +27,7 @@ const Widgets = ({ mlModel }) => {
         columns
       },
     },
-    savedQueriesStates: {
+    saveActions: {
       selectedQuery: { saved = -1, execution = -1 },
       // savedQueries,
       // queryExecutions,
