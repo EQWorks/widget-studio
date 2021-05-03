@@ -21,7 +21,7 @@ export const store = createStore({
     (actions) => actions.setAccess,
     (actions, { payload: { meta: { defaultView } } }) => {
       if (!defaultView.id) {
-        actions.builder.helpers.reset()
+        actions.builder.reset()
         actions.savedQueries.reset()
         actions.builder.viewTypeControlsReset()
         actions.builder.handleViewsDispatch({
@@ -32,14 +32,14 @@ export const store = createStore({
     }
   ),
 
-  // query builder
+  /* -- query builder -- */
   builder,
 
-  // saved queries
+  /* -- saved queries -- */
   savedQueries: { ...savedQueriesStates },
 
-  // widgets
-  widgets: widgetsReducer
+  /* -- widgets -- */
+  widgets: widgetsReducer,
 }, {
   disableImmer: true,
 })
