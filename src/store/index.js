@@ -35,6 +35,7 @@ export const store = createStore({
     (actions, { payload: { meta: { defaultView } } }) => {
       if (!defaultView.id) {
         actions.builder.helpers.reset()
+        actions.savedQueries.reset()
         actions.builder.views.viewTypeControlsReset()
         actions.builder.views.handleViewsDispatch({
           type: 'NEW_ACCESS',
