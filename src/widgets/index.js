@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Widgets = ({ mlModel }) => {
+const Widgets = ({ qlModel }) => {
   const {
     builder: {
       resultState: {
@@ -32,7 +32,7 @@ const Widgets = ({ mlModel }) => {
       // savedQueries,
       // queryExecutions,
     },
-  } = mlModel
+  } = qlModel
 
   const isDone = useStoreState((state) => state.widgets.isDone)
   const dispatch = useStoreDispatch()
@@ -81,7 +81,7 @@ const Widgets = ({ mlModel }) => {
 }
 
 Widgets.propTypes = {
-  mlModel: PropTypes.object,
+  qlModel: PropTypes.object,
 }
 
 export default Widgets
