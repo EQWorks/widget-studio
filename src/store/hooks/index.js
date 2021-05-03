@@ -17,7 +17,7 @@ export const useQLStore = () => {
 
   /* -- hooks -- */
   const builder = useBuilderStates(_actions)
-  const savedQueries = useSavedQueriesStates(_actions)
+  const queries = useSavedQueriesStates(_actions)
 
   return {
     access,
@@ -31,7 +31,7 @@ export const useQLStore = () => {
     setQueryDrawer: _actions.setQueryDrawer,
 
     builder,
-    savedQueries,
+    queries,
 
     widgets: { ..._actions.widgets },
 

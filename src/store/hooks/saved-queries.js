@@ -3,44 +3,40 @@ import { useStoreState } from 'easy-peasy'
 
 export const useSavedQueriesStates = (_actions) => {
   /* -- Saved Queries States -- */
-  const currentWL = useStoreState((state) => state.savedQueries.currentWL)
-  const modelReset = useStoreState((state) => state.savedQueries.modelReset)
-  const selectedQuery = useStoreState((state) => state.savedQueries.selectedQuery)
-  const selectedExecution = useStoreState((state) => state.savedQueries.selectedExecution)
-  const executionParams = useStoreState((state) => state.savedQueries.executionParams)
+  const modelReset = useStoreState((state) => state.queries.modelReset)
+  const selectedQuery = useStoreState((state) => state.queries.selectedQuery)
+  const executionParams = useStoreState((state) => state.queries.executionParams)
 
-  const open = useStoreState((state) => state.savedQueries.saveModalStates.open)
-  const name = useStoreState((state) => state.savedQueries.saveModalStates.name)
-  const saveExecution = useStoreState((state) => state.savedQueries.saveModalStates.saveExecution)
-  const unsavedAlert = useStoreState((state) => state.savedQueries.saveModalStates.unsavedAlert)
-  const deleteAlert = useStoreState((state) => state.savedQueries.saveModalStates.deleteAlert)
+  const open = useStoreState((state) => state.queries.saveModal.open)
+  const name = useStoreState((state) => state.queries.saveModal.name)
+  const saveExecution = useStoreState((state) => state.queries.saveModal.saveExecution)
+  const unsavedAlert = useStoreState((state) => state.queries.saveModal.unsavedAlert)
+  const deleteAlert = useStoreState((state) => state.queries.saveModal.deleteAlert)
 
-  const savedQueries = useStoreState((state) => state.savedQueries.qlSavedQueries.savedQueries)
-  const savedQueriesLoading = useStoreState((state) => state.savedQueries.qlSavedQueries.savedQueriesLoading)
-  const savedQuery = useStoreState((state) => state.savedQueries.qlSavedQueries.savedQuery)
-  const savedQueryLoading = useStoreState((state) => state.savedQueries.qlSavedQueries.savedQueryLoading)
-  const queryMutations = useStoreState((state) => state.savedQueries.qlSavedQueries.queryMutations)
+  const savedQueries = useStoreState((state) => state.queries.qlSavedQueries.savedQueries)
+  const savedQueriesLoading = useStoreState((state) => state.queries.qlSavedQueries.savedQueriesLoading)
+  const savedQuery = useStoreState((state) => state.queries.qlSavedQueries.savedQuery)
+  const savedQueryLoading = useStoreState((state) => state.queries.qlSavedQueries.savedQueryLoading)
+  const queryMutations = useStoreState((state) => state.queries.qlSavedQueries.queryMutations)
 
-  const queryExecutions = useStoreState((state) => state.savedQueries.qlExecutionHistory.queryExecutions)
-  const executionLoading = useStoreState((state) => state.savedQueries.qlExecutionHistory.executionLoading)
-  const createExecution = useStoreState((state) => state.savedQueries.qlExecutionHistory.createExecution)
+  const queryExecutions = useStoreState((state) => state.queries.qlExecutionHistory.queryExecutions)
+  const executionLoading = useStoreState((state) => state.queries.qlExecutionHistory.executionLoading)
+  const executionMutations = useStoreState((state) => state.queries.qlExecutionHistory.executionMutations)
   /* -- Saved Queries States -- */
 
   return {
-    currentWL,
     modelReset,
     selectedQuery,
-    selectedExecution,
     executionParams,
-    ..._actions.savedQueries,
+    ..._actions.queries,
 
-    saveModalStates: {
+    saveModal: {
       open,
       name,
       saveExecution,
       unsavedAlert,
       deleteAlert,
-      ..._actions.savedQueries.saveModalStates,
+      ..._actions.queries.saveModal,
     },
 
     qlSavedQueries: {
@@ -48,18 +44,21 @@ export const useSavedQueriesStates = (_actions) => {
       savedQueriesLoading,
       savedQuery,
       savedQueryLoading,
-      ..._actions.savedQueries.qlSavedQueries,
+      ..._actions.queries.qlSavedQueries,
       queryMutations: {
         ...queryMutations,
-        ..._actions.savedQueries.qlSavedQueries.queryMutations,
+        ..._actions.queries.qlSavedQueries.queryMutations,
       }
     },
 
     qlExecutionHistory: {
       queryExecutions,
       executionLoading,
-      createExecution,
-      ..._actions.savedQueries.qlExecutionHistory,
+      ..._actions.queries.qlExecutionHistory,
+      executionMutations: {
+        ...executionMutations,
+        ..._actions.queries.qlExecutionHistory.executionMutations,
+      },
     },
   }
 }
