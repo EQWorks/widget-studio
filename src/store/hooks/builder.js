@@ -20,7 +20,7 @@ export const useBuilderStates = (_actions) => {
   const geoJoinColumn = useStoreState((state) => state.builder.geoJoinColumn)
 
   /* -- results reducer -- */
-  const resultState = useStoreState((state) => state.builder.results.resultState)
+  const resultState = useStoreState((state) => state.builder.resultState)
 
   return {
     /* -- views -- */
@@ -36,13 +36,14 @@ export const useBuilderStates = (_actions) => {
 
     /* -- filters -- */
     filters,
-    ..._actions.builder,
 
     /* -- columns -- */
     columns,
     geoJoinColumn,
 
-    results: { resultState, ..._actions.builder.results },
-    helpers: { ..._actions.builder.helpers },
+    /* -- results -- */
+    resultState,
+
+    ..._actions.builder,
   }
 }
