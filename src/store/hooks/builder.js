@@ -12,6 +12,7 @@ export const useBuilderStates = (_actions) => {
   const columnsLoading = useStoreState((state) => state.builder.columnsLoading)
   const viewState = useStoreState((state) => state.builder.viewState)
   const viewsControlStates = useStoreState((state) => state.builder.viewTypeChangeControls)
+  const subViewIndex = useStoreState((state) => state.builder.subViewIndex)
   /* -- filters -- */
   const filters = useStoreState((state) => state.builder.filters)
 
@@ -27,6 +28,7 @@ export const useBuilderStates = (_actions) => {
     views,
     viewColorMap,
     viewState,
+    subViewIndex,
     viewsControlStates,
     MLViews,
     MLViewCols,
