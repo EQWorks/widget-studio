@@ -22,11 +22,9 @@ const Widgets = ({ mlModel }) => {
   const {
     builder: {
       resultLoading,
-      results: {
-        resultState: {
-          results,
-          columns
-        },
+      resultState: {
+        results,
+        columns
       },
     },
     savedQueriesStates: {
