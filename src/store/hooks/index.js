@@ -10,6 +10,7 @@ export const useQLStore = () => {
   const mode = useStoreState((state) => state.mode)
   const alert = useStoreState((state) => state.alert)
 
+
   const _actions = useStoreActions((actions) => actions)
   /* -- dispatch -- */
   const viewDispatch = useStoreDispatch()
