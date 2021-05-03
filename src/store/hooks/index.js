@@ -13,7 +13,7 @@ export const useQLStore = () => {
 
   const _actions = useStoreActions((actions) => actions)
   /* -- dispatch -- */
-  const viewDispatch = useStoreDispatch()
+  const qlModelDispatch = useStoreDispatch()
 
   /* -- hooks -- */
   const builder = useBuilderStates(_actions)
@@ -35,7 +35,6 @@ export const useQLStore = () => {
 
     widgets: { ..._actions.widgets },
 
-    viewDispatch,
-    resultDispatch: viewDispatch,
+    qlModelDispatch,
   }
 }
