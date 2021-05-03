@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { LoginContextProvider } from '@eqworks/common-login'
 
 import WlCuSelector from './wl-cu-selector'
-import AuthML from '../src'
+import AuthQL from '../src'
 
 
 /* create react-query client & provide client to ml */
@@ -19,8 +19,8 @@ const queryClientContext = (children) => {
 }
 
 export default {
-  title: 'LOCUS ML',
-  component: AuthML,
+  title: 'LOCUS QL',
+  component: AuthQL,
 }
 /** SHOULDN'T EXIST ANYMORE WITHOUT WL/CU
 
@@ -42,19 +42,19 @@ export const NormalWithWLCu = () => {
   const wlState = useState(4)
   const cuState = useState(null)
 
-  const ml = (
+  const ql = (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       {/* wl/cu selector for dev purposes  */}
       <WlCuSelector {...{ wlState, cuState }}/>
       <LoginContextProvider>
-        <AuthML
+        <AuthQL
           wl={wlState[0]}
           cu={cuState[0]}
         />
       </LoginContextProvider>
     </div>)
 
-  return queryClientContext(ml)
+  return queryClientContext(ql)
 }
 
 export const WithDefaultView = () => {
@@ -86,11 +86,11 @@ export const WithDefaultView = () => {
     }
   }, [c])
 
-  const ml = (
+  const ql = (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <WlCuSelector {...{ wlState, cuState }}/>
       <LoginContextProvider>
-        <AuthML
+        <AuthQL
           wl={wlState[0]}
           cu={cuState[0]}
           defaultView={d}
@@ -124,5 +124,5 @@ export const WithDefaultView = () => {
       </LoginContextProvider>
     </div>)
 
-  return queryClientContext( ml)
+  return queryClientContext(ql)
 }
