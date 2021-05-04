@@ -21,6 +21,8 @@ export const useSavedQueriesStates = (_actions) => {
 
   const queryExecutions = useStoreState((state) => state.queries.qlExecutionHistory.queryExecutions)
   const executionLoading = useStoreState((state) => state.queries.qlExecutionHistory.executionLoading)
+  const showAll = useStoreState((state) => state.queries.qlExecutionHistory.showAll)
+  const filterConfig = useStoreState((state) => state.queries.qlExecutionHistory.filterConfig)
   const executionMutations = useStoreState((state) => state.queries.qlExecutionHistory.executionMutations)
   /* -- Saved Queries States -- */
 
@@ -54,6 +56,8 @@ export const useSavedQueriesStates = (_actions) => {
     qlExecutionHistory: {
       queryExecutions,
       executionLoading,
+      showAll,
+      filterConfig,
       ..._actions.queries.qlExecutionHistory,
       executionMutations: {
         ...executionMutations,
