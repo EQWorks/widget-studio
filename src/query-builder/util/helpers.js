@@ -168,3 +168,16 @@ export const jsonToCsv = ({ data, rows, visibleColumns, visCols = false, filtere
   link.click()
   link.remove()
 }
+
+// check for duplicate column names
+export const validateColumnNames = (columns) => {
+  // checking for normal columns
+  const _columnNames = (columns.filter(({ type }) => type === 'column'))
+    .map(({ data: { key }, as }) => {
+      if (as) return as
+      return key
+    })
+  const hasDuplicate = new Set(_columnNames).size !== _columnNames.length
+
+  return { duplicateNames: hasDuplicate }
+}
