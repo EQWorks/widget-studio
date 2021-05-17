@@ -15,6 +15,7 @@ export const useBuilderStates = (_actions) => {
   const subViewIndex = useStoreState((state) => state.builder.subViewIndex)
 
   const viewCategories = useStoreState((state) => state.builder.viewCategories)
+  const selectedNodes = useStoreState((state) => state.builder.selectedNodes)
   /* -- filters -- */
   const filters = useStoreState((state) => state.builder.filters)
 
@@ -38,6 +39,7 @@ export const useBuilderStates = (_actions) => {
     columnsLoading,
 
     viewCategories,
+    selectedNodes,
 
     /* -- filters -- */
     filters,
