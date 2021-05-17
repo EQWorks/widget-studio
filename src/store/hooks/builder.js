@@ -6,6 +6,7 @@ export const useBuilderStates = (_actions) => {
   const views = useStoreState((state) => state.builder.views)
   const viewColorMap = useStoreState((state) => state.builder.viewColorMap)
   const MLViews = useStoreState((state) => state.builder.MLViews)
+  const QLViews = useStoreState((state) => state.builder.QLViews)
   const MLViewCols = useStoreState((state) => state.builder.MLViewCols)
   const viewsLoading = useStoreState((state) => state.builder.viewsLoading)
   const subViewsLoading = useStoreState((state) => state.builder.subViewsLoading)
@@ -32,6 +33,7 @@ export const useBuilderStates = (_actions) => {
     viewState,
     subViewIndex,
     viewsControlStates,
+    QLViews,
     MLViews,
     MLViewCols,
     viewsLoading,
