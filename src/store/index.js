@@ -24,10 +24,6 @@ export const store = createStore({
         actions.builder.reset()
         actions.queries.reset()
         actions.builder.viewTypeControlsReset()
-        actions.builder.handleViewsDispatch({
-          type: 'NEW_ACCESS',
-          payload: {},
-        })
       }
     }
   ),
