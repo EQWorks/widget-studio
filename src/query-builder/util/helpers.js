@@ -83,12 +83,6 @@ export const clearViews = ({ columns, filters, viewId, reset }) => {
   return clear
 }
 
-// return viewData arrays from subViews
-export const getSubViewData = (viewState) => (type) => Object.values(viewState).map((views) => {
-  const view = views.find((view) => view.viewData && view.name === type)
-  return view?.viewData
-}).filter((v) => v).flat()
-
 const mapFalsy = {
   0 : '0',
   undefined : 'Undefined',
