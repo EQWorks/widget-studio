@@ -9,10 +9,8 @@ export const useBuilderStates = (_actions) => {
   const QLViews = useStoreState((state) => state.builder.QLViews)
   const MLViewCols = useStoreState((state) => state.builder.MLViewCols)
   const viewsLoading = useStoreState((state) => state.builder.viewsLoading)
-  const columnsLoading = useStoreState((state) => state.builder.columnsLoading)
-  const viewState = useStoreState((state) => state.builder.viewState)
+  const viewColsLoading = useStoreState((state) => state.builder.viewColsLoading)
   const viewsControlStates = useStoreState((state) => state.builder.viewTypeChangeControls)
-  const subViewIndex = useStoreState((state) => state.builder.subViewIndex)
 
   const viewCategories = useStoreState((state) => state.builder.viewCategories)
   const selectedNodes = useStoreState((state) => state.builder.selectedNodes)
@@ -29,14 +27,12 @@ export const useBuilderStates = (_actions) => {
     /* -- views -- */
     views,
     viewColorMap,
-    viewState,
-    subViewIndex,
     viewsControlStates,
     QLViews,
     MLViews,
     MLViewCols,
     viewsLoading,
-    columnsLoading,
+    viewColsLoading,
 
     viewCategories,
     selectedNodes,
