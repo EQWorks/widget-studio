@@ -10,6 +10,7 @@ export const useBuilderStates = (_actions) => {
   const MLViewCols = useStoreState((state) => state.builder.MLViewCols)
   const viewsLoading = useStoreState((state) => state.builder.viewsLoading)
   const viewColsLoading = useStoreState((state) => state.builder.viewColsLoading)
+  const viewsWithAggCols = useStoreState((state) => state.builder.viewsWithAggCols)
   const viewsControlStates = useStoreState((state) => state.builder.viewTypeChangeControls)
 
   const viewCategories = useStoreState((state) => state.builder.viewCategories)
@@ -33,6 +34,7 @@ export const useBuilderStates = (_actions) => {
     MLViewCols,
     viewsLoading,
     viewColsLoading,
+    viewsWithAggCols,
 
     viewCategories,
     selectedNodes,
