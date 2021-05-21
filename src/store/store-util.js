@@ -8,3 +8,11 @@ export const _action = (key) => action((state, payload) => {
   }
   return { ...state, [key]: _payload }
 })
+
+export const findNodes = (categories = [], targetID, parents = []) => (
+  categories.map(({ id, name, children }) => {
+    if (targetID === id) {
+      return [...parents, { id, name }]
+    }
+    return findNodes(children, targetID, [...parents, { id, name }])
+  })).flat()

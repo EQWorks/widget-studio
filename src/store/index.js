@@ -23,7 +23,7 @@ export const store = createStore({
       if (!defaultView.id) {
         actions.builder.reset()
         actions.queries.reset()
-        actions.builder.viewTypeControlsReset()
+        actions.builder.viewSelectionReset()
       }
     }
   ),
