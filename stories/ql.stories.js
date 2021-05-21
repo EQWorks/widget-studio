@@ -62,8 +62,8 @@ export const WithDefaultView = () => {
   // const cuState = useState(10183) // Test Advertiser
   const cuState = useState(9533) // Paulo Simoes
   const [d, setD] = useState({
-    type: 'layer',
-    id: 'layer_1313_1',
+    type: 'layer_propensity',
+    id: 'layer_1124_1',
   })
   const [c, setC] = useState(0)
   // const wlState = useState(1532)
