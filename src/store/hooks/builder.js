@@ -2,17 +2,17 @@ import { useStoreState } from 'easy-peasy'
 
 
 export const useBuilderStates = (_actions) => {
-  /* --  Views reducer + MLViews -- */
+  /* --  Views reducer -- */
   const views = useStoreState((state) => state.builder.views)
   const viewColorMap = useStoreState((state) => state.builder.viewColorMap)
-  const MLViews = useStoreState((state) => state.builder.MLViews)
-  const MLViewCols = useStoreState((state) => state.builder.MLViewCols)
+  const QLViews = useStoreState((state) => state.builder.QLViews)
+  const viewCategories = useStoreState((state) => state.builder.viewCategories)
+  const selectedNodes = useStoreState((state) => state.builder.selectedNodes)
   const viewsLoading = useStoreState((state) => state.builder.viewsLoading)
-  const subViewsLoading = useStoreState((state) => state.builder.subViewsLoading)
-  const columnsLoading = useStoreState((state) => state.builder.columnsLoading)
-  const viewState = useStoreState((state) => state.builder.viewState)
-  const viewsControlStates = useStoreState((state) => state.builder.viewTypeChangeControls)
-  const subViewIndex = useStoreState((state) => state.builder.subViewIndex)
+  const viewColsLoading = useStoreState((state) => state.builder.viewColsLoading)
+  const viewsWithAggCols = useStoreState((state) => state.builder.viewsWithAggCols)
+  const viewSelectionState = useStoreState((state) => state.builder.viewSelectionState)
+
   /* -- filters -- */
   const filters = useStoreState((state) => state.builder.filters)
 
@@ -26,14 +26,13 @@ export const useBuilderStates = (_actions) => {
     /* -- views -- */
     views,
     viewColorMap,
-    viewState,
-    subViewIndex,
-    viewsControlStates,
-    MLViews,
-    MLViewCols,
+    QLViews,
+    selectedNodes,
+    viewSelectionState,
     viewsLoading,
-    subViewsLoading,
-    columnsLoading,
+    viewColsLoading,
+    viewsWithAggCols,
+    viewCategories,
 
     /* -- filters -- */
     filters,
