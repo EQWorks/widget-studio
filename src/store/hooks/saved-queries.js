@@ -12,6 +12,7 @@ export const useSavedQueriesStates = (_actions) => {
   const saveExecution = useStoreState((state) => state.queries.saveModal.saveExecution)
   const unsavedAlert = useStoreState((state) => state.queries.saveModal.unsavedAlert)
   const deleteAlert = useStoreState((state) => state.queries.saveModal.deleteAlert)
+  const exeCancelAlert = useStoreState((state) => state.queries.saveModal.exeCancelAlert)
 
   const savedQueries = useStoreState((state) => state.queries.qlSavedQueries.savedQueries)
   const savedQueriesLoading = useStoreState((state) => state.queries.qlSavedQueries.savedQueriesLoading)
@@ -38,6 +39,7 @@ export const useSavedQueriesStates = (_actions) => {
       saveExecution,
       unsavedAlert,
       deleteAlert,
+      exeCancelAlert,
       ..._actions.queries.saveModal,
     },
 
