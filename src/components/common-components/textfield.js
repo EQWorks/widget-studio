@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0.5),
     color: 'rgba(0, 0, 0, 0.6)',
   },
-  required: { margin: '8px 0px 0px 0px', color: 'red' },
+  required: { margin: '8px 0px 0px 0px', color: '#EA0000' },
 }))
 
 const Textfield = ({ width, label, required, ...props }) => {

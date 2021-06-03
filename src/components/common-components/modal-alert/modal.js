@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Modal = ({ children, open, onClose }) => {
+const Modal = React.forwardRef(({ children, open, onClose }, ref) => {
   const classes = useStyles()
   return (
     <MUIModal
@@ -26,10 +26,10 @@ const Modal = ({ children, open, onClose }) => {
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 500 }}
     >
-      <Fade in={open}>{children}</Fade>
+      <Fade in={open}><div ref={ref}>{children}</div></Fade>
     </MUIModal>
   )
-}
+})
 
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
@@ -37,4 +37,6 @@ Modal.propTypes = {
   onClose: PropTypes.func
 }
 Modal.defaultProps = { onClose: () => {} }
+
+Modal.displayName = 'Modal'
 export default Modal

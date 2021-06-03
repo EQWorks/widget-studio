@@ -15,6 +15,8 @@ const useStyles = makeStyles({
     border: '1px solid #0075FF',
     borderRadius: '4px',
     boxShadow: '0px 4px 30px rgba(12, 12, 13, 0.05)',
+    paddingLeft: '4px',
+    paddingRight: '4px',
   },
   sm: { width: '450px' },
   header: { paddingBottom: 0 },
@@ -24,7 +26,7 @@ const useStyles = makeStyles({
     color: '#0075FF',
     '&:hover': { cursor: 'pointer' },
   },
-  content: { paddingTop: 0 },
+  content: { paddingTop: 0, paddingBottom: 0 },
   title: {
     fontSize: '20px',
     fontWeight: 700,
