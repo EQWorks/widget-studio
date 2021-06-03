@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStoreDispatch, useStoreState } from 'easy-peasy'
 import { Button, Loader, Typography } from '@eqworks/lumen-ui'
-import ResultsTable from '../components/table'
+import ResultsTable from '../components/ql-components/table'
 import WidgetSelector from './modal'
 import EditMode from './edit-mode'
 
