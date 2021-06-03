@@ -9,6 +9,7 @@ export const useSavedQueriesStates = (_actions) => {
 
   const open = useStoreState((state) => state.queries.saveModal.open)
   const name = useStoreState((state) => state.queries.saveModal.name)
+  const description = useStoreState((state) => state.queries.saveModal.description)
   const saveExecution = useStoreState((state) => state.queries.saveModal.saveExecution)
   const unsavedAlert = useStoreState((state) => state.queries.saveModal.unsavedAlert)
   const deleteAlert = useStoreState((state) => state.queries.saveModal.deleteAlert)
@@ -36,6 +37,7 @@ export const useSavedQueriesStates = (_actions) => {
     saveModal: {
       open,
       name,
+      description,
       saveExecution,
       unsavedAlert,
       deleteAlert,
