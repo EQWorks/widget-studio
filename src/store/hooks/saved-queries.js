@@ -7,6 +7,7 @@ export const useSavedQueriesStates = (_actions) => {
   const selectedQuery = useStoreState((state) => state.queries.selectedQuery)
   const executionParams = useStoreState((state) => state.queries.executionParams)
 
+  const error = useStoreState((state) => state.queries.saveModal.error)
   const open = useStoreState((state) => state.queries.saveModal.open)
   const name = useStoreState((state) => state.queries.saveModal.name)
   const description = useStoreState((state) => state.queries.saveModal.description)
@@ -35,6 +36,7 @@ export const useSavedQueriesStates = (_actions) => {
     ..._actions.queries,
 
     saveModal: {
+      error,
       open,
       name,
       description,
