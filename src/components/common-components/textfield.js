@@ -20,6 +20,11 @@ const StyledTextField = withStyles((theme) => ({
     padding: '4px 6px',
     transition: theme.transitions.create(['border-color', 'box-shadow']),
   },
+  error: {
+    borderRadius: 2,
+    border: '1px solid #EA0000',
+    boxShadow: `${fade('#EA0000', 0.25)} 0 0 0 0.2rem`,
+  },
   focused: {
     boxShadow: `${fade(theme.palette.primary[100], 0.25)} 0 0 0 0.2rem`,
     borderColor: theme.palette.primary.main,
@@ -38,9 +43,10 @@ const useStyles = makeStyles((theme) => ({
     color: 'rgba(0, 0, 0, 0.6)',
   },
   required: { margin: '8px 0px 0px 0px', color: '#EA0000' },
+  error: { marginTop: theme.spacing(0.5), marginLeft: theme.spacing(0.5), color: '#EA0000' },
 }))
 
-const Textfield = ({ width, label, required, ...props }) => {
+const Textfield = ({ width, label, required, error, ...props }) => {
   const classes = useStyles({ width })
   return (
     <FormControl className={classes.root}>
@@ -48,7 +54,8 @@ const Textfield = ({ width, label, required, ...props }) => {
         <Typography variant='caption' className={classes.label}>{label}</Typography>
         {required && <p className={classes.required}>*</p>}
       </div>}
-      <StyledTextField color='primary' required={required} {...props} />
+      <StyledTextField error={error.status} required={required} {...props} />
+      {error.msg && <Typography variant='caption' className={classes.error}>{error.msg}</Typography>}
     </FormControl>
   )
 }
@@ -60,10 +67,12 @@ Textfield.propTypes = {
   ]),
   label: PropTypes.string,
   required: PropTypes.bool,
+  error: PropTypes.object,
 }
 Textfield.defaultProps = {
   width: '100%',
   label: '',
   required: false,
+  error: {},
 }
 export default Textfield
