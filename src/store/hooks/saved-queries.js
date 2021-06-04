@@ -8,14 +8,10 @@ export const useSavedQueriesStates = (_actions) => {
   const executionParams = useStoreState((state) => state.queries.executionParams)
 
   const error = useStoreState((state) => state.queries.saveModal.error)
-  const open = useStoreState((state) => state.queries.saveModal.open)
+  const modalAlert = useStoreState((state) => state.queries.saveModal.modalAlert)
   const name = useStoreState((state) => state.queries.saveModal.name)
   const description = useStoreState((state) => state.queries.saveModal.description)
   const saveExecution = useStoreState((state) => state.queries.saveModal.saveExecution)
-  const resetAlert = useStoreState((state) => state.queries.saveModal.resetAlert)
-  const unsavedAlert = useStoreState((state) => state.queries.saveModal.unsavedAlert)
-  const deleteAlert = useStoreState((state) => state.queries.saveModal.deleteAlert)
-  const exeCancelAlert = useStoreState((state) => state.queries.saveModal.exeCancelAlert)
 
   const savedQueries = useStoreState((state) => state.queries.qlSavedQueries.savedQueries)
   const savedQueriesLoading = useStoreState((state) => state.queries.qlSavedQueries.savedQueriesLoading)
@@ -38,14 +34,10 @@ export const useSavedQueriesStates = (_actions) => {
 
     saveModal: {
       error,
-      open,
+      modalAlert,
       name,
       description,
       saveExecution,
-      resetAlert,
-      unsavedAlert,
-      deleteAlert,
-      exeCancelAlert,
       ..._actions.queries.saveModal,
     },
 
