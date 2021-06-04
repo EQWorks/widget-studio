@@ -17,8 +17,10 @@ const useStyles = makeStyles({
     boxShadow: '0px 4px 30px rgba(12, 12, 13, 0.05)',
     paddingLeft: '4px',
     paddingRight: '4px',
+    position: 'relative',
   },
-  sm: { width: '450px' },
+  sm: ({ height }) => ({ width: '370px', height }),
+  md: ({ height }) => ({ width: '450px', height }),
   header: { paddingBottom: 0 },
   clearIcon: {
     width: '20px',
@@ -35,14 +37,14 @@ const useStyles = makeStyles({
     paddingBottom: 5,
   },
   actions: {
-    display: 'flex',
-    padding: '8px',
-    justifyContent: 'flex-end',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
   },
 })
 
-const Card = ({ size, title, content, actions, onClose }) => {
-  const classes = useStyles()
+const Card = ({ size, height, title, content, actions, onClose }) => {
+  const classes = useStyles({ height })
 
   return (
     <MUICard className={`${classes.root} ${classes[size]}`}>
@@ -58,6 +60,10 @@ const Card = ({ size, title, content, actions, onClose }) => {
 
 Card.propTypes = {
   size: PropTypes.string,
+  height: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   title: PropTypes.string,
   content: PropTypes.any,
   actions: PropTypes.any,
@@ -65,6 +71,7 @@ Card.propTypes = {
 }
 Card.defaultProps = {
   size: 'sm',
+  height: 'auto',
   title: '',
   content: '',
   actions: '',
