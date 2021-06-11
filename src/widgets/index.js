@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     overflow: 'auto',
     padding: 18,
-    maxHeight: 'calc(100vh - 100px)'
+    maxHeight: 'calc(100vh - 150px)'
   }
 }))
 
