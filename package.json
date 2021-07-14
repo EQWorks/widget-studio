@@ -1,6 +1,6 @@
 {
-  "name": "@eqworks/ml-ui",
-  "version": "1.1.1-alpha.8",
+  "name": "@eqworks/widget-studio",
+  "version": "1.0.0-alpha",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -12,21 +12,13 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EQWorks/ml-ui.git"
+    "url": "https://github.com/EQWorks/widget-studio.git"
   },
   "scripts": {
     "lint": "eslint src/",
+    "watch": "babel src -w --out-dir dist --copy-files",
     "build": "babel src --out-dir dist --copy-files",
-    "build-storybook": "build-storybook",
-    "deploy-storybook": "storybook-to-ghpages --ci",
-    "storybook": "env $(print-env) start-storybook -p 6006",
-    "start": "yarn storybook",
     "prepublishOnly": "yarn lint && yarn build"
-  },
-  "storybook-deployer": {
-    "gitUsername": "Deployer",
-    "gitEmail": "sb-deployer@eqworks.com",
-    "commitMessage": "Deploy Storybook to GitHub Pages"
   },
   "peerDependencies": {
     "@eqworks/common-login": "^0.8.0-alpha.5",
@@ -56,7 +48,6 @@
     "@storybook/addon-links": "^6.1.14",
     "@storybook/react": "^6.1.14",
     "@storybook/storybook-deployer": "^2.8.7",
-    "axios": "^0.20.0",
     "babel-loader": "^8.1.0",
     "eslint": "^7.7.0",
     "eslint-plugin-react": "^7.20.6",
@@ -66,22 +57,15 @@
     "size-limit": "^4.5.7"
   },
   "dependencies": {
-    "@date-io/moment": "2.x",
     "@eqworks/lumen-table": "1.3.1",
-    "@material-ui/pickers": "4.0.0-alpha.12",
-    "clsx": "^1.1.1",
     "easy-peasy": "^5.0.3",
-    "history": "^5.0.0",
     "json2csv": "^5.0.5",
     "moment": "^2.28.0",
-    "object-hash": "^2.1.1",
     "plotly.js": "^1.58.4",
     "prop-types": "^15.7.2",
     "react-dnd": "^11.1.3",
     "react-dnd-html5-backend": "^11.1.3",
-    "react-plotly.js": "^2.5.1",
-    "react-query": "^3.9.8",
-    "use-debounce": "^4.0.0"
+    "react-plotly.js": "^2.5.1"
   },
   "size-limit": [
     {

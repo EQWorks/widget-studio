@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 import { Table } from '@eqworks/lumen-table'
-import { formatCell, jsonToCsv } from '../../query-builder/util/helpers'
+import { formatCell, jsonToCsv } from '../../util/helpers'
 import { makeStyles } from '@material-ui/core'
 
 

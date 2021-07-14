@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { useStoreDispatch, useStoreState } from 'easy-peasy'
+import { useStoreDispatch, useStoreState, useStoreActions } from 'easy-peasy'
 import { Button, Loader, Typography } from '@eqworks/lumen-ui'
 import ResultsTable from '../components/ql-components/table'
 import WidgetSelector from './modal'
@@ -29,10 +29,14 @@ const Widgets = ({ qlModel }) => {
     },
     queries: {
       selectedQuery: { saved = -1, execution = -1 },
-      // savedQueries,
-      // queryExecutions,
     },
   } = qlModel
+
+  const widgetsReset = useStoreActions(actions => actions.widgets.reset)
+
+  useEffect(() => {
+    widgetsReset()
+  }, [saved, execution, widgetsReset])
 
   const isDone = useStoreState((state) => state.widgets.isDone)
   const dispatch = useStoreDispatch()
@@ -49,10 +53,6 @@ const Widgets = ({ qlModel }) => {
   if (saved === -1 && execution === -1) {
     return renderWarning('Run or select a query from the list.')
   }
-
-  // if (savedQueries[saved].executions.length === 0 ) { // there is a selected query but no executions
-  //   return renderWarning('This query has never been run, try running it first or select a different query from the list')
-  // }
 
   if (results.length === 0 && !resultLoading  ) {
     return renderWarning('No Results')
