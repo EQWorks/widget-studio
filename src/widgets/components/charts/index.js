@@ -3,7 +3,7 @@ import usePieControls from './pie-controls'
 import useLineControls from './line-controls'
 
 
-export const getChart = (type) => ({ columns, results }) => {
+export const getChart = (type) => ({ columns, rows }) => {
   const { useControl } = {
     bar: {
       useControl: useBarControls,
@@ -22,7 +22,7 @@ export const getChart = (type) => ({ columns, results }) => {
     // },
   }[type]
 
-  const [props, getControl] = useControl({ columns, results })
+  const [props, getControl] = useControl({ columns, rows })
 
   return { props, getControl }
 }

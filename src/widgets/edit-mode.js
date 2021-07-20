@@ -21,12 +21,12 @@ const useStyles = makeStyles((theme) => ({
   control: { width: '25%', marginBottom: 16, padding: 16 },
 }))
 
-const EditMode = ({ results, columns }) => {
+const EditMode = ({ rows, columns }) => {
   const classes = useStyles()
   const [revision, setRevision] = useState(0) // if chart needs to be resized
   const type = useStoreState((state) => state.widgets.initState.type)
   const ready = useStoreState((state) => state.widgets.controllers.ready)
-  const { props, getControl } = getChart(type)({ columns, results })
+  const { props, getControl } = getChart(type)({ columns, rows })
 
   return (
     <div className={classes.content}>
@@ -58,12 +58,12 @@ const EditMode = ({ results, columns }) => {
 }
 
 EditMode.propTypes = {
-  results: PropTypes.array,
+  rows: PropTypes.array,
   columns: PropTypes.array,
 }
 EditMode.default = {
   columns: [],
-  results: [],
+  rows: [],
 }
 
 export default EditMode

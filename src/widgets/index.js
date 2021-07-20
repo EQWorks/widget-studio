@@ -18,25 +18,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Widgets = ({ qlModel }) => {
-  const {
-    builder: {
-      resultState: {
-        results,
-        columns,
-        resultLoading,
-      },
-    },
-    queries: {
-      selectedQuery: { saved = -1, execution = -1 },
-    },
-  } = qlModel
+const WidgetStudio = ({ results }) => {
 
+  const { columns, rows, loading: resultsLoading } = results
   const widgetsReset = useStoreActions(actions => actions.widgets.reset)
-
   useEffect(() => {
     widgetsReset()
-  }, [saved, execution, widgetsReset])
+  }, [columns, rows, widgetsReset])
 
   const isDone = useStoreState((state) => state.widgets.isDone)
   const dispatch = useStoreDispatch()
@@ -50,38 +38,39 @@ const Widgets = ({ qlModel }) => {
       </Typography>
     </div>)
 
-  if (saved === -1 && execution === -1) {
-    return renderWarning('Run or select a query from the list.')
-  }
+  // if (saved === -1 && execution === -1) {
+  //   return renderWarning('Run or select a query from the list.')
+  // }
 
-  if (results.length === 0 && !resultLoading  ) {
+  if (rows.length === 0 && !resultsLoading) {
     return renderWarning('No Results')
   }
-
-  const loaderIsOpen = results.length === 0 && resultLoading
+  // dispatch({ type: 'WIDGETS', payload: { isOpen: true } })
+  // const loaderIsOpen = results.length === 0 && resultsLoading
   return (
     <>
-      <Loader backdrop action='circular' open={loaderIsOpen} />
+      {/* <Loader backdrop action='circular' open={loaderIsOpen} /> */}
       <div className={classes.content}>
         <WidgetSelector
-          {...{ columns, loaderIsOpen }}
+          // {...{ columns, loaderIsOpen }}
+          {...{ columns, loaderIsOpen: false }}
         />
         <div className={classes.placeholder}>
-          <Button onClick={() => dispatch({ type: 'WIDGETS', payload: { isOpen: true } })}> + Chart</Button>
+          {/* <Button onClick={() => dispatch({ type: 'WIDGETS', payload: { isOpen: true } })}> + Chart</Button> */}
         </div>
         { isDone &&
           <EditMode
-            {...{ columns, results }}
+            {...{ columns, rows }}
           />
         }
-        <ResultsTable {...{ results }}/>
+        <ResultsTable {...{ results: rows }}/>
       </div>
     </>
   )
 }
 
-Widgets.propTypes = {
-  qlModel: PropTypes.object,
+WidgetStudio.propTypes = {
+  results: PropTypes.object,
 }
 
-export default Widgets
+export default WidgetStudio

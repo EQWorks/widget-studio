@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   row3: { padding: '30px 0 20px 0' },
 }))
 
-const usePieControls = ({ columns, results }) => {
+const usePieControls = ({ columns, rows }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
@@ -33,7 +33,7 @@ const usePieControls = ({ columns, results }) => {
   const capData = useStoreActions(actions => actions.widgets.pie.capData)
 
   useEffect(() => {
-    const resultsCopy = JSON.parse(JSON.stringify(results))
+    const resultsCopy = JSON.parse(JSON.stringify(rows))
     handleDispatch({ ready: false })()
     // setChosenKey([])
     const _groupedData = sum({
@@ -45,7 +45,7 @@ const usePieControls = ({ columns, results }) => {
       options: Object.keys(_groupedData),
       groupedData: _groupedData,
     })()
-  }, [handleDispatch, results, xAxis, yAxis])
+  }, [handleDispatch, rows, xAxis, yAxis])
 
   useEffect(() => {
     if (options.length) {
@@ -78,7 +78,7 @@ const usePieControls = ({ columns, results }) => {
       handleDispatch({ data: _data })()
     }
     handleDispatch({ ready: true })()
-  }, [chosenKey, groupedData, handleDispatch, isDonut, options, results, xAxis, yAxis])
+  }, [chosenKey, groupedData, handleDispatch, isDonut, options, rows, xAxis, yAxis])
 
   useEffect(() => {
     /** logic to create grid view */

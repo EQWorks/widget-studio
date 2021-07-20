@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   row3: { padding: '30px 0 20px 0' },
 }))
 
-const useBarControls = ({ columns, results }) => {
+const useBarControls = ({ columns, rows }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
@@ -36,7 +36,7 @@ const useBarControls = ({ columns, results }) => {
   const isVertical = layout === 'vertical'
 
   useEffect(() => {
-    const resultsCopy = JSON.parse(JSON.stringify(results))
+    const resultsCopy = JSON.parse(JSON.stringify(rows))
     handleDispatch({ groupedData: null })()
     if (isJson) {
       handleDispatch({ ready: false })()
@@ -56,7 +56,7 @@ const useBarControls = ({ columns, results }) => {
         groupedData: _groupedData,
       })()
     }
-  }, [handleDispatch, isJson, isVertical, results, xAxis, yAxis])
+  }, [handleDispatch, isJson, isVertical, rows, xAxis, yAxis])
 
   useEffect(() => {
     const specs = {

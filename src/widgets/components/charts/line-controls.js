@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   row3: { padding: '30px 0 20px 0' },
 }))
 
-const useLineControls = ({ columns, results }) => {
+const useLineControls = ({ columns, rows }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
@@ -34,7 +34,7 @@ const useLineControls = ({ columns, results }) => {
   const setLineState = useStoreActions(actions => actions.widgets.line.update)
 
   useEffect(() => {
-    const resultsCopy = JSON.parse(JSON.stringify(results))
+    const resultsCopy = JSON.parse(JSON.stringify(rows))
     if(xAxis && yAxis.length) {
       if (isJson) {
         handleDispatch({ ready: false })()
@@ -60,7 +60,7 @@ const useLineControls = ({ columns, results }) => {
         })()
       }
     }
-  }, [area, chosenKey, handleDispatch, isJson, results, xAxis, yAxis])
+  }, [area, chosenKey, handleDispatch, isJson, rows, xAxis, yAxis])
 
   useEffect(() => {
     const specs = {
