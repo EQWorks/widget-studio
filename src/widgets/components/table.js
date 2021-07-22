@@ -7,10 +7,16 @@ import { makeStyles } from '@material-ui/core'
 
 
 const useStyles = makeStyles(() => ({
-  table: { backgroundColor: '#fff' },
+  table: { backgroundColor: '#fff', width: '100%', height: '100%' },
+  get hiddenTable() {
+    return {
+      ...this.table,
+      display: 'none'
+    }
+  },
 }))
 
-const ResultsTable = ({ results }) => {
+const ResultsTable = ({ results, hide }) => {
   const classes = useStyles()
   const [_results, set_results] = useState(results)
   const tableColumns = _results[0] ? Object.keys(_results[0]) : []
@@ -18,7 +24,7 @@ const ResultsTable = ({ results }) => {
     set_results(results)
   }, [results])
   return (
-    <div className={classes.table}>
+    <div className={hide ? classes.hiddenTable : classes.table}>
       <Table
         data={_results}
         downloadFn={jsonToCsv}
@@ -32,7 +38,7 @@ const ResultsTable = ({ results }) => {
           />
         ))}
       </Table>
-    </div>
+    </div >
   )
 }
 

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    height:'20vh'
+    // height:'20vh'
   },
   storyControlsOverlay: {
     position:'absolute',

@@ -16,7 +16,7 @@ const initStateControllers = () => ({
 })
 
 export const widgetsReducer = {
-  /** this is just for the modal initial selections */
+  /** this is just for the initial selections */
   initState: reducer(( prevState = initState(), { payload, type }) => {
     if (type === 'WIDGETS') {
       return { ...prevState, ...payload }

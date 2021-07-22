@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
-// import React from 'react'
 
 import PropTypes from 'prop-types'
-import axios from 'axios'
 import { createMemoryHistory } from 'history'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -12,7 +10,6 @@ import { Login, AuthActions, useAuthContext, InitStorage } from '@eqworks/common
 import { ThemeProvider } from '@eqworks/lumen-ui'
 
 import WidgetStudio from './widgets'
-// import { FO } from './actions'
 import { store } from './store'
 
 const AuthWidgetStudio = ({ crossLoginLOCUS, ...props }) => {
@@ -22,16 +19,6 @@ const AuthWidgetStudio = ({ crossLoginLOCUS, ...props }) => {
   useEffect(() => {
     if (jwt) dispatch({ type: 'authenticated_user' })
   }, [dispatch, jwt])
-  
-  // const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imt5bGUuZ3JpbXNydWQtbWFuekBlcXdvcmtzLmNvbSIsImFwaV9hY2Nlc3MiOnsid2wiOi0xLCJjdXN0b21lcnMiOi0xLCJyZWFkIjotMSwid3JpdGUiOi0xfSwiand0X3V1aWQiOiJmOGJkYTE1Zi1kZDU1LTRlMzktYTZhMC0zNTZkMzY4NWFhMzAiLCJwcmVmaXgiOiJkZXYiLCJwcm9kdWN0IjoibG9jdXMiLCJpYXQiOjE2MjU4NjUwMjYsImV4cCI6MzE3MTcwMzA3NDI2fQ.pIyy-z14gmI4A_0wYD8R3Dl1_MmZbTLU7lYzOyct1BM'
-
-  const api = axios.create({
-    baseURL: [
-      process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
-      process.env.API_STAGE || process.env.STORYBOOK_API_STAGE,
-    ].filter(v => v).join('/'),
-    headers: { 'eq-api-jwt': jwt },
-  })
 
   const crossLoginClick = () => {
     InitStorage('widget-studio', ['auth_jwt'])
@@ -65,7 +52,7 @@ const AuthWidgetStudio = ({ crossLoginLOCUS, ...props }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <StoreProvider store={store}>
-        <WidgetStudio {...props}/>
+        <WidgetStudio {...props} />
       </StoreProvider>
     </DndProvider>
   )
@@ -73,6 +60,5 @@ const AuthWidgetStudio = ({ crossLoginLOCUS, ...props }) => {
 
 AuthWidgetStudio.propTypes = { crossLoginLOCUS: PropTypes.bool }
 AuthWidgetStudio.defaultProps = { crossLoginLOCUS: false }
-// AuthWidgetStudio.propTypes = { qlModel: PropTypes.object }
 
 export default AuthWidgetStudio
