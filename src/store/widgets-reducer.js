@@ -1,6 +1,11 @@
 import { reducer, computed, action, thunk, thunkOn } from 'easy-peasy'
 import { isJson } from '../widgets/components/charts/utils'
 
+const dataState = () => ({
+  rows:[],
+  columns:[]
+})
+
 const initState = () => ({
   type: '',
   xAxis: '',
@@ -16,6 +21,14 @@ const initStateControllers = () => ({
 })
 
 export const widgetsReducer = {
+  /** data */
+  dataState: reducer(( prevState = dataState(), { payload, type }) => {
+    if (type === 'DATA') {
+      return { ...prevState, ...payload }
+    }
+    return prevState
+  }),
+
   /** this is just for the initial selections */
   initState: reducer(( prevState = initState(), { payload, type }) => {
     if (type === 'WIDGETS') {

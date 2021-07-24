@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { Children, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { useStoreState, useStoreActions } from 'easy-peasy'
+import { useStoreState, useStoreActions, useStoreDispatch } from 'easy-peasy'
 import { Typography } from '@eqworks/lumen-ui'
-import EditMode from './edit-mode'
+import { Button } from '@eqworks/lumen-ui'
+import WidgetControls from './widget-controls'
+import WidgetSelector from './widget-selector'
+import ResultsTable from './components/table'
+import styles from './styles'
 
-const useStyles = makeStyles((theme) => ({
-  warning: { textAlign: 'center', marginTop: theme.spacing(6) },
-}))
+const useStyles = makeStyles((theme) => styles(theme))
 
-const WidgetStudio = ({ results }) => {
+const WidgetStudio = props => {
 
-  const { columns, rows, loading: resultsLoading } = results
+  const { columns, rows, loading: resultsLoading } = props
+  const dispatch = useStoreDispatch()
   const widgetsReset = useStoreActions(actions => actions.widgets.reset)
   useEffect(() => {
     widgetsReset()
@@ -21,6 +24,8 @@ const WidgetStudio = ({ results }) => {
   const isDone = useStoreState((state) => state.widgets.isDone)
 
   const classes = useStyles({ isDone })
+
+  const [showExtras, setShowExtras] = useState(false)
 
   const renderWarning = (message) => (
     <div className={classes.warning}>
@@ -33,20 +38,55 @@ const WidgetStudio = ({ results }) => {
   //   return renderWarning('Run or select a query from the list.')
   // }
 
+  useEffect(() => {
+    dispatch({ type: 'DATA', payload: { rows, columns } })
+  }, [rows, columns, dispatch])
+
   if (rows.length === 0 && !resultsLoading) {
     return renderWarning('No Results')
   }
   return (
     <div className={classes.content}>
-      <EditMode
-        {...{ columns, rows }}
-      />
+      {
+        isDone ?
+          <div className={classes.container}>
+            <Button
+              onClick={() => setShowExtras(!showExtras)}
+              className={classes.showExtrasButton}
+              type={showExtras ? 'secondary' : 'primary'}
+            >
+              {
+                showExtras ?
+                  'Hide controls'
+                  :
+                  'Show controls'
+              }
+            </Button>
+            {/* <ResultsTable
+              hide={false}
+              results={rows}
+            /> */}
+            <div className={classes.chart}>
+              {Children.only(props.children)}
+            </div>
+            <div className={showExtras ? classes.control : classes.hiddenControl}>
+              <WidgetControls
+                {...{ rows, columns }}
+              />
+            </div>
+          </div>
+          :
+          <WidgetSelector {...{ columns }} />
+      }
     </div>
   )
 }
 
 WidgetStudio.propTypes = {
-  results: PropTypes.object,
+  rows: PropTypes.array,
+  columns: PropTypes.array,
+  loading: PropTypes.bool,
+  children: PropTypes.object,
 }
 
 export default WidgetStudio

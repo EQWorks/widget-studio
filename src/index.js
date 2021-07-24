@@ -11,8 +11,9 @@ import { ThemeProvider } from '@eqworks/lumen-ui'
 
 import WidgetStudio from './widgets'
 import { store } from './store'
+import Widget from './widgets/widget'
 
-const AuthWidgetStudio = ({ crossLoginLOCUS, ...props }) => {
+const AuthWidgetStudio = ({ crossLoginLOCUS, results }) => {
   const { authState: { authenticated }, dispatch } = useAuthContext()
   const jwt = window.localStorage.getItem('auth_jwt')
 
@@ -49,16 +50,23 @@ const AuthWidgetStudio = ({ crossLoginLOCUS, ...props }) => {
       </ThemeProvider>
     )
   }
+
   return (
     <DndProvider backend={HTML5Backend}>
       <StoreProvider store={store}>
-        <WidgetStudio {...props} />
+        <WidgetStudio {...results}>
+          <Widget id={1234} />
+          {/* <Widget/> */}
+        </WidgetStudio>
       </StoreProvider>
     </DndProvider>
   )
 }
 
-AuthWidgetStudio.propTypes = { crossLoginLOCUS: PropTypes.bool }
+AuthWidgetStudio.propTypes = {
+  crossLoginLOCUS: PropTypes.bool,
+  results: PropTypes.object
+}
 AuthWidgetStudio.defaultProps = { crossLoginLOCUS: false }
 
 export default AuthWidgetStudio
