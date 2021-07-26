@@ -55,8 +55,8 @@ const AuthWidgetStudio = ({ crossLoginLOCUS, results }) => {
     <DndProvider backend={HTML5Backend}>
       <StoreProvider store={store}>
         <WidgetStudio {...results}>
-          <Widget id={1234} />
-          {/* <Widget/> */}
+          {/* <Widget id={1234} /> */}
+          <Widget/>
         </WidgetStudio>
       </StoreProvider>
     </DndProvider>

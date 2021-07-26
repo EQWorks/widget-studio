@@ -50,7 +50,7 @@ const WidgetSelector = ({ columns }) => {
     <div className={classes.widgetSelectorContainer}>
       {
         !columns.length ?
-          <Loader />
+          <Loader open={!columns.length} />
           :
           <Fade in={isOpen}>
             <div className={classes.paper}>

@@ -14,6 +14,10 @@ const useStyles = makeStyles((theme) => styles(theme))
 
 const WidgetStudio = props => {
 
+  const config = useStoreState((state) => state.widgets.config)
+
+  var widget = Children.only(props.children)
+
   const { columns, rows, loading: resultsLoading } = props
   const dispatch = useStoreDispatch()
   const widgetsReset = useStoreActions(actions => actions.widgets.reset)
@@ -37,7 +41,6 @@ const WidgetStudio = props => {
   // if (saved === -1 && execution === -1) {
   //   return renderWarning('Run or select a query from the list.')
   // }
-
   useEffect(() => {
     dispatch({ type: 'DATA', payload: { rows, columns } })
   }, [rows, columns, dispatch])
@@ -67,7 +70,7 @@ const WidgetStudio = props => {
               results={rows}
             /> */}
             <div className={classes.chart}>
-              {Children.only(props.children)}
+              {React.cloneElement(widget, { config })}
             </div>
             <div className={showExtras ? classes.control : classes.hiddenControl}>
               <WidgetControls

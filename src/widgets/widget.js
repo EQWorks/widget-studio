@@ -2,39 +2,47 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Plot from 'react-plotly.js'
-import { Button } from '@eqworks/lumen-ui'
-import { useStoreState } from 'easy-peasy'
+import { Button, Loader } from '@eqworks/lumen-ui'
 import { ErrorBoundary } from './helper'
-import { getChart } from './components/charts'
+import chartDefaults from './components/charts/chart-defaults'
 
 const Widget = props => {
+
+  var config
+  if (props.config) {
+    config = props.config
+  } else {
+    // fetch config from id
+    throw new Error('not implemented')
+  }
+
+  const chartProps = {
+    data: config.data,
+    ...chartDefaults[config.type]
+  }
+
   const [revision, setRevision] = useState(0) // if chart needs to be resized
-
-  const rows = useStoreState((state) => state.widgets.dataState.rows)
-  const columns = useStoreState((state) => state.widgets.dataState.columns)
-
-  const type = useStoreState((state) => state.widgets.initState.type)
-  // const ready = useStoreState((state) => state.widgets.controllers.ready)
-  const { props: chartProps, getControl } = getChart(type)({ columns, rows })
-
   return (
-    <ErrorBoundary>
-      <Plot
-        revision={revision} // if chart needs to be resized
-        {...chartProps}
-      />
-      <Button
-        onClick={() => setRevision(revision + 1)}
-        type='tertiary'>
-        Resize
-      </Button>
-    </ErrorBoundary>
+    <Loader open={!config.data || !config.data.length}>
+      <ErrorBoundary>
+        <Plot
+          revision={revision} // if chart needs to be resized
+          {...chartProps}
+        />
+        <Button
+          onClick={() => setRevision(revision + 1)}
+          type='tertiary'>
+          resize
+        </Button>
+
+      </ErrorBoundary>
+    </Loader>
   )
 }
 
 Widget.propTypes = {
-  rows: PropTypes.array,
-  columns: PropTypes.array,
+  config: PropTypes.object,
+  id: PropTypes.number
 }
 Widget.default = {
   columns: [],

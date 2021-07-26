@@ -1,36 +1,24 @@
 import { reducer, computed, action, thunk, thunkOn } from 'easy-peasy'
 import { isJson } from '../widgets/components/charts/utils'
 
-const dataState = () => ({
-  rows:[],
-  columns:[]
-})
-
 const initState = () => ({
   type: '',
   xAxis: '',
   yAxis: [],
   isOpen: true,
 })
-const initStateControllers = () => ({
+const controllers = () => ({
   data: null, // the final plotly data prop format
   groupedData: null, // data agg stage but not ready to be passed to plotly
   options: [], // based on xAxis
   chosenKey: [], // this value is reset when x||yaxis changes
-  ready: true // when data parsing is done
+  ready: true, // when data parsing is done
 })
 
 export const widgetsReducer = {
-  /** data */
-  dataState: reducer(( prevState = dataState(), { payload, type }) => {
-    if (type === 'DATA') {
-      return { ...prevState, ...payload }
-    }
-    return prevState
-  }),
 
   /** this is just for the initial selections */
-  initState: reducer(( prevState = initState(), { payload, type }) => {
+  initState: reducer((prevState = initState(), { payload, type }) => {
     if (type === 'WIDGETS') {
       return { ...prevState, ...payload }
     }
@@ -38,7 +26,7 @@ export const widgetsReducer = {
   }),
 
   /** common states of each chart type */
-  controllers: reducer(( prevState = initStateControllers(), { payload, type }) => {
+  controllers: reducer((prevState = controllers(), { payload, type }) => {
     if (type === 'CONTROLLER') {
       return { ...prevState, ...payload }
     }
@@ -63,17 +51,17 @@ export const widgetsReducer = {
   bar: {
     groupMode: 'group',
     layout: 'vertical',
-    update: action((state, payload) =>  ({ ...state, ...payload }))
+    update: action((state, payload) => ({ ...state, ...payload }))
   },
   line: {
     area: false,
     multiAxis: false,
-    update: action((state, payload) =>  ({ ...state, ...payload }))
+    update: action((state, payload) => ({ ...state, ...payload }))
   },
   pie: {
     isDonut: false,
     multi: {},
-    update: action((state, payload) =>  ({ ...state, ...payload })),
+    update: action((state, payload) => ({ ...state, ...payload })),
     capData: thunk((actions, payload, { dispatch, getStoreState }) => {
       const data = getStoreState()
         .widgets
@@ -81,7 +69,7 @@ export const widgetsReducer = {
         .data
         .slice(0, 3)
         .map((chart, i) => {
-          chart.domain =  {
+          chart.domain = {
             column: i % 3 //3 charts per row
           }
           return chart
@@ -89,6 +77,20 @@ export const widgetsReducer = {
       dispatch({ type: 'CONTROLLER', payload: { data } })
     })
   },
+
+  config: computed(
+    [
+      (state) => state.initState.type,
+      (state) => state.controllers.data,
+    ],
+    (
+      type,
+      data,
+    ) => ({
+      type,
+      data,
+    })
+  ),
 
   /** checks if the selected yAxis is hod or dow */
   isJson: computed(
@@ -113,11 +115,11 @@ export const widgetsReducer = {
   ),
 
   /** called when results change to reset all states */
-  reset: thunk((actions, payload, { dispatch } ) => {
+  reset: thunk((actions, payload, { dispatch }) => {
     dispatch({ type: 'WIDGETS', payload: initState() })
-    dispatch({ type: 'CONTROLLER', payload: initStateControllers() })
+    dispatch({ type: 'CONTROLLER', payload: controllers() })
     const initSpecific = {
-      bar: { groupMode: 'group',layout: 'vertical' },
+      bar: { groupMode: 'group', layout: 'vertical' },
       pie: { isDonut: false, multi: {} },
       line: { area: false, multiAxis: false }
     }
