@@ -12,7 +12,7 @@ import styles from './styles'
 
 const useStyles = makeStyles((theme) => styles(theme))
 
-const WidgetStudio = props => {
+const WidgetConfig = props => {
 
   const config = useStoreState((state) => state.widgets.config)
 
@@ -85,11 +85,11 @@ const WidgetStudio = props => {
   )
 }
 
-WidgetStudio.propTypes = {
+WidgetConfig.propTypes = {
   rows: PropTypes.array,
   columns: PropTypes.array,
   loading: PropTypes.bool,
   children: PropTypes.object,
 }
 
-export default WidgetStudio
+export default WidgetConfig
