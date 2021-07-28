@@ -9,7 +9,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import CustomSelect from '../custom-select'
-import { parseData, groupJson, getChartData, getLayers, sum } from './utils'
+// import { parseData, groupJson, getChartData, getLayers, sum } from './utils'
+import { groupJson, isJson, sum } from './utils'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,116 +23,31 @@ const useBarControls = ({ columns, rows }) => {
   const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
   const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
 
-  const data = useStoreState((state) => state.widgets.controllers.data)
-  const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
-  const options = useStoreState((state) => state.widgets.controllers.options)
+  // const data = useStoreState((state) => state.widgets.controllers.data)
+  // const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
+  const groupingOptions = useStoreState((state) => state.widgets.controllers.groupingOptions)
   const chosenKey = useStoreState((state) => state.widgets.controllers.chosenKey)
   const groupMode = useStoreState((state) => state.widgets.bar.groupMode)
   const layout = useStoreState((state) => state.widgets.bar.layout)
-  const isJson = useStoreState((state) => state.widgets.isJson)
+  // const isJson = useStoreState((state) => state.widgets.isJson)
 
   const handleDispatch = useStoreActions(actions => actions.widgets.handleDispatch)
   const setBarState = useStoreActions(actions => actions.widgets.bar.update)
 
-  const isVertical = layout === 'vertical'
+  // const isVertical = layout === 'vertical'
 
+  // compute options (grouping keys) on relevant changes
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(rows))
-    handleDispatch({ groupedData: null })()
-    if (isJson) {
-      handleDispatch({ ready: false })()
-      const [_options, _groupedData] = groupJson({ results: resultsCopy, groupKey: xAxis, key: yAxis[0] })
-      handleDispatch({
-        options: _options,
-        groupedData: _groupedData,
-      })()
-    } else {
-      const _groupedData = sum({
-        results: resultsCopy,
-        groupKey: xAxis,
-        yKeys: yAxis,
-      })
-      handleDispatch({
-        options: Object.keys(_groupedData),
-        groupedData: _groupedData,
-      })()
-    }
-  }, [handleDispatch, isJson, isVertical, rows, xAxis, yAxis])
+    handleDispatch({
+      groupingOptions:
+        isJson(yAxis[0]) ?
+          groupJson({ results: resultsCopy, groupKey: xAxis, key: yAxis[0] })[0]
+          :
+          Object.keys(sum({ results: resultsCopy, groupKey: xAxis, yKeys: yAxis }))
+    })()
+  }, [handleDispatch, rows, xAxis, yAxis])
 
-  useEffect(() => {
-    const specs = {
-      type: 'bar',
-      orientation: isVertical ? 'v' : 'h',
-      hovertemplate: '<b> %{fullData.name} </b>' +
-      // '<br> %{x}: %{y} ' +
-      '<br><b> %{xaxis.title.text}</b>: %{x} ' +
-      '<br><b> %{yaxis.title.text}</b>: %{y} <br>' +
-      '<extra></extra>',
-      isVertical,
-    }
-    if (isJson && groupedData) {
-      const _res = parseData({ data: groupedData, keys: chosenKey })
-      const _data = _res.map(({ x, y, name }) => getLayers({
-        x,
-        y,
-        name,
-        specs,
-      }))
-      handleDispatch({ data: _data, ready: true })()
-    }
-    if (!isJson && groupedData) {
-      const _data = getChartData({
-        sumData: groupedData,
-        chosenKey,
-      })({ specs })
-      handleDispatch({ data: _data })()
-    }
-  }, [chosenKey, handleDispatch, groupedData, isJson, isVertical])
-
-  const islongTickLabel = (axis) => {
-    if (data && data[0]) {
-      return data[0][axis]?.some((e) => e?.length > 4)
-    } else {
-      return false
-    }
-  }
-
-  const getTitle = (axis) => ({
-    x: isVertical ? isJson || xAxis : 'value',
-    y: isVertical ? 'value' : isJson || xAxis
-  }[axis])
-
-  const props = {
-    data,
-    layout:{
-      autosize: true,
-      hovermode: 'closest',
-      hoverlabel: { align: 'left', bgcolor: 'fff' },
-      colorway: ['#0062d9', '#f65b20', '#ffaa00', '#dd196b', '#9928b3', '#00b5c8', '#a8a8a8'],
-      yaxis: {
-        // visible: !islongTickLabel('y'),
-        title: {
-          text: getTitle('y'),
-          standoff: isVertical ? 5 : 20
-        },
-        automargin: true,
-        ticklen: 8,
-        showline: true,
-      },
-      xaxis: {
-        // visible: !islongTickLabel('x'),
-        title: {
-          text: getTitle('x'),
-          standoff: isVertical ? 5 : 20
-        },
-        automargin: true,
-        tickangle: islongTickLabel('x') ? 45 : 0,
-        ticklen: 8,
-      },
-      ...( data?.length > 1 ? { barmode: groupMode } : {}),
-    },
-    useResizeHandler: true,
-  }
   const getBarControls = () => {
     return (
       <>
@@ -150,12 +66,12 @@ const useBarControls = ({ columns, rows }) => {
             setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
           />
         </div>
-        {options.length > 1 &&
+        {groupingOptions.length > 1 &&
           <>
             <CustomSelect
               multi
               title='Group By'
-              data={options.sort()}
+              data={groupingOptions.sort()}
               chosenValue={chosenKey}
               setChosenValue={handleDispatch({ key: 'chosenKey' })}
             />
@@ -176,17 +92,17 @@ const useBarControls = ({ columns, rows }) => {
           </FormControl>
         </div>
 
-        {(yAxis.length > 1 || options.length > 1) &&
-        <FormControl component='fieldset'>
-          <RadioGroup aria-label='groupMode' name='group1' value={groupMode} onChange={({ target: { value } }) => setBarState({ groupMode: value })}>
-            <FormControlLabel value='group' control={<Radio />} label='Grouped' />
-            <FormControlLabel value='stack' control={<Radio />} label='Stacked' />
-          </RadioGroup>
-        </FormControl>}
+        {(yAxis.length > 1 || groupingOptions.length > 1) &&
+          <FormControl component='fieldset'>
+            <RadioGroup aria-label='groupMode' name='group1' value={groupMode} onChange={({ target: { value } }) => setBarState({ groupMode: value })}>
+              <FormControlLabel value='group' control={<Radio />} label='Grouped' />
+              <FormControlLabel value='stack' control={<Radio />} label='Stacked' />
+            </RadioGroup>
+          </FormControl>}
       </>
     )
   }
-  return [props, getBarControls]
+  return getBarControls
 }
 
 export default useBarControls

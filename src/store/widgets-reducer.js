@@ -1,4 +1,4 @@
-import { reducer, computed, action, thunk, thunkOn } from 'easy-peasy'
+import { reducer, computed, action, thunk, thunkOn, useStoreState } from 'easy-peasy'
 import { isJson } from '../widgets/components/charts/utils'
 
 const initState = () => ({
@@ -8,9 +8,11 @@ const initState = () => ({
   isOpen: true,
 })
 const controllers = () => ({
+  dataSource: null,
+  dataID: null,
   data: null, // the final plotly data prop format
   groupedData: null, // data agg stage but not ready to be passed to plotly
-  options: [], // based on xAxis
+  groupingOptions: [], // based on xAxis
   chosenKey: [], // this value is reset when x||yaxis changes
   ready: true, // when data parsing is done
 })
@@ -80,15 +82,30 @@ export const widgetsReducer = {
 
   config: computed(
     [
+      (state) => state.initState.xAxis,
+      (state) => state.initState.yAxis,
       (state) => state.initState.type,
-      (state) => state.controllers.data,
+      (state) => state.controllers.dataSource,
+      (state) => state.controllers.dataID,
+      (state) => state.controllers.chosenKey,
+      (state) => state[state.initState.type],
     ],
     (
+      xAxis,
+      yAxis,
       type,
-      data,
+      dataSource,
+      dataID,
+      chosenKey,
+      options,
     ) => ({
+      xAxis,
+      yAxis,
       type,
-      data,
+      dataSource,
+      dataID,
+      chosenKey,
+      options,
     })
   ),
 

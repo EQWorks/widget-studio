@@ -83,7 +83,9 @@ const WidgetStudioWithWlCu = props => {
   const resultsState = useState({
     columns: [],
     rows: [],
-    loading: false
+    loading: false,
+    dataSource: null,
+    dataID: null
   })
   const [wlCuLoading, setWlCuLoading] = wlCuLoadingState
   const [results, setResults] = resultsState
@@ -140,7 +142,7 @@ const WidgetStudioWithWlCu = props => {
           </div>
         }
         <WlCuSelector {...{ wlState, cuState, wlCuLoadingState }} />
-        <QueryExecutionSelector {...{ wlState, cuState, resultState: resultsState }} />
+        <QueryExecutionSelector {...{ wlState, cuState, resultsState }} />
         {
           results.loading ?
             <Typography variant='subtitle2'>

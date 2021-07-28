@@ -22,7 +22,8 @@ export const getChart = (type) => ({ columns, rows }) => {
     // },
   }[type]
 
-  const [props, getControl] = useControl({ columns, rows })
+  // const [props, getControl] = useControl({ columns, rows })
+  // return { props, getControl }
 
-  return { props, getControl }
+  return useControl({ columns, rows })
 }

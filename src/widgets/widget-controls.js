@@ -20,7 +20,7 @@ const WidgetControls = ({ rows, columns }) => {
   // const [revision, setRevision] = useState(0) // if chart needs to be resized
   const type = useStoreState((state) => state.widgets.initState.type)
   // const ready = useStoreState((state) => state.widgets.controllers.ready)
-  const { props, getControl } = getChart(type)({ columns, rows })
+  const getControl = getChart(type)({ columns, rows })
   // const [showTable, setShowTable] = useState(false);
 
   return (

@@ -79,7 +79,7 @@ const useExecutions = () => {
   return [isLoading, data]
 }
 
-const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultState: [result, setResult] }) => {
+const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [result, setResult] }) => {
   const classes = useStyles()
 
   const [, savedQueryList] = useSavedQueries()
@@ -216,7 +216,7 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultState: [re
 QueryExecutionSelector.propTypes = {
   wlState: PropTypes.array.isRequired,
   cuState: PropTypes.array.isRequired,
-  resultState: PropTypes.array.isRequired,
+  resultsState: PropTypes.array.isRequired,
 }
 
 export {

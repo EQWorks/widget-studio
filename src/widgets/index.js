@@ -1,95 +1,105 @@
-import React, { Children, useState, useEffect } from 'react'
+import React, { cloneElement, Children, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
+import Modal from '@material-ui/core/Modal'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStoreState, useStoreActions, useStoreDispatch } from 'easy-peasy'
 import { Typography } from '@eqworks/lumen-ui'
 import { Button } from '@eqworks/lumen-ui'
+
 import WidgetControls from './widget-controls'
 import WidgetSelector from './widget-selector'
 import ResultsTable from './components/table'
 import styles from './styles'
 
+// render child and pass the config object
+const WidgetWithConfig = ({ widget, config }) => cloneElement(widget, { config })
+
+// put styles in separate file for readability
 const useStyles = makeStyles((theme) => styles(theme))
 
-const WidgetConfig = props => {
+const WidgetConfig = ({ children, columns, rows, loading: resultsLoading, dataSource, dataID }) => {
 
+  const classes = useStyles()
+  const isDone = useStoreState((state) => state.widgets.isDone)
   const config = useStoreState((state) => state.widgets.config)
+  const [showControls, setShowControls] = useState(false)
+  const [showTable, setShowTable] = useState(false)
 
-  var widget = Children.only(props.children)
-
-  const { columns, rows, loading: resultsLoading } = props
+  // for remaining easy-peasy store functionality
   const dispatch = useStoreDispatch()
   const widgetsReset = useStoreActions(actions => actions.widgets.reset)
+
+  // reset when data changes
   useEffect(() => {
     widgetsReset()
   }, [columns, rows, widgetsReset])
 
-  const isDone = useStoreState((state) => state.widgets.isDone)
-
-  const classes = useStyles({ isDone })
-
-  const [showExtras, setShowExtras] = useState(false)
-
-  const renderWarning = (message) => (
-    <div className={classes.warning}>
-      <Typography secondary={600} variant='subtitle1'>
-        {message}
-      </Typography>
-    </div>)
-
-  // if (saved === -1 && execution === -1) {
-  //   return renderWarning('Run or select a query from the list.')
-  // }
+  // send dataSource and dataID to config object on change
   useEffect(() => {
-    dispatch({ type: 'DATA', payload: { rows, columns } })
-  }, [rows, columns, dispatch])
+    dispatch({ type: 'CONTROLLER', payload: { dataSource, dataID } })
+  }, [dataSource, dataID, dispatch])
 
   if (rows.length === 0 && !resultsLoading) {
-    return renderWarning('No Results')
+    return (
+      <div className={classes.warning}>
+        <Typography secondary={600} variant='subtitle1'> No results </Typography>
+      </div>
+    )
   }
   return (
     <div className={classes.content}>
       {
-        isDone ?
-          <div className={classes.container}>
-            <Button
-              onClick={() => setShowExtras(!showExtras)}
-              className={classes.showExtrasButton}
-              type={showExtras ? 'secondary' : 'primary'}
-            >
-              {
-                showExtras ?
-                  'Hide controls'
-                  :
-                  'Show controls'
-              }
-            </Button>
-            {/* <ResultsTable
-              hide={false}
-              results={rows}
-            /> */}
-            <div className={classes.chart}>
-              {React.cloneElement(widget, { config })}
+        !isDone ?
+          <WidgetSelector {...{ columns }} />
+          :
+          <div className={classes.outerContainer}>
+            <div className={classes.container}>
+              <div className={classes.chart}>
+                <WidgetWithConfig
+                  widget={Children.only(children)}
+                  config={config}
+                />
+              </div>
+              <div className={showControls ? classes.control : classes.hiddenControl}>
+                <WidgetControls
+                  {...{ rows, columns }}
+                />
+              </div>
             </div>
-            <div className={showExtras ? classes.control : classes.hiddenControl}>
-              <WidgetControls
-                {...{ rows, columns }}
-              />
+            <div className={classes.buttonsContainer}>
+              <Button onClick={() => setShowTable(!showTable)}> View table </Button>
+              <Button
+                onClick={() => setShowControls(!showControls)}
+                type={showControls ? 'secondary' : 'primary'}
+              >
+                {showControls ? 'Hide controls' : 'Show controls'}
+              </Button>
             </div>
           </div>
-          :
-          <WidgetSelector {...{ columns }} />
       }
-    </div>
+      <Modal
+        className={classes.modal}
+        open={showTable}
+      >
+        <div className={classes.table}>
+          <Button style={{ float: 'right' }} onClick={() => setShowTable(false)}>CLOSE</Button>
+          <ResultsTable
+            results={rows}
+          />
+        </div>
+      </Modal>
+    </div >
   )
 }
 
 WidgetConfig.propTypes = {
+  children: PropTypes.object,
   rows: PropTypes.array,
   columns: PropTypes.array,
   loading: PropTypes.bool,
-  children: PropTypes.object,
+  dataSource: PropTypes.string,
+  dataID: PropTypes.string,
 }
 
 export default WidgetConfig

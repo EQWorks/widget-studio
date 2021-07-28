@@ -23,7 +23,7 @@ const usePieControls = ({ columns, rows }) => {
 
   const data = useStoreState((state) => state.widgets.controllers.data)
   const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
-  const options = useStoreState((state) => state.widgets.controllers.options)
+  const groupingOptions = useStoreState((state) => state.widgets.controllers.groupingOptions)
   const chosenKey = useStoreState((state) => state.widgets.controllers.chosenKey)
   const isDonut = useStoreState((state) => state.widgets.pie.isDonut)
   const multi = useStoreState((state) => state.widgets.pie.multi)
@@ -42,18 +42,18 @@ const usePieControls = ({ columns, rows }) => {
       yKeys: yAxis,
     })
     handleDispatch({
-      options: Object.keys(_groupedData),
+      groupingOptions: Object.keys(_groupedData),
       groupedData: _groupedData,
     })()
   }, [handleDispatch, rows, xAxis, yAxis])
 
   useEffect(() => {
-    if (options.length) {
+    if (groupingOptions.length) {
       if (yAxis.length > 1) {
-        handleDispatch({ chosenKey: [options[0]] })()
+        handleDispatch({ chosenKey: [groupingOptions[0]] })()
       }
     }
-  }, [handleDispatch, options, yAxis])
+  }, [handleDispatch, groupingOptions, yAxis])
 
   useEffect(() => {
     let values
@@ -78,7 +78,7 @@ const usePieControls = ({ columns, rows }) => {
       handleDispatch({ data: _data })()
     }
     handleDispatch({ ready: true })()
-  }, [chosenKey, groupedData, handleDispatch, isDonut, options, rows, xAxis, yAxis])
+  }, [chosenKey, groupedData, handleDispatch, isDonut, groupingOptions, rows, xAxis, yAxis])
 
   useEffect(() => {
     /** logic to create grid view */
@@ -148,18 +148,18 @@ const usePieControls = ({ columns, rows }) => {
             setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
           />
         </div>
-        {options.length > 1 &&
+        {groupingOptions.length > 1 &&
         <>
           <CustomSelect
             multi
             title='Group By'
-            data={options.sort()}
+            data={groupingOptions.sort()}
             chosenValue={chosenKey}
             setChosenValue={handleDispatch({ key: 'chosenKey' })}
           />
           <IconButton
             size='small'
-            onClick={() => handleDispatch({ chosenKey: yAxis.length > 1 ? [options[0]] : [] })()}
+            onClick={() => handleDispatch({ chosenKey: yAxis.length > 1 ? [groupingOptions[0]] : [] })()}
           >
             <Clear />
           </IconButton>

@@ -24,7 +24,7 @@ const useLineControls = ({ columns, rows }) => {
 
   const data = useStoreState((state) => state.widgets.controllers.data)
   const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
-  const options = useStoreState((state) => state.widgets.controllers.options)
+  const groupingOptions = useStoreState((state) => state.widgets.controllers.groupingOptions)
   const chosenKey = useStoreState((state) => state.widgets.controllers.chosenKey)
   const area= useStoreState((state) => state.widgets.line.area)
   const multiAxis = useStoreState((state) => state.widgets.line.multiAxis)
@@ -39,13 +39,13 @@ const useLineControls = ({ columns, rows }) => {
       if (isJson) {
         handleDispatch({ ready: false })()
         // setGroupedData(null)
-        const [_options, _groupedData] = groupJson({
+        const [_groupingOptions, _groupedData] = groupJson({
           results: resultsCopy ,
           groupKey: xAxis,
           key: yAxis[0]
         })
         handleDispatch({
-          options: _options,
+          groupingOptions: _groupingOptions,
           groupedData: _groupedData,
         })()
       } else {
@@ -55,7 +55,7 @@ const useLineControls = ({ columns, rows }) => {
           yKeys: yAxis,
         })
         handleDispatch({
-          options: Object.keys(_groupedData),
+          groupingOptions: Object.keys(_groupedData),
           groupedData: _groupedData,
         })()
       }
@@ -160,12 +160,12 @@ const useLineControls = ({ columns, rows }) => {
             setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
           />
         </div>
-        {options.length > 1 &&
+        {groupingOptions.length > 1 &&
         <>
           <CustomSelect
             multi
             title='Group By'
-            data={options.sort()}
+            data={groupingOptions.sort()}
             chosenValue={chosenKey}
             setChosenValue={handleDispatch({ key: 'chosenKey' })}
           />
