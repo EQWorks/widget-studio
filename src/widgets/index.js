@@ -1,7 +1,6 @@
 import React, { cloneElement, Children, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import Modal from '@material-ui/core/Modal'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStoreState, useStoreActions, useStoreDispatch } from 'easy-peasy'
 import { Typography } from '@eqworks/lumen-ui'
@@ -53,42 +52,50 @@ const WidgetConfig = ({ children, columns, rows, loading: resultsLoading, dataSo
         !isDone ?
           <WidgetSelector {...{ columns }} />
           :
-          <div className={classes.outerContainer}>
-            <div className={classes.container}>
-              <div className={classes.chart}>
-                <WidgetWithConfig
-                  widget={Children.only(children)}
-                  config={config}
-                />
+          <>
+            <div className={classes.outerContainer}>
+              <div style={{ overflow: 'auto', display: showTable ? 'flex' : 'none' }}>
+                <div className={classes.table}>
+                  <ResultsTable
+                    results={rows} />
+                </div>
               </div>
-              <div className={showControls ? classes.control : classes.hiddenControl}>
-                <WidgetControls
-                  {...{ rows, columns }}
-                />
+              <div style={{ display: showTable ? 'none' : 'block', height: '90%' }}>
+                <div className={classes.container}>
+                  <div className={classes.chart}>
+                    <WidgetWithConfig
+                      widget={Children.only(children)}
+                      config={config}
+                    />
+                  </div>
+                  <div className={classes.control}>
+                    <div style={{ display: showControls ? 'flex' : 'none' }}>
+                      <WidgetControls
+                        {...{ rows, columns }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className={classes.buttonsContainer}>
-              <Button onClick={() => setShowTable(!showTable)}> View table </Button>
               <Button
-                onClick={() => setShowControls(!showControls)}
-                type={showControls ? 'secondary' : 'primary'}
+                onClick={() => setShowTable(!showTable)}
+                type={showTable ? 'secondary' : 'primary'}
               >
-                {showControls ? 'Hide controls' : 'Show controls'}
+                {showTable ? 'Widget' : 'Data'}
               </Button>
+              {!showTable &&
+                <Button
+                  onClick={() => setShowControls(!showControls)}
+                  type={showControls ? 'secondary' : 'primary'}
+                >
+                  {showControls ? 'Hide controls' : 'Show controls'}
+                </Button>
+              }
             </div>
-          </div>
+          </>
       }
-      <Modal
-        className={classes.modal}
-        open={showTable}
-      >
-        <div className={classes.table}>
-          <Button style={{ float: 'right' }} onClick={() => setShowTable(false)}>CLOSE</Button>
-          <ResultsTable
-            results={rows}
-          />
-        </div>
-      </Modal>
     </div >
   )
 }

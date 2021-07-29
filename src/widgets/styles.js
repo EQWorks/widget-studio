@@ -3,38 +3,38 @@ export default (theme) => ({
   content: {
     display: 'flex',
     marginTop: 10,
-    width: '100%',
+    border: 'solid',
+    borderRadius: '1rem',
+    padding: '1rem',
+    borderWidth: 'thin',
+    borderColor: '#d6d6d6',
+    flexDirection: 'column',
+    height: '60vh'
   },
   container: {
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    overflow: 'auto'
+    height: '100%',
   },
   outerContainer: {
-    flexGrow:1
+    height: '90%',
+    overflow: 'auto',
   },
   chart: {
+    flex: '1 1 0',
+    minWidth: 0
   },
   control: {
-    flexGrow: 1,
-  },
-  get hiddenControl() {
-    return {
-      ...this.control,
-      display: 'none'
-    }
   },
   table: {
     backgroundColor: '#fff',
-    width:'60%',
   },
   buttonsContainer: {
+    height: '10%',
     flexDirection: 'row'
   },
-  modal: {
-    display: 'flex',
-    justifyContent:'center',
-    alignItems:'center'
-  }
+  widgetSelectorContainer: {
+    height: '100%',
+  },
 })
