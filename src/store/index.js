@@ -1,6 +1,6 @@
 import { createStore } from 'easy-peasy'
 import { reducer, computed, action, thunk, thunkOn } from 'easy-peasy'
-import { isJson } from '../widgets/components/charts/utils'
+import { isJson } from '../components/charts/utils'
 
 import { _action } from './store-util'
 
