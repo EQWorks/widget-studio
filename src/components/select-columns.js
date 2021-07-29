@@ -6,8 +6,8 @@ import CustomSelect from './custom-select'
 import { useStoreState, useStoreDispatch } from 'easy-peasy'
 
 const SelectColumns = ({ columnsData }) =>  {
-  const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
-  const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
+  const xAxis = useStoreState((state) => state.initState.xAxis)
+  const yAxis = useStoreState((state) => state.initState.yAxis)
   const dispatch = useStoreDispatch()
   /**
    * this component only takes single values

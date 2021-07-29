@@ -10,7 +10,7 @@ import { InitStorage, AuthActions, LoginContextProvider, Login, useAuthContext }
 import WlCuSelector from './util/wl-cu-selector'
 import { QueryExecutionSelector } from './util/query-execution-selector'
 import WidgetStudio from '../src'
-import Widget from '../src/widgets/widget'
+import Widget from '../src/widget'
 
 export default {
   title: 'LOCUS WIDGET STUDIO',

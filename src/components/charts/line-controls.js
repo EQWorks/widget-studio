@@ -19,19 +19,19 @@ const useStyles = makeStyles((theme) => ({
 
 const useLineControls = ({ columns, rows }) => {
   const classes = useStyles()
-  const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
-  const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
+  const xAxis = useStoreState((state) => state.initState.xAxis)
+  const yAxis = useStoreState((state) => state.initState.yAxis)
 
-  const data = useStoreState((state) => state.widgets.controllers.data)
-  const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
-  const groupingOptions = useStoreState((state) => state.widgets.controllers.groupingOptions)
-  const chosenKey = useStoreState((state) => state.widgets.controllers.chosenKey)
-  const area= useStoreState((state) => state.widgets.line.area)
-  const multiAxis = useStoreState((state) => state.widgets.line.multiAxis)
-  const isJson = useStoreState((state) => state.widgets.isJson)
+  const data = useStoreState((state) => state.controllers.data)
+  const groupedData = useStoreState((state) => state.controllers.groupedData)
+  const groupingOptions = useStoreState((state) => state.controllers.groupingOptions)
+  const chosenKey = useStoreState((state) => state.controllers.chosenKey)
+  const area= useStoreState((state) => state.line.area)
+  const multiAxis = useStoreState((state) => state.line.multiAxis)
+  const isJson = useStoreState((state) => state.isJson)
 
-  const handleDispatch = useStoreActions(actions => actions.widgets.handleDispatch)
-  const setLineState = useStoreActions(actions => actions.widgets.line.update)
+  const handleDispatch = useStoreActions(actions => actions.handleDispatch)
+  const setLineState = useStoreActions(actions => actions.line.update)
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(rows))

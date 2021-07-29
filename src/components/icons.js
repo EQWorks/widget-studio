@@ -22,7 +22,7 @@ const mapIcons = [
 ]
 const Icons = () => {
   const dispatch = useStoreDispatch()
-  const current = useStoreState((state) => state.widgets.initState.type)
+  const current = useStoreState((state) => state.initState.type)
 
   const genClicableIcon = () => mapIcons.map(({ Component, type, disabled }, i) => {
     /** at least 2 categories */ //TODO is this a good idea? maybe can plot with only numbers, or strings....

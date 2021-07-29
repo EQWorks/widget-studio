@@ -7,7 +7,7 @@ import { Typography } from '@eqworks/lumen-ui'
 import { useStoreState } from 'easy-peasy'
 import { getChart } from './components/charts'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   controlHeader: {
     display: 'flex',
     flexDirection: 'row',
@@ -17,11 +17,8 @@ const useStyles = makeStyles((theme) => ({
 
 const WidgetControls = ({ rows, columns }) => {
   const classes = useStyles()
-  // const [revision, setRevision] = useState(0) // if chart needs to be resized
-  const type = useStoreState((state) => state.widgets.initState.type)
-  // const ready = useStoreState((state) => state.widgets.controllers.ready)
+  const type = useStoreState((state) => state.initState.type)
   const getControl = getChart(type)({ columns, rows })
-  // const [showTable, setShowTable] = useState(false);
 
   return (
     <Paper>

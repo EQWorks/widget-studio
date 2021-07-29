@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 const WidgetSelector = ({ columns }) => {
   const classes = useStyles()
   const dispatch = useStoreDispatch()
-  const isOpen = useStoreState((state) => state.widgets.initState.isOpen)
+  const isOpen = useStoreState((state) => state.initState.isOpen)
 
   return (
     <div className={classes.widgetSelectorContainer}>

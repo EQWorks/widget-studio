@@ -18,19 +18,19 @@ const useStyles = makeStyles((theme) => ({
 
 const usePieControls = ({ columns, rows }) => {
   const classes = useStyles()
-  const xAxis = useStoreState((state) => state.widgets.initState.xAxis)
-  const yAxis = useStoreState((state) => state.widgets.initState.yAxis)
+  const xAxis = useStoreState((state) => state.initState.xAxis)
+  const yAxis = useStoreState((state) => state.initState.yAxis)
 
-  const data = useStoreState((state) => state.widgets.controllers.data)
-  const groupedData = useStoreState((state) => state.widgets.controllers.groupedData)
-  const groupingOptions = useStoreState((state) => state.widgets.controllers.groupingOptions)
-  const chosenKey = useStoreState((state) => state.widgets.controllers.chosenKey)
-  const isDonut = useStoreState((state) => state.widgets.pie.isDonut)
-  const multi = useStoreState((state) => state.widgets.pie.multi)
+  const data = useStoreState((state) => state.controllers.data)
+  const groupedData = useStoreState((state) => state.controllers.groupedData)
+  const groupingOptions = useStoreState((state) => state.controllers.groupingOptions)
+  const chosenKey = useStoreState((state) => state.controllers.chosenKey)
+  const isDonut = useStoreState((state) => state.pie.isDonut)
+  const multi = useStoreState((state) => state.pie.multi)
 
-  const handleDispatch = useStoreActions(actions => actions.widgets.handleDispatch)
-  const setPieState = useStoreActions(actions => actions.widgets.pie.update)
-  const capData = useStoreActions(actions => actions.widgets.pie.capData)
+  const handleDispatch = useStoreActions(actions => actions.handleDispatch)
+  const setPieState = useStoreActions(actions => actions.pie.update)
+  const capData = useStoreActions(actions => actions.pie.capData)
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(rows))
