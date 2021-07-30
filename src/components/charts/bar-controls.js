@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   row3: { padding: '30px 0 20px 0' },
 }))
 
-const useBarControls = ({ columns, rows }) => {
+const BarControls = ({ columns, rows }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.initState.xAxis)
   const yAxis = useStoreState((state) => state.initState.yAxis)
@@ -48,61 +49,67 @@ const useBarControls = ({ columns, rows }) => {
     })()
   }, [handleDispatch, rows, xAxis, yAxis])
 
-  const getBarControls = () => {
-    return (
-      <>
-        <div className={classes.row1}>
-          <CustomSelect
-            title='Column 1'
-            data={columns}
-            chosenValue={xAxis}
-            setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
-          />
+  return (
+    <>
+      <div className={classes.row1}>
+        <CustomSelect
+          title='Column 1'
+          data={columns}
+          chosenValue={xAxis}
+          setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
+        />
+        <CustomSelect
+          multi
+          title='Columns 2'
+          data={columns}
+          chosenValue={yAxis}
+          setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
+        />
+      </div>
+      {groupingOptions.length > 1 &&
+        <>
           <CustomSelect
             multi
-            title='Columns 2'
-            data={columns}
-            chosenValue={yAxis}
-            setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
+            title='Group By'
+            data={groupingOptions.sort()}
+            chosenValue={chosenKey}
+            setChosenValue={handleDispatch({ key: 'chosenKey' })}
           />
-        </div>
-        {groupingOptions.length > 1 &&
-          <>
-            <CustomSelect
-              multi
-              title='Group By'
-              data={groupingOptions.sort()}
-              chosenValue={chosenKey}
-              setChosenValue={handleDispatch({ key: 'chosenKey' })}
-            />
-            <IconButton
-              size='small'
-              onClick={() => handleDispatch({ chosenKey: [] })()}
-            >
-              <Clear />
-            </IconButton>
-          </>
-        }
-        <div className={classes.row3}>
-          <FormControl component='fieldset'>
-            <RadioGroup aria-label='layout' name='layout1' value={layout} onChange={({ target: { value } }) => setBarState({ layout: value })}>
-              <FormControlLabel value='vertical' control={<Radio />} label='Vertical' />
-              <FormControlLabel value='horizontal' control={<Radio />} label='Horizontal' />
-            </RadioGroup>
-          </FormControl>
-        </div>
+          <IconButton
+            size='small'
+            onClick={() => handleDispatch({ chosenKey: [] })()}
+          >
+            <Clear />
+          </IconButton>
+        </>
+      }
+      <div className={classes.row3}>
+        <FormControl component='fieldset'>
+          <RadioGroup aria-label='layout' name='layout1' value={layout} onChange={({ target: { value } }) => setBarState({ layout: value })}>
+            <FormControlLabel value='vertical' control={<Radio />} label='Vertical' />
+            <FormControlLabel value='horizontal' control={<Radio />} label='Horizontal' />
+          </RadioGroup>
+        </FormControl>
+      </div>
 
-        {(yAxis.length > 1 || groupingOptions.length > 1) &&
-          <FormControl component='fieldset'>
-            <RadioGroup aria-label='groupMode' name='group1' value={groupMode} onChange={({ target: { value } }) => setBarState({ groupMode: value })}>
-              <FormControlLabel value='group' control={<Radio />} label='Grouped' />
-              <FormControlLabel value='stack' control={<Radio />} label='Stacked' />
-            </RadioGroup>
-          </FormControl>}
-      </>
-    )
-  }
-  return getBarControls
+      {(yAxis.length > 1 || groupingOptions.length > 1) &&
+        <FormControl component='fieldset'>
+          <RadioGroup aria-label='groupMode' name='group1' value={groupMode} onChange={({ target: { value } }) => setBarState({ groupMode: value })}>
+            <FormControlLabel value='group' control={<Radio />} label='Grouped' />
+            <FormControlLabel value='stack' control={<Radio />} label='Stacked' />
+          </RadioGroup>
+        </FormControl>}
+    </>
+  )
 }
 
-export default useBarControls
+BarControls.propTypes = {
+  rows: PropTypes.array,
+  columns: PropTypes.array,
+}
+BarControls.default = {
+  columns: [],
+  rows: [],
+}
+
+export default BarControls

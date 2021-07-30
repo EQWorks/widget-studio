@@ -1,5 +1,11 @@
 export default (theme) => ({
-  warning: { textAlign: 'center', marginTop: theme.spacing(6) },
+  warning: {
+    textAlign: 'center',
+    height:'100%',
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center'
+  },
   content: {
     display: 'flex',
     marginTop: 10,
@@ -26,6 +32,7 @@ export default (theme) => ({
     minWidth: 0
   },
   control: {
+    height: '100%'
   },
   table: {
     backgroundColor: '#fff',

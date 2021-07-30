@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   row3: { padding: '30px 0 20px 0' },
 }))
 
-const usePieControls = ({ columns, rows }) => {
+const PieControls = ({ columns, rows }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.initState.xAxis)
   const yAxis = useStoreState((state) => state.initState.yAxis)
@@ -63,11 +63,11 @@ const usePieControls = ({ columns, rows }) => {
       values,
       labels,
       textposition: 'inside',
-      hovertemplate:'<b>%{fullData.name}</b>' +
-      '<br><b>%{label}</b>: %{value} ' +
-      '<br><b>percent</b>: %{percent} ' +
-      '<extra></extra>',
-      ...(isDonut? { hole: .5 } : {})
+      hovertemplate: '<b>%{fullData.name}</b>' +
+        '<br><b>%{label}</b>: %{value} ' +
+        '<br><b>percent</b>: %{percent} ' +
+        '<extra></extra>',
+      ...(isDonut ? { hole: .5 } : {})
     }
     if (groupedData) {
       const _data = getPieChartData({
@@ -119,36 +119,24 @@ const usePieControls = ({ columns, rows }) => {
     return _str
   }
 
-
-  const props = {
-    data,
-    layout: {
-      colorway: ['#0062d9', '#f65b20', '#ffaa00', '#dd196b', '#9928b3', '#00b5c8', '#a8a8a8'],
-      autosize: true,
-      hoverlabel: { align: 'left', bgcolor: 'fff' },
-      ...multi,
-    },
-  }
-
-  const getPieControls = () => {
-    return (
-      <>
-        <div className={classes.row1}>
-          <CustomSelect
-            title='Column 1'
-            data={columns}
-            chosenValue={xAxis}
-            setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
-          />
-          <CustomSelect
-            multi
-            title='Columns 2'
-            data={columns}
-            chosenValue={yAxis}
-            setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
-          />
-        </div>
-        {groupingOptions.length > 1 &&
+  return (
+    <>
+      <div className={classes.row1}>
+        <CustomSelect
+          title='Column 1'
+          data={columns}
+          chosenValue={xAxis}
+          setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
+        />
+        <CustomSelect
+          multi
+          title='Columns 2'
+          data={columns}
+          chosenValue={yAxis}
+          setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
+        />
+      </div>
+      {groupingOptions.length > 1 &&
         <>
           <CustomSelect
             multi
@@ -164,21 +152,19 @@ const usePieControls = ({ columns, rows }) => {
             <Clear />
           </IconButton>
         </>
-        }
-        <FormGroup className={classes.row3}>
-          <FormControlLabel
-            control={<Switch
-              checked={isDonut}
-              onChange={({ target: { checked } }) => setPieState({ isDonut: checked })}
-              name='style'
-            />}
-            label='Donut'
-          />
-        </FormGroup>
-      </>
-    )
-  }
-  return [props, getPieControls]
+      }
+      <FormGroup className={classes.row3}>
+        <FormControlLabel
+          control={<Switch
+            checked={isDonut}
+            onChange={({ target: { checked } }) => setPieState({ isDonut: checked })}
+            name='style'
+          />}
+          label='Donut'
+        />
+      </FormGroup>
+    </>
+  )
 }
 
-export default usePieControls
+export default PieControls

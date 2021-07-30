@@ -128,14 +128,12 @@ export const store = createStore({
       (state) => state.initState.type,
       (state) => state.initState.xAxis,
       (state) => state.initState.yAxis,
-      (state) => state.initState.isOpen,
     ],
     (
       type,
       xAxis,
       yAxis,
-      isOpen,
-    ) => Boolean(xAxis && yAxis && type && !isOpen)
+    ) => Boolean(xAxis && yAxis.length && type)
   ),
 
   /** called when results change to reset all states */

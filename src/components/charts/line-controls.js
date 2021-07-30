@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   row3: { padding: '30px 0 20px 0' },
 }))
 
-const useLineControls = ({ columns, rows }) => {
+const LineControls = ({ columns, rows }) => {
   const classes = useStyles()
   const xAxis = useStoreState((state) => state.initState.xAxis)
   const yAxis = useStoreState((state) => state.initState.yAxis)
@@ -26,7 +26,7 @@ const useLineControls = ({ columns, rows }) => {
   const groupedData = useStoreState((state) => state.controllers.groupedData)
   const groupingOptions = useStoreState((state) => state.controllers.groupingOptions)
   const chosenKey = useStoreState((state) => state.controllers.chosenKey)
-  const area= useStoreState((state) => state.line.area)
+  const area = useStoreState((state) => state.line.area)
   const multiAxis = useStoreState((state) => state.line.multiAxis)
   const isJson = useStoreState((state) => state.isJson)
 
@@ -35,12 +35,12 @@ const useLineControls = ({ columns, rows }) => {
 
   useEffect(() => {
     const resultsCopy = JSON.parse(JSON.stringify(rows))
-    if(xAxis && yAxis.length) {
+    if (xAxis && yAxis.length) {
       if (isJson) {
         handleDispatch({ ready: false })()
         // setGroupedData(null)
         const [_groupingOptions, _groupedData] = groupJson({
-          results: resultsCopy ,
+          results: resultsCopy,
           groupKey: xAxis,
           key: yAxis[0]
         })
@@ -67,10 +67,10 @@ const useLineControls = ({ columns, rows }) => {
       type: 'scatter',
       mode: 'lines+markers', // makes axis start far from 0
       hovertemplate: '<b> %{fullData.name} </b>' +
-      // '<br> %{x}: %{y} ' +
-      '<br><b> %{xaxis.title.text}</b>: %{x} ' +
-      '<br><b> %{yaxis.title.text}</b>: %{y} <br>' +
-      '<extra></extra>',
+        // '<br> %{x}: %{y} ' +
+        '<br><b> %{xaxis.title.text}</b>: %{x} ' +
+        '<br><b> %{yaxis.title.text}</b>: %{y} <br>' +
+        '<extra></extra>',
       connectgaps: true,
       ...(area && { fill: 'tonexty' })
     }
@@ -90,15 +90,16 @@ const useLineControls = ({ columns, rows }) => {
         chosenKey,
       })({ specs })
       if (multiAxis) {
-        handleDispatch({ data: _data
-          .slice(0, 2)
-          .map((d, i) => {
-            let _data = d
-            if (i === 1) {
-              _data = { ...d, yaxis: 'y2' }
-            }
-            return _data
-          })
+        handleDispatch({
+          data: _data
+            .slice(0, 2)
+            .map((d, i) => {
+              let _data = d
+              if (i === 1) {
+                _data = { ...d, yaxis: 'y2' }
+              }
+              return _data
+            })
         })()
       } else {
         handleDispatch({ data: _data })()
@@ -106,61 +107,24 @@ const useLineControls = ({ columns, rows }) => {
     }
   }, [isJson, groupedData, area, chosenKey, multiAxis, handleDispatch])
 
-  const islongTickLabel = data && data[0].x?.some((e) => e.length > 4)
-  const props = {
-    data,
-    layout:{
-      showlegend: multiAxis ? false : true,
-      autosize: true,
-      hovermode: 'closest',
-      hoverlabel: { align: 'left', bgcolor: 'fff' },
-      colorway: ['#0062d9', '#f65b20', '#ffaa00', '#dd196b', '#9928b3', '#00b5c8', '#a8a8a8'],
-      yaxis: {
-        title: {
-          text: isJson || multiAxis ? yAxis[0] : 'value',
-          standoff: 20,
-        },
-        automargin: true,
-        showline: true,
-      },
-      xaxis: {
-        title: {
-          text: isJson || xAxis,
-          standoff: 20
-        },
-        automargin: true,
-        tickangle: islongTickLabel ? 45 : 0,
-        rangemode: 'tozero'
-      },
-      ...(multiAxis && { yaxis2: {
-        overlaying: 'y',
-        side: 'right',
-        title: yAxis[1],
-        automargin: true,
-        type: 'linear',
-        showline: true,
-      } })
-    },
-  }
-  const getLineControls = () => {
-    return (
-      <>
-        <div className={classes.row1}>
-          <CustomSelect
-            title='Column 1'
-            data={columns}
-            chosenValue={xAxis}
-            setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
-          />
-          <CustomSelect
-            multi
-            title='Columns 2'
-            data={columns}
-            chosenValue={yAxis}
-            setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
-          />
-        </div>
-        {groupingOptions.length > 1 &&
+  return (
+    <>
+      <div className={classes.row1}>
+        <CustomSelect
+          title='Column 1'
+          data={columns}
+          chosenValue={xAxis}
+          setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
+        />
+        <CustomSelect
+          multi
+          title='Columns 2'
+          data={columns}
+          chosenValue={yAxis}
+          setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
+        />
+      </div>
+      {groupingOptions.length > 1 &&
         <>
           <CustomSelect
             multi
@@ -176,18 +140,18 @@ const useLineControls = ({ columns, rows }) => {
             <Clear />
           </IconButton>
         </>
-        }
-        <FormGroup className={classes.row3}>
-          <FormControlLabel
-            style={{ marginBottom: 20 }}
-            control={<Switch
-              checked={area}
-              onChange={({ target: { checked } }) => setLineState({ area: checked })}
-              name='Area'
-            />}
-            label='Area'
-          />
-          {(!isJson && yAxis.length > 1) &&
+      }
+      <FormGroup className={classes.row3}>
+        <FormControlLabel
+          style={{ marginBottom: 20 }}
+          control={<Switch
+            checked={area}
+            onChange={({ target: { checked } }) => setLineState({ area: checked })}
+            name='Area'
+          />}
+          label='Area'
+        />
+        {(!isJson && yAxis.length > 1) &&
           <FormControlLabel
             control={<Switch
               checked={multiAxis}
@@ -196,12 +160,10 @@ const useLineControls = ({ columns, rows }) => {
             />}
             label='Multi Axis'
           />
-          }
-        </FormGroup>
-      </>
-    )
-  }
-  return [props, getLineControls]
+        }
+      </FormGroup>
+    </>
+  )
 }
 
-export default useLineControls
+export default LineControls

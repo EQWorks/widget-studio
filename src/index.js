@@ -10,7 +10,6 @@ import { Typography } from '@eqworks/lumen-ui'
 import { Button } from '@eqworks/lumen-ui'
 
 import WidgetControls from './widget-controls'
-import WidgetSelector from './widget-selector'
 import ResultsTable from './components/table'
 import styles from './styles'
 
@@ -37,8 +36,9 @@ const WidgetStudio = ({ children, columns, rows, loading: resultsLoading, dataSo
 
   const classes = useStyles()
   const isDone = useStoreState((state) => state.isDone)
+  const type = useStoreState((state) => state.initState.type)
   const config = useStoreState((state) => state.config)
-  const [showControls, setShowControls] = useState(false)
+  const [showControls, setShowControls] = useState(true)
   const [showTable, setShowTable] = useState(false)
 
   // for remaining easy-peasy store functionality
@@ -65,52 +65,60 @@ const WidgetStudio = ({ children, columns, rows, loading: resultsLoading, dataSo
   return (
     <div className={classes.content}>
       {
-        !isDone ?
-          <WidgetSelector {...{ columns }} />
-          :
-          <>
-            <div className={classes.outerContainer}>
-              <div style={{ overflow: 'auto', display: showTable ? 'flex' : 'none' }}>
-                <div className={classes.table}>
-                  <ResultsTable
-                    results={rows} />
-                </div>
+        <>
+          <div className={classes.outerContainer}>
+            <div style={{ overflow: 'auto', display: showTable ? 'flex' : 'none' }}>
+              <div className={classes.table}>
+                <ResultsTable
+                  results={rows} />
               </div>
-              <div style={{ display: showTable ? 'none' : 'block', height: '90%' }}>
-                <div className={classes.container}>
-                  <div className={classes.chart}>
-                    <WidgetWithConfig
-                      widget={Children.only(children)}
-                      config={config}
+            </div>
+            <div style={{ display: showTable ? 'none' : 'block', height: '90%' }}>
+              <div className={classes.container}>
+                <div className={classes.chart}>
+                  {
+                    isDone ?
+                      <WidgetWithConfig
+                        widget={Children.only(children)}
+                        config={config}
+                      />
+                      :
+                      <div className={classes.warning}>
+                        <Typography color="textSecondary" variant='h6'>
+                          Select a widget type and data.
+                        </Typography>
+                      </div>
+                  }
+                </div>
+                <div className={classes.control}>
+                  <div style={{ display: showControls ? 'flex' : 'none' }}>
+                    <WidgetControls
+                      {...{ rows, columns }}
                     />
                   </div>
-                  <div className={classes.control}>
-                    <div style={{ display: showControls ? 'flex' : 'none' }}>
-                      <WidgetControls
-                        {...{ rows, columns }}
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
-            <div className={classes.buttonsContainer}>
+          </div>
+          <div className={classes.buttonsContainer}>
+            <Button
+              disabled={!isDone}
+              onClick={() => setShowTable(!showTable)}
+              type={showTable ? 'secondary' : 'primary'}
+            >
+              {showTable ? 'Widget' : 'Data'}
+            </Button>
+            {!showTable &&
               <Button
-                onClick={() => setShowTable(!showTable)}
-                type={showTable ? 'secondary' : 'primary'}
+                disabled={!isDone}
+                onClick={() => setShowControls(!showControls)}
+                type={showControls ? 'secondary' : 'primary'}
               >
-                {showTable ? 'Widget' : 'Data'}
+                {showControls ? 'Hide controls' : 'Show controls'}
               </Button>
-              {!showTable &&
-                <Button
-                  onClick={() => setShowControls(!showControls)}
-                  type={showControls ? 'secondary' : 'primary'}
-                >
-                  {showControls ? 'Hide controls' : 'Show controls'}
-                </Button>
-              }
-            </div>
-          </>
+            }
+          </div>
+        </>
       }
     </div >
   )
