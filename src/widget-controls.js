@@ -19,7 +19,7 @@ const controls = {
 
 const useStyles = makeStyles(() => ({
   controlContainer: {
-    flexDirection:'column'
+    flexDirection: 'column'
   },
   controlHeader: {
     display: 'flex',
@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const WidgetControls = ({ rows, columns }) => {
+const WidgetControls = ({ columns }) => {
   const classes = useStyles()
   const type = useStoreState((state) => state.initState.type)
 
@@ -40,10 +40,7 @@ const WidgetControls = ({ rows, columns }) => {
       {type &&
         createElement(
           controls[type],
-          {
-            columns,
-            rows
-          }
+          { columns }
         )
       }
     </div>

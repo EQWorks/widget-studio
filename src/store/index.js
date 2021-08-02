@@ -4,6 +4,8 @@ import { isJson } from '../components/charts/utils'
 
 import { _action } from './store-util'
 
+const widgetTypes = ['bar', 'line', 'pie']
+
 const initState = () => ({
   type: '',
   xAxis: '',
@@ -19,6 +21,16 @@ const controllers = () => ({
   chosenKey: [], // this value is reset when x||yaxis changes
   ready: true, // when data parsing is done
 })
+
+const widgetDefaults = {
+  bar: {
+    group: false,
+    groupBy: null,
+    indexBy: null,
+    stack: false,
+    keys: [],
+  }
+}
 
 export const store = createStore({
   mode: { edit: true, read: false, isEditing: -1 },
@@ -57,9 +69,9 @@ export const store = createStore({
   }),
 
   /** unique state of each chart type (maybe they can be grouped if not adding more) */
+
   bar: {
-    groupMode: 'group',
-    layout: 'vertical',
+    ...widgetDefaults.bar,
     update: action((state, payload) => ({ ...state, ...payload }))
   },
   line: {
@@ -73,7 +85,6 @@ export const store = createStore({
     update: action((state, payload) => ({ ...state, ...payload })),
     capData: thunk((actions, payload, { dispatch, getStoreState }) => {
       const data = getStoreState()
-        .widgets
         .controllers
         .data
         .slice(0, 3)
@@ -126,27 +137,67 @@ export const store = createStore({
   isDone: computed(
     [
       (state) => state.initState.type,
-      (state) => state.initState.xAxis,
-      (state) => state.initState.yAxis,
+      (state) => state.barIsDone
     ],
     (
       type,
-      xAxis,
-      yAxis,
-    ) => Boolean(xAxis && yAxis.length && type)
+      barIsDone,
+    ) => {
+      // TODO there has to be a more elegant way of doing this
+      if (!type) return false
+      if (type == 'bar') return barIsDone
+      if (type == 'line') return lineIsDone
+      if (type == 'pie') return pieIsDone
+    }
   ),
+
+  barIsDone: computed(
+    [
+      (state) => state.bar.keys,
+      (state) => state.bar.group,
+      (state) => state.bar.groupBy,
+    ],
+    (
+      keys,
+      group,
+      groupBy
+    ) => {
+      if (!group) {
+        return Boolean(keys.length)
+      }
+      return Boolean(keys.length && groupBy)
+    }
+  ),
+
+  lineIsDone: computed(
+    [
+      (state) => state.initState.yAxis,
+    ],
+    (
+      yAxis,
+    ) => Boolean(yAxis.length)
+  ),
+
+  pieIsDone: computed(
+    [
+      (state) => state.initState.yAxis,
+    ],
+    (
+      yAxis,
+    ) => Boolean(yAxis.length)
+  ),
+
+  resetCurrent: thunk((actions, payload, { getState }) => {
+    const type = getState().initState.type
+    actions[type].update(widgetDefaults[type])
+  }),
 
   /** called when results change to reset all states */
   reset: thunk((actions, payload, { dispatch }) => {
     dispatch({ type: 'WIDGETS', payload: initState() })
     dispatch({ type: 'CONTROLLER', payload: controllers() })
-    const initSpecific = {
-      bar: { groupMode: 'group', layout: 'vertical' },
-      pie: { isDonut: false, multi: {} },
-      line: { area: false, multiAxis: false }
-    }
-    Object.keys(initSpecific).forEach((type) => {
-      actions[type].update(initSpecific[type])
+    widgetTypes.forEach((type) => {
+      actions[type].update(widgetDefaults[type])
     })
   }),
 

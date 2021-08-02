@@ -85,16 +85,14 @@ const WidgetStudio = ({ children, columns, rows, loading: resultsLoading, dataSo
                       :
                       <div className={classes.warning}>
                         <Typography color="textSecondary" variant='h6'>
-                          Select a widget type and data.
+                          {type ? 'Select data and options.' : 'Select a widget type.'}
                         </Typography>
                       </div>
                   }
                 </div>
                 <div className={classes.control}>
                   <div style={{ display: showControls ? 'flex' : 'none' }}>
-                    <WidgetControls
-                      {...{ rows, columns }}
-                    />
+                    <WidgetControls {...{ columns }} />
                   </div>
                 </div>
               </div>
