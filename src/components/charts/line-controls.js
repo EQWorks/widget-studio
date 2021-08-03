@@ -1,169 +1,114 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormGroup from '@material-ui/core/FormGroup'
+import FormControl from '@material-ui/core/FormControl'
+import Switch from '@material-ui/core/Switch'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
-import { Switch } from '@eqworks/lumen-ui'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import CustomSelect from '../custom-select'
 
-import { parseData, groupJson, getLayers, getChartData, sum } from './utils'
+const useStyles = makeStyles({
+  controls: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end'
+  },
+})
 
-
-const useStyles = makeStyles((theme) => ({
-  row1: { marginBottom: theme.spacing(2.5) },
-  row3: { padding: '30px 0 20px 0' },
-}))
-
-const LineControls = ({ columns, rows }) => {
+const LineControls = ({ columns }) => {
   const classes = useStyles()
-  const xAxis = useStoreState((state) => state.initState.xAxis)
-  const yAxis = useStoreState((state) => state.initState.yAxis)
 
-  const data = useStoreState((state) => state.controllers.data)
-  const groupedData = useStoreState((state) => state.controllers.groupedData)
-  const groupingOptions = useStoreState((state) => state.controllers.groupingOptions)
-  const chosenKey = useStoreState((state) => state.controllers.chosenKey)
-  const area = useStoreState((state) => state.line.area)
-  const multiAxis = useStoreState((state) => state.line.multiAxis)
-  const isJson = useStoreState((state) => state.isJson)
+  const indexByValue = useStoreState((state) => state.line.indexByValue)
+  const stack = useStoreState((state) => state.line.stack)
+  const groupBy = useStoreState((state) => state.line.groupBy)
+  const x = useStoreState((state) => state.line.x)
+  const y = useStoreState((state) => state.line.y)
+  const keys = useStoreState((state) => state.line.keys)
+  const indexBy = useStoreState((state) => state.line.indexBy)
 
-  const handleDispatch = useStoreActions(actions => actions.handleDispatch)
   const setLineState = useStoreActions(actions => actions.line.update)
+  const reset = useStoreActions(actions => actions.resetCurrent)
 
+  // TODO data inference rather than using 'category' attribute
+  const [numericColumns, setNumericColumns] = useState([])
+  const [stringColumns, setStringColumns] = useState([])
   useEffect(() => {
-    const resultsCopy = JSON.parse(JSON.stringify(rows))
-    if (xAxis && yAxis.length) {
-      if (isJson) {
-        handleDispatch({ ready: false })()
-        // setGroupedData(null)
-        const [_groupingOptions, _groupedData] = groupJson({
-          results: resultsCopy,
-          groupKey: xAxis,
-          key: yAxis[0]
-        })
-        handleDispatch({
-          groupingOptions: _groupingOptions,
-          groupedData: _groupedData,
-        })()
-      } else {
-        const _groupedData = sum({
-          results: resultsCopy,
-          groupKey: xAxis,
-          yKeys: yAxis,
-        })
-        handleDispatch({
-          groupingOptions: Object.keys(_groupedData),
-          groupedData: _groupedData,
-        })()
-      }
-    }
-  }, [area, chosenKey, handleDispatch, isJson, rows, xAxis, yAxis])
+    setNumericColumns(columns.filter(({ _, category }) => category === 'Numeric'))
+    setStringColumns(columns.filter(({ _, category }) => category === 'String'))
+  }, [columns])
 
-  useEffect(() => {
-    const specs = {
-      type: 'scatter',
-      mode: 'lines+markers', // makes axis start far from 0
-      hovertemplate: '<b> %{fullData.name} </b>' +
-        // '<br> %{x}: %{y} ' +
-        '<br><b> %{xaxis.title.text}</b>: %{x} ' +
-        '<br><b> %{yaxis.title.text}</b>: %{y} <br>' +
-        '<extra></extra>',
-      connectgaps: true,
-      ...(area && { fill: 'tonexty' })
-    }
-    if (isJson && groupedData) {
-      const _res = parseData({ data: groupedData, keys: chosenKey })
-      const _data = _res.map(({ x, y, name }) => getLayers({
-        x,
-        y,
-        name,
-        specs
-      }))
-      handleDispatch({ data: _data, ready: true })()
-    }
-    if (!isJson && groupedData) {
-      const _data = getChartData({
-        sumData: groupedData,
-        chosenKey,
-      })({ specs })
-      if (multiAxis) {
-        handleDispatch({
-          data: _data
-            .slice(0, 2)
-            .map((d, i) => {
-              let _data = d
-              if (i === 1) {
-                _data = { ...d, yaxis: 'y2' }
-              }
-              return _data
-            })
-        })()
-      } else {
-        handleDispatch({ data: _data })()
-      }
-    }
-  }, [isJson, groupedData, area, chosenKey, multiAxis, handleDispatch])
+  const setIndexByValue = event => {
+    setLineState({ indexByValue: event.target.checked })
+  }
 
   return (
-    <>
-      <div className={classes.row1}>
-        <CustomSelect
-          title='Column 1'
-          data={columns}
-          chosenValue={xAxis}
-          setChosenValue={handleDispatch({ key: 'xAxis', type: 'WIDGETS' })}
+    <div className={classes.controls}>
+      <FormControl>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={indexByValue}
+              onChange={setIndexByValue}
+              color="primary"
+            />
+          }
+          label="Index by value"
         />
-        <CustomSelect
-          multi
-          title='Columns 2'
-          data={columns}
-          chosenValue={yAxis}
-          setChosenValue={handleDispatch({ key: 'yAxis', type: 'WIDGETS' })}
-        />
-      </div>
-      {groupingOptions.length > 1 &&
-        <>
+      </FormControl>
+      {
+        indexByValue ?
+          <>
+            <CustomSelect
+              // TODO multi optional
+              multi
+              title={'Y Keys'}
+              data={numericColumns}
+              chosenValue={y}
+              setChosenValue={val => setLineState({ y: val })}
+            />
+            <CustomSelect
+              title='Index by'
+              data={stringColumns}
+              chosenValue={indexBy}
+              setChosenValue={val => setLineState({ indexBy: val })}
+            />
+            <CustomSelect
+              title='X Key'
+              data={stringColumns}
+              chosenValue={x}
+              setChosenValue={val => setLineState({ x: val })}
+            />
+          </>
+          :
           <CustomSelect
             multi
-            title='Group By'
-            data={groupingOptions.sort()}
-            chosenValue={chosenKey}
-            setChosenValue={handleDispatch({ key: 'chosenKey' })}
+            title={'Keys (min. 2)'}
+            data={numericColumns}
+            chosenValue={keys}
+            setChosenValue={val => setLineState({ keys: val })}
           />
-          <IconButton
-            size='small'
-            onClick={() => handleDispatch({ chosenKey: [] })()}
-          >
-            <Clear />
-          </IconButton>
-        </>
+
       }
-      <FormGroup className={classes.row3}>
-        <FormControlLabel
-          style={{ marginBottom: 20 }}
-          control={<Switch
-            checked={area}
-            onChange={({ target: { checked } }) => setLineState({ area: checked })}
-            name='Area'
-          />}
-          label='Area'
-        />
-        {(!isJson && yAxis.length > 1) &&
-          <FormControlLabel
-            control={<Switch
-              checked={multiAxis}
-              onChange={({ target: { checked } }) => setLineState({ multiAxis: checked })}
-              name='Multi Axis'
-            />}
-            label='Multi Axis'
-          />
-        }
-      </FormGroup>
-    </>
+      <IconButton
+        size='small'
+        onClick={reset}
+      >
+        <Clear />
+      </IconButton>
+    </div>
   )
+}
+
+LineControls.propTypes = {
+  rows: PropTypes.array,
+  columns: PropTypes.array,
+}
+LineControls.default = {
+  columns: [],
+  rows: [],
 }
 
 export default LineControls

@@ -29,6 +29,12 @@ const widgetDefaults = {
     indexBy: null,
     stack: false,
     keys: [],
+  },
+  line: {
+    indexByValue: true,
+    keys: [],
+    x: null,
+    y: [],
   }
 }
 
@@ -75,9 +81,10 @@ export const store = createStore({
     update: action((state, payload) => ({ ...state, ...payload }))
   },
   line: {
-    area: false,
-    multiAxis: false,
-    update: action((state, payload) => ({ ...state, ...payload }))
+    // area: false,
+    // multiAxis: false,
+    ...widgetDefaults.line,
+    update: action((state, payload) => ({ ...state, ...payload })),
   },
   pie: {
     isDonut: false,
@@ -137,11 +144,15 @@ export const store = createStore({
   isDone: computed(
     [
       (state) => state.initState.type,
-      (state) => state.barIsDone
+      (state) => state.barIsDone,
+      (state) => state.lineIsDone,
+      (state) => state.pieIsDone,
     ],
     (
       type,
       barIsDone,
+      lineIsDone,
+      pieIsDone,
     ) => {
       // TODO there has to be a more elegant way of doing this
       if (!type) return false
@@ -171,11 +182,24 @@ export const store = createStore({
 
   lineIsDone: computed(
     [
-      (state) => state.initState.yAxis,
+      (state) => state.line.indexByValue,
+      (state) => state.line.x,
+      (state) => state.line.y,
+      (state) => state.line.indexBy,
+      (state) => state.line.keys,
     ],
     (
-      yAxis,
-    ) => Boolean(yAxis.length)
+      indexByValue,
+      x,
+      y,
+      indexBy,
+      keys,
+    ) => {
+      if (!indexByValue) {
+        return Boolean(keys.length > 1)
+      }
+      return Boolean(x && y.length && indexBy)
+    }
   ),
 
   pieIsDone: computed(
