@@ -79,7 +79,7 @@ const useExecutions = () => {
   return [isLoading, data]
 }
 
-const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [result, setResult] }) => {
+const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [results, setResults] }) => {
   const classes = useStyles()
 
   const [, savedQueryList] = useSavedQueries()
@@ -94,6 +94,7 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [r
 
   const SAVED_QUERIES = 'Saved queries'
   const EXECUTIONS = 'Executions'
+
   const [selectedDataSource, setSelectedDataSource] = useState(SAVED_QUERIES)
 
   const requestQueryResults = async (id) => {
@@ -163,17 +164,20 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [r
 
   const updateData = async (id) => {
     var data
-    setResult({ ...result, loading: true })
+
+    setResults({ ...results, loading: true })
     if (selectedDataSource == SAVED_QUERIES) {
       data = await requestQueryResults(id)
     }
     else if (selectedDataSource == EXECUTIONS) {
       data = await requestExecutionResults(id)
     }
-    setResult({
+    setResults({
       columns: data.columns,
       rows: data.results,
-      loading: false
+      loading: false,
+      dataSource: selectedDataSource,
+      dataID: id 
     })
   }
 

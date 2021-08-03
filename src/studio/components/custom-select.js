@@ -42,7 +42,7 @@ const CustomSelect = (props) => {
           input={<Input />}
           renderValue={(selected) => (
             <div className={classes.chips}>
-              <Chip key={selected} label={selected} margin={1} custom='#006DE9'/>
+              <Chip key={selected} label={selected} margin={1} custom='#006DE9' />
             </div>
           )}
           MenuProps={{ elevation: 1 }}
@@ -75,7 +75,7 @@ const CustomSelect = (props) => {
         renderValue={(selected) => (
           <div className={classes.chips}>
             {selected.map((value) => (
-              <Chip key={value} label={value} margin={1} custom='#006DE9'/>
+              <Chip key={value} label={value} margin={1} custom='#006DE9' />
             ))}
           </div>
         )}

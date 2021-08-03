@@ -9,20 +9,16 @@ import { InitStorage, AuthActions, LoginContextProvider, Login, useAuthContext }
 
 import WlCuSelector from './util/wl-cu-selector'
 import { QueryExecutionSelector } from './util/query-execution-selector'
-import WidgetStudio from '../src'
-import Widget from '../src/widget'
+import { WidgetStudio  }from '../src'
 
 export default {
   title: 'LOCUS WIDGET STUDIO',
   component: AuthWidgetStudioWithWlCu
 }
 
-export const AuthWidgetStudioWithWlCu = () => (
+export const AuthWidgetStudioWithWlCu = props => (
   <LoginContextProvider>
-    <WidgetStudioWithWlCu>
-      <Widget />
-      {/* ^ example */}
-    </WidgetStudioWithWlCu>
+    <WidgetStudioWithWlCu {...props}/>
   </LoginContextProvider>
 )
 
@@ -80,16 +76,19 @@ const WidgetStudioWithWlCu = props => {
   const wlState = useState()
   const cuState = useState()
   const wlCuLoadingState = useState(true)
-  const resultsState = useState({
-    columns: [],
-    rows: [],
-    loading: false,
-    dataSource: null,
-    dataID: null
-  })
+  const resultsState = useState(
+    props.preloadData ?
+      props.preloadData
+      : {
+        columns: [],
+        rows: [],
+        loading: false,
+        dataSource: null,
+        dataID: null,
+      }
+  )
   const [wlCuLoading, setWlCuLoading] = wlCuLoadingState
   const [results, setResults] = resultsState
-
 
   const { authState: { authenticated }, dispatch } = useAuthContext()
   const jwt = window.localStorage.getItem('auth_jwt')
@@ -133,29 +132,34 @@ const WidgetStudioWithWlCu = props => {
     <div className={classes.container}>
       <div className={classes.storyControls}>
         {
-          wlCuLoading &&
-          <div className={classes.wlCuLoadingNotice}>
-            <Typography variant='subtitle1' className={classes.wlCuLoadingText}>
-              Loading...
-            </Typography>
-            <div className={classes.storyControlsOverlay} />
-          </div>
-        }
-        <WlCuSelector {...{ wlState, cuState, wlCuLoadingState }} />
-        <QueryExecutionSelector {...{ wlState, cuState, resultsState }} />
-        {
-          results.loading ?
-            <Typography variant='subtitle2'>
-              Loading results...
-            </Typography>
-            :
-            <Typography variant='subtitle2'>
-              {
-                results.rows.length > 0 ?
-                  `Results loaded with ${results.columns.length} columns and ${results.rows.length} rows.`
-                  : 'No results found for this datasource.'
-              }
-            </Typography>
+          !props.preloadData &&
+          <>
+            {
+              wlCuLoading &&
+              <div className={classes.wlCuLoadingNotice}>
+                <Typography variant='subtitle1' className={classes.wlCuLoadingText}>
+                  Loading...
+                </Typography>
+                <div className={classes.storyControlsOverlay} />
+              </div>
+            }
+            <WlCuSelector {...{ wlState, cuState, wlCuLoadingState }} />
+            <QueryExecutionSelector {...{ wlState, cuState, resultsState }} />
+            {
+              results.loading ?
+                <Typography variant='subtitle2'>
+                  Loading results...
+                </Typography>
+                :
+                <Typography variant='subtitle2'>
+                  {
+                    results.rows.length > 0 ?
+                      `Results loaded with ${results.columns.length} columns and ${results.rows.length} rows.`
+                      : 'No results found for this datasource.'
+                  }
+                </Typography>
+            }
+          </>
         }
       </div>
       <WidgetStudio {...results}>

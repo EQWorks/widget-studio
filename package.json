@@ -65,7 +65,6 @@
     "easy-peasy": "^5.0.3",
     "history": "^5.0.0",
     "json2csv": "^5.0.5",
-    "moment": "^2.28.0",
     "plotly.js": "^1.58.4",
     "prop-types": "^15.7.2",
     "react-dnd": "^11.1.3",

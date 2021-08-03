@@ -1,6 +1,5 @@
 import { createStore } from 'easy-peasy'
 import { reducer, computed, action, thunk, thunkOn } from 'easy-peasy'
-import { isJson } from '../widgets/components/charts/utils'
 
 import { _action } from './store-util'
 
@@ -132,12 +131,6 @@ export const store = createStore({
       chosenKey,
       options,
     })
-  ),
-
-  /** checks if the selected yAxis is hod or dow */
-  isJson: computed(
-    [(state) => state.initState.yAxis],
-    (yAxis) => isJson(yAxis[0])
   ),
 
   /** checks if all initial states have been filled */
