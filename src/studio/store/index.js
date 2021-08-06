@@ -38,6 +38,11 @@ const widgetDefaults = {
   pie: {
     indexBy: null,
     keys: [],
+  },
+  scatter: {
+    indexBy: null,
+    x: null,
+    y: [],
   }
 }
 
@@ -108,6 +113,10 @@ export const store = createStore({
       dispatch({ type: 'CONTROLLER', payload: { data } })
     })
   },
+  scatter: {
+    ...widgetDefaults.scatter,
+    update: action((state, payload) => ({ ...state, ...payload })),
+  },
 
   config: computed(
     [
@@ -145,18 +154,21 @@ export const store = createStore({
       (state) => state.barIsDone,
       (state) => state.lineIsDone,
       (state) => state.pieIsDone,
+      (state) => state.scatterIsDone,
     ],
     (
       type,
       barIsDone,
       lineIsDone,
       pieIsDone,
+      scatterIsDone,
     ) => {
       // TODO there has to be a more elegant way of doing this
       if (!type) return false
       if (type == 'bar') return barIsDone
       if (type == 'line') return lineIsDone
       if (type == 'pie') return pieIsDone
+      if (type == 'scatter') return scatterIsDone
     }
   ),
 
@@ -209,6 +221,19 @@ export const store = createStore({
       indexBy,
       keys,
     ) => Boolean(indexBy && keys.length)
+  ),
+
+  scatterIsDone: computed(
+    [
+      (state) => state.scatter.x,
+      (state) => state.scatter.y,
+      (state) => state.scatter.indexBy,
+    ],
+    (
+      x,
+      y,
+      indexBy,
+    ) => Boolean(x && y.length && indexBy)
   ),
 
   resetCurrent: thunk((actions, payload, { getState }) => {

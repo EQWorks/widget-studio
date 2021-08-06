@@ -10,11 +10,13 @@ import Icons from './components/icons'
 import BarControls from './components/charts/bar-controls'
 import PieControls from './components/charts/pie-controls'
 import LineControls from './components/charts/line-controls'
+import ScatterControls from './components/charts/scatter-controls'
 
 const controls = {
   bar: BarControls,
   line: LineControls,
   pie: PieControls,
+  scatter: ScatterControls,
 }
 
 const useStyles = makeStyles(() => ({

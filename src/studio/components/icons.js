@@ -17,7 +17,7 @@ const mapIcons = [
   { type: 'map', Component: MapIcon, disabled: true, cat: ['Geometry'], minAxis: 2 },
   { type: 'pie', Component: PieChartIcon, disabled: false, cat: ['Numeric', 'String'], minAxis: 2 },
   { type: 'bar', Component: InsertChartIcon, disabled: false, cat: ['Numeric', 'String', 'Date'], minAxis: 2 },
-  { type: 'scatter', Component: ScatterPlotIcon, disabled: true, cat: ['Num', 'String', 'Date'], minAxis: 2 },
+  { type: 'scatter', Component: ScatterPlotIcon, disabled: false, cat: ['Num', 'String', 'Date'], minAxis: 2 },
   { type: 'line', Component: TimelineIcon, disabled: false, cat: ['Date', 'Numeric', 'String'], minAxis: 2 },
 ]
 const Icons = () => {
