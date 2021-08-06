@@ -103,12 +103,10 @@ const LineControls = ({ columns }) => {
 }
 
 LineControls.propTypes = {
-  rows: PropTypes.array,
   columns: PropTypes.array,
 }
 LineControls.default = {
   columns: [],
-  rows: [],
 }
 
 export default LineControls

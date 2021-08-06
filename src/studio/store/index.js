@@ -34,6 +34,10 @@ const widgetDefaults = {
     keys: [],
     x: null,
     y: [],
+  },
+  pie: {
+    indexBy: null,
+    keys: [],
   }
 }
 
@@ -86,8 +90,9 @@ export const store = createStore({
     update: action((state, payload) => ({ ...state, ...payload })),
   },
   pie: {
-    isDonut: false,
-    multi: {},
+    // donut: false,
+    // multi: {},
+    ...widgetDefaults.pie,
     update: action((state, payload) => ({ ...state, ...payload })),
     capData: thunk((actions, payload, { dispatch, getStoreState }) => {
       const data = getStoreState()
@@ -197,11 +202,13 @@ export const store = createStore({
 
   pieIsDone: computed(
     [
-      (state) => state.initState.yAxis,
+      (state) => state.pie.indexBy,
+      (state) => state.pie.keys,
     ],
     (
-      yAxis,
-    ) => Boolean(yAxis.length)
+      indexBy,
+      keys,
+    ) => Boolean(indexBy && keys.length)
   ),
 
   resetCurrent: thunk((actions, payload, { getState }) => {
