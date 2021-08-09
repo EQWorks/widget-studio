@@ -147,6 +147,16 @@ export const store = createStore({
     })
   ),
 
+  hasData: computed(
+    [
+      (state) => state.controllers.dataSource,
+      (state) => state.controllers.dataID,
+    ],
+    (dataSource, dataID) => {
+      return (Boolean(dataSource && dataID))
+    }
+  ),
+
   /** checks if all initial states have been filled */
   isDone: computed(
     [

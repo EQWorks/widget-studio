@@ -3,11 +3,16 @@ import { storiesOf } from '@storybook/react'
 
 import { AuthWidgetStudioWithWlCu } from './widget-studio.stories'
 import { Widget } from '../src'
-import dummyData from './dummy-data'
+import { sampleData } from './sample-data'
 
 storiesOf('Widget', module)
+  .add('Dynamic data source', () => (
+    <AuthWidgetStudioWithWlCu >
+      <Widget />
+    </AuthWidgetStudioWithWlCu>
+  ))
   .add('Preloaded data source 1', () => (
-    <AuthWidgetStudioWithWlCu preloadData={dummyData}>
+    <AuthWidgetStudioWithWlCu preloadData={sampleData}>
       <Widget />
     </AuthWidgetStudioWithWlCu>
   ))

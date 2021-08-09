@@ -3,13 +3,13 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { ThemeProvider, Typography } from '@eqworks/lumen-ui'
+import { ThemeProvider, Typography, Chip } from '@eqworks/lumen-ui'
 import { createMemoryHistory } from 'history'
 import { InitStorage, AuthActions, LoginContextProvider, Login, useAuthContext } from '@eqworks/common-login'
 
 import WlCuSelector from './util/wl-cu-selector'
 import { QueryExecutionSelector } from './util/query-execution-selector'
-import { WidgetStudio  }from '../src'
+import { WidgetStudio } from '../src'
 
 export default {
   title: 'LOCUS WIDGET STUDIO',
@@ -18,7 +18,7 @@ export default {
 
 export const AuthWidgetStudioWithWlCu = props => (
   <LoginContextProvider>
-    <WidgetStudioWithWlCu {...props}/>
+    <WidgetStudioWithWlCu {...props} />
   </LoginContextProvider>
 )
 
@@ -42,32 +42,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    // height:'20vh'
-  },
-  storyControlsOverlay: {
-    position: 'absolute',
-    backgroundColor: '#bdbdbd',
-    opacity: '0.8',
-    width: '100%',
-    height: '100%',
-    zIndex: 2
+    padding: '1rem'
   },
   resultsLoadingNotice: {
     display: 'flex',
   },
-  wlCuLoadingText: {
-    display: 'flex',
-    alignItems: 'center',
-    zIndex: 3
-  },
-  wlCuLoadingNotice: {
-    position: 'absolute',
-    display: 'flex',
-    height: '20vh',
-    width: '100%',
-    justifyContent: 'center',
-    alignSelf: 'start'
-  }
 }))
 
 const WidgetStudioWithWlCu = props => {
@@ -76,6 +55,7 @@ const WidgetStudioWithWlCu = props => {
   const wlState = useState()
   const cuState = useState()
   const wlCuLoadingState = useState(true)
+  const dataSourcesLoadingState = useState(true)
   const resultsState = useState(
     props.preloadData ?
       props.preloadData
@@ -88,6 +68,7 @@ const WidgetStudioWithWlCu = props => {
       }
   )
   const [wlCuLoading, setWlCuLoading] = wlCuLoadingState
+  const [dataSourcesLoading, setdataSourcesLoading] = dataSourcesLoadingState
   const [results, setResults] = resultsState
 
   const { authState: { authenticated }, dispatch } = useAuthContext()
@@ -134,17 +115,14 @@ const WidgetStudioWithWlCu = props => {
         {
           !props.preloadData &&
           <>
-            {
-              wlCuLoading &&
-              <div className={classes.wlCuLoadingNotice}>
-                <Typography variant='subtitle1' className={classes.wlCuLoadingText}>
-                  Loading...
-                </Typography>
-                <div className={classes.storyControlsOverlay} />
-              </div>
-            }
-            <WlCuSelector {...{ wlState, cuState, wlCuLoadingState }} />
-            <QueryExecutionSelector {...{ wlState, cuState, resultsState }} />
+            <Chip color='warning' label={wlCuLoading || dataSourcesLoading ? 'loading...' : 'dev stage'} style={{ margin: '16px 0 0 0' }} />
+            <WlCuSelector
+              {...{ wlState, cuState, wlCuLoadingState }}
+            />
+            <QueryExecutionSelector
+              disabled={wlCuLoading || dataSourcesLoading}
+              {...{ wlState, cuState, dataSourcesLoadingState, resultsState }}
+            />
             {
               results.loading ?
                 <Typography variant='subtitle2'>
@@ -153,9 +131,10 @@ const WidgetStudioWithWlCu = props => {
                 :
                 <Typography variant='subtitle2'>
                   {
-                    results.rows.length > 0 ?
+                    !wlCuLoading && results.dataID &&
+                    (results.rows.length > 0 ?
                       `Results loaded with ${results.columns.length} columns and ${results.rows.length} rows.`
-                      : 'No results found for this datasource.'
+                      : 'No results found for this datasource.')
                   }
                 </Typography>
             }

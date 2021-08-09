@@ -79,11 +79,12 @@ const useExecutions = () => {
   return [isLoading, data]
 }
 
-const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [results, setResults] }) => {
+const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadingState, disabled, resultsState: [results, setResults] }) => {
   const classes = useStyles()
 
-  const [, savedQueryList] = useSavedQueries()
-  const [, executionsList] = useExecutions()
+  const [dataSourcesLoading, setdataSourcesLoading] = dataSourcesLoadingState
+  const [queriesLoading, savedQueryList] = useSavedQueries()
+  const [executionsLoading, executionsList] = useExecutions()
 
   // TODO make sure wl is checked as well
   const getFilteredQueries = () => savedQueryList.filter((query) => query.customerID == cu)
@@ -96,6 +97,10 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [r
   const EXECUTIONS = 'Executions'
 
   const [selectedDataSource, setSelectedDataSource] = useState(SAVED_QUERIES)
+
+  useEffect(() => {
+    setdataSourcesLoading(queriesLoading || executionsLoading)
+  }, [executionsLoading, queriesLoading, setdataSourcesLoading])
 
   const requestQueryResults = async (id) => {
     const query = await api.get(`/ql/queries/${id}`)
@@ -177,25 +182,31 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [r
       rows: data.results,
       loading: false,
       dataSource: selectedDataSource,
-      dataID: id 
+      dataID: id
     })
   }
 
   return (
     <div className={classes.container}>
-      <RadioGroup className={classes.radioGroup} value={selectedDataSource} onChange={event => setSelectedDataSource(event.target.value)}>
+      <RadioGroup
+        {...{ disabled }}
+        className={classes.radioGroup}
+        value={selectedDataSource}
+        onChange={event => setSelectedDataSource(event.target.value)}
+      >
         {Object.entries(dataSelectors)
           .map(([label, selector], index) => {
             return (
               <div key={index} className={classes.selectors}>
                 <FormControlLabel
+                  {...{ disabled }}
                   value={label}
                   control={<Radio />}
                   label={`${label} (${selector.arr.length})`}
                 />
-                <FormControl className={classes.form}>
+                <FormControl disabled={selectedDataSource != label} className={classes.form}>
                   <Select
-                    disabled={selectedDataSource != label}
+                    {...{ disabled }}
                     onChange={(event) => {
                       updateData(event.target.value)
                       selector.valState[1](event.target.value)
@@ -220,6 +231,8 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], resultsState: [r
 QueryExecutionSelector.propTypes = {
   wlState: PropTypes.array.isRequired,
   cuState: PropTypes.array.isRequired,
+  dataSourcesLoadingState: PropTypes.array.isRequired,
+  disabled: PropTypes.bool.isRequired,
   resultsState: PropTypes.array.isRequired,
 }
 

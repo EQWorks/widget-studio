@@ -6,7 +6,6 @@ import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import InputLabel from '@material-ui/core/InputLabel'
-import { Chip } from '@eqworks/lumen-ui'
 
 import { useQuery } from 'react-query'
 import axios from 'axios'
@@ -125,9 +124,8 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
 
   return (
     <div className={classes.container}>
-      <Chip color='warning' label='dev stage' style={{ margin: '16px 0 0 0' }} />
       <div className={classes.formContainer}>
-        <FormControl className={classes.form}>
+        <FormControl disabled={wlCuLoading} className={classes.form}>
           <InputLabel id='Whitelabel'>Whitelabel</InputLabel>
           <Select
             value={`${wlList.length && wl ? wl : 0}`}
@@ -146,7 +144,7 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
               ))}
           </Select>
         </FormControl>
-        <FormControl className={classes.form}>
+        <FormControl disabled={wlCuLoading} className={classes.form}>
           <InputLabel id='Customer'>Customer</InputLabel>
           <Select
             value={`${cuList.length && cu ? cu : 0}`}

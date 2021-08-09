@@ -5,12 +5,14 @@ import { Loader } from '@eqworks/lumen-ui'
 
 import { WidgetAdapter } from '@eqworks/chart-system'
 
-const Widget = ({ id, config }) => {
+import { sampleConfigs } from '../../stories/sample-data'
+const Widget = ({ id, config: passedConfig }) => {
 
-  if (id) {
-    // fetch config from id
-    throw new Error('not implemented')
+  // TODO implement fetching config from db
+  if (id && !sampleConfigs[id]) {
+    throw new Error("not implemented")
   }
+  const config = id && sampleConfigs[id] ? sampleConfigs[id] : passedConfig
 
   const [rows, setRows] = useState([])
   const [columns, setColumns] = useState([])

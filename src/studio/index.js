@@ -38,6 +38,7 @@ const WidgetStudio = ({ children, columns, rows, loading: resultsLoading, dataSo
   const isDone = useStoreState((state) => state.isDone)
   const type = useStoreState((state) => state.initState.type)
   const config = useStoreState((state) => state.config)
+
   const [showControls, setShowControls] = useState(true)
   const [showTable, setShowTable] = useState(false)
 
@@ -55,13 +56,11 @@ const WidgetStudio = ({ children, columns, rows, loading: resultsLoading, dataSo
     dispatch({ type: 'CONTROLLER', payload: { dataSource, dataID } })
   }, [dataSource, dataID, dispatch])
 
-  if (rows.length === 0 && !resultsLoading) {
-    return (
-      <div className={classes.warning}>
-        <Typography secondary={600} variant='subtitle1'> No results </Typography>
-      </div>
-    )
-  }
+  // useEffect(() => {
+  //   console.log("**************************");
+  //   console.dir(config)
+  // }, [config]);
+
   return (
     <div className={classes.content}>
       {
@@ -85,7 +84,17 @@ const WidgetStudio = ({ children, columns, rows, loading: resultsLoading, dataSo
                       :
                       <div className={classes.warning}>
                         <Typography color="textSecondary" variant='h6'>
-                          {type ? 'Select data and options.' : 'Select a widget type.'}
+                          {
+                            !dataSource || !dataID ? 'No data'
+                              :
+                              resultsLoading ? 'Loading data...'
+                                :
+                                !rows.length ? 'Data is empty.'
+                                  :
+                                  type ? 'Select data and options.'
+                                    : 'Select a widget type.'
+
+                          }
                         </Typography>
                       </div>
                   }
