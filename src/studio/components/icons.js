@@ -9,7 +9,7 @@ import InsertChartIcon from '@material-ui/icons/InsertChart'
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 import Grid from '@material-ui/core/Grid'
 import Badge from '@material-ui/core/Badge'
-import { useStoreDispatch, useStoreState } from 'easy-peasy'
+import { useStoreActions, useStoreState } from 'easy-peasy'
 
 
 const mapIcons = [
@@ -20,8 +20,8 @@ const mapIcons = [
   { type: 'line', Component: TimelineIcon, disabled: false, cat: ['Date', 'Numeric', 'String'], minAxis: 2 },
 ]
 const Icons = () => {
-  const dispatch = useStoreDispatch()
-  const current = useStoreState((state) => state.initState.type)
+  const updateStore = useStoreActions((actions) => actions.update)
+  const current = useStoreState((state) => state.type)
   const hasData = useStoreState((state) => state.hasData)
 
   const genClicableIcon = () => mapIcons.map(({ Component, type, disabled }, i) => {
@@ -29,11 +29,9 @@ const Icons = () => {
     // const isUsable = categories.length > 1 && cat.some((c) => categories.includes(c))
 
     return (
-      // <IconButton key={i} onClick={() => dispatch({ type: 'WIDGETS', payload: { type } })} disabled={!isUsable}>
-      <IconButton key={i} onClick={() => dispatch({ type: 'WIDGETS', payload: { type } })} disabled={!hasData || disabled}>
+      <IconButton key={i} onClick={() => updateStore({ type })} disabled={!hasData || disabled}>
         <Badge variant='dot' invisible={!current || type !== current} color='error'>
           <Component fontSize='large' color={!hasData || disabled ? 'disabled' : 'primary'} />
-          {/* <Component fontSize='large' color={isUsable ? 'primary' : 'disabled'}/> */}
         </Badge>
       </IconButton>
     )

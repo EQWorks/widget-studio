@@ -12,20 +12,22 @@ import axios from 'axios'
 
 import { useSavedQueries } from './query-execution-selector'
 
-const DEFAULT_WL = 4
-const DEFAULT_CU = 10340 
+// const DEFAULT_WL = 4
+// const DEFAULT_CU = 10340 
+const DEFAULT_WL = 1532
+const DEFAULT_CU = 20524
 
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: '10px',
     backgroundColor: '#bdbdbd',
     textAlign: 'center',
-    display:'flex',
+    display: 'flex',
     flexDirection: 'row',
   },
   formContainer: {
-    display:'flex',
-    flexDirection:'column'
+    display: 'flex',
+    flexDirection: 'column'
   },
   form: {
     margin: theme.spacing(0, 2),
@@ -89,21 +91,14 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
   const [cuListIsLoading, cuList = []] = useCustomers(wl)
 
   setWlCuLoading(wlListIsLoading || cuListIsLoading)
-
-  const onChange = (ref) => ({ target: value }) => {
-    const v = parseInt(value.value) || null
-    ref === 'wl'
-      ? (setWl(v), setCu(null))
-      : setCu(v)
-  }
+  useEffect(() => {
+    setWl(DEFAULT_WL)
+    setCu(DEFAULT_CU)
+  }, [setCu, setWl])
 
   useEffect(() => {
-    if (!wlListIsLoading && !cuListIsLoading) {
-      setWlCuLoading(false)
-      setWl(DEFAULT_WL)
-      setCu(DEFAULT_CU)
-    }
-  }, [cuListIsLoading, setCu, setWl, setWlCuLoading, wlListIsLoading]);
+    setWlCuLoading(wlListIsLoading || cuListIsLoading)
+  }, [cuListIsLoading, setWlCuLoading, wlListIsLoading])
 
   const getFilteredWhiteLabels = () => {
     return wlList
@@ -119,20 +114,23 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
     }
   }
 
+
   var filteredWhiteLabels = useMemo(getFilteredWhiteLabels, [wlList, savedQueryList])
   var filteredCustomers = useMemo(getFilteredCustomers, [cuList, savedQueryList])
 
   return (
     <div className={classes.container}>
       <div className={classes.formContainer}>
-        <FormControl disabled={wlCuLoading} className={classes.form}>
+        <FormControl disabled={wlListIsLoading || !wlList.length} className={classes.form}>
           <InputLabel id='Whitelabel'>Whitelabel</InputLabel>
           <Select
-            value={`${wlList.length && wl ? wl : 0}`}
-            onChange={onChange('wl')}
+            value={`${wl}`}
+            onChange={(event) => {
+              setWl(event.target.value)
+              setCu(null)
+            }}
             MenuProps={{ elevation: 1 }}
           >
-            <MenuItem value={'0'}>All</MenuItem>
             {filteredWhiteLabels
               .map(({ whitelabelid, company }) => (
                 <MenuItem
@@ -144,14 +142,13 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
               ))}
           </Select>
         </FormControl>
-        <FormControl disabled={wlCuLoading} className={classes.form}>
+        <FormControl disabled={cuListIsLoading || wlCuLoading || !wlList.length} className={classes.form}>
           <InputLabel id='Customer'>Customer</InputLabel>
           <Select
-            value={`${cuList.length && cu ? cu : 0}`}
-            onChange={onChange('cu')}
+            value={`${cu}`}
+            onChange={(event) => setCu(event.target.value)}
             MenuProps={{ elevation: 1 }}
           >
-            <MenuItem value={'0'}>All</MenuItem>
             {filteredCustomers
               .map(({ agencyid, companyname }) => (
                 <MenuItem

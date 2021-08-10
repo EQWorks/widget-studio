@@ -1,10 +1,10 @@
-export default (theme) => ({
+export default {
   warning: {
     textAlign: 'center',
-    height:'100%',
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center'
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   content: {
     display: 'flex',
@@ -44,4 +44,4 @@ export default (theme) => ({
   widgetSelectorContainer: {
     height: '100%',
   },
-})
+}

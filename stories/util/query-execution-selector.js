@@ -204,15 +204,15 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadi
                   control={<Radio />}
                   label={`${label} (${selector.arr.length})`}
                 />
-                <FormControl disabled={selectedDataSource != label} className={classes.form}>
+                <FormControl className={classes.form}>
                   <Select
-                    {...{ disabled }}
+                    disabled={disabled || selectedDataSource != label}
                     onChange={(event) => {
                       updateData(event.target.value)
                       selector.valState[1](event.target.value)
                     }
                     }
-                    value={`${selector.valState[0] && selector.arr.length ? selector.valState[0] : 0}`}
+                    value={selector.valState[0] && selector.arr.length ? selector.valState[0] : 0}
                     MenuProps={{ elevation: 1 }}
                   >
                     <MenuItem value={'0'}></MenuItem>

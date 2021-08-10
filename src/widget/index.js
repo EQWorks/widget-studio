@@ -1,30 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { updateData } from './fetch'
+import { requestData, requestConfig } from '../util/fetch'
 import { Loader } from '@eqworks/lumen-ui'
-
 import { WidgetAdapter } from '@eqworks/chart-system'
 
-import { sampleConfigs } from '../../stories/sample-data'
-const Widget = ({ id, config: passedConfig }) => {
+const Widget = ({ id, studioConfig, studioData }) => {
 
-  // TODO implement fetching config from db
-  if (id && !sampleConfigs[id]) {
-    throw new Error("not implemented")
-  }
-  const config = id && sampleConfigs[id] ? sampleConfigs[id] : passedConfig
+  const [config, setConfig] = useState({ dataSource: null, dataID: null })
+
+  useEffect(() => {
+    if (studioConfig) {
+      setConfig(studioConfig)
+    } else if (id) {
+      requestConfig(id).then(obj => setConfig(obj))
+    } else {
+      throw new Error('Widget components must be wrapped in a WidgetStudio component and/or receive an \'id\' prop.')
+    }
+  }, [id, studioConfig])
 
   const [rows, setRows] = useState([])
   const [columns, setColumns] = useState([])
 
-  // fetch rows/columns on data source change
+  // handle data source change
   useEffect(() => {
-    updateData(config.dataSource, config.dataID)
-      .then(({ rows, columns }) => {
-        setRows(rows)
-        setColumns(columns)
-      })
-  }, [config.dataSource, config.dataID])
+    if (studioData) {
+      setRows(studioData.rows)
+      setColumns(studioData.columns)
+    } else {
+      requestData(config.dataSource, config.dataID)
+        .then(({ rows, columns }) => {
+          setRows(rows)
+          setColumns(columns)
+        })
+    }
+  }, [config.dataSource, config.dataID, studioData])
 
   return (
     columns && rows && columns.length && rows.length ?
@@ -37,8 +46,9 @@ const Widget = ({ id, config: passedConfig }) => {
 }
 
 Widget.propTypes = {
-  config: PropTypes.object,
-  id: PropTypes.number
+  studioConfig: PropTypes.object,
+  studioData: PropTypes.object,
+  id: PropTypes.string,
 }
 
 export default Widget

@@ -28,9 +28,9 @@ const PieControls = ({ columns }) => {
   const donut = useStoreState((state) => state.pie.donut)
   const setPieState = useStoreActions(actions => actions.pie.update)
 
-  // const data = useStoreState((state) => state.controllers.data)
-  // const groupedData = useStoreState((state) => state.controllers.groupedData)
-  // const groupingOptions = useStoreState((state) => state.controllers.groupingOptions)
+  // const data = useStoreState((state) => state.data)
+  // const groupedData = useStoreState((state) => state.groupedData)
+  // const groupingOptions = useStoreState((state) => state.groupingOptions)
   // const multi = useStoreState((state) => state.pie.multi)
   // const capData = useStoreActions(actions => actions.pie.capData)
 

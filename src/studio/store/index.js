@@ -1,25 +1,9 @@
 import { createStore } from 'easy-peasy'
-import { reducer, computed, action, thunk, thunkOn } from 'easy-peasy'
+import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
 import { _action } from './store-util'
 
 const widgetTypes = ['bar', 'line', 'pie']
-
-const initState = () => ({
-  type: '',
-  xAxis: '',
-  yAxis: [],
-  isOpen: true,
-})
-const controllers = () => ({
-  dataSource: null,
-  dataID: null,
-  data: null, // the final plotly data prop format
-  groupedData: null, // data agg stage but not ready to be passed to plotly
-  groupingOptions: [], // based on xAxis
-  chosenKey: [], // this value is reset when x||yaxis changes
-  ready: true, // when data parsing is done
-})
 
 const widgetDefaults = {
   bar: {
@@ -46,41 +30,30 @@ const widgetDefaults = {
   }
 }
 
+const stateDefaults = {
+  type: '',
+  xAxis: '',
+  yAxis: [],
+  isOpen: true,
+  dataSource: null,
+  dataID: null,
+  data: null, // the final plotly data prop format
+  groupedData: null, // data agg stage but not ready to be passed to plotly
+  groupingOptions: [], // based on xAxis
+  chosenKey: [], // this value is reset when x||yaxis changes
+  ready: true, // when data parsing is done
+}
+
 export const store = createStore({
   mode: { edit: true, read: false, isEditing: -1 },
   alert: { status: false, message: 'Error' },
 
+  rows: [],
+  columns: [],
+
   setAlert: _action('alert'),
 
-  /** this is just for the initial selections */
-  initState: reducer((prevState = initState(), { payload, type }) => {
-    if (type === 'WIDGETS') {
-      return { ...prevState, ...payload }
-    }
-    return prevState
-  }),
-
-  /** common states of each chart type */
-  controllers: reducer((prevState = controllers(), { payload, type }) => {
-    if (type === 'CONTROLLER') {
-      return { ...prevState, ...payload }
-    }
-    return prevState
-  }),
-
-  /**
-   * just a regular dispatch to remove complexity from the components
-   * has to be a curried function to work with the <Select/>
-   * but also as a regular dispatch
-  */
-  handleDispatch: thunk((actions, payload, { dispatch }) => (value = null) => {
-    const { type = 'CONTROLLER', key } = payload
-    if (value) {
-      dispatch({ type, payload: { [key]: value } })
-      return
-    }
-    dispatch({ type, payload })
-  }),
+  ...stateDefaults,
 
   /** unique state of each chart type (maybe they can be grouped if not adding more) */
 
@@ -118,39 +91,42 @@ export const store = createStore({
     update: action((state, payload) => ({ ...state, ...payload })),
   },
 
+  readConfig: action((state, payload) => {
+
+    const { options, ...genConfig } = payload
+    const widgetType = genConfig.type
+    return {
+      ...state,
+      ...genConfig,
+      [widgetType]: options
+    }
+  }
+  ),
+
   config: computed(
     [
-      (state) => state.initState.xAxis,
-      (state) => state.initState.yAxis,
-      (state) => state.initState.type,
-      (state) => state.controllers.dataSource,
-      (state) => state.controllers.dataID,
-      (state) => state.controllers.chosenKey,
-      (state) => state[state.initState.type],
+      (state) => state.type,
+      (state) => state.dataSource,
+      (state) => state.dataID,
+      (state) => state[state.type],
     ],
     (
-      xAxis,
-      yAxis,
       type,
       dataSource,
       dataID,
-      chosenKey,
       options,
     ) => ({
-      xAxis,
-      yAxis,
       type,
       dataSource,
       dataID,
-      chosenKey,
       options,
     })
   ),
 
   hasData: computed(
     [
-      (state) => state.controllers.dataSource,
-      (state) => state.controllers.dataID,
+      (state) => state.dataSource,
+      (state) => state.dataID,
     ],
     (dataSource, dataID) => {
       return (Boolean(dataSource && dataID))
@@ -160,13 +136,17 @@ export const store = createStore({
   /** checks if all initial states have been filled */
   isDone: computed(
     [
-      (state) => state.initState.type,
+      (state) => state.rows,
+      (state) => state.columns,
+      (state) => state.type,
       (state) => state.barIsDone,
       (state) => state.lineIsDone,
       (state) => state.pieIsDone,
       (state) => state.scatterIsDone,
     ],
     (
+      rows,
+      columns,
       type,
       barIsDone,
       lineIsDone,
@@ -174,7 +154,7 @@ export const store = createStore({
       scatterIsDone,
     ) => {
       // TODO there has to be a more elegant way of doing this
-      if (!type) return false
+      if (!type || !columns.length || !rows.length) return false
       if (type == 'bar') return barIsDone
       if (type == 'line') return lineIsDone
       if (type == 'pie') return pieIsDone
@@ -185,16 +165,18 @@ export const store = createStore({
   barIsDone: computed(
     [
       (state) => state.bar.keys,
+      (state) => state.bar.indexBy,
       (state) => state.bar.group,
       (state) => state.bar.groupBy,
     ],
     (
       keys,
+      indexBy,
       group,
       groupBy
     ) => {
       if (!group) {
-        return Boolean(keys.length)
+        return Boolean(keys.length && indexBy)
       }
       return Boolean(keys.length && groupBy)
     }
@@ -243,18 +225,25 @@ export const store = createStore({
       x,
       y,
       indexBy,
-    ) => Boolean(x && y.length && indexBy)
+    ) => (Boolean(x && y.length && indexBy))
   ),
 
+  update: action((state, payload) => {
+    console.dir({ ...state, ...payload })
+    return { ...state, ...payload }
+  }),
+
   resetCurrent: thunk((actions, payload, { getState }) => {
-    const type = getState().initState.type
+    const type = getState().type
     actions[type].update(widgetDefaults[type])
   }),
 
   /** called when results change to reset all states */
   reset: thunk((actions, payload, { dispatch }) => {
-    dispatch({ type: 'WIDGETS', payload: initState() })
-    dispatch({ type: 'CONTROLLER', payload: controllers() })
+    // TODO implement
+    // dispatch({ type: 'WIDGETS', payload: initState() })
+    // dispatch({ type: 'CONTROLLER', payload: controllers() })
+    dispatch(stateDefaults)
     widgetTypes.forEach((type) => {
       actions[type].update(widgetDefaults[type])
     })
@@ -266,7 +255,8 @@ export const store = createStore({
     (actions, target) => { // handler
       const { xAxis, yAxis } = target.payload
       if (xAxis || yAxis) {
-        actions.handleDispatch({ chosenKey: [] })()
+        // obsolete:
+        // actions.handleDispatch({ chosenKey: [] })()
       }
     },
   )

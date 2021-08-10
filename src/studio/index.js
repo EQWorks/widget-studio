@@ -5,7 +5,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 import { StoreProvider } from 'easy-peasy'
 import { makeStyles } from '@material-ui/core/styles'
-import { useStoreState, useStoreActions, useStoreDispatch } from 'easy-peasy'
+import { useStoreState, useStoreActions } from 'easy-peasy'
 import { Typography } from '@eqworks/lumen-ui'
 import { Button } from '@eqworks/lumen-ui'
 
@@ -13,6 +13,7 @@ import WidgetControls from './widget-controls'
 import ResultsTable from './components/table'
 import styles from './styles'
 
+import { requestData, requestConfig } from '../util/fetch'
 import { store } from './store'
 
 // provide studio+widget with DnD and easy-peasy store
@@ -26,35 +27,53 @@ const withWrappers = studio => {
   )
 }
 
-// render child and pass the config object
-const WidgetWithConfig = ({ widget, config }) => cloneElement(widget, { config })
-
 // put styles in separate file for readability
-const useStyles = makeStyles((theme) => styles(theme))
+const useStyles = makeStyles(styles)
 
-const WidgetStudio = ({ children, columns, rows, loading: resultsLoading, dataSource, dataID }) => {
+const WidgetStudio = ({ dataSource, dataID, children }) => {
+
+  const widget = Children.only(children)
 
   const classes = useStyles()
+
+  const readConfig = useStoreActions(actions => actions.readConfig)
+  const updateStore = useStoreActions(actions => actions.update)
+  const widgetsReset = useStoreActions(actions => actions.reset)
+
   const isDone = useStoreState((state) => state.isDone)
-  const type = useStoreState((state) => state.initState.type)
   const config = useStoreState((state) => state.config)
+  const rows = useStoreState((state) => state.rows)
+  const columns = useStoreState((state) => state.columns)
 
   const [showControls, setShowControls] = useState(true)
   const [showTable, setShowTable] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  // for remaining easy-peasy store functionality
-  const dispatch = useStoreDispatch()
-  const widgetsReset = useStoreActions(actions => actions.reset)
-
-  // reset when data changes
-  useEffect(() => {
-    widgetsReset()
-  }, [columns, rows, widgetsReset])
+  const [configControlled, setConfigControlled] = useState(!widget.props.id)
 
   // send dataSource and dataID to config object on change
   useEffect(() => {
-    dispatch({ type: 'CONTROLLER', payload: { dataSource, dataID } })
-  }, [dataSource, dataID, dispatch])
+    widgetsReset()
+    updateStore({ dataSource, dataID })
+  }, [dataSource, dataID, updateStore, widgetsReset])
+
+  // fetch rows/columns on data source change
+  useEffect(() => {
+    setLoading(true)
+    requestData(config.dataSource, config.dataID)
+      .then(({ rows, columns }) => {
+        updateStore({ rows, columns })
+        setLoading(false)
+      })
+  }, [config.dataSource, config.dataID, updateStore])
+
+  // gain control of the config object if the widget has one
+  if (!configControlled) {
+    requestConfig(widget.props.id).then(obj => {
+      readConfig(obj)
+      setConfigControlled(true)
+    })
+  }
 
   // useEffect(() => {
   //   console.log("**************************");
@@ -77,21 +96,24 @@ const WidgetStudio = ({ children, columns, rows, loading: resultsLoading, dataSo
                 <div className={classes.chart}>
                   {
                     isDone ?
-                      <WidgetWithConfig
-                        widget={Children.only(children)}
-                        config={config}
-                      />
+                      cloneElement(
+                        widget,
+                        {
+                          studioConfig: config,
+                          studioData: { rows, columns }
+                        }
+                      )
                       :
                       <div className={classes.warning}>
                         <Typography color="textSecondary" variant='h6'>
                           {
-                            !dataSource || !dataID ? 'No data'
+                            !config.dataSource || !config.dataID ? 'No data'
                               :
-                              resultsLoading ? 'Loading data...'
+                              loading ? 'Loading data...'
                                 :
                                 !rows.length ? 'Data is empty.'
                                   :
-                                  type ? 'Select data and options.'
+                                  config.type ? 'Select data and options.'
                                     : 'Select a widget type.'
 
                           }

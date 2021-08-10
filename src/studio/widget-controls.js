@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
 
 const WidgetControls = ({ columns }) => {
   const classes = useStyles()
-  const type = useStoreState((state) => state.initState.type)
+  const type = useStoreState((state) => state.type)
 
   return (
     <div className={classes.controlContainer}>

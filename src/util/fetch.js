@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { sampleConfigs } from '../../stories/sample-data'
 
 const api = axios.create({
   baseURL: [
@@ -14,7 +15,7 @@ const EXECUTIONS = 'Executions'
 const requestQueryResults = async (id) => {
   const query = await api.get(`/ql/queries/${id}`)
   try {
-    return requestExecutionResults(query.data.executions[0].executionID)
+    return await requestExecutionResults(query.data.executions[0].executionID)
   }
   catch (err) {
     return {
@@ -24,7 +25,7 @@ const requestQueryResults = async (id) => {
   }
 }
 
-const requestExecutionResults = (id) => {
+const requestExecutionResults = async (id) => {
   return api.get(`/ql/executions/${id}`, { params: { results: 1 } })
     .then(res => {
       if (res.data.status == 'SUCCEEDED') {
@@ -37,7 +38,7 @@ const requestExecutionResults = (id) => {
     })
 }
 
-export const updateData = async (dataSource, dataID) => {
+export const requestData = async (dataSource, dataID) => {
   var data
   // setResult({ ...result, loading: true })
   if (dataSource == SAVED_QUERIES) {
@@ -52,3 +53,6 @@ export const updateData = async (dataSource, dataID) => {
   }
 }
 
+export const requestConfig = async (id) => {
+  return sampleConfigs[id]
+}
