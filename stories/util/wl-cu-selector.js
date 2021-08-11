@@ -19,9 +19,8 @@ const DEFAULT_CU = 20524
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: '10px',
-    backgroundColor: '#bdbdbd',
     textAlign: 'center',
+    margin: '1rem',
     display: 'flex',
     flexDirection: 'row',
   },
@@ -121,7 +120,7 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
   return (
     <div className={classes.container}>
       <div className={classes.formContainer}>
-        <FormControl disabled={wlListIsLoading || !wlList.length} className={classes.form}>
+        <FormControl disabled={wlListIsLoading || !filteredWhiteLabels.length} className={classes.form}>
           <InputLabel id='Whitelabel'>Whitelabel</InputLabel>
           <Select
             value={`${wl}`}
@@ -142,7 +141,7 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
               ))}
           </Select>
         </FormControl>
-        <FormControl disabled={cuListIsLoading || wlCuLoading || !wlList.length} className={classes.form}>
+        <FormControl disabled={wlListIsLoading || cuListIsLoading || !filteredWhiteLabels.length} className={classes.form}>
           <InputLabel id='Customer'>Customer</InputLabel>
           <Select
             value={`${cu}`}

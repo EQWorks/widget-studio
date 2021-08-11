@@ -9,8 +9,8 @@ const api = axios.create({
   headers: { 'eq-api-jwt': window.localStorage.getItem('auth_jwt') },
 })
 
-const SAVED_QUERIES = 'Saved queries'
-const EXECUTIONS = 'Executions'
+export const SAVED_QUERIES = 'Saved query'
+export const EXECUTIONS = 'Execution'
 
 const requestQueryResults = async (id) => {
   const query = await api.get(`/ql/queries/${id}`)

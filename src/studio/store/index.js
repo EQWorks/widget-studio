@@ -3,8 +3,6 @@ import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
 import { _action } from './store-util'
 
-const widgetTypes = ['bar', 'line', 'pie']
-
 const widgetDefaults = {
   bar: {
     group: false,
@@ -228,10 +226,7 @@ export const store = createStore({
     ) => (Boolean(x && y.length && indexBy))
   ),
 
-  update: action((state, payload) => {
-    console.dir({ ...state, ...payload })
-    return { ...state, ...payload }
-  }),
+  update: action((state, payload) => ({ ...state, ...payload })),
 
   resetCurrent: thunk((actions, payload, { getState }) => {
     const type = getState().type
@@ -239,13 +234,11 @@ export const store = createStore({
   }),
 
   /** called when results change to reset all states */
-  reset: thunk((actions, payload, { dispatch }) => {
-    // TODO implement
-    // dispatch({ type: 'WIDGETS', payload: initState() })
-    // dispatch({ type: 'CONTROLLER', payload: controllers() })
-    dispatch(stateDefaults)
-    widgetTypes.forEach((type) => {
-      actions[type].update(widgetDefaults[type])
+  reset: thunk((actions, payload, { getState }) => {
+    const { dataSource, dataID } = getState()
+    actions.update({ ...stateDefaults, dataSource, dataID })
+    Object.entries(widgetDefaults).forEach(([type, defaultValues]) => {
+      actions[type].update(defaultValues)
     })
   }),
 

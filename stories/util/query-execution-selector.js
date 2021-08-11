@@ -3,23 +3,22 @@ import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
-
+import { useStoreState, useStoreActions } from 'easy-peasy'
 import { useQuery } from 'react-query'
 import axios from 'axios'
 
+import { SAVED_QUERIES, EXECUTIONS } from '../../src/util/fetch'
+
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: '5px',
-    backgroundColor: '#bdbdbd',
     textAlign: 'center',
     display: 'flex',
-    marginLeft: '15px',
-    marginRight: '15px',
+    margin: '1rem'
   },
   form: {
     margin: theme.spacing(0, 2),
@@ -79,8 +78,12 @@ const useExecutions = () => {
   return [isLoading, data]
 }
 
-const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadingState, disabled, resultsState: [results, setResults] }) => {
+const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadingState, disabled }) => {
   const classes = useStyles()
+
+  const updateStore = useStoreActions((actions) => actions.update)
+  const dataSource = useStoreState((state) => state.dataSource)
+  const dataID = useStoreState((state) => state.dataID)
 
   const [dataSourcesLoading, setdataSourcesLoading] = dataSourcesLoadingState
   const [queriesLoading, savedQueryList] = useSavedQueries()
@@ -93,40 +96,14 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadi
   var filteredQueries = useMemo(getFilteredQueries, [savedQueryList, cu])
   var filteredExecutions = useMemo(getFilteredExecutions, [executionsList, cu])
 
-  const SAVED_QUERIES = 'Saved queries'
-  const EXECUTIONS = 'Executions'
-
-  const [selectedDataSource, setSelectedDataSource] = useState(SAVED_QUERIES)
+  const [selectedDataSource, setSelectedDataSource] = useState(dataSource)
+  useEffect(() => {
+    setSelectedDataSource(dataSource)
+  }, [dataSource])
 
   useEffect(() => {
     setdataSourcesLoading(queriesLoading || executionsLoading)
   }, [executionsLoading, queriesLoading, setdataSourcesLoading])
-
-  const requestQueryResults = async (id) => {
-    const query = await api.get(`/ql/queries/${id}`)
-    try {
-      return requestExecutionResults(query.data.executions[0].executionID)
-    }
-    catch (err) {
-      return {
-        columns: [],
-        results: []
-      }
-    }
-  }
-
-  const requestExecutionResults = (id) => {
-    return api.get(`/ql/executions/${id}`, { params: { results: 1 } })
-      .then(res => {
-        if (res.data.status == 'SUCCEEDED') {
-          return res.data
-        }
-        return {
-          columns: [],
-          results: []
-        }
-      })
-  }
 
   const dataSelectors = {
     [SAVED_QUERIES]: {
@@ -167,25 +144,6 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadi
     }
   }
 
-  const updateData = async (id) => {
-    var data
-
-    setResults({ ...results, loading: true })
-    if (selectedDataSource == SAVED_QUERIES) {
-      data = await requestQueryResults(id)
-    }
-    else if (selectedDataSource == EXECUTIONS) {
-      data = await requestExecutionResults(id)
-    }
-    setResults({
-      columns: data.columns,
-      rows: data.results,
-      loading: false,
-      dataSource: selectedDataSource,
-      dataID: id
-    })
-  }
-
   return (
     <div className={classes.container}>
       <RadioGroup
@@ -208,11 +166,20 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadi
                   <Select
                     disabled={disabled || selectedDataSource != label}
                     onChange={(event) => {
-                      updateData(event.target.value)
+                      updateStore({
+                        dataSource: `${selectedDataSource}`,
+                        dataID: event.target.value
+                      })
                       selector.valState[1](event.target.value)
                     }
                     }
-                    value={selector.valState[0] && selector.arr.length ? selector.valState[0] : 0}
+                    value={
+                      dataSource === label ?
+                        dataID
+                        :
+                        selector.valState[0]
+                      // selector.valState[0] && selector.arr.length ? selector.valState[0] : 0
+                    }
                     MenuProps={{ elevation: 1 }}
                   >
                     <MenuItem value={'0'}></MenuItem>

@@ -2,7 +2,7 @@ import React, { createElement, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { Typography } from '@eqworks/lumen-ui'
+import { Loader } from '@eqworks/lumen-ui'
 import { useStoreState } from 'easy-peasy'
 
 import Icons from './components/icons'
@@ -20,8 +20,25 @@ const controls = {
 }
 
 const useStyles = makeStyles(() => ({
+  container: {
+    flexDirection: 'column',
+    marginLeft: '1rem'
+  },
   controlContainer: {
-    flexDirection: 'column'
+    // flexDirection: 'column',
+    // marginLeft: '1rem'
+  },
+  get hiddenControlContainer() {
+    return {
+      ...this.controlContainer,
+      opacity: 0
+    }
+  },
+  loaderContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%'
   },
   controlHeader: {
     display: 'flex',
@@ -30,21 +47,29 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const WidgetControls = ({ columns }) => {
+const WidgetControls = ({ columns, dataLoading }) => {
   const classes = useStyles()
   const type = useStoreState((state) => state.type)
 
   return (
-    <div className={classes.controlContainer}>
-      <div className={classes.controlHeader}>
-        <Icons />
-      </div>
-      {type &&
-        createElement(
-          controls[type],
-          { columns }
-        )
+    <div className={classes.container}>
+      {
+        dataLoading &&
+        <div className={classes.loaderContainer}>
+          <Loader open />
+        </div>
       }
+      <div className={dataLoading ? classes.hiddenControlContainer : classes.controlContainer}>
+        <div className={classes.controlHeader}>
+          <Icons />
+        </div>
+        {type &&
+          createElement(
+            controls[type],
+            { columns }
+          )
+        }
+      </div>
     </div>
   )
 }

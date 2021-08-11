@@ -14,7 +14,7 @@ import { Chip } from '@eqworks/lumen-ui'
 
 const useStyles = makeStyles(() => ({
   form: {
-    width: '50%',
+    width: '100%',
     maxHeight: 200,
     overflowY: 'auto',
     overflowX: 'hidden'

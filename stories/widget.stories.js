@@ -1,36 +1,31 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import AuthWidgetStudioWithWlCu from './util/auth-widget-studio-with-data-select'
+import AuthWidgetStudio from './util/auth-widget-studio'
 import { Widget } from '../src'
 
 import styles from '../src/studio/styles'
 
 storiesOf('Widget without ID')
   .add('Blank widget with Studio + data select', () => (
-    <AuthWidgetStudioWithWlCu >
+    <AuthWidgetStudio>
       <Widget />
-    </AuthWidgetStudioWithWlCu>
+    </AuthWidgetStudio>
   ))
   .add('Blank standalone widget (not allowed)', () => (
     <Widget />
   ))
 
 storiesOf('Widget with ID in studio', module)
-  // .add('Preloaded data source 1', () => (
-  //   <AuthWidgetStudioWithWlCu preloadData={sampleData}>
-  //     <Widget />
-  //   </AuthWidgetStudioWithWlCu>
-  // ))
   .add('Bar widget with Studio', () => (
-    <AuthWidgetStudioWithWlCu >
+    <AuthWidgetStudio>
       <Widget id="bar-1" />
-    </AuthWidgetStudioWithWlCu >
+    </AuthWidgetStudio >
   ))
   .add('Pie widget with Studio', () => (
-    <AuthWidgetStudioWithWlCu >
+    <AuthWidgetStudio>
       <Widget id="pie-1" />
-    </AuthWidgetStudioWithWlCu >
+    </AuthWidgetStudio >
   ))
 
 storiesOf('Widget with ID')

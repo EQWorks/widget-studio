@@ -7,7 +7,12 @@ import { StoreProvider } from 'easy-peasy'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { Typography } from '@eqworks/lumen-ui'
-import { Button } from '@eqworks/lumen-ui'
+import TocIcon from '@material-ui/icons/Toc'
+import IconButton from '@material-ui/core/IconButton'
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
+import SettingsIcon from '@material-ui/icons/Settings'
+import BuildIcon from '@material-ui/icons/Build'
+import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 
 import WidgetControls from './widget-controls'
 import ResultsTable from './components/table'
@@ -15,6 +20,7 @@ import styles from './styles'
 
 import { requestData, requestConfig } from '../util/fetch'
 import { store } from './store'
+import DataController from './data-select'
 
 // provide studio+widget with DnD and easy-peasy store
 const withWrappers = studio => {
@@ -30,7 +36,8 @@ const withWrappers = studio => {
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const WidgetStudio = ({ dataSource, dataID, children }) => {
+// const WidgetStudio = ({ dataSource, dataID, children }) => {
+const WidgetStudio = ({ children }) => {
 
   const widget = Children.only(children)
 
@@ -38,42 +45,47 @@ const WidgetStudio = ({ dataSource, dataID, children }) => {
 
   const readConfig = useStoreActions(actions => actions.readConfig)
   const updateStore = useStoreActions(actions => actions.update)
-  const widgetsReset = useStoreActions(actions => actions.reset)
+  const reset = useStoreActions(actions => actions.reset)
 
+  const dataSource = useStoreState((state) => state.dataSource)
+  const dataID = useStoreState((state) => state.dataID)
   const isDone = useStoreState((state) => state.isDone)
   const config = useStoreState((state) => state.config)
   const rows = useStoreState((state) => state.rows)
   const columns = useStoreState((state) => state.columns)
 
-  const [showControls, setShowControls] = useState(true)
+  const [showWidgetControls, setShowWidgetControls] = useState(!!widget.props.id)
   const [showTable, setShowTable] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [showDataControls, setShowDataControls] = useState(false)
+  const [dataLoading, setDataLoading] = useState(false)
 
-  const [configControlled, setConfigControlled] = useState(!widget.props.id)
+  const [configControlled, setConfigControlled] = useState(false)
 
-  // send dataSource and dataID to config object on change
-  useEffect(() => {
-    widgetsReset()
-    updateStore({ dataSource, dataID })
-  }, [dataSource, dataID, updateStore, widgetsReset])
+  // gain control of the config object
+  if (!configControlled) {
+    if (widget.props.id) {
+      requestConfig(widget.props.id).then(obj => {
+        readConfig(obj)
+        setConfigControlled(true)
+      })
+    } else {
+      // nullify data source when appropriate
+      updateStore({ dataSource: null, dataID: null })
+      setConfigControlled(true)
+    }
+  }
 
   // fetch rows/columns on data source change
   useEffect(() => {
-    setLoading(true)
-    requestData(config.dataSource, config.dataID)
+    reset()
+    setDataLoading(true)
+    requestData(dataSource, dataID)
       .then(({ rows, columns }) => {
         updateStore({ rows, columns })
-        setLoading(false)
+        setDataLoading(false)
+        setShowWidgetControls(true)
       })
-  }, [config.dataSource, config.dataID, updateStore])
-
-  // gain control of the config object if the widget has one
-  if (!configControlled) {
-    requestConfig(widget.props.id).then(obj => {
-      readConfig(obj)
-      setConfigControlled(true)
-    })
-  }
+  }, [dataSource, dataID, updateStore, reset])
 
   // useEffect(() => {
   //   console.log("**************************");
@@ -82,84 +94,118 @@ const WidgetStudio = ({ dataSource, dataID, children }) => {
 
   return (
     <div className={classes.content}>
-      {
-        <>
-          <div className={classes.outerContainer}>
-            <div style={{ overflow: 'auto', display: showTable ? 'flex' : 'none' }}>
-              <div className={classes.table}>
-                <ResultsTable
-                  results={rows} />
-              </div>
-            </div>
-            <div style={{ display: showTable ? 'none' : 'block', height: '90%' }}>
-              <div className={classes.container}>
-                <div className={classes.chart}>
+      <div className={classes.outerContainer}>
+        <div className={classes.buttonsContainer}>
+          {
+            showDataControls || showTable ?
+              <IconButton
+                className={classes.tallButton}
+                onClick={() => {
+                  setShowTable(false)
+                  setShowDataControls(false)
+                }}
+                color='secondary'
+              >
+                <HighlightOffIcon />
+              </IconButton>
+              :
+              <>
+                <IconButton
+                  disabled={!config.dataSource || !config.dataID}
+                  onClick={() => setShowDataControls(!showDataControls)}
+                  color='secondary'
+                >
+                  <SettingsIcon />
+                </IconButton>
+                <IconButton
+                  disabled={dataLoading || !config.dataSource || !config.dataID}
+                  onClick={() => setShowTable(!showTable)}
+                  color='secondary'
+                >
+                  <TocIcon />
+                </IconButton>
+              </>
+          }
+        </div>
+        <div className={showDataControls ? classes.alternateView : classes.hiddenAlternateView}>
+          <DataController />
+        </div>
+        <div style={{ overflow: 'auto', display: showTable ? 'flex' : 'none' }}>
+          <div className={classes.table}>
+            <ResultsTable
+              results={rows} />
+          </div>
+        </div>
+        <div className={showDataControls || showTable ? classes.hiddenContainer : classes.container}>
+          <div className={classes.chart}>
+            {
+              !dataLoading && isDone ?
+                cloneElement(
+                  widget,
                   {
-                    isDone ?
-                      cloneElement(
-                        widget,
-                        {
-                          studioConfig: config,
-                          studioData: { rows, columns }
-                        }
-                      )
+                    studioConfig: config,
+                    studioData: { rows, columns }
+                  }
+                )
+                :
+                <div className={classes.warning}>
+                  {
+                    !config.dataSource || !config.dataID ?
+                      <DataController />
                       :
-                      <div className={classes.warning}>
-                        <Typography color="textSecondary" variant='h6'>
-                          {
-                            !config.dataSource || !config.dataID ? 'No data'
+                      <Typography color="textSecondary" variant='h6'>
+                        {
+                          dataLoading ? 'Loading data...'
+                            :
+                            !rows.length ? 'Sorry, this data is empty.'
                               :
-                              loading ? 'Loading data...'
-                                :
-                                !rows.length ? 'Data is empty.'
-                                  :
-                                  config.type ? 'Select data and options.'
-                                    : 'Select a widget type.'
+                              config.type ? 'Select columns and configure your widget.'
+                                : 'Select a widget type.'
 
-                          }
-                        </Typography>
-                      </div>
+                        }
+                      </Typography>
+                  }
+                  {
+                    config.dataSource && config.dataID &&
+                    <Typography color="textSecondary" variant='subtitle2'>
+                      {
+                        dataLoading ?
+                          `${config.dataSource} ${config.dataID}`
+                          :
+                          'Data loaded successfully'
+                      }
+                    </Typography>
                   }
                 </div>
-                <div className={classes.control}>
-                  <div style={{ display: showControls ? 'flex' : 'none' }}>
-                    <WidgetControls {...{ columns }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={classes.buttonsContainer}>
-            <Button
-              disabled={!isDone}
-              onClick={() => setShowTable(!showTable)}
-              type={showTable ? 'secondary' : 'primary'}
-            >
-              {showTable ? 'Widget' : 'Data'}
-            </Button>
-            {!showTable &&
-              <Button
-                disabled={!isDone}
-                onClick={() => setShowControls(!showControls)}
-                type={showControls ? 'secondary' : 'primary'}
-              >
-                {showControls ? 'Hide controls' : 'Show controls'}
-              </Button>
             }
           </div>
-        </>
-      }
+          <div className={classes.control}>
+            <div className={classes.controlTab}>
+              <IconButton
+                className={classes.tallButton}
+                onClick={() => setShowWidgetControls(!showWidgetControls)}
+                type={showWidgetControls ? 'secondary' : 'primary'}
+              >
+                {
+                  showWidgetControls ?
+                    <KeyboardArrowRightIcon />
+                    :
+                    <BuildIcon />
+                }
+              </IconButton>
+            </div>
+            <div style={{ display: showWidgetControls ? 'flex' : 'none' }}>
+              <WidgetControls {...{ columns, dataLoading }} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div >
   )
 }
 
 WidgetStudio.propTypes = {
   children: PropTypes.object,
-  rows: PropTypes.array,
-  columns: PropTypes.array,
-  loading: PropTypes.bool,
-  dataSource: PropTypes.string,
-  dataID: PropTypes.string,
 }
 
 export default (props) => {
