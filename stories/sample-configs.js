@@ -1,3 +1,31 @@
+/*
+bar: {
+  group: boolean,
+  groupBy: string,
+  indexBy: string,
+  stack: boolean,
+  keys: Array<string>,
+},
+
+line: {
+  indexByValue: boolean,
+  keys: Array<string>,
+  x: string,
+  y: Array<string>,
+},
+
+pie: {
+  indexBy: boolean,
+  keys: Array<string>,
+},
+
+scatter: {
+  indexBy: string,
+  x: string,
+  y: Array<string>,
+}
+*/
+
 export default {
   'pie-1': {
     'type': 'pie',

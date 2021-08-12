@@ -8,10 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import InputLabel from '@material-ui/core/InputLabel'
 import { useStoreState } from 'easy-peasy'
 
-import { useQuery } from 'react-query'
-import axios from 'axios'
-
-import { useSavedQueries } from '../../util/fetch'
+import { useWhiteLabels, useCustomers, useSavedQueries } from '../../util/fetch'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,49 +28,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row'
   },
 }))
-// if merged into ml-codebase, add api into actions.js
-const api = axios.create({
-  baseURL: [
-    process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
-    process.env.API_STAGE || process.env.STORYBOOK_API_STAGE,
-  ].filter(v => v).join('/'),
-  headers: { 'eq-api-jwt': window.localStorage.getItem('auth_jwt') },
-})
-
-// from snoke
-const useWhiteLabels = () => {
-  const _key = 'Get Whitelabels'
-  const { isError, error, isLoading, data = [] } = useQuery(
-    _key,
-    () => api.get('/whitelabel').then(({ data = [] }) => data),
-    { refetchOnWindowFocus: false }
-  )
-
-  useEffect(() => {
-    if (isError) {
-      console.error(`${_key}: ${error.message}`)
-    }
-  }, [isError, error])
-
-  return [isLoading, data]
-}
-// from snoke
-const useCustomers = (wlID) => {
-  const _key = 'Get Customers'
-  const { isError, error, isLoading, data = [] } = useQuery(
-    [_key, wlID],
-    () => api.get('/customer', { params: { wlID } }).then(({ data = [] }) => data),
-    { enabled: Boolean(wlID), refetchOnWindowFocus: false },
-  )
-
-  useEffect(() => {
-    if (isError) {
-      console.error(`${_key}: ${error.message}`)
-    }
-  }, [isError, error])
-
-  return [isLoading, data]
-}
 
 const WlCuSelector = ({ selectedWlState, selectedCuState, wlCuLoadingState }) => {
   const classes = useStyles()

@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
+import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'

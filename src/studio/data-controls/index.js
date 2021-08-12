@@ -6,6 +6,7 @@ import { Typography, Loader } from '@eqworks/lumen-ui'
 
 import WlCuSelector from './wl-cu-selector'
 import QueryExecutionSelector from './query-execution-selector'
+import styles from './styles'
 
 /* create react-query client & provide client to ml */
 const queryClientContext = (children) => {
@@ -17,39 +18,10 @@ const queryClientContext = (children) => {
     </QueryClientProvider>)
 }
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    padding: '2rem',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  title: {
-    padding: '1rem'
-  },
-  dataSelectorContainer: {
-    border: 'solid',
-    borderRadius: '1rem',
-    borderColor: '#d6d6d6'
-    // borderWidth: 'thin'
-  },
-  dataSelector: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: '1rem',
-    justifyContent: 'center'
-  },
-  get hiddenDataSelector() {
-    return {
-      ...this.dataSelector,
-      opacity: '0'
-    }
-  }
-}))
+// put styles in separate file for readability
+const useStyles = makeStyles(styles)
 
-const DataController = () => {
+const DataControls = () => {
   const classes = useStyles()
 
   const selectedWlState = useState()
@@ -90,4 +62,4 @@ const DataController = () => {
   )
 }
 
-export default DataController
+export default DataControls

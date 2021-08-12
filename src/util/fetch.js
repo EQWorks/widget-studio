@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import axios from 'axios'
 import sampleConfigs from '../../stories/sample-configs'
@@ -13,6 +13,42 @@ const api = axios.create({
 
 export const SAVED_QUERIES = 'Saved query'
 export const EXECUTIONS = 'Execution'
+
+// from snoke
+export const useWhiteLabels = () => {
+  const _key = 'Get Whitelabels'
+  const { isError, error, isLoading, data = [] } = useQuery(
+    _key,
+    () => api.get('/whitelabel').then(({ data = [] }) => data),
+    { refetchOnWindowFocus: false }
+  )
+
+  useEffect(() => {
+    if (isError) {
+      console.error(`${_key}: ${error.message}`)
+    }
+  }, [isError, error])
+
+  return [isLoading, data]
+}
+
+// from snoke
+export const useCustomers = (wlID) => {
+  const _key = 'Get Customers'
+  const { isError, error, isLoading, data = [] } = useQuery(
+    [_key, wlID],
+    () => api.get('/customer', { params: { wlID } }).then(({ data = [] }) => data),
+    { enabled: Boolean(wlID), refetchOnWindowFocus: false },
+  )
+
+  useEffect(() => {
+    if (isError) {
+      console.error(`${_key}: ${error.message}`)
+    }
+  }, [isError, error])
+
+  return [isLoading, data]
+}
 
 export const useSavedQueries = () => {
   const _key = 'Get Queries'

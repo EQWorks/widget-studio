@@ -7,7 +7,7 @@ export default {
     alignItems: 'center',
     justifyContent: 'center'
   },
-  content: {
+  outerContainer: {
     display: 'flex',
     marginTop: 10,
     border: 'solid',
@@ -19,48 +19,39 @@ export default {
     flexDirection: 'column',
     height: '60vh'
   },
-  container: {
+  mainContainer: {
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
     height: '100%',
   },
-  get hiddenContainer() {
-    return {
-      ...this.container,
-      display: 'none'
-    }
-  },
-  outerContainer: {
+  innerContainer: {
     height: '100%',
     display: 'flex'
   },
-  chart: {
+  widgetContainer: {
     flex: '1 1 0',
     minWidth: 0
   },
-  control: {
+  widgetControlsSidebar: {
     display: 'flex',
     borderRadius: '1rem',
     padding: '1rem',
     background: '#e6e6e6',
   },
-  controlTab: {
+  widgetControlsSidebarTab: {
     display: 'flex',
     alignItems: 'center',
     height: '100%',
     borderRadius: '1rem',
     background: '#d6d6d6',
   },
-  table: {
-    // backgroundColor: '#fff',
-  },
   tallButton: {
     height: '100%',
     width: '100%',
     borderRadius: '1rem'
   },
-  buttonsContainer: {
+  navigationSidebar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -73,17 +64,17 @@ export default {
       marginRight: '0.5rem'
     },
   },
-  widgetSelectorContainer: {
-    height: '100%',
-  },
-  alternateView: {
+  dataControlsAlt: {
     display: 'flex',
     height: '100%'
   },
-  get hiddenAlternateView() {
-    return {
-      ...this.alternateView,
-      display: 'none'
-    }
+  hidden: {
+    display: 'none',
+  },
+  flex: {
+    display: 'flex',
+  },
+  extras: {
+    overflow: 'auto'
   }
 }

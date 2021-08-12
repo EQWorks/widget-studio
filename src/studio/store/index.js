@@ -1,7 +1,4 @@
-import { createStore } from 'easy-peasy'
-import { computed, action, thunk, thunkOn } from 'easy-peasy'
-
-import { _action } from './store-util'
+import { computed, action, thunk } from 'easy-peasy'
 
 const widgetDefaults = {
   bar: {
@@ -29,82 +26,103 @@ const widgetDefaults = {
 }
 
 const stateDefaults = {
+  rows: [],
+  columns: [],
   type: '',
-  xAxis: '',
-  yAxis: [],
-  isOpen: true,
-  data: {
-    source: null,
-    id: null
-  },
-  groupedData: null, // data agg stage but not ready to be passed to plotly
-  groupingOptions: [], // based on xAxis
-  chosenKey: [], // this value is reset when x||yaxis changes
-  ready: true, // when data parsing is done
   wl: null,
   cu: null,
 }
+
 export const storeOptions = {
   disableImmer: true,
 }
 
 export const storeContent = {
-  mode: { edit: true, read: false, isEditing: -1 },
-  alert: { status: false, message: 'Error' },
 
-  rows: [],
-  columns: [],
-
-  setAlert: _action('alert'),
-
+  /** STATE ------------------------------------------------------------------ */
+  data: {
+    source: null,
+    id: null
+  },
   ...stateDefaults,
 
-  /** unique state of each chart type (maybe they can be grouped if not adding more) */
-
+  /** unique state of each chart type */
   bar: {
     ...widgetDefaults.bar,
-    update: action((state, payload) => ({ ...state, ...payload }))
+    update: action((state, payload) => ({ ...state, ...payload })),
+    isReady: computed(
+      [
+        (state) => state.keys,
+        (state) => state.indexBy,
+        (state) => state.group,
+        (state) => state.groupBy,
+      ],
+      (
+        keys,
+        indexBy,
+        group,
+        groupBy
+      ) => {
+        if (!group) {
+          return Boolean(keys.length && indexBy)
+        }
+        return Boolean(keys.length && groupBy)
+      }
+    ),
   },
   line: {
     ...widgetDefaults.line,
     update: action((state, payload) => ({ ...state, ...payload })),
+    isReady: computed(
+      [
+        (state) => state.indexByValue,
+        (state) => state.x,
+        (state) => state.y,
+        (state) => state.indexBy,
+      ],
+      (
+        indexByValue,
+        x,
+        y,
+        indexBy,
+      ) => {
+        return indexByValue ? Boolean(x && y.length && indexBy) : Boolean(x && y.length)
+      }
+    ),
+
   },
   pie: {
     ...widgetDefaults.pie,
     update: action((state, payload) => ({ ...state, ...payload })),
-    capData: thunk((actions, payload, { dispatch, getStoreState }) => {
-      const data = getStoreState()
-        .controllers
-        .data
-        .slice(0, 3)
-        .map((chart, i) => {
-          chart.domain = {
-            column: i % 3 //3 charts per row
-          }
-          return chart
-        })
-      dispatch({ type: 'CONTROLLER', payload: { data } })
-    })
+    isReady: computed(
+      [
+        (state) => state.indexBy,
+        (state) => state.keys,
+      ],
+      (
+        indexBy,
+        keys,
+      ) => Boolean(indexBy && keys.length)
+    ),
   },
   scatter: {
     ...widgetDefaults.scatter,
     update: action((state, payload) => ({ ...state, ...payload })),
+    isReady: computed(
+      [
+        (state) => state.x,
+        (state) => state.y,
+        (state) => state.indexBy,
+      ],
+      (
+        x,
+        y,
+        indexBy,
+      ) => (Boolean(x && y.length && indexBy))
+    ),
   },
 
-  readConfig: action((state, payload) => {
-    const { options, dataSource, dataID, ...genConfig } = payload
-    const widgetType = genConfig.type
-    return {
-      ...state,
-      ...genConfig,
-      [widgetType]: options,
-      data: {
-        source: dataSource,
-        id: dataID
-      }
-    }
-  }
-  ),
+  /** COMPUTED STATE ------------------------------------------------------------ */
 
   config: computed(
     [
@@ -137,120 +155,56 @@ export const storeContent = {
   ),
 
   /** checks if all initial states have been filled */
-  isDone: computed(
+  isReady: computed(
     [
       (state) => state.rows,
       (state) => state.columns,
       (state) => state.type,
-      (state) => state.barIsDone,
-      (state) => state.lineIsDone,
-      (state) => state.pieIsDone,
-      (state) => state.scatterIsDone,
+      (state) => state.type ? state[state.type].isReady : false
     ],
     (
       rows,
       columns,
       type,
-      barIsDone,
-      lineIsDone,
-      pieIsDone,
-      scatterIsDone,
+      widgetConfigIsReady,
     ) => {
-      // TODO there has to be a more elegant way of doing this
       if (!type || !columns.length || !rows.length) return false
-      if (type == 'bar') return barIsDone
-      if (type == 'line') return lineIsDone
-      if (type == 'pie') return pieIsDone
-      if (type == 'scatter') return scatterIsDone
+      return widgetConfigIsReady
     }
   ),
 
-  barIsDone: computed(
-    [
-      (state) => state.bar.keys,
-      (state) => state.bar.indexBy,
-      (state) => state.bar.group,
-      (state) => state.bar.groupBy,
-    ],
-    (
-      keys,
-      indexBy,
-      group,
-      groupBy
-    ) => {
-      if (!group) {
-        return Boolean(keys.length && indexBy)
+  /** ACTIONS ------------------------------------------------------------------ */
+
+  // set state based on config object that has been passed UP from a child Widget
+  readConfig: action((state, payload) => {
+    const { options, dataSource, dataID, ...genConfig } = payload
+    const widgetType = genConfig.type
+    return {
+      ...state,
+      ...genConfig,
+      [widgetType]: options,
+      data: {
+        source: dataSource,
+        id: dataID
       }
-      return Boolean(keys.length && groupBy)
     }
+  }
   ),
 
-  lineIsDone: computed(
-    [
-      (state) => state.line.indexByValue,
-      (state) => state.line.x,
-      (state) => state.line.y,
-      (state) => state.line.indexBy,
-    ],
-    (
-      indexByValue,
-      x,
-      y,
-      indexBy,
-    ) => {
-      return indexByValue ? Boolean(x && y.length && indexBy) : Boolean(x && y.length)
-    }
-  ),
-
-  pieIsDone: computed(
-    [
-      (state) => state.pie.indexBy,
-      (state) => state.pie.keys,
-    ],
-    (
-      indexBy,
-      keys,
-    ) => Boolean(indexBy && keys.length)
-  ),
-
-  scatterIsDone: computed(
-    [
-      (state) => state.scatter.x,
-      (state) => state.scatter.y,
-      (state) => state.scatter.indexBy,
-    ],
-    (
-      x,
-      y,
-      indexBy,
-    ) => (Boolean(x && y.length && indexBy))
-  ),
-
+  // update the store state
   update: action((state, payload) => ({ ...state, ...payload })),
 
+  // reset only the current widget's unique state
   resetCurrent: thunk((actions, payload, { getState }) => {
     const type = getState().type
     actions[type].update(widgetDefaults[type])
   }),
 
-  /** called when results change to reset all states */
-  reset: thunk((actions, payload, { getState }) => {
-    const { data } = getState()
-    actions.update({ ...stateDefaults, data })
+  // reset all shared and unique states except data source and data ID
+  reset: thunk((actions, payload) => {
+    actions.update({ ...stateDefaults })
     Object.entries(widgetDefaults).forEach(([type, defaultValues]) => {
       actions[type].update(defaultValues)
     })
-  }),
-
-  /** listener to clear chosenKey on axis change like an useEffect */
-  onAxisChange: thunkOn(
-    () => 'WIDGETS', // 👈 the targetResolver function
-    (actions, target) => { // handler
-      const { xAxis, yAxis } = target.payload
-      if (xAxis || yAxis) {
-        // obsolete:
-        // actions.handleDispatch({ chosenKey: [] })()
-      }
-    },
-  )
+  })
 }

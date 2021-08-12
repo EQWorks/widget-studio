@@ -1,16 +1,16 @@
-import React, { createElement, useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React, { createElement } from 'react'
 
+import PropTypes from 'prop-types'
+import { useStoreState } from 'easy-peasy'
 import { makeStyles } from '@material-ui/core/styles'
 import { Loader } from '@eqworks/lumen-ui'
-import { useStoreState } from 'easy-peasy'
-
-import Icons from './icons'
 
 import BarControls from './controls/bar-controls'
 import PieControls from './controls/pie-controls'
 import LineControls from './controls/line-controls'
 import ScatterControls from './controls/scatter-controls'
+import Icons from './icons'
+import styles from './styles'
 
 const controls = {
   bar: BarControls,
@@ -19,33 +19,8 @@ const controls = {
   scatter: ScatterControls,
 }
 
-const useStyles = makeStyles(() => ({
-  container: {
-    flexDirection: 'column',
-    marginLeft: '1rem'
-  },
-  controlContainer: {
-    // flexDirection: 'column',
-    // marginLeft: '1rem'
-  },
-  get hiddenControlContainer() {
-    return {
-      ...this.controlContainer,
-      opacity: 0
-    }
-  },
-  loaderContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%'
-  },
-  controlHeader: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-}))
+// put styles in separate file for readability
+const useStyles = makeStyles(styles)
 
 const WidgetControls = ({ columns, dataLoading }) => {
   const classes = useStyles()
@@ -61,9 +36,10 @@ const WidgetControls = ({ columns, dataLoading }) => {
       }
       <div className={dataLoading ? classes.hiddenControlContainer : classes.controlContainer}>
         <div className={classes.controlHeader}>
-          <Icons />
+          <Icons disabled={!columns.length || dataLoading} />
         </div>
         {type &&
+          // render the appropriate controls
           createElement(
             controls[type],
             { columns }
@@ -75,12 +51,11 @@ const WidgetControls = ({ columns, dataLoading }) => {
 }
 
 WidgetControls.propTypes = {
-  rows: PropTypes.array,
   columns: PropTypes.array,
+  dataLoading: PropTypes.bool,
 }
 WidgetControls.default = {
   columns: [],
-  rows: [],
 }
 
 export default WidgetControls
