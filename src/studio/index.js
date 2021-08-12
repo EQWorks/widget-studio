@@ -3,7 +3,7 @@ import React, { Children, cloneElement, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
-import { StoreProvider } from 'easy-peasy'
+import { createStore, StoreProvider } from 'easy-peasy'
 import { makeStyles } from '@material-ui/core/styles'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { Typography } from '@eqworks/lumen-ui'
@@ -19,14 +19,14 @@ import ResultsTable from './table'
 import styles from './styles'
 
 import { requestData, requestConfig } from '../util/fetch'
-import { store } from './store'
+import { storeContent, storeOptions } from './store'
 import DataController from './data-controls'
 
 // provide studio+widget with DnD and easy-peasy store
 const withWrappers = studio => {
   return (
     <DndProvider backend={HTML5Backend}>
-      <StoreProvider store={store}>
+      <StoreProvider store={createStore(storeContent, storeOptions)}>
         {studio}
       </StoreProvider>
     </DndProvider>
@@ -39,63 +39,66 @@ const useStyles = makeStyles(styles)
 // const WidgetStudio = ({ dataSource, dataID, children }) => {
 const WidgetStudio = ({ children }) => {
 
+  // <Widget/> child
   const widget = Children.only(children)
+  const widgetID = widget.props.id || null
 
   const classes = useStyles()
 
+  // easy-peasy actions
   const readConfig = useStoreActions(actions => actions.readConfig)
   const updateStore = useStoreActions(actions => actions.update)
   const reset = useStoreActions(actions => actions.reset)
 
-  const dataSource = useStoreState((state) => state.dataSource)
-  const dataID = useStoreState((state) => state.dataID)
+  // widget configuration state (easy-peasy)
+  const dataSource = useStoreState((state) => state.data.source)
+  const dataID = useStoreState((state) => state.data.id)
   const isDone = useStoreState((state) => state.isDone)
   const config = useStoreState((state) => state.config)
   const rows = useStoreState((state) => state.rows)
   const columns = useStoreState((state) => state.columns)
 
-  const [showWidgetControls, setShowWidgetControls] = useState(!!widget.props.id)
+  // studio UI state
+  const [showWidgetControls, setShowWidgetControls] = useState(Boolean(widgetID))
   const [showTable, setShowTable] = useState(false)
   const [showDataControls, setShowDataControls] = useState(false)
+
+  // data retrieval state
   const [dataLoading, setDataLoading] = useState(false)
   const [dataError, setDataError] = useState(null)
-
-  const [configControlled, setConfigControlled] = useState(false)
+  const [initComplete, setInitComplete] = useState(!widgetID)
 
   // gain control of the config object
-  if (!configControlled) {
-    if (widget.props.id) {
-      requestConfig(widget.props.id).then(obj => {
-        readConfig(obj)
-        setConfigControlled(true)
-      })
-    } else {
-      // nullify data source when appropriate
-      updateStore({ dataSource: null, dataID: null })
-      setConfigControlled(true)
-    }
+  if (!initComplete) {
+    requestConfig(widgetID).then(obj => {
+      readConfig(obj)
+      setInitComplete(true)
+    })
   }
+
 
   // fetch rows/columns on data source change
   useEffect(() => {
-    reset()
-    setDataLoading(true)
-    requestData(dataSource, dataID)
-      .then(res => {
-        const { results: rows, columns, whitelabelID, customerID } = res
-        updateStore({
-          rows,
-          columns,
-          wl: whitelabelID,
-          cu: customerID,
+    if (dataSource && dataID) {
+      reset()
+      setDataLoading(true)
+      requestData(dataSource, dataID)
+        .then(res => {
+          const { results: rows, columns, whitelabelID, customerID } = res
+          updateStore({
+            rows,
+            columns,
+            wl: whitelabelID,
+            cu: customerID,
+          })
+          setDataError(null)
+          setDataLoading(false)
+          setShowWidgetControls(true)
         })
-        setDataError(null)
-        setDataLoading(false)
-        setShowWidgetControls(true)
-      })
-      .catch((err) => {
-        setDataError(err)
-      })
+        .catch((err) => {
+          setDataError(err)
+        })
+    }
   }, [dataSource, dataID, updateStore, reset])
 
   return (

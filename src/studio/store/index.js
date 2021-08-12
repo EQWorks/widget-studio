@@ -33,19 +33,22 @@ const stateDefaults = {
   xAxis: '',
   yAxis: [],
   isOpen: true,
-  dataSource: null,
-  dataID: null,
-  data: null, // the final plotly data prop format
+  data: {
+    source: null,
+    id: null
+  },
   groupedData: null, // data agg stage but not ready to be passed to plotly
   groupingOptions: [], // based on xAxis
   chosenKey: [], // this value is reset when x||yaxis changes
   ready: true, // when data parsing is done
   wl: null,
   cu: null,
-  dataSourceName: null,
+}
+export const storeOptions = {
+  disableImmer: true,
 }
 
-export const store = createStore({
+export const storeContent = {
   mode: { edit: true, read: false, isEditing: -1 },
   alert: { status: false, message: 'Error' },
 
@@ -63,14 +66,10 @@ export const store = createStore({
     update: action((state, payload) => ({ ...state, ...payload }))
   },
   line: {
-    // area: false,
-    // multiAxis: false,
     ...widgetDefaults.line,
     update: action((state, payload) => ({ ...state, ...payload })),
   },
   pie: {
-    // donut: false,
-    // multi: {},
     ...widgetDefaults.pie,
     update: action((state, payload) => ({ ...state, ...payload })),
     capData: thunk((actions, payload, { dispatch, getStoreState }) => {
@@ -93,13 +92,16 @@ export const store = createStore({
   },
 
   readConfig: action((state, payload) => {
-
-    const { options, ...genConfig } = payload
+    const { options, dataSource, dataID, ...genConfig } = payload
     const widgetType = genConfig.type
     return {
       ...state,
       ...genConfig,
-      [widgetType]: options
+      [widgetType]: options,
+      data: {
+        source: dataSource,
+        id: dataID
+      }
     }
   }
   ),
@@ -107,8 +109,8 @@ export const store = createStore({
   config: computed(
     [
       (state) => state.type,
-      (state) => state.dataSource,
-      (state) => state.dataID,
+      (state) => state.data.source,
+      (state) => state.data.id,
       (state) => state[state.type],
     ],
     (
@@ -126,8 +128,8 @@ export const store = createStore({
 
   hasData: computed(
     [
-      (state) => state.dataSource,
-      (state) => state.dataID,
+      (state) => state.data.source,
+      (state) => state.data.id,
     ],
     (dataSource, dataID) => {
       return (Boolean(dataSource && dataID))
@@ -233,8 +235,8 @@ export const store = createStore({
 
   /** called when results change to reset all states */
   reset: thunk((actions, payload, { getState }) => {
-    const { dataSource, dataID } = getState()
-    actions.update({ ...stateDefaults, dataSource, dataID })
+    const { data } = getState()
+    actions.update({ ...stateDefaults, data })
     Object.entries(widgetDefaults).forEach(([type, defaultValues]) => {
       actions[type].update(defaultValues)
     })
@@ -251,6 +253,4 @@ export const store = createStore({
       }
     },
   )
-}, {
-  disableImmer: true,
-})
+}

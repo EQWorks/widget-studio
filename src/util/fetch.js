@@ -54,8 +54,13 @@ export const useExecutions = () => {
 }
 
 const requestQueryResults = async (id) => {
-  const query = await api.get(`/ql/queries/${id}`)
-  return await requestExecutionResults(query.data.executions[0].executionID)
+  return api.get(`/ql/queries/${id}`)
+    .then(async ({ data: { executions } }) => {
+      if (!executions.length) {
+        throw new Error('This query has not been executed.')
+      }
+      return await requestExecutionResults(executions[0].executionID)
+    })
 }
 
 const requestExecutionResults = async (id) => {

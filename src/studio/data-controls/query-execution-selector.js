@@ -34,8 +34,8 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, dataSourcesLoadingStat
   const classes = useStyles()
 
   const updateStore = useStoreActions((actions) => actions.update)
-  const dataSource = useStoreState((state) => state.dataSource)
-  const dataID = useStoreState((state) => state.dataID)
+  const dataSource = useStoreState((state) => state.data.source)
+  const dataID = useStoreState((state) => state.data.id)
 
   const [dataSourcesLoading, setdataSourcesLoading] = dataSourcesLoadingState
 
@@ -123,8 +123,10 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, dataSourcesLoadingStat
                       updateStore({
                         wl: selectedWl,
                         cu: selectedCu,
-                        dataSource: `${selectedDataSource}`,
-                        dataID: event.target.value
+                        data: {
+                          source: `${selectedDataSource}`,
+                          id: event.target.value
+                        }
                       })
                       setVal(event.target.value)
                     }

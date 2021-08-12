@@ -28,7 +28,7 @@ const Widget = ({ id, studioConfig, studioData }) => {
       setColumns(studioData.columns)
     } else {
       requestData(config.dataSource, config.dataID)
-        .then(({ rows, columns }) => {
+        .then(({ results: rows, columns }) => {
           setRows(rows)
           setColumns(columns)
         })
