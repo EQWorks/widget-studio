@@ -4,8 +4,8 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography, Loader } from '@eqworks/lumen-ui'
 
-import WlCuSelector from './components/wl-cu-selector'
-import QueryExecutionSelector from './components/query-execution-selector'
+import WlCuSelector from './wl-cu-selector'
+import QueryExecutionSelector from './query-execution-selector'
 
 /* create react-query client & provide client to ml */
 const queryClientContext = (children) => {

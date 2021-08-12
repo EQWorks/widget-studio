@@ -5,12 +5,12 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Loader } from '@eqworks/lumen-ui'
 import { useStoreState } from 'easy-peasy'
 
-import Icons from './components/icons'
+import Icons from './icons'
 
-import BarControls from './components/charts/bar-controls'
-import PieControls from './components/charts/pie-controls'
-import LineControls from './components/charts/line-controls'
-import ScatterControls from './components/charts/scatter-controls'
+import BarControls from './controls/bar-controls'
+import PieControls from './controls/pie-controls'
+import LineControls from './controls/line-controls'
+import ScatterControls from './controls/scatter-controls'
 
 const controls = {
   bar: BarControls,

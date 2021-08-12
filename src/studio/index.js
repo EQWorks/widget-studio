@@ -15,12 +15,12 @@ import BuildIcon from '@material-ui/icons/Build'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 
 import WidgetControls from './widget-controls'
-import ResultsTable from './components/table'
+import ResultsTable from './table'
 import styles from './styles'
 
 import { requestData, requestConfig } from '../util/fetch'
 import { store } from './store'
-import DataController from './data-select'
+import DataController from './data-controls'
 
 // provide studio+widget with DnD and easy-peasy store
 const withWrappers = studio => {
