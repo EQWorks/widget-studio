@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { makeStyles } from '@material-ui/core/styles'
-import { useStoreState } from 'easy-peasy'
 import { Typography, Loader } from '@eqworks/lumen-ui'
 
-import WlCuSelector from '../../stories/util/wl-cu-selector'
-import { QueryExecutionSelector } from '../../stories/util/query-execution-selector'
+import WlCuSelector from './components/wl-cu-selector'
+import QueryExecutionSelector from './components/query-execution-selector'
 
 /* create react-query client & provide client to ml */
 const queryClientContext = (children) => {
@@ -50,17 +49,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const DataController = props => {
+const DataController = () => {
   const classes = useStyles()
 
-  const wlState = useState()
-  const cuState = useState()
+  const selectedWlState = useState()
+  const selectedCuState = useState()
   const wlCuLoadingState = useState(true)
   const dataSourcesLoadingState = useState(true)
 
   const wlCuLoading = wlCuLoadingState[0]
   const dataSourcesLoading = dataSourcesLoadingState[0]
-  const cu = cuState[0]
+
+  const selectedWl = selectedWlState[0]
+  const selectedCu = selectedCuState[0]
 
 
   return queryClientContext(
@@ -72,31 +73,19 @@ const DataController = props => {
         <Loader open={wlCuLoading}>
           <div className={wlCuLoading ? classes.hiddenDataSelector : classes.dataSelector}>
             <WlCuSelector
-              {...{ wlState, cuState, wlCuLoadingState }}
+              {...{ selectedWlState, selectedCuState, wlCuLoadingState }}
             />
             <QueryExecutionSelector
-              disabled={wlCuLoading || dataSourcesLoading || !cu}
-              {...{ wlState, cuState, dataSourcesLoadingState }}
+              disabled={wlCuLoading || dataSourcesLoading || !selectedCu}
+              {...{
+                selectedWl,
+                selectedCu,
+                dataSourcesLoadingState
+              }}
             />
           </div>
         </Loader>
       </div>
-      {/* <div className={classes.dataSelector}>
-        {
-          wlCuLoading ?
-            <Loader open />
-            :
-            <>
-              <WlCuSelector
-                {...{ wlState, cuState, wlCuLoadingState }}
-              />
-              <QueryExecutionSelector
-                disabled={wlCuLoading || dataSourcesLoading || !cu}
-                {...{ wlState, cuState, dataSourcesLoadingState }}
-              />
-            </>
-        }
-      </div> */}
     </div>
   )
 }

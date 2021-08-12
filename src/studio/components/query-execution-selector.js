@@ -9,10 +9,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
 import { useStoreState, useStoreActions } from 'easy-peasy'
-import { useQuery } from 'react-query'
-import axios from 'axios'
 
-import { SAVED_QUERIES, EXECUTIONS } from '../../src/util/fetch'
+import { SAVED_QUERIES, EXECUTIONS, useSavedQueries, useExecutions } from '../../util/fetch'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,54 +29,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const api = axios.create({
-  baseURL: [
-    process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
-    process.env.API_STAGE || process.env.STORYBOOK_API_STAGE,
-  ].filter(v => v).join('/'),
-  headers: { 'eq-api-jwt': window.localStorage.getItem('auth_jwt') },
-})
 
-const useSavedQueries = () => {
-  const _key = 'Get Queries'
-  const { isError, error, isLoading, data = [] } = useQuery(
-    _key,
-    () => api.get('/ql/queries', {
-      params: {
-        _wl: '',
-        _customer: '',
-      }
-    }).then(({ data = [] }) => data),
-    { refetchOnWindowFocus: false }
-  )
-
-  useEffect(() => {
-    if (isError) {
-      console.error(`${_key}: ${error.message}`)
-    }
-  }, [isError, error])
-
-  return [isLoading, data]
-}
-
-const useExecutions = () => {
-  const _key = 'Get Query Executions'
-  const { isError, error, isLoading, data = [] } = useQuery(
-    _key,
-    () => api.get('/ql/executions').then(({ data = [] }) => data),
-    { refetchOnWindowFocus: false }
-  )
-
-  useEffect(() => {
-    if (isError) {
-      console.error(`${_key}: ${error.message}`)
-    }
-  }, [isError, error])
-
-  return [isLoading, data]
-}
-
-const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadingState, disabled }) => {
+const QueryExecutionSelector = ({ selectedWl, selectedCu, dataSourcesLoadingState, disabled }) => {
   const classes = useStyles()
 
   const updateStore = useStoreActions((actions) => actions.update)
@@ -86,15 +38,17 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadi
   const dataID = useStoreState((state) => state.dataID)
 
   const [dataSourcesLoading, setdataSourcesLoading] = dataSourcesLoadingState
+
   const [queriesLoading, savedQueryList] = useSavedQueries()
   const [executionsLoading, executionsList] = useExecutions()
-
-  // TODO make sure wl is checked as well
-  const getFilteredQueries = () => savedQueryList.filter((query) => query.customerID == cu)
-  const getFilteredExecutions = () => executionsList.filter((execution) => execution.customerID == cu)
-
-  var filteredQueries = useMemo(getFilteredQueries, [savedQueryList, cu])
-  var filteredExecutions = useMemo(getFilteredExecutions, [executionsList, cu])
+  var filteredQueries = useMemo(
+    () => savedQueryList.filter((query) => query.customerID == selectedCu),
+    [savedQueryList, selectedCu]
+  )
+  var filteredExecutions = useMemo(
+    () => executionsList.filter((execution) => execution.customerID == selectedCu),
+    [executionsList, selectedCu]
+  )
 
   const [selectedDataSource, setSelectedDataSource] = useState(dataSource)
   useEffect(() => {
@@ -153,37 +107,38 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadi
         onChange={event => setSelectedDataSource(event.target.value)}
       >
         {Object.entries(dataSelectors)
-          .map(([label, selector], index) => {
+          .map(([label, { arr, valState: [val, setVal], render }], index) => {
             return (
               <div key={index} className={classes.selectors}>
                 <FormControlLabel
                   {...{ disabled }}
                   value={label}
                   control={<Radio />}
-                  label={`${label} (${selector.arr.length})`}
+                  label={`${label} (${arr.length})`}
                 />
                 <FormControl className={classes.form}>
                   <Select
                     disabled={disabled || selectedDataSource != label}
                     onChange={(event) => {
                       updateStore({
+                        wl: selectedWl,
+                        cu: selectedCu,
                         dataSource: `${selectedDataSource}`,
                         dataID: event.target.value
                       })
-                      selector.valState[1](event.target.value)
+                      setVal(event.target.value)
                     }
                     }
                     value={
                       dataSource === label ?
                         dataID
                         :
-                        selector.valState[0]
-                      // selector.valState[0] && selector.arr.length ? selector.valState[0] : 0
+                        val
                     }
                     MenuProps={{ elevation: 1 }}
                   >
                     <MenuItem value={'0'}></MenuItem>
-                    {selector.render()}
+                    {render()}
                   </Select>
                 </FormControl>
               </div>
@@ -196,6 +151,8 @@ const QueryExecutionSelector = ({ wlState: [wl], cuState: [cu], dataSourcesLoadi
 }
 
 QueryExecutionSelector.propTypes = {
+  selectedWl: PropTypes.number.isRequired,
+  selectedCu: PropTypes.number.isRequired,
   wlState: PropTypes.array.isRequired,
   cuState: PropTypes.array.isRequired,
   dataSourcesLoadingState: PropTypes.array.isRequired,
@@ -203,7 +160,4 @@ QueryExecutionSelector.propTypes = {
   resultsState: PropTypes.array.isRequired,
 }
 
-export {
-  useSavedQueries,
-  QueryExecutionSelector
-}
+export default QueryExecutionSelector

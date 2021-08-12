@@ -12,8 +12,8 @@ const widgetDefaults = {
     keys: [],
   },
   line: {
-    indexByValue: true,
-    keys: [],
+    indexByValue: false,
+    indexBy: null,
     x: null,
     y: [],
   },
@@ -40,6 +40,9 @@ const stateDefaults = {
   groupingOptions: [], // based on xAxis
   chosenKey: [], // this value is reset when x||yaxis changes
   ready: true, // when data parsing is done
+  wl: null,
+  cu: null,
+  dataSourceName: null,
 }
 
 export const store = createStore({
@@ -186,19 +189,14 @@ export const store = createStore({
       (state) => state.line.x,
       (state) => state.line.y,
       (state) => state.line.indexBy,
-      (state) => state.line.keys,
     ],
     (
       indexByValue,
       x,
       y,
       indexBy,
-      keys,
     ) => {
-      if (!indexByValue) {
-        return Boolean(keys.length > 1)
-      }
-      return Boolean(x && y.length && indexBy)
+      return indexByValue ? Boolean(x && y.length && indexBy) : Boolean(x && y.length)
     }
   ),
 

@@ -58,6 +58,7 @@ const WidgetStudio = ({ children }) => {
   const [showTable, setShowTable] = useState(false)
   const [showDataControls, setShowDataControls] = useState(false)
   const [dataLoading, setDataLoading] = useState(false)
+  const [dataError, setDataError] = useState(null)
 
   const [configControlled, setConfigControlled] = useState(false)
 
@@ -80,17 +81,22 @@ const WidgetStudio = ({ children }) => {
     reset()
     setDataLoading(true)
     requestData(dataSource, dataID)
-      .then(({ rows, columns }) => {
-        updateStore({ rows, columns })
+      .then(res => {
+        const { results: rows, columns, whitelabelID, customerID } = res
+        updateStore({
+          rows,
+          columns,
+          wl: whitelabelID,
+          cu: customerID,
+        })
+        setDataError(null)
         setDataLoading(false)
         setShowWidgetControls(true)
       })
+      .catch((err) => {
+        setDataError(err)
+      })
   }, [dataSource, dataID, updateStore, reset])
-
-  // useEffect(() => {
-  //   console.log("**************************");
-  //   console.dir(config)
-  // }, [config]);
 
   return (
     <div className={classes.content}>
@@ -139,7 +145,7 @@ const WidgetStudio = ({ children }) => {
         <div className={showDataControls || showTable ? classes.hiddenContainer : classes.container}>
           <div className={classes.chart}>
             {
-              !dataLoading && isDone ?
+              !dataLoading && !dataError && isDone ?
                 cloneElement(
                   widget,
                   {
@@ -155,12 +161,14 @@ const WidgetStudio = ({ children }) => {
                       :
                       <Typography color="textSecondary" variant='h6'>
                         {
-                          dataLoading ? 'Loading data...'
+                          dataError ? 'Something went wrong.'
                             :
-                            !rows.length ? 'Sorry, this data is empty.'
+                            dataLoading ? 'Loading data...'
                               :
-                              config.type ? 'Select columns and configure your widget.'
-                                : 'Select a widget type.'
+                              !rows.length ? 'Sorry, this data is empty.'
+                                :
+                                config.type ? 'Select columns and configure your widget.'
+                                  : 'Select a widget type.'
 
                         }
                       </Typography>
@@ -169,10 +177,13 @@ const WidgetStudio = ({ children }) => {
                     config.dataSource && config.dataID &&
                     <Typography color="textSecondary" variant='subtitle2'>
                       {
-                        dataLoading ?
-                          `${config.dataSource} ${config.dataID}`
+                        dataError ?
+                          `${dataError}`
                           :
-                          'Data loaded successfully'
+                          dataLoading ?
+                            `${config.dataSource} ${config.dataID}`
+                            :
+                            'Data loaded successfully'
                       }
                     </Typography>
                   }

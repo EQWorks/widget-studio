@@ -6,16 +6,12 @@ import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import InputLabel from '@material-ui/core/InputLabel'
+import { useStoreState } from 'easy-peasy'
 
 import { useQuery } from 'react-query'
 import axios from 'axios'
 
-import { useSavedQueries } from './query-execution-selector'
-
-// const DEFAULT_WL = 4
-// const DEFAULT_CU = 10340 
-const DEFAULT_WL = 1532
-const DEFAULT_CU = 20524
+import { useSavedQueries } from '../../util/fetch'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -79,21 +75,24 @@ const useCustomers = (wlID) => {
   return [isLoading, data]
 }
 
-const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
+const WlCuSelector = ({ selectedWlState, selectedCuState, wlCuLoadingState }) => {
   const classes = useStyles()
-  const [wl, setWl] = wlState
-  const [cu, setCu] = cuState
+  const [selectedWl, setSelectedWl] = selectedWlState
+  const [selectedCu, setSelectedCu] = selectedCuState
+  const wl = useStoreState((state) => state.wl)
+  const cu = useStoreState((state) => state.cu)
   const [wlCuLoading, setWlCuLoading] = wlCuLoadingState
+
+  useEffect(() => {
+    setSelectedWl(wl)
+    setSelectedCu(cu)
+  }, [cu, wl, setSelectedCu, setSelectedWl])
 
   const [, savedQueryList] = useSavedQueries()
   const [wlListIsLoading, wlList] = useWhiteLabels()
-  const [cuListIsLoading, cuList = []] = useCustomers(wl)
+  const [cuListIsLoading, cuList = []] = useCustomers(selectedWl)
 
   setWlCuLoading(wlListIsLoading || cuListIsLoading)
-  useEffect(() => {
-    setWl(DEFAULT_WL)
-    setCu(DEFAULT_CU)
-  }, [setCu, setWl])
 
   useEffect(() => {
     setWlCuLoading(wlListIsLoading || cuListIsLoading)
@@ -106,11 +105,9 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
   }
 
   const getFilteredCustomers = () => {
-    {
-      return cuList
-        .filter((cu) => savedQueryList.filter((q) => q.customerID == cu.agencyid).length > 0)
-        .sort((a, b) => a.agencyid - b.agencyid)
-    }
+    return cuList
+      .filter((cu) => savedQueryList.filter((q) => q.customerID == cu.agencyid).length > 0)
+      .sort((a, b) => a.agencyid - b.agencyid)
   }
 
 
@@ -123,10 +120,10 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
         <FormControl disabled={wlListIsLoading || !filteredWhiteLabels.length} className={classes.form}>
           <InputLabel id='Whitelabel'>Whitelabel</InputLabel>
           <Select
-            value={`${wl}`}
+            value={`${selectedWl}`}
             onChange={(event) => {
-              setWl(event.target.value)
-              setCu(null)
+              setSelectedWl(event.target.value)
+              setSelectedCu(null)
             }}
             MenuProps={{ elevation: 1 }}
           >
@@ -144,8 +141,8 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
         <FormControl disabled={wlListIsLoading || cuListIsLoading || !filteredWhiteLabels.length} className={classes.form}>
           <InputLabel id='Customer'>Customer</InputLabel>
           <Select
-            value={`${cu}`}
-            onChange={(event) => setCu(event.target.value)}
+            value={`${selectedCu}`}
+            onChange={(event) => setSelectedCu(event.target.value)}
             MenuProps={{ elevation: 1 }}
           >
             {filteredCustomers
@@ -165,8 +162,8 @@ const WlCuSelector = ({ wlState, cuState, wlCuLoadingState }) => {
 }
 
 WlCuSelector.propTypes = {
-  wlState: PropTypes.array.isRequired,
-  cuState: PropTypes.array.isRequired,
+  selectedWlState: PropTypes.array.isRequired,
+  selectedCuState: PropTypes.array.isRequired,
   wlCuLoadingState: PropTypes.array.isRequired,
 }
 

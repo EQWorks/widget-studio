@@ -22,11 +22,8 @@ const LineControls = ({ columns }) => {
   const classes = useStyles()
 
   const indexByValue = useStoreState((state) => state.line.indexByValue)
-  const stack = useStoreState((state) => state.line.stack)
-  const groupBy = useStoreState((state) => state.line.groupBy)
   const x = useStoreState((state) => state.line.x)
   const y = useStoreState((state) => state.line.y)
-  const keys = useStoreState((state) => state.line.keys)
   const indexBy = useStoreState((state) => state.line.indexBy)
 
   const setLineState = useStoreActions(actions => actions.line.update)
@@ -58,40 +55,30 @@ const LineControls = ({ columns }) => {
           label="Index by value"
         />
       </FormControl>
+      <CustomSelect
+        title='X Key'
+        data={columns}
+        chosenValue={x}
+        setChosenValue={val => setLineState({ x: val })}
+      />
+      <CustomSelect
+        // TODO multi optional
+        multi
+        title={'Y Keys'}
+        data={numericColumns}
+        chosenValue={y}
+        setChosenValue={val => setLineState({ y: val })}
+      />
       {
-        indexByValue ?
-          <>
-            <CustomSelect
-              // TODO multi optional
-              multi
-              title={'Y Keys'}
-              data={numericColumns}
-              chosenValue={y}
-              setChosenValue={val => setLineState({ y: val })}
-            />
-            <CustomSelect
-              title='Index by'
-              data={stringColumns}
-              chosenValue={indexBy}
-              setChosenValue={val => setLineState({ indexBy: val })}
-            />
-            <CustomSelect
-              title='X Key'
-              data={stringColumns}
-              chosenValue={x}
-              setChosenValue={val => setLineState({ x: val })}
-            />
-          </>
-          :
-          <CustomSelect
-            multi
-            title={'Keys (min. 2)'}
-            data={numericColumns}
-            chosenValue={keys}
-            setChosenValue={val => setLineState({ keys: val })}
-          />
-
+        indexByValue &&
+        <CustomSelect
+          title='Index by'
+          data={columns}
+          chosenValue={indexBy}
+          setChosenValue={val => setLineState({ indexBy: val })}
+        />
       }
+
       <IconButton
         size='small'
         onClick={reset}

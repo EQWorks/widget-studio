@@ -5,32 +5,35 @@ import AuthWidgetStudio from './util/auth-widget-studio'
 import { Widget } from '../src'
 
 import styles from '../src/studio/styles'
+import sampleConfigs from './sample-configs'
 
-storiesOf('Widget without ID')
-  .add('Blank widget with Studio + data select', () => (
+storiesOf('Undefined widget')
+  .add('In studio', () => (
     <AuthWidgetStudio>
       <Widget />
     </AuthWidgetStudio>
   ))
-  .add('Blank standalone widget (not allowed)', () => (
+  .add('Standalone (not allowed)', () => (
     <Widget />
   ))
 
-storiesOf('Widget with ID in studio', module)
-  .add('Bar widget with Studio', () => (
-    <AuthWidgetStudio>
-      <Widget id="bar-1" />
-    </AuthWidgetStudio >
-  ))
-  .add('Pie widget with Studio', () => (
-    <AuthWidgetStudio>
-      <Widget id="pie-1" />
-    </AuthWidgetStudio >
-  ))
+Object.entries(sampleConfigs).forEach(([id, config]) => {
+  if (config && Object.keys(config).length) {
+    const type = config.type.charAt(0).toUpperCase() + config.type.slice(1)
+    const index = id.split('-')[1]
+    const label = `${type} ${index > 1 ? '(' + index + ')' : ''}`
+    storiesOf('WidgetStudio with defined widget', module)
+      .add(label, () => (
+        <AuthWidgetStudio>
+          <Widget {...{ id }} />
+        </AuthWidgetStudio >
+      ))
 
-storiesOf('Widget with ID')
-  .add('Bar widget', () => (
-    <div style={styles.content} >
-      <Widget id="bar-1" />
-    </div>
-  ))
+    storiesOf('Defined widget')
+      .add(label, () => (
+        <div style={styles.content} >
+          <Widget {...{ id }} />
+        </div>
+      ))
+  }
+})
