@@ -1,11 +1,19 @@
 import React, { useState, useEffect, createElement } from 'react'
 
 import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core/styles'
 import { Loader } from '@eqworks/lumen-ui'
+import { Typography } from '@eqworks/lumen-ui'
 
 import { requestData, requestConfig } from '../util/fetch'
+import styles from './styles'
+
+// put styles in separate file for readability
+const useStyles = makeStyles(styles)
 
 const Widget = ({ id, studioConfig, studioData, adapter }) => {
+
+  const classes = useStyles()
 
   // define config object to be passed to the WidgetAdapter
   const [config, setConfig] = useState({ dataSource: null, dataID: null })
@@ -42,13 +50,22 @@ const Widget = ({ id, studioConfig, studioData, adapter }) => {
 
   return (
     columns && rows && columns.length && rows.length ?
-      // pass data + config to the adapter of choice
-      createElement(
-        adapter,
+      <>
+        <div className={classes.widgetTitle}>
+          <Typography color='textSecondary' variant='subtitle1'>
+            {config.title}
+          </Typography>
+        </div>
         {
-          ...{ rows, columns, config }
+          // pass data + config to the adapter of choice
+          createElement(
+            adapter,
+            {
+              ...{ rows, columns, config }
+            }
+          )
         }
-      )
+      </>
       :
       // display loader
       <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>

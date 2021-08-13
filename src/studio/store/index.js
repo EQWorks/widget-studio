@@ -26,6 +26,7 @@ const widgetDefaults = {
 }
 
 const stateDefaults = {
+  title: '',
   rows: [],
   columns: [],
   type: '',
@@ -126,17 +127,20 @@ export const storeContent = {
 
   config: computed(
     [
+      (state) => state.title,
       (state) => state.type,
       (state) => state.data.source,
       (state) => state.data.id,
       (state) => state[state.type],
     ],
     (
+      title,
       type,
       dataSource,
       dataID,
       options,
     ) => ({
+      title,
       type,
       dataSource,
       dataID,

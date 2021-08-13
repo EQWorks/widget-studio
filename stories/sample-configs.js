@@ -28,6 +28,7 @@ scatter: {
 
 export default {
   'pie-1': {
+    'title': 'My example pie widget',
     'type': 'pie',
     'dataSource': 'Saved query',
     'dataID': '187',
@@ -40,6 +41,7 @@ export default {
     }
   },
   'bar-1': {
+    'title': 'My example bar widget',
     'type': 'bar',
     'dataSource': 'Saved query',
     'dataID': '187',
@@ -55,6 +57,7 @@ export default {
     }
   },
   'line-1': {
+    'title': 'My example line widget',
     'type': 'line',
     'dataSource': 'Execution',
     'dataID': '305',
@@ -66,6 +69,7 @@ export default {
     }
   },
   'scatter-1': {
+    'title': 'My example scatter widget',
     'type': 'scatter',
     'dataSource': 'Saved query',
     'dataID': '217',
