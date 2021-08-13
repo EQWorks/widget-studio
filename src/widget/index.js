@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createElement } from 'react'
 
 import PropTypes from 'prop-types'
 import { Loader } from '@eqworks/lumen-ui'
-import { WidgetAdapter } from '@eqworks/chart-system'
 
 import { requestData, requestConfig } from '../util/fetch'
 
-const Widget = ({ id, studioConfig, studioData }) => {
+const Widget = ({ id, studioConfig, studioData, adapter }) => {
 
   // define config object to be passed to the WidgetAdapter
   const [config, setConfig] = useState({ dataSource: null, dataID: null })
@@ -43,10 +42,17 @@ const Widget = ({ id, studioConfig, studioData }) => {
 
   return (
     columns && rows && columns.length && rows.length ?
-      <WidgetAdapter {...{ rows }} {...{ columns }} {...{ config }} />
+      // pass data + config to the adapter of choice
+      createElement(
+        adapter,
+        {
+          ...{ rows, columns, config }
+        }
+      )
       :
+      // display loader
       <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-        <Loader open={true} />
+        <Loader open />
       </div>
   )
 }
@@ -55,6 +61,7 @@ Widget.propTypes = {
   studioConfig: PropTypes.object,
   studioData: PropTypes.object,
   id: PropTypes.string,
+  adapter: PropTypes.object,
 }
 
 export default Widget
