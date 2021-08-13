@@ -3,16 +3,34 @@ import { storiesOf } from '@storybook/react'
 import { WidgetAdapter as NivoAdapter } from '@eqworks/chart-system'
 
 import sampleConfigs from './sample-configs'
-import AuthWidgetStudio from './util/auth-widget-studio'
-import { Widget } from '../src'
+import { Widget, WidgetStudio } from '../src'
 import styles from '../src/studio/styles'
+
+storiesOf('Dashboard-esque example')
+  .add('Dashboard-esque example', () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '50% 50%'
+      }} >
+      {
+        Object.keys(sampleConfigs).map(id =>
+          <div key={id}>
+            <WidgetStudio>
+              <Widget adapter={NivoAdapter} {...{ id }} />
+            </WidgetStudio>
+          </div>
+        )
+      }
+    </div >
+  ))
 
 storiesOf('Undefined widget')
   // showcase behaviour without explicit widget ID
   .add('In studio', () => (
-    <AuthWidgetStudio>
+    <WidgetStudio>
       <Widget adapter={NivoAdapter} />
-    </AuthWidgetStudio>
+    </WidgetStudio>
   ))
   // demonstrate incorrect component usage
   .add('Standalone (not allowed)', () => (
@@ -30,9 +48,9 @@ Object.entries(sampleConfigs).forEach(([id, config]) => {
     // generate a studio story
     storiesOf('Defined widget wrapped in studio', module)
       .add(label, () => (
-        <AuthWidgetStudio>
+        <WidgetStudio>
           <Widget {...{ id }} adapter={NivoAdapter} />
-        </AuthWidgetStudio >
+        </WidgetStudio >
       ))
 
     // and a standalone story

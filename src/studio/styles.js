@@ -9,7 +9,6 @@ export default {
   },
   outerContainer: {
     display: 'flex',
-    marginTop: 10,
     border: 'solid',
     borderRadius: '1rem',
     padding: '1rem',
