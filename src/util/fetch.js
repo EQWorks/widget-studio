@@ -8,7 +8,20 @@ const api = axios.create({
     process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
     process.env.API_STAGE || process.env.STORYBOOK_API_STAGE,
   ].filter(v => v).join('/'),
-  headers: { 'eq-api-jwt': window.localStorage.getItem('auth_jwt') },
+})
+
+api.interceptors.request.use(config => {
+  const token = window.localStorage.getItem('auth_jwt')
+  if (!token) {
+    throw new Error('This application is not authorized to make this request.')
+  }
+  return {
+    ...config,
+    headers: {
+      ...config.headers,
+      'eq-api-jwt': token
+    }
+  }
 })
 
 export const SAVED_QUERIES = 'Saved query'
