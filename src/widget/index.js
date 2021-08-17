@@ -7,11 +7,12 @@ import { Typography } from '@eqworks/lumen-ui'
 
 import { requestData, requestConfig } from '../util/fetch'
 import styles from './styles'
+import adapters from './adapter-associations'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const Widget = ({ id, studioConfig, studioData, adapter }) => {
+const Widget = ({ id, studioConfig, studioData }) => {
 
   const classes = useStyles()
 
@@ -59,7 +60,7 @@ const Widget = ({ id, studioConfig, studioData, adapter }) => {
         {
           // pass data + config to the adapter of choice
           createElement(
-            adapter,
+            adapters[config.type],
             {
               ...{ rows, columns, config }
             }
@@ -78,7 +79,6 @@ Widget.propTypes = {
   studioConfig: PropTypes.object,
   studioData: PropTypes.object,
   id: PropTypes.string,
-  adapter: PropTypes.object,
 }
 
 export default Widget
