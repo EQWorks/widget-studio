@@ -1,6 +1,5 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { WidgetAdapter as NivoAdapter } from '@eqworks/chart-system'
 
 import sampleConfigs from './sample-configs'
 import { Widget, WidgetStudio } from '../src'
@@ -17,7 +16,7 @@ storiesOf('Dashboard-esque example')
         Object.keys(sampleConfigs).map(id =>
           <div key={id}>
             <WidgetStudio>
-              <Widget adapter={NivoAdapter} {...{ id }} />
+              <Widget {...{ id }} />
             </WidgetStudio>
           </div>
         )
@@ -29,12 +28,12 @@ storiesOf('Undefined widget')
   // showcase behaviour without explicit widget ID
   .add('In studio', () => (
     <WidgetStudio>
-      <Widget adapter={NivoAdapter} />
+      <Widget />
     </WidgetStudio>
   ))
   // demonstrate incorrect component usage
   .add('Standalone (not allowed)', () => (
-    <Widget adapter={NivoAdapter} />
+    <Widget />
   ))
 
 // for each non-empty sample config,
@@ -49,7 +48,7 @@ Object.entries(sampleConfigs).forEach(([id, config]) => {
     storiesOf('Defined widget wrapped in studio', module)
       .add(label, () => (
         <WidgetStudio>
-          <Widget {...{ id }} adapter={NivoAdapter} />
+          <Widget {...{ id }} />
         </WidgetStudio >
       ))
 
@@ -57,7 +56,7 @@ Object.entries(sampleConfigs).forEach(([id, config]) => {
     storiesOf('Defined widget')
       .add(label, () => (
         <div style={styles.outerContainer} >
-          <Widget {...{ id }} adapter={NivoAdapter} />
+          <Widget {...{ id }} />
         </div>
       ))
   }
