@@ -1,8 +1,7 @@
 import React, { Children, cloneElement, useState, useEffect } from 'react'
 
 import PropTypes from 'prop-types'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DndProvider } from 'react-dnd'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import TocIcon from '@material-ui/icons/Toc'
 import IconButton from '@material-ui/core/IconButton'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
@@ -20,14 +19,17 @@ import { requestData, requestConfig } from '../util/fetch'
 import { storeContent, storeOptions } from './store'
 import DataControls from './data-controls'
 
-// provide studio+widget with DnD and easy-peasy store
-const withWrappers = studio => {
+// provide studio+widget with QueryClient and easy-peasy store
+const queryClient = new QueryClient()
+const WrappedWidgetStudio = ({ children }) => {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <QueryClientProvider client={queryClient}>
       <StoreProvider store={createStore(storeContent, storeOptions)}>
-        {studio}
+        <WidgetStudio>
+          {children}
+        </WidgetStudio>
       </StoreProvider>
-    </DndProvider>
+    </QueryClientProvider>
   )
 }
 
@@ -38,7 +40,7 @@ const WidgetStudio = props => {
 
   const classes = useStyles()
 
-  // <Widget/> child
+  // <Widget /> child
   const widget = Children.only(props.children)
   const widgetID = widget.props.id || null
 
@@ -211,6 +213,5 @@ WidgetStudio.propTypes = {
   children: PropTypes.object,
 }
 
-export default ({ children }) => withWrappers(<WidgetStudio {...{ children }} />)
-
+export default WrappedWidgetStudio
 

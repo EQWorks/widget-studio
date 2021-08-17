@@ -30,22 +30,20 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const QueryExecutionSelector = ({ selectedWl, selectedCu, dataSourcesLoadingState, disabled }) => {
+const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading, disabled }) => {
   const classes = useStyles()
 
   const updateStore = useStoreActions((actions) => actions.update)
   const dataSource = useStoreState((state) => state.data.source)
   const dataID = useStoreState((state) => state.data.id)
 
-  const [dataSourcesLoading, setdataSourcesLoading] = dataSourcesLoadingState
-
   const [queriesLoading, savedQueryList] = useSavedQueries()
   const [executionsLoading, executionsList] = useExecutions()
-  var filteredQueries = useMemo(
+  const filteredQueries = useMemo(
     () => savedQueryList.filter((query) => query.customerID == selectedCu),
     [savedQueryList, selectedCu]
   )
-  var filteredExecutions = useMemo(
+  const filteredExecutions = useMemo(
     () => executionsList.filter((execution) => execution.customerID == selectedCu),
     [executionsList, selectedCu]
   )
@@ -56,8 +54,8 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, dataSourcesLoadingStat
   }, [dataSource])
 
   useEffect(() => {
-    setdataSourcesLoading(queriesLoading || executionsLoading)
-  }, [executionsLoading, queriesLoading, setdataSourcesLoading])
+    setDataSourcesLoading(queriesLoading || executionsLoading)
+  }, [executionsLoading, queriesLoading, setDataSourcesLoading])
 
   const dataSelectors = {
     [SAVED_QUERIES]: {
@@ -157,7 +155,7 @@ QueryExecutionSelector.propTypes = {
   selectedCu: PropTypes.number.isRequired,
   wlState: PropTypes.array.isRequired,
   cuState: PropTypes.array.isRequired,
-  dataSourcesLoadingState: PropTypes.array.isRequired,
+  setDataSourcesLoading: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   resultsState: PropTypes.array.isRequired,
 }

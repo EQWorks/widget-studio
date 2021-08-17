@@ -29,13 +29,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const WlCuSelector = ({ selectedWlState, selectedCuState, wlCuLoadingState }) => {
+const WlCuSelector = ({ selectedWl, setSelectedWl, selectedCu, setSelectedCu, setWlCuLoading }) => {
   const classes = useStyles()
-  const [selectedWl, setSelectedWl] = selectedWlState
-  const [selectedCu, setSelectedCu] = selectedCuState
   const wl = useStoreState((state) => state.wl)
   const cu = useStoreState((state) => state.cu)
-  const [wlCuLoading, setWlCuLoading] = wlCuLoadingState
 
   useEffect(() => {
     setSelectedWl(wl)
@@ -116,9 +113,11 @@ const WlCuSelector = ({ selectedWlState, selectedCuState, wlCuLoadingState }) =>
 }
 
 WlCuSelector.propTypes = {
-  selectedWlState: PropTypes.array.isRequired,
-  selectedCuState: PropTypes.array.isRequired,
-  wlCuLoadingState: PropTypes.array.isRequired,
+  selectedCu: PropTypes.string.isRequired,
+  setSelectedCu: PropTypes.func.isRequired,
+  selectedWl: PropTypes.string.isRequired,
+  setSelectedWl: PropTypes.func.isRequired,
+  setWlCuLoading: PropTypes.func.isRequired,
 }
 
 export default WlCuSelector
