@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { ThemeProvider, Loader } from '@eqworks/lumen-ui'
+import { ThemeProvider } from '@eqworks/lumen-ui'
 import { InitStorage, AuthActions, LoginContextProvider, Login, useAuthContext } from '@eqworks/common-login'
 import { createMemoryHistory } from 'history'
 
 const AuthProvider = ({ children }) => {
-  const { authState: { authenticated, authLoading }, dispatch } = useAuthContext()
+  const { authState: { authenticated }, dispatch } = useAuthContext()
 
   const jwt = window.localStorage.getItem('auth_jwt')
 
@@ -31,21 +31,18 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    authLoading ?
-      <Loader open />
+    authenticated ?
+      children
       :
-      authenticated ?
-        children
-        :
-        <ThemeProvider>
-          <Login
-            product='locus'
-            actions={AuthActions}
-            history={createMemoryHistory()}
-            // crossLoginClick={crossLoginLOCUS ? crossLoginClick : null}
-            crossLoginClick={crossLoginClick}
-          />
-        </ThemeProvider>
+      <ThemeProvider>
+        <Login
+          product='locus'
+          actions={AuthActions}
+          history={createMemoryHistory()}
+          // crossLoginClick={crossLoginLOCUS ? crossLoginClick : null}
+          crossLoginClick={crossLoginClick}
+        />
+      </ThemeProvider>
   )
 }
 
