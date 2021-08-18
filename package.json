@@ -1,6 +1,7 @@
 {
   "name": "@eqworks/widget-studio",
   "version": "1.0.0-alpha",
+  "private": true,
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
