@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl'
 import Switch from '@material-ui/core/Switch'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
-import { useStoreState, useStoreActions } from 'easy-peasy'
+import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../custom-select'
 
 const useStyles = makeStyles({

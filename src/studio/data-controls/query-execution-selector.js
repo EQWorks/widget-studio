@@ -8,7 +8,7 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
-import { useStoreState, useStoreActions } from 'easy-peasy'
+import { useStoreState, useStoreActions } from '../store'
 
 import { SAVED_QUERIES, EXECUTIONS, useSavedQueries, useExecutions } from '../../util/fetch'
 

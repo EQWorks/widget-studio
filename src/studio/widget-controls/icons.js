@@ -9,7 +9,7 @@ import InsertChartIcon from '@material-ui/icons/InsertChart'
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 import Grid from '@material-ui/core/Grid'
 import Badge from '@material-ui/core/Badge'
-import { useStoreActions, useStoreState } from 'easy-peasy'
+import { useStoreActions, useStoreState } from '../store'
 
 
 const mapIcons = [

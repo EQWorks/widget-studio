@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import Switch from '@material-ui/core/Switch'
-import { useStoreState, useStoreActions } from 'easy-peasy'
+import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../custom-select'
 // import { getPieChartData, sum } from './utils'
 

@@ -9,26 +9,25 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import BuildIcon from '@material-ui/icons/Build'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import { makeStyles } from '@material-ui/core/styles'
-import { useStoreState, useStoreActions, createStore, StoreProvider } from 'easy-peasy'
+import { StudioStore, useStoreState, useStoreActions } from './store'
 import { Typography } from '@eqworks/lumen-ui'
 
 import WidgetControls from './widget-controls'
 import ResultsTable from './table'
 import styles from './styles'
 import { requestData, requestConfig } from '../util/fetch'
-import { storeContent, storeOptions } from './store'
 import DataControls from './data-controls'
 
-// provide studio+widget with QueryClient and easy-peasy store
+// provide studio+widget with QueryClient
 const queryClient = new QueryClient()
 const WrappedWidgetStudio = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <StoreProvider store={createStore(storeContent, storeOptions)}>
+      <StudioStore.Provider>
         <WidgetStudio>
           {children}
         </WidgetStudio>
-      </StoreProvider>
+      </StudioStore.Provider>
     </QueryClientProvider>
   )
 }

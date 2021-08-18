@@ -1,7 +1,7 @@
 import React, { createElement } from 'react'
 
 import PropTypes from 'prop-types'
-import { useStoreState } from 'easy-peasy'
+import { useStoreState } from '../store'
 import { makeStyles } from '@material-ui/core/styles'
 import { Loader } from '@eqworks/lumen-ui'
 
