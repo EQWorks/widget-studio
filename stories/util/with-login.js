@@ -47,7 +47,7 @@ const AuthProvider = ({ children }) => {
 }
 
 AuthProvider.propTypes = {
-  children: PropTypes.array
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 }
 
 const withLogin = (children) => {

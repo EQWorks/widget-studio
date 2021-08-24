@@ -151,13 +151,10 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
 }
 
 QueryExecutionSelector.propTypes = {
-  selectedWl: PropTypes.number.isRequired,
-  selectedCu: PropTypes.number.isRequired,
-  wlState: PropTypes.array.isRequired,
-  cuState: PropTypes.array.isRequired,
+  selectedWl: PropTypes.number,
+  selectedCu: PropTypes.number,
   setDataSourcesLoading: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  resultsState: PropTypes.array.isRequired,
+  disabled: PropTypes.bool
 }
 
 export default QueryExecutionSelector

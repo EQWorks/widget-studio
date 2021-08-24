@@ -24,7 +24,7 @@ const DataControls = () => {
         Choose a source of data for your widget.
       </Typography>
       <div className={classes.dataSelectorContainer}>
-        <Loader open={wlCuLoading}>
+        <Loader open={wlCuLoading || dataSourcesLoading}>
           <div className={wlCuLoading ? classes.hiddenDataSelector : classes.dataSelector}>
             <WlCuSelector
               {...{

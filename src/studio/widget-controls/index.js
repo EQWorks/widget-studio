@@ -38,7 +38,7 @@ const WidgetControls = ({ columns, dataLoading }) => {
         <div className={classes.controlHeader}>
           <Icons disabled={!columns.length || dataLoading} />
         </div>
-        {type &&
+        {type && columns &&
           // render the appropriate controls
           createElement(
             controls[type],

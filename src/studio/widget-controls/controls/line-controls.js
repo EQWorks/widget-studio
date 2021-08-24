@@ -33,8 +33,8 @@ const LineControls = ({ columns }) => {
   const [numericColumns, setNumericColumns] = useState([])
   const [stringColumns, setStringColumns] = useState([])
   useEffect(() => {
-    setNumericColumns(columns.filter(({ _, category }) => category === 'Numeric'))
-    setStringColumns(columns.filter(({ _, category }) => category === 'String'))
+    setNumericColumns(columns.filter(({ category }) => category === 'Numeric'))
+    setStringColumns(columns.filter(({ category }) => category === 'String'))
   }, [columns])
 
   const setIndexByValue = event => {

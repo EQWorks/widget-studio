@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import InputLabel from '@material-ui/core/InputLabel'
-import { StudioStore, useStoreState, useStoreActions } from '../store'
+import { useStoreState } from '../store'
 
 import { useWhiteLabels, useCustomers, useSavedQueries } from '../../util/fetch'
 
@@ -43,8 +43,6 @@ const WlCuSelector = ({ selectedWl, setSelectedWl, selectedCu, setSelectedCu, se
   const [wlListIsLoading, wlList] = useWhiteLabels()
   const [cuListIsLoading, cuList = []] = useCustomers(selectedWl)
 
-  setWlCuLoading(wlListIsLoading || cuListIsLoading)
-
   useEffect(() => {
     setWlCuLoading(wlListIsLoading || cuListIsLoading)
   }, [cuListIsLoading, setWlCuLoading, wlListIsLoading])
@@ -71,7 +69,7 @@ const WlCuSelector = ({ selectedWl, setSelectedWl, selectedCu, setSelectedCu, se
         <FormControl disabled={wlListIsLoading || !filteredWhiteLabels.length} className={classes.form}>
           <InputLabel id='Whitelabel'>Whitelabel</InputLabel>
           <Select
-            value={`${selectedWl}`}
+            value={selectedWl || ''}
             onChange={(event) => {
               setSelectedWl(event.target.value)
               setSelectedCu(null)
@@ -92,7 +90,7 @@ const WlCuSelector = ({ selectedWl, setSelectedWl, selectedCu, setSelectedCu, se
         <FormControl disabled={wlListIsLoading || cuListIsLoading || !filteredWhiteLabels.length} className={classes.form}>
           <InputLabel id='Customer'>Customer</InputLabel>
           <Select
-            value={`${selectedCu}`}
+            value={selectedCu || ''}
             onChange={(event) => setSelectedCu(event.target.value)}
             MenuProps={{ elevation: 1 }}
           >
@@ -113,9 +111,9 @@ const WlCuSelector = ({ selectedWl, setSelectedWl, selectedCu, setSelectedCu, se
 }
 
 WlCuSelector.propTypes = {
-  selectedCu: PropTypes.string.isRequired,
+  selectedCu: PropTypes.number,
   setSelectedCu: PropTypes.func.isRequired,
-  selectedWl: PropTypes.string.isRequired,
+  selectedWl: PropTypes.number,
   setSelectedWl: PropTypes.func.isRequired,
   setWlCuLoading: PropTypes.func.isRequired,
 }

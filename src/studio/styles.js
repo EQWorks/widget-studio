@@ -16,7 +16,7 @@ export default {
     borderColor: '#d6d6d6',
     background: '#f7f7f7',
     flexDirection: 'column',
-    height: '60vh'
+    height: '40vh'
   },
   mainContainer: {
     display: 'flex',
