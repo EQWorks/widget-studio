@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, useState, useEffect } from 'react'
+import React, { Children, cloneElement, useCallback, useState, useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -67,17 +67,18 @@ const WidgetStudio = props => {
 
   // on first load, gain control of the widget's predefined config object (if it has one)
   const [initComplete, setInitComplete] = useState(!widgetID)
-  if (!initComplete) {
-    requestConfig(widgetID).then(obj => {
-      readConfig(obj)
-      setInitComplete(true)
-    })
-  }
+  useEffect(() => {
+    if (!initComplete) {
+      requestConfig(widgetID).then(readConfig)
+    }
+  }, [initComplete, readConfig, widgetID])
 
   // fetch rows/columns on data source change, reset config appropriately
   useEffect(() => {
     if (dataSource && dataID) {
-      reset()
+      if (initComplete) {
+        reset()
+      }
       setDataLoading(true)
       requestData(dataSource, dataID)
         .then(res => {
@@ -96,9 +97,11 @@ const WidgetStudio = props => {
         })
         .finally(() => {
           setDataLoading(false)
+          setInitComplete(true)
         })
     }
-  }, [dataSource, dataID, updateStore, reset])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataID, dataSource, reset, updateStore])
 
   return (
     <div className={classes.outerContainer}>
