@@ -135,5 +135,5 @@ export const requestData = async (dataSource, dataID) => {
 
 // TODO request from db -- this is a placeholder
 export const requestConfig = async (id) => {
-  return sampleConfigs[id]
+  return id ? sampleConfigs[id] : null
 }

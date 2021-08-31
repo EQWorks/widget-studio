@@ -1,10 +1,10 @@
 import React, { createElement } from 'react'
 
 import PropTypes from 'prop-types'
-import { useStoreState } from '../store'
 import { makeStyles } from '@material-ui/core/styles'
 import { Loader } from '@eqworks/lumen-ui'
 
+import { useStoreState } from '../../store'
 import BarControls from './controls/bar-controls'
 import PieControls from './controls/pie-controls'
 import LineControls from './controls/line-controls'
