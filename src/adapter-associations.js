@@ -1,4 +1,4 @@
-import { NivoAdapter } from '../adapter'
+import { NivoAdapter } from './adapter'
 
 export default {
   bar: NivoAdapter,

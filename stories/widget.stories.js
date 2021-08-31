@@ -2,8 +2,8 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 
 import sampleConfigs from './sample-configs'
-import { Widget, WidgetStudio } from '../src'
-import styles from '../src/studio/styles'
+import Widget from '../src'
+import styles from '../src/styles'
 
 storiesOf('Dashboard-esque example')
   .add('Dashboard-esque example', () => (
@@ -15,9 +15,7 @@ storiesOf('Dashboard-esque example')
       {
         Object.keys(sampleConfigs).map(id =>
           <div key={id}>
-            <WidgetStudio>
-              <Widget {...{ id }} />
-            </WidgetStudio>
+            <Widget studio {...{ id }} />
           </div>
         )
       }
@@ -27,9 +25,7 @@ storiesOf('Dashboard-esque example')
 storiesOf('Undefined widget')
   // showcase behaviour without explicit widget ID
   .add('In studio', () => (
-    <WidgetStudio>
-      <Widget />
-    </WidgetStudio>
+    <Widget studio />
   ))
   // demonstrate incorrect component usage
   .add('Standalone (not allowed)', () => (
@@ -47,9 +43,7 @@ Object.entries(sampleConfigs).forEach(([id, config]) => {
     // generate a studio story
     storiesOf('Defined widget wrapped in studio', module)
       .add(label, () => (
-        <WidgetStudio>
-          <Widget {...{ id }} />
-        </WidgetStudio >
+        <Widget studio {...{ id }} />
       ))
 
     // and a standalone story
