@@ -1,4 +1,7 @@
 export default {
+  widgetTitle: {
+    paddingLeft: '3rem',
+  },
   warning: {
     textAlign: 'center',
     height: '100%',
@@ -15,28 +18,26 @@ export default {
     borderWidth: 'thin',
     borderColor: '#d6d6d6',
     background: '#f7f7f7',
-    flexDirection: 'column',
-    height: '40vh'
+    height: '60vh',
   },
   mainContainer: {
     display: 'flex',
     flexDirection: 'row',
-    width: '100%',
     height: '100%',
-  },
-  innerContainer: {
-    height: '100%',
-    display: 'flex'
+    order: 2,
+    flex: '1 1 0',
+    minWidth: 0,
+    justifyContent: 'center'
   },
   widgetContainer: {
-    flex: '1 1 0',
-    minWidth: 0
+    width: '100%'
   },
   widgetControlsSidebar: {
     display: 'flex',
     borderRadius: '1rem',
     padding: '1rem',
     background: '#e6e6e6',
+    order: 3,
   },
   widgetControlsSidebarTab: {
     display: 'flex',
@@ -62,6 +63,7 @@ export default {
       marginLeft: '0.5rem',
       marginRight: '0.5rem'
     },
+    order: 1
   },
   dataControlsAlt: {
     display: 'flex',
@@ -74,6 +76,8 @@ export default {
     display: 'flex',
   },
   extras: {
-    overflow: 'auto'
+    overflow: 'auto',
+    flex: 1,
+    order: 2
   }
 }
