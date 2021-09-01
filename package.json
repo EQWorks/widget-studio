@@ -41,7 +41,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@eqworks/chart-system": "^0.5.2",
-    "@eqworks/common-login": "^0.8.0-alpha.5",
+    "@eqworks/common-login": "^0.9.0-alpha.1",
     "@eqworks/lumen-ui": "^1.0.0",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@material-ui/core": "^4.11.0",
@@ -63,6 +63,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-query": "^3.19.0",
+    "react-router-dom": "5.2.0",
     "size-limit": "^4.5.7",
     "tailwindcss": "^2.2.9"
   },
