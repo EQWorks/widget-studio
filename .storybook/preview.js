@@ -2,7 +2,7 @@
 import React from "react"
 import { ThemeProvider } from '@eqworks/react-labs'
 
-import withLogin from "../stories/util/with-login"
+import { Authenticated } from "@eqworks/common-login"
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -10,5 +10,11 @@ export const parameters = {
 }
 
 export const decorators = [
-  (Story) => (withLogin(<ThemeProvider><Story /></ThemeProvider>)),
+  (Story) => (
+    <Authenticated product='locus'>
+      <ThemeProvider>
+        <Story />
+      </ThemeProvider>
+    </Authenticated>
+  )
 ]
