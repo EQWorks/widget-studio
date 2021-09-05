@@ -1,6 +1,3 @@
-### NOTE
-This document describes a usage pattern that is changed in unmerged branches. Please see [this README](https://github.com/EQWorks/widget-studio/blob/refactor/new-component-structure/README.md) for the most recent usage pattern which is more intuitive with fewer caveats.
-
 # widget-studio 
 
 System to generate and control widgets, graduated from `ml-ui`
@@ -16,32 +13,34 @@ $ yarn start
 Navigate to http://localhost:6008 to view the development storybook.
 
 ## Short intro
-This project allows us to have a portable `Widget` component that reads a config object and passes it to some visualization-library-specific `WidgetAdapter`.
+This project provides a declarative `Widget` component with a simple interface.
 
-Optionally, the `Widget` component can be wrapped in a `WidgetStudio`. In this case, one container is rendered that encapsulates the chart, widget configuration controls, data source selection, and raw data view. 
+- `id`: `string`
+  - identifier for a widget config JSON that this widget will read from and update. 
+- `studio`: `bool`
+  - default `false`
+  - If `studio === true`, one container is rendered that encapsulates the chart, widget configuration controls, data source selection, and raw data view. Otherwise, only the chart and title are rendered. 
+- `staticData`: `bool`
+  - default `false`
+  - If `staticData === true`, controls for modifying the widget's data source are not exposed to the frontend.
 
 ---
 ## Usage scenarios
 
-**`WidgetStudio`+`Widget` can be used in **_one of three_** ways:**
-
-1. A `WidgetStudio` **implicitly** passes its controlled `config` object as a prop to its child. 
+1. A `Widget` has no `id`, so its initial configuration is empty, but its studio features are enabled so it has the capacity to construct a config. This widget is "starting from scratch."
 ```jsx
-<WidgetStudio>
-  <Widget /> 
-</WidgetStudio>
+<Widget studio /> 
 ```
 
-2. A standalone `Widget` **explicitly receives an `id` prop** and retrieves the appropriate config object. * 
+2. A `Widget` has an `id` that determines its initial configuration. Its configuration is controlled by the enabled studio features. This widget is essentially a "loaded" widget.
 ```jsx
-<Widget id={someID}  />
+<Widget studio id={someID} />
 ```
 
-3. A `Widget` **explicitly receives an `id` prop _but is also wrapped in a `WidgetStudio`_**. The `Widget` retrieves the appropriate config object, **but the `WidgetStudio` then "reaches into" the Widget, reads the Widget's config, and overrides the Widget's config with a new controlled copy.** Once this process is complete (represented by `initComplete` state), the final result is similar to case 1 above. 
+3. A `Widget` has an `id` that determines its initial configuration. This configuration cannot change because the studio features are not enabled. This widget is essentially a read-only chart with a title.
+
 ```jsx
-<WidgetStudio>
-  <Widget id={someID} />
-</WidgetStudio>
+<Widget id={someID} />
 ```
 
 \* *Currently, the widget config database is not implemented and configs are instead retrieved from a hardcoded file.*
