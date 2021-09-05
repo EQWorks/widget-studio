@@ -1,98 +1,62 @@
-import { createElement, useMemo } from 'react'
-import PropTypes from 'prop-types'
-
 import { BarChart, PieChart, LineChart, ScatterChart } from '@eqworks/chart-system'
 
-const charts = {
-  bar: BarChart,
-  line: LineChart,
-  pie: PieChart,
-  scatter: ScatterChart,
-}
-
-const WidgetAdapter = ({ rows, config: { type, options } }) => {
-
-  const shuffledRows = useMemo(() => rows.sort(() => Math.random() - Math.random()), [rows])
-
-  const adaptedData = useMemo(() => {
-    if (type === 'bar' || type === 'pie' || type === 'scatter') {
-      return shuffledRows.slice(0, 15)
-    }
-    else if (type === 'line') {
-      return rows.slice(0, 15)
-    }
-    throw new Error
-  }, [rows, shuffledRows, type])
-
-  const adaptedConfig = useMemo(() => {
-    if (type === 'bar') {
-      return {
-        data: adaptedData,
-        groupMode: options.stack ? 'stacked' : 'grouped',
-        ...options.indexBy && { indexBy: options.indexBy },
-        ...options.group ?
-          {
-            groupByKey: options.groupBy,
-            valueKey: options.keys[0],
-          }
-          :
-          {
-            keys: options.keys,
-          },
-        // axisBottomLegendLabel: ???,
-        ...options.group && options.keys[0] && {
-          axisLeftLegendLabel: options.keys[0],
-        },
-      }
-    }
-    else if (type === 'line') {
-      return {
-        // title={title}
-        data: adaptedData,
-        ...options.indexByValue &&
+export default {
+  bar: [
+    BarChart,
+    (rows, config) => ({
+      data: rows.slice(0, 15),
+      groupMode: config.options.stack ? 'stacked' : 'grouped',
+      ...config.options.indexBy && { indexBy: config.options.indexBy },
+      ...config.options.group ?
         {
-          indexBy: options.indexBy,
+          groupByKey: config.options.groupBy,
+          valueKey: config.options.keys[0],
+        }
+        :
+        {
+          keys: config.options.keys,
         },
-        yKeys: options.y,
-        xKey: options.x,
-        xScale: { type: 'point' },
-        indexByValue: options.indexByValue,
-        axisBottomLegendLabel: options.x,
-        axisLeftLegendLabel: options.y.join(', '),
-      }
-    }
-    else if (type === 'pie') {
-      return {
-        //   title:title ,
-        data: adaptedData,
-        dataKey: options.keys[0], // TODO support multi..?
-        indexBy: options.indexBy,
-        isDonut: options.donut,
-      }
-    }
-    else if (type === 'scatter') {
-      return {
-        //   title:title ,
-        data: adaptedData,
-        xKey: options.x,
-        yKeys: options.y,
-        indexBy: options.indexBy,
-      }
-    }
-  }, [adaptedData, options, type])
-
-  return createElement(charts[type], { ...adaptedConfig })
+      // axisBottomLegendLabel: ???,
+      ...config.options.group && config.options.keys[0] && {
+        axisLeftLegendLabel: config.options.keys[0],
+      },
+    })
+  ],
+  line: [
+    LineChart,
+    (rows, config) => ({
+      // title={title}
+      data: rows.slice(0, 15),
+      ...config.options.indexByValue &&
+      {
+        indexBy: config.options.indexBy,
+      },
+      yKeys: config.options.y,
+      xKey: config.options.x,
+      xScale: { type: 'point' },
+      indexByValue: config.options.indexByValue,
+      axisBottomLegendLabel: config.options.x,
+      axisLeftLegendLabel: config.options.y.join(', '),
+    })
+  ],
+  pie: [
+    PieChart,
+    (rows, config) => ({
+      //   title:title ,
+      data: rows.slice(0, 15),
+      dataKey: config.options.keys[0], // TODO support multi..?
+      indexBy: config.options.indexBy,
+      isDonut: config.options.donut,
+    }),
+  ],
+  scatter: [
+    ScatterChart,
+    (rows, config) => ({
+      //   title:title ,
+      data: rows.slice(0, 15),
+      xKey: config.options.x,
+      yKeys: config.options.y,
+      indexBy: config.options.indexBy,
+    })
+  ]
 }
-
-WidgetAdapter.propTypes = {
-  rows: PropTypes.array,
-  columns: PropTypes.array,
-  config: PropTypes.object,
-}
-WidgetAdapter.default = {
-  rows: [],
-  columns: [],
-  config: {},
-}
-
-export default WidgetAdapter

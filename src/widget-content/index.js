@@ -5,7 +5,7 @@ import { Loader } from '@eqworks/lumen-ui'
 import { Typography } from '@eqworks/lumen-ui'
 
 import { useStoreState } from '../store'
-import adapters from './adapters'
+import WidgetAdapter from './adapters'
 import styles from '../styles'
 
 // put styles in separate file for readability
@@ -43,15 +43,7 @@ const WidgetContent = () => {
                 {title}
               </Typography>
             </div>
-            {
-              // pass data + config to the adapter of choice
-              createElement(
-                adapters[type],
-                {
-                  ...{ rows, columns, config }
-                }
-              )
-            }
+            <WidgetAdapter />
           </div>
           :
           // guide the user to configure the widget
