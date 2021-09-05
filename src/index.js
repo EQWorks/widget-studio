@@ -14,18 +14,6 @@ import WidgetContent from './widget-content'
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-// provide studio+widget with QueryClient
-const queryClient = new QueryClient()
-const WrappedWidget = (props) => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <StudioStore.Provider>
-        <Widget {...props} />
-      </StudioStore.Provider>
-    </QueryClientProvider>
-  )
-}
-
 const Widget = ({ id, studio, dynamicDataSource }) => {
 
   const classes = useStyles()
@@ -94,4 +82,4 @@ Widget.defaultProps = {
   dynamicDataSource: false,
 }
 
-export default WrappedWidget
+export default withQueryClient(withStore(Widget))
