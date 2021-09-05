@@ -14,7 +14,7 @@ import WidgetContent from './widget-content'
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const Widget = ({ id, studio, dynamicDataSource }) => {
+const Widget = ({ id, studio, staticData }) => {
 
   const classes = useStyles()
 
@@ -29,10 +29,20 @@ const Widget = ({ id, studio, dynamicDataSource }) => {
   const dataID = useStoreState((state) => state.data.id)
   const config = useStoreState((state) => state.config)
 
-  // on first load, get/read the config associated with the widget ID
+  // on first load,
   useEffect(() => {
-    requestConfig(id).then(readConfig)
-  }, [readConfig, id])
+    // dispatch staticData prop
+    updateUI({ staticData })
+    // check for invalid component usage
+    if (id == undefined || id == null) {
+      if (staticData || !studio) {
+        throw new Error('Incorrect usage: Widgets must either receive an id or have studio features and data control enabled.')
+      }
+    } else {
+      // fetch/read the config associated with the widget ID
+      requestConfig(id).then(readConfig)
+    }
+  }, [readConfig, id, staticData, updateUI, studio])
 
   // fetch rows/columns on data source change, reset config appropriately
   useEffect(() => {
@@ -41,6 +51,7 @@ const Widget = ({ id, studio, dynamicDataSource }) => {
         reset()
       }
       updateStore({ dataLoading: true })
+      updateUI({ showDataControls: false })
       requestData(dataSource, dataID)
         .then(res => {
           const { results: rows, columns, whitelabelID, customerID } = res
@@ -59,8 +70,10 @@ const Widget = ({ id, studio, dynamicDataSource }) => {
         .finally(() => {
           updateStore({ dataLoading: false })
         })
+    } else {
+      updateUI({ showDataControls: !staticData })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataID, dataSource, reset, updateUI, updateStore])
 
   return (
@@ -74,12 +87,12 @@ const Widget = ({ id, studio, dynamicDataSource }) => {
 Widget.propTypes = {
   studio: PropTypes.bool,
   id: PropTypes.string,
-  dynamicDataSource: PropTypes.bool,
+  staticData: PropTypes.bool,
 }
 Widget.defaultProps = {
   studio: false,
   id: undefined,
-  dynamicDataSource: false,
+  staticData: false,
 }
 
 export default withQueryClient(withStore(Widget))

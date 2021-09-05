@@ -35,7 +35,8 @@ const stateDefaults = {
   ui: {
     showTable: false,
     showWidgetControls: false,
-    showDataControls: false
+    showDataControls: false,
+    staticData: false
   },
   dataLoading: false,
   dataError: null
@@ -200,7 +201,7 @@ export default {
   update: action((state, payload) => ({ ...state, ...payload })),
 
   // update the ui state specifically
-  updateUI: action((state, payload) => ({ ...state, ui: { ...payload } })),
+  updateUI: action((state, payload) => ({ ...state, ui: { ...state.ui, ...payload } })),
 
   // reset only the current widget's unique state
   resetCurrent: thunk((actions, payload, { getState }) => {
