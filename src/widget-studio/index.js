@@ -36,6 +36,7 @@ const WidgetStudio = props => {
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const showTable = useStoreState((state) => state.ui.showTable)
   const showDataControls = useStoreState((state) => state.ui.showDataControls)
+  const staticData = useStoreState((state) => state.ui.staticData)
 
   return (
     <>
@@ -44,7 +45,9 @@ const WidgetStudio = props => {
           // something to exit?
           showDataControls || showTable ?
             // show exit button
-            <IconButton className={classes.tallButton} color='secondary'
+            <IconButton
+              className={classes.tallButton}
+              color='secondary'
               onClick={() => {
                 updateUI({
                   showTable: false,
@@ -54,9 +57,13 @@ const WidgetStudio = props => {
             :
             // show sidebar buttons
             <>
-              <IconButton disabled={!dataSource || !dataID} color='secondary'
-                onClick={() => updateUI({ showDataControls: !showDataControls })}
-              > <SettingsIcon /> </IconButton>
+              {
+                !staticData &&
+                <IconButton
+                  color='secondary'
+                  onClick={() => updateUI({ showDataControls: !showDataControls })}
+                > <SettingsIcon /> </IconButton>
+              }
               <IconButton
                 disabled={dataLoading || !dataSource || !dataID}
                 color='secondary'
@@ -71,7 +78,10 @@ const WidgetStudio = props => {
 
       <div className={showDataControls || showTable ? classes.extras : classes.hidden}>
         <div className={showDataControls ? classes.dataControlsAlt : classes.hidden}>
-          <DataControls />
+          {
+            !staticData &&
+            <DataControls />
+          }
         </div>
         <div className={showTable ? null : classes.hidden}>
           <ResultsTable results={rows} />

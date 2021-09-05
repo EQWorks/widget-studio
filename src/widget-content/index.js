@@ -58,30 +58,35 @@ const WidgetContent = () => {
           <div className={classes.warning}>
             <Typography color="textSecondary" variant='h6'>
               {
-                dataError ? 'Something went wrong.'
+                !dataID || !dataSource ? 'Please select a data source.'
                   :
-                  dataLoading ?
-                    <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-
-                      <Loader message="Loading data..." open />
-                    </div>
+                  dataError ? 'Something went wrong.'
                     :
-                    !rows.length ? 'Sorry, this data is empty.'
+                    dataLoading ?
+                      <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+
+                        <Loader message="Loading data..." open />
+                      </div>
                       :
-                      type ? 'Select columns and configure your widget.'
-                        : 'Select a widget type.'
+                      !rows.length ? 'Sorry, this data is empty.'
+                        :
+                        type ? 'Select columns and configure your widget.'
+                          : 'Select a widget type.'
 
               }
             </Typography>
             <Typography color="textSecondary" variant='subtitle2'>
               {
-                dataError ?
-                  `${dataError}`
-                  :
-                  dataLoading ?
-                    `${dataSource} ${dataID}`
+                dataID && dataSource &&
+                (
+                  dataError ?
+                    `${dataError}`
                     :
-                    'Data loaded successfully'
+                    dataLoading ?
+                      `${dataSource} ${dataID}`
+                      :
+                      'Data loaded successfully'
+                )
               }
             </Typography>
           </div>
