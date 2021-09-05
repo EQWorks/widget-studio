@@ -1,4 +1,5 @@
-import { NivoAdapter } from './adapter'
+import NivoAdapter from './chart-system/nivo'
+import PlotlyAdapter from './chart-system/plotly'
 
 export default {
   bar: NivoAdapter,
