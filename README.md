@@ -1,9 +1,11 @@
+### NOTE
+This document describes a usage pattern that is changed in unmerged branches. Please see [this README](https://github.com/EQWorks/widget-studio/blob/refactor/new-component-structure/README.md) for the most recent usage pattern which is more intuitive with fewer caveats.
+
 # widget-studio 
 
-System to generate, handle and control widget config objects, graduated from `ml-ui`
+System to generate and control widgets, graduated from `ml-ui`
 
 ## Getting started
-
 In `widget-studio` project root:
 ```shell
 $ nvm use
@@ -14,34 +16,31 @@ $ yarn start
 Navigate to http://localhost:6008 to view the development storybook.
 
 ## Short intro
-This project allows us to have a `Widget` component that reads a config object and passes it to some visualization-library-specific `WidgetAdapter`.
+This project allows us to have a portable `Widget` component that reads a config object and passes it to some visualization-library-specific `WidgetAdapter`.
 
 Optionally, the `Widget` component can be wrapped in a `WidgetStudio`. In this case, one container is rendered that encapsulates the chart, widget configuration controls, data source selection, and raw data view. 
 
-Specifically, these components can be used in **_one of three_** ways:
+---
+## Usage scenarios
 
-1. A `WidgetStudio` implicitly passes its controlled `config` object as a prop to its child. 
+**`WidgetStudio`+`Widget` can be used in **_one of three_** ways:**
+
+1. A `WidgetStudio` **implicitly** passes its controlled `config` object as a prop to its child. 
 ```jsx
-import { WidgetAdapter as NivoAdapter } from '@eqworks/chart-system'
-
 <WidgetStudio>
-  <Widget adapter={NivoAdapter} /> 
+  <Widget /> 
 </WidgetStudio>
 ```
 
-2. A standalone `Widget` explicitly receives an `id` prop and queries a database to retrieve the appropriate config object. * 
+2. A standalone `Widget` **explicitly receives an `id` prop** and retrieves the appropriate config object. * 
 ```jsx
-import { WidgetAdapter as NivoAdapter } from '@eqworks/chart-system'
-
-<Widget id={someID} adapter={NivoAdapter} />
+<Widget id={someID}  />
 ```
 
-3. A `Widget` wrapped in a `WidgetStudio` explicitly receives an `id` prop and queries a database to retrieve the appropriate config object. * Then, the `WidgetStudio` gains control of that object and the result is similar to case #1. 
+3. A `Widget` **explicitly receives an `id` prop _but is also wrapped in a `WidgetStudio`_**. The `Widget` retrieves the appropriate config object, **but the `WidgetStudio` then "reaches into" the Widget, reads the Widget's config, and overrides the Widget's config with a new controlled copy.** Once this process is complete (represented by `initComplete` state), the final result is similar to case 1 above. 
 ```jsx
-import { WidgetAdapter as NivoAdapter } from '@eqworks/chart-system'
-
 <WidgetStudio>
-  <Widget id={someID} adapter={NivoAdapter} />
+  <Widget id={someID} />
 </WidgetStudio>
 ```
 
