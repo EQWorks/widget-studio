@@ -18,7 +18,7 @@ export default {
     borderWidth: 'thin',
     borderColor: '#d6d6d6',
     background: '#f7f7f7',
-    height: '60vh',
+    height: '45vh',
   },
   mainContainer: {
     display: 'flex',

@@ -5,18 +5,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Switch from '@material-ui/core/Switch'
-import IconButton from '@material-ui/core/IconButton'
-import Clear from '@material-ui/icons/Clear'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../custom-select'
+import styles from '../styles'
 
-const useStyles = makeStyles({
-  controls: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end'
-  },
-})
+const useStyles = makeStyles(styles)
 
 const LineControls = ({ columns }) => {
   const classes = useStyles()
@@ -27,7 +20,6 @@ const LineControls = ({ columns }) => {
   const indexBy = useStoreState((state) => state.line.indexBy)
 
   const setLineState = useStoreActions(actions => actions.line.update)
-  const reset = useStoreActions(actions => actions.resetCurrent)
 
   // TODO data inference rather than using 'category' attribute
   const [numericColumns, setNumericColumns] = useState([])
@@ -79,12 +71,6 @@ const LineControls = ({ columns }) => {
         />
       }
 
-      <IconButton
-        size='small'
-        onClick={reset}
-      >
-        <Clear />
-      </IconButton>
     </div>
   )
 }

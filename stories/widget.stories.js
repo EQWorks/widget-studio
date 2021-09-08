@@ -3,7 +3,6 @@ import { storiesOf } from '@storybook/react'
 
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
-import styles from '../src/styles'
 
 storiesOf('Dashboard-esque example')
   .add('Dashboard-esque example', () => (
@@ -57,9 +56,7 @@ Object.entries(sampleConfigs).forEach(([id, config]) => {
     // and a standalone story
     storiesOf('Widget with ID (standalone)')
       .add(label, () => (
-        <div style={styles.outerContainer} >
-          <Widget {...{ id }} />
-        </div>
+        <Widget {...{ id }} />
       ))
   }
 })
