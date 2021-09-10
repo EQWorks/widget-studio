@@ -11,9 +11,10 @@ import styles from '../styles'
 
 const useStyles = makeStyles(styles)
 
-const BarControls = ({ columns }) => {
+const BarControls = () => {
   const classes = useStyles()
 
+  const columns = useStoreState((state) => state.bar.columns)
   const group = useStoreState((state) => state.bar.group)
   const stack = useStoreState((state) => state.bar.stack)
   const groupBy = useStoreState((state) => state.bar.groupBy)

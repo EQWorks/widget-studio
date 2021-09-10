@@ -8,9 +8,10 @@ import styles from '../styles'
 
 const useStyles = makeStyles(styles)
 
-const ScatterControls = ({ columns }) => {
+const ScatterControls = () => {
   const classes = useStyles()
 
+  const columns = useStoreState((state) => state.bar.columns)
   const x = useStoreState((state) => state.scatter.x)
   const y = useStoreState((state) => state.scatter.y)
   const indexBy = useStoreState((state) => state.scatter.indexBy)

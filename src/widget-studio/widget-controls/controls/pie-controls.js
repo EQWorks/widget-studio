@@ -12,8 +12,10 @@ import styles from '../styles'
 
 const useStyles = makeStyles(styles)
 
-const PieControls = ({ columns }) => {
+const PieControls = () => {
   const classes = useStyles()
+
+  const columns = useStoreState((state) => state.bar.columns)
   const indexBy = useStoreState((state) => state.pie.indexBy)
   const keys = useStoreState((state) => state.pie.keys)
   const donut = useStoreState((state) => state.pie.donut)

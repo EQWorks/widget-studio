@@ -25,9 +25,12 @@ const controls = {
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const WidgetControls = ({ columns, dataLoading }) => {
+const WidgetControls = () => {
   const classes = useStyles()
+
   const type = useStoreState((state) => state.type)
+  const dataLoading = useStoreState((state) => state.dataLoading)
+  const columns = useStoreState((state) => state.columns)
   const reset = useStoreActions(actions => actions.resetCurrent)
 
   return (
