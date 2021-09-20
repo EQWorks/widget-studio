@@ -12,17 +12,17 @@ export default {
   },
   outerContainer: {
     display: 'flex',
+    flex: 1,
     border: 'solid',
     borderRadius: '1rem',
     padding: '1rem',
     borderWidth: 'thin',
     borderColor: '#d6d6d6',
     background: '#f7f7f7',
-    height: '45vh',
   },
   mainContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     height: '100%',
     order: 2,
     flex: '1 1 0',
@@ -30,7 +30,9 @@ export default {
     justifyContent: 'center'
   },
   widgetContainer: {
-    width: '100%'
+    width: '100%',
+    paddingLeft: '1rem',
+    paddingRight: '1rem'
   },
   widgetControlsSidebar: {
     display: 'flex',
@@ -55,7 +57,6 @@ export default {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100%',
     borderRadius: '1rem',
     background: '#e6e6e6',
     flexDirection: 'column',

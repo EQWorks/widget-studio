@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
+import { Resizable } from 're-resizable'
 
 import styles from './styles'
 import { useStoreState, useStoreActions } from './store'
@@ -14,7 +15,7 @@ import WidgetContent from './widget-content'
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const Widget = ({ id, studio, staticData }) => {
+const Widget = ({ id, studio, staticData, resizable }) => {
 
   const classes = useStyles()
 
@@ -76,11 +77,21 @@ const Widget = ({ id, studio, staticData }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataID, dataSource, reset, updateUI, updateStore])
 
-  return (
+  const ws =
     <div className={classes.outerContainer}>
       {studio && <WidgetStudio />}
       <WidgetContent />
     </div >
+
+  return (
+    resizable ?
+      <Resizable>
+        <div style={{ display: 'flex', width: '100%', height: '100%' }} >
+          {ws}
+        </div>
+      </Resizable>
+      :
+      ws
   )
 }
 
@@ -88,11 +99,13 @@ Widget.propTypes = {
   studio: PropTypes.bool,
   id: PropTypes.string,
   staticData: PropTypes.bool,
+  resizable: PropTypes.bool,
 }
 Widget.defaultProps = {
   studio: false,
   id: undefined,
   staticData: false,
+  resizable: true,
 }
 
 export default withQueryClient(withStore(Widget))
