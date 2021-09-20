@@ -1,86 +1,80 @@
-import React, { useState, useEffect } from 'react'
-
+import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormControl from '@material-ui/core/FormControl'
-import Switch from '@material-ui/core/Switch'
+
 import { useStoreState, useStoreActions } from '../../../store'
-import CustomSelect from '../custom-select'
-import styles from '../styles'
+import {
+  aggOps,
+  Dropdown,
+  Toggle,
+  PluralLinkedSelect,
+  WidgetControlCard as Card,
+  ToggleableCard
+} from './shared'
 
-const useStyles = makeStyles(styles)
+const LineControls = ({ numericColumns, stringColumns }) => {
 
-const LineControls = () => {
-  const classes = useStyles()
-
-  const columns = useStoreState((state) => state.bar.columns)
-  const indexByValue = useStoreState((state) => state.line.indexByValue)
-  const x = useStoreState((state) => state.line.x)
-  const y = useStoreState((state) => state.line.y)
   const indexBy = useStoreState((state) => state.line.indexBy)
-
-  const setLineState = useStoreActions(actions => actions.line.update)
-
-  // TODO data inference rather than using 'category' attribute
-  const [numericColumns, setNumericColumns] = useState([])
-  const [stringColumns, setStringColumns] = useState([])
-  useEffect(() => {
-    setNumericColumns(columns.filter(({ category }) => category === 'Numeric'))
-    setStringColumns(columns.filter(({ category }) => category === 'String'))
-  }, [columns])
-
-  const setIndexByValue = event => {
-    setLineState({ indexByValue: event.target.checked })
-  }
+  const spline = useStoreState((state) => state.line.spline)
+  const showTicks = useStoreState((state) => state.line.showTicks)
+  const x = useStoreState((state) => state.line.x)
+  const keys = useStoreState((state) => state.line.keys)
+  const lineUpdate = useStoreActions(actions => actions.line.update)
 
   return (
-    <div className={classes.controls}>
-      <FormControl>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={indexByValue}
-              onChange={setIndexByValue}
-              color="primary"
-            />
-          }
-          label="Index by value"
+    <>
+      <Card title='Value Keys'>
+        <PluralLinkedSelect
+          valuePairs={keys}
+          titles={['Key', 'Aggregation']}
+          data={numericColumns}
+          subData={indexBy ? aggOps : []}
+          update={(val) => lineUpdate({ keys: val })}
         />
-      </FormControl>
-      <CustomSelect
-        title='X Key'
-        data={columns}
-        chosenValue={x}
-        setChosenValue={val => setLineState({ x: val })}
-      />
-      <CustomSelect
-        // TODO multi optional
-        multi
-        title={'Y Keys'}
-        data={numericColumns}
-        chosenValue={y}
-        setChosenValue={val => setLineState({ y: val })}
-      />
-      {
-        indexByValue &&
-        <CustomSelect
-          title='Index by'
-          data={columns}
-          chosenValue={indexBy}
-          setChosenValue={val => setLineState({ indexBy: val })}
-        />
-      }
+      </Card>
 
-    </div>
+      <ToggleableCard
+        init={!!indexBy}
+        title='Index Key'
+        update={(val) => {
+          if (!val) {
+            lineUpdate({ indexBy: null })
+          }
+        }}
+      >
+        <Dropdown
+          data={stringColumns}
+          value={indexBy}
+          update={val => lineUpdate({ indexBy: val })}
+        />
+      </ToggleableCard>
+
+      <Card title={'X Key'}>
+        <Dropdown
+          data={stringColumns.concat(numericColumns)}
+          value={x}
+          update={val => lineUpdate({ x: val })}
+        />
+      </Card>
+
+      <Card title='Styling'>
+        <Toggle
+          value={spline}
+          label='Spline interpolation'
+          update={(val) => lineUpdate({ spline: val })}
+        />
+        <Toggle
+          value={showTicks}
+          label='Show ticks'
+          update={(val) => lineUpdate({ showTicks: val })}
+        />
+      </Card>
+    </>
   )
 }
 
 LineControls.propTypes = {
-  columns: PropTypes.array,
-}
-LineControls.default = {
-  columns: [],
+  numericColumns: PropTypes.array.isRequired,
+  stringColumns: PropTypes.array.isRequired
 }
 
 export default LineControls

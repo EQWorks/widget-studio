@@ -1,84 +1,56 @@
 import React, { useState, useEffect } from 'react'
 
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormControl from '@material-ui/core/FormControl'
-import Switch from '@material-ui/core/Switch'
 import { useStoreState, useStoreActions } from '../../../store'
-import CustomSelect from '../custom-select'
 // import { getPieChartData, sum } from './utils'
-import styles from '../styles'
+import {
+  aggOps,
+  Dropdown,
+  Toggle,
+  PluralLinkedSelect,
+  WidgetControlCard as Card
+} from './shared'
 
-const useStyles = makeStyles(styles)
+const PieControls = ({ numericColumns, stringColumns }) => {
 
-const PieControls = () => {
-  const classes = useStyles()
-
-  const columns = useStoreState((state) => state.bar.columns)
   const indexBy = useStoreState((state) => state.pie.indexBy)
   const keys = useStoreState((state) => state.pie.keys)
   const donut = useStoreState((state) => state.pie.donut)
-  const setPieState = useStoreActions(actions => actions.pie.update)
-
-  // const data = useStoreState((state) => state.data)
-  // const groupedData = useStoreState((state) => state.groupedData)
-  // const groupingOptions = useStoreState((state) => state.groupingOptions)
-  // const multi = useStoreState((state) => state.pie.multi)
-  // const capData = useStoreActions(actions => actions.pie.capData)
-
-  // TODO data inference rather than using 'category' attribute
-  const [numericColumns, setNumericColumns] = useState([])
-  useEffect(() => {
-    setNumericColumns(columns.filter(({ _, category }) => category === 'Numeric'))
-  }, [columns])
+  const showPercentage = useStoreState((state) => state.pie.showPercentage)
+  const pieUpdate = useStoreActions(actions => actions.pie.update)
 
   return (
     <>
-      <div className={classes.controls}>
-        <FormControl>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={donut}
-                onChange={({ target: { checked } }) => setPieState({ donut: checked })}
-                color="primary"
-              />
-            }
-            label='Donut'
-          />
-        </FormControl>
-        <CustomSelect
-          title='Index by'
-          data={columns.filter(({ name, _ }) => !keys.includes(name))}
-          chosenValue={indexBy}
-          setChosenValue={val => setPieState({ indexBy: val })}
-        />
-        <CustomSelect
-          multi
-          title='Keys'
+      <Card title='Value Keys'>
+        <PluralLinkedSelect
+          valuePairs={keys}
+          titles={['Key', 'Aggregation']}
           data={numericColumns}
-          chosenValue={keys}
-          setChosenValue={val => setPieState({ keys: val })}
+          subData={aggOps}
+          update={(val) => pieUpdate({ keys: val })}
         />
-        {/* {groupingOptions.length > 1 &&
-        <>
-          <CustomSelect
-            multi
-            title='Group By'
-            data={groupingOptions.sort()}
-            chosenValue={chosenKey}
-            setChosenValue={handleDispatch({ key: 'chosenKey' })}
-          />
-          <IconButton
-            size='small'
-          onClick={() => handleDispatch({ chosenKey: keys.length > 1 ? [groupingOptions[0]] : [] })()}
-          >
-            <Clear />
-          </IconButton>
-        </>
-      } */}
-      </div>
+      </Card>
+
+      <Card title='Index Key'>
+        <Dropdown
+          data={stringColumns}
+          value={indexBy}
+          update={val => pieUpdate({ indexBy: val })}
+        />
+      </Card>
+
+      <Card title='Styling'>
+        <Toggle
+          value={donut}
+          label='Donut'
+          update={(val) => pieUpdate({ donut: val })}
+        />
+        <Toggle
+          value={showPercentage}
+          label='Show Percentage'
+          update={(val) => pieUpdate({ showPercentage: val })}
+        />
+      </Card>
     </>
   )
 }

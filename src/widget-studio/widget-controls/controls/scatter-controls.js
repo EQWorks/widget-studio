@@ -1,63 +1,77 @@
-import React, { useState, useEffect } from 'react'
-
+import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
+
 import { useStoreState, useStoreActions } from '../../../store'
-import CustomSelect from '../custom-select'
-import styles from '../styles'
+import {
+  aggOps,
+  Dropdown,
+  Toggle,
+  PluralLinkedSelect,
+  WidgetControlCard as Card,
+  ToggleableCard
+} from './shared'
 
-const useStyles = makeStyles(styles)
+const ScatterControls = ({ numericColumns, stringColumns }) => {
 
-const ScatterControls = () => {
-  const classes = useStyles()
-
-  const columns = useStoreState((state) => state.bar.columns)
-  const x = useStoreState((state) => state.scatter.x)
-  const y = useStoreState((state) => state.scatter.y)
   const indexBy = useStoreState((state) => state.scatter.indexBy)
-
-  const setLineState = useStoreActions(actions => actions.scatter.update)
-
-  // TODO data inference rather than using 'category' attribute
-  const [numericColumns, setNumericColumns] = useState([])
-  const [stringColumns, setStringColumns] = useState([])
-  useEffect(() => {
-    setNumericColumns(columns.filter(({ _, category }) => category === 'Numeric'))
-    setStringColumns(columns.filter(({ _, category }) => category === 'String'))
-  }, [columns])
+  const showTicks = useStoreState((state) => state.scatter.showTicks)
+  const x = useStoreState((state) => state.scatter.x)
+  const keys = useStoreState((state) => state.scatter.keys)
+  const scatterUpdate = useStoreActions(actions => actions.scatter.update)
 
   return (
-    <div className={classes.controls}>
-      <>
-        <CustomSelect
-          title='X Key'
-          data={numericColumns.filter(({ name, _ }) => !y.includes(name))}
-          chosenValue={x}
-          setChosenValue={val => setLineState({ x: val })}
+    <>
+      <Card title='Value Keys'>
+        <PluralLinkedSelect
+          valuePairs={keys}
+          titles={['Key', 'Aggregation']}
+          data={numericColumns}
+          subData={indexBy ? aggOps : []}
+          update={(val) => scatterUpdate({ keys: val })}
         />
-        <CustomSelect
-          multi
-          title={'Y Keys'}
-          data={numericColumns.filter(({ name, _ }) => name !== x)}
-          chosenValue={y}
-          setChosenValue={val => setLineState({ y: val })}
-        />
-        <CustomSelect
-          title='Index by'
+      </Card>
+
+      <ToggleableCard
+        init={!!indexBy}
+        title='Index Key'
+        update={(val) => {
+          if (!val) {
+            scatterUpdate({ indexBy: null })
+          }
+        }}
+      >
+        <Dropdown
           data={stringColumns}
-          chosenValue={indexBy}
-          setChosenValue={val => setLineState({ indexBy: val })}
+          value={indexBy}
+          update={val => scatterUpdate({ indexBy: val })}
         />
-      </>
-    </div>
+      </ToggleableCard>
+
+      {
+        !indexBy &&
+        <Card title={'X Key'}>
+          <Dropdown
+            data={stringColumns.concat(numericColumns)}
+            value={x}
+            update={val => scatterUpdate({ x: val })}
+          />
+        </Card>
+      }
+
+      <Card title='Styling'>
+        <Toggle
+          value={showTicks}
+          label='Show ticks'
+          update={(val) => scatterUpdate({ showTicks: val })}
+        />
+      </Card>
+    </>
   )
 }
 
 ScatterControls.propTypes = {
-  columns: PropTypes.array,
-}
-ScatterControls.default = {
-  columns: [],
+  numericColumns: PropTypes.array.isRequired,
+  stringColumns: PropTypes.array.isRequired
 }
 
 export default ScatterControls

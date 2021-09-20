@@ -9,7 +9,6 @@ import Input from '@material-ui/core/Input'
 import Checkbox from '@material-ui/core/Checkbox'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { Chip } from '@eqworks/lumen-ui'
 
 
 const useStyles = makeStyles(() => ({
@@ -34,7 +33,7 @@ const CustomSelect = (props) => {
   if (!multi) {
     return (
       <FormControl className={classes.form}>
-        <InputLabel id={`single-checkbox-key ${title}`}>{title}</InputLabel>
+        {title && <InputLabel id={`single-checkbox-key ${title}`}>{title}</InputLabel>}
         <Select
           labelId={`single-checkbox-key ${title}`}
           value={chosenValue}
@@ -42,7 +41,7 @@ const CustomSelect = (props) => {
           input={<Input />}
           renderValue={(selected) => (
             <div className={classes.chips}>
-              <Chip key={selected} label={selected} margin={1} custom='#006DE9' />
+              {selected}
             </div>
           )}
           MenuProps={{ elevation: 1 }}
@@ -65,7 +64,7 @@ const CustomSelect = (props) => {
 
   return (
     <FormControl className={classes.form}>
-      <InputLabel id={`mutiple-checkbox-key ${title}`}>{title}</InputLabel>
+      {title && <InputLabel id={`mutiple-checkbox-key ${title}`}>{title}</InputLabel>}
       <Select
         labelId={`mutiple-checkbox-key ${title}`}
         multiple
@@ -73,11 +72,11 @@ const CustomSelect = (props) => {
         onChange={handleChange(setChosenValue)}
         input={<Input />}
         renderValue={(selected) => (
-          <div className={classes.chips}>
-            {selected.map((value) => (
-              <Chip key={value} label={value} margin={1} custom='#006DE9' />
-            ))}
-          </div>
+          selected.map(value => (
+            <div key={value} className={classes.chips}>
+              {value}
+            </div>
+          ))
         )}
         MenuProps={{ elevation: 1 }}
         {...rest}
@@ -91,7 +90,7 @@ const CustomSelect = (props) => {
           })
           : data.map((value) => (<MenuItem key={value} value={value}>{value}</MenuItem>))}
       </Select>
-    </FormControl>
+    </FormControl >
   )
 }
 

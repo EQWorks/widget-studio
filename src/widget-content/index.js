@@ -18,11 +18,9 @@ const WidgetContent = () => {
   // widget configuration state (easy-peasy)
   const dataSource = useStoreState((state) => state.data.source)
   const dataID = useStoreState((state) => state.data.id)
-  const title = useStoreState((state) => state.title)
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const rows = useStoreState((state) => state.rows)
-  const columns = useStoreState((state) => state.columns)
 
   // studio UI state
   const showTable = useStoreState((state) => state.ui.showTable)
@@ -38,11 +36,6 @@ const WidgetContent = () => {
         config ?
           // render widget
           <div className={classes.widgetContainer}>
-            <div className={classes.widgetTitle}>
-              <Typography color='textSecondary' variant='subtitle1'>
-                {title}
-              </Typography>
-            </div>
             <WidgetAdapter />
           </div>
           :
@@ -56,7 +49,6 @@ const WidgetContent = () => {
                     :
                     dataLoading ?
                       <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-
                         <Loader message="Loading data..." open />
                       </div>
                       :

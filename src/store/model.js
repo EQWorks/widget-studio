@@ -2,26 +2,29 @@ import { computed, action, thunk } from 'easy-peasy'
 
 const widgetDefaults = {
   bar: {
-    group: false,
-    groupBy: null,
     indexBy: null,
-    stack: false,
+    stacked: false,
+    spline: false,
+    showTicks: true,
     keys: [],
   },
   line: {
-    indexByValue: false,
     indexBy: null,
     x: null,
-    y: [],
+    showTicks: true,
+    keys: [],
   },
   pie: {
     indexBy: null,
     keys: [],
+    donut: false,
+    showPercentage: true
   },
   scatter: {
     indexBy: null,
     x: null,
-    y: [],
+    showTicks: true,
+    keys: [],
   }
 }
 
@@ -30,16 +33,21 @@ const stateDefaults = {
   rows: [],
   columns: [],
   type: '',
+  filters: {},
+  truncate: [],
+  truncateKey: null,
   wl: null,
   cu: null,
   ui: {
     showTable: false,
     showWidgetControls: false,
+    showFilterControls: false,
     showDataControls: false,
     staticData: false
   },
   dataLoading: false,
-  dataError: null
+  dataError: null,
+  dataName: null
 }
 
 export default {
@@ -59,19 +67,12 @@ export default {
       [
         (state) => state.keys,
         (state) => state.indexBy,
-        (state) => state.group,
-        (state) => state.groupBy,
       ],
       (
         keys,
-        indexBy,
-        group,
-        groupBy
+        indexBy
       ) => {
-        if (!group) {
-          return Boolean(keys.length && indexBy)
-        }
-        return Boolean(keys.length && groupBy)
+        return Boolean(keys.length && indexBy)
       }
     ),
   },
@@ -80,18 +81,14 @@ export default {
     update: action((state, payload) => ({ ...state, ...payload })),
     isReady: computed(
       [
-        (state) => state.indexByValue,
         (state) => state.x,
-        (state) => state.y,
-        (state) => state.indexBy,
+        (state) => state.keys,
       ],
       (
-        indexByValue,
         x,
-        y,
-        indexBy,
+        keys,
       ) => {
-        return indexByValue ? Boolean(x && y.length && indexBy) : Boolean(x && y.length)
+        return Boolean(keys.length && x)
       }
     ),
 
@@ -116,14 +113,12 @@ export default {
     isReady: computed(
       [
         (state) => state.x,
-        (state) => state.y,
-        (state) => state.indexBy,
+        (state) => state.keys,
       ],
       (
         x,
-        y,
-        indexBy,
-      ) => (Boolean(x && y.length && indexBy))
+        keys,
+      ) => (Boolean(x && keys.length))
     ),
   },
 
@@ -133,6 +128,7 @@ export default {
     [
       (state) => state.title,
       (state) => state.type,
+      (state) => state.filters,
       (state) => state.data.source,
       (state) => state.data.id,
       (state) => state[state.type],
@@ -141,6 +137,7 @@ export default {
     (
       title,
       type,
+      filters,
       dataSource,
       dataID,
       options,
@@ -150,6 +147,7 @@ export default {
         ? {
           title,
           type,
+          filters,
           dataSource,
           dataID,
           options,
@@ -202,6 +200,9 @@ export default {
 
   // update the ui state specifically
   updateUI: action((state, payload) => ({ ...state, ui: { ...state.ui, ...payload } })),
+
+  // update the filters state specifically
+  updateFilters: action((state, payload) => ({ ...state, filters: { ...state.filters, ...payload } })),
 
   // reset only the current widget's unique state
   resetCurrent: thunk((actions, payload, { getState }) => {

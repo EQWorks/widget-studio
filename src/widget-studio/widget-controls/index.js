@@ -1,4 +1,4 @@
-import React, { createElement } from 'react'
+import React, { useMemo, createElement } from 'react'
 
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
@@ -33,6 +33,14 @@ const WidgetControls = () => {
   const columns = useStoreState((state) => state.columns)
   const reset = useStoreActions(actions => actions.resetCurrent)
 
+  const numericColumns = useMemo(() => (
+    columns.filter(({ _, category }) => category === 'Numeric')
+  ), [columns])
+
+  const stringColumns = useMemo(() => (
+    columns.filter(({ _, category }) => category === 'String')
+  ), [columns])
+
   return (
     <div className={classes.container}>
       {
@@ -45,11 +53,9 @@ const WidgetControls = () => {
         <Icons disabled={!columns.length || dataLoading} />
       </div>
       {!dataLoading && type && columns &&
-        // render the appropriate controls
-        createElement(
-          controls[type],
-          { columns }
-        )
+        <div className={classes.controls}>
+          {createElement(controls[type], { numericColumns, stringColumns })}
+        </div>
       }
       {
         !dataLoading &&

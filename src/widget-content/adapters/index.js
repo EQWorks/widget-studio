@@ -2,14 +2,15 @@ import { useEffect, createElement, useMemo } from 'react'
 import Joi from 'joi'
 
 import { useStoreState } from '../../store'
-import NivoAdapters from './chart-system/nivo'
+// import NivoAdapters from './chart-system/nivo'
+import PlotlyAdapters from './chart-system/plotly'
 
 // state which adapter set should handle which widget type
 const typeDict = {
-  bar: NivoAdapters,
-  pie: NivoAdapters,
-  scatter: NivoAdapters,
-  line: NivoAdapters,
+  bar: PlotlyAdapters,
+  pie: PlotlyAdapters,
+  scatter: PlotlyAdapters,
+  line: PlotlyAdapters,
 }
 
 // construct a schema to validate adapters, also construct a set of the adapters used above
@@ -39,10 +40,17 @@ const WidgetAdapter = () => {
     })
   }, [])
 
+  // const [chart, adapt] = useMemo(() => typeDict[type][type], [type])
   const [chart, adapt] = useMemo(() => typeDict[type][type], [type])
-  const adaptedConfig = useMemo(() => adapt(rows, config), [adapt, config, rows])
+  const adaptedConfig = useMemo(() => adapt(config), [adapt, config])
+  // const adaptedData = useMemo(() => rows.slice(0, 1000), [rows])
+  const adaptedData = useMemo(() => rows, [rows])
 
-  return createElement(chart, { ...adaptedConfig })
+  return createElement(chart, {
+    data: adaptedData,
+    columns: columns.map(c => c.name),
+    ...adaptedConfig
+  })
 }
 
 export default WidgetAdapter

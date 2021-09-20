@@ -1,3 +1,21 @@
+export const aggregateJson = (data, xAxis, yAxis) => {
+  const resultsCopy = JSON.parse(JSON.stringify(data))
+  return groupJson({
+    results: resultsCopy,
+    groupKey: xAxis,
+    key: yAxis[0]
+  })
+}
+
+export const aggregate = (data, xAxis, yAxis) => {
+  const resultsCopy = JSON.parse(JSON.stringify(data))
+  return sum({
+    results: resultsCopy,
+    groupKey: xAxis,
+    yKeys: yAxis,
+  })
+}
+
 /** group data for hod and dow only */
 export const groupJson = ({ results, groupKey, key }) => {
   // groupkey = 'report_id'
@@ -25,8 +43,7 @@ export const groupJson = ({ results, groupKey, key }) => {
     }...
   }*/
   }
-  const data = results.reduce(reducer, {})
-  return [Object.keys(data), data]
+  return results.reduce(reducer, {})
 }
 
 const getAxisValues = (current) => {

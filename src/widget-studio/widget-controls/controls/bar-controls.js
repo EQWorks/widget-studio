@@ -1,99 +1,62 @@
-import React, { useState, useEffect } from 'react'
-
+import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormControl from '@material-ui/core/FormControl'
-import Switch from '@material-ui/core/Switch'
+
 import { useStoreState, useStoreActions } from '../../../store'
-import CustomSelect from '../custom-select'
-import styles from '../styles'
+import {
+  aggOps,
+  Dropdown,
+  Toggle,
+  PluralLinkedSelect,
+  WidgetControlCard as Card
+} from './shared'
 
-const useStyles = makeStyles(styles)
+const BarControls = ({ numericColumns, stringColumns }) => {
 
-const BarControls = () => {
-  const classes = useStyles()
-
-  const columns = useStoreState((state) => state.bar.columns)
-  const group = useStoreState((state) => state.bar.group)
-  const stack = useStoreState((state) => state.bar.stack)
-  const groupBy = useStoreState((state) => state.bar.groupBy)
-  const keys = useStoreState((state) => state.bar.keys)
+  const stacked = useStoreState((state) => state.bar.stacked)
+  const showTicks = useStoreState((state) => state.bar.showTicks)
   const indexBy = useStoreState((state) => state.bar.indexBy)
-
-  const setBarState = useStoreActions(actions => actions.bar.update)
-
-  // TODO data inference rather than using 'category' attribute
-  const [numericColumns, setNumericColumns] = useState([])
-  const [stringColumns, setStringColumns] = useState([])
-  useEffect(() => {
-    setNumericColumns(columns.filter(({ _, category }) => category === 'Numeric'))
-    setStringColumns(columns.filter(({ _, category }) => category === 'String'))
-  }, [columns])
-
-  const setGroup = event => {
-    setBarState({ keys: [] })
-    setBarState({ group: event.target.checked })
-    setBarState({ groupBy: null })
-  }
+  const keys = useStoreState((state) => state.bar.keys)
+  const barUpdate = useStoreActions(actions => actions.bar.update)
 
   return (
-    <div className={classes.controls}>
-      <FormControl>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={stack}
-              onChange={event => setBarState({ stack: event.target.checked })}
-              color="primary"
-            />
-          }
-          label="Stacked"
+    <>
+      <Card title='Value Keys'>
+        <PluralLinkedSelect
+          valuePairs={keys}
+          titles={['Key', 'Aggregation']}
+          data={numericColumns}
+          subData={aggOps}
+          update={(val) => barUpdate({ keys: val })}
         />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={group}
-              onChange={setGroup}
-              color="primary"
-            />
-          }
-          label="Group by key"
-        />
-      </FormControl>
-      <CustomSelect
-        multi={!group}
-        title={group ? 'Key' : 'Keys'}
-        data={numericColumns}
-        chosenValue={group ? keys[0] : keys}
-        setChosenValue={val => group ? setBarState({ keys: [val] }) : setBarState({ keys: val })}
-      />
-      <CustomSelect
-        title='Index by'
-        data={stringColumns}
-        chosenValue={indexBy}
-        setChosenValue={val => setBarState({ indexBy: val })}
-      />
-      {
-        group &&
-        <CustomSelect
-          title='Group by'
+      </Card>
+
+      <Card title='Index Key'>
+        <Dropdown
           data={stringColumns}
-          chosenValue={groupBy}
-          setChosenValue={val => setBarState({ groupBy: val })}
+          value={indexBy}
+          update={val => barUpdate({ indexBy: val })}
         />
-      }
-    </div>
+      </Card>
+
+      <Card title='Styling'>
+        <Toggle
+          value={stacked}
+          label='Stacked'
+          update={(val) => barUpdate({ stacked: val })}
+        />
+        <Toggle
+          value={showTicks}
+          label='Show ticks'
+          update={(val) => barUpdate({ showTicks: val })}
+        />
+      </Card>
+    </>
   )
 }
 
 BarControls.propTypes = {
-  rows: PropTypes.array,
-  columns: PropTypes.array,
-}
-BarControls.default = {
-  columns: [],
-  rows: [],
+  numericColumns: PropTypes.array.isRequired,
+  stringColumns: PropTypes.array.isRequired
 }
 
 export default BarControls

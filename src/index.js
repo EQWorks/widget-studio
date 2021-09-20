@@ -11,6 +11,7 @@ import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
 import WidgetStudio from './widget-studio'
 import WidgetContent from './widget-content'
+import WidgetTitle from './widget-content/widget-title'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
@@ -29,6 +30,10 @@ const Widget = ({ id, studio, staticData, resizable }) => {
   const dataSource = useStoreState((state) => state.data.source)
   const dataID = useStoreState((state) => state.data.id)
   const config = useStoreState((state) => state.config)
+
+  useEffect(() => {
+    console.dir(config)
+  }, [config])
 
   // on first load,
   useEffect(() => {
@@ -55,15 +60,17 @@ const Widget = ({ id, studio, staticData, resizable }) => {
       updateUI({ showDataControls: false })
       requestData(dataSource, dataID)
         .then(res => {
-          const { results: rows, columns, whitelabelID, customerID } = res
+          const { results: rows, columns, whitelabelID, customerID, views } = res
           updateStore({
             rows,
             columns,
             wl: whitelabelID, // only used for wl-cu-selector
             cu: customerID, // only used for wl-cu-selector
-            dataError: null
+            dataError: null,
+            dataName: views[0].name,
           })
           updateUI({ showWidgetControls: true })
+          updateUI({ showFilterControls: true })
         })
         .catch((err) => {
           updateStore({ dataError: err })
@@ -79,6 +86,7 @@ const Widget = ({ id, studio, staticData, resizable }) => {
 
   const ws =
     <div className={classes.outerContainer}>
+      <WidgetTitle />
       {studio && <WidgetStudio />}
       <WidgetContent />
     </div >
