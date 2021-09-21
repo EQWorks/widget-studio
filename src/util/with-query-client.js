@@ -11,7 +11,7 @@ const withQueryClient = (WrappedComponent) => {
       </QueryClientProvider>
     )
   }
-  wrapped.displayName = `withStore(${WrappedComponent.displayName ?? WrappedComponent.name})`
+  wrapped.displayName = `withQueryClient(${WrappedComponent.displayName ?? WrappedComponent.name})`
   return wrapped
 }
 
