@@ -22,7 +22,7 @@ const WidgetContent = () => {
   const config = useStoreState((state) => state.config)
   const rows = useStoreState((state) => state.rows)
 
-  // studio UI state
+  // editor UI state
   const showTable = useStoreState((state) => state.ui.showTable)
   const showDataControls = useStoreState((state) => state.ui.showDataControls)
 

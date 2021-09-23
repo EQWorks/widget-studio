@@ -9,14 +9,14 @@ import { useStoreState, useStoreActions } from './store'
 import { requestData, requestConfig } from './util/fetch'
 import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
-import WidgetStudio from './widget-studio'
+import WidgetEditor from './widget-editor'
 import WidgetContent from './widget-content'
 import WidgetTitle from './widget-content/widget-title'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const Widget = ({ id, studio, staticData, resizable }) => {
+const Widget = ({ id, editor, staticData, resizable }) => {
 
   const classes = useStyles()
 
@@ -41,14 +41,14 @@ const Widget = ({ id, studio, staticData, resizable }) => {
     updateUI({ staticData })
     // check for invalid component usage
     if (id == undefined || id == null) {
-      if (staticData || !studio) {
-        throw new Error('Incorrect usage: Widgets must either receive an id or have studio features and data control enabled.')
+      if (staticData || !editor) {
+        throw new Error('Incorrect usage: Widgets must either receive an id or have editor features and data control enabled.')
       }
     } else {
       // fetch/read the config associated with the widget ID
       requestConfig(id).then(readConfig)
     }
-  }, [readConfig, id, staticData, updateUI, studio])
+  }, [readConfig, id, staticData, updateUI, editor])
 
   // fetch rows/columns on data source change, reset config appropriately
   useEffect(() => {
@@ -87,7 +87,7 @@ const Widget = ({ id, studio, staticData, resizable }) => {
   const ws =
     <div className={classes.outerContainer}>
       <WidgetTitle />
-      {studio && <WidgetStudio />}
+      {editor && <WidgetEditor />}
       <WidgetContent />
     </div >
 
@@ -104,13 +104,13 @@ const Widget = ({ id, studio, staticData, resizable }) => {
 }
 
 Widget.propTypes = {
-  studio: PropTypes.bool,
+  editor: PropTypes.bool,
   id: PropTypes.string,
   staticData: PropTypes.bool,
   resizable: PropTypes.bool,
 }
 Widget.defaultProps = {
-  studio: false,
+  editor: false,
   id: undefined,
   staticData: false,
   resizable: true,

@@ -25,7 +25,7 @@ import FilterControls from './widget-controls/filter-controls'
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const WidgetStudio = props => {
+const WidgetEditor = props => {
 
   const classes = useStyles()
 
@@ -38,7 +38,7 @@ const WidgetStudio = props => {
   const dataLoading = useStoreState((state) => state.dataLoading)
   const dataError = useStoreState((state) => state.dataError)
 
-  // studio UI state
+  // editor UI state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
   const showTable = useStoreState((state) => state.ui.showTable)
@@ -162,8 +162,8 @@ const WidgetStudio = props => {
   )
 }
 
-WidgetStudio.propTypes = {
+WidgetEditor.propTypes = {
   children: PropTypes.object,
 }
 
-export default WidgetStudio
+export default WidgetEditor
