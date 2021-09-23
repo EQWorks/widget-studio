@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createElement } from 'react'
 
 import PropTypes from 'prop-types'
 import TocIcon from '@material-ui/icons/Toc'
@@ -9,6 +9,8 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import ArtTrackIcon from '@material-ui/icons/ArtTrack'
 import CropLandscapeIcon from '@material-ui/icons/CropLandscape'
 import SaveIcon from '@material-ui/icons/Save'
+import DownloadIcon from '@material-ui/icons/CloudDownload'
+import ShareIcon from '@material-ui/icons/Share'
 import BuildIcon from '@material-ui/icons/Build'
 import FilterListIcon from '@material-ui/icons/FilterList'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
@@ -45,6 +47,15 @@ const WidgetEditor = props => {
   const showDataControls = useStoreState((state) => state.ui.showDataControls)
   const staticData = useStoreState((state) => state.ui.staticData)
 
+  const DefaultSidebarButton = ({ onClick, icon }) =>
+    <IconButton
+      disabled={dataLoading || dataError || !dataSource || !dataID}
+      color='secondary'
+      onClick={onClick}
+    >
+      {createElement(icon)}
+    </IconButton>
+
   return (
     <>
       <div className={classes.navigationSidebar}>
@@ -64,29 +75,24 @@ const WidgetEditor = props => {
             :
             // show sidebar buttons
             <>
-              <IconButton
-                color='secondary'
+              <DefaultSidebarButton
                 onClick={() => alert('Not implemented')}
-                disabled={dataLoading || dataError || !dataSource || !dataID}
-              > <SaveIcon /> </IconButton>
+                icon={SaveIcon}
+              />
               {
                 !staticData &&
                 <IconButton
                   color='secondary'
                   onClick={() => updateUI({ showDataControls: !showDataControls })}
-                > <SettingsIcon /> </IconButton>
+                >
+                  <SettingsIcon />
+                </IconButton>
               }
-              <IconButton
-                disabled={dataLoading || dataError || !dataSource || !dataID}
-                color='secondary'
-                onClick={() => updateUI({ showTable: !showTable }
-                )}
-              >
-                <TocIcon />
-              </IconButton>
-              <IconButton
-                disabled={dataLoading || dataError || !dataSource || !dataID}
-                color='secondary'
+              <DefaultSidebarButton
+                onClick={() => updateUI({ showTable: !showTable })}
+                icon={TocIcon}
+              />
+              <DefaultSidebarButton
                 onClick={() =>
                   updateUI(showWidgetControls || showFilterControls ?
                     { showWidgetControls: false, showFilterControls: false }
@@ -94,9 +100,16 @@ const WidgetEditor = props => {
                     { showWidgetControls: true, showFilterControls: true }
                   )
                 }
-              >
-                {showWidgetControls || showFilterControls ? <CropLandscapeIcon /> : <ArtTrackIcon />}
-              </IconButton>
+                icon={showWidgetControls || showFilterControls ? CropLandscapeIcon : ArtTrackIcon}
+              />
+              <DefaultSidebarButton
+                onClick={() => alert('Not implemented')}
+                icon={DownloadIcon}
+              />
+              <DefaultSidebarButton
+                onClick={() => alert('Not implemented')}
+                icon={ShareIcon}
+              />
             </>
         }
       </div>
