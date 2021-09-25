@@ -33,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
 const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading, disabled }) => {
   const classes = useStyles()
 
-  const updateStore = useStoreActions((actions) => actions.update)
-  const dataSource = useStoreState((state) => state.data.source)
-  const dataID = useStoreState((state) => state.data.id)
+  const update = useStoreActions((actions) => actions.update)
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
 
   const [queriesLoading, savedQueryList] = useSavedQueries()
   const [executionsLoading, executionsList] = useExecutions()
@@ -48,10 +48,10 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
     [executionsList, selectedCu]
   )
 
-  const [selectedDataSource, setSelectedDataSource] = useState(dataSource)
+  const [selectedDataSource, setSelectedDataSource] = useState(dataSourceType)
   useEffect(() => {
-    setSelectedDataSource(dataSource)
-  }, [dataSource])
+    setSelectedDataSource(dataSourceType)
+  }, [dataSourceType])
 
   useEffect(() => {
     setDataSourcesLoading(queriesLoading || executionsLoading)
@@ -118,11 +118,11 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
                   <Select
                     disabled={disabled || selectedDataSource != label}
                     onChange={(event) => {
-                      updateStore({
+                      update({
                         wl: selectedWl,
                         cu: selectedCu,
-                        data: {
-                          source: `${selectedDataSource}`,
+                        dataSource: {
+                          type: `${selectedDataSource}`,
                           id: event.target.value
                         }
                       })
@@ -130,8 +130,8 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
                     }
                     }
                     value={
-                      dataSource === label ?
-                        dataID
+                      dataSourceType === label ?
+                        dataSourceID
                         :
                         val
                     }

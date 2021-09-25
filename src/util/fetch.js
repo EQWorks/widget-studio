@@ -122,13 +122,13 @@ const requestExecutionResults = async (id) => {
     })
 }
 
-export const requestData = async (dataSource, dataID) => {
+export const requestData = async (dataSourceType, dataSourceID) => {
   var data
-  if (dataSource == SAVED_QUERIES) {
-    data = await requestQueryResults(dataID)
+  if (dataSourceType == SAVED_QUERIES) {
+    data = await requestQueryResults(dataSourceID)
   }
-  else if (dataSource == EXECUTIONS) {
-    data = await requestExecutionResults(dataID)
+  else if (dataSourceType == EXECUTIONS) {
+    data = await requestExecutionResults(dataSourceID)
   }
   return data
 }

@@ -8,8 +8,10 @@ export default {
         308
       ]
     },
-    'dataSource': 'Saved query',
-    'dataID': '187',
+    'dataSource': {
+      'type': 'Saved query',
+      'id': '187'
+    },
     'options': {
       'indexBy': 'geo_ca_city',
       'keys': [
@@ -31,8 +33,10 @@ export default {
         138
       ]
     },
-    'dataSource': 'Saved query',
-    'dataID': '187',
+    'dataSource': {
+      'type': 'Saved query',
+      'id': '187'
+    },
     'options': {
       'indexBy': 'geo_ca_city',
       'stacked': true,
@@ -58,8 +62,10 @@ export default {
         528
       ]
     },
-    'dataSource': 'Saved query',
-    'dataID': '191',
+    'dataSource': {
+      'type': 'Saved query',
+      'id': '191'
+    },
     'options': {
       'indexBy': null,
       'spline': true,
@@ -78,8 +84,10 @@ export default {
   'line-2': {
     'title': 'My example line widget',
     'type': 'line',
-    'dataSource': 'Execution',
-    'dataID': '305',
+    'dataSource': {
+      'type': 'Execution',
+      'id': '305'
+    },
     'filters': {},
     'options': {
       'indexBy': null,
@@ -105,8 +113,10 @@ export default {
         891
       ]
     },
-    'dataSource': 'Saved query',
-    'dataID': '217',
+    'dataSource': {
+      'type': 'Saved query',
+      'id': '217'
+    },
     'options': {
       'indexBy': 'address_postalcode',
       'x': 'unique_visitors',

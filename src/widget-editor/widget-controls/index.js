@@ -29,7 +29,7 @@ const WidgetControls = () => {
   const classes = useStyles()
 
   const type = useStoreState((state) => state.type)
-  const dataLoading = useStoreState((state) => state.dataLoading)
+  const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
   const columns = useStoreState((state) => state.columns)
   const reset = useStoreActions(actions => actions.resetCurrent)
 
@@ -44,21 +44,21 @@ const WidgetControls = () => {
   return (
     <div className={classes.container}>
       {
-        dataLoading &&
+        dataSourceLoading &&
         <div className={classes.loaderContainer}>
           <Loader open />
         </div>
       }
-      <div className={dataLoading ? classes.hidden : classes.controlHeader}>
-        <Icons disabled={!columns.length || dataLoading} />
+      <div className={dataSourceLoading ? classes.hidden : classes.controlHeader}>
+        <Icons disabled={!columns.length || dataSourceLoading} />
       </div>
-      {!dataLoading && type && columns &&
+      {!dataSourceLoading && type && columns &&
         <div className={classes.controls}>
           {createElement(controls[type], { numericColumns, stringColumns })}
         </div>
       }
       {
-        !dataLoading &&
+        !dataSourceLoading &&
         <div className={classes.controlFooter}>
           <IconButton
             size='small'
@@ -74,7 +74,7 @@ const WidgetControls = () => {
 
 WidgetControls.propTypes = {
   columns: PropTypes.array,
-  dataLoading: PropTypes.bool,
+  dataSourceLoading: PropTypes.bool,
 }
 WidgetControls.default = {
   columns: [],

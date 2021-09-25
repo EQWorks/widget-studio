@@ -42,21 +42,21 @@ const stateDefaults = {
     showTable: false,
     showWidgetControls: false,
     showFilterControls: false,
-    showDataControls: false,
+    showDataSourceControls: false,
     staticData: false
   },
-  dataLoading: false,
-  dataError: null,
-  dataName: null
+  dataSource: {
+    type: null,
+    id: null,
+    loading: false,
+    error: null,
+    name: null
+  },
 }
 
 export default {
 
   /** STATE ------------------------------------------------------------------ */
-  data: {
-    source: null,
-    id: null
-  },
   ...stateDefaults,
 
   /** unique state of each chart type */
@@ -129,8 +129,8 @@ export default {
       (state) => state.title,
       (state) => state.type,
       (state) => state.filters,
-      (state) => state.data.source,
-      (state) => state.data.id,
+      (state) => state.dataSource.type,
+      (state) => state.dataSource.id,
       (state) => state[state.type],
       (state) => state.isReady,
     ],
@@ -138,8 +138,8 @@ export default {
       title,
       type,
       filters,
-      dataSource,
-      dataID,
+      dataSourceType,
+      dataSourceID,
       options,
       isReady,
     ) => (
@@ -148,8 +148,10 @@ export default {
           title,
           type,
           filters,
-          dataSource,
-          dataID,
+          dataSource: {
+            type: dataSourceType,
+            id: dataSourceID,
+          },
           options,
         }
         : undefined)
@@ -181,16 +183,12 @@ export default {
     if (!payload) {
       return state
     }
-    const { options, dataSource, dataID, ...genConfig } = payload
-    const widgetType = genConfig.type
+    const { options, type, ...rest } = payload
     return {
       ...state,
-      ...genConfig,
-      [widgetType]: options,
-      data: {
-        source: dataSource,
-        id: dataID
-      }
+      ...rest,
+      type,
+      [type]: options,
     }
   }
   ),
@@ -198,11 +196,13 @@ export default {
   // update the store state
   update: action((state, payload) => ({ ...state, ...payload })),
 
-  // update the ui state specifically
-  updateUI: action((state, payload) => ({ ...state, ui: { ...state.ui, ...payload } })),
-
-  // update the filters state specifically
-  updateFilters: action((state, payload) => ({ ...state, filters: { ...state.filters, ...payload } })),
+  // perform a nested update on the store state
+  nestedUpdate: action((state, payload) => {
+    return Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
+      acc[nestKey] = { ...acc[nestKey], ...nestedPayload }
+      return acc
+    }, state)
+  }),
 
   // reset only the current widget's unique state
   resetCurrent: thunk((actions, payload, { getState }) => {

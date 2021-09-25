@@ -28,7 +28,7 @@ const FilterControls = () => {
   const columns = useStoreState((state) => state.columns)
 
   const update = useStoreActions(actions => actions.update)
-  const updateFilters = useStoreActions(actions => actions.updateFilters)
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   const numericColumns = useMemo(() => (
     columns.filter(({ _, category }) => category === 'Numeric')
@@ -49,7 +49,7 @@ const FilterControls = () => {
           setDisabledFilters({ ...{ [key]: _range }, ...disabledFilters })
         } else {
           const { [key]: _range, ...remainingFilters } = disabledFilters
-          updateFilters({ [key]: _range })
+          nestedUpdate({ filters: { [key]: _range } })
           setDisabledFilters(remainingFilters)
         }
       }}
@@ -58,7 +58,7 @@ const FilterControls = () => {
         min={min(key)}
         max={max(key)}
         value={range}
-        update={val => updateFilters({ [key]: val })}
+        update={val => nestedUpdate({ filters: { [key]: val } })}
       />
     </ToggleableCard >
   }
@@ -74,7 +74,7 @@ const FilterControls = () => {
             <Dropdown
               data={numericColumns.filter(col => !Object.keys(filters).includes(col.name))}
               update={val => {
-                updateFilters({ [val]: [min(val), max(val)] })
+                nestedUpdate({ filters: { [val]: [min(val), max(val)] } })
                 setAddingFilter(false)
               }}
             />
@@ -95,7 +95,7 @@ const FilterControls = () => {
 
 FilterControls.propTypes = {
   columns: PropTypes.array,
-  dataLoading: PropTypes.bool,
+  dataSourceLoading: PropTypes.bool,
 }
 FilterControls.default = {
   columns: [],

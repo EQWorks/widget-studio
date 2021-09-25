@@ -22,19 +22,19 @@ const Widget = ({ id, editor, staticData, resizable }) => {
 
   // easy-peasy actions
   const readConfig = useStoreActions(actions => actions.readConfig)
-  const updateStore = useStoreActions(actions => actions.update)
-  const updateUI = useStoreActions(actions => actions.updateUI)
+  const update = useStoreActions(actions => actions.update)
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const reset = useStoreActions(actions => actions.reset)
 
   // widget configuration state (easy-peasy)
-  const dataSource = useStoreState((state) => state.data.source)
-  const dataID = useStoreState((state) => state.data.id)
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
   const config = useStoreState((state) => state.config)
 
   // on first load,
   useEffect(() => {
     // dispatch staticData prop
-    updateUI({ staticData })
+    nestedUpdate({ ui: { staticData } })
     // check for invalid component usage
     if (id == undefined || id == null) {
       if (staticData || !editor) {
@@ -44,41 +44,53 @@ const Widget = ({ id, editor, staticData, resizable }) => {
       // fetch/read the config associated with the widget ID
       requestConfig(id).then(readConfig)
     }
-  }, [readConfig, id, staticData, updateUI, editor])
+  }, [readConfig, id, staticData, editor, nestedUpdate])
 
   // fetch rows/columns on data source change, reset config appropriately
   useEffect(() => {
-    if (dataSource && dataID) {
+    if (dataSourceType && dataSourceID) {
       if (config) {
         reset()
       }
-      updateStore({ dataLoading: true })
-      updateUI({ showDataControls: false })
-      requestData(dataSource, dataID)
+      nestedUpdate({
+        ui: {
+          showDataSourceControls: false
+        },
+        dataSource: {
+          loading: true
+        }
+      })
+      requestData(dataSourceType, dataSourceID)
         .then(res => {
           const { results: rows, columns, whitelabelID, customerID, views } = res
-          updateStore({
+          update({
             rows,
             columns,
             wl: whitelabelID, // only used for wl-cu-selector
             cu: customerID, // only used for wl-cu-selector
-            dataError: null,
-            dataName: views[0].name,
           })
-          updateUI({ showWidgetControls: true })
-          updateUI({ showFilterControls: true })
+          nestedUpdate({
+            dataSource: {
+              name: views[0].name,
+              error: null,
+            },
+            ui: {
+              showWidgetControls: true,
+              showFilterControls: true
+            }
+          })
         })
-        .catch((err) => {
-          updateStore({ dataError: err })
+        .catch((error) => {
+          nestedUpdate({ dataSource: { error } })
         })
         .finally(() => {
-          updateStore({ dataLoading: false })
+          nestedUpdate({ dataSource: { loading: false } })
         })
     } else {
-      updateUI({ showDataControls: !staticData })
+      nestedUpdate({ ui: { showDataSourceControls: !staticData } })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataID, dataSource, reset, updateUI, updateStore])
+  }, [dataSourceID, dataSourceType, reset, update, nestedUpdate, staticData])
 
   const ws =
     <div className={classes.outerContainer}>

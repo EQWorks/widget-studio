@@ -26,22 +26,22 @@ const WidgetTitle = () => {
 
   const classes = useStyles()
 
-  const dataSource = useStoreState((state) => state.data.source)
-  const dataID = useStoreState((state) => state.data.id)
-  const dataName = useStoreState((state) => state.dataName)
   const type = useStoreState((state) => state.type)
   const title = useStoreState((state) => state.title)
   const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
-  const dataLoading = useStoreState((state) => state.dataLoading)
-  const dataError = useStoreState((state) => state.dataError)
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
+  const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
+  const dataSourceError = useStoreState((state) => state.dataSource.error)
+  const dataSourceName = useStoreState((state) => state.dataName)
 
 
   return (
     <div className={classes.widgetTitle}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         {
-          !dataLoading && !dataError &&
+          !dataSourceLoading && !dataSourceError &&
           <Typography style={{ marginRight: '1rem', fontWeight: 600 }} color='textPrimary' variant='h6'>
             {title || 'Untitled'}
           </Typography>
@@ -50,14 +50,14 @@ const WidgetTitle = () => {
       </div>
 
       {
-        !dataLoading && !dataError &&
+        !dataSourceLoading && !dataSourceError &&
         <>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography color='textSecondary' variant='subtitle1'>
-              {`${dataSource} ${dataID}`}
+              {`${dataSourceType} ${dataSourceID}`}
             </Typography>
             <Typography style={{ fontWeight: 200 }} color='textSecondary' variant='subtitle2'>
-              {dataName || ''}
+              {dataSourceName || ''}
             </Typography>
           </div>
           <Divider orientation='vertical' className={classes.verticalDivider} />

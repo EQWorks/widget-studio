@@ -16,21 +16,22 @@ const WidgetContent = () => {
   const classes = useStyles()
 
   // widget configuration state (easy-peasy)
-  const dataSource = useStoreState((state) => state.data.source)
-  const dataID = useStoreState((state) => state.data.id)
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const rows = useStoreState((state) => state.rows)
 
   // editor UI state
   const showTable = useStoreState((state) => state.ui.showTable)
-  const showDataControls = useStoreState((state) => state.ui.showDataControls)
+  const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
 
   // data retrieval state
-  const dataLoading = useStoreState((state) => state.dataLoading)
-  const dataError = useStoreState((state) => state.dataError)
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
+  const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
+  const dataSourceError = useStoreState((state) => state.dataSource.error)
+
   return (
-    <div className={showDataControls || showTable ? classes.hidden : classes.mainContainer}>
+    <div className={showDataSourceControls || showTable ? classes.hidden : classes.mainContainer}>
       {
         // config object ready?
         config ?
@@ -43,11 +44,11 @@ const WidgetContent = () => {
           <div className={classes.warning}>
             <Typography color="textSecondary" variant='h6'>
               {
-                !dataID || !dataSource ? 'Please select a data source.'
+                !dataSourceID || !dataSourceType ? 'Please select a data source.'
                   :
-                  dataError ? 'Something went wrong.'
+                  dataSourceError ? 'Something went wrong.'
                     :
-                    dataLoading ?
+                    dataSourceLoading ?
                       <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                         <Loader message="Loading data..." open />
                       </div>
@@ -61,13 +62,13 @@ const WidgetContent = () => {
             </Typography>
             <Typography color="textSecondary" variant='subtitle2'>
               {
-                dataID && dataSource &&
+                dataSourceID && dataSourceType &&
                 (
-                  dataError ?
-                    `${dataError}`
+                  dataSourceError ?
+                    `${dataSourceError}`
                     :
-                    dataLoading ?
-                      `${dataSource} ${dataID}`
+                    dataSourceLoading ?
+                      `${dataSourceType} ${dataSourceID}`
                       :
                       'Data loaded successfully'
                 )
