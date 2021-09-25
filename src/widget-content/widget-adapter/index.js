@@ -2,8 +2,8 @@ import { useEffect, createElement, useMemo } from 'react'
 import Joi from 'joi'
 
 import { useStoreState } from '../../store'
-// import NivoAdapters from './chart-system/nivo'
-import PlotlyAdapters from './chart-system/plotly'
+// import NivoAdapters from './adapters/chart-system/nivo'
+import PlotlyAdapters from './adapters/chart-system/plotly'
 
 // state which adapter set should handle which widget type
 const typeDict = {

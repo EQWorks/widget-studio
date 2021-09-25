@@ -5,7 +5,7 @@ import { Loader } from '@eqworks/lumen-ui'
 import { Typography } from '@eqworks/lumen-ui'
 
 import { useStoreState } from '../store'
-import WidgetAdapter from './adapters'
+import WidgetAdapter from './widget-adapter'
 import styles from '../styles'
 
 // put styles in separate file for readability
