@@ -31,10 +31,6 @@ const Widget = ({ id, editor, staticData, resizable }) => {
   const dataID = useStoreState((state) => state.data.id)
   const config = useStoreState((state) => state.config)
 
-  useEffect(() => {
-    console.dir(config)
-  }, [config])
-
   // on first load,
   useEffect(() => {
     // dispatch staticData prop
