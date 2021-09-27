@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import PropTypes from 'prop-types'
 import { useStoreState, useStoreActions } from '../../../store'
 // import { getPieChartData, sum } from './utils'
+import { aggOps } from './util/constants'
 import {
-  aggOps,
   Dropdown,
   Toggle,
   PluralLinkedSelect,
   WidgetControlCard as Card
-} from './shared'
+} from '../../shared-components'
 
 const PieControls = ({ numericColumns, stringColumns }) => {
 

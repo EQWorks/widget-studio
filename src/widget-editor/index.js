@@ -20,9 +20,9 @@ import { Typography } from '@eqworks/lumen-ui'
 import { useStoreState, useStoreActions } from '../store'
 import WidgetControls from './widget-controls'
 import ResultsTable from './table'
-import DataControls from './data-controls'
+import DataSourceControls from './data-source-controls'
 import styles from '../styles' // TODO fix
-import FilterControls from './widget-controls/filter-controls'
+import FilterControls from './data-controls/filter-controls'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
@@ -44,7 +44,7 @@ const WidgetEditor = props => {
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
   const showTable = useStoreState((state) => state.ui.showTable)
-  const showDataControls = useStoreState((state) => state.ui.showDataControls)
+  const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
   const staticData = useStoreState((state) => state.ui.staticData)
 
   const DefaultSidebarButton = ({ onClick, icon }) =>
@@ -61,7 +61,7 @@ const WidgetEditor = props => {
       <div className={classes.navigationSidebar}>
         {
           // something to exit?
-          showDataControls || showTable ?
+          showDataSourceControls || showTable ?
             // show exit button
             <IconButton
               className={classes.tallButton}
@@ -70,7 +70,7 @@ const WidgetEditor = props => {
                 nestedUpdate({
                   ui: {
                     showTable: false,
-                    showDataControls: false
+                    showDataSourceControls: false
                   }
                 })
               }} > <HighlightOffIcon /> </IconButton>
@@ -85,7 +85,7 @@ const WidgetEditor = props => {
                 !staticData &&
                 <IconButton
                   color='secondary'
-                  onClick={() => nestedUpdate({ ui: { showDataControls: !showDataControls } })}
+                  onClick={() => nestedUpdate({ ui: { showDataSourceControls: !showDataSourceControls } })}
                 >
                   <SettingsIcon />
                 </IconButton>
@@ -116,11 +116,11 @@ const WidgetEditor = props => {
         }
       </div>
 
-      <div className={showDataControls || showTable ? classes.extras : classes.hidden}>
-        <div className={showDataControls ? classes.dataControlsAlt : classes.hidden}>
+      <div className={showDataSourceControls || showTable ? classes.extras : classes.hidden}>
+        <div className={showDataSourceControls ? classes.dataControlsAlt : classes.hidden}>
           {
             !staticData &&
-            <DataControls />
+            <DataSourceControls />
           }
         </div>
         <div className={showTable ? null : classes.hidden}>

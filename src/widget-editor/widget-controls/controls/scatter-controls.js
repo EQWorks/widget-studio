@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../../store'
+import { aggOps } from './util/constants'
 import {
-  aggOps,
   Dropdown,
   Toggle,
   PluralLinkedSelect,
   WidgetControlCard as Card,
   ToggleableCard
-} from './shared'
+} from '../../shared-components'
 
 const ScatterControls = ({ numericColumns, stringColumns }) => {
 

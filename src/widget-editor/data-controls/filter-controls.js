@@ -11,9 +11,9 @@ import {
   Dropdown,
   Slider,
   WidgetControlCard
-} from './controls/shared'
+} from '../shared-components'
 
-import styles from './styles'
+import styles from '../styles'
 
 const useStyles = makeStyles(styles)
 

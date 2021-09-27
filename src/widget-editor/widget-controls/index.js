@@ -13,7 +13,7 @@ import LineControls from './controls/line-controls'
 import ScatterControls from './controls/scatter-controls'
 
 import Icons from './icons'
-import styles from './styles'
+import styles from '../styles'
 
 const controls = {
   bar: BarControls,

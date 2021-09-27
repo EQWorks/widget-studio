@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import PropTypes from 'prop-types'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Switch from '@material-ui/core/Switch'
@@ -6,15 +7,84 @@ import MuiSlider from '@material-ui/core/Slider'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@eqworks/lumen-ui'
+import CustomSelect from './custom-select'
 
 import styles from '../../styles'
-import CustomSelect from './util/custom-select'
-import LinkedSelect from './util/linked-select'
-import WidgetControlCard from './util/control-card'
-import aggOps from './util/agg-ops'
-export { aggOps, CustomSelect, WidgetControlCard, LinkedSelect }
-
 const useStyles = makeStyles(styles)
+
+export const LinkedSelect = ({ update, data, init, subData, subInit, controlled }) => {
+
+  const classes = useStyles()
+
+  const [choice, setChoice] = useState(init)
+  const [subChoice, setSubChoice] = useState(subInit)
+  const subDisabled = useMemo(() => !choice || !subData.length, [choice, subData.length])
+
+  useEffect(() => {
+    if (choice && (subChoice || subDisabled)) {
+      update({ [choice]: subChoice })
+      if (!controlled) {
+        setChoice(init)
+        setSubChoice(subInit)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [choice, controlled, init, subChoice, subInit])
+
+  return (
+    <div className={classes.controlRow}>
+      <div className={classes.linkedSelectPrimary} >
+        <CustomSelect
+          data={data}
+          chosenValue={choice}
+          setChosenValue={setChoice}
+        />
+      </div>
+      <div className={classes.linkedSelectSub}>
+        <CustomSelect
+          data={subData}
+          chosenValue={subChoice}
+          setChosenValue={setSubChoice}
+          disabled={subDisabled}
+        />
+      </div>
+    </div>
+  )
+}
+LinkedSelect.propTypes = {
+  update: PropTypes.func,
+  data: PropTypes.array,
+  init: PropTypes.string,
+  subData: PropTypes.array,
+  subInit: PropTypes.string,
+  controlled: PropTypes.bool,
+}
+
+LinkedSelect.defaultProps = {
+  controlled: true
+}
+
+export const WidgetControlCard = ({ title, children }) => {
+
+  const classes = useStyles()
+  return (
+    <>
+      {
+        title &&
+        <Typography
+          className={classes.controlCardHeader}
+          color='textSecondary'
+          variant='subtitle1'
+        >
+          {title}
+        </Typography>
+      }
+      <div className={classes.controlCard}>
+        {children}
+      </div >
+    </ >
+  )
+}
 
 export const PluralLinkedSelect = ({ valuePairs, titles, data, subData, update }) => {
 
