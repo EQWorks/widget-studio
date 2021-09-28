@@ -12,7 +12,7 @@ export default {
       'type': 'Saved query',
       'id': '187'
     },
-    'keys': {
+    'yKeys': {
       'city_clicks': {
         'agg': 'mean'
       },
@@ -36,7 +36,7 @@ export default {
       'type': 'Saved query',
       'id': '187'
     },
-    'keys': {
+    'yKeys': {
       'converted_users': {
         'agg': 'mean'
       },
@@ -63,7 +63,7 @@ export default {
       'type': 'Saved query',
       'id': '191'
     },
-    'keys': {
+    'yKeys': {
       'revenue': {
         agg: null
       },
@@ -72,10 +72,10 @@ export default {
       },
     },
     'groupBy': null,
+    'xKey': 'clicks',
     'options': {
       'spline': true,
       'showTicks': true,
-      'x': 'clicks',
     }
   },
   'line-2': {
@@ -86,15 +86,15 @@ export default {
       'id': '305'
     },
     'filters': {},
-    'keys': {
+    'yKeys': {
       'spend': {},
       'clicks': {},
     },
     'groupBy': null,
+    'xKey': 'impressions',
     'options': {
       'spline': false,
       'showTicks': false,
-      'x': 'impressions',
     }
   },
   'scatter-1': {
@@ -110,7 +110,7 @@ export default {
       'type': 'Saved query',
       'id': '217'
     },
-    'keys': {
+    'yKeys': {
       'repeat_visitors': {
         'agg': 'mean'
       },
@@ -119,8 +119,8 @@ export default {
       }
     },
     'groupBy': 'address_postalcode',
+    'xKey': 'unique_visitors',
     'options': {
-      'x': 'unique_visitors',
       'showTicks': false
     }
   }

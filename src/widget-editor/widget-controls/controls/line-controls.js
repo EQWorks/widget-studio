@@ -12,16 +12,17 @@ import { ValueControls } from '../../data-controls'
 const LineControls = () => {
 
   // common actions
+  const update = useStoreActions((state) => state.update)
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
 
   // common state
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
+  const xKey = useStoreState((state) => state.xKey)
 
   // unique state
   const spline = useStoreState((state) => state.line.spline)
   const showTicks = useStoreState((state) => state.line.showTicks)
-  const x = useStoreState((state) => state.line.x)
 
   return (
     <>
@@ -30,8 +31,8 @@ const LineControls = () => {
       <Card title={'X Key'}>
         <Dropdown
           data={stringColumns.concat(numericColumns)}
-          value={x}
-          update={val => nestedUpdate({ line: { x: val } })}
+          value={xKey}
+          update={val => update({ xKey: val })}
         />
       </Card>
 

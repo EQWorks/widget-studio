@@ -18,7 +18,7 @@ const ValueControls = () => {
 
   // common state
   const groupBy = useStoreState((state) => state.groupBy)
-  const keys = useStoreState((state) => state.keys)
+  const yKeys = useStoreState((state) => state.yKeys)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
 
@@ -27,11 +27,11 @@ const ValueControls = () => {
       <Card title='Value Keys'>
         <PluralLinkedSelect
           titles={['Key', 'Aggregation']}
-          values={keys}
+          values={yKeys}
           subKey='agg'
           data={numericColumns}
           subData={groupBy ? aggOps : []}
-          update={(val) => nestedUpdate({ keys: val })}
+          update={(val) => nestedUpdate({ yKeys: val })}
         />
       </Card>
 

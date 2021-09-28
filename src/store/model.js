@@ -7,7 +7,6 @@ const widgetDefaults = {
     showTicks: true,
   },
   line: {
-    x: null,
     showTicks: true,
   },
   pie: {
@@ -15,7 +14,6 @@ const widgetDefaults = {
     showPercentage: true
   },
   scatter: {
-    x: null,
     showTicks: true,
   }
 }
@@ -27,7 +25,8 @@ const stateDefaults = {
   type: '',
   filters: {},
   groupBy: null,
-  keys: {},
+  xKey: null,
+  yKeys: {},
   ui: {
     showTable: false,
     showWidgetControls: false,
@@ -64,7 +63,7 @@ export default {
       (state) => state.title,
       (state) => state.type,
       (state) => state.filters,
-      (state) => state.keys,
+      (state) => state.yKeys,
       (state) => state.dataSource.type,
       (state) => state.dataSource.id,
       (state) => state[state.type],
@@ -74,7 +73,7 @@ export default {
       title,
       type,
       filters,
-      keys,
+      yKeys,
       dataSourceType,
       dataSourceID,
       options,
@@ -85,7 +84,7 @@ export default {
           title,
           type,
           filters,
-          keys,
+          yKeys,
           dataSource: {
             type: dataSourceType,
             id: dataSourceID,
@@ -102,22 +101,17 @@ export default {
       (state) => state.columns,
       (state) => state.type,
       (state) => state.groupBy,
-      (state) => state.keys,
+      (state) => state.yKeys,
     ],
     (
       rows,
       columns,
       type,
       groupBy,
-      keys,
-    ) => {
-      console.log(keys)
-      const res = Boolean(type && columns.length && rows.length && groupBy && keys)
-      return res
-      // if (!type || !columns.length || !rows.length) return false
-      // return widgetConfigIsReady
-    }
-  ),
+      yKeys,
+    ) => (
+      Boolean(type && columns.length && rows.length && yKeys)
+    )),
 
   /** ACTIONS ------------------------------------------------------------------ */
 

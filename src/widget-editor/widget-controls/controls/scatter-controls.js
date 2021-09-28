@@ -12,16 +12,17 @@ import { ValueControls } from '../../data-controls'
 const ScatterControls = () => {
 
   // common actions
+  const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
   const groupBy = useStoreState((state) => state.groupBy)
+  const xKey = useStoreState((state) => state.xKey)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
 
   // unique state
   const showTicks = useStoreState((state) => state.scatter.showTicks)
-  const x = useStoreState((state) => state.scatter.x)
 
   return (
     <>
@@ -32,8 +33,8 @@ const ScatterControls = () => {
         <Card title={'X Key'}>
           <Dropdown
             data={stringColumns.concat(numericColumns)}
-            value={x}
-            update={val => nestedUpdate({ scatter: { x: val } })}
+            value={xKey}
+            update={val => update({ xKey: val })}
           />
         </Card>
       }

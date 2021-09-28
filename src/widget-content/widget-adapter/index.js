@@ -29,7 +29,8 @@ const WidgetAdapter = () => {
   const rows = useStoreState((state) => state.rows)
   const type = useStoreState((state) => state.type)
   const filters = useStoreState((state) => state.filters)
-  const keys = useStoreState((state) => state.keys)
+  const xKey = useStoreState((state) => state.xKey)
+  const yKeys = useStoreState((state) => state.yKeys)
   const config = useStoreState((state) => state.config)
   const groupBy = useStoreState((state) => state.groupBy)
 
@@ -68,29 +69,42 @@ const WidgetAdapter = () => {
       dataframe
   ), [dataframe, filters])
 
-  // aggregate the dataframe when aggregation settings change
-  const aggregatedDataFrame = useMemo(() => (
+  // do final processing on the dataframe when appropriate
+  const processedDataframe = useMemo(() => (
     groupBy ?
+      // aggregate
       truncatedDataframe.groupby([groupBy])
         .agg(
           Object.fromEntries(
-            Object.entries(keys).map(([k, { agg }]) =>
+            Object.entries(yKeys).map(([k, { agg }]) =>
               [k, agg ?? 'sum']
             )
           )
         )
       :
-      truncatedDataframe
-  ), [groupBy, keys, truncatedDataframe])
+      // simply sort if no aggregation
+      truncatedDataframe.sort_values({
+        by: xKey,
+      })
+  ), [groupBy, truncatedDataframe, yKeys, xKey])
 
   // assemble final data using completely processed dataframe
   const data = useMemo(() => (
-    Object.entries(keys).map(([k, { agg }]) => ({
-      name: `${k} (${agg ?? 'sum'})`,
-      x: aggregatedDataFrame[groupBy].values,
-      y: aggregatedDataFrame[`${k}_${agg ?? 'sum'}`].values,
-    }))
-  ), [aggregatedDataFrame, groupBy, keys])
+    Object.entries(yKeys).map(([k, { agg }]) => (
+      groupBy ?
+        {
+          name: `${k} (${agg ?? 'sum'})`,
+          x: processedDataframe[groupBy].values,
+          y: processedDataframe[`${k}_${agg ?? 'sum'}`].values,
+        }
+        :
+        {
+          name: `${k}`,
+          x: processedDataframe[xKey].values,
+          y: processedDataframe[k].values,
+        }
+    ))
+  ), [groupBy, processedDataframe, xKey, yKeys])
 
   return createElement(chart, {
     data,
