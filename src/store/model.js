@@ -2,29 +2,21 @@ import { computed, action, thunk } from 'easy-peasy'
 
 const widgetDefaults = {
   bar: {
-    indexBy: null,
     stacked: false,
     spline: false,
     showTicks: true,
-    keys: [],
   },
   line: {
-    indexBy: null,
     x: null,
     showTicks: true,
-    keys: [],
   },
   pie: {
-    indexBy: null,
-    keys: [],
     donut: false,
     showPercentage: true
   },
   scatter: {
-    indexBy: null,
     x: null,
     showTicks: true,
-    keys: [],
   }
 }
 
@@ -34,10 +26,8 @@ const stateDefaults = {
   columns: [],
   type: '',
   filters: {},
-  truncate: [],
-  truncateKey: null,
-  wl: null,
-  cu: null,
+  groupBy: null,
+  keys: {},
   ui: {
     showTable: false,
     showWidgetControls: false,
@@ -52,6 +42,8 @@ const stateDefaults = {
     error: null,
     name: null
   },
+  wl: null,
+  cu: null,
 }
 
 export default {
@@ -60,67 +52,10 @@ export default {
   ...stateDefaults,
 
   /** unique state of each chart type */
-  bar: {
-    ...widgetDefaults.bar,
-    update: action((state, payload) => ({ ...state, ...payload })),
-    isReady: computed(
-      [
-        (state) => state.keys,
-        (state) => state.indexBy,
-      ],
-      (
-        keys,
-        indexBy
-      ) => {
-        return Boolean(keys.length && indexBy)
-      }
-    ),
-  },
-  line: {
-    ...widgetDefaults.line,
-    update: action((state, payload) => ({ ...state, ...payload })),
-    isReady: computed(
-      [
-        (state) => state.x,
-        (state) => state.keys,
-      ],
-      (
-        x,
-        keys,
-      ) => {
-        return Boolean(keys.length && x)
-      }
-    ),
-
-  },
-  pie: {
-    ...widgetDefaults.pie,
-    update: action((state, payload) => ({ ...state, ...payload })),
-    isReady: computed(
-      [
-        (state) => state.indexBy,
-        (state) => state.keys,
-      ],
-      (
-        indexBy,
-        keys,
-      ) => Boolean(indexBy && keys.length)
-    ),
-  },
-  scatter: {
-    ...widgetDefaults.scatter,
-    update: action((state, payload) => ({ ...state, ...payload })),
-    isReady: computed(
-      [
-        (state) => state.x,
-        (state) => state.keys,
-      ],
-      (
-        x,
-        keys,
-      ) => (Boolean(x && keys.length))
-    ),
-  },
+  bar: { ...widgetDefaults.bar },
+  line: { ...widgetDefaults.line },
+  pie: { ...widgetDefaults.pie },
+  scatter: { ...widgetDefaults.scatter },
 
   /** COMPUTED STATE ------------------------------------------------------------ */
 
@@ -129,6 +64,7 @@ export default {
       (state) => state.title,
       (state) => state.type,
       (state) => state.filters,
+      (state) => state.keys,
       (state) => state.dataSource.type,
       (state) => state.dataSource.id,
       (state) => state[state.type],
@@ -138,6 +74,7 @@ export default {
       title,
       type,
       filters,
+      keys,
       dataSourceType,
       dataSourceID,
       options,
@@ -148,14 +85,15 @@ export default {
           title,
           type,
           filters,
+          keys,
           dataSource: {
             type: dataSourceType,
             id: dataSourceID,
           },
           options,
         }
-        : undefined)
-  ),
+        : undefined
+    )),
 
   /** checks if all initial states have been filled */
   isReady: computed(
@@ -163,16 +101,21 @@ export default {
       (state) => state.rows,
       (state) => state.columns,
       (state) => state.type,
-      (state) => state.type ? state[state.type].isReady : false
+      (state) => state.groupBy,
+      (state) => state.keys,
     ],
     (
       rows,
       columns,
       type,
-      widgetConfigIsReady,
+      groupBy,
+      keys,
     ) => {
-      if (!type || !columns.length || !rows.length) return false
-      return widgetConfigIsReady
+      console.log(keys)
+      const res = Boolean(type && columns.length && rows.length && groupBy && keys)
+      return res
+      // if (!type || !columns.length || !rows.length) return false
+      // return widgetConfigIsReady
     }
   ),
 
@@ -199,6 +142,12 @@ export default {
   // perform a nested update on the store state
   nestedUpdate: action((state, payload) => {
     return Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
+      // console.dir(nestedPayload)
+      // Object.entries(nestedPayload).forEach(([deepNestKey, deepNestedPayload]) => {
+      //   // console.log([deepNestKey, deepNestedPayload])
+      //   // console.log(Object.getPrototypeOf(nestedPayload) === Object.prototype)
+      // })
+
       acc[nestKey] = { ...acc[nestKey], ...nestedPayload }
       return acc
     }, state)

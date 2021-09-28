@@ -2,52 +2,35 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../../store'
-import { aggOps } from './util/constants'
 import {
-  Dropdown,
   Toggle,
-  PluralLinkedSelect,
   WidgetControlCard as Card
 } from '../../shared-components'
+import { ValueControls } from '../../data-controls'
 
-const BarControls = ({ numericColumns, stringColumns }) => {
+const BarControls = () => {
 
+  // common actions
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
+
+  // unique state
   const stacked = useStoreState((state) => state.bar.stacked)
   const showTicks = useStoreState((state) => state.bar.showTicks)
-  const indexBy = useStoreState((state) => state.bar.indexBy)
-  const keys = useStoreState((state) => state.bar.keys)
-  const barUpdate = useStoreActions(actions => actions.bar.update)
 
   return (
     <>
-      <Card title='Value Keys'>
-        <PluralLinkedSelect
-          valuePairs={keys}
-          titles={['Key', 'Aggregation']}
-          data={numericColumns}
-          subData={aggOps}
-          update={(val) => barUpdate({ keys: val })}
-        />
-      </Card>
-
-      <Card title='Index Key'>
-        <Dropdown
-          data={stringColumns}
-          value={indexBy}
-          update={val => barUpdate({ indexBy: val })}
-        />
-      </Card>
+      <ValueControls />
 
       <Card title='Styling'>
         <Toggle
           value={stacked}
           label='Stacked'
-          update={(val) => barUpdate({ stacked: val })}
+          update={(val) => nestedUpdate({ bar: { stacked: val } })}
         />
         <Toggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => barUpdate({ showTicks: val })}
+          update={(val) => nestedUpdate({ bar: { showTicks: val } })}
         />
       </Card>
     </>

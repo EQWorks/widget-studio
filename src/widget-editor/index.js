@@ -22,7 +22,7 @@ import WidgetControls from './widget-controls'
 import ResultsTable from './table'
 import DataSourceControls from './data-source-controls'
 import styles from '../styles' // TODO fix
-import FilterControls from './data-controls/filter-controls'
+import { FilterControls } from './data-controls'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)

@@ -3,52 +3,35 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useStoreState, useStoreActions } from '../../../store'
 // import { getPieChartData, sum } from './utils'
-import { aggOps } from './util/constants'
 import {
-  Dropdown,
   Toggle,
-  PluralLinkedSelect,
   WidgetControlCard as Card
 } from '../../shared-components'
+import { ValueControls } from '../../data-controls'
 
-const PieControls = ({ numericColumns, stringColumns }) => {
+const PieControls = () => {
 
-  const indexBy = useStoreState((state) => state.pie.indexBy)
-  const keys = useStoreState((state) => state.pie.keys)
+  // common actions
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
+
+  // unique state
   const donut = useStoreState((state) => state.pie.donut)
   const showPercentage = useStoreState((state) => state.pie.showPercentage)
-  const pieUpdate = useStoreActions(actions => actions.pie.update)
 
   return (
     <>
-      <Card title='Value Keys'>
-        <PluralLinkedSelect
-          valuePairs={keys}
-          titles={['Key', 'Aggregation']}
-          data={numericColumns}
-          subData={aggOps}
-          update={(val) => pieUpdate({ keys: val })}
-        />
-      </Card>
-
-      <Card title='Index Key'>
-        <Dropdown
-          data={stringColumns}
-          value={indexBy}
-          update={val => pieUpdate({ indexBy: val })}
-        />
-      </Card>
+      <ValueControls />
 
       <Card title='Styling'>
         <Toggle
           value={donut}
           label='Donut'
-          update={(val) => pieUpdate({ donut: val })}
+          update={(val) => nestedUpdate({ pie: { donut: val } })}
         />
         <Toggle
           value={showPercentage}
           label='Show Percentage'
-          update={(val) => pieUpdate({ showPercentage: val })}
+          update={(val) => nestedUpdate({ pie: { showPercentage: val } })}
         />
       </Card>
     </>

@@ -9,10 +9,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@eqworks/lumen-ui'
 import CustomSelect from './custom-select'
 
-import styles from '../../styles'
+import styles from '../styles'
 const useStyles = makeStyles(styles)
 
-export const LinkedSelect = ({ update, data, init, subData, subInit, controlled }) => {
+export const LinkedSelect = ({ callback, data, init, subData, subInit, controlled }) => {
 
   const classes = useStyles()
 
@@ -22,7 +22,8 @@ export const LinkedSelect = ({ update, data, init, subData, subInit, controlled 
 
   useEffect(() => {
     if (choice && (subChoice || subDisabled)) {
-      update({ [choice]: subChoice })
+      // update({ [choice]: subChoice })
+      callback([choice, subChoice])
       if (!controlled) {
         setChoice(init)
         setSubChoice(subInit)
@@ -52,7 +53,7 @@ export const LinkedSelect = ({ update, data, init, subData, subInit, controlled 
   )
 }
 LinkedSelect.propTypes = {
-  update: PropTypes.func,
+  callback: PropTypes.func,
   data: PropTypes.array,
   init: PropTypes.string,
   subData: PropTypes.array,
@@ -86,9 +87,10 @@ export const WidgetControlCard = ({ title, children }) => {
   )
 }
 
-export const PluralLinkedSelect = ({ valuePairs, titles, data, subData, update }) => {
+export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, update }) => {
 
   const classes = useStyles()
+  const unusedKeys = useMemo(() => data.filter(({ name }) => !(name in values)), [data, values])
   return (
     <>
       <div className={classes.controlRow}>
@@ -109,38 +111,23 @@ export const PluralLinkedSelect = ({ valuePairs, titles, data, subData, update }
       </div>
       <Divider className={classes.controlDivider} />
       {
-        valuePairs.map((obj, i) => {
-          const [k, v] = Object.values(obj)
+        Object.entries(values).map(([k, v]) => {
           return (
             <LinkedSelect
               key={k}
-              update={(kv) => {
-                const [k, v] = Object.entries(kv)[0]
-                let keysCopy = [...valuePairs]
-                keysCopy[i] = {
-                  name: k,
-                  agg: v
-                }
-                update(keysCopy)
-              }}
-              data={data}
+              callback={([, _v]) => update({ [k]: { [subKey]: _v } })}
+              data={unusedKeys}
               init={k}
               subData={subData}
-              subInit={v}
+              subInit={v[subKey]}
             />
           )
         })
       }
       < LinkedSelect
         controlled={false}
-        update={(kv) => {
-          const [k, v] = Object.entries(kv)[0]
-          update([...valuePairs, {
-            name: k,
-            agg: v
-          }])
-        }}
-        data={data}
+        callback={([_k, _v]) => update({ [_k]: { [subKey]: _v } })}
+        data={unusedKeys}
         init={''}
         subData={subData}
         subInit={''}

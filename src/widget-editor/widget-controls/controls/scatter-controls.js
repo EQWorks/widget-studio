@@ -2,58 +2,38 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../../store'
-import { aggOps } from './util/constants'
 import {
   Dropdown,
   Toggle,
-  PluralLinkedSelect,
   WidgetControlCard as Card,
-  ToggleableCard
 } from '../../shared-components'
+import { ValueControls } from '../../data-controls'
 
-const ScatterControls = ({ numericColumns, stringColumns }) => {
+const ScatterControls = () => {
 
-  const indexBy = useStoreState((state) => state.scatter.indexBy)
+  // common actions
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
+
+  // common state
+  const groupBy = useStoreState((state) => state.groupBy)
+  const numericColumns = useStoreState((state) => state.numericColumns)
+  const stringColumns = useStoreState((state) => state.stringColumns)
+
+  // unique state
   const showTicks = useStoreState((state) => state.scatter.showTicks)
   const x = useStoreState((state) => state.scatter.x)
-  const keys = useStoreState((state) => state.scatter.keys)
-  const scatterUpdate = useStoreActions(actions => actions.scatter.update)
 
   return (
     <>
-      <Card title='Value Keys'>
-        <PluralLinkedSelect
-          valuePairs={keys}
-          titles={['Key', 'Aggregation']}
-          data={numericColumns}
-          subData={indexBy ? aggOps : []}
-          update={(val) => scatterUpdate({ keys: val })}
-        />
-      </Card>
-
-      <ToggleableCard
-        init={!!indexBy}
-        title='Index Key'
-        update={(val) => {
-          if (!val) {
-            scatterUpdate({ indexBy: null })
-          }
-        }}
-      >
-        <Dropdown
-          data={stringColumns}
-          value={indexBy}
-          update={val => scatterUpdate({ indexBy: val })}
-        />
-      </ToggleableCard>
+      <ValueControls />
 
       {
-        !indexBy &&
+        !groupBy &&
         <Card title={'X Key'}>
           <Dropdown
             data={stringColumns.concat(numericColumns)}
             value={x}
-            update={val => scatterUpdate({ x: val })}
+            update={val => nestedUpdate({ scatter: { x: val } })}
           />
         </Card>
       }
@@ -62,7 +42,7 @@ const ScatterControls = ({ numericColumns, stringColumns }) => {
         <Toggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => scatterUpdate({ showTicks: val })}
+          update={(val) => nestedUpdate({ scatter: { showTicks: val } })}
         />
       </Card>
     </>

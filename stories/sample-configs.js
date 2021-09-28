@@ -12,14 +12,13 @@ export default {
       'type': 'Saved query',
       'id': '187'
     },
+    'keys': {
+      'city_clicks': {
+        'agg': 'mean'
+      },
+    },
+    'groupBy': 'geo_ca_city',
     'options': {
-      'indexBy': 'geo_ca_city',
-      'keys': [
-        {
-          'name': 'city_clicks',
-          'agg': 'mean'
-        }
-      ],
       'showPercentage': true,
       'donut': false
     }
@@ -37,20 +36,18 @@ export default {
       'type': 'Saved query',
       'id': '187'
     },
+    'keys': {
+      'converted_users': {
+        'agg': 'mean'
+      },
+      'city_clicks': {
+        'agg': 'sum'
+      }
+    },
+    'groupBy': 'geo_ca_city',
     'options': {
-      'indexBy': 'geo_ca_city',
       'stacked': true,
       'showTicks': false,
-      'keys': [
-        {
-          'name': 'converted_users',
-          'agg': 'mean'
-        },
-        {
-          'name': 'city_clicks',
-          'agg': 'sum'
-        }
-      ]
     }
   },
   'line-1': {
@@ -66,19 +63,19 @@ export default {
       'type': 'Saved query',
       'id': '191'
     },
+    'keys': {
+      'revenue': {
+        agg: null
+      },
+      'clicks': {
+        agg: null
+      },
+    },
+    'groupBy': null,
     'options': {
-      'indexBy': null,
       'spline': true,
       'showTicks': true,
       'x': 'clicks',
-      'keys': [
-        {
-          'name': 'revenue'
-        },
-        {
-          'name': 'clicks',
-        }
-      ]
     }
   },
   'line-2': {
@@ -89,19 +86,15 @@ export default {
       'id': '305'
     },
     'filters': {},
+    'keys': {
+      'spend': {},
+      'clicks': {},
+    },
+    'groupBy': null,
     'options': {
-      'indexBy': null,
       'spline': false,
       'showTicks': false,
       'x': 'impressions',
-      'keys': [
-        {
-          'name': 'spend',
-        },
-        {
-          'name': 'clicks',
-        }
-      ]
     }
   },
   'scatter-1': {
@@ -117,19 +110,17 @@ export default {
       'type': 'Saved query',
       'id': '217'
     },
+    'keys': {
+      'repeat_visitors': {
+        'agg': 'mean'
+      },
+      'unique_visitors': {
+        'agg': 'sum'
+      }
+    },
+    'groupBy': 'address_postalcode',
     'options': {
-      'indexBy': 'address_postalcode',
       'x': 'unique_visitors',
-      'keys': [
-        {
-          'name': 'repeat_visitors',
-          'agg': 'mean'
-        },
-        {
-          'name': 'unique_visitors',
-          'agg': 'sum'
-        }
-      ],
       'showTicks': false
     }
   }

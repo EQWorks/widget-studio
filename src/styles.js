@@ -1,6 +1,7 @@
 export default {
   widgetTitle: {
     // paddingLeft: '3rem',
+    width: '100%',
     display: 'flex',
     gridColumn: '1 / 3',
     gridRow: '1',
@@ -23,10 +24,12 @@ export default {
     justifyContent: 'center'
   },
   outerContainer: {
+    maxWidth: '100%',
+    width: '100%',
+    height: '100%',
     display: 'grid',
     gridTemplateColumns: 'auto 2fr auto',
     gridTemplateRows: 'auto 2fr auto',
-    gridGap: '1rem',
     flex: 1,
     border: 'solid',
     borderRadius: '1rem',
@@ -34,6 +37,7 @@ export default {
     borderWidth: 'thin',
     borderColor: '#d6d6d6',
     background: '#f7f7f7',
+    overflow: 'auto'
   },
   mainContainer: {
     display: 'flex',
