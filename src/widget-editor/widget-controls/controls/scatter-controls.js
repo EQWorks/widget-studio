@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../../store'
 import {
@@ -16,8 +15,8 @@ const ScatterControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
-  const groupBy = useStoreState((state) => state.groupBy)
-  const xKey = useStoreState((state) => state.xKey)
+  const groupKey = useStoreState((state) => state.groupKey)
+  const indexKey = useStoreState((state) => state.indexKey)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
 
@@ -29,12 +28,12 @@ const ScatterControls = () => {
       <ValueControls />
 
       {
-        !groupBy &&
+        !groupKey &&
         <Card title={'X Key'}>
           <Dropdown
             data={stringColumns.concat(numericColumns)}
-            value={xKey}
-            update={val => update({ xKey: val })}
+            value={indexKey}
+            update={val => update({ indexKey: val })}
           />
         </Card>
       }
@@ -48,11 +47,6 @@ const ScatterControls = () => {
       </Card>
     </>
   )
-}
-
-ScatterControls.propTypes = {
-  numericColumns: PropTypes.array.isRequired,
-  stringColumns: PropTypes.array.isRequired
 }
 
 export default ScatterControls

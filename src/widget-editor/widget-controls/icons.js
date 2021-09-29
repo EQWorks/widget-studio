@@ -8,7 +8,6 @@ import PieChartIcon from '@material-ui/icons/PieChart'
 import InsertChartIcon from '@material-ui/icons/InsertChart'
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 import Grid from '@material-ui/core/Grid'
-import Badge from '@material-ui/core/Badge'
 import { useStoreActions, useStoreState } from '../../store'
 
 const mapIcons = [
@@ -25,9 +24,15 @@ const Icons = ({ disabled }) => {
   const genClicableIcon = () => mapIcons.map(({ Component, type, available }, i) => {
     return (
       <IconButton key={i} onClick={() => updateStore({ type })} disabled={disabled || !available}>
-        <Badge variant='dot' invisible={!current || type !== current} color='error'>
-          <Component fontSize='large' color={disabled || !available ? 'disabled' : 'primary'} />
-        </Badge>
+        <Component fontSize='large' color={
+          disabled || !available ?
+            'disabled'
+            :
+            type === current ?
+              'primary'
+              :
+              'secondary'
+        } />
       </IconButton>
     )
   })

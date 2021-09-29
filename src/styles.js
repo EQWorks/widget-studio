@@ -11,8 +11,8 @@ export default {
     paddingRight: '1.5rem',
     paddingTop: '0.4rem',
     paddingBottom: '0.4rem',
-    borderRadius: '1rem',
     fontWeight: '400',
+    borderTopLeftRadius: '1rem',
     alignItems: 'center'
   },
   warning: {
@@ -51,8 +51,6 @@ export default {
   },
   widgetContainer: {
     width: '100%',
-    paddingLeft: '1rem',
-    paddingRight: '1rem',
   },
   widgetControlsSidebar: {
     display: 'flex',
@@ -64,7 +62,7 @@ export default {
   },
   filterControlsBar: {
     display: 'flex',
-    borderRadius: '1rem',
+    borderBottomLeftRadius: '1rem',
     flex: '1',
     flexDirection: 'column',
     alignContent: 'stretch',
@@ -75,16 +73,17 @@ export default {
   widgetControlsSidebarTab: {
     display: 'flex',
     alignItems: 'center',
-    borderRadius: '1rem',
     background: '#d6d6d6',
+    borderTopRightRadius: '1rem',
+    borderBottomRightRadius: '1rem',
   },
   filterControlsBarTab: {
     display: 'flex',
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
-    borderRadius: '1rem',
     background: '#d6d6d6',
+    borderBottomLeftRadius: '1rem',
   },
   filterControlsBarTabText: {
     marginLeft: '1rem',
@@ -93,7 +92,6 @@ export default {
   tallButton: {
     height: '100%',
     width: '100%',
-    borderRadius: '1rem'
   },
   wideButton: {
     flex: 1
@@ -102,7 +100,6 @@ export default {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '1rem',
     background: '#e6e6e6',
     flexDirection: 'column',
     '& button': {

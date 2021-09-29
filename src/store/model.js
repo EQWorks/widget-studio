@@ -8,10 +8,12 @@ const widgetDefaults = {
   },
   line: {
     showTicks: true,
+    spline: false,
   },
   pie: {
     donut: false,
-    showPercentage: true
+    showPercentage: true,
+    showLegend: true
   },
   scatter: {
     showTicks: true,
@@ -24,10 +26,14 @@ const stateDefaults = {
   columns: [],
   type: '',
   filters: {},
-  groupBy: null,
-  xKey: null,
-  yKeys: {},
-  ui: {
+  group: false,
+  groupKey: null,
+  indexKey: null,
+  valueKeys: {},
+  genericOptions: {
+    subPlots: false,
+  },
+  editorUI: {
     showTable: false,
     showWidgetControls: false,
     showFilterControls: false,
@@ -63,7 +69,11 @@ export default {
       (state) => state.title,
       (state) => state.type,
       (state) => state.filters,
-      (state) => state.yKeys,
+      (state) => state.group,
+      (state) => state.groupKey,
+      (state) => state.indexKey,
+      (state) => state.valueKeys,
+      (state) => state.genericOptions,
       (state) => state.dataSource.type,
       (state) => state.dataSource.id,
       (state) => state[state.type],
@@ -73,7 +83,11 @@ export default {
       title,
       type,
       filters,
-      yKeys,
+      group,
+      groupKey,
+      indexKey,
+      valueKeys,
+      genericOptions,
       dataSourceType,
       dataSourceID,
       options,
@@ -84,12 +98,16 @@ export default {
           title,
           type,
           filters,
-          yKeys,
+          valueKeys,
+          group,
+          groupKey,
+          indexKey,
           dataSource: {
             type: dataSourceType,
             id: dataSourceID,
           },
           options,
+          genericOptions,
         }
         : undefined
     )),
@@ -100,17 +118,17 @@ export default {
       (state) => state.rows,
       (state) => state.columns,
       (state) => state.type,
-      (state) => state.groupBy,
-      (state) => state.yKeys,
+      (state) => state.groupKey,
+      (state) => state.valueKeys,
     ],
     (
       rows,
       columns,
       type,
-      groupBy,
-      yKeys,
+      groupKey,
+      valueKeys,
     ) => (
-      Boolean(type && columns.length && rows.length && yKeys)
+      Boolean(type && columns.length && rows.length && Object.keys(valueKeys).length)
     )),
 
   /** ACTIONS ------------------------------------------------------------------ */
@@ -154,7 +172,7 @@ export default {
   }),
 
   // reset all shared and unique states except data source and data ID
-  reset: thunk((actions, payload) => {
+  reset: thunk((actions) => {
     actions.update({ ...stateDefaults })
     Object.entries(widgetDefaults).forEach(([type, defaultValues]) => {
       actions[type].update(defaultValues)

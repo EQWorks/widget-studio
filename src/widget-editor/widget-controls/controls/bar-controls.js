@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../../store'
 import {
@@ -7,6 +6,7 @@ import {
   WidgetControlCard as Card
 } from '../../shared-components'
 import { ValueControls } from '../../data-controls'
+import { GenericOptionControls } from '../shared-controls'
 
 const BarControls = () => {
 
@@ -19,7 +19,8 @@ const BarControls = () => {
 
   return (
     <>
-      <ValueControls />
+      <ValueControls groupingOptional={false} />
+      <GenericOptionControls />
 
       <Card title='Styling'>
         <Toggle
@@ -35,11 +36,6 @@ const BarControls = () => {
       </Card>
     </>
   )
-}
-
-BarControls.propTypes = {
-  numericColumns: PropTypes.array.isRequired,
-  stringColumns: PropTypes.array.isRequired
 }
 
 export default BarControls

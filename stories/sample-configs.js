@@ -12,14 +12,18 @@ export default {
       'type': 'Saved query',
       'id': '187'
     },
-    'yKeys': {
+    'valueKeys': {
       'city_clicks': {
         'agg': 'mean'
       },
     },
-    'groupBy': 'geo_ca_city',
+    'groupKey': 'geo_ca_city',
+    'genericOptions': {
+      'subPlots': false,
+    },
     'options': {
       'showPercentage': true,
+      'showLegend': true,
       'donut': false
     }
   },
@@ -36,7 +40,7 @@ export default {
       'type': 'Saved query',
       'id': '187'
     },
-    'yKeys': {
+    'valueKeys': {
       'converted_users': {
         'agg': 'mean'
       },
@@ -44,7 +48,11 @@ export default {
         'agg': 'sum'
       }
     },
-    'groupBy': 'geo_ca_city',
+    'group': true,
+    'groupKey': 'geo_ca_city',
+    'genericOptions': {
+      'subPlots': false,
+    },
     'options': {
       'stacked': true,
       'showTicks': false,
@@ -63,16 +71,20 @@ export default {
       'type': 'Saved query',
       'id': '191'
     },
-    'yKeys': {
+    'valueKeys': {
       'revenue': {
         agg: null
       },
-      'clicks': {
+      'impressions': {
         agg: null
       },
     },
-    'groupBy': null,
-    'xKey': 'clicks',
+    'group': false,
+    'groupKey': null,
+    'indexKey': 'clicks',
+    'genericOptions': {
+      'subPlots': true,
+    },
     'options': {
       'spline': true,
       'showTicks': true,
@@ -86,12 +98,15 @@ export default {
       'id': '305'
     },
     'filters': {},
-    'yKeys': {
+    'valueKeys': {
       'spend': {},
       'clicks': {},
     },
-    'groupBy': null,
-    'xKey': 'impressions',
+    'groupKey': null,
+    'indexKey': 'impressions',
+    'genericOptions': {
+      'subPlots': false,
+    },
     'options': {
       'spline': false,
       'showTicks': false,
@@ -110,7 +125,7 @@ export default {
       'type': 'Saved query',
       'id': '217'
     },
-    'yKeys': {
+    'valueKeys': {
       'repeat_visitors': {
         'agg': 'mean'
       },
@@ -118,8 +133,11 @@ export default {
         'agg': 'sum'
       }
     },
-    'groupBy': 'address_postalcode',
-    'xKey': 'unique_visitors',
+    'groupKey': 'address_postalcode',
+    'indexKey': 'unique_visitors',
+    'genericOptions': {
+      'subPlots': false,
+    },
     'options': {
       'showTicks': false
     }

@@ -34,7 +34,7 @@ const Widget = ({ id, editor, staticData, resizable }) => {
   // on first load,
   useEffect(() => {
     // dispatch staticData prop
-    nestedUpdate({ ui: { staticData } })
+    nestedUpdate({ editorUI: { staticData } })
     // check for invalid component usage
     if (id == undefined || id == null) {
       if (staticData || !editor) {
@@ -53,7 +53,7 @@ const Widget = ({ id, editor, staticData, resizable }) => {
         reset()
       }
       nestedUpdate({
-        ui: {
+        editorUI: {
           showDataSourceControls: false
         },
         dataSource: {
@@ -74,7 +74,7 @@ const Widget = ({ id, editor, staticData, resizable }) => {
               name: views[0].name,
               error: null,
             },
-            ui: {
+            editorUI: {
               showWidgetControls: true,
               showFilterControls: true
             }
@@ -87,7 +87,7 @@ const Widget = ({ id, editor, staticData, resizable }) => {
           nestedUpdate({ dataSource: { loading: false } })
         })
     } else {
-      nestedUpdate({ ui: { showDataSourceControls: !staticData } })
+      nestedUpdate({ editorUI: { showDataSourceControls: !staticData } })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSourceID, dataSourceType, reset, update, nestedUpdate, staticData])

@@ -41,7 +41,7 @@ export default {
   controlRow: {
     display: 'flex',
     flexDirection: 'row',
-    width: '100%',
+    flex: 1,
   },
   controlCardHeader: {
     alignSelf: 'flex-start',

@@ -29,10 +29,11 @@ const WidgetAdapter = () => {
   const rows = useStoreState((state) => state.rows)
   const type = useStoreState((state) => state.type)
   const filters = useStoreState((state) => state.filters)
-  const xKey = useStoreState((state) => state.xKey)
-  const yKeys = useStoreState((state) => state.yKeys)
+  const indexKey = useStoreState((state) => state.indexKey)
+  const valueKeys = useStoreState((state) => state.valueKeys)
   const config = useStoreState((state) => state.config)
-  const groupBy = useStoreState((state) => state.groupBy)
+  const group = useStoreState((state) => state.group)
+  const groupKey = useStoreState((state) => state.groupKey)
 
   // on first load, ensure there are no problems with the imported adapter files
   // TODO: perform a more rigorous validation.
@@ -71,40 +72,39 @@ const WidgetAdapter = () => {
 
   // do final processing on the dataframe when appropriate
   const processedDataframe = useMemo(() => (
-    groupBy ?
+    group ?
       // aggregate
-      truncatedDataframe.groupby([groupBy])
+      truncatedDataframe.groupby([groupKey])
         .agg(
           Object.fromEntries(
-            Object.entries(yKeys).map(([k, { agg }]) =>
+            Object.entries(valueKeys).map(([k, { agg }]) =>
               [k, agg ?? 'sum']
             )
           )
         )
       :
-      // simply sort if no aggregation
-      truncatedDataframe.sort_values({
-        by: xKey,
-      })
-  ), [groupBy, truncatedDataframe, yKeys, xKey])
+      // simply index + sort data if no aggregation
+      truncatedDataframe.set_index({ key: indexKey }).sort_index()
+  ), [group, truncatedDataframe, groupKey, valueKeys, indexKey])
 
   // assemble final data using completely processed dataframe
   const data = useMemo(() => (
-    Object.entries(yKeys).map(([k, { agg }]) => (
-      groupBy ?
+    Object.entries(valueKeys).map(([k, { agg }]) => (
+      group ?
         {
           name: `${k} (${agg ?? 'sum'})`,
-          x: processedDataframe[groupBy].values,
+          x: processedDataframe[groupKey].values,
           y: processedDataframe[`${k}_${agg ?? 'sum'}`].values,
         }
         :
         {
           name: `${k}`,
-          x: processedDataframe[xKey].values,
+          // x: processedDataframe[indexKey].values,
+          x: processedDataframe.index,
           y: processedDataframe[k].values,
         }
     ))
-  ), [groupBy, processedDataframe, xKey, yKeys])
+  ), [group, groupKey, processedDataframe, valueKeys])
 
   return createElement(chart, {
     data,

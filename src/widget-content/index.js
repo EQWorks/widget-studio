@@ -21,8 +21,8 @@ const WidgetContent = () => {
   const rows = useStoreState((state) => state.rows)
 
   // editor UI state
-  const showTable = useStoreState((state) => state.ui.showTable)
-  const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
+  const showTable = useStoreState((state) => state.editorUI.showTable)
+  const showDataSourceControls = useStoreState((state) => state.editorUI.showDataSourceControls)
 
   // data retrieval state
   const dataSourceType = useStoreState((state) => state.dataSource.type)

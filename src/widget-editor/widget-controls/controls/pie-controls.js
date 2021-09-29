@@ -1,6 +1,5 @@
 import React from 'react'
 
-import PropTypes from 'prop-types'
 import { useStoreState, useStoreActions } from '../../../store'
 // import { getPieChartData, sum } from './utils'
 import {
@@ -8,6 +7,7 @@ import {
   WidgetControlCard as Card
 } from '../../shared-components'
 import { ValueControls } from '../../data-controls'
+import { GenericOptionControls } from '../shared-controls'
 
 const PieControls = () => {
 
@@ -17,10 +17,12 @@ const PieControls = () => {
   // unique state
   const donut = useStoreState((state) => state.pie.donut)
   const showPercentage = useStoreState((state) => state.pie.showPercentage)
+  const showLegend = useStoreState((state) => state.pie.showLegend)
 
   return (
     <>
-      <ValueControls />
+      <ValueControls groupingOptional={false} />
+      <GenericOptionControls />
 
       <Card title='Styling'>
         <Toggle
@@ -33,16 +35,14 @@ const PieControls = () => {
           label='Show Percentage'
           update={(val) => nestedUpdate({ pie: { showPercentage: val } })}
         />
+        <Toggle
+          value={showLegend}
+          label='Show Legend'
+          update={(val) => nestedUpdate({ pie: { showLegend: val } })}
+        />
       </Card>
     </>
   )
-}
-
-PieControls.propTypes = {
-  columns: PropTypes.array,
-}
-PieControls.default = {
-  columns: [],
 }
 
 export default PieControls

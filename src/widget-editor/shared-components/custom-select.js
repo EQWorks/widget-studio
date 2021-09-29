@@ -1,6 +1,6 @@
 import React from 'react'
-
 import PropTypes from 'prop-types'
+
 import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
@@ -9,7 +9,7 @@ import Input from '@material-ui/core/Input'
 import Checkbox from '@material-ui/core/Checkbox'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemText from '@material-ui/core/ListItemText'
-
+import { Chip } from '@eqworks/lumen-ui'
 
 const useStyles = makeStyles(() => ({
   form: {
@@ -41,7 +41,7 @@ const CustomSelect = (props) => {
           input={<Input />}
           renderValue={(selected) => (
             <div className={classes.chips}>
-              {selected}
+              <Chip key={selected} label={selected} margin={0.5} custom='#006DE9' />
             </div>
           )}
           MenuProps={{ elevation: 1 }}
@@ -74,7 +74,7 @@ const CustomSelect = (props) => {
         renderValue={(selected) => (
           selected.map(value => (
             <div key={value} className={classes.chips}>
-              {value}
+              <Chip key={value} label={value} margin={0.5} custom='#006DE9' />
             </div>
           ))
         )}
@@ -88,7 +88,12 @@ const CustomSelect = (props) => {
               <ListItemText primary={`${key} (${category})`} />
             </MenuItem>)
           })
-          : data.map((value) => (<MenuItem key={value} value={value}>{value}</MenuItem>))}
+          : data.map((value) => (
+            <MenuItem key={value} value={value}>
+              <Checkbox checked={chosenValue.indexOf(value) > -1} />
+              <ListItemText primary={value} />
+            </MenuItem>
+          ))}
       </Select>
     </FormControl >
   )

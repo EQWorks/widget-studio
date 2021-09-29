@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton'
+import { Typography } from '@eqworks/lumen-ui'
 
 import { useStoreState, useStoreActions } from '../../store'
 import {
@@ -54,12 +55,19 @@ const FilterControls = () => {
         }
       }}
     >
-      <Slider
-        min={min(key)}
-        max={max(key)}
-        value={range}
-        update={val => nestedUpdate({ filters: { [key]: val } })}
-      />
+      <div className={classes.controlRow}>
+        <div style={{ marginRight: '1rem' }}>
+          <Typography color="textSecondary" variant='subtitle2'>
+            {`${range[0]}-${range[1]}`}
+          </Typography>
+        </div>
+        <Slider
+          min={min(key)}
+          max={max(key)}
+          value={range}
+          update={val => nestedUpdate({ filters: { [key]: val } })}
+        />
+      </div>
     </ToggleableCard >
   }
 
@@ -67,12 +75,11 @@ const FilterControls = () => {
     <div className={classes.filterControls}>
       {Object.entries(filters).map(([key, range]) => card(key, range, true))}
       {Object.entries(disabledFilters).map(([key, range]) => card(key, range, false))}
-      {/* {cards(disabledFilters)} */}
       <WidgetControlCard>
         {
           addingFilter ?
             <Dropdown
-              data={numericColumns.filter(col => !Object.keys(filters).includes(col.name))}
+              data={numericColumns.filter(col => !Object.keys(filters).includes(col))}
               update={val => {
                 nestedUpdate({ filters: { [val]: [min(val), max(val)] } })
                 setAddingFilter(false)

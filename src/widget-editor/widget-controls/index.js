@@ -35,8 +35,8 @@ const WidgetControls = () => {
   const columns = useStoreState((state) => state.columns)
 
   useEffect(() => {
-    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric') })
-    update({ stringColumns: columns.filter(({ category }) => category === 'String') })
+    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
+    update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
   }, [columns, update])
 
   return (

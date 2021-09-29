@@ -65,32 +65,64 @@ LinkedSelect.defaultProps = {
   controlled: true
 }
 
-export const WidgetControlCard = ({ title, children }) => {
+export const WidgetControlCard = ({ title, titleExtra, children }) => {
 
   const classes = useStyles()
   return (
+    <div className={classes.controlCard}>
+      <div className={classes.controlRow}>
+        {
+          title &&
+          <Typography
+            className={classes.controlCardHeader}
+            color='textSecondary'
+            variant='subtitle1'
+          >
+            {title}
+          </Typography>
+        }
+        {titleExtra}
+      </div>
+      {children}
+    </ div>
+  )
+}
+
+export const PluralSelect = ({ values, data, update }) => {
+
+  const dataRemaining = useMemo(() => data.filter((name) => !(name in values)), [data, values])
+  return (
     <>
       {
-        title &&
-        <Typography
-          className={classes.controlCardHeader}
-          color='textSecondary'
-          variant='subtitle1'
-        >
-          {title}
-        </Typography>
+        Object.keys(values).map(k => {
+          return (
+            <CustomSelect
+              key={k}
+              data={dataRemaining}
+              chosenValue={k}
+              setChosenValue={update}
+            />
+          )
+        })
       }
-      <div className={classes.controlCard}>
-        {children}
-      </div >
-    </ >
+      {
+        dataRemaining.length ?
+          <CustomSelect
+            data={dataRemaining}
+            chosenValue={''}
+            setChosenValue={update}
+          />
+          :
+          null
+      }
+    </>
   )
 }
 
 export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, update }) => {
 
   const classes = useStyles()
-  const unusedKeys = useMemo(() => data.filter(({ name }) => !(name in values)), [data, values])
+  const remainingValues = useMemo(() => data.filter((name) => !(name in values)), [data, values])
   return (
     <>
       <div className={classes.controlRow}>
@@ -116,7 +148,7 @@ export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, upda
             <LinkedSelect
               key={k}
               callback={([, _v]) => update({ [k]: { [subKey]: _v } })}
-              data={unusedKeys}
+              data={remainingValues}
               init={k}
               subData={subData}
               subInit={v[subKey]}
@@ -127,7 +159,7 @@ export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, upda
       < LinkedSelect
         controlled={false}
         callback={([_k, _v]) => update({ [_k]: { [subKey]: _v } })}
-        data={unusedKeys}
+        data={remainingValues}
         init={''}
         subData={subData}
         subInit={''}
@@ -136,7 +168,7 @@ export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, upda
   )
 }
 
-export const Toggle = ({ label, value, update }) =>
+export const Toggle = ({ label, value, update, disabled }) =>
   <FormControl>
     <FormControlLabel
       control={
@@ -144,6 +176,7 @@ export const Toggle = ({ label, value, update }) =>
           checked={value}
           onChange={event => update(event.target.checked)}
           color="primary"
+          disabled={disabled ?? false}
         />
       }
       label={label}
@@ -168,20 +201,13 @@ export const Slider = ({ min, max, value, update }) =>
 
 
 
-export const ToggleableCard = ({ init, update, title, children }) => {
+export const ToggleableCard = ({ init, update, title, altTitle, children }) => {
   const [toggle, setToggle] = useState(init)
-  const classes = useStyles()
   return (
     <>
-      <WidgetControlCard>
-        <div className={classes.controlRow}>
-          <Typography
-            className={classes.controlCardHeader}
-            color='textSecondary'
-            variant='subtitle1'
-          >
-            {title}
-          </Typography>
+      <WidgetControlCard
+        title={toggle ? title : altTitle ?? title}
+        titleExtra={
           <Toggle
             value={toggle}
             update={(val) => {
@@ -189,10 +215,23 @@ export const ToggleableCard = ({ init, update, title, children }) => {
               setToggle(val)
             }}
           />
-        </div>
+        }
+      >
         {
-          toggle &&
-          children
+          Array.isArray(children) ?
+            (
+              toggle ?
+                children[0]
+                :
+                children.slice(1)
+
+            )
+            :
+            (
+              toggle &&
+              children
+            )
+
         }
       </WidgetControlCard>
     </>

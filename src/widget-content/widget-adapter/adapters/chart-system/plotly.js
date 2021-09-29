@@ -3,18 +3,18 @@ import { PlotlyBarChart, PlotlyPieChart, PlotlyLineChart, PlotlyScatterChart } f
 export default {
   bar: [
     PlotlyBarChart,
-    (config) => ({ ...config.options })
+    ({ options, genericOptions }) => ({ ...options, ...genericOptions })
   ],
   line: [
     PlotlyLineChart,
-    (config) => ({ ...config.options })
+    ({ options, genericOptions }) => ({ ...options, ...genericOptions })
   ],
   pie: [
     PlotlyPieChart,
-    (config) => ({ ...config.options })
+    ({ options, genericOptions }) => ({ ...options, ...genericOptions })
   ],
   scatter: [
     PlotlyScatterChart,
-    (config) => ({ ...config.options })
+    ({ options, genericOptions }) => ({ ...options, ...genericOptions })
   ]
 }
