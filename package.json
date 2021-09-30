@@ -44,6 +44,7 @@
     "@eqworks/chart-system": "https://github.com/eqworks/chart-system#plotly/plotly-charts",
     "@eqworks/common-login": "^0.9.0-alpha.1",
     "@eqworks/lumen-ui": "^1.0.0",
+    "@eqworks/lumen-labs": "^0.1.0-alpha.10",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -70,7 +71,7 @@
     "tailwindcss": "^2.2.9"
   },
   "dependencies": {
-    "@eqworks/lumen-table": "1.3.1",
+    "@eqworks/lumen-table": "^1.4.0",
     "danfojs": "^0.2.8",
     "easy-peasy": "^5.0.3",
     "joi": "^17.4.2",
