@@ -1,6 +1,6 @@
 
 import React from "react"
-import { ThemeProvider } from '@eqworks/react-labs'
+import { ThemeProvider } from '@eqworks/lumen-ui'
 
 import { Authenticated } from "@eqworks/common-login"
 

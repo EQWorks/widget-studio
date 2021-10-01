@@ -1,6 +1,8 @@
 export default {
-  widgetTitle: {
-    // paddingLeft: '3rem',
+  widgetTitleBarItem: {
+    marginRight: '1rem'
+  },
+  widgetTitleBar: {
     width: '100%',
     display: 'flex',
     gridColumn: '1 / 3',
@@ -18,6 +20,7 @@ export default {
   warning: {
     textAlign: 'center',
     height: '100%',
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -42,15 +45,20 @@ export default {
   mainContainer: {
     display: 'flex',
     flexDirection: 'column',
-    // height: '100%',
     order: 3,
     flex: '1 1 0',
     minWidth: 0,
-    justifyContent: 'center',
-    gridRow: 2
+    gridRow: 2,
+    overflow: 'auto'
+  },
+  table: {
+    flex: 0,
+    maxHeight: 0
   },
   widgetContainer: {
-    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    flex: 1
   },
   widgetControlsSidebar: {
     display: 'flex',

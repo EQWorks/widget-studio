@@ -19,7 +19,6 @@ import { Typography } from '@eqworks/lumen-ui'
 
 import { useStoreState, useStoreActions } from '../store'
 import WidgetControls from './widget-controls'
-import ResultsTable from './table'
 import DataSourceControls from './data-source-controls'
 import styles from '../styles' // TODO fix
 import { FilterControls } from './data-controls'
@@ -34,7 +33,6 @@ const WidgetEditor = props => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // widget configuration state
-  const rows = useStoreState((state) => state.rows)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
   const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
@@ -91,10 +89,6 @@ const WidgetEditor = props => {
                 </IconButton>
               }
               <DefaultSidebarButton
-                onClick={() => nestedUpdate({ editorUI: { showTable: !showTable } })}
-                icon={TocIcon}
-              />
-              <DefaultSidebarButton
                 onClick={() =>
                   nestedUpdate(showWidgetControls || showFilterControls ?
                     { editorUI: { showWidgetControls: false, showFilterControls: false } }
@@ -116,15 +110,12 @@ const WidgetEditor = props => {
         }
       </div>
 
-      <div className={showDataSourceControls || showTable ? classes.extras : classes.hidden}>
+      <div className={showDataSourceControls ? classes.extras : classes.hidden}>
         <div className={showDataSourceControls ? classes.dataControlsAlt : classes.hidden}>
           {
             !staticData &&
             <DataSourceControls />
           }
-        </div>
-        <div className={showTable ? null : classes.hidden}>
-          <ResultsTable results={rows} />
         </div>
       </div>
 

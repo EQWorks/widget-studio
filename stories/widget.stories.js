@@ -13,7 +13,7 @@ storiesOf('Dashboard-esque example')
       }} >
       {
         Object.keys(sampleConfigs).map(id =>
-          <div key={id}>
+          <div key={id} style={{ margin: '2rem' }}>
             <Widget editor {...{ id }} staticData />
           </div>
         )

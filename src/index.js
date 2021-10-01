@@ -2,21 +2,20 @@ import React, { useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import { Resizable } from 're-resizable'
 
 import styles from './styles'
 import { useStoreState, useStoreActions } from './store'
 import { requestData, requestConfig } from './util/fetch'
 import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
-import WidgetEditor from './widget-editor'
-import WidgetContent from './widget-content'
-import WidgetTitle from './widget-content/widget-title'
+import WidgetEditor from './editor'
+import WidgetContent from './content'
+import WidgetView from './view'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const Widget = ({ id, editor, staticData, resizable }) => {
+const Widget = ({ id, editor, staticData }) => {
 
   const classes = useStyles()
 
@@ -92,22 +91,12 @@ const Widget = ({ id, editor, staticData, resizable }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSourceID, dataSourceType, reset, update, nestedUpdate, staticData])
 
-  const ws =
-    <div className={classes.outerContainer}>
-      <WidgetTitle />
-      {editor && <WidgetEditor />}
-      <WidgetContent />
-    </div >
-
   return (
-    resizable ?
-      <Resizable>
-        <div style={{ display: 'flex', width: '100%', height: '100%' }} >
-          {ws}
-        </div>
-      </Resizable>
-      :
-      ws
+    <div className={classes.outerContainer}>
+      <WidgetView />
+      <WidgetContent />
+      {editor && <WidgetEditor />}
+    </div >
   )
 }
 
@@ -115,13 +104,11 @@ Widget.propTypes = {
   editor: PropTypes.bool,
   id: PropTypes.string,
   staticData: PropTypes.bool,
-  resizable: PropTypes.bool,
 }
 Widget.defaultProps = {
   editor: false,
   id: undefined,
   staticData: false,
-  resizable: true,
 }
 
 export default withQueryClient(withStore(Widget))
