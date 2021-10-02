@@ -14,8 +14,8 @@ const LineControls = () => {
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
 
   // unique state
-  const spline = useStoreState((state) => state.line.spline)
-  const showTicks = useStoreState((state) => state.line.showTicks)
+  const spline = useStoreState((state) => state.options.spline)
+  const showTicks = useStoreState((state) => state.options.showTicks)
 
   return (
     <>
@@ -26,12 +26,12 @@ const LineControls = () => {
         <Toggle
           value={spline}
           label='Spline interpolation'
-          update={(val) => nestedUpdate({ line: { spline: val } })}
+          update={(val) => nestedUpdate({ options: { spline: val } })}
         />
         <Toggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => nestedUpdate({ line: { showTicks: val } })}
+          update={(val) => nestedUpdate({ options: { showTicks: val } })}
         />
       </Card>
     </>

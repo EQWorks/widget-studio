@@ -31,6 +31,7 @@ const stateDefaults = {
   groupKey: null,
   indexKey: null,
   valueKeys: {},
+  options: {},
   genericOptions: {
     subPlots: false,
   },
@@ -57,12 +58,6 @@ export default {
   /** STATE ------------------------------------------------------------------ */
   ...stateDefaults,
 
-  /** unique state of each chart type */
-  bar: { ...widgetDefaults.bar },
-  line: { ...widgetDefaults.line },
-  pie: { ...widgetDefaults.pie },
-  scatter: { ...widgetDefaults.scatter },
-
   /** COMPUTED STATE ------------------------------------------------------------ */
 
   config: computed(
@@ -75,10 +70,9 @@ export default {
       (state) => state.indexKey,
       (state) => state.valueKeys,
       (state) => state.genericOptions,
-      (state) => state.dataSource.type,
-      (state) => state.dataSource.id,
-      (state) => state[state.type],
+      (state) => state.options,
       (state) => state.isReady,
+      (state) => state.dataSource,
     ],
     (
       title,
@@ -89,10 +83,9 @@ export default {
       indexKey,
       valueKeys,
       genericOptions,
-      dataSourceType,
-      dataSourceID,
       options,
       isReady,
+      { type: dataSourceType, id: dataSourceID },
     ) => (
       isReady
         ? {
@@ -103,12 +96,9 @@ export default {
           group,
           groupKey,
           indexKey,
-          dataSource: {
-            type: dataSourceType,
-            id: dataSourceID,
-          },
           options,
           genericOptions,
+          dataSource: { type: dataSourceType, id: dataSourceID },
         }
         : undefined
     )),
@@ -119,14 +109,12 @@ export default {
       (state) => state.rows,
       (state) => state.columns,
       (state) => state.type,
-      (state) => state.groupKey,
       (state) => state.valueKeys,
     ],
     (
       rows,
       columns,
       type,
-      groupKey,
       valueKeys,
     ) => (
       Boolean(type && columns.length && rows.length && Object.keys(valueKeys).length)
@@ -155,28 +143,15 @@ export default {
   // perform a nested update on the store state
   nestedUpdate: action((state, payload) => {
     return Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
-      // console.dir(nestedPayload)
-      // Object.entries(nestedPayload).forEach(([deepNestKey, deepNestedPayload]) => {
-      //   // console.log([deepNestKey, deepNestedPayload])
-      //   // console.log(Object.getPrototypeOf(nestedPayload) === Object.prototype)
-      // })
-
       acc[nestKey] = { ...acc[nestKey], ...nestedPayload }
       return acc
     }, state)
   }),
 
-  // reset only the current widget's unique state
-  resetCurrent: thunk((actions, payload, { getState }) => {
-    const type = getState().type
-    actions[type].update(widgetDefaults[type])
-  }),
-
   // reset all shared and unique states except data source and data ID
-  reset: thunk((actions) => {
+  reset: thunk((actions, payload, { getState }) => {
+    const type = getState().type
     actions.update({ ...stateDefaults })
-    Object.entries(widgetDefaults).forEach(([type, defaultValues]) => {
-      actions[type].update(defaultValues)
-    })
+    actions.nestedUpdate({ options: widgetDefaults[type] })
   })
 }
