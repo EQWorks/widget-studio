@@ -32,7 +32,7 @@ export default {
     width: '100%',
     height: '100%',
     display: 'grid',
-    gridTemplateColumns: 'auto 2fr auto',
+    gridTemplateColumns: 'auto 1fr min-content',
     gridTemplateRows: 'auto 2fr auto',
     flex: 1,
     border: 'solid',
