@@ -17,14 +17,15 @@ export default {
     borderTopLeftRadius: '1rem',
     alignItems: 'center'
   },
-  warning: {
-    textAlign: 'center',
-    height: '100%',
+  warningContainer: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'center'
+    flexDirection: 'column'
+  },
+  loader: {
+    margin: '1rem'
   },
   outerContainer: {
     maxWidth: '100%',

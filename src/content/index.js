@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Loader } from '@eqworks/lumen-ui'
+import { Loader } from '@eqworks/lumen-labs'
 import { Typography } from '@eqworks/lumen-ui'
 
 import { useStoreState } from '../store'
@@ -17,7 +17,7 @@ const WidgetContent = () => {
 
   // widget configuration state (easy-peasy)
   const type = useStoreState((state) => state.type)
-  const config = useStoreState((state) => state.config)
+  const isReady = useStoreState((state) => state.isReady)
   const rows = useStoreState((state) => state.rows)
 
   // UI state
@@ -29,7 +29,20 @@ const WidgetContent = () => {
   const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
   const dataSourceError = useStoreState((state) => state.dataSource.error)
 
+  const widgetWarning = useMemo(() => ({
+    primary:
+      !dataSourceID || !dataSourceType ? 'Please select a data source.'
+        : dataSourceError ? 'Something went wrong.'
+          : !rows.length ? 'Sorry, this data is empty.'
+            : type ? 'Select columns and configure your widget.'
+              : 'Select a widget type.',
+    secondary:
+      dataSourceError ? `${dataSourceError}`
+        : 'Data loaded successfully'
+  }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
+
   return (
+
     <div className={classes.mainContainer}>
       <div className={!showTable ? classes.hidden : classes.table}>
         <ResultsTable results={rows} />
@@ -38,48 +51,34 @@ const WidgetContent = () => {
       <div className={showTable ? classes.hidden : classes.widgetContainer}>
         {
           // config object ready?
-          config ?
+          isReady ?
             // render widget
             <WidgetAdapter />
             :
             // guide the user to configure the widget
-            <div className={classes.warning}>
-              <Typography color="textSecondary" variant='h6'>
-                {
-                  !dataSourceID || !dataSourceType ? 'Please select a data source.'
-                    :
-                    dataSourceError ? 'Something went wrong.'
-                      :
-                      dataSourceLoading ?
-                        <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                          <Loader message="Loading data..." open />
-                        </div>
-                        :
-                        !rows.length ? 'Sorry, this data is empty.'
-                          :
-                          type ? 'Select columns and configure your widget.'
-                            : 'Select a widget type.'
-
-                }
-              </Typography>
+            <div className={classes.warningContainer}>
+              {
+                dataSourceLoading ?
+                  <div className={classes.loader}>
+                    <Loader open classes={{ icon: 'text-primary-700' }} />
+                  </div>
+                  :
+                  <Typography color="textSecondary" variant='h6'>
+                    {widgetWarning.primary}
+                  </Typography>
+              }
               <Typography color="textSecondary" variant='subtitle2'>
                 {
-                  dataSourceID && dataSourceType &&
-                  (
-                    dataSourceError ?
-                      `${dataSourceError}`
-                      :
-                      dataSourceLoading ?
-                        `${dataSourceType} ${dataSourceID}`
-                        :
-                        'Data loaded successfully'
-                  )
+                  dataSourceLoading ?
+                    `Loading ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
+                    :
+                    widgetWarning.secondary
                 }
               </Typography>
             </div>
         }
       </div>
-    </div>
+    </div >
   )
 }
 
