@@ -22,13 +22,22 @@ const WidgetContent = () => {
 
   // UI state
   const showTable = useStoreState((state) => state.editorUI.showTable)
+  const dataSourceLoading = useStoreState((state) => state.editorUI.dataSourceLoading)
+  const dataSourceError = useStoreState((state) => state.editorUI.dataSourceError)
 
-  // data retrieval state
+  // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
-  const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
-  const dataSourceError = useStoreState((state) => state.dataSource.error)
 
+  // descriptive message to display when the data source is still loading
+  const dataSourceLoadingMessage = useMemo(() => (
+    dataSourceType && dataSourceID ?
+      `Loading ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
+      :
+      'Loading'
+  ), [dataSourceType, dataSourceID])
+
+  // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
   const widgetWarning = useMemo(() => ({
     primary:
       !dataSourceID || !dataSourceType ? 'Please select a data source.'
@@ -70,7 +79,7 @@ const WidgetContent = () => {
               <Typography color="textSecondary" variant='subtitle2'>
                 {
                   dataSourceLoading ?
-                    `Loading ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
+                    dataSourceLoadingMessage
                     :
                     widgetWarning.secondary
                 }

@@ -1,7 +1,6 @@
 import React, { createElement } from 'react'
 
 import PropTypes from 'prop-types'
-import TocIcon from '@material-ui/icons/Toc'
 import IconButton from '@material-ui/core/IconButton'
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
@@ -35,10 +34,10 @@ const WidgetEditor = props => {
   // widget configuration state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
-  const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
-  const dataSourceError = useStoreState((state) => state.dataSource.error)
 
   // editor UI state
+  const dataSourceLoading = useStoreState((state) => state.editorUI.dataSourceLoading)
+  const dataSourceError = useStoreState((state) => state.editorUI.dataSourceError)
   const showWidgetControls = useStoreState((state) => state.editorUI.showWidgetControls)
   const showFilterControls = useStoreState((state) => state.editorUI.showFilterControls)
   const showTable = useStoreState((state) => state.editorUI.showTable)

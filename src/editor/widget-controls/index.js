@@ -31,8 +31,9 @@ const WidgetControls = () => {
   const update = useStoreActions(actions => actions.update)
   const reset = useStoreActions(actions => actions.reset)
   const type = useStoreState((state) => state.type)
-  const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
   const columns = useStoreState((state) => state.columns)
+
+  const dataSourceLoading = useStoreState((state) => state.editorUI.dataSourceLoading)
 
   useEffect(() => {
     update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })

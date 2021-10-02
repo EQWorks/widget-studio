@@ -1,4 +1,5 @@
 import { computed, action, thunk } from 'easy-peasy'
+import { requestConfig, requestData } from '../util/fetch'
 
 const widgetDefaults = {
   bar: {
@@ -23,8 +24,6 @@ const widgetDefaults = {
 
 const stateDefaults = {
   title: '',
-  rows: [],
-  columns: [],
   type: '',
   filters: {},
   group: false,
@@ -35,19 +34,21 @@ const stateDefaults = {
   genericOptions: {
     subPlots: false,
   },
+  dataSource: {
+    type: null,
+    id: null,
+  },
+  rows: [],
+  columns: [],
   editorUI: {
     showTable: false,
     showWidgetControls: false,
     showFilterControls: false,
     showDataSourceControls: false,
-    staticData: false
-  },
-  dataSource: {
-    type: null,
-    id: null,
-    loading: false,
-    error: null,
-    name: null
+    staticData: false,
+    dataSourceLoading: false,
+    dataSourceError: null,
+    dataSourceName: null
   },
   wl: null,
   cu: null,
@@ -122,20 +123,56 @@ export default {
 
   /** ACTIONS ------------------------------------------------------------------ */
 
-  // set state based on config object that has been passed UP from a child Widget
-  readConfig: action((state, payload) => {
-    if (!payload) {
-      return state
+  loadConfig: thunk(async (actions, payload) => {
+
+    actions.nestedUpdate({
+      editorUI: {
+        showDataSourceControls: false,
+        dataSourceLoading: true
+      },
+    })
+    const config = await requestConfig(payload)
+      .catch((dataSourceError) => {
+        actions.nestedUpdate({
+          editorUI: {
+            error: dataSourceError,
+            dataSourceLoading: false
+          }
+        })
+      })
+    actions.update(config)
+    actions.loadData(config.dataSource)
+  }),
+
+  loadData: thunk(async (actions, { type, id }, { getState }) => {
+
+    const { isReady, staticData } = getState()
+    const data = await requestData(type, id)
+
+    if (type && id) {
+      if (isReady) {
+        actions.reset()
+      }
+      const { results: rows, columns, whitelabelID, customerID, views } = data
+      actions.update({
+        rows,
+        columns,
+        wl: whitelabelID, // only used for wl-cu-selector
+        cu: customerID, // only used for wl-cu-selector
+      })
+      actions.nestedUpdate({
+        editorUI: {
+          showWidgetControls: true,
+          showFilterControls: true,
+          dataSourceName: views[0].name,
+          dataSourceError: null,
+        }
+      })
+      actions.nestedUpdate({ editorUI: { dataSourceLoading: false } })
+    } else {
+      actions.nestedUpdate({ editorUI: { showDataSourceControls: !staticData } })
     }
-    const { options, type, ...rest } = payload
-    return {
-      ...state,
-      ...rest,
-      type,
-      [type]: options,
-    }
-  }
-  ),
+  }),
 
   // update the store state
   update: action((state, payload) => ({ ...state, ...payload })),
