@@ -17,6 +17,7 @@ const widgetDefaults = {
   },
   scatter: {
     showTicks: true,
+    showLines: false,
   }
 }
 
