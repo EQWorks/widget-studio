@@ -92,7 +92,7 @@ const Widget = ({ id, editor, staticData }) => {
   }, [dataSourceID, dataSourceType, reset, update, nestedUpdate, staticData])
 
   return (
-    <div className={classes.outerContainer}>
+    <div className={editor ? classes.outerContainer : classes.outerContainerNoEditor}>
       <WidgetView />
       <WidgetContent />
       {editor && <WidgetEditor />}

@@ -43,6 +43,13 @@ export default {
     background: '#f7f7f7',
     overflow: 'auto'
   },
+  get outerContainerNoEditor() {
+    return {
+      ...this.outerContainer,
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: '1fr',
+    }
+  },
   mainContainer: {
     display: 'flex',
     flexDirection: 'column',
