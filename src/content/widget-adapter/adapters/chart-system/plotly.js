@@ -3,18 +3,64 @@ import { PlotlyBarChart, PlotlyPieChart, PlotlyLineChart, PlotlyScatterChart } f
 export default {
   bar: [
     PlotlyBarChart,
-    ({ options, genericOptions }) => ({ ...options, ...genericOptions })
+    (data, { options, genericOptions, ...config }) => ({
+      adaptedData: {
+        data,
+        x: config.groupKey,
+        y: Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`))
+      },
+      adaptedConfig: { ...options, ...genericOptions }
+    })
   ],
   line: [
     PlotlyLineChart,
-    ({ options, genericOptions }) => ({ ...options, ...genericOptions })
+    (data, { options, genericOptions, ...config }) => ({
+      adaptedData: {
+        data,
+        ...(config.group ?
+          {
+            x: config.groupKey,
+            y: Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`))
+          }
+          :
+          {
+            x: config.indexKey,
+            y: Object.keys(config.valueKeys)
+          }
+        )
+      },
+      adaptedConfig: { ...options, ...genericOptions }
+    })
   ],
   pie: [
     PlotlyPieChart,
-    ({ options, genericOptions }) => ({ ...options, ...genericOptions })
+    (data, { options, genericOptions, ...config }) => ({
+      adaptedData: {
+        data,
+        label: config.groupKey,
+        values: Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`))
+      },
+      adaptedConfig: { ...options, ...genericOptions }
+    })
   ],
   scatter: [
     PlotlyScatterChart,
-    ({ options, genericOptions }) => ({ ...options, ...genericOptions })
+    (data, { options, genericOptions, ...config }) => ({
+      adaptedData: {
+        data,
+        ...(config.group ?
+          {
+            x: config.groupKey,
+            y: Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`))
+          }
+          :
+          {
+            x: config.indexKey,
+            y: Object.keys(config.valueKeys)
+          }
+        )
+      },
+      adaptedConfig: { ...options, ...genericOptions }
+    })
   ]
 }

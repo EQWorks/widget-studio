@@ -1,4 +1,4 @@
-import { useEffect, createElement, useMemo } from 'react'
+import { useState, useEffect, createElement, useMemo } from 'react'
 import Joi from 'joi'
 import * as dfd from 'danfojs/src/index'
 
@@ -35,6 +35,10 @@ const WidgetAdapter = () => {
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
 
+  const [data, setData] = useState()
+  const [chart, adapt] = useMemo(() => typeDict[type][type], [type])
+  const { adaptedConfig, adaptedData } = useMemo(() => adapt(data, config), [adapt, config, data])
+
   // on first load, ensure there are no problems with the imported adapter files
   // TODO: perform a more rigorous validation.
   useEffect(() => {
@@ -45,11 +49,20 @@ const WidgetAdapter = () => {
     })
   }, [])
 
-  const [chart, adapt] = useMemo(() => typeDict[type][type], [type])
-  const adaptedConfig = useMemo(() => adapt(config), [adapt, config])
-
-  // construct a dataframe when the raw data changes
+  // memoize conversion of raw data to a danfojs dataframe
   const dataframe = useMemo(() => new dfd.DataFrame(rows), [rows])
+
+  // drop unused columns when used columns change
+  const selectedDataframe = useMemo(() => (
+    dataframe.drop({
+      inplace: false,
+      columns: dataframe.columns.filter(c =>
+        !(indexKey === c
+          || groupKey === c
+          || c in filters
+          || c in valueKeys))
+    })
+  ), [dataframe, filters, groupKey, indexKey, valueKeys])
 
   // truncate the dataframe when the filters change
   const truncatedDataframe = useMemo(() => (
@@ -65,10 +78,10 @@ const WidgetAdapter = () => {
             'is': '<=',
             'to': max,
           })
-        ), dataframe)
+        ), selectedDataframe)
       :
-      dataframe
-  ), [dataframe, filters])
+      selectedDataframe
+  ), [selectedDataframe, filters])
 
   // do final processing on the dataframe when appropriate
   const processedDataframe = useMemo(() => (
@@ -84,30 +97,16 @@ const WidgetAdapter = () => {
         )
       :
       // simply index + sort data if no aggregation
-      truncatedDataframe.set_index({ key: indexKey }).sort_index()
+      truncatedDataframe.set_index({ key: indexKey, drop: false }).sort_index()
   ), [group, truncatedDataframe, groupKey, valueKeys, indexKey])
 
-  // assemble final data using completely processed dataframe
-  const data = useMemo(() => (
-    Object.entries(valueKeys).map(([k, { agg }]) => (
-      group ?
-        {
-          name: `${k} (${agg ?? 'sum'})`,
-          x: processedDataframe[groupKey].values,
-          y: processedDataframe[`${k}_${agg ?? 'sum'}`].values,
-        }
-        :
-        {
-          name: `${k}`,
-          // x: processedDataframe[indexKey].values,
-          x: processedDataframe.index,
-          y: processedDataframe[k].values,
-        }
-    ))
-  ), [group, groupKey, processedDataframe, valueKeys])
+  // convert dataframe back to object literal when final processing is done
+  useEffect(() => {
+    (async () => setData(JSON.parse(await processedDataframe.to_json())))()
+  }, [processedDataframe])
 
   return createElement(chart, {
-    data,
+    ...adaptedData,
     ...adaptedConfig
   })
 }
