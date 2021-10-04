@@ -18,7 +18,8 @@
     "lint": "eslint src/",
     "watch": "babel src -w --out-dir dist --copy-files",
     "build": "babel src --out-dir dist --copy-files",
-    "prepublishOnly": "yarn lint && yarn build"
+    "prepublishOnly": "yarn lint && yarn build",
+    "build-storybook": "build-storybook"
   },
   "peerDependencies": {
     "@eqworks/common-login": "^0.8.0-alpha.5",
