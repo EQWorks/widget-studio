@@ -14,7 +14,7 @@ const useStyles = makeStyles(styles)
 const LineControls = () => {
   const classes = useStyles()
 
-  const columns = useStoreState((state) => state.bar.columns)
+  const columns = useStoreState((state) => state.columns)
   const indexByValue = useStoreState((state) => state.line.indexByValue)
   const x = useStoreState((state) => state.line.x)
   const y = useStoreState((state) => state.line.y)

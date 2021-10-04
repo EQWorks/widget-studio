@@ -14,7 +14,7 @@ const useStyles = makeStyles(styles)
 const BarControls = () => {
   const classes = useStyles()
 
-  const columns = useStoreState((state) => state.bar.columns)
+  const columns = useStoreState((state) => state.columns)
   const group = useStoreState((state) => state.bar.group)
   const stack = useStoreState((state) => state.bar.stack)
   const groupBy = useStoreState((state) => state.bar.groupBy)
