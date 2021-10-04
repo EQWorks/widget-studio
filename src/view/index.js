@@ -77,7 +77,7 @@ const WidgetView = () => {
       {
         !dataSourceLoading && !dataSourceError &&
         <>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography color='textSecondary' variant='subtitle1'>
               {`${dataSourceType} ${dataSourceID}`}
             </Typography>
@@ -86,7 +86,7 @@ const WidgetView = () => {
             </Typography>
           </div>
           <Divider orientation='vertical' className={classes.verticalDivider} />
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography style={{ fontStyle: 'italic', fontWeight: 200 }} color='textSecondary' variant='subtitle1'>
               {`${rows.length} rows`}
             </Typography>
