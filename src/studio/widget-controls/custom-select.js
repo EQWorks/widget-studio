@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
+import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
@@ -14,7 +14,7 @@ import { Chip } from '@eqworks/lumen-ui'
 
 const useStyles = makeStyles(() => ({
   form: {
-    width: '50%',
+    width: '100%',
     maxHeight: 200,
     overflowY: 'auto',
     overflowX: 'hidden'
@@ -42,7 +42,7 @@ const CustomSelect = (props) => {
           input={<Input />}
           renderValue={(selected) => (
             <div className={classes.chips}>
-              <Chip key={selected} label={selected} margin={1} custom='#006DE9'/>
+              <Chip key={selected} label={selected} margin={1} custom='#006DE9' />
             </div>
           )}
           MenuProps={{ elevation: 1 }}
@@ -75,7 +75,7 @@ const CustomSelect = (props) => {
         renderValue={(selected) => (
           <div className={classes.chips}>
             {selected.map((value) => (
-              <Chip key={value} label={value} margin={1} custom='#006DE9'/>
+              <Chip key={value} label={value} margin={1} custom='#006DE9' />
             ))}
           </div>
         )}
