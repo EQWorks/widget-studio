@@ -82,8 +82,4 @@ const WidgetContent = () => {
   )
 }
 
-WidgetContent.propTypes = {
-
-}
-
 export default WidgetContent

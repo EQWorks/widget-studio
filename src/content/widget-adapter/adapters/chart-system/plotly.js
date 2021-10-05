@@ -17,17 +17,8 @@ export default {
     (data, { options, genericOptions, ...config }) => ({
       adaptedData: {
         data,
-        ...(config.group ?
-          {
-            x: config.groupKey,
-            y: Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`))
-          }
-          :
-          {
-            x: config.indexKey,
-            y: Object.keys(config.valueKeys)
-          }
-        )
+        x: config.group ? config.groupKey : config.indexKey,
+        y: config.group ? Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`)) : Object.keys(config.valueKeys),
       },
       adaptedConfig: { ...options, ...genericOptions }
     })
@@ -48,17 +39,8 @@ export default {
     (data, { options, genericOptions, ...config }) => ({
       adaptedData: {
         data,
-        ...(config.group ?
-          {
-            x: config.groupKey,
-            y: Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`))
-          }
-          :
-          {
-            x: config.indexKey,
-            y: Object.keys(config.valueKeys)
-          }
-        )
+        x: config.group ? config.groupKey : config.indexKey,
+        y: config.group ? Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`)) : Object.keys(config.valueKeys),
       },
       adaptedConfig: { ...options, ...genericOptions }
     })

@@ -58,20 +58,11 @@ const ValueControls = ({ groupingOptional }) => {
                   update={toggleGroup} />
               }
             >
-              {
-                group ?
-                  <Dropdown
-                    data={stringColumns}
-                    value={groupKey}
-                    update={val => update({ groupKey: val })}
-                  />
-                  :
-                  <Dropdown
-                    data={numericColumns.filter(c => !(c in valueKeys))}
-                    value={indexKey}
-                    update={val => update({ indexKey: val })}
-                  />
-              }
+              <Dropdown
+                data={group ? stringColumns : numericColumns.filter(c => !(c in valueKeys))}
+                value={group ? groupKey : indexKey}
+                update={val => update(group ? { groupKey: val } : { indexKey: val })}
+              />
             </Card>
             <Card title='Value Keys'>
               {
