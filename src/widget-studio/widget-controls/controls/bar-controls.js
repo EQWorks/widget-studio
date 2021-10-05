@@ -5,22 +5,16 @@ import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Switch from '@material-ui/core/Switch'
-import IconButton from '@material-ui/core/IconButton'
-import Clear from '@material-ui/icons/Clear'
-import { useStoreState, useStoreActions } from '../../store'
+import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../custom-select'
+import styles from '../styles'
 
-const useStyles = makeStyles({
-  controls: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end'
-  },
-})
+const useStyles = makeStyles(styles)
 
-const BarControls = ({ columns }) => {
+const BarControls = () => {
   const classes = useStyles()
 
+  const columns = useStoreState((state) => state.columns)
   const group = useStoreState((state) => state.bar.group)
   const stack = useStoreState((state) => state.bar.stack)
   const groupBy = useStoreState((state) => state.bar.groupBy)
@@ -28,7 +22,6 @@ const BarControls = ({ columns }) => {
   const indexBy = useStoreState((state) => state.bar.indexBy)
 
   const setBarState = useStoreActions(actions => actions.bar.update)
-  const reset = useStoreActions(actions => actions.resetCurrent)
 
   // TODO data inference rather than using 'category' attribute
   const [numericColumns, setNumericColumns] = useState([])
@@ -90,12 +83,6 @@ const BarControls = ({ columns }) => {
           setChosenValue={val => setBarState({ groupBy: val })}
         />
       }
-      <IconButton
-        size='small'
-        onClick={reset}
-      >
-        <Clear />
-      </IconButton>
     </div>
   )
 }

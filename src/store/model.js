@@ -32,6 +32,14 @@ const stateDefaults = {
   type: '',
   wl: null,
   cu: null,
+  ui: {
+    showTable: false,
+    showWidgetControls: false,
+    showDataControls: false,
+    staticData: false
+  },
+  dataLoading: false,
+  dataError: null
 }
 
 export default {
@@ -128,6 +136,7 @@ export default {
       (state) => state.data.source,
       (state) => state.data.id,
       (state) => state[state.type],
+      (state) => state.isReady,
     ],
     (
       title,
@@ -135,23 +144,17 @@ export default {
       dataSource,
       dataID,
       options,
-    ) => ({
-      title,
-      type,
-      dataSource,
-      dataID,
-      options,
-    })
-  ),
-
-  hasData: computed(
-    [
-      (state) => state.data.source,
-      (state) => state.data.id,
-    ],
-    (dataSource, dataID) => {
-      return (Boolean(dataSource && dataID))
-    }
+      isReady,
+    ) => (
+      isReady
+        ? {
+          title,
+          type,
+          dataSource,
+          dataID,
+          options,
+        }
+        : undefined)
   ),
 
   /** checks if all initial states have been filled */
@@ -177,6 +180,9 @@ export default {
 
   // set state based on config object that has been passed UP from a child Widget
   readConfig: action((state, payload) => {
+    if (!payload) {
+      return state
+    }
     const { options, dataSource, dataID, ...genConfig } = payload
     const widgetType = genConfig.type
     return {
@@ -193,6 +199,9 @@ export default {
 
   // update the store state
   update: action((state, payload) => ({ ...state, ...payload })),
+
+  // update the ui state specifically
+  updateUI: action((state, payload) => ({ ...state, ui: { ...state.ui, ...payload } })),
 
   // reset only the current widget's unique state
   resetCurrent: thunk((actions, payload, { getState }) => {

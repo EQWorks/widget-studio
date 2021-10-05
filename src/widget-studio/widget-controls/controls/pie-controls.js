@@ -4,27 +4,20 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
-import IconButton from '@material-ui/core/IconButton'
-import Clear from '@material-ui/icons/Clear'
 import Switch from '@material-ui/core/Switch'
-import { useStoreState, useStoreActions } from '../../store'
+import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../custom-select'
 // import { getPieChartData, sum } from './utils'
+import styles from '../styles'
 
+const useStyles = makeStyles(styles)
 
-const useStyles = makeStyles({
-  controls: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end'
-  },
-})
-
-const PieControls = ({ columns }) => {
+const PieControls = () => {
   const classes = useStyles()
+
+  const columns = useStoreState((state) => state.columns)
   const indexBy = useStoreState((state) => state.pie.indexBy)
   const keys = useStoreState((state) => state.pie.keys)
-  const reset = useStoreActions(actions => actions.resetCurrent)
   const donut = useStoreState((state) => state.pie.donut)
   const setPieState = useStoreActions(actions => actions.pie.update)
 
@@ -85,12 +78,6 @@ const PieControls = ({ columns }) => {
           </IconButton>
         </>
       } */}
-        <IconButton
-          size='small'
-          onClick={reset}
-        >
-          <Clear />
-        </IconButton>
       </div>
     </>
   )

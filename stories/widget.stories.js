@@ -2,8 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 
 import sampleConfigs from './sample-configs'
-import { Widget, WidgetStudio } from '../src'
-import styles from '../src/studio/styles'
+import Widget from '../src'
 
 storiesOf('Dashboard-esque example')
   .add('Dashboard-esque example', () => (
@@ -15,25 +14,29 @@ storiesOf('Dashboard-esque example')
       {
         Object.keys(sampleConfigs).map(id =>
           <div key={id}>
-            <WidgetStudio>
-              <Widget {...{ id }} />
-            </WidgetStudio>
+            <Widget studio {...{ id }} staticData />
           </div>
         )
       }
     </div >
   ))
 
-storiesOf('Undefined widget')
-  // showcase behaviour without explicit widget ID
-  .add('In studio', () => (
-    <WidgetStudio>
-      <Widget />
-    </WidgetStudio>
+// showcase behaviour without explicit widget ID
+storiesOf('Widget with no ID (studio enabled)')
+  .add('Data control enabled (default)', () => (
+    <Widget studio />
   ))
-  // demonstrate incorrect component usage
-  .add('Standalone (not allowed)', () => (
+  .add('Data control disabled [DISALLOWED]', () => (
+    <Widget studio staticData />
+  ))
+
+// showcase behaviour without explicit widget ID
+storiesOf('Widget with no ID (standalone)')
+  .add('Data control enabled (default) [DISALLOWED]', () => (
     <Widget />
+  ))
+  .add('Data control disabled [DISALLOWED]', () => (
+    <Widget staticData />
   ))
 
 // for each non-empty sample config,
@@ -45,19 +48,15 @@ Object.entries(sampleConfigs).forEach(([id, config]) => {
     const label = `${type} ${index > 1 ? '(' + index + ')' : ''}`
 
     // generate a studio story
-    storiesOf('Defined widget wrapped in studio', module)
+    storiesOf('Widget with ID (studio enabled)', module)
       .add(label, () => (
-        <WidgetStudio>
-          <Widget {...{ id }} />
-        </WidgetStudio >
+        <Widget studio {...{ id }} />
       ))
 
     // and a standalone story
-    storiesOf('Defined widget')
+    storiesOf('Widget with ID (standalone)')
       .add(label, () => (
-        <div style={styles.outerContainer} >
-          <Widget {...{ id }} />
-        </div>
+        <Widget {...{ id }} />
       ))
   }
 })
