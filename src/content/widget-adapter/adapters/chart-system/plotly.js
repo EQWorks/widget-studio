@@ -1,5 +1,6 @@
 import { PlotlyBarChart, PlotlyPieChart, PlotlyLineChart, PlotlyScatterChart } from '@eqworks/chart-system'
 
+
 export default {
   bar: [
     PlotlyBarChart,

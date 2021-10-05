@@ -10,6 +10,8 @@ import { Typography } from '@eqworks/lumen-ui'
 import CustomSelect from './custom-select'
 
 import styles from '../styles'
+
+
 const useStyles = makeStyles(styles)
 
 export const LinkedSelect = ({ callback, data, init, subData, subInit, controlled }) => {

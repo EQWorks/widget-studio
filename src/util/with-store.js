@@ -3,6 +3,7 @@ import React from 'react'
 
 import { EditorStore } from '../store'
 
+
 const withStore = (WrappedComponent) => {
   const wrapped = (props) => {
     return (

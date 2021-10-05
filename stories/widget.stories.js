@@ -5,6 +5,7 @@ import sampleConfigs from './sample-configs'
 import Widget from '../src'
 import { WidgetControlCard as Card, Toggle } from '../src/editor/shared-components'
 
+
 storiesOf('Dashboard-esque example')
   .add('Dashboard-esque example', () => {
     const [fullscreen, setFullscreen] = useState(false)

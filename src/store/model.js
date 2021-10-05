@@ -1,5 +1,6 @@
 import { computed, action, thunk } from 'easy-peasy'
 
+
 const widgetDefaults = {
   bar: {
     stacked: false,

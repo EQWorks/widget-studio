@@ -15,6 +15,7 @@ import ScatterControls from './controls/scatter-controls'
 import Icons from './icons'
 import styles from '../styles'
 
+
 const controls = {
   bar: BarControls,
   line: LineControls,

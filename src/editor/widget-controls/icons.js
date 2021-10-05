@@ -10,6 +10,7 @@ import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 
 import { useStoreActions, useStoreState } from '../../store'
 
+
 const mapIcons = [
   { type: 'map', Component: MapIcon, available: false, cat: ['Geometry'], minAxis: 2 },
   { type: 'pie', Component: PieChartIcon, available: true, cat: ['Numeric', 'String'], minAxis: 2 },
