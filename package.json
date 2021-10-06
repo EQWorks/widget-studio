@@ -72,6 +72,7 @@
   },
   "dependencies": {
     "@eqworks/lumen-table": "^1.4.0",
+    "@eqworks/react-maps": "^0.7.2",
     "danfojs": "^0.2.8",
     "easy-peasy": "^5.0.3",
     "json2csv": "5.0.6",
