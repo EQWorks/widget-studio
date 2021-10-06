@@ -109,14 +109,12 @@ const WidgetEditor = props => {
         }
       </div>
 
-      <div className={showDataSourceControls ? classes.extras : classes.hidden}>
+      {
+        !staticData &&
         <div className={showDataSourceControls ? classes.dataControlsAlt : classes.hidden}>
-          {
-            !staticData &&
-            <DataSourceControls />
-          }
+          <DataSourceControls />
         </div>
-      </div>
+      }
 
       <div className={classes.widgetControlsSidebar}>
         <div className={classes.widgetControlsSidebarTab}>

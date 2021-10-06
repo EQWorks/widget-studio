@@ -126,19 +126,16 @@ export default {
     gridRow: 2
   },
   dataControlsAlt: {
+    gridRow: 2,
+    order: 2,
     display: 'flex',
-    height: '100%'
+    flex: 1
   },
   hidden: {
     display: 'none',
   },
   flex: {
     display: 'flex',
-  },
-  extras: {
-    overflow: 'auto',
-    flex: 1,
-    order: 3
   },
   verticalDivider: {
     marginLeft: '1rem',
