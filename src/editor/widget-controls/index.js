@@ -35,6 +35,7 @@ const WidgetControls = () => {
   const columns = useStoreState((state) => state.columns)
 
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const dataReady = useStoreState((state) => state.dataReady)
 
   useEffect(() => {
     update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
@@ -49,16 +50,16 @@ const WidgetControls = () => {
           <Loader open />
         </div>
       }
-      <div className={dataSourceLoading ? classes.hidden : classes.controlHeader}>
-        <Icons disabled={!columns.length || dataSourceLoading} />
+      <div className={dataReady ? classes.hidden : classes.controlHeader}>
+        <Icons disabled={!columns.length || !dataReady} />
       </div>
-      {!dataSourceLoading && type && columns &&
+      {dataReady && type && columns &&
         <div className={classes.controls}>
           {createElement(controls[type])}
         </div>
       }
       {
-        !dataSourceLoading &&
+        dataReady &&
         <div className={classes.controlFooter}>
           <IconButton
             size='small'
