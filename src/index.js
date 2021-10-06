@@ -25,7 +25,7 @@ const Widget = ({ id, editor, staticData }) => {
   // on first load,
   useEffect(() => {
     // dispatch staticData prop
-    nestedUpdate({ editorUI: { staticData } })
+    nestedUpdate({ ui: { staticData } })
     // check for invalid component usage
     if (id == undefined || id == null) {
       if (staticData || !editor) {

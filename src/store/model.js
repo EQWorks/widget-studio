@@ -41,7 +41,7 @@ const stateDefaults = {
   },
   rows: [],
   columns: [],
-  editorUI: {
+  ui: {
     showTable: false,
     showWidgetControls: false,
     showFilterControls: false,
@@ -127,7 +127,7 @@ export default {
   loadConfig: thunk(async (actions, payload) => {
 
     actions.nestedUpdate({
-      editorUI: {
+      ui: {
         showDataSourceControls: false,
         dataSourceLoading: true
       },
@@ -135,7 +135,7 @@ export default {
     const config = await requestConfig(payload)
       .catch((dataSourceError) => {
         actions.nestedUpdate({
-          editorUI: {
+          ui: {
             error: dataSourceError,
             dataSourceLoading: false
           }
@@ -162,16 +162,16 @@ export default {
         cu: customerID, // only used for wl-cu-selector
       })
       actions.nestedUpdate({
-        editorUI: {
+        ui: {
           showWidgetControls: true,
           showFilterControls: true,
           dataSourceName: views[0].name,
           dataSourceError: null,
         }
       })
-      actions.nestedUpdate({ editorUI: { dataSourceLoading: false } })
+      actions.nestedUpdate({ ui: { dataSourceLoading: false } })
     } else {
-      actions.nestedUpdate({ editorUI: { showDataSourceControls: !staticData } })
+      actions.nestedUpdate({ ui: { showDataSourceControls: !staticData } })
     }
   }),
 
