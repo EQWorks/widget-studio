@@ -1,28 +1,30 @@
 import { useState, useEffect, createElement, useMemo } from 'react'
-import Joi from 'joi'
-import * as dfd from 'danfojs/src/index'
+import PropTypes from 'prop-types'
+import { DataFrame } from 'danfojs/src/index'
 
 import { useStoreState } from '../../store'
-// import NivoAdapters from './adapters/chart-system/nivo'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 
 // state which adapter set should handle which widget type
-const typeDict = {
-  bar: PlotlyAdapters,
-  pie: PlotlyAdapters,
-  scatter: PlotlyAdapters,
-  line: PlotlyAdapters,
+const adapterDict = {
+  bar: PlotlyAdapters.bar,
+  pie: PlotlyAdapters.pie,
+  scatter: PlotlyAdapters.scatter,
+  line: PlotlyAdapters.line,
 }
 
 // construct a schema to validate adapters, also construct a set of the adapters used above
-let usedAdapters = new Set()
-const adapterSchema = Joi.object(
-  Object.entries(typeDict).reduce((acc, [key, adapter]) => {
-    usedAdapters.add(adapter)
-    acc[key] = Joi.array()
-    return acc
-  }, {})
-)
+Object.entries(adapterDict).forEach(([key, adapter]) => {
+  PropTypes.checkPropTypes(
+    {
+      component: PropTypes.elementType.isRequired,
+      adapt: PropTypes.func.isRequired,
+    },
+    adapter,
+    'property',
+    `adapterDict.${key}`
+  )
+})
 
 const WidgetAdapter = () => {
 
@@ -36,21 +38,11 @@ const WidgetAdapter = () => {
   const groupKey = useStoreState((state) => state.groupKey)
 
   const [data, setData] = useState([])
-  const [chart, adapt] = useMemo(() => typeDict[type][type], [type])
-  const { adaptedConfig, adaptedData } = useMemo(() => adapt(data, config), [adapt, config, data])
-
-  // on first load, ensure there are no problems with the imported adapter files
-  // TODO: perform a more rigorous validation.
-  useEffect(() => {
-    usedAdapters.forEach(adapterSet => {
-      if (adapterSchema.validate(adapterSet).error) {
-        throw new Error('Invalid schema provided to WidgetAdapter')
-      }
-    })
-  }, [])
+  const { component, adapt } = useMemo(() => adapterDict[type], [type])
+  const adaptedDataAndConfig = useMemo(() => adapt(data, config), [adapt, config, data])
 
   // memoize conversion of raw data to a danfojs dataframe
-  const dataframe = useMemo(() => new dfd.DataFrame(rows), [rows])
+  const dataframe = useMemo(() => new DataFrame(rows), [rows])
 
   // drop unused columns when used columns change
   const selectedDataframe = useMemo(() => (
@@ -105,10 +97,7 @@ const WidgetAdapter = () => {
     (async () => setData(JSON.parse(await processedDataframe.to_json())))()
   }, [processedDataframe])
 
-  return createElement(chart, {
-    ...adaptedData,
-    ...adaptedConfig
-  })
+  return createElement(component, adaptedDataAndConfig)
 }
 
 export default WidgetAdapter
