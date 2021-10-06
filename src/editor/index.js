@@ -31,13 +31,8 @@ const WidgetEditor = props => {
 
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
-  // widget configuration state
-  const dataSourceType = useStoreState((state) => state.dataSource.type)
-  const dataSourceID = useStoreState((state) => state.dataSource.id)
-
   // editor UI state
-  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
-  const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
+  const dataReady = useStoreState((state) => state.dataReady)
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
   const showTable = useStoreState((state) => state.ui.showTable)
@@ -46,7 +41,7 @@ const WidgetEditor = props => {
 
   const DefaultSidebarButton = ({ onClick, icon }) =>
     <IconButton
-      disabled={dataSourceLoading || dataSourceError || !dataSourceType || !dataSourceID}
+      disabled={!dataReady}
       color='secondary'
       onClick={onClick}
     >
