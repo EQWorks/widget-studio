@@ -122,6 +122,23 @@ export default {
       Boolean(type && columns.length && rows.length && Object.keys(valueKeys).length)
     )),
 
+
+  dataReady: computed(
+    [
+      (state) => state.ui.dataSourceError,
+      (state) => state.ui.dataSourceLoading,
+      (state) => state.dataSource.type,
+      (state) => state.dataSource.id,
+    ],
+    (
+      dataSourceError,
+      dataSourceLoading,
+      dataSourceType,
+      dataSourceID,
+    ) => (
+      Boolean(dataSourceType && dataSourceID && !dataSourceLoading && !dataSourceError)
+    )),
+
   /** ACTIONS ------------------------------------------------------------------ */
 
   loadConfig: thunk(async (actions, payload) => {
