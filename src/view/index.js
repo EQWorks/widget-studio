@@ -45,14 +45,13 @@ const WidgetView = () => {
   // editor UI state
   const showTable = useStoreState((state) => state.ui.showTable)
   const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
-  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
-  const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
+  const dataReady = useStoreState((state) => state.dataReady)
 
   return (
     <div className={classes.widgetTitleBar}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         {
-          !dataSourceLoading && !dataSourceError &&
+          dataReady &&
           <div className={classes.widgetTitleBarItem}>
             <Typography style={{ fontWeight: 600 }} color='textPrimary' variant='h6'>
               {title || 'Untitled'}
@@ -64,7 +63,7 @@ const WidgetView = () => {
         </div>
         <div className={classes.widgetTitleBarItem}>
           {
-            !dataSourceLoading && !dataSourceError &&
+            dataReady &&
             <Chip
               color='secondary'
               onClick={() => nestedUpdate({ ui: { showTable: !showTable } })}
@@ -76,7 +75,7 @@ const WidgetView = () => {
       </div>
 
       {
-        !dataSourceLoading && !dataSourceError &&
+        dataReady &&
         <>
           <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Typography color='textSecondary' variant='subtitle1'>
