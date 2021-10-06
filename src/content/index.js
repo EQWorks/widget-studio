@@ -22,6 +22,7 @@ const WidgetContent = () => {
 
   // UI state
   const showTable = useStoreState((state) => state.editorUI.showTable)
+  const showDataSourceControls = useStoreState((state) => state.editorUI.showDataSourceControls)
   const dataSourceLoading = useStoreState((state) => state.editorUI.dataSourceLoading)
   const dataSourceError = useStoreState((state) => state.editorUI.dataSourceError)
 
@@ -52,7 +53,7 @@ const WidgetContent = () => {
 
   return (
 
-    <div className={classes.mainContainer}>
+    <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
       <div className={!showTable ? classes.hidden : classes.table}>
         <ResultsTable results={rows} />
       </div>
