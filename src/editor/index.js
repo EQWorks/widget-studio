@@ -36,13 +36,13 @@ const WidgetEditor = props => {
   const dataSourceID = useStoreState((state) => state.dataSource.id)
 
   // editor UI state
-  const dataSourceLoading = useStoreState((state) => state.editorUI.dataSourceLoading)
-  const dataSourceError = useStoreState((state) => state.editorUI.dataSourceError)
-  const showWidgetControls = useStoreState((state) => state.editorUI.showWidgetControls)
-  const showFilterControls = useStoreState((state) => state.editorUI.showFilterControls)
-  const showTable = useStoreState((state) => state.editorUI.showTable)
-  const showDataSourceControls = useStoreState((state) => state.editorUI.showDataSourceControls)
-  const staticData = useStoreState((state) => state.editorUI.staticData)
+  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
+  const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
+  const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
+  const showTable = useStoreState((state) => state.ui.showTable)
+  const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
+  const staticData = useStoreState((state) => state.ui.staticData)
 
   const DefaultSidebarButton = ({ onClick, icon }) =>
     <IconButton
@@ -65,7 +65,7 @@ const WidgetEditor = props => {
               color='secondary'
               onClick={() => {
                 nestedUpdate({
-                  editorUI: {
+                  ui: {
                     showTable: false,
                     showDataSourceControls: false
                   }
@@ -82,7 +82,7 @@ const WidgetEditor = props => {
                 !staticData &&
                 <IconButton
                   color='secondary'
-                  onClick={() => nestedUpdate({ editorUI: { showDataSourceControls: !showDataSourceControls } })}
+                  onClick={() => nestedUpdate({ ui: { showDataSourceControls: !showDataSourceControls } })}
                 >
                   <SettingsIcon />
                 </IconButton>
@@ -90,9 +90,9 @@ const WidgetEditor = props => {
               <DefaultSidebarButton
                 onClick={() =>
                   nestedUpdate(showWidgetControls || showFilterControls ?
-                    { editorUI: { showWidgetControls: false, showFilterControls: false } }
+                    { ui: { showWidgetControls: false, showFilterControls: false } }
                     :
-                    { editorUI: { showWidgetControls: true, showFilterControls: true } }
+                    { ui: { showWidgetControls: true, showFilterControls: true } }
                   )
                 }
                 icon={showWidgetControls || showFilterControls ? CropLandscapeIcon : ArtTrackIcon}
@@ -119,7 +119,7 @@ const WidgetEditor = props => {
       <div className={classes.widgetControlsSidebar}>
         <div className={classes.widgetControlsSidebarTab}>
           <IconButton className={classes.tallButton}
-            onClick={() => nestedUpdate({ editorUI: { showWidgetControls: !showWidgetControls } })}
+            onClick={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
           >
             {showWidgetControls ? <KeyboardArrowRightIcon /> : <BuildIcon />}
           </IconButton>
@@ -143,7 +143,7 @@ const WidgetEditor = props => {
                   Filters
                 </Typography>
                 <IconButton
-                  onClick={() => nestedUpdate({ editorUI: { showFilterControls: !showFilterControls } })}
+                  onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
                 >
                   <KeyboardArrowDownIcon />
                 </IconButton>
@@ -151,7 +151,7 @@ const WidgetEditor = props => {
               :
               <IconButton
                 className={classes.wideButton}
-                onClick={() => nestedUpdate({ editorUI: { showFilterControls: !showFilterControls } })}
+                onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
               >
                 <FilterListIcon className={classes.wideButton} />
               </IconButton>
