@@ -15,8 +15,8 @@ const BarControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // unique state
-  const stacked = useStoreState((state) => state.bar.stacked)
-  const showTicks = useStoreState((state) => state.bar.showTicks)
+  const stacked = useStoreState((state) => state.options.stacked)
+  const showTicks = useStoreState((state) => state.options.showTicks)
 
   return (
     <>
@@ -27,12 +27,12 @@ const BarControls = () => {
         <Toggle
           value={stacked}
           label='Stacked'
-          update={(val) => nestedUpdate({ bar: { stacked: val } })}
+          update={(val) => nestedUpdate({ options: { stacked: val } })}
         />
         <Toggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => nestedUpdate({ bar: { showTicks: val } })}
+          update={(val) => nestedUpdate({ options: { showTicks: val } })}
         />
       </Card>
     </>

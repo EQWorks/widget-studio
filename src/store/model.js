@@ -1,4 +1,5 @@
 import { computed, action, thunk } from 'easy-peasy'
+import { requestConfig, requestData } from '../util/fetch'
 
 
 const widgetDefaults = {
@@ -24,30 +25,31 @@ const widgetDefaults = {
 
 const stateDefaults = {
   title: '',
-  rows: [],
-  columns: [],
   type: '',
   filters: {},
   group: false,
   groupKey: null,
   indexKey: null,
   valueKeys: {},
+  options: {},
   genericOptions: {
     subPlots: false,
   },
+  dataSource: {
+    type: null,
+    id: null,
+  },
+  rows: [],
+  columns: [],
   editorUI: {
     showTable: false,
     showWidgetControls: false,
     showFilterControls: false,
     showDataSourceControls: false,
-    staticData: false
-  },
-  dataSource: {
-    type: null,
-    id: null,
-    loading: false,
-    error: null,
-    name: null
+    staticData: false,
+    dataSourceLoading: false,
+    dataSourceError: null,
+    dataSourceName: null
   },
   wl: null,
   cu: null,
@@ -57,12 +59,6 @@ export default {
 
   /** STATE ------------------------------------------------------------------ */
   ...stateDefaults,
-
-  /** unique state of each chart type */
-  bar: { ...widgetDefaults.bar },
-  line: { ...widgetDefaults.line },
-  pie: { ...widgetDefaults.pie },
-  scatter: { ...widgetDefaults.scatter },
 
   /** COMPUTED STATE ------------------------------------------------------------ */
 
@@ -76,10 +72,9 @@ export default {
       (state) => state.indexKey,
       (state) => state.valueKeys,
       (state) => state.genericOptions,
-      (state) => state.dataSource.type,
-      (state) => state.dataSource.id,
-      (state) => state[state.type],
+      (state) => state.options,
       (state) => state.isReady,
+      (state) => state.dataSource,
     ],
     (
       title,
@@ -90,10 +85,9 @@ export default {
       indexKey,
       valueKeys,
       genericOptions,
-      dataSourceType,
-      dataSourceID,
       options,
       isReady,
+      { type: dataSourceType, id: dataSourceID },
     ) => (
       isReady
         ? {
@@ -104,12 +98,9 @@ export default {
           group,
           groupKey,
           indexKey,
-          dataSource: {
-            type: dataSourceType,
-            id: dataSourceID,
-          },
           options,
           genericOptions,
+          dataSource: { type: dataSourceType, id: dataSourceID },
         }
         : undefined
     )),
@@ -120,14 +111,12 @@ export default {
       (state) => state.rows,
       (state) => state.columns,
       (state) => state.type,
-      (state) => state.groupKey,
       (state) => state.valueKeys,
     ],
     (
       rows,
       columns,
       type,
-      groupKey,
       valueKeys,
     ) => (
       Boolean(type && columns.length && rows.length && Object.keys(valueKeys).length)
@@ -135,20 +124,56 @@ export default {
 
   /** ACTIONS ------------------------------------------------------------------ */
 
-  // set state based on config object that has been passed UP from a child Widget
-  readConfig: action((state, payload) => {
-    if (!payload) {
-      return state
+  loadConfig: thunk(async (actions, payload) => {
+
+    actions.nestedUpdate({
+      editorUI: {
+        showDataSourceControls: false,
+        dataSourceLoading: true
+      },
+    })
+    const config = await requestConfig(payload)
+      .catch((dataSourceError) => {
+        actions.nestedUpdate({
+          editorUI: {
+            error: dataSourceError,
+            dataSourceLoading: false
+          }
+        })
+      })
+    actions.update(config)
+    actions.loadData(config.dataSource)
+  }),
+
+  loadData: thunk(async (actions, { type, id }, { getState }) => {
+
+    const { isReady, staticData } = getState()
+    const data = await requestData(type, id)
+
+    if (type && id) {
+      if (isReady) {
+        actions.reset()
+      }
+      const { results: rows, columns, whitelabelID, customerID, views } = data
+      actions.update({
+        rows,
+        columns,
+        wl: whitelabelID, // only used for wl-cu-selector
+        cu: customerID, // only used for wl-cu-selector
+      })
+      actions.nestedUpdate({
+        editorUI: {
+          showWidgetControls: true,
+          showFilterControls: true,
+          dataSourceName: views[0].name,
+          dataSourceError: null,
+        }
+      })
+      actions.nestedUpdate({ editorUI: { dataSourceLoading: false } })
+    } else {
+      actions.nestedUpdate({ editorUI: { showDataSourceControls: !staticData } })
     }
-    const { options, type, ...rest } = payload
-    return {
-      ...state,
-      ...rest,
-      type,
-      [type]: options,
-    }
-  }
-  ),
+  }),
 
   // update the store state
   update: action((state, payload) => ({ ...state, ...payload })),
@@ -156,28 +181,15 @@ export default {
   // perform a nested update on the store state
   nestedUpdate: action((state, payload) => {
     return Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
-      // console.dir(nestedPayload)
-      // Object.entries(nestedPayload).forEach(([deepNestKey, deepNestedPayload]) => {
-      //   // console.log([deepNestKey, deepNestedPayload])
-      //   // console.log(Object.getPrototypeOf(nestedPayload) === Object.prototype)
-      // })
-
       acc[nestKey] = { ...acc[nestKey], ...nestedPayload }
       return acc
     }, state)
   }),
 
-  // reset only the current widget's unique state
-  resetCurrent: thunk((actions, payload, { getState }) => {
-    const type = getState().type
-    actions[type].update(widgetDefaults[type])
-  }),
-
   // reset all shared and unique states except data source and data ID
-  reset: thunk((actions) => {
+  reset: thunk((actions, payload, { getState }) => {
+    const type = getState().type
     actions.update({ ...stateDefaults })
-    Object.entries(widgetDefaults).forEach(([type, defaultValues]) => {
-      actions[type].update(defaultValues)
-    })
+    actions.nestedUpdate({ options: widgetDefaults[type] })
   })
 }

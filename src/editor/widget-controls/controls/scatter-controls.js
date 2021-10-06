@@ -22,8 +22,8 @@ const ScatterControls = () => {
   const stringColumns = useStoreState((state) => state.stringColumns)
 
   // unique state
-  const showTicks = useStoreState((state) => state.scatter.showTicks)
-  const showLines = useStoreState((state) => state.scatter.showLines)
+  const showTicks = useStoreState((state) => state.options.showTicks)
+  const showLines = useStoreState((state) => state.options.showLines)
 
   return (
     <>
@@ -44,7 +44,7 @@ const ScatterControls = () => {
         <Toggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => nestedUpdate({ scatter: { showTicks: val } })}
+          update={(val) => nestedUpdate({ options: { showTicks: val } })}
         />
         <Toggle
           value={showLines}

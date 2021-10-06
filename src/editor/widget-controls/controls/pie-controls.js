@@ -16,9 +16,9 @@ const PieControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // unique state
-  const donut = useStoreState((state) => state.pie.donut)
-  const showPercentage = useStoreState((state) => state.pie.showPercentage)
-  const showLegend = useStoreState((state) => state.pie.showLegend)
+  const donut = useStoreState((state) => state.options.donut)
+  const showPercentage = useStoreState((state) => state.options.showPercentage)
+  const showLegend = useStoreState((state) => state.options.showLegend)
 
   return (
     <>
@@ -29,17 +29,17 @@ const PieControls = () => {
         <Toggle
           value={donut}
           label='Donut'
-          update={(val) => nestedUpdate({ pie: { donut: val } })}
+          update={(val) => nestedUpdate({ options: { donut: val } })}
         />
         <Toggle
           value={showPercentage}
           label='Show Percentage'
-          update={(val) => nestedUpdate({ pie: { showPercentage: val } })}
+          update={(val) => nestedUpdate({ options: { showPercentage: val } })}
         />
         <Toggle
           value={showLegend}
           label='Show Legend'
-          update={(val) => nestedUpdate({ pie: { showLegend: val } })}
+          update={(val) => nestedUpdate({ options: { showLegend: val } })}
         />
       </Card>
     </>

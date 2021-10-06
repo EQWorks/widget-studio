@@ -41,12 +41,12 @@ const WidgetView = () => {
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
-  const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
-  const dataSourceError = useStoreState((state) => state.dataSource.error)
-  const dataSourceName = useStoreState((state) => state.dataSource.name)
 
   // editor UI state
   const showTable = useStoreState((state) => state.editorUI.showTable)
+  const dataSourceName = useStoreState((state) => state.editorUI.dataSourceName)
+  const dataSourceLoading = useStoreState((state) => state.editorUI.dataSourceLoading)
+  const dataSourceError = useStoreState((state) => state.editorUI.dataSourceError)
 
   return (
     <div className={classes.widgetTitleBar}>
