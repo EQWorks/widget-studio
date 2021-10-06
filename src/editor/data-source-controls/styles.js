@@ -4,6 +4,7 @@ export default {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    flex: 1
   },
   title: {
     padding: '1rem'
