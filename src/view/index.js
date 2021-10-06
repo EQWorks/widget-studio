@@ -43,10 +43,10 @@ const WidgetView = () => {
   const dataSourceID = useStoreState((state) => state.dataSource.id)
 
   // editor UI state
-  const showTable = useStoreState((state) => state.editorUI.showTable)
-  const dataSourceName = useStoreState((state) => state.editorUI.dataSourceName)
-  const dataSourceLoading = useStoreState((state) => state.editorUI.dataSourceLoading)
-  const dataSourceError = useStoreState((state) => state.editorUI.dataSourceError)
+  const showTable = useStoreState((state) => state.ui.showTable)
+  const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
+  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
 
   return (
     <div className={classes.widgetTitleBar}>
@@ -67,7 +67,7 @@ const WidgetView = () => {
             !dataSourceLoading && !dataSourceError &&
             <Chip
               color='secondary'
-              onClick={() => nestedUpdate({ editorUI: { showTable: !showTable } })}
+              onClick={() => nestedUpdate({ ui: { showTable: !showTable } })}
             >
               {`${showTable ? 'Hide' : 'View'} Table`}
             </Chip>
