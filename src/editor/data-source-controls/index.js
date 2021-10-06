@@ -9,7 +9,7 @@ import styles from './styles'
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const DataControls = () => {
+const DataSourceControls = () => {
 
   const classes = useStyles()
 
@@ -50,4 +50,4 @@ const DataControls = () => {
   )
 }
 
-export default DataControls
+export default DataSourceControls

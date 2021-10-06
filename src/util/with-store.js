@@ -1,14 +1,15 @@
 
 import React from 'react'
 
-import { StudioStore } from '../store'
+import { EditorStore } from '../store'
+
 
 const withStore = (WrappedComponent) => {
   const wrapped = (props) => {
     return (
-      <StudioStore.Provider>
+      <EditorStore.Provider>
         <WrappedComponent  {...props} />
-      </StudioStore.Provider>
+      </EditorStore.Provider>
     )
   }
   wrapped.displayName = `withStore(${WrappedComponent.displayName ?? WrappedComponent.name})`

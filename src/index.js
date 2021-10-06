@@ -8,89 +8,105 @@ import { useStoreState, useStoreActions } from './store'
 import { requestData, requestConfig } from './util/fetch'
 import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
-import WidgetStudio from './widget-studio'
-import WidgetContent from './widget-content'
+import WidgetEditor from './editor'
+import WidgetContent from './content'
+import WidgetView from './view'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const Widget = ({ id, studio, staticData }) => {
+const Widget = ({ id, editor, staticData }) => {
 
   const classes = useStyles()
 
   // easy-peasy actions
   const readConfig = useStoreActions(actions => actions.readConfig)
-  const updateStore = useStoreActions(actions => actions.update)
-  const updateUI = useStoreActions(actions => actions.updateUI)
+  const update = useStoreActions(actions => actions.update)
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const reset = useStoreActions(actions => actions.reset)
 
   // widget configuration state (easy-peasy)
-  const dataSource = useStoreState((state) => state.data.source)
-  const dataID = useStoreState((state) => state.data.id)
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
   const config = useStoreState((state) => state.config)
 
   // on first load,
   useEffect(() => {
     // dispatch staticData prop
-    updateUI({ staticData })
+    nestedUpdate({ editorUI: { staticData } })
     // check for invalid component usage
     if (id == undefined || id == null) {
-      if (staticData || !studio) {
-        throw new Error('Incorrect usage: Widgets must either receive an id or have studio features and data control enabled.')
+      if (staticData || !editor) {
+        throw new Error('Incorrect usage: Widgets must either receive an id or have editor features and data control enabled.')
       }
     } else {
       // fetch/read the config associated with the widget ID
       requestConfig(id).then(readConfig)
     }
-  }, [readConfig, id, staticData, updateUI, studio])
+  }, [readConfig, id, staticData, editor, nestedUpdate])
 
   // fetch rows/columns on data source change, reset config appropriately
   useEffect(() => {
-    if (dataSource && dataID) {
+    if (dataSourceType && dataSourceID) {
       if (config) {
         reset()
       }
-      updateStore({ dataLoading: true })
-      updateUI({ showDataControls: false })
-      requestData(dataSource, dataID)
+      nestedUpdate({
+        editorUI: {
+          showDataSourceControls: false
+        },
+        dataSource: {
+          loading: true
+        }
+      })
+      requestData(dataSourceType, dataSourceID)
         .then(res => {
-          const { results: rows, columns, whitelabelID, customerID } = res
-          updateStore({
+          const { results: rows, columns, whitelabelID, customerID, views } = res
+          update({
             rows,
             columns,
             wl: whitelabelID, // only used for wl-cu-selector
             cu: customerID, // only used for wl-cu-selector
-            dataError: null
           })
-          updateUI({ showWidgetControls: true })
+          nestedUpdate({
+            dataSource: {
+              name: views[0].name,
+              error: null,
+            },
+            editorUI: {
+              showWidgetControls: true,
+              showFilterControls: true
+            }
+          })
         })
-        .catch((err) => {
-          updateStore({ dataError: err })
+        .catch((error) => {
+          nestedUpdate({ dataSource: { error } })
         })
         .finally(() => {
-          updateStore({ dataLoading: false })
+          nestedUpdate({ dataSource: { loading: false } })
         })
     } else {
-      updateUI({ showDataControls: !staticData })
+      nestedUpdate({ editorUI: { showDataSourceControls: !staticData } })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataID, dataSource, reset, updateUI, updateStore])
+  }, [dataSourceID, dataSourceType, reset, update, nestedUpdate, staticData])
 
   return (
-    <div className={classes.outerContainer}>
-      {studio && <WidgetStudio />}
+    <div className={editor ? classes.outerContainer : classes.outerContainerNoEditor}>
+      <WidgetView />
       <WidgetContent />
+      {editor && <WidgetEditor />}
     </div >
   )
 }
 
 Widget.propTypes = {
-  studio: PropTypes.bool,
+  editor: PropTypes.bool,
   id: PropTypes.string,
   staticData: PropTypes.bool,
 }
 Widget.defaultProps = {
-  studio: false,
+  editor: false,
   id: undefined,
   staticData: false,
 }

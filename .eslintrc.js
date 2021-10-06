@@ -15,6 +15,9 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
   ],
   globals: {
     Atomics: 'readonly',
@@ -31,8 +34,10 @@ module.exports = {
   'plugins': [
     'react',
     'react-hooks',
+    'import',
   ],
   'rules': {
+    'import/newline-after-import': ['error', { 'count': 2 }],
     'indent': [
       'error',
       2,

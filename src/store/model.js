@@ -1,27 +1,24 @@
 import { computed, action, thunk } from 'easy-peasy'
 
+
 const widgetDefaults = {
   bar: {
-    group: false,
-    groupBy: null,
-    indexBy: null,
-    stack: false,
-    keys: [],
+    stacked: false,
+    spline: false,
+    showTicks: true,
   },
   line: {
-    indexByValue: false,
-    indexBy: null,
-    x: null,
-    y: [],
+    showTicks: true,
+    spline: false,
   },
   pie: {
-    indexBy: null,
-    keys: [],
+    donut: false,
+    showPercentage: true,
+    showLegend: true
   },
   scatter: {
-    indexBy: null,
-    x: null,
-    y: [],
+    showTicks: true,
+    showLines: false,
   }
 }
 
@@ -30,102 +27,42 @@ const stateDefaults = {
   rows: [],
   columns: [],
   type: '',
-  wl: null,
-  cu: null,
-  ui: {
+  filters: {},
+  group: false,
+  groupKey: null,
+  indexKey: null,
+  valueKeys: {},
+  genericOptions: {
+    subPlots: false,
+  },
+  editorUI: {
     showTable: false,
     showWidgetControls: false,
-    showDataControls: false,
+    showFilterControls: false,
+    showDataSourceControls: false,
     staticData: false
   },
-  dataLoading: false,
-  dataError: null
+  dataSource: {
+    type: null,
+    id: null,
+    loading: false,
+    error: null,
+    name: null
+  },
+  wl: null,
+  cu: null,
 }
 
 export default {
 
   /** STATE ------------------------------------------------------------------ */
-  data: {
-    source: null,
-    id: null
-  },
   ...stateDefaults,
 
   /** unique state of each chart type */
-  bar: {
-    ...widgetDefaults.bar,
-    update: action((state, payload) => ({ ...state, ...payload })),
-    isReady: computed(
-      [
-        (state) => state.keys,
-        (state) => state.indexBy,
-        (state) => state.group,
-        (state) => state.groupBy,
-      ],
-      (
-        keys,
-        indexBy,
-        group,
-        groupBy
-      ) => {
-        if (!group) {
-          return Boolean(keys.length && indexBy)
-        }
-        return Boolean(keys.length && groupBy)
-      }
-    ),
-  },
-  line: {
-    ...widgetDefaults.line,
-    update: action((state, payload) => ({ ...state, ...payload })),
-    isReady: computed(
-      [
-        (state) => state.indexByValue,
-        (state) => state.x,
-        (state) => state.y,
-        (state) => state.indexBy,
-      ],
-      (
-        indexByValue,
-        x,
-        y,
-        indexBy,
-      ) => {
-        return indexByValue ? Boolean(x && y.length && indexBy) : Boolean(x && y.length)
-      }
-    ),
-
-  },
-  pie: {
-    ...widgetDefaults.pie,
-    update: action((state, payload) => ({ ...state, ...payload })),
-    isReady: computed(
-      [
-        (state) => state.indexBy,
-        (state) => state.keys,
-      ],
-      (
-        indexBy,
-        keys,
-      ) => Boolean(indexBy && keys.length)
-    ),
-  },
-  scatter: {
-    ...widgetDefaults.scatter,
-    update: action((state, payload) => ({ ...state, ...payload })),
-    isReady: computed(
-      [
-        (state) => state.x,
-        (state) => state.y,
-        (state) => state.indexBy,
-      ],
-      (
-        x,
-        y,
-        indexBy,
-      ) => (Boolean(x && y.length && indexBy))
-    ),
-  },
+  bar: { ...widgetDefaults.bar },
+  line: { ...widgetDefaults.line },
+  pie: { ...widgetDefaults.pie },
+  scatter: { ...widgetDefaults.scatter },
 
   /** COMPUTED STATE ------------------------------------------------------------ */
 
@@ -133,16 +70,28 @@ export default {
     [
       (state) => state.title,
       (state) => state.type,
-      (state) => state.data.source,
-      (state) => state.data.id,
+      (state) => state.filters,
+      (state) => state.group,
+      (state) => state.groupKey,
+      (state) => state.indexKey,
+      (state) => state.valueKeys,
+      (state) => state.genericOptions,
+      (state) => state.dataSource.type,
+      (state) => state.dataSource.id,
       (state) => state[state.type],
       (state) => state.isReady,
     ],
     (
       title,
       type,
-      dataSource,
-      dataID,
+      filters,
+      group,
+      groupKey,
+      indexKey,
+      valueKeys,
+      genericOptions,
+      dataSourceType,
+      dataSourceID,
       options,
       isReady,
     ) => (
@@ -150,12 +99,20 @@ export default {
         ? {
           title,
           type,
-          dataSource,
-          dataID,
+          filters,
+          valueKeys,
+          group,
+          groupKey,
+          indexKey,
+          dataSource: {
+            type: dataSourceType,
+            id: dataSourceID,
+          },
           options,
+          genericOptions,
         }
-        : undefined)
-  ),
+        : undefined
+    )),
 
   /** checks if all initial states have been filled */
   isReady: computed(
@@ -163,18 +120,18 @@ export default {
       (state) => state.rows,
       (state) => state.columns,
       (state) => state.type,
-      (state) => state.type ? state[state.type].isReady : false
+      (state) => state.groupKey,
+      (state) => state.valueKeys,
     ],
     (
       rows,
       columns,
       type,
-      widgetConfigIsReady,
-    ) => {
-      if (!type || !columns.length || !rows.length) return false
-      return widgetConfigIsReady
-    }
-  ),
+      groupKey,
+      valueKeys,
+    ) => (
+      Boolean(type && columns.length && rows.length && Object.keys(valueKeys).length)
+    )),
 
   /** ACTIONS ------------------------------------------------------------------ */
 
@@ -183,16 +140,12 @@ export default {
     if (!payload) {
       return state
     }
-    const { options, dataSource, dataID, ...genConfig } = payload
-    const widgetType = genConfig.type
+    const { options, type, ...rest } = payload
     return {
       ...state,
-      ...genConfig,
-      [widgetType]: options,
-      data: {
-        source: dataSource,
-        id: dataID
-      }
+      ...rest,
+      type,
+      [type]: options,
     }
   }
   ),
@@ -200,8 +153,19 @@ export default {
   // update the store state
   update: action((state, payload) => ({ ...state, ...payload })),
 
-  // update the ui state specifically
-  updateUI: action((state, payload) => ({ ...state, ui: { ...state.ui, ...payload } })),
+  // perform a nested update on the store state
+  nestedUpdate: action((state, payload) => {
+    return Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
+      // console.dir(nestedPayload)
+      // Object.entries(nestedPayload).forEach(([deepNestKey, deepNestedPayload]) => {
+      //   // console.log([deepNestKey, deepNestedPayload])
+      //   // console.log(Object.getPrototypeOf(nestedPayload) === Object.prototype)
+      // })
+
+      acc[nestKey] = { ...acc[nestKey], ...nestedPayload }
+      return acc
+    }, state)
+  }),
 
   // reset only the current widget's unique state
   resetCurrent: thunk((actions, payload, { getState }) => {
@@ -210,7 +174,7 @@ export default {
   }),
 
   // reset all shared and unique states except data source and data ID
-  reset: thunk((actions, payload) => {
+  reset: thunk((actions) => {
     actions.update({ ...stateDefaults })
     Object.entries(widgetDefaults).forEach(([type, defaultValues]) => {
       actions[type].update(defaultValues)

@@ -1,4 +1,4 @@
-import React, { createElement } from 'react'
+import React, { useEffect, createElement } from 'react'
 
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
@@ -13,7 +13,8 @@ import LineControls from './controls/line-controls'
 import ScatterControls from './controls/scatter-controls'
 
 import Icons from './icons'
-import styles from './styles'
+import styles from '../styles'
+
 
 const controls = {
   bar: BarControls,
@@ -28,31 +29,35 @@ const useStyles = makeStyles(styles)
 const WidgetControls = () => {
   const classes = useStyles()
 
-  const type = useStoreState((state) => state.type)
-  const dataLoading = useStoreState((state) => state.dataLoading)
-  const columns = useStoreState((state) => state.columns)
+  const update = useStoreActions(actions => actions.update)
   const reset = useStoreActions(actions => actions.resetCurrent)
+  const type = useStoreState((state) => state.type)
+  const dataSourceLoading = useStoreState((state) => state.dataSource.loading)
+  const columns = useStoreState((state) => state.columns)
+
+  useEffect(() => {
+    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
+    update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
+  }, [columns, update])
 
   return (
     <div className={classes.container}>
       {
-        dataLoading &&
+        dataSourceLoading &&
         <div className={classes.loaderContainer}>
           <Loader open />
         </div>
       }
-      <div className={dataLoading ? classes.hidden : classes.controlHeader}>
-        <Icons disabled={!columns.length || dataLoading} />
+      <div className={dataSourceLoading ? classes.hidden : classes.controlHeader}>
+        <Icons disabled={!columns.length || dataSourceLoading} />
       </div>
-      {!dataLoading && type && columns &&
-        // render the appropriate controls
-        createElement(
-          controls[type],
-          { columns }
-        )
+      {!dataSourceLoading && type && columns &&
+        <div className={classes.controls}>
+          {createElement(controls[type])}
+        </div>
       }
       {
-        !dataLoading &&
+        !dataSourceLoading &&
         <div className={classes.controlFooter}>
           <IconButton
             size='small'
@@ -68,7 +73,7 @@ const WidgetControls = () => {
 
 WidgetControls.propTypes = {
   columns: PropTypes.array,
-  dataLoading: PropTypes.bool,
+  dataSourceLoading: PropTypes.bool,
 }
 WidgetControls.default = {
   columns: [],

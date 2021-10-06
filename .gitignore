@@ -117,3 +117,6 @@ dist
 
 # IDE files
 .vscode
+
+# misc
+storybook-static

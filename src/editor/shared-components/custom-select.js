@@ -1,6 +1,6 @@
 import React from 'react'
-
 import PropTypes from 'prop-types'
+
 import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
@@ -34,7 +34,7 @@ const CustomSelect = (props) => {
   if (!multi) {
     return (
       <FormControl className={classes.form}>
-        <InputLabel id={`single-checkbox-key ${title}`}>{title}</InputLabel>
+        {title && <InputLabel id={`single-checkbox-key ${title}`}>{title}</InputLabel>}
         <Select
           labelId={`single-checkbox-key ${title}`}
           value={chosenValue}
@@ -42,7 +42,7 @@ const CustomSelect = (props) => {
           input={<Input />}
           renderValue={(selected) => (
             <div className={classes.chips}>
-              <Chip key={selected} label={selected} margin={1} custom='#006DE9' />
+              <Chip key={selected} label={selected} margin={0.5} custom='#006DE9' />
             </div>
           )}
           MenuProps={{ elevation: 1 }}
@@ -65,7 +65,7 @@ const CustomSelect = (props) => {
 
   return (
     <FormControl className={classes.form}>
-      <InputLabel id={`mutiple-checkbox-key ${title}`}>{title}</InputLabel>
+      {title && <InputLabel id={`mutiple-checkbox-key ${title}`}>{title}</InputLabel>}
       <Select
         labelId={`mutiple-checkbox-key ${title}`}
         multiple
@@ -73,11 +73,11 @@ const CustomSelect = (props) => {
         onChange={handleChange(setChosenValue)}
         input={<Input />}
         renderValue={(selected) => (
-          <div className={classes.chips}>
-            {selected.map((value) => (
-              <Chip key={value} label={value} margin={1} custom='#006DE9' />
-            ))}
-          </div>
+          selected.map(value => (
+            <div key={value} className={classes.chips}>
+              <Chip key={value} label={value} margin={0.5} custom='#006DE9' />
+            </div>
+          ))
         )}
         MenuProps={{ elevation: 1 }}
         {...rest}
@@ -89,9 +89,14 @@ const CustomSelect = (props) => {
               <ListItemText primary={`${key} (${category})`} />
             </MenuItem>)
           })
-          : data.map((value) => (<MenuItem key={value} value={value}>{value}</MenuItem>))}
+          : data.map((value) => (
+            <MenuItem key={value} value={value}>
+              <Checkbox checked={chosenValue.indexOf(value) > -1} />
+              <ListItemText primary={value} />
+            </MenuItem>
+          ))}
       </Select>
-    </FormControl>
+    </FormControl >
   )
 }
 
