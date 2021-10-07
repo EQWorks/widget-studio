@@ -35,7 +35,7 @@ const WidgetAdapter = () => {
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
 
-  const [data, setData] = useState()
+  const [data, setData] = useState([])
   const [chart, adapt] = useMemo(() => typeDict[type][type], [type])
   const { adaptedConfig, adaptedData } = useMemo(() => adapt(data, config), [adapt, config, data])
 
