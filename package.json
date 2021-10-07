@@ -56,7 +56,6 @@
     "@storybook/react": "^6.1.14",
     "@storybook/storybook-deployer": "^2.8.7",
     "autoprefixer": "^10.3.3",
-    "axios": "^0.20.0",
     "babel-loader": "^8.1.0",
     "eslint": "^7.7.0",
     "eslint-plugin-import": "^2.24.2",
@@ -72,6 +71,7 @@
   },
   "dependencies": {
     "@eqworks/lumen-table": "^1.4.0",
+    "axios": "^0.20.0",
     "danfojs": "^0.2.8",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",
