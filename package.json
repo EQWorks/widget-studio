@@ -75,8 +75,7 @@
     "danfojs": "^0.2.8",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",
-    "prop-types": "^15.7.2",
-    "react-plotly.js": "^2.5.1"
+    "prop-types": "^15.7.2"
   },
   "size-limit": [
     {
