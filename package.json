@@ -19,11 +19,10 @@
     "lint": "eslint src/",
     "watch": "babel src -w --out-dir dist --copy-files",
     "storybook": "env $(print-env) start-storybook -p 6008",
-    "build-storybook": "build-storybook",
     "start": "yarn storybook",
     "build": "babel src --out-dir dist --copy-files",
     "prepublishOnly": "yarn lint && yarn build",
-    "build-storybook": "build-storybook"
+    "build-storybook": "yarn build-storybook"
   },
   "peerDependencies": {
     "@eqworks/chart-system": "https://github.com/eqworks/chart-system#plotly/plotly-charts",
