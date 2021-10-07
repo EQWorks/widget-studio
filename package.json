@@ -42,7 +42,7 @@
     "@babel/eslint-parser": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
-    "@eqworks/chart-system": "https://github.com/eqworks/chart-system#plotly/plotly-charts",
+    "@eqworks/chart-system": "^0.6.0",
     "@eqworks/common-login": "^0.9.0-alpha.1",
     "@eqworks/lumen-labs": "^0.1.0-alpha.10",
     "@eqworks/lumen-ui": "^1.0.0",
