@@ -33,7 +33,7 @@ const FilterControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   const numericColumns = useMemo(() => (
-    columns.filter(({ _, category }) => category === 'Numeric')
+    columns.filter(({ category }) => category === 'Numeric')
   ), [columns])
 
   const min = useCallback((key) => Math.min.apply(null, rows.map(r => r[key])), [rows])

@@ -25,7 +25,7 @@ import { FilterControls } from './data-controls'
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
 
-const WidgetEditor = props => {
+const WidgetEditor = () => {
 
   const classes = useStyles()
 
@@ -52,6 +52,11 @@ const WidgetEditor = props => {
     >
       {createElement(icon)}
     </IconButton>
+
+  DefaultSidebarButton.propTypes = {
+    onClick: PropTypes.func,
+    icon: PropTypes.elementType
+  }
 
   return (
     <>

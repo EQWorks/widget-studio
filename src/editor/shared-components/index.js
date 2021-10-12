@@ -24,7 +24,6 @@ export const LinkedSelect = ({ callback, data, init, subData, subInit, controlle
 
   useEffect(() => {
     if (choice && (subChoice || subDisabled)) {
-      // update({ [choice]: subChoice })
       callback([choice, subChoice])
       if (!controlled) {
         setChoice(init)
@@ -56,11 +55,11 @@ export const LinkedSelect = ({ callback, data, init, subData, subInit, controlle
 }
 LinkedSelect.propTypes = {
   callback: PropTypes.func,
-  data: PropTypes.array,
-  init: PropTypes.string,
-  subData: PropTypes.array,
-  subInit: PropTypes.string,
   controlled: PropTypes.bool,
+  data: PropTypes.arrayOf(PropTypes.string),
+  init: PropTypes.string,
+  subData: PropTypes.arrayOf(PropTypes.string),
+  subInit: PropTypes.string
 }
 
 LinkedSelect.defaultProps = {
@@ -90,35 +89,10 @@ export const WidgetControlCard = ({ title, titleExtra, children }) => {
   )
 }
 
-export const PluralSelect = ({ values, data, update }) => {
-
-  const dataRemaining = useMemo(() => data.filter((name) => !(name in values)), [data, values])
-  return (
-    <>
-      {
-        Object.keys(values).map(k => {
-          return (
-            <CustomSelect
-              key={k}
-              data={dataRemaining}
-              chosenValue={k}
-              setChosenValue={update}
-            />
-          )
-        })
-      }
-      {
-        dataRemaining.length ?
-          <CustomSelect
-            data={dataRemaining}
-            chosenValue={''}
-            setChosenValue={update}
-          />
-          :
-          null
-      }
-    </>
-  )
+WidgetControlCard.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.elementType, PropTypes.array]),
+  title: PropTypes.string,
+  titleExtra: PropTypes.elementType
 }
 
 export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, update }) => {
@@ -170,6 +144,15 @@ export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, upda
   )
 }
 
+PluralLinkedSelect.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.string),
+  subData: PropTypes.arrayOf(PropTypes.string),
+  subKey: PropTypes.string,
+  titles: PropTypes.arrayOf(PropTypes.string),
+  update: PropTypes.func,
+  values: PropTypes.object
+}
+
 export const Toggle = ({ label, value, update, disabled }) =>
   <FormControl>
     <FormControlLabel
@@ -185,12 +168,25 @@ export const Toggle = ({ label, value, update, disabled }) =>
     />
   </FormControl>
 
+Toggle.propTypes = {
+  disabled: PropTypes.bool,
+  label: PropTypes.string,
+  update: PropTypes.func,
+  value: PropTypes.bool
+}
+
 export const Dropdown = ({ data, value, update }) =>
   <CustomSelect
     data={data}
     chosenValue={value || ''}
     setChosenValue={update}
   />
+
+Dropdown.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.string),
+  update: PropTypes.func,
+  value: PropTypes.string
+}
 
 export const Slider = ({ min, max, value, update }) =>
   <MuiSlider
@@ -201,7 +197,12 @@ export const Slider = ({ min, max, value, update }) =>
     onChange={(event, val) => update(val)}
   />
 
-
+Slider.propTypes = {
+  max: PropTypes.number,
+  min: PropTypes.number,
+  update: PropTypes.func,
+  value: PropTypes.arrayOf(PropTypes.number)
+}
 
 export const ToggleableCard = ({ init, update, title, altTitle, children }) => {
   const [toggle, setToggle] = useState(init)
@@ -238,4 +239,12 @@ export const ToggleableCard = ({ init, update, title, altTitle, children }) => {
       </WidgetControlCard>
     </>
   )
+}
+
+ToggleableCard.propTypes = {
+  altTitle: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.elementType, PropTypes.array]),
+  init: PropTypes.bool,
+  title: PropTypes.string,
+  update: PropTypes.func
 }
