@@ -25,7 +25,6 @@
     "build-storybook": "build-storybook"
   },
   "peerDependencies": {
-    "@eqworks/chart-system": "^0.6.0",
     "@eqworks/common-login": "^0.8.0-alpha.5",
     "@eqworks/lumen-ui": "^1.0.0",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
@@ -41,7 +40,6 @@
     "@babel/eslint-parser": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
-    "@eqworks/chart-system": "^0.6.0",
     "@eqworks/common-login": "^0.9.0-alpha.1",
     "@eqworks/lumen-labs": "^0.1.0-alpha.10",
     "@eqworks/lumen-ui": "^1.0.0",
@@ -56,7 +54,6 @@
     "@storybook/react": "^6.1.14",
     "@storybook/storybook-deployer": "^2.8.7",
     "autoprefixer": "^10.3.3",
-    "axios": "^0.20.0",
     "babel-loader": "^8.1.0",
     "eslint": "^7.7.0",
     "eslint-plugin-import": "^2.24.2",
@@ -71,7 +68,9 @@
     "tailwindcss": "^2.2.9"
   },
   "dependencies": {
+    "@eqworks/chart-system": "^0.6.0",
     "@eqworks/lumen-table": "^1.4.0",
+    "axios": "^0.20.0",
     "danfojs": "^0.2.8",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",
