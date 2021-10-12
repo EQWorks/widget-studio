@@ -1290,7 +1290,7 @@
     prop-types "^15.7.2"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.10", "@eqworks/lumen-labs@^0.1.0-alpha.6":
+"@eqworks/lumen-labs@^0.1.0-alpha.6":
   version "0.1.0-alpha.10"
   resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.10/84dd8799b104d417c582363a2dc80bfdf53f047fba86af4f798192c5ac6f369e#2d47f7681a4ccfa53a6b7f91c5f6832da68763ae"
   integrity sha512-yBN9a53ocE4/QKrrUHMr0D9wfpG1ghbHIlZfFmd/mucbizoLOWCtb7iAiWXWiXo4H4d4JQvGgq6J9C6MhkRB6Q==
