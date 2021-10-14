@@ -3,16 +3,17 @@ import { storiesOf } from '@storybook/react'
 
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
-import { WidgetControlCard as Card, Toggle } from '../src/editor/shared-components'
+import WidgetControlCard from '../src/editor/shared-components/custom-toggle'
+import CustomToggle from '../src/editor/shared-components/widget-control-card'
 
 
 storiesOf('Dashboard-esque example')
   .add('Dashboard-esque example', () => {
     const [fullscreen, setFullscreen] = useState(false)
     return <>
-      <Card title={'Story controls'}>
-        <Toggle label={'Fullscreen widgets'} value={fullscreen} update={v => setFullscreen(v)} />
-      </Card>
+      <WidgetControlCard title={'Story controls'}>
+        <CustomToggle label={'Fullscreen widgets'} value={fullscreen} update={v => setFullscreen(v)} />
+      </WidgetControlCard>
       <div
         style={{
           display: 'grid',

@@ -19,8 +19,8 @@ import { Typography } from '@eqworks/lumen-ui'
 import { useStoreState, useStoreActions } from '../store'
 import WidgetControls from './widget-controls'
 import DataSourceControls from './data-source-controls'
+import FilterControls from './widget-controls/data-controls/filter-controls'
 import styles from '../styles' // TODO fix
-import { FilterControls } from './data-controls'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
