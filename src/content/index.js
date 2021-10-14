@@ -21,9 +21,10 @@ const WidgetContent = () => {
   const rows = useStoreState((state) => state.rows)
 
   // UI state
-  const showTable = useStoreState((state) => state.editorUI.showTable)
-  const dataSourceLoading = useStoreState((state) => state.editorUI.dataSourceLoading)
-  const dataSourceError = useStoreState((state) => state.editorUI.dataSourceError)
+  const showTable = useStoreState((state) => state.ui.showTable)
+  const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
+  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -52,7 +53,7 @@ const WidgetContent = () => {
 
   return (
 
-    <div className={classes.mainContainer}>
+    <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
       <div className={!showTable ? classes.hidden : classes.table}>
         <ResultsTable results={rows} />
       </div>
