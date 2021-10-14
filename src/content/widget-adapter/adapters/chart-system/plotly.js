@@ -1,4 +1,7 @@
-import { PlotlyBarChart, PlotlyPieChart, PlotlyLineChart, PlotlyScatterChart } from '@eqworks/chart-system'
+import PlotlyBarChart from '@eqworks/chart-system/dist/components/plotly/bar'
+import PlotlyLineChart from '@eqworks/chart-system/dist/components/plotly/line'
+import PlotlyPieChart from '@eqworks/chart-system/dist/components/plotly/pie'
+import PlotlyScatterChart from '@eqworks/chart-system/dist/components/plotly/scatter'
 
 
 export default {
