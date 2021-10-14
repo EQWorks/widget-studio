@@ -1,6 +1,5 @@
 import React, { useEffect, createElement } from 'react'
 
-import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { Loader } from '@eqworks/lumen-ui'
 import IconButton from '@material-ui/core/IconButton'
@@ -70,14 +69,6 @@ const WidgetControls = () => {
       }
     </div>
   )
-}
-
-WidgetControls.propTypes = {
-  columns: PropTypes.array,
-  dataSourceLoading: PropTypes.bool,
-}
-WidgetControls.default = {
-  columns: [],
 }
 
 export default WidgetControls

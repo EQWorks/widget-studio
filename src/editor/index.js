@@ -54,8 +54,8 @@ const WidgetEditor = () => {
     </IconButton>
 
   DefaultSidebarButton.propTypes = {
-    onClick: PropTypes.func,
-    icon: PropTypes.elementType
+    onClick: PropTypes.func.isRequired,
+    icon: PropTypes.elementType.isRequired
   }
 
   return (
@@ -170,10 +170,6 @@ const WidgetEditor = () => {
       </div>
     </>
   )
-}
-
-WidgetEditor.propTypes = {
-  children: PropTypes.object,
 }
 
 export default WidgetEditor

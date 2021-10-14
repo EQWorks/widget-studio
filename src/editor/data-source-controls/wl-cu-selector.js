@@ -112,11 +112,16 @@ const WlCuSelector = ({ selectedWl, setSelectedWl, selectedCu, setSelectedCu, se
 }
 
 WlCuSelector.propTypes = {
-  selectedCu: PropTypes.number,
+  selectedCu: PropTypes.number.isRequired,
   setSelectedCu: PropTypes.func.isRequired,
-  selectedWl: PropTypes.number,
+  selectedWl: PropTypes.number.isRequired,
   setSelectedWl: PropTypes.func.isRequired,
   setWlCuLoading: PropTypes.func.isRequired,
+}
+
+WlCuSelector.propTypes = {
+  selectedCu: null,
+  selectedWl: null,
 }
 
 export default WlCuSelector
