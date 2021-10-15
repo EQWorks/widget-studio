@@ -1,4 +1,3 @@
-
 import { createContextStore } from 'easy-peasy'
 import model from './model'
 import config from './config'

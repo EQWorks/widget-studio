@@ -45,4 +45,8 @@ Icons.propTypes = {
   disabled: PropTypes.bool,
 }
 
+Icons.defaultProps = {
+  disabled: false
+}
+
 export default Icons

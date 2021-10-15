@@ -158,4 +158,10 @@ QueryExecutionSelector.propTypes = {
   disabled: PropTypes.bool
 }
 
+QueryExecutionSelector.defaultProps = {
+  selectedWl: null,
+  selectedCu: null,
+  disabled: false
+}
+
 export default QueryExecutionSelector

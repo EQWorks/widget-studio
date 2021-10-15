@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
 
-import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton'
@@ -33,7 +32,7 @@ const FilterControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   const numericColumns = useMemo(() => (
-    columns.filter(({ _, category }) => category === 'Numeric')
+    columns.filter(({ category }) => category === 'Numeric')
   ), [columns])
 
   const min = useCallback((key) => Math.min.apply(null, rows.map(r => r[key])), [rows])
@@ -99,14 +98,6 @@ const FilterControls = () => {
       </WidgetControlCard>
     </div>
   )
-}
-
-FilterControls.propTypes = {
-  columns: PropTypes.array,
-  dataSourceLoading: PropTypes.bool,
-}
-FilterControls.default = {
-  columns: [],
 }
 
 export default FilterControls
