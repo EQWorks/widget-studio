@@ -79,7 +79,6 @@
     "@eqworks/chart-system": "^0.6.1",
     "@eqworks/lumen-table": "^1.4.0",
     "axios": "^0.20.0",
-    "danfojs": "^0.2.8",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",
     "prop-types": "^15.7.2"
