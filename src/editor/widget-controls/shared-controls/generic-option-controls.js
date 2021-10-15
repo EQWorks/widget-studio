@@ -22,7 +22,7 @@ const GenericOptionControls = () => {
         value={subPlots}
         label='Subplots'
         update={(val) => nestedUpdate({ genericOptions: { subPlots: val } })}
-        disabled={Object.keys(valueKeys).length <= 1}
+        disabled={valueKeys.length <= 1}
       />
     </Card>
   )

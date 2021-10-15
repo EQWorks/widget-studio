@@ -8,11 +8,12 @@ export default {
         308
       ]
     },
-    'valueKeys': {
-      'city_clicks': {
+    'valueKeys': [
+      {
+        'key': 'city_clicks',
         'agg': 'mean'
       }
-    },
+    ],
     'group': true,
     'groupKey': 'geo_ca_city',
     'indexKey': null,
@@ -38,14 +39,16 @@ export default {
         138
       ]
     },
-    'valueKeys': {
-      'converted_users': {
+    'valueKeys': [
+      {
+        'key': 'converted_users',
         'agg': 'mean'
       },
-      'city_clicks': {
+      {
+        'key': 'city_clicks',
         'agg': 'sum'
       }
-    },
+    ],
     'group': true,
     'groupKey': 'geo_ca_city',
     'indexKey': null,
@@ -70,14 +73,16 @@ export default {
         423
       ]
     },
-    'valueKeys': {
-      'clicks': {
+    'valueKeys': [
+      {
+        'key': 'clicks',
         'agg': null
       },
-      'revenue': {
+      {
+        'key': 'revenue',
         'agg': null
       }
-    },
+    ],
     'group': false,
     'groupKey': null,
     'indexKey': 'impressions',
@@ -97,10 +102,14 @@ export default {
     'title': 'My example line widget',
     'type': 'line',
     'filters': {},
-    'valueKeys': {
-      'spend': {},
-      'clicks': {}
-    },
+    'valueKeys': [
+      {
+        'key': 'spend'
+      },
+      {
+        'key': 'clicks'
+      },
+    ],
     'group': false,
     'groupKey': null,
     'indexKey': 'impressions',
@@ -125,14 +134,16 @@ export default {
         891
       ]
     },
-    'valueKeys': {
-      'repeat_visitors': {
+    'valueKeys': [
+      {
+        'key': 'repeat_visitors',
         'agg': 'mean'
       },
-      'unique_visitors': {
+      {
+        'key': 'unique_visitors',
         'agg': 'sum'
       }
-    },
+    ],
     'group': true,
     'groupKey': 'address_postalcode',
     'indexKey': null,

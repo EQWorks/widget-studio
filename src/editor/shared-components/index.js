@@ -95,10 +95,10 @@ WidgetControlCard.propTypes = {
   titleExtra: PropTypes.elementType
 }
 
-export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, update }) => {
+export const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, subData, update }) => {
 
   const classes = useStyles()
-  const remainingValues = useMemo(() => data.filter((name) => !(name in values)), [data, values])
+  const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
   return (
     <>
       <div className={classes.controlRow}>
@@ -119,22 +119,22 @@ export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, upda
       </div>
       <Divider className={classes.controlDivider} />
       {
-        Object.entries(values).map(([k, v]) => {
+        values.map((v, i) => {
           return (
             <LinkedSelect
-              key={k}
-              callback={([, _v]) => update({ [k]: { [subKey]: _v } })}
+              key={i}
+              callback={([_k, _v]) => update(i, { [primaryKey]: _k, [secondaryKey]: _v })}
               data={remainingValues}
-              init={k}
+              init={v[primaryKey]}
               subData={subData}
-              subInit={v[subKey]}
+              subInit={v[secondaryKey]}
             />
           )
         })
       }
-      < LinkedSelect
+      <LinkedSelect
         controlled={false}
-        callback={([_k, _v]) => update({ [_k]: { [subKey]: _v } })}
+        callback={([_k, _v]) => update(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
         data={remainingValues}
         init={''}
         subData={subData}
@@ -147,7 +147,8 @@ export const PluralLinkedSelect = ({ titles, values, subKey, data, subData, upda
 PluralLinkedSelect.propTypes = {
   data: PropTypes.arrayOf(PropTypes.string),
   subData: PropTypes.arrayOf(PropTypes.string),
-  subKey: PropTypes.string,
+  primaryKey: PropTypes.string,
+  secondaryKey: PropTypes.string,
   titles: PropTypes.arrayOf(PropTypes.string),
   update: PropTypes.func,
   values: PropTypes.object

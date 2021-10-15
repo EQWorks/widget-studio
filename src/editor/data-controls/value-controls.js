@@ -16,7 +16,6 @@ const ValueControls = ({ groupingOptional }) => {
 
   // common actions
   const update = useStoreActions(actions => actions.update)
-  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
   const group = useStoreState((state) => state.group)
@@ -34,18 +33,29 @@ const ValueControls = ({ groupingOptional }) => {
 
   const toggleGroup = (val) => {
     update({ group: val })
-    update({ valueKeys: {} })
+    update({ valueKeys: [] })
   }
 
   const groupedValueKeysSelect =
     <PluralLinkedSelect
       titles={['Key', 'Aggregation']}
       values={valueKeys}
-      subKey='agg'
+      primaryKey='key'
+      secondaryKey='agg'
       data={numericColumns}
       subData={groupKey ? aggOps : []}
-      update={(val) => nestedUpdate({ valueKeys: val })}
+      update={(i, val) => {
+        if (i === valueKeys.length) {
+          const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+          valueKeysCopy.push(val)
+          update({ valueKeys: valueKeysCopy })
+        } else {
+          update({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
+        }
+      }
+      }
     />
+
   return (
     <>
       {
@@ -60,7 +70,7 @@ const ValueControls = ({ groupingOptional }) => {
               }
             >
               <Dropdown
-                data={group ? stringColumns : numericColumns.filter(c => !(c in valueKeys))}
+                data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
                 value={group ? groupKey : indexKey}
                 update={val => update(group ? { groupKey: val } : { indexKey: val })}
               />
@@ -72,17 +82,10 @@ const ValueControls = ({ groupingOptional }) => {
                   :
                   <CustomSelect
                     multi
-                    chosenValue={Object.keys(valueKeys)}
+                    chosenValue={valueKeys.map(({ key }) => key)}
                     data={numericColumns.filter(c => c !== indexKey)}
                     setChosenValue={(val) =>
-                      update({
-                        valueKeys: {
-                          // keep all entries that haven't been removed
-                          ...Object.fromEntries(Object.entries(valueKeys).filter(([k]) => val.includes(k))),
-                          // add any entries that don't exist yet
-                          ...Object.fromEntries(val.filter(k => !(k in valueKeys)).map(k => ([k, { agg: null }])))
-                        }
-                      })
+                      update({ valueKeys: val.map(v => ({ key: v })) })
                     }
                   />
               }
