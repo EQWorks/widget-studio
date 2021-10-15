@@ -1,3 +1,4 @@
-const aggOps = ['mean', 'sum', 'count', 'mode', 'std', 'var', 'cumsum', 'cumprod', 'cummax', 'cummin']
+const aggOps = ['sum', 'product', 'mean', 'min', 'max', 'count', 'unique']
+// const aggOps = ['mode', 'std', 'var']
 
 export default aggOps
