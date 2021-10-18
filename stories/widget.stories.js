@@ -12,7 +12,7 @@ storiesOf('Dashboard-esque example')
     const [fullscreen, setFullscreen] = useState(false)
     return <>
       <WidgetControlCard title={'Story controls'}>
-        <CustomToggle label={'Fullscreen widgets'} value={fullscreen} update={v => setFullscreen(v)} />
+        <CustomToggle label={'Fullscreen widgets'} value={fullscreen} callback={v => setFullscreen(v)} />
       </WidgetControlCard>
       <div
         style={{

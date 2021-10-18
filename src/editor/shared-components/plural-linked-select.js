@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@eqworks/lumen-ui'
-import LinkedSelect from './linked-select'
 
+import LinkedSelect from './linked-select'
 import styles from '../styles'
 
 
 const useStyles = makeStyles(styles)
 
-export const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, subData, update }) => {
+const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, subData, callback }) => {
 
   const classes = useStyles()
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
@@ -38,7 +38,7 @@ export const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, d
           return (
             <LinkedSelect
               key={i}
-              callback={([_k, _v]) => update(i, { [primaryKey]: _k, [secondaryKey]: _v })}
+              callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
               data={remainingValues}
               init={v[primaryKey]}
               subData={subData}
@@ -47,9 +47,9 @@ export const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, d
           )
         })
       }
-      < LinkedSelect
+      <LinkedSelect
         controlled={false}
-        callback={([_k, _v]) => update(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
+        callback={([_k, _v]) => callback(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
         data={remainingValues}
         init={''}
         subData={subData}
@@ -60,13 +60,17 @@ export const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, d
 }
 
 PluralLinkedSelect.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.string),
-  subData: PropTypes.arrayOf(PropTypes.string),
-  primaryKey: PropTypes.string,
-  secondaryKey: PropTypes.string,
+  data: PropTypes.arrayOf(PropTypes.string).isRequired,
+  subData: PropTypes.arrayOf(PropTypes.string).isRequired,
+  primaryKey: PropTypes.string.isRequired,
+  secondaryKey: PropTypes.string.isRequired,
   titles: PropTypes.arrayOf(PropTypes.string),
-  update: PropTypes.func,
-  values: PropTypes.object
+  callback: PropTypes.func.isRequired,
+  values: PropTypes.arrayOf(PropTypes.object).isRequired
+}
+
+PluralLinkedSelect.defaultProps = {
+  titles: [],
 }
 
 export default PluralLinkedSelect

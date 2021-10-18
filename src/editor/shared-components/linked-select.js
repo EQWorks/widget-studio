@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import CustomSelect from './custom-select'
 
+import CustomSelect from './custom-select'
 import styles from '../styles'
 
 
@@ -47,16 +47,18 @@ const LinkedSelect = ({ callback, data, init, subData, subInit, controlled }) =>
   )
 }
 LinkedSelect.propTypes = {
-  callback: PropTypes.func,
+  callback: PropTypes.func.isRequired,
   controlled: PropTypes.bool,
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.string).isRequired,
+  subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   init: PropTypes.string,
-  subData: PropTypes.arrayOf(PropTypes.string),
   subInit: PropTypes.string
 }
 
 LinkedSelect.defaultProps = {
-  controlled: true
+  controlled: true,
+  init: '',
+  subInit: ''
 }
 
 export default LinkedSelect

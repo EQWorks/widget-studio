@@ -41,7 +41,7 @@ const FilterControls = () => {
     return <ToggleableCard key={key}
       init={enabled}
       title={key}
-      update={(val) => {
+      callback={(val) => {
         if (!val) {
           const { [key]: _range, ...remainingFilters } = filters
           update({ filters: remainingFilters })
@@ -63,7 +63,7 @@ const FilterControls = () => {
           min={min(key)}
           max={max(key)}
           value={range}
-          update={val => nestedUpdate({ filters: { [key]: val } })}
+          callback={val => nestedUpdate({ filters: { [key]: val } })}
         />
       </div>
     </ToggleableCard >

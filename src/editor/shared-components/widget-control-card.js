@@ -37,4 +37,10 @@ WidgetControlCard.propTypes = {
   titleExtra: PropTypes.elementType
 }
 
+WidgetControlCard.defaultProps = {
+  children: [],
+  title: '',
+  titleExtra: null
+}
+
 export default WidgetControlCard

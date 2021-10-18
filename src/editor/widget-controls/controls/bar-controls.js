@@ -25,12 +25,12 @@ const BarControls = () => {
         <CustomToggle
           value={stacked}
           label='Stacked'
-          update={(val) => nestedUpdate({ options: { stacked: val } })}
+          callback={(val) => nestedUpdate({ options: { stacked: val } })}
         />
         <CustomToggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => nestedUpdate({ options: { showTicks: val } })}
+          callback={(val) => nestedUpdate({ options: { showTicks: val } })}
         />
       </WidgetControlCard>
     </>

@@ -42,12 +42,12 @@ const ScatterControls = () => {
         <CustomToggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => nestedUpdate({ options: { showTicks: val } })}
+          callback={(val) => nestedUpdate({ options: { showTicks: val } })}
         />
         <CustomToggle
           value={showLines}
           label='Show lines'
-          update={(val) => nestedUpdate({ scatter: { showLines: val } })}
+          callback={(val) => nestedUpdate({ scatter: { showLines: val } })}
         />
       </WidgetControlCard>
     </>

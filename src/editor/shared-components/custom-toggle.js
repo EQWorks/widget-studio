@@ -5,13 +5,13 @@ import FormControl from '@material-ui/core/FormControl'
 import Switch from '@material-ui/core/Switch'
 
 
-const CustomToggle = ({ label, value, update, disabled }) =>
+const CustomToggle = ({ label, value, callback, disabled }) =>
   <FormControl>
     <FormControlLabel
       control={
         <Switch
           checked={value}
-          onChange={event => update(event.target.checked)}
+          onChange={event => callback(event.target.checked)}
           color="primary"
           disabled={disabled ?? false}
         />
@@ -23,8 +23,14 @@ const CustomToggle = ({ label, value, update, disabled }) =>
 CustomToggle.propTypes = {
   disabled: PropTypes.bool,
   label: PropTypes.string,
-  update: PropTypes.func,
+  callback: PropTypes.func.isRequired,
   value: PropTypes.bool
+}
+
+CustomToggle.defaultProps = {
+  disabled: false,
+  label: '',
+  value: true
 }
 
 export default CustomToggle

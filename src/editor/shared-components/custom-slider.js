@@ -3,20 +3,20 @@ import PropTypes from 'prop-types'
 import MuiSlider from '@material-ui/core/Slider'
 
 
-const CustomSlider = ({ min, max, value, update }) =>
+const CustomSlider = ({ min, max, value, callback }) =>
   <MuiSlider
     valueLabelDisplay='auto'
     defaultValue={value || [min, max]}
     min={min}
     max={max}
-    onChange={(event, val) => update(val)}
+    onChange={(event, val) => callback(val)}
   />
 
 CustomSlider.propTypes = {
-  max: PropTypes.number,
-  min: PropTypes.number,
-  update: PropTypes.func,
-  value: PropTypes.arrayOf(PropTypes.number)
+  max: PropTypes.number.isRequired,
+  min: PropTypes.number.isRequired,
+  callback: PropTypes.func.isRequired,
+  value: PropTypes.arrayOf(PropTypes.number).isRequired
 }
 
 export default CustomSlider

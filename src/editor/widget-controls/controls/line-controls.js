@@ -25,12 +25,12 @@ const LineControls = () => {
         <CustomToggle
           value={spline}
           label='Spline interpolation'
-          update={(val) => nestedUpdate({ options: { spline: val } })}
+          callback={(val) => nestedUpdate({ options: { spline: val } })}
         />
         <CustomToggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => nestedUpdate({ options: { showTicks: val } })}
+          callback={(val) => nestedUpdate({ options: { showTicks: val } })}
         />
       </WidgetControlCard>
     </>

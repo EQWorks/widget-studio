@@ -41,7 +41,7 @@ const ValueControls = ({ groupingOptional }) => {
       secondaryKey='agg'
       data={numericColumns}
       subData={groupKey ? Object.keys(aggFuncDict) : []}
-      update={(i, val) => {
+      callback={(i, val) => {
         if (i === valueKeys.length) {
           const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
           valueKeysCopy.push(val)
@@ -49,8 +49,7 @@ const ValueControls = ({ groupingOptional }) => {
         } else {
           update({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
         }
-      }
-      }
+      }}
     />
 
   return (
@@ -63,7 +62,7 @@ const ValueControls = ({ groupingOptional }) => {
               titleExtra={
                 <CustomToggle
                   value={group}
-                  update={toggleGroup} />
+                  callback={toggleGroup} />
               }
             >
               <CustomSelect
