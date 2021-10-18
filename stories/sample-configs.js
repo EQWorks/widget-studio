@@ -58,7 +58,7 @@ export default {
     },
     'options': {
       'stacked': true,
-      'showTicks': false
+      'showTicks': true
     },
     'genericOptions': {
       'subPlots': false
@@ -119,7 +119,7 @@ export default {
     },
     'options': {
       'spline': false,
-      'showTicks': false
+      'showTicks': true
     },
     'genericOptions': {
       'subPlots': false
@@ -152,7 +152,7 @@ export default {
       'id': '217'
     },
     'options': {
-      'showTicks': false
+      'showTicks': true
     },
     'genericOptions': {
       'subPlots': false
