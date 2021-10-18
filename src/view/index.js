@@ -1,4 +1,4 @@
-import React, { createElement } from 'react'
+import React, { useMemo, createElement } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
@@ -8,12 +8,12 @@ import InsertChartIcon from '@material-ui/icons/InsertChart'
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 import TimelineIcon from '@material-ui/icons/Timeline'
 import { Typography } from '@eqworks/lumen-ui'
-import { Chip } from '@eqworks/lumen-labs'
+import { Chip, Loader } from '@eqworks/lumen-labs'
 
-import WidgetContent from './content'
 import ResultsTable from './table'
 import { useStoreState, useStoreActions } from '../store'
 import styles from '../styles'
+import WidgetAdapter from './adapter'
 
 
 const useStyles = makeStyles(styles)
@@ -38,6 +38,7 @@ const WidgetView = () => {
   const title = useStoreState((state) => state.title)
   const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
+  const isReady = useStoreState((state) => state.isReady)
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -47,7 +48,30 @@ const WidgetView = () => {
   // UI state
   const showTable = useStoreState((state) => state.ui.showTable)
   const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
+  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
   const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
+
+  // descriptive message to display when the data source is still loading
+  const dataSourceLoadingMessage = useMemo(() => (
+    dataSourceType && dataSourceID ?
+      `Loading ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
+      :
+      'Loading'
+  ), [dataSourceType, dataSourceID])
+
+  // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
+  const widgetWarning = useMemo(() => ({
+    primary:
+      !dataSourceID || !dataSourceType ? 'Please select a data source.'
+        : dataSourceError ? 'Something went wrong.'
+          : !rows.length ? 'Sorry, this data is empty.'
+            : type ? 'Select columns and configure your widget.'
+              : 'Select a widget type.',
+    secondary:
+      dataSourceError ? `${dataSourceError}`
+        : 'Data loaded successfully'
+  }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
 
   return (
     <>
@@ -105,7 +129,35 @@ const WidgetView = () => {
           <ResultsTable results={rows} />
         </div>
         <div className={showTable ? classes.hidden : classes.widgetContainer}>
-          <WidgetContent />
+          {
+
+            // config object ready?
+            isReady ?
+              // render widget
+              <WidgetAdapter />
+              :
+              // guide the user to configure the widget
+              <div className={classes.warningContainer}>
+                {
+                  dataSourceLoading ?
+                    <div className={classes.loader}>
+                      <Loader open classes={{ icon: 'text-primary-700' }} />
+                    </div>
+                    :
+                    <Typography color="textSecondary" variant='h6'>
+                      {widgetWarning.primary}
+                    </Typography>
+                }
+                <Typography color="textSecondary" variant='subtitle2'>
+                  {
+                    dataSourceLoading ?
+                      dataSourceLoadingMessage
+                      :
+                      widgetWarning.secondary
+                  }
+                </Typography>
+              </div>
+          }
         </div>
       </div>
     </>
