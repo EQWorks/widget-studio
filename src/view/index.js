@@ -46,6 +46,7 @@ const WidgetView = () => {
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
+  const editor = useStoreState((state) => state.ui.editor)
   const showTable = useStoreState((state) => state.ui.showTable)
   const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
@@ -125,7 +126,12 @@ const WidgetView = () => {
         }
       </div>
       <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
-        <div className={!showTable ? classes.hidden : classes.table}>
+        <div className={!showTable
+          ? classes.hidden
+          : editor
+            ? classes.table
+            : ''
+        }>
           <ResultsTable results={rows} />
         </div>
         <div className={showTable ? classes.hidden : classes.widgetContainer}>
