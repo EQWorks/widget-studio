@@ -12,6 +12,7 @@ const WidgetControlCard = ({ title, titleExtra, children }) => {
 
   const classes = useStyles()
   return (
+    children &&
     <div className={classes.controlCard}>
       <div className={classes.controlRow}>
         {
