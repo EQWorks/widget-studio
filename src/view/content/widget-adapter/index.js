@@ -1,7 +1,7 @@
 import { createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { useStoreState } from '../../store'
+import { useStoreState } from '../../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 
 // declare which adapter handles each widget type

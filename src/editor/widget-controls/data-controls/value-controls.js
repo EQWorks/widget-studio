@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { aggFuncDict } from '../../../content/widget-adapter'
+import { aggFuncDict } from '../../../view/content/widget-adapter'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../shared-components/custom-select'
 import CustomToggle from '../../shared-components/custom-toggle'

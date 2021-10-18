@@ -29,10 +29,13 @@ const WidgetEditor = () => {
 
   const classes = useStyles()
 
+  // store actions
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
-  // editor UI state
+  // data source state
   const dataReady = useStoreState((state) => state.dataReady)
+
+  // UI state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
   const showTable = useStoreState((state) => state.ui.showTable)

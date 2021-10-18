@@ -3,10 +3,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Loader } from '@eqworks/lumen-labs'
 import { Typography } from '@eqworks/lumen-ui'
 
-import { useStoreState } from '../store'
+import { useStoreState } from '../../store'
 import WidgetAdapter from './widget-adapter'
-import styles from '../styles'
-import ResultsTable from '../table'
+import styles from '../../styles'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
@@ -21,8 +20,6 @@ const WidgetContent = () => {
   const rows = useStoreState((state) => state.rows)
 
   // UI state
-  const showTable = useStoreState((state) => state.ui.showTable)
-  const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
 
@@ -52,43 +49,32 @@ const WidgetContent = () => {
   }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
 
   return (
-
-    <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
-      <div className={!showTable ? classes.hidden : classes.table}>
-        <ResultsTable results={rows} />
-      </div>
-
-      <div className={showTable ? classes.hidden : classes.widgetContainer}>
+    // config object ready?
+    isReady ?
+      // render widget
+      <WidgetAdapter />
+      :
+      // guide the user to configure the widget
+      <div className={classes.warningContainer}>
         {
-          // config object ready?
-          isReady ?
-            // render widget
-            <WidgetAdapter />
-            :
-            // guide the user to configure the widget
-            <div className={classes.warningContainer}>
-              {
-                dataSourceLoading ?
-                  <div className={classes.loader}>
-                    <Loader open classes={{ icon: 'text-primary-700' }} />
-                  </div>
-                  :
-                  <Typography color="textSecondary" variant='h6'>
-                    {widgetWarning.primary}
-                  </Typography>
-              }
-              <Typography color="textSecondary" variant='subtitle2'>
-                {
-                  dataSourceLoading ?
-                    dataSourceLoadingMessage
-                    :
-                    widgetWarning.secondary
-                }
-              </Typography>
+          dataSourceLoading ?
+            <div className={classes.loader}>
+              <Loader open classes={{ icon: 'text-primary-700' }} />
             </div>
+            :
+            <Typography color="textSecondary" variant='h6'>
+              {widgetWarning.primary}
+            </Typography>
         }
+        <Typography color="textSecondary" variant='subtitle2'>
+          {
+            dataSourceLoading ?
+              dataSourceLoadingMessage
+              :
+              widgetWarning.secondary
+          }
+        </Typography>
       </div>
-    </div >
   )
 }
 
