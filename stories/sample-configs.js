@@ -27,7 +27,7 @@ export default {
       'donut': false
     },
     'genericOptions': {
-      'subPlots': false
+      'subPlots': true
     }
   },
   'bar-1': {
