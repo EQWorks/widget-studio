@@ -50,6 +50,11 @@ const ValueControls = ({ groupingOptional }) => {
           update({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
         }
       }}
+      deleteCallback={(i) => {
+        const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+        valueKeysCopy.splice(i, 1)
+        update({ valueKeys: valueKeysCopy })
+      }}
     />
 
   return (
