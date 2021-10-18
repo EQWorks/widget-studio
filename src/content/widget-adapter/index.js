@@ -1,11 +1,10 @@
-import { useState, useEffect, createElement, useMemo } from 'react'
+import { createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { DataFrame } from 'danfojs/src/index'
 
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 
-// state which adapter set should handle which widget type
+// declare which adapter handles each widget type
 const adapterDict = {
   bar: PlotlyAdapters.bar,
   pie: PlotlyAdapters.pie,
@@ -13,7 +12,7 @@ const adapterDict = {
   line: PlotlyAdapters.line,
 }
 
-// construct a schema to validate adapters, also construct a set of the adapters used above
+// validate each used adapter according to { component, adapt } schema
 Object.entries(adapterDict).forEach(([key, adapter]) => {
   PropTypes.checkPropTypes(
     {
@@ -26,6 +25,18 @@ Object.entries(adapterDict).forEach(([key, adapter]) => {
   )
 })
 
+// define various aggregation functions for use when data is grouped
+// TODO median/mode, std, var
+export const aggFuncDict = {
+  sum: arr => arr.reduce((a, b) => a + b, 0),
+  product: arr => arr.reduce((a, b) => a * b, 1),
+  mean: arr => arr.reduce((p, c, i) => p + (c - p) / (i + 1), 0),
+  min: arr => Math.min(arr),
+  max: arr => Math.max(arr),
+  count: arr => arr.filter(d => d || d === 0).length,
+  unique: arr => (new Set(arr)).size
+}
+
 const WidgetAdapter = () => {
 
   const rows = useStoreState((state) => state.rows)
@@ -37,66 +48,74 @@ const WidgetAdapter = () => {
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
 
-  const [data, setData] = useState([])
+  // record the correct adapter for use later (after data processing)
   const { component, adapt } = useMemo(() => adapterDict[type], [type])
-  const adaptedDataAndConfig = useMemo(() => adapt(data, config), [adapt, config, data])
 
-  // memoize conversion of raw data to a danfojs dataframe
-  const dataframe = useMemo(() => new DataFrame(rows), [rows])
-
-  // drop unused columns when used columns change
-  const selectedDataframe = useMemo(() => (
-    dataframe.drop({
-      inplace: false,
-      columns: dataframe.columns.filter(c =>
-        !(indexKey === c
-          || groupKey === c
-          || c in filters
-          || c in valueKeys))
+  // truncate the data when the filters change
+  const truncatedData = useMemo(() => {
+    return rows.filter(obj => {
+      for (const [key, [min, max]] of Object.entries(filters)) {
+        if (obj[key] < min || obj[key] > max) {
+          return false
+        }
+      }
+      return true
     })
-  ), [dataframe, filters, groupKey, indexKey, valueKeys])
+  }, [rows, filters])
 
-  // truncate the dataframe when the filters change
-  const truncatedDataframe = useMemo(() => (
-    Object.keys(filters).length ?
-      Object.entries(filters).filter(obj => obj[1] && obj[1].length == 2)
-        .reduce((acc, [key, [min, max]]) => (
-          acc.query({
-            'column': key,
-            'is': '>=',
-            'to': min,
-          }).query({
-            'column': key,
-            'is': '<=',
-            'to': max,
-          })
-        ), selectedDataframe)
-      :
-      selectedDataframe
-  ), [selectedDataframe, filters])
+  // if grouping enabled, memoize grouped and reorganized version of data that will be easy to aggregate
+  const groupedData = useMemo(() => (
+    group
+      ? truncatedData.reduce((res, r) => {
+        const group = r[groupKey]
+        res[group] = res[group] || {}
+        Object.entries(r).forEach(([k, v]) => {
+          if (k !== groupKey) {
+            if (res[group][k]) {
+              res[group][k].push(v)
+            } else {
+              res[group][k] = [v]
+            }
+          }
+        })
+        return res
+      }, {})
+      : null
+  ), [group, groupKey, truncatedData])
 
-  // do final processing on the dataframe when appropriate
-  const processedDataframe = useMemo(() => (
-    group ?
-      // aggregate
-      truncatedDataframe.groupby([groupKey])
-        .agg(
-          Object.fromEntries(
-            Object.entries(valueKeys).map(([k, { agg }]) =>
-              [k, agg ?? 'sum']
-            )
-          )
-        )
-      :
-      // simply index + sort data if no aggregation
-      truncatedDataframe.set_index({ key: indexKey, drop: false }).sort_index()
-  ), [group, truncatedDataframe, groupKey, valueKeys, indexKey])
+  // if grouping enabled, aggregate each column from valueKeys in groupedData according to defined 'agg' property
+  const aggregatedData = useMemo(() => (
+    group
+      ? Object.entries(groupedData).map(([_groupKey, values]) => (
+        Object.entries(valueKeys).reduce((res, [_valueKey, { agg }]) => {
+          if (!agg) {
+            agg = 'sum'
+          }
+          res[`${_valueKey}_${agg}`] = aggFuncDict[agg](values[_valueKey])
+          return res
+        }, { [groupKey]: _groupKey })
+      ))
+      : null
+  ), [group, groupKey, groupedData, valueKeys])
 
-  // convert dataframe back to object literal when final processing is done
-  useEffect(() => {
-    (async () => setData(JSON.parse(await processedDataframe.to_json())))()
-  }, [processedDataframe])
+  // simply sort the data if grouping is not enabled
+  const indexedData = useMemo(() => (
+    !group
+      ? truncatedData.sort((a, b) => a[indexKey] - b[indexKey])
+      : null
+  ), [group, indexKey, truncatedData])
 
+  // memoize the final data processing according to whether grouping is enabled
+  const finalData = useMemo(() => (
+    group
+      ? aggregatedData
+      : indexedData
+  ), [aggregatedData, group, indexedData])
+
+  // pass the processed data to the rendering adapter and memoize the results
+  const adaptedDataAndConfig = useMemo(() => adapt(finalData ?? [], config), [adapt, config, finalData])
+
+  // render the component
   return createElement(component, adaptedDataAndConfig)
 }
 

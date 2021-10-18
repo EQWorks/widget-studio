@@ -4,7 +4,7 @@ export default {
     'type': 'pie',
     'filters': {
       'city_clicks': [
-        80,
+        20,
         308
       ]
     },
