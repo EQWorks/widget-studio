@@ -8,7 +8,6 @@ import { useStoreActions } from './store'
 import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
 import WidgetEditor from './editor'
-import WidgetContent from './content'
 import WidgetView from './view'
 
 // put styles in separate file for readability
@@ -24,8 +23,8 @@ const Widget = ({ id, editor, staticData }) => {
 
   // on first load,
   useEffect(() => {
-    // dispatch staticData prop
-    nestedUpdate({ ui: { staticData } })
+    // dispatch editor and staticData props
+    nestedUpdate({ ui: { editor, staticData } })
     // check for invalid component usage
     if (id == undefined || id == null) {
       if (staticData || !editor) {
@@ -40,7 +39,6 @@ const Widget = ({ id, editor, staticData }) => {
   return (
     <div className={editor ? classes.outerContainer : classes.outerContainerNoEditor}>
       <WidgetView />
-      <WidgetContent />
       {editor && <WidgetEditor />}
     </div >
   )

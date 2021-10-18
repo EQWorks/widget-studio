@@ -5,15 +5,13 @@ import AddIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton'
 import { Typography } from '@eqworks/lumen-ui'
 
-import { useStoreState, useStoreActions } from '../../store'
-import {
-  ToggleableCard,
-  Dropdown,
-  Slider,
-  WidgetControlCard
-} from '../shared-components'
+import { useStoreState, useStoreActions } from '../../../store'
+import ToggleableCard from '../../shared-components/toggleable-card'
+import CustomSelect from '../../shared-components/custom-select'
+import CustomSlider from '../../shared-components/custom-slider'
+import WidgetControlCard from '../../shared-components/widget-control-card'
 
-import styles from '../styles'
+import styles from '../../styles'
 
 
 const useStyles = makeStyles(styles)
@@ -43,7 +41,7 @@ const FilterControls = () => {
     return <ToggleableCard key={key}
       init={enabled}
       title={key}
-      update={(val) => {
+      callback={(val) => {
         if (!val) {
           const { [key]: _range, ...remainingFilters } = filters
           update({ filters: remainingFilters })
@@ -61,11 +59,11 @@ const FilterControls = () => {
             {`${range[0]}-${range[1]}`}
           </Typography>
         </div>
-        <Slider
+        <CustomSlider
           min={min(key)}
           max={max(key)}
           value={range}
-          update={val => nestedUpdate({ filters: { [key]: val } })}
+          callback={val => nestedUpdate({ filters: { [key]: val } })}
         />
       </div>
     </ToggleableCard >
@@ -78,9 +76,9 @@ const FilterControls = () => {
       <WidgetControlCard>
         {
           addingFilter ?
-            <Dropdown
+            <CustomSelect
               data={numericColumns.filter(col => !Object.keys(filters).includes(col))}
-              update={val => {
+              setChosenValue={val => {
                 nestedUpdate({ filters: { [val]: [min(val), max(val)] } })
                 setAddingFilter(false)
               }}

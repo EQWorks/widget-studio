@@ -19,8 +19,8 @@ import { Typography } from '@eqworks/lumen-ui'
 import { useStoreState, useStoreActions } from '../store'
 import WidgetControls from './widget-controls'
 import DataSourceControls from './data-source-controls'
+import FilterControls from './widget-controls/data-controls/filter-controls'
 import styles from '../styles' // TODO fix
-import { FilterControls } from './data-controls'
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
@@ -29,10 +29,13 @@ const WidgetEditor = () => {
 
   const classes = useStyles()
 
+  // store actions
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
-  // editor UI state
+  // data source state
   const dataReady = useStoreState((state) => state.dataReady)
+
+  // UI state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
   const showTable = useStoreState((state) => state.ui.showTable)

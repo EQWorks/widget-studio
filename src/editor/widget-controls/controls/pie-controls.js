@@ -2,12 +2,10 @@ import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../../store'
 // import { getPieChartData, sum } from './utils'
-import {
-  Toggle,
-  WidgetControlCard as Card
-} from '../../shared-components'
-import { ValueControls } from '../../data-controls'
-import { GenericOptionControls } from '../shared-controls'
+import CustomToggle from '../../shared-components/custom-toggle'
+import WidgetControlCard from '../../shared-components/widget-control-card'
+import ValueControls from '../data-controls/value-controls'
+import GenericOptionControls from '../generic-option-controls'
 
 
 const PieControls = () => {
@@ -25,23 +23,23 @@ const PieControls = () => {
       <ValueControls groupingOptional={false} />
       <GenericOptionControls />
 
-      <Card title='Styling'>
-        <Toggle
+      <WidgetControlCard title='Styling'>
+        <CustomToggle
           value={donut}
           label='Donut'
-          update={(val) => nestedUpdate({ options: { donut: val } })}
+          callback={(val) => nestedUpdate({ options: { donut: val } })}
         />
-        <Toggle
+        <CustomToggle
           value={showPercentage}
           label='Show Percentage'
-          update={(val) => nestedUpdate({ options: { showPercentage: val } })}
+          callback={(val) => nestedUpdate({ options: { showPercentage: val } })}
         />
-        <Toggle
+        <CustomToggle
           value={showLegend}
           label='Show Legend'
-          update={(val) => nestedUpdate({ options: { showLegend: val } })}
+          callback={(val) => nestedUpdate({ options: { showLegend: val } })}
         />
-      </Card>
+      </WidgetControlCard>
     </>
   )
 }

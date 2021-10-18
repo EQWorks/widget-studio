@@ -1,12 +1,10 @@
 import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../../store'
-import {
-  Toggle,
-  WidgetControlCard as Card,
-} from '../../shared-components'
-import { ValueControls } from '../../data-controls'
-import { GenericOptionControls } from '../shared-controls'
+import CustomToggle from '../../shared-components/custom-toggle'
+import WidgetControlCard from '../../shared-components/widget-control-card'
+import ValueControls from '../data-controls/value-controls'
+import GenericOptionControls from '../generic-option-controls'
 
 
 const LineControls = () => {
@@ -23,18 +21,18 @@ const LineControls = () => {
       <ValueControls />
       <GenericOptionControls />
 
-      <Card title='Styling'>
-        <Toggle
+      <WidgetControlCard title='Styling'>
+        <CustomToggle
           value={spline}
           label='Spline interpolation'
-          update={(val) => nestedUpdate({ options: { spline: val } })}
+          callback={(val) => nestedUpdate({ options: { spline: val } })}
         />
-        <Toggle
+        <CustomToggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => nestedUpdate({ options: { showTicks: val } })}
+          callback={(val) => nestedUpdate({ options: { showTicks: val } })}
         />
-      </Card>
+      </WidgetControlCard>
     </>
   )
 }
