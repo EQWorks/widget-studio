@@ -32,9 +32,9 @@ const WidgetControlCard = ({ title, titleExtra, children }) => {
 }
 
 WidgetControlCard.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.elementType, PropTypes.array]),
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
   title: PropTypes.string,
-  titleExtra: PropTypes.elementType
+  titleExtra: PropTypes.element
 }
 
 WidgetControlCard.defaultProps = {
