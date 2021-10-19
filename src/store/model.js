@@ -42,6 +42,7 @@ const stateDefaults = {
   rows: [],
   columns: [],
   ui: {
+    mode: null,
     showTable: false,
     showWidgetControls: false,
     showFilterControls: false,

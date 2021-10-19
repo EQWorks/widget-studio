@@ -43,7 +43,14 @@ export default {
     background: '#f7f7f7',
     overflow: 'auto'
   },
-  get outerContainerNoEditor() {
+  get outerContainerViewMode() {
+    return {
+      ...this.outerContainer,
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: '1fr',
+    }
+  },
+  get outerContainerQLMode() {
     return {
       ...this.outerContainer,
       gridTemplateColumns: '1fr',

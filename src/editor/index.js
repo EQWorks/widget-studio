@@ -16,11 +16,13 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@eqworks/lumen-ui'
 
+import modes from '../constants/modes'
 import { useStoreState, useStoreActions } from '../store'
 import WidgetControls from './widget-controls'
 import DataSourceControls from './data-source-controls'
 import FilterControls from './widget-controls/data-controls/filter-controls'
 import styles from '../styles' // TODO fix
+
 
 // put styles in separate file for readability
 const useStyles = makeStyles(styles)
@@ -36,6 +38,7 @@ const WidgetEditor = () => {
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
+  const mode = useStoreState((state) => state.ui.mode)
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
   const showTable = useStoreState((state) => state.ui.showTable)
@@ -58,59 +61,62 @@ const WidgetEditor = () => {
 
   return (
     <>
-      <div className={classes.navigationSidebar}>
-        {
-          // something to exit?
-          showDataSourceControls || showTable ?
-            // show exit button
-            <IconButton
-              className={classes.tallButton}
-              color='secondary'
-              onClick={() => {
-                nestedUpdate({
-                  ui: {
-                    showTable: false,
-                    showDataSourceControls: false
-                  }
-                })
-              }} > <HighlightOffIcon /> </IconButton>
-            :
-            // show sidebar buttons
-            <>
-              <DefaultSidebarButton
-                onClick={() => alert('Not implemented')}
-                icon={SaveIcon}
-              />
-              {
-                !staticData &&
-                <IconButton
-                  color='secondary'
-                  onClick={() => nestedUpdate({ ui: { showDataSourceControls: !showDataSourceControls } })}
-                >
-                  <SettingsIcon />
-                </IconButton>
-              }
-              <DefaultSidebarButton
-                onClick={() =>
-                  nestedUpdate(showWidgetControls || showFilterControls ?
-                    { ui: { showWidgetControls: false, showFilterControls: false } }
-                    :
-                    { ui: { showWidgetControls: true, showFilterControls: true } }
-                  )
+      {
+        mode === modes.EDITOR &&
+        <div className={classes.navigationSidebar}>
+          {
+            // something to exit?
+            showDataSourceControls || showTable ?
+              // show exit button
+              <IconButton
+                className={classes.tallButton}
+                color='secondary'
+                onClick={() => {
+                  nestedUpdate({
+                    ui: {
+                      showTable: false,
+                      showDataSourceControls: false
+                    }
+                  })
+                }} > <HighlightOffIcon /> </IconButton>
+              :
+              // show sidebar buttons
+              <>
+                <DefaultSidebarButton
+                  onClick={() => alert('Not implemented')}
+                  icon={SaveIcon}
+                />
+                {
+                  !staticData &&
+                  <IconButton
+                    color='secondary'
+                    onClick={() => nestedUpdate({ ui: { showDataSourceControls: !showDataSourceControls } })}
+                  >
+                    <SettingsIcon />
+                  </IconButton>
                 }
-                icon={showWidgetControls || showFilterControls ? CropLandscapeIcon : ArtTrackIcon}
-              />
-              <DefaultSidebarButton
-                onClick={() => alert('Not implemented')}
-                icon={DownloadIcon}
-              />
-              <DefaultSidebarButton
-                onClick={() => alert('Not implemented')}
-                icon={ShareIcon}
-              />
-            </>
-        }
-      </div>
+                <DefaultSidebarButton
+                  onClick={() =>
+                    nestedUpdate(showWidgetControls || showFilterControls ?
+                      { ui: { showWidgetControls: false, showFilterControls: false } }
+                      :
+                      { ui: { showWidgetControls: true, showFilterControls: true } }
+                    )
+                  }
+                  icon={showWidgetControls || showFilterControls ? CropLandscapeIcon : ArtTrackIcon}
+                />
+                <DefaultSidebarButton
+                  onClick={() => alert('Not implemented')}
+                  icon={DownloadIcon}
+                />
+                <DefaultSidebarButton
+                  onClick={() => alert('Not implemented')}
+                  icon={ShareIcon}
+                />
+              </>
+          }
+        </div>
+      }
 
       {
         !staticData &&
@@ -132,38 +138,41 @@ const WidgetEditor = () => {
         </div>
       </div>
 
-      <div className={classes.filterControlsBar}>
-        <div className={classes.filterControlsBarTab}>
+      {
+        mode === modes.EDITOR &&
+        <div className={classes.filterControlsBar}>
+          <div className={classes.filterControlsBarTab}>
 
-          {
-            showFilterControls ?
-              <>
-                <Typography
-                  className={classes.filterControlsBarTabText}
-                  color='textSecondary'
-                  variant='subtitle1'
-                >
-                  Filters
-                </Typography>
+            {
+              showFilterControls ?
+                <>
+                  <Typography
+                    className={classes.filterControlsBarTabText}
+                    color='textSecondary'
+                    variant='subtitle1'
+                  >
+                    Filters
+                  </Typography>
+                  <IconButton
+                    onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
+                  >
+                    <KeyboardArrowDownIcon />
+                  </IconButton>
+                </>
+                :
                 <IconButton
+                  className={classes.wideButton}
                   onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
                 >
-                  <KeyboardArrowDownIcon />
+                  <FilterListIcon className={classes.wideButton} />
                 </IconButton>
-              </>
-              :
-              <IconButton
-                className={classes.wideButton}
-                onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
-              >
-                <FilterListIcon className={classes.wideButton} />
-              </IconButton>
-          }
+            }
+          </div>
+          <div className={showFilterControls ? classes.flex : classes.hidden} >
+            <FilterControls />
+          </div>
         </div>
-        <div className={showFilterControls ? classes.flex : classes.hidden} >
-          <FilterControls />
-        </div>
-      </div>
+      }
     </>
   )
 }

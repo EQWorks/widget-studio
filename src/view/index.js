@@ -11,6 +11,7 @@ import { Typography } from '@eqworks/lumen-ui'
 import { Chip, Loader } from '@eqworks/lumen-labs'
 
 import ResultsTable from './table'
+import modes from '../constants/modes'
 import { useStoreState, useStoreActions } from '../store'
 import styles from '../styles'
 import WidgetAdapter from './adapter'
@@ -46,7 +47,7 @@ const WidgetView = () => {
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
-  const editor = useStoreState((state) => state.ui.editor)
+  const mode = useStoreState((state) => state.ui.mode)
   const showTable = useStoreState((state) => state.ui.showTable)
   const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
@@ -128,7 +129,7 @@ const WidgetView = () => {
       <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
         <div className={!showTable
           ? classes.hidden
-          : editor
+          : mode !== modes.VIEW
             ? classes.table
             : ''
         }>
