@@ -70,6 +70,7 @@
     "postcss-cli": "^7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-frame-component": "^5.1.0",
     "react-query": "^3.19.0",
     "react-router-dom": "5.2.0",
     "size-limit": "^4.5.7",
