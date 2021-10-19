@@ -49,8 +49,8 @@ const WidgetControls = () => {
           <Loader open />
         </div>
       }
-      <div className={dataReady ? classes.hidden : classes.controlHeader}>
-        <Icons disabled={!columns.length || !dataReady} />
+      <div className={dataReady ? classes.controlHeader : classes.hidden}>
+        <Icons disabled={!columns.length} />
       </div>
       {dataReady && type && columns &&
         <div className={classes.controls}>

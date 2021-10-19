@@ -31,8 +31,8 @@ export const aggFuncDict = {
   sum: arr => arr.reduce((a, b) => a + b, 0),
   product: arr => arr.reduce((a, b) => a * b, 1),
   mean: arr => arr.reduce((p, c, i) => p + (c - p) / (i + 1), 0),
-  min: arr => Math.min(arr),
-  max: arr => Math.max(arr),
+  min: Math.min,
+  max: Math.max,
   count: arr => arr.filter(d => d || d === 0).length,
   unique: arr => (new Set(arr)).size
 }
@@ -52,8 +52,8 @@ const WidgetAdapter = () => {
   const { component, adapt } = useMemo(() => adapterDict[type], [type])
 
   // truncate the data when the filters change
-  const truncatedData = useMemo(() => {
-    return rows.filter(obj => {
+  const truncatedData = useMemo(() => (
+    rows.filter(obj => {
       for (const [key, [min, max]] of Object.entries(filters)) {
         if (obj[key] < min || obj[key] > max) {
           return false
@@ -61,7 +61,7 @@ const WidgetAdapter = () => {
       }
       return true
     })
-  }, [rows, filters])
+  ), [rows, filters])
 
   // if grouping enabled, memoize grouped and reorganized version of data that will be easy to aggregate
   const groupedData = useMemo(() => (
@@ -87,11 +87,11 @@ const WidgetAdapter = () => {
   const aggregatedData = useMemo(() => (
     group
       ? Object.entries(groupedData).map(([_groupKey, values]) => (
-        Object.entries(valueKeys).reduce((res, [_valueKey, { agg }]) => {
+        valueKeys.reduce((res, { key, agg }) => {
           if (!agg) {
             agg = 'sum'
           }
-          res[`${_valueKey}_${agg}`] = aggFuncDict[agg](values[_valueKey])
+          res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
           return res
         }, { [groupKey]: _groupKey })
       ))

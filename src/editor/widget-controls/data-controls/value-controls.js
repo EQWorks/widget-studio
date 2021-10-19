@@ -1,22 +1,18 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { aggOps } from './util/constants'
-import { useStoreState, useStoreActions } from '../../store'
-import {
-  PluralLinkedSelect,
-  Toggle,
-  WidgetControlCard as Card,
-  Dropdown,
-} from '../shared-components'
-import CustomSelect from '../shared-components/custom-select'
+import { aggFuncDict } from '../../../view/adapter'
+import { useStoreState, useStoreActions } from '../../../store'
+import CustomSelect from '../../shared-components/custom-select'
+import CustomToggle from '../../shared-components/custom-toggle'
+import PluralLinkedSelect from '../../shared-components/plural-linked-select'
+import WidgetControlCard from '../../shared-components/widget-control-card'
 
 
 const ValueControls = ({ groupingOptional }) => {
 
   // common actions
   const update = useStoreActions(actions => actions.update)
-  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
   const group = useStoreState((state) => state.group)
@@ -34,72 +30,75 @@ const ValueControls = ({ groupingOptional }) => {
 
   const toggleGroup = (val) => {
     update({ group: val })
-    update({ valueKeys: {} })
+    update({ valueKeys: [] })
   }
 
   const groupedValueKeysSelect =
     <PluralLinkedSelect
       titles={['Key', 'Aggregation']}
       values={valueKeys}
-      subKey='agg'
+      primaryKey='key'
+      secondaryKey='agg'
       data={numericColumns}
-      subData={groupKey ? aggOps : []}
-      update={(val) => nestedUpdate({ valueKeys: val })}
+      subData={groupKey ? Object.keys(aggFuncDict) : []}
+      callback={(i, val) => {
+        if (i === valueKeys.length) {
+          const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+          valueKeysCopy.push(val)
+          update({ valueKeys: valueKeysCopy })
+        } else {
+          update({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
+        }
+      }}
     />
+
   return (
     <>
       {
         groupingOptional ?
           <>
-            <Card
+            <WidgetControlCard
               title={group ? 'Group by' : 'Index by'}
               titleExtra={
-                <Toggle
+                <CustomToggle
                   value={group}
-                  update={toggleGroup} />
+                  callback={toggleGroup} />
               }
             >
-              <Dropdown
-                data={group ? stringColumns : numericColumns.filter(c => !(c in valueKeys))}
-                value={group ? groupKey : indexKey}
-                update={val => update(group ? { groupKey: val } : { indexKey: val })}
+              <CustomSelect
+                data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
+                chosenValue={group ? groupKey : indexKey}
+                setChosenValue={val => update(group ? { groupKey: val } : { indexKey: val })}
               />
-            </Card>
-            <Card title='Value Keys'>
+            </WidgetControlCard>
+            <WidgetControlCard title='Value Keys'>
               {
                 group ?
                   groupedValueKeysSelect
                   :
                   <CustomSelect
                     multi
-                    chosenValue={Object.keys(valueKeys)}
+                    chosenValue={valueKeys.map(({ key }) => key)}
                     data={numericColumns.filter(c => c !== indexKey)}
                     setChosenValue={(val) =>
-                      update({
-                        valueKeys: {
-                          // keep all entries that haven't been removed
-                          ...Object.fromEntries(Object.entries(valueKeys).filter(([k]) => val.includes(k))),
-                          // add any entries that don't exist yet
-                          ...Object.fromEntries(val.filter(k => !(k in valueKeys)).map(k => ([k, { agg: null }])))
-                        }
-                      })
+                      update({ valueKeys: val.map(v => ({ key: v })) })
                     }
                   />
               }
-            </Card>
+            </WidgetControlCard>
           </>
           :
           <>
-            <Card title='Group by' >
-              <Dropdown
+            <WidgetControlCard title='Group by' >
+              <CustomSelect
                 data={stringColumns}
-                value={groupKey}
-                update={val => update({ groupKey: val })}
+                chosenValue={groupKey}
+                setChosenValue={val => update({ groupKey: val })}
               />
-            </Card>
-            <Card title='Value keys' >
+            </WidgetControlCard>
+            <WidgetControlCard title='Value keys' >
               {groupedValueKeysSelect}
-            </Card>
+            </WidgetControlCard>
           </>
       }
     </>

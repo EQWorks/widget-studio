@@ -10,7 +10,7 @@ export default {
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
       x: config.groupKey,
-      y: Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`)),
+      y: config.valueKeys.map(({ key, agg }) => (`${key}_${agg}`)),
       ...options,
       ...genericOptions
     })
@@ -20,7 +20,7 @@ export default {
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
       x: config.group ? config.groupKey : config.indexKey,
-      y: config.group ? Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`)) : Object.keys(config.valueKeys),
+      y: config.valueKeys.map(({ key, agg }) => config.group ? `${key}_${agg}` : key),
       ...options,
       ...genericOptions
     })
@@ -30,7 +30,7 @@ export default {
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
       label: config.groupKey,
-      values: Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`)),
+      values: config.valueKeys.map(({ key, agg }) => (`${key}_${agg}`)),
       ...options,
       ...genericOptions
     })
@@ -40,7 +40,7 @@ export default {
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
       x: config.group ? config.groupKey : config.indexKey,
-      y: config.group ? Object.entries(config.valueKeys).map(([k, { agg }]) => (`${k}_${agg}`)) : Object.keys(config.valueKeys),
+      y: config.valueKeys.map(({ key, agg }) => config.group ? `${key}_${agg}` : key),
       ...options,
       ...genericOptions
     })

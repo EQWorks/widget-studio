@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { useStoreState, useStoreActions } from '../../../store'
-import {
-  Toggle,
-  WidgetControlCard as Card,
-} from '../../shared-components'
+import { useStoreState, useStoreActions } from '../../store'
+import CustomToggle from '../shared-components/custom-toggle'
+import WidgetControlCard from '../shared-components/widget-control-card'
 
 
 const GenericOptionControls = () => {
@@ -17,14 +15,14 @@ const GenericOptionControls = () => {
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
 
   return (
-    <Card title='Options'>
-      <Toggle
+    <WidgetControlCard title='Options'>
+      <CustomToggle
         value={subPlots}
         label='Subplots'
-        update={(val) => nestedUpdate({ genericOptions: { subPlots: val } })}
-        disabled={Object.keys(valueKeys).length <= 1}
+        callback={(val) => nestedUpdate({ genericOptions: { subPlots: val } })}
+        disabled={valueKeys.length <= 1}
       />
-    </Card>
+    </WidgetControlCard>
   )
 }
 

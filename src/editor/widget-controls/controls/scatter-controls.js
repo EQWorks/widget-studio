@@ -1,12 +1,10 @@
 import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../../store'
-import {
-  Dropdown,
-  Toggle,
-  WidgetControlCard as Card,
-} from '../../shared-components'
-import { ValueControls } from '../../data-controls'
+import CustomSelect from '../../shared-components/custom-select'
+import CustomToggle from '../../shared-components/custom-toggle'
+import WidgetControlCard from '../../shared-components/widget-control-card'
+import ValueControls from '../data-controls/value-controls'
 
 
 const ScatterControls = () => {
@@ -31,27 +29,27 @@ const ScatterControls = () => {
 
       {
         !groupKey &&
-        <Card title={'X Key'}>
-          <Dropdown
+        <WidgetControlCard title={'X Key'}>
+          <CustomSelect
             data={stringColumns.concat(numericColumns)}
-            value={indexKey}
-            update={val => update({ indexKey: val })}
+            chosenValue={indexKey}
+            setChosenValue={val => update({ indexKey: val })}
           />
-        </Card>
+        </WidgetControlCard>
       }
 
-      <Card title='Styling'>
-        <Toggle
+      <WidgetControlCard title='Styling'>
+        <CustomToggle
           value={showTicks}
           label='Show ticks'
-          update={(val) => nestedUpdate({ options: { showTicks: val } })}
+          callback={(val) => nestedUpdate({ options: { showTicks: val } })}
         />
-        <Toggle
+        <CustomToggle
           value={showLines}
           label='Show lines'
-          update={(val) => nestedUpdate({ scatter: { showLines: val } })}
+          callback={(val) => nestedUpdate({ scatter: { showLines: val } })}
         />
-      </Card>
+      </WidgetControlCard>
     </>
   )
 }

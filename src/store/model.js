@@ -30,7 +30,7 @@ const stateDefaults = {
   group: false,
   groupKey: null,
   indexKey: null,
-  valueKeys: {},
+  valueKeys: [],
   options: {},
   genericOptions: {
     subPlots: false,
@@ -119,7 +119,7 @@ export default {
       type,
       valueKeys,
     ) => (
-      Boolean(type && columns.length && rows.length && Object.keys(valueKeys).length)
+      Boolean(type && columns.length && rows.length && valueKeys.length)
     )),
 
 
