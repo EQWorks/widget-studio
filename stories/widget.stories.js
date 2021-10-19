@@ -3,8 +3,8 @@ import { storiesOf } from '@storybook/react'
 
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
-import WidgetControlCard from '../src/editor/shared-components/custom-toggle'
-import CustomToggle from '../src/editor/shared-components/widget-control-card'
+import WidgetControlCard from '../src/editor/shared-components/widget-control-card'
+import CustomToggle from '../src/editor/shared-components/custom-toggle'
 
 
 storiesOf('Dashboard-esque example')
