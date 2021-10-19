@@ -51,7 +51,7 @@ ToggleableCard.propTypes = {
 }
 
 ToggleableCard.defaultProps = {
-  altTitle: '',
+  altTitle: null,
   children: [],
   init: true,
   title: '',
