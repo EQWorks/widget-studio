@@ -1,5 +1,6 @@
 import React from 'react'
 
+import modes from '../../../constants/modes'
 import { useStoreState, useStoreActions } from '../../../store'
 // import { getPieChartData, sum } from './utils'
 import CustomToggle from '../../shared-components/custom-toggle'
@@ -18,28 +19,36 @@ const PieControls = () => {
   const showPercentage = useStoreState((state) => state.options.showPercentage)
   const showLegend = useStoreState((state) => state.options.showLegend)
 
+  // ui state
+  const mode = useStoreState((state) => state.ui.mode)
+
   return (
     <>
       <ValueControls groupingOptional={false} />
-      <GenericOptionControls />
 
-      <WidgetControlCard title='Styling'>
-        <CustomToggle
-          value={donut}
-          label='Donut'
-          callback={(val) => nestedUpdate({ options: { donut: val } })}
-        />
-        <CustomToggle
-          value={showPercentage}
-          label='Show Percentage'
-          callback={(val) => nestedUpdate({ options: { showPercentage: val } })}
-        />
-        <CustomToggle
-          value={showLegend}
-          label='Show Legend'
-          callback={(val) => nestedUpdate({ options: { showLegend: val } })}
-        />
-      </WidgetControlCard>
+      {
+        mode === modes.EDITOR &&
+        <>
+          <GenericOptionControls />
+          <WidgetControlCard title='Styling'>
+            <CustomToggle
+              value={donut}
+              label='Donut'
+              callback={(val) => nestedUpdate({ options: { donut: val } })}
+            />
+            <CustomToggle
+              value={showPercentage}
+              label='Show Percentage'
+              callback={(val) => nestedUpdate({ options: { showPercentage: val } })}
+            />
+            <CustomToggle
+              value={showLegend}
+              label='Show Legend'
+              callback={(val) => nestedUpdate({ options: { showLegend: val } })}
+            />
+          </WidgetControlCard>
+        </>
+      }
     </>
   )
 }

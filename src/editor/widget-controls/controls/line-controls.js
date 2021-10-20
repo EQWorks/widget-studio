@@ -1,5 +1,6 @@
 import React from 'react'
 
+import modes from '../../../constants/modes'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomToggle from '../../shared-components/custom-toggle'
 import WidgetControlCard from '../../shared-components/widget-control-card'
@@ -16,23 +17,31 @@ const LineControls = () => {
   const spline = useStoreState((state) => state.options.spline)
   const showTicks = useStoreState((state) => state.options.showTicks)
 
+  // ui state
+  const mode = useStoreState((state) => state.ui.mode)
+
   return (
     <>
       <ValueControls />
-      <GenericOptionControls />
 
-      <WidgetControlCard title='Styling'>
-        <CustomToggle
-          value={spline}
-          label='Spline interpolation'
-          callback={(val) => nestedUpdate({ options: { spline: val } })}
-        />
-        <CustomToggle
-          value={showTicks}
-          label='Show ticks'
-          callback={(val) => nestedUpdate({ options: { showTicks: val } })}
-        />
-      </WidgetControlCard>
+      {
+        mode === modes.EDITOR &&
+        <>
+          <GenericOptionControls />
+          <WidgetControlCard title='Styling'>
+            <CustomToggle
+              value={spline}
+              label='Spline interpolation'
+              callback={(val) => nestedUpdate({ options: { spline: val } })}
+            />
+            <CustomToggle
+              value={showTicks}
+              label='Show ticks'
+              callback={(val) => nestedUpdate({ options: { showTicks: val } })}
+            />
+          </WidgetControlCard>
+        </>
+      }
     </>
   )
 }
