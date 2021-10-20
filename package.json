@@ -68,6 +68,7 @@
     "lodash.merge": "^4.6.2",
     "postcss": "^7",
     "postcss-cli": "^7",
+    "re-resizable": "^6.9.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-query": "^3.19.0",
