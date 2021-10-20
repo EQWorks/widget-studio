@@ -59,6 +59,58 @@ const WidgetEditor = () => {
     icon: PropTypes.elementType.isRequired
   }
 
+  const renderSidebarButtons =
+    <>
+      <DefaultSidebarButton
+        onClick={() => alert('Not implemented')}
+        icon={SaveIcon}
+      />
+      {
+        !staticData &&
+        <IconButton
+          color='secondary'
+          onClick={() => nestedUpdate({ ui: { showDataSourceControls: !showDataSourceControls } })}
+        >
+          <SettingsIcon />
+        </IconButton>
+      }
+      <DefaultSidebarButton
+        onClick={() =>
+          nestedUpdate(showWidgetControls || showFilterControls ?
+            { ui: { showWidgetControls: false, showFilterControls: false } }
+            :
+            { ui: { showWidgetControls: true, showFilterControls: true } }
+          )
+        }
+        icon={showWidgetControls || showFilterControls ? CropLandscapeIcon : ArtTrackIcon}
+      />
+      <DefaultSidebarButton
+        onClick={() => alert('Not implemented')}
+        icon={DownloadIcon}
+      />
+      <DefaultSidebarButton
+        onClick={() => alert('Not implemented')}
+        icon={ShareIcon}
+      />
+    </>
+
+
+  const renderFilterControlsContainer =
+    <>
+      <Typography
+        className={classes.filterControlsBarTabText}
+        color='textSecondary'
+        variant='subtitle1'
+      >
+        Filters
+      </Typography>
+      <IconButton
+        onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
+      >
+        <KeyboardArrowDownIcon />
+      </IconButton>
+    </>
+
   return (
     <>
       {
@@ -66,9 +118,11 @@ const WidgetEditor = () => {
         <div className={classes.navigationSidebar}>
           {
             // something to exit?
-            showDataSourceControls || showTable ?
+            !showDataSourceControls && !showTable
+              // show sidebar buttons
+              ? renderSidebarButtons
               // show exit button
-              <IconButton
+              : <IconButton
                 className={classes.tallButton}
                 color='secondary'
                 onClick={() => {
@@ -79,41 +133,6 @@ const WidgetEditor = () => {
                     }
                   })
                 }} > <HighlightOffIcon /> </IconButton>
-              :
-              // show sidebar buttons
-              <>
-                <DefaultSidebarButton
-                  onClick={() => alert('Not implemented')}
-                  icon={SaveIcon}
-                />
-                {
-                  !staticData &&
-                  <IconButton
-                    color='secondary'
-                    onClick={() => nestedUpdate({ ui: { showDataSourceControls: !showDataSourceControls } })}
-                  >
-                    <SettingsIcon />
-                  </IconButton>
-                }
-                <DefaultSidebarButton
-                  onClick={() =>
-                    nestedUpdate(showWidgetControls || showFilterControls ?
-                      { ui: { showWidgetControls: false, showFilterControls: false } }
-                      :
-                      { ui: { showWidgetControls: true, showFilterControls: true } }
-                    )
-                  }
-                  icon={showWidgetControls || showFilterControls ? CropLandscapeIcon : ArtTrackIcon}
-                />
-                <DefaultSidebarButton
-                  onClick={() => alert('Not implemented')}
-                  icon={DownloadIcon}
-                />
-                <DefaultSidebarButton
-                  onClick={() => alert('Not implemented')}
-                  icon={ShareIcon}
-                />
-              </>
           }
         </div>
       }
@@ -142,23 +161,9 @@ const WidgetEditor = () => {
         mode === modes.EDITOR &&
         <div className={classes.filterControlsBar}>
           <div className={classes.filterControlsBarTab}>
-
             {
-              showFilterControls ?
-                <>
-                  <Typography
-                    className={classes.filterControlsBarTabText}
-                    color='textSecondary'
-                    variant='subtitle1'
-                  >
-                    Filters
-                  </Typography>
-                  <IconButton
-                    onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
-                  >
-                    <KeyboardArrowDownIcon />
-                  </IconButton>
-                </>
+              showFilterControls
+                ? renderFilterControlsContainer
                 :
                 <IconButton
                   className={classes.wideButton}
