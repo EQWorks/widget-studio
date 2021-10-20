@@ -1,7 +1,7 @@
 const modes = {
   EDITOR: 'editor',
   QL: 'ql',
-  VIEW: 'view'
+  VIEW: 'view_only'
 }
 
 export default modes

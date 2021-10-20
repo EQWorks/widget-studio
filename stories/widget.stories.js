@@ -73,6 +73,6 @@ storiesOf('Incorrect usage')
 
   .add('View-mode widget without ID', () => (
     <Widget
-      mode='view'
+      mode='view_only'
     />
   ))
