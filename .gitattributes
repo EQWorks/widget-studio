@@ -1,0 +1,2 @@
+# override generated tailwind CSS file so the repo is not assessed to be 99% CSS
+src/styles/index.css linguist-generated
