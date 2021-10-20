@@ -47,14 +47,14 @@ export default {
     return {
       ...this.outerContainer,
       gridTemplateColumns: '1fr',
-      gridTemplateRows: '1fr',
+      gridTemplateRows: 'min-content auto',
     }
   },
   get outerContainerQLMode() {
     return {
       ...this.outerContainer,
       gridTemplateColumns: '1fr',
-      gridTemplateRows: '1fr',
+      gridTemplateRows: 'min-content 1fr',
     }
   },
   mainContainer: {
