@@ -44,14 +44,14 @@ const ToggleableCard = ({ init, callback, title, altTitle, children }) => {
 
 ToggleableCard.propTypes = {
   altTitle: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.elementType, PropTypes.array]),
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
   init: PropTypes.bool,
   title: PropTypes.string,
   callback: PropTypes.func.isRequired
 }
 
 ToggleableCard.defaultProps = {
-  altTitle: '',
+  altTitle: null,
   children: [],
   init: true,
   title: '',

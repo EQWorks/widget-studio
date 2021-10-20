@@ -5,6 +5,7 @@ import CustomSelect from '../../shared-components/custom-select'
 import CustomToggle from '../../shared-components/custom-toggle'
 import WidgetControlCard from '../../shared-components/widget-control-card'
 import ValueControls from '../data-controls/value-controls'
+import GenericOptionControls from '../generic-option-controls'
 
 
 const ScatterControls = () => {
@@ -26,6 +27,7 @@ const ScatterControls = () => {
   return (
     <>
       <ValueControls />
+      <GenericOptionControls />
 
       {
         !groupKey &&

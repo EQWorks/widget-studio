@@ -1232,10 +1232,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/chart-system@^0.6.1":
-  version "0.6.1"
-  resolved "https://npm.pkg.github.com/download/@eqworks/chart-system/0.6.1/444f1febe6ba2d3cbb229f76c302b707f01463a202a94478bb9cd1f7dd43132f#f3bc2ce3a642c273035d19451e26cb0d44209b3b"
-  integrity sha512-L7XM91bZtz9bKuKkTX/xkj7cgCqY7RuktEZeKEg5znXM63Qa2liH05isHHwwqIEy4OOIypU8H2Y0JEFpCd8pmw==
+"@eqworks/chart-system@^0.6.2":
+  version "0.6.2"
+  resolved "https://npm.pkg.github.com/download/@eqworks/chart-system/0.6.2/2050e5f50dc0358875624e58999446ffb6efb0bb842ee3e39440179232d43d57#aaccb1b625989da25f6473686099ed1219d121f7"
+  integrity sha512-5EQdAYZTOJ5cZxcmOfDEMfXaBYo8UH+vdMURhne8+e3i8hKXm5UB2JVUlBzS0uaCqe2osN04FMJT05vBUgru4g==
   dependencies:
     "@nivo/bar" "^0.62.0"
     "@nivo/core" "^0.62.0"

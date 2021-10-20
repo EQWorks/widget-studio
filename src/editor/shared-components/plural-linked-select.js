@@ -10,7 +10,7 @@ import styles from '../styles'
 
 const useStyles = makeStyles(styles)
 
-const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, subData, callback }) => {
+const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, subData, callback, deleteCallback }) => {
 
   const classes = useStyles()
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
@@ -43,6 +43,8 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
               init={v[primaryKey]}
               subData={subData}
               subInit={v[secondaryKey]}
+              deletable
+              deleteCallback={() => deleteCallback(i)}
             />
           )
         })
@@ -66,6 +68,7 @@ PluralLinkedSelect.propTypes = {
   secondaryKey: PropTypes.string.isRequired,
   titles: PropTypes.arrayOf(PropTypes.string),
   callback: PropTypes.func.isRequired,
+  deleteCallback: PropTypes.func.isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 

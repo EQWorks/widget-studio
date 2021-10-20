@@ -42,6 +42,7 @@ export default {
     display: 'flex',
     flexDirection: 'row',
     flex: 1,
+    alignItems: 'center'
   },
   controlCardHeader: {
     alignSelf: 'flex-start',

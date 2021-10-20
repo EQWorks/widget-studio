@@ -32,7 +32,9 @@ export default {
       label: config.groupKey,
       values: config.valueKeys.map(({ key, agg }) => (`${key}_${agg}`)),
       ...options,
-      ...genericOptions
+      ...genericOptions,
+      // overrides
+      subPlots: true
     })
   },
   scatter: {
