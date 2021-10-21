@@ -79,10 +79,12 @@
   },
   "dependencies": {
     "@eqworks/chart-system": "^0.6.2",
+    "@eqworks/react-maps": "^0.7.5-alpha.1",
     "axios": "^0.20.0",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "react-resize-detector": "^6.7.6"
   },
   "size-limit": [
     {
