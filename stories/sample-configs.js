@@ -158,4 +158,31 @@ export default {
       'subPlots': false,
     },
   },
+  'map-1': {
+    'title': 'My example map widget',
+    'type': 'map',
+    'filters': { 'visits': [0, 100] },
+    'valueKeys': [
+      {
+        'key': 'visits',
+        'agg': 'sum',
+        'map_vis': 'radius',
+      },
+      {
+        'key': 'unique_visitors',
+        'agg': 'sum',
+        'map_vis': 'fill',
+      },
+    ],
+    'group': true,
+    'groupKey': 'poi_name',
+    'dataSource': {
+      'type': 'Execution',
+      'id': '913',
+    },
+    'options': {
+      'showTooltip': true,
+      'showLegend': true,
+    },
+  },
 }
