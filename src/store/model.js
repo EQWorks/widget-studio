@@ -2,6 +2,8 @@ import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
+import { geoKeyHasCoordinates } from '../util'
+import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
 
 const widgetDefaults = {
@@ -22,6 +24,10 @@ const widgetDefaults = {
     showTicks: true,
     showLines: false,
   },
+  map: {
+    showTooltip: true,
+    showLegend: true,
+  },
 }
 
 const stateDefaults = [
@@ -32,8 +38,10 @@ const stateDefaults = [
   { key: 'group', defaultValue: false, resettable: true },
   { key: 'groups', defaultValue: [], resettable: true },
   { key: 'groupKey', defaultValue: null, resettable: true },
+  { key: 'mapGroupKey', defaultValue: null, resettable: true },
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
+  { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'renderableValueKeys', defaultValue: [], resettable: true },
   { key: 'options', defaultValue: {}, resettable: true },
   {
@@ -56,9 +64,12 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
-  { key: 'dataHasVariance', defaultValue: true, resettable: false },
+  { key: 'zeroVarianceColumns', defaultValue: [], resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
   { key: 'numericColumns', defaultValue: [], resettable: false },
+  { key: 'validMapGroupKeys', defaultValue: [], resettable: false },
+  // determines to use postal code geo key to aggregate by FSA
+  { key: 'groupFSAbyPC', defaultValue: false, resettable: false },
   {
     key: 'ui',
     defaultValue: {
@@ -98,6 +109,7 @@ export default {
       (state) => state.filters,
       (state) => state.group,
       (state) => state.groupKey,
+      (state) => state.mapGroupKey,
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
       (state) => state.genericOptions,
@@ -112,6 +124,7 @@ export default {
       filters,
       group,
       groupKey,
+      mapGroupKey,
       indexKey,
       renderableValueKeys,
       genericOptions,
@@ -125,9 +138,11 @@ export default {
           title,
           type,
           filters,
-          valueKeys: renderableValueKeys,
+          valueKeys: type !== 'map' ? renderableValueKeys : [],
+          mapValueKeys: type === 'map' ? renderableValueKeys : [],
           group,
           groupKey,
+          mapGroupKey,
           indexKey,
           ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
           ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
@@ -138,27 +153,78 @@ export default {
         : undefined
     )),
 
+  numericColumns: computed(
+    [(state) => state.columns],
+    (columns) => (
+      columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name)
+    )
+  ),
+
+  stringColumns: computed(
+    [(state) => state.columns],
+    (columns) => (
+      columns.filter(({ category }) => category === 'String').map(({ name }) => name)
+    )
+  ),
+
+  validMapGroupKeys: computed(
+    [
+      (state) => state.columns,
+      (state) => state.numericColumns,
+    ],
+    (columns, numericColumns) => {
+      const dataGeoKeys = columns.filter(({ name }) =>
+        MAP_GEO_KEYS.includes(name) && geoKeyHasCoordinates(name, numericColumns))
+        .map(({ name }) => name)
+      // BEFORE MERGING - replace this with the commented lines below; this is just for demonstration
+      // this allows grouping by FSA when postal code key is present in the data object but no FSA
+      if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key))) {
+      // if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key)) &&
+      // !dataGeoKeys.some(key => GEO_KEY_TYPES.fsa.includes(key))) {
+        // add an artificial geo_ca_fsa key to the validMapGroupKeys if we have postalcode key but no FSA
+        dataGeoKeys.push('geo_ca_fsa')
+      }
+      return dataGeoKeys
+    }
+  ),
+
+  groupFSAByPC: computed(
+    [
+      (state) => state.mapGroupKey,
+      (state) => state.columns,
+    ],
+    (mapGroupKey, columns) => {
+      return  GEO_KEY_TYPES.fsa.includes(mapGroupKey) && !columns.map(({ name }) => name).includes(mapGroupKey)
+    }
+  ),
+
   renderableValueKeys: computed(
     [
       (state) => state.valueKeys,
+      (state) => state.mapValueKeys,
       (state) => state.group,
+      (state) => state.type,
+      (state) => state.zeroVarianceColumns,
       (state) => state.formattedColumnNames,
     ],
     (
       valueKeys,
+      mapValueKeys,
       group,
-      formattedColumnNames,
+      type,
+      zeroVarianceColumns,
+      formattedColumnNames
     ) => (
-      valueKeys
-        .filter(({ key, agg }) => key && (agg || !group)
-        )
-        .map(({ key, agg, ...rest }) => ({
-          key,
-          title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}` || key,
-          ...(agg && { agg }),
-          ...rest,
-        })
-        )
+      type === 'map'
+        ? mapValueKeys.filter(({ key, agg }) => key && (agg || zeroVarianceColumns.includes(key)))
+        : valueKeys
+          .filter(({ key, agg }) => key && (agg || !group))
+          .map(({ key, agg, ...rest }) => ({
+            key,
+            title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}` || key,
+            ...(agg && { agg }),
+            ...rest,
+          }))
     )
   ),
 
@@ -182,6 +248,7 @@ export default {
       (state) => state.renderableValueKeys,
       (state) => state.indexKey,
       (state) => state.groupKey,
+      (state) => state.mapGroupKey,
     ],
     (
       rows,
@@ -190,10 +257,16 @@ export default {
       renderableValueKeys,
       indexKey,
       groupKey,
+      mapGroupKey,
     ) => (
-      Boolean(type && columns.length && rows.length && (indexKey || groupKey) && renderableValueKeys.length)
+      Boolean(type && columns.length && rows.length &&
+        (
+          type === 'map'
+            ? renderableValueKeys.length && mapGroupKey
+            : renderableValueKeys.length && (indexKey || groupKey)
+        )
+      )
     )),
-
 
   dataReady: computed(
     [
@@ -302,9 +375,11 @@ export default {
   // reset all shared and unique states except data source and data ID
   resetWidget: action((state) => ({
     ...state,
-    options: widgetDefaults[state.type],
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
+    options: widgetDefaults[state.type],
+    // map widget doesn't have a switch to change group state, so we have to keep it true here
+    group: state.type === 'map' ? true : state.group,
   })),
 
   // on reset, set a 5 second timer during which reset cannot be re-enabled

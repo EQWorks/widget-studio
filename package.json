@@ -81,6 +81,7 @@
     "@eqworks/chart-system": "0.6.3-alpha.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@react-hook/resize-observer": "^1.2.4",
+    "@eqworks/react-maps": "0.7.5-alpha.4",
     "axios": "^0.20.0",
     "clsx": "^1.1.1",
     "easy-peasy": "^5.0.3",
