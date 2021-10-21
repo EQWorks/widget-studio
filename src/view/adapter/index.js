@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
+import MapAdapter from './adapters/map'
+
 
 // declare which adapter handles each widget type
 const adapterDict = {
@@ -10,6 +12,7 @@ const adapterDict = {
   pie: PlotlyAdapters.pie,
   scatter: PlotlyAdapters.scatter,
   line: PlotlyAdapters.line,
+  map: MapAdapter,
 }
 
 // validate each used adapter according to { component, adapt } schema
@@ -37,8 +40,7 @@ export const aggFuncDict = {
   unique: arr => (new Set(arr)).size,
 }
 
-const WidgetAdapter = () => {
-
+const WidgetAdapter = ({ width, height }) => {
   const rows = useStoreState((state) => state.rows)
   const type = useStoreState((state) => state.type)
   const filters = useStoreState((state) => state.filters)
@@ -86,17 +88,30 @@ const WidgetAdapter = () => {
   // if grouping enabled, aggregate each column from valueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
-      ? Object.entries(groupedData).map(([_groupKey, values]) => (
-        valueKeys.reduce((res, { key, agg }) => {
+      ? Object.entries(groupedData).map(([_groupKey, values]) => {
+        let aggValueKeys = valueKeys.reduce((res, { key, agg }) => {
           if (!agg) {
             agg = 'sum'
           }
-          res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
+          // key can be '' for map widget
+          if(key) {
+            res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
+          }
           return res
         }, { [groupKey]: _groupKey })
-      ))
+        //---TODO - Erika: refactor this to include all types of coord keys
+        // add coordinates for map widget data
+        if (type === 'map' && groupedData[_groupKey].lat?.length && groupedData[_groupKey].lon?.length) {
+          aggValueKeys = {
+            ...aggValueKeys,
+            lat: groupedData[_groupKey].lat[0],
+            lon: groupedData[_groupKey].lon[0],
+          }
+        }
+        return aggValueKeys
+      })
       : null
-  ), [group, groupKey, groupedData, valueKeys])
+  ), [group, groupKey, groupedData, valueKeys, type])
 
   // simply sort the data if grouping is not enabled
   const indexedData = useMemo(() => (
@@ -116,7 +131,17 @@ const WidgetAdapter = () => {
   const adaptedDataAndConfig = useMemo(() => adapt(finalData ?? [], config), [adapt, config, finalData])
 
   // render the component
-  return createElement(component, adaptedDataAndConfig)
+  return createElement(component, { width, height, ...adaptedDataAndConfig })
 }
 
 export default WidgetAdapter
+
+WidgetAdapter.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+}
+
+WidgetAdapter.defaultProps = {
+  width: 0,
+  height: 0,
+}
