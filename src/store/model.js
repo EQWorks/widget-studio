@@ -21,6 +21,10 @@ const widgetDefaults = {
     showTicks: true,
     showLines: false,
   },
+  map: {
+    showTooltip: true,
+    showLegend: true,
+  },
 }
 
 const stateDefaults = {
