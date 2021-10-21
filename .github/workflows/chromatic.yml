@@ -45,6 +45,7 @@ jobs:
           STORYBOOK_API_STAGE: "dev"
           STORYBOOK_KEY_WARDEN_HOST: "https://auth.eqworks.io"
           STORYBOOK_KEY_WARDEN_STAGE: "dev"
+          STORYBOOK_MAPBOX_ACCESS_TOKEN: ${{ secrets.STORYBOOK_MAPBOX_ACCESS_TOKEN }}
 
   storybook-pr-comment:
     needs: chromatic-deployment
