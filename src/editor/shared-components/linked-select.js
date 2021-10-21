@@ -9,8 +9,18 @@ import styles from '../styles'
 
 
 const useStyles = makeStyles(styles)
-const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData, subInit, controlled }) => {
 
+const LinkedSelect = ({
+  deletable,
+  deleteCallback,
+  callback,
+  data,
+  init,
+  subData,
+  subInit,
+  controlled,
+  type,
+}) => {
   const classes = useStyles()
 
   const [choice, setChoice] = useState(init)
@@ -46,13 +56,21 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
         />
       </div>
       {deletable &&
-        <IconButton onClick={deleteCallback}>
+        <IconButton onClick={type === 'map' ?
+          () => {
+            deleteCallback()
+            setChoice('')
+            setSubChoice('')
+          } :
+          deleteCallback}
+        >
           <Delete />
         </IconButton>
       }
     </div>
   )
 }
+
 LinkedSelect.propTypes = {
   deletable: PropTypes.bool,
   deleteCallback: PropTypes.func,
@@ -62,6 +80,7 @@ LinkedSelect.propTypes = {
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   init: PropTypes.string,
   subInit: PropTypes.string,
+  type: PropTypes.string,
 }
 
 LinkedSelect.defaultProps = {
@@ -70,6 +89,7 @@ LinkedSelect.defaultProps = {
   controlled: true,
   init: '',
   subInit: '',
+  type: '',
 }
 
 export default LinkedSelect
