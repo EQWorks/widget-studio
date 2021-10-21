@@ -10,8 +10,8 @@ const useStyles = makeStyles({
   mapWrapper: (props) => ({
     position: 'absolute',
     width: props.width - 10,
-    height: props.height - 10,
-    margin: '5px',
+      height: props.height ? props.height - 10 : '10px',
+      margin: '5px',
   }),
 })
 
