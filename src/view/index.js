@@ -9,6 +9,7 @@ import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 import TimelineIcon from '@material-ui/icons/Timeline'
 import { Typography } from '@eqworks/lumen-ui'
 import { Chip, Loader } from '@eqworks/lumen-labs'
+import { useResizeDetector } from 'react-resize-detector'
 
 import ResultsTable from './table'
 import modes from '../constants/modes'
@@ -28,7 +29,7 @@ const icons = {
 }
 
 const WidgetView = () => {
-
+  const { width, height, ref } = useResizeDetector({})
   const classes = useStyles()
 
   // store actions
@@ -102,7 +103,6 @@ const WidgetView = () => {
             }
           </div>
         </div>
-
         {
           dataReady &&
           <>
@@ -135,13 +135,12 @@ const WidgetView = () => {
         }>
           <ResultsTable results={rows} />
         </div>
-        <div className={showTable ? classes.hidden : classes.widgetContainer}>
+        <div className={showTable ? classes.hidden : classes.widgetContainer} ref={ref}>
           {
-
             // config object ready?
             isReady ?
               // render widget
-              <WidgetAdapter />
+              <WidgetAdapter {...{ width, height }} />
               :
               // guide the user to configure the widget
               <div className={classes.warningContainer}>
