@@ -6,6 +6,8 @@ import useTransformedData from '../../hooks/use-transformed-data'
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 import { useResizeDetector } from 'react-resize-detector'
+import MapAdapter from './adapters/map'
+
 
 // declare which adapter handles each widget type
 const adapterDict = {
@@ -13,6 +15,7 @@ const adapterDict = {
   pie: PlotlyAdapters.pie,
   scatter: PlotlyAdapters.scatter,
   line: PlotlyAdapters.line,
+  map: MapAdapter,
 }
 
 // validate each used adapter according to { component, adapt } schema
@@ -97,10 +100,20 @@ const WidgetAdapter = () => {
           'opacity-1': !hide,
         })}
       >
-        {createElement(component, adaptedDataAndConfig)}
+        {createElement(component, { width: delayedSize.width, height: delayedSize.height, ...adaptedDataAndConfig })}
       </div>
     </div>
   )
 }
 
 export default WidgetAdapter
+
+WidgetAdapter.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+}
+
+WidgetAdapter.defaultProps = {
+  width: 0,
+  height: 0,
+}
