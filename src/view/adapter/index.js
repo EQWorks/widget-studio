@@ -6,6 +6,8 @@ import { makeStyles } from '@eqworks/lumen-labs'
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 
+import MapAdapter from './adapters/map'
+
 
 const classes = makeStyles({
   container: {
@@ -20,6 +22,7 @@ const adapterDict = {
   pie: PlotlyAdapters.pie,
   scatter: PlotlyAdapters.scatter,
   line: PlotlyAdapters.line,
+  map: MapAdapter,
 }
 
 // validate each used adapter according to { component, adapt } schema
@@ -56,3 +59,13 @@ const WidgetAdapter = () => {
 }
 
 export default WidgetAdapter
+
+WidgetAdapter.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+}
+
+WidgetAdapter.defaultProps = {
+  width: 0,
+  height: 0,
+}
