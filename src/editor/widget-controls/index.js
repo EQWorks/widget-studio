@@ -10,9 +10,11 @@ import BarControls from './controls/bar-controls'
 import PieControls from './controls/pie-controls'
 import LineControls from './controls/line-controls'
 import ScatterControls from './controls/scatter-controls'
+import MapControls from './controls/map-controls'
 
 import Icons from './icons'
 import styles from '../styles'
+import { coordKeys } from '../../constants'
 
 
 const controls = {
@@ -20,6 +22,7 @@ const controls = {
   line: LineControls,
   pie: PieControls,
   scatter: ScatterControls,
+  map: MapControls,
 }
 
 // put styles in separate file for readability
@@ -37,7 +40,9 @@ const WidgetControls = () => {
   const dataReady = useStoreState((state) => state.dataReady)
 
   useEffect(() => {
-    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
+    update({ numericColumns: columns.filter(({ category, name }) =>
+      category === 'Numeric' && !coordKeys.some(key => name.includes(key)))
+      .map(({ name }) => name) })
     update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
   }, [columns, update])
 
