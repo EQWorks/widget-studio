@@ -44,6 +44,12 @@ export default {
     flex: 1,
     alignItems: 'center',
   },
+  controlRowMap: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+    marginTop: '10px',
+  },
   controlCardHeader: {
     alignSelf: 'flex-start',
     marginBottom: '0.5rem',
