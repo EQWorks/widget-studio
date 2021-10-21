@@ -5,6 +5,8 @@ import useTransformedData from '../../hooks/use-transformed-data'
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 import useDebouncedResizeObserver from '../../hooks/use-debounced-resize-observer'
+import MapAdapter from './adapters/map'
+
 
 // declare which adapter handles each widget type
 const adapterDict = {
@@ -12,6 +14,7 @@ const adapterDict = {
   pie: PlotlyAdapters.pie,
   scatter: PlotlyAdapters.scatter,
   line: PlotlyAdapters.line,
+  map: MapAdapter,
 }
 
 // validate each used adapter according to { component, adapt } schema
@@ -58,10 +61,20 @@ const WidgetAdapter = () => {
   return (
     <div ref={ref} className='h-full flex justify-center'>
       <div style={{ width: delayedSize.width, height: delayedSize.height }} className={`transition-opacity duration-300 ease-in-out ${hide || !delayedSize.width ? 'opacity-0' : 'opacity-1'}`}>
-        {createElement(component, adaptedDataAndConfig)}
+        {createElement(component, { width: delayedSize.width, height: delayedSize.height, ...adaptedDataAndConfig })}
       </div>
     </div>
   )
 }
 
 export default WidgetAdapter
+
+WidgetAdapter.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+}
+
+WidgetAdapter.defaultProps = {
+  width: 0,
+  height: 0,
+}
