@@ -20,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
   formContainer: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   form: {
     margin: theme.spacing(0, 2),
     minWidth: 120,
     maxWidth: 300,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 }))
 

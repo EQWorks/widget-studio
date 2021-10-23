@@ -61,7 +61,7 @@ LinkedSelect.propTypes = {
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   init: PropTypes.string,
-  subInit: PropTypes.string
+  subInit: PropTypes.string,
 }
 
 LinkedSelect.defaultProps = {
@@ -69,7 +69,7 @@ LinkedSelect.defaultProps = {
   deleteCallback: () => console.error('Not implemented'),
   controlled: true,
   init: '',
-  subInit: ''
+  subInit: '',
 }
 
 export default LinkedSelect

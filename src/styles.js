@@ -1,6 +1,6 @@
 export default {
   widgetTitleBarItem: {
-    marginRight: '1rem'
+    marginRight: '1rem',
   },
   widgetTitleBar: {
     width: '100%',
@@ -15,17 +15,17 @@ export default {
     paddingBottom: '0.4rem',
     fontWeight: '400',
     borderTopLeftRadius: '1rem',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   warningContainer: {
     flex: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   loader: {
-    margin: '1rem'
+    margin: '1rem',
   },
   outerContainer: {
     maxWidth: '100%',
@@ -41,7 +41,7 @@ export default {
     borderWidth: 'thin',
     borderColor: '#d6d6d6',
     background: '#f7f7f7',
-    overflow: 'auto'
+    overflow: 'auto',
   },
   get outerContainerViewMode() {
     return {
@@ -64,16 +64,16 @@ export default {
     flex: '1 1 0',
     minWidth: 0,
     gridRow: 2,
-    overflow: 'auto'
+    overflow: 'auto',
   },
   table: {
     flex: 0,
-    maxHeight: 0
+    maxHeight: 0,
   },
   widgetContainer: {
     display: 'flex',
     alignItems: 'center',
-    flex: 1
+    flex: 1,
   },
   widgetControlsSidebar: {
     display: 'flex',
@@ -81,7 +81,7 @@ export default {
     background: '#e6e6e6',
     order: 4,
     gridRow: '1 / 4',
-    gridColumn: 3
+    gridColumn: 3,
   },
   filterControlsBar: {
     display: 'flex',
@@ -117,7 +117,7 @@ export default {
     width: '100%',
   },
   wideButton: {
-    flex: 1
+    flex: 1,
   },
   navigationSidebar: {
     display: 'flex',
@@ -127,16 +127,16 @@ export default {
     flexDirection: 'column',
     '& button': {
       marginLeft: '0.5rem',
-      marginRight: '0.5rem'
+      marginRight: '0.5rem',
     },
     order: 2,
-    gridRow: 2
+    gridRow: 2,
   },
   dataControlsAlt: {
     gridRow: 2,
     order: 2,
     display: 'flex',
-    flex: 1
+    flex: 1,
   },
   hidden: {
     display: 'none',
@@ -147,5 +147,5 @@ export default {
   verticalDivider: {
     marginLeft: '1rem',
     marginRight: '1rem',
-  }
+  },
 }

@@ -110,10 +110,10 @@ const ValueControls = ({ groupingOptional }) => {
   )
 }
 ValueControls.propTypes = {
-  groupingOptional: PropTypes.bool
+  groupingOptional: PropTypes.bool,
 }
 ValueControls.defaultProps = {
-  groupingOptional: true
+  groupingOptional: true,
 }
 
 export default ValueControls

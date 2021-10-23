@@ -69,7 +69,7 @@ PluralLinkedSelect.propTypes = {
   titles: PropTypes.arrayOf(PropTypes.string),
   callback: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func.isRequired,
-  values: PropTypes.arrayOf(PropTypes.object).isRequired
+  values: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 PluralLinkedSelect.defaultProps = {

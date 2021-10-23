@@ -24,13 +24,13 @@ CustomToggle.propTypes = {
   disabled: PropTypes.bool,
   label: PropTypes.string,
   callback: PropTypes.func.isRequired,
-  value: PropTypes.bool
+  value: PropTypes.bool,
 }
 
 CustomToggle.defaultProps = {
   disabled: false,
   label: '',
-  value: true
+  value: true,
 }
 
 export default CustomToggle

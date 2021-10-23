@@ -56,7 +56,7 @@ const WidgetEditor = () => {
 
   DefaultSidebarButton.propTypes = {
     onClick: PropTypes.func.isRequired,
-    icon: PropTypes.elementType.isRequired
+    icon: PropTypes.elementType.isRequired,
   }
 
   const renderSidebarButtons =
@@ -129,8 +129,8 @@ const WidgetEditor = () => {
                   nestedUpdate({
                     ui: {
                       showTable: false,
-                      showDataSourceControls: false
-                    }
+                      showDataSourceControls: false,
+                    },
                   })
                 }} > <HighlightOffIcon /> </IconButton>
           }

@@ -61,10 +61,11 @@ module.exports = {
     ],
     'comma-dangle': [
       'error',
-      'only-multiline'
+      'always-multiline'
     ],
     'eol-last': [
       'error',
+      'always'
     ],
     'no-trailing-spaces': [
       'error',

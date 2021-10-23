@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     textAlign: 'center',
     display: 'flex',
-    margin: '1rem'
+    margin: '1rem',
   },
   form: {
     margin: theme.spacing(0, 2),
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   selectors: {
     display: 'flex',
     flexDirection: 'row',
-  }
+  },
 }))
 
 
@@ -73,7 +73,7 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
               {`${query.queryID} - ${query.name}`}
             </MenuItem>
           ))
-      }
+      },
     },
 
     [EXECUTIONS]: {
@@ -93,8 +93,8 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
               </MenuItem>
             )
           })
-      }
-    }
+      },
+    },
   }
 
   return (
@@ -124,8 +124,8 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
                         cu: selectedCu,
                         dataSource: {
                           type: `${selectedDataSource}`,
-                          id: event.target.value
-                        }
+                          id: event.target.value,
+                        },
                       })
                       setVal(event.target.value)
                     }
@@ -155,13 +155,13 @@ QueryExecutionSelector.propTypes = {
   selectedWl: PropTypes.number,
   selectedCu: PropTypes.number,
   setDataSourcesLoading: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 }
 
 QueryExecutionSelector.defaultProps = {
   selectedWl: null,
   selectedCu: null,
-  disabled: false
+  disabled: false,
 }
 
 export default QueryExecutionSelector

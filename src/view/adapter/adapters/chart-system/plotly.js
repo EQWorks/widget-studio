@@ -12,8 +12,8 @@ export default {
       x: config.groupKey,
       y: config.valueKeys.map(({ key, agg }) => (`${key}_${agg}`)),
       ...options,
-      ...genericOptions
-    })
+      ...genericOptions,
+    }),
   },
   line: {
     component: PlotlyLineChart,
@@ -22,8 +22,8 @@ export default {
       x: config.group ? config.groupKey : config.indexKey,
       y: config.valueKeys.map(({ key, agg }) => config.group ? `${key}_${agg}` : key),
       ...options,
-      ...genericOptions
-    })
+      ...genericOptions,
+    }),
   },
   pie: {
     component: PlotlyPieChart,
@@ -34,8 +34,8 @@ export default {
       ...options,
       ...genericOptions,
       // overrides
-      subPlots: true
-    })
+      subPlots: true,
+    }),
   },
   scatter: {
     component: PlotlyScatterChart,
@@ -44,7 +44,7 @@ export default {
       x: config.group ? config.groupKey : config.indexKey,
       y: config.valueKeys.map(({ key, agg }) => config.group ? `${key}_${agg}` : key),
       ...options,
-      ...genericOptions
-    })
-  }
+      ...genericOptions,
+    }),
+  },
 }

@@ -3,34 +3,34 @@ export default {
     padding: '0.5rem',
     display: 'flex',
     flexDirection: 'column',
-    marginLeft: '1rem'
+    marginLeft: '1rem',
   },
   filterControlsContainer: {
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    marginLeft: '1rem'
+    marginLeft: '1rem',
   },
   hidden: {
-    opacity: 0
+    opacity: 0,
   },
   loaderContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100%'
+    height: '100%',
   },
   controlHeader: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   controlFooter: {
     display: 'flex',
     justifyContent: 'flex-end',
     margin: '1rem',
     flexDirection: 'row',
-    justifySelf: 'flex-end'
+    justifySelf: 'flex-end',
   },
   controls: {
     display: 'flex',
@@ -42,7 +42,7 @@ export default {
     display: 'flex',
     flexDirection: 'row',
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   controlCardHeader: {
     alignSelf: 'flex-start',
@@ -56,29 +56,29 @@ export default {
     background: '#dedede',
     padding: '1rem',
     borderRadius: '0.5rem',
-    marginBottom: '0.5rem'
+    marginBottom: '0.5rem',
   },
   linkedSelectPrimary: {
-    flex: '2'
+    flex: '2',
   },
   linkedSelectSub: {
-    flex: '1'
+    flex: '1',
   },
   controlDivider: {
     marginTop: '0.5rem',
-    marginBottom: '0.5rem'
+    marginBottom: '0.5rem',
   },
   filterControls: {
     flex: 1,
     display: 'grid',
     gridTemplateColumns: '1fr 1fr 1fr',
     gridGap: '1rem',
-    margin: '1rem'
+    margin: '1rem',
   },
   filterControlCell: {
     display: 'flex',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 }

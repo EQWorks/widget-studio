@@ -16,7 +16,7 @@ CustomSlider.propTypes = {
   max: PropTypes.number.isRequired,
   min: PropTypes.number.isRequired,
   callback: PropTypes.func.isRequired,
-  value: PropTypes.arrayOf(PropTypes.number).isRequired
+  value: PropTypes.arrayOf(PropTypes.number).isRequired,
 }
 
 export default CustomSlider

@@ -24,7 +24,7 @@ const icons = {
   pie: PieChartIcon,
   bar: InsertChartIcon,
   scatter: ScatterPlotIcon,
-  line: TimelineIcon
+  line: TimelineIcon,
 }
 
 const WidgetView = () => {
@@ -72,7 +72,7 @@ const WidgetView = () => {
               : 'Select a widget type.',
     secondary:
       dataSourceError ? `${dataSourceError}`
-        : 'Data loaded successfully'
+        : 'Data loaded successfully',
   }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
 
   return (

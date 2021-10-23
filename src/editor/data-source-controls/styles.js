@@ -4,15 +4,15 @@ export default {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    flex: 1
+    flex: 1,
   },
   title: {
-    padding: '1rem'
+    padding: '1rem',
   },
   dataSelectorContainer: {
     border: 'solid',
     borderRadius: '1rem',
-    borderColor: '#d6d6d6'
+    borderColor: '#d6d6d6',
     // borderWidth: 'thin'
   },
   dataSelector: {
@@ -21,12 +21,12 @@ export default {
     flexDirection: 'row',
     alignItems: 'center',
     padding: '1rem',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   get hiddenDataSelector() {
     return {
       ...this.dataSelector,
-      opacity: '0'
+      opacity: '0',
     }
-  }
+  },
 }
