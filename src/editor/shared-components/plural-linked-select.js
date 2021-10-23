@@ -49,14 +49,17 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
           )
         })
       }
-      <LinkedSelect
-        controlled={false}
-        callback={([_k, _v]) => callback(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
-        data={remainingValues}
-        init={''}
-        subData={subData}
-        subInit={''}
-      />
+      {
+        remainingValues && remainingValues.isArray && remainingValues.length &&
+        <LinkedSelect
+          controlled={false}
+          callback={([_k, _v]) => callback(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
+          data={remainingValues}
+          init={''}
+          subData={subData}
+          subInit={''}
+        />
+      }
     </>
   )
 }
