@@ -74,6 +74,7 @@ export default {
     display: 'flex',
     alignItems: 'center',
     flex: 1,
+    height: '100%',
   },
   widgetControlsSidebar: {
     display: 'flex',

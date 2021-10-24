@@ -21,14 +21,12 @@ Object.values(modes).forEach(mode => {
       // generate an editor story
       storiesOf(`${mode.toUpperCase()} mode`, module)
         .add(label, () => (
-          <div style={{ padding: '1rem' }}>
-            <Resizable>
-              <Widget
-                mode={mode}
-                id={id}
-              />
-            </Resizable>
-          </div>
+          <Resizable style={{ margin: '1rem' }} >
+            <Widget
+              mode={mode}
+              id={id}
+            />
+          </Resizable>
         ))
     }
   })
