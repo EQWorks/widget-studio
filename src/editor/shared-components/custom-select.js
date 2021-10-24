@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
     width: '100%',
     maxHeight: 200,
     overflowY: 'auto',
-    overflowX: 'hidden'
+    overflowX: 'hidden',
   },
   chips: {
     display: 'flex',

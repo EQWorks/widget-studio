@@ -46,7 +46,7 @@ Icons.propTypes = {
 }
 
 Icons.defaultProps = {
-  disabled: false
+  disabled: false,
 }
 
 export default Icons

@@ -47,7 +47,7 @@ ToggleableCard.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
   init: PropTypes.bool,
   title: PropTypes.string,
-  callback: PropTypes.func.isRequired
+  callback: PropTypes.func.isRequired,
 }
 
 ToggleableCard.defaultProps = {

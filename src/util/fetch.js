@@ -20,8 +20,8 @@ api.interceptors.request.use(config => {
     ...config,
     headers: {
       ...config.headers,
-      'eq-api-jwt': token
-    }
+      'eq-api-jwt': token,
+    },
   }
 })
 
@@ -72,7 +72,7 @@ export const useSavedQueries = () => {
       params: {
         _wl: '',
         _customer: '',
-      }
+      },
     }).then(({ data = [] }) => data),
     { refetchOnWindowFocus: false }
   )

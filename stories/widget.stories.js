@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { storiesOf } from '@storybook/react'
+import { Resizable } from 're-resizable'
 
 import modes from '../src/constants/modes'
 import sampleConfigs from './sample-configs'
@@ -20,10 +21,12 @@ Object.values(modes).forEach(mode => {
       // generate an editor story
       storiesOf(`${mode.toUpperCase()} mode`, module)
         .add(label, () => (
-          <Widget
-            mode={mode}
-            id={id}
-          />
+          <Resizable style={{ margin: '1rem' }} >
+            <Widget
+              mode={mode}
+              id={id}
+            />
+          </Resizable>
         ))
     }
   })

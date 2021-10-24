@@ -15,12 +15,12 @@ const widgetDefaults = {
   pie: {
     donut: false,
     showPercentage: true,
-    showLegend: true
+    showLegend: true,
   },
   scatter: {
     showTicks: true,
     showLines: false,
-  }
+  },
 }
 
 const stateDefaults = {
@@ -50,7 +50,7 @@ const stateDefaults = {
     staticData: false,
     dataSourceLoading: false,
     dataSourceError: null,
-    dataSourceName: null
+    dataSourceName: null,
   },
   wl: null,
   cu: null,
@@ -147,7 +147,7 @@ export default {
     actions.nestedUpdate({
       ui: {
         showDataSourceControls: false,
-        dataSourceLoading: true
+        dataSourceLoading: true,
       },
     })
     const config = await requestConfig(payload)
@@ -155,8 +155,8 @@ export default {
         actions.nestedUpdate({
           ui: {
             error: dataSourceError,
-            dataSourceLoading: false
-          }
+            dataSourceLoading: false,
+          },
         })
       })
     actions.update(config)
@@ -185,7 +185,7 @@ export default {
           showFilterControls: true,
           dataSourceName: views[0].name,
           dataSourceError: null,
-        }
+        },
       })
       actions.nestedUpdate({ ui: { dataSourceLoading: false } })
     } else {
@@ -209,5 +209,5 @@ export default {
     const type = getState().type
     actions.update({ ...stateDefaults })
     actions.nestedUpdate({ options: widgetDefaults[type] })
-  })
+  }),
 }

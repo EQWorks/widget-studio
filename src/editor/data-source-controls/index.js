@@ -32,7 +32,7 @@ const DataSourceControls = () => {
                 setSelectedCu,
                 selectedWl,
                 setSelectedWl,
-                setWlCuLoading
+                setWlCuLoading,
               }}
             />
             <QueryExecutionSelector
@@ -40,7 +40,7 @@ const DataSourceControls = () => {
               {...{
                 selectedWl,
                 selectedCu,
-                setDataSourcesLoading
+                setDataSourcesLoading,
               }}
             />
           </div>

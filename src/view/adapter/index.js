@@ -34,7 +34,7 @@ export const aggFuncDict = {
   min: Math.min,
   max: Math.max,
   count: arr => arr.filter(d => d || d === 0).length,
-  unique: arr => (new Set(arr)).size
+  unique: arr => (new Set(arr)).size,
 }
 
 const WidgetAdapter = () => {
