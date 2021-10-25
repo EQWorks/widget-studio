@@ -35,6 +35,7 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
   const classes = useStyles()
 
   const update = useStoreActions((actions) => actions.update)
+  const loadData = useStoreActions((actions) => actions.loadData)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
 
@@ -48,6 +49,10 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
     () => executionsList.filter((execution) => execution.customerID == selectedCu),
     [executionsList, selectedCu]
   )
+
+  useEffect(() => {
+    loadData({ type: dataSourceType, id: dataSourceID })
+  }, [loadData, dataSourceType, dataSourceID])
 
   const [selectedDataSource, setSelectedDataSource] = useState(dataSourceType)
   useEffect(() => {
