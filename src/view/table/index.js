@@ -6,7 +6,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Parser, transforms } from 'json2csv'
-import { Table } from '@eqworks/lumen-table'
+import { Table } from '@eqworks/react-labs'
 
 // formerly from util/helpers
 const mapFalsy = {

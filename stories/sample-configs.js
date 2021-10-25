@@ -5,30 +5,30 @@ export default {
     'filters': {
       'city_clicks': [
         20,
-        308
-      ]
+        308,
+      ],
     },
     'valueKeys': [
       {
         'key': 'city_clicks',
-        'agg': 'mean'
-      }
+        'agg': 'mean',
+      },
     ],
     'group': true,
     'groupKey': 'geo_ca_city',
     'indexKey': null,
     'dataSource': {
       'type': 'Saved query',
-      'id': '187'
+      'id': '187',
     },
     'options': {
       'showPercentage': true,
       'showLegend': true,
-      'donut': false
+      'donut': false,
     },
     'genericOptions': {
-      'subPlots': true
-    }
+      'subPlots': true,
+    },
   },
   'bar-1': {
     'title': 'My example bar widget',
@@ -36,33 +36,33 @@ export default {
     'filters': {
       'city_clicks': [
         30,
-        138
-      ]
+        138,
+      ],
     },
     'valueKeys': [
       {
         'key': 'converted_users',
-        'agg': 'mean'
+        'agg': 'mean',
       },
       {
         'key': 'city_clicks',
-        'agg': 'sum'
-      }
+        'agg': 'sum',
+      },
     ],
     'group': true,
     'groupKey': 'geo_ca_city',
     'indexKey': null,
     'dataSource': {
       'type': 'Saved query',
-      'id': '187'
+      'id': '187',
     },
     'options': {
       'stacked': true,
-      'showTicks': true
+      'showTicks': true,
     },
     'genericOptions': {
-      'subPlots': false
-    }
+      'subPlots': false,
+    },
   },
   'line-1': {
     'title': 'Another Line Widget',
@@ -70,33 +70,33 @@ export default {
     'filters': {
       'clicks': [
         117,
-        423
-      ]
+        423,
+      ],
     },
     'valueKeys': [
       {
         'key': 'clicks',
-        'agg': null
+        'agg': null,
       },
       {
         'key': 'revenue',
-        'agg': null
-      }
+        'agg': null,
+      },
     ],
     'group': false,
     'groupKey': null,
     'indexKey': 'impressions',
     'dataSource': {
       'type': 'Saved query',
-      'id': '191'
+      'id': '191',
     },
     'options': {
       'spline': true,
-      'showTicks': true
+      'showTicks': true,
     },
     'genericOptions': {
-      'subPlots': true
-    }
+      'subPlots': true,
+    },
   },
   'line-2': {
     'title': 'My example line widget',
@@ -104,10 +104,10 @@ export default {
     'filters': {},
     'valueKeys': [
       {
-        'key': 'spend'
+        'key': 'spend',
       },
       {
-        'key': 'clicks'
+        'key': 'clicks',
       },
     ],
     'group': false,
@@ -115,15 +115,15 @@ export default {
     'indexKey': 'impressions',
     'dataSource': {
       'type': 'Execution',
-      'id': '305'
+      'id': '305',
     },
     'options': {
       'spline': false,
-      'showTicks': true
+      'showTicks': true,
     },
     'genericOptions': {
-      'subPlots': false
-    }
+      'subPlots': false,
+    },
   },
   'scatter-1': {
     'title': 'My example scatter widget',
@@ -131,31 +131,31 @@ export default {
     'filters': {
       'unique_visitors': [
         0,
-        891
-      ]
+        891,
+      ],
     },
     'valueKeys': [
       {
         'key': 'repeat_visitors',
-        'agg': 'mean'
+        'agg': 'mean',
       },
       {
         'key': 'unique_visitors',
-        'agg': 'sum'
-      }
+        'agg': 'sum',
+      },
     ],
     'group': true,
     'groupKey': 'address_postalcode',
     'indexKey': null,
     'dataSource': {
       'type': 'Saved query',
-      'id': '217'
+      'id': '217',
     },
     'options': {
-      'showTicks': true
+      'showTicks': true,
     },
     'genericOptions': {
-      'subPlots': false
-    }
-  }
+      'subPlots': false,
+    },
+  },
 }

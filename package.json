@@ -18,7 +18,7 @@
     "node": "14.x"
   },
   "scripts": {
-    "lint": "eslint src/",
+    "lint": "eslint .*.js *.js stories/ src/",
     "watch": "babel src -w --out-dir dist --copy-files",
     "storybook": "env $(print-env) start-storybook -p 6008",
     "start": "yarn storybook",
@@ -31,6 +31,7 @@
   "peerDependencies": {
     "@eqworks/lumen-labs": "^0.1.0-alpha.10",
     "@eqworks/lumen-ui": "^1.0.0",
+    "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@tailwindcss/postcss7-compat": "^2.1.2",
@@ -78,7 +79,6 @@
   },
   "dependencies": {
     "@eqworks/chart-system": "^0.6.2",
-    "@eqworks/lumen-table": "^1.4.0",
     "axios": "^0.20.0",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",

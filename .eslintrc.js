@@ -57,15 +57,15 @@ module.exports = {
     ],
     'no-console': [
       'warn',
-      { allow: ['error'] }
+      { allow: ['error'] },
     ],
     'comma-dangle': [
       'error',
-      'always-multiline'
+      'always-multiline',
     ],
     'eol-last': [
       'error',
-      'always'
+      'always',
     ],
     'no-trailing-spaces': [
       'error',

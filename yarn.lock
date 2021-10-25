@@ -1286,15 +1286,6 @@
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
-"@eqworks/lumen-table@^1.4.0":
-  version "1.4.0"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-table/1.4.0/fc6695c4ccbe969bf578db8570c8ee1659c51bdd4a486432380dfe3e6feb4f53#b97f295baf18e14923f21e9c7e27f3abf7ab1ce0"
-  integrity sha512-LRwiUa92HKbJpK0nfAd5zKWbiVV0P9kPip8sig2oXa/ARZ6+oQElFshBrJ7uoE00Y9xSez505+QKm+KcUXKAXQ==
-  dependencies:
-    prop-types "^15.7.2"
-    react-table "^7.6.0"
-    use-cached "^2.0.0"
-
 "@eqworks/lumen-ui@^1.0.0":
   version "1.1.1"
   resolved "https://npm.pkg.github.com/download/@eqworks/lumen-ui/1.1.1/4b76221bf7097e5666791c1226671703b3da9c2c9a3ba173809a037228d886f9#ebab4fcb88bb165497fe6bcfe83306bcbd9fa36b"
