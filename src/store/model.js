@@ -150,47 +150,64 @@ export default {
         dataSourceLoading: true,
       },
     })
-    const config = await requestConfig(payload)
-      .catch((dataSourceError) => {
+    requestConfig(payload)
+      .then(config => {
+        actions.update(config)
+        actions.loadData(config.dataSource)
+      })
+      .catch(err => {
         actions.nestedUpdate({
           ui: {
-            error: dataSourceError,
+            error: err,
             dataSourceLoading: false,
           },
         })
       })
-    actions.update(config)
-    actions.loadData(config.dataSource)
   }),
 
   loadData: thunk(async (actions, { type, id }, { getState }) => {
 
+    actions.nestedUpdate({
+      ui: {
+        showDataSourceControls: false,
+        dataSourceLoading: true,
+      },
+    })
     const { isReady, staticData } = getState()
-    const data = await requestData(type, id)
-
-    if (type && id) {
-      if (isReady) {
-        actions.reset()
-      }
-      const { results: rows, columns, whitelabelID, customerID, views } = data
-      actions.update({
-        rows,
-        columns,
-        wl: whitelabelID, // only used for wl-cu-selector
-        cu: customerID, // only used for wl-cu-selector
+    requestData(type, id)
+      .then(data => {
+        if (type && id) {
+          if (isReady) {
+            actions.reset()
+          }
+          const { results: rows, columns, whitelabelID, customerID, views } = data
+          actions.update({
+            rows,
+            columns,
+            wl: whitelabelID, // only used for wl-cu-selector
+            cu: customerID, // only used for wl-cu-selector
+          })
+          actions.nestedUpdate({
+            ui: {
+              showWidgetControls: true,
+              showFilterControls: true,
+              dataSourceName: views[0].name,
+              dataSourceError: null,
+            },
+          })
+          actions.nestedUpdate({ ui: { dataSourceLoading: false } })
+        } else {
+          actions.nestedUpdate({ ui: { showDataSourceControls: !staticData } })
+        }
       })
-      actions.nestedUpdate({
-        ui: {
-          showWidgetControls: true,
-          showFilterControls: true,
-          dataSourceName: views[0].name,
-          dataSourceError: null,
-        },
+      .catch(err => {
+        actions.nestedUpdate({
+          ui: {
+            dataSourceError: err,
+            dataSourceLoading: false,
+          },
+        })
       })
-      actions.nestedUpdate({ ui: { dataSourceLoading: false } })
-    } else {
-      actions.nestedUpdate({ ui: { showDataSourceControls: !staticData } })
-    }
   }),
 
   // update the store state
