@@ -18,7 +18,7 @@
     "node": "14.x"
   },
   "scripts": {
-    "lint": "eslint src/",
+    "lint": "eslint .*.js *.js stories/ src/",
     "watch": "babel src -w --out-dir dist --copy-files",
     "storybook": "env $(print-env) start-storybook -p 6008",
     "start": "yarn storybook",

@@ -46,7 +46,7 @@ Object.values(modes).forEach(mode => {
           style={{
             display: 'grid',
             gridTemplateColumns: fullscreen ? 'auto' : '1fr 1fr',
-            gridAutoRows: fullscreen ? '100vh' : 'min-content'
+            gridAutoRows: fullscreen ? '100vh' : 'min-content',
           }} >
           {
 

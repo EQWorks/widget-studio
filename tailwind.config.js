@@ -6,8 +6,8 @@ const config = {
   theme: {
     extend: {
       // place extended styles here
-    }
-  }
+    },
+  },
 }
 
 module.exports = merge(base, config)
