@@ -41,6 +41,8 @@ const stateDefaults = {
   },
   rows: [],
   columns: [],
+  stringColumns: [],
+  numericColumns: [],
   ui: {
     mode: null,
     showTable: false,
@@ -113,14 +115,18 @@ export default {
       (state) => state.columns,
       (state) => state.type,
       (state) => state.valueKeys,
+      (state) => state.indexKey,
+      (state) => state.groupKey,
     ],
     (
       rows,
       columns,
       type,
       valueKeys,
+      indexKey,
+      groupKey,
     ) => (
-      Boolean(type && columns.length && rows.length && valueKeys.length)
+      Boolean(type && columns.length && rows.length && (indexKey || groupKey) && valueKeys.length)
     )),
 
 
@@ -173,32 +179,28 @@ export default {
         dataSourceLoading: true,
       },
     })
-    const { isReady, staticData } = getState()
+    const { isReady } = getState()
     requestData(type, id)
       .then(data => {
-        if (type && id) {
-          if (isReady) {
-            actions.reset()
-          }
-          const { results: rows, columns, whitelabelID, customerID, views } = data
-          actions.update({
-            rows,
-            columns,
-            wl: whitelabelID, // only used for wl-cu-selector
-            cu: customerID, // only used for wl-cu-selector
-          })
-          actions.nestedUpdate({
-            ui: {
-              showWidgetControls: true,
-              showFilterControls: true,
-              dataSourceName: views[0].name,
-              dataSourceError: null,
-            },
-          })
-          actions.nestedUpdate({ ui: { dataSourceLoading: false } })
-        } else {
-          actions.nestedUpdate({ ui: { showDataSourceControls: !staticData } })
+        if (isReady) {
+          actions.resetWidget()
         }
+        const { results: rows, columns, whitelabelID, customerID, views } = data
+        actions.update({
+          rows,
+          columns,
+          wl: whitelabelID, // only used for wl-cu-selector
+          cu: customerID, // only used for wl-cu-selector
+        })
+        actions.nestedUpdate({
+          ui: {
+            showWidgetControls: true,
+            showFilterControls: true,
+            dataSourceName: views[0].name,
+            dataSourceError: null,
+          },
+        })
+        actions.nestedUpdate({ ui: { dataSourceLoading: false } })
       })
       .catch(err => {
         actions.nestedUpdate({
@@ -222,9 +224,9 @@ export default {
   }),
 
   // reset all shared and unique states except data source and data ID
-  reset: thunk((actions, payload, { getState }) => {
-    const type = getState().type
-    actions.update({ ...stateDefaults })
+  resetWidget: thunk((actions, payload, { getState }) => {
+    const { type, ui, dataSource } = getState()
+    actions.update({ ...stateDefaults, ui, dataSource })
     actions.nestedUpdate({ options: widgetDefaults[type] })
   }),
 }

@@ -51,7 +51,9 @@ const QueryExecutionSelector = ({ selectedWl, selectedCu, setDataSourcesLoading,
   )
 
   useEffect(() => {
-    loadData({ type: dataSourceType, id: dataSourceID })
+    if (dataSourceType && dataSourceID) {
+      loadData({ type: dataSourceType, id: dataSourceID })
+    }
   }, [loadData, dataSourceType, dataSourceID])
 
   const [selectedDataSource, setSelectedDataSource] = useState(dataSourceType)
