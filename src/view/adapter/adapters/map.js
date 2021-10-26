@@ -36,7 +36,7 @@ const getKeyValues = (objArray, key) => objArray.filter(o => o.map_vis === key)[
 
 export default {
   component: Map,
-  adapt: (data, { options, genericOptions, ...config }) => ({
+  adapt: (data, { options, ...config }) => ({
     // create a good id
     dataConfig: [{ id: 'testWIReport', data }],
     layerConfig: [{
@@ -76,9 +76,10 @@ export default {
     mapConfig: {
       cursor: (layers) => getCursor({ layers }),
       legendPosition: 'top-right',
-      mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
+      legendSize: 'widget',
+      mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
+      showMapLegend: options.showLegend,
+      showMapTooltip: options.showTooltip,
     },
-    ...options,
-    ...genericOptions,
   }),
 }
