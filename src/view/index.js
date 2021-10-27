@@ -35,6 +35,7 @@ const WidgetView = () => {
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
 
   // widget state
+  const id = useStoreState((state) => state.id)
   const type = useStoreState((state) => state.type)
   const title = useStoreState((state) => state.title)
   const columns = useStoreState((state) => state.columns)
@@ -53,6 +54,7 @@ const WidgetView = () => {
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
   const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
+  const editingTitle = useStoreState((state) => state.ui.editingTitle)
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (

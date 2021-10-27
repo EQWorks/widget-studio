@@ -24,6 +24,7 @@ const widgetDefaults = {
 }
 
 const stateDefaults = {
+  id: null,
   title: '',
   type: '',
   filters: {},
@@ -53,6 +54,7 @@ const stateDefaults = {
     dataSourceLoading: false,
     dataSourceError: null,
     dataSourceName: null,
+    editingTitle: false,
   },
   wl: null,
   cu: null,

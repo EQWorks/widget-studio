@@ -22,6 +22,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
 
   // easy-peasy actions
   const loadConfig = useStoreActions(actions => actions.loadConfig)
+  const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // ui state
@@ -35,7 +36,8 @@ const Widget = ({ id, mode: _mode, staticData }) => {
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${modes}.`)
     }
 
-    // dispatch ui state options
+    // dispatch state
+    update({ id })
     nestedUpdate({ ui: { mode: validatedMode, staticData } })
 
     // if there is a widget ID,
@@ -49,7 +51,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_mode, id, loadConfig, mode, nestedUpdate, staticData])
+  }, [_mode, id, loadConfig, mode, update, nestedUpdate, staticData])
 
   return (
     <div className={
