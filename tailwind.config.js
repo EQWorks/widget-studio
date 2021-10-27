@@ -7,6 +7,7 @@ const config = {
   variants: {
     extend: {
       flex: ['children-not-first'],
+      textColor: ['children'],
     },
   },
   theme: {
