@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
+import { Layout } from '@eqworks/lumen-labs'
 
 import styles from './styles'
 import modes from './constants/modes'
@@ -54,21 +55,21 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   }, [_mode, id, loadConfig, mode, update, nestedUpdate, staticData])
 
   return (
-    <div className={
-      mode === modes.EDITOR
-        ? classes.outerContainer
-        : mode === modes.VIEW
-          ? classes.outerContainerViewMode
-          : mode === modes.QL
-            ? classes.outerContainerQLMode
-            : ''
+    <Layout className={`border border-neutral-100
+    ${mode === modes.EDITOR
+      ? classes.outerContainer
+      : mode === modes.VIEW
+        ? classes.outerContainerViewMode
+        : mode === modes.QL
+          ? classes.outerContainerQLMode
+          : ''}`
     }>
       <WidgetView />
       {
         mode !== modes.VIEW &&
         <WidgetEditor />
       }
-    </div >
+    </Layout >
   )
 }
 

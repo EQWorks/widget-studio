@@ -36,7 +36,7 @@ const WidgetTitleBar = () => {
 
   const renderButton = (children, onClick, props) =>
     <Button
-      classes={{ button: 'ml-2 uppercase' }}
+      classes={{ button: 'ml-2 uppercase p-1.5 tracking-wider' }}
       variant='borderless'
       size='md'
       onClick={e => {
@@ -89,7 +89,7 @@ const WidgetTitleBar = () => {
       ])}
     </div>
   return (
-    <Accordion color='secondary' className='w-full p-2 shadow-light-10' >
+    <Accordion color='secondary' className='w-full' >
       <Accordion.Panel
         color='transparent'
         classes={{

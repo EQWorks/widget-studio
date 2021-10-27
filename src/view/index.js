@@ -63,11 +63,11 @@ const WidgetView = () => {
 
   return (
     <>
-      <Layout.Header className='w-full flex row-span-1 col-span-3 shadow'>
+      <Layout.Header className='w-full flex row-span-1 col-span-3 p-4 shadow-light-10'>
         <WidgetTitleBar />
       </Layout.Header>
 
-      <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
+      <Layout.Content className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
         <CustomSwitch
           className='mt-3 ml-5'
           labels={['widget', 'table']}
@@ -79,19 +79,17 @@ const WidgetView = () => {
           ? classes.hidden
           : mode !== modes.VIEW
             ? classes.table
-            : ''
-        }>
+            : ''}>
           <ResultsTable results={rows} />
         </div>
-        <div className={showTable ? classes.hidden : classes.widgetContainer}>
+        <div className={`flex h-full flex-1 ${showTable ? 'invisible' : 'visible'}`}>
           {
-
-            // config object ready?
+          // config object ready?
             dataReady && isReady ?
-              // render widget
+            // render widget
               <WidgetAdapter />
               :
-              // guide the user to configure the widget
+            // guide the user to configure the widget
               <div className={classes.warningContainer}>
                 {
                   dataSourceLoading ?
@@ -114,7 +112,7 @@ const WidgetView = () => {
               </div>
           }
         </div>
-      </div>
+      </Layout.Content>
     </>
   )
 }
