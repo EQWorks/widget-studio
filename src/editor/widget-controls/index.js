@@ -29,7 +29,7 @@ const WidgetControls = () => {
   const classes = useStyles()
 
   const update = useStoreActions(actions => actions.update)
-  const reset = useStoreActions(actions => actions.reset)
+  const resetWidget = useStoreActions(actions => actions.resetWidget)
   const type = useStoreState((state) => state.type)
   const columns = useStoreState((state) => state.columns)
 
@@ -62,7 +62,7 @@ const WidgetControls = () => {
         <div className={classes.controlFooter}>
           <IconButton
             size='small'
-            onClick={reset}
+            onClick={resetWidget}
           >
             <Clear />
           </IconButton>

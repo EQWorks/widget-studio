@@ -65,6 +65,16 @@ Object.values(modes).forEach(mode => {
     })
 })
 
+// add blank widget
+storiesOf('Blank widget (no ID)', module)
+  .add('Blank widget (no ID)', () => (
+    <Resizable style={{ margin: '1rem' }} >
+      <Widget
+        mode='editor'
+      />
+    </Resizable>
+  ))
+
 // showcase behaviour without explicit widget ID
 storiesOf('Incorrect usage')
   .add('Editor-mode widget with data control disabled and no widget ID', () => (

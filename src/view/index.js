@@ -139,7 +139,7 @@ const WidgetView = () => {
           {
 
             // config object ready?
-            isReady ?
+            dataReady && isReady ?
               // render widget
               <WidgetAdapter />
               :

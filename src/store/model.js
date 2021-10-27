@@ -41,6 +41,8 @@ const stateDefaults = {
   },
   rows: [],
   columns: [],
+  stringColumns: [],
+  numericColumns: [],
   ui: {
     mode: null,
     showTable: false,
@@ -113,14 +115,18 @@ export default {
       (state) => state.columns,
       (state) => state.type,
       (state) => state.valueKeys,
+      (state) => state.indexKey,
+      (state) => state.groupKey,
     ],
     (
       rows,
       columns,
       type,
       valueKeys,
+      indexKey,
+      groupKey,
     ) => (
-      Boolean(type && columns.length && rows.length && valueKeys.length)
+      Boolean(type && columns.length && rows.length && (indexKey || groupKey) && valueKeys.length)
     )),
 
 
@@ -150,47 +156,60 @@ export default {
         dataSourceLoading: true,
       },
     })
-    const config = await requestConfig(payload)
-      .catch((dataSourceError) => {
+    requestConfig(payload)
+      .then(config => {
+        actions.update(config)
+        actions.loadData(config.dataSource)
+      })
+      .catch(err => {
         actions.nestedUpdate({
           ui: {
-            error: dataSourceError,
+            error: err,
             dataSourceLoading: false,
           },
         })
       })
-    actions.update(config)
-    actions.loadData(config.dataSource)
   }),
 
   loadData: thunk(async (actions, { type, id }, { getState }) => {
 
-    const { isReady, staticData } = getState()
-    const data = await requestData(type, id)
-
-    if (type && id) {
-      if (isReady) {
-        actions.reset()
-      }
-      const { results: rows, columns, whitelabelID, customerID, views } = data
-      actions.update({
-        rows,
-        columns,
-        wl: whitelabelID, // only used for wl-cu-selector
-        cu: customerID, // only used for wl-cu-selector
+    actions.nestedUpdate({
+      ui: {
+        showDataSourceControls: false,
+        dataSourceLoading: true,
+      },
+    })
+    const { isReady } = getState()
+    requestData(type, id)
+      .then(data => {
+        if (isReady) {
+          actions.resetWidget()
+        }
+        const { results: rows, columns, whitelabelID, customerID, views } = data
+        actions.update({
+          rows,
+          columns,
+          wl: whitelabelID, // only used for wl-cu-selector
+          cu: customerID, // only used for wl-cu-selector
+        })
+        actions.nestedUpdate({
+          ui: {
+            showWidgetControls: true,
+            showFilterControls: true,
+            dataSourceName: views[0].name,
+            dataSourceError: null,
+          },
+        })
+        actions.nestedUpdate({ ui: { dataSourceLoading: false } })
       })
-      actions.nestedUpdate({
-        ui: {
-          showWidgetControls: true,
-          showFilterControls: true,
-          dataSourceName: views[0].name,
-          dataSourceError: null,
-        },
+      .catch(err => {
+        actions.nestedUpdate({
+          ui: {
+            dataSourceError: err,
+            dataSourceLoading: false,
+          },
+        })
       })
-      actions.nestedUpdate({ ui: { dataSourceLoading: false } })
-    } else {
-      actions.nestedUpdate({ ui: { showDataSourceControls: !staticData } })
-    }
   }),
 
   // update the store state
@@ -205,9 +224,9 @@ export default {
   }),
 
   // reset all shared and unique states except data source and data ID
-  reset: thunk((actions, payload, { getState }) => {
-    const type = getState().type
-    actions.update({ ...stateDefaults })
+  resetWidget: thunk((actions, payload, { getState }) => {
+    const { type, ui, dataSource } = getState()
+    actions.update({ ...stateDefaults, ui, dataSource })
     actions.nestedUpdate({ options: widgetDefaults[type] })
   }),
 }
