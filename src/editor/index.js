@@ -2,17 +2,8 @@ import React, { createElement } from 'react'
 
 import PropTypes from 'prop-types'
 import IconButton from '@material-ui/core/IconButton'
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import SettingsIcon from '@material-ui/icons/Settings'
-import ArtTrackIcon from '@material-ui/icons/ArtTrack'
-import CropLandscapeIcon from '@material-ui/icons/CropLandscape'
-import SaveIcon from '@material-ui/icons/Save'
-import DownloadIcon from '@material-ui/icons/CloudDownload'
-import ShareIcon from '@material-ui/icons/Share'
-import BuildIcon from '@material-ui/icons/Build'
 import FilterListIcon from '@material-ui/icons/FilterList'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@eqworks/lumen-ui'
 
@@ -22,6 +13,8 @@ import WidgetControls from './widget-controls'
 import DataSourceControls from './data-source-controls'
 import FilterControls from './widget-controls/data-controls/filter-controls'
 import styles from '../styles' // TODO fix
+import { Button, Icons, Layout } from '@eqworks/lumen-labs'
+import { Controls } from '../components/icons'
 
 
 // put styles in separate file for readability
@@ -41,7 +34,6 @@ const WidgetEditor = () => {
   const mode = useStoreState((state) => state.ui.mode)
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
-  const showTable = useStoreState((state) => state.ui.showTable)
   const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
   const staticData = useStoreState((state) => state.ui.staticData)
 
@@ -58,42 +50,6 @@ const WidgetEditor = () => {
     onClick: PropTypes.func.isRequired,
     icon: PropTypes.elementType.isRequired,
   }
-
-  const renderSidebarButtons =
-    <>
-      <DefaultSidebarButton
-        onClick={() => alert('Not implemented')}
-        icon={SaveIcon}
-      />
-      {
-        !staticData &&
-        <IconButton
-          color='secondary'
-          onClick={() => nestedUpdate({ ui: { showDataSourceControls: !showDataSourceControls } })}
-        >
-          <SettingsIcon />
-        </IconButton>
-      }
-      <DefaultSidebarButton
-        onClick={() =>
-          nestedUpdate(showWidgetControls || showFilterControls ?
-            { ui: { showWidgetControls: false, showFilterControls: false } }
-            :
-            { ui: { showWidgetControls: true, showFilterControls: true } }
-          )
-        }
-        icon={showWidgetControls || showFilterControls ? CropLandscapeIcon : ArtTrackIcon}
-      />
-      <DefaultSidebarButton
-        onClick={() => alert('Not implemented')}
-        icon={DownloadIcon}
-      />
-      <DefaultSidebarButton
-        onClick={() => alert('Not implemented')}
-        icon={ShareIcon}
-      />
-    </>
-
 
   const renderFilterControlsContainer =
     <>
@@ -114,53 +70,51 @@ const WidgetEditor = () => {
   return (
     <>
       {
-        mode === modes.EDITOR &&
-        <div className={classes.navigationSidebar}>
-          {
-            // something to exit?
-            !showDataSourceControls && !showTable
-              // show sidebar buttons
-              ? renderSidebarButtons
-              // show exit button
-              : <IconButton
-                className={classes.tallButton}
-                color='secondary'
-                onClick={() => {
-                  nestedUpdate({
-                    ui: {
-                      showTable: false,
-                      showDataSourceControls: false,
-                    },
-                  })
-                }} > <HighlightOffIcon /> </IconButton>
-          }
-        </div>
-      }
-
-      {
         !staticData &&
         <div className={showDataSourceControls ? classes.dataControlsAlt : classes.hidden}>
           <DataSourceControls />
         </div>
       }
 
-      <div className={classes.widgetControlsSidebar}>
-        <div className={classes.widgetControlsSidebarTab}>
-          <IconButton className={classes.tallButton}
+      <Layout className='border border-neutral-100 p-5 row-span-3'>
+        <Layout.Header className='flex flex-1 items-center'>
+          {
+            showWidgetControls &&
+            <span className='flex-1 font-bold text-secondary-800'>Controls</span>
+          }
+          <Button
+            variant='borderless'
+            className={`border-none ${showWidgetControls ? '' : 'h-full'}`}
             onClick={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
           >
-            {showWidgetControls ? <KeyboardArrowRightIcon /> : <BuildIcon />}
-          </IconButton>
-        </div>
+            {
+              showWidgetControls
+                ? createElement(Icons.Close,
+                  {
+                    className: 'fill-current text-secondary-500 h-min w-auto',
+                    size: 'md',
+                  }
+                )
+                : createElement(Controls,
+                  {
+                    className: 'h-full stroke-current text-secondary-500 w-5 ',
+                    size: 'md',
+                  }
+                )
+            }
+
+          </Button>
+          {/* </span> */}
+        </Layout.Header>
         <div className={showWidgetControls ? classes.flex : classes.hidden} >
           <WidgetControls />
         </div>
-      </div>
+      </Layout>
 
       {
         mode === modes.EDITOR &&
-        <div className={classes.filterControlsBar}>
-          <div className={classes.filterControlsBarTab}>
+        <Layout className='border border-neutral-100 p-1 col-span-2'>
+          <Layout.Header className='flex flex-1 items-center'>
             {
               showFilterControls
                 ? renderFilterControlsContainer
@@ -172,11 +126,11 @@ const WidgetEditor = () => {
                   <FilterListIcon className={classes.wideButton} />
                 </IconButton>
             }
-          </div>
+          </Layout.Header>
           <div className={showFilterControls ? classes.flex : classes.hidden} >
             <FilterControls />
           </div>
-        </div>
+        </Layout>
       }
     </>
   )
