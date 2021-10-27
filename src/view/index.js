@@ -1,14 +1,10 @@
-import React, { useMemo, createElement } from 'react'
+import React, { useMemo } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Divider from '@material-ui/core/Divider'
-import MapIcon from '@material-ui/icons/Map'
-import PieChartIcon from '@material-ui/icons/PieChart'
-import InsertChartIcon from '@material-ui/icons/InsertChart'
-import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
-import TimelineIcon from '@material-ui/icons/Timeline'
 import { Typography } from '@eqworks/lumen-ui'
-import { Chip, Loader } from '@eqworks/lumen-labs'
+import { Accordion, Icons, TextField, Button, Chip, Loader, Layout } from '@eqworks/lumen-labs'
+import { ArrowExpand, EditPen, Download } from '../components/icons'
+import OverflowMarquee from '../components/overflow-marquee'
 
 import ResultsTable from './table'
 import modes from '../constants/modes'
@@ -19,19 +15,12 @@ import WidgetAdapter from './adapter'
 
 const useStyles = makeStyles(styles)
 
-const icons = {
-  map: MapIcon,
-  pie: PieChartIcon,
-  bar: InsertChartIcon,
-  scatter: ScatterPlotIcon,
-  line: TimelineIcon,
-}
-
 const WidgetView = () => {
 
   const classes = useStyles()
 
   // store actions
+  const update = useStoreActions((state) => state.update)
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
 
   // widget state
@@ -77,57 +66,132 @@ const WidgetView = () => {
         : 'Data loaded successfully',
   }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
 
-  return (
-    <>
-      <div className={classes.widgetTitleBar}>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          {
-            dataReady &&
-            <div className={classes.widgetTitleBarItem}>
-              <Typography style={{ fontWeight: 600 }} color='textPrimary' variant='h6'>
-                {title || 'Untitled'}
-              </Typography>
-            </div>
-          }
-          <div className={classes.widgetTitleBarItem}>
-            {type && createElement(icons[type], { color: 'secondary' })}
+  const [tentativeTitle, setTentativeTitle] = React.useState(title)
+  React.useEffect(() => {
+    setTentativeTitle(title)
+  }, [title])
+
+  const renderButton = (children, onClick, props) =>
+    <Button
+      classes={{ button: 'ml-2' }}
+      variant='borderless'
+      size='md'
+      onClick={onClick}
+      {...props}
+    >
+      {children}
+    </Button>
+
+  const renderIconButton = (Component, onClick, props = {}) =>
+    renderButton(<Component size='md' />, onClick, props)
+
+  const renderDetailItems = (items) =>
+    <div className={`w-full grid items-center grid-cols-${items.length} divide-x divide-secondary-300`}>
+      {
+        items.map(([title, info], i) => (
+          <div key={i} className='flex pl-3 pr-3 flex-col '>
+            <span className='m-0 text-xs text-secondary-500 tracking-wider'>
+              {`${title}:`}
+            </span>
+            <OverflowMarquee >
+              <div className='flex-none whitespace-nowrap min-w-0'>
+                <span className='flex-initial text-xs font-mono bg-secondary-200 text-secondary-800'>
+                  {info}
+                </span>
+              </div>
+            </OverflowMarquee>
           </div>
-          <div className={classes.widgetTitleBarItem}>
+        )
+        )
+      }
+    </div>
+
+
+  const renderWidgetMeta =
+    <div className='flex bg-transparent p-3'>
+      {renderDetailItems([
+        ['CREATED DATE', '09/09/09 10:23 AM'],
+        ['LAST UPDATED', '09/09/09 10:23 AM'],
+        ['DATA VOLUME', dataReady
+          ? `${columns.length} columns ${rows.length} rows`
+          : '...',
+        ],
+        ['DATA SOURCE', dataReady
+          ? `${dataSourceType} ${dataSourceID} ${dataSourceName || ''}`
+          : '...',
+        ],
+      ])}
+    </div>
+
+  const renderWidgetTitle =
+    <Accordion color='secondary' className='w-full p-2' >
+      <Accordion.Panel
+        color='transparent'
+        classes={{ icon: 'h-full', header: 'children:not-first:flex-1' }}
+        header={
+          <div className='flex items-center'>
             {
-              dataReady &&
-              <Chip
-                color='secondary'
-                onClick={() => nestedUpdate({ ui: { showTable: !showTable } })}
-              >
-                {`${showTable ? 'Hide' : 'View'} Table`}
+              editingTitle
+                ? <TextField
+                  autoFocus
+                  size='lg'
+                  value={tentativeTitle}
+                  onChange={(v) => setTentativeTitle(v)}
+                  onBlur={() => {
+                    setTentativeTitle(title)
+                    nestedUpdate({ ui: { editingTitle: false } })
+                  }}
+                  onSubmit={(e) => {
+                    update({ title: e.target.children[0].children[0].value })
+                    nestedUpdate({ ui: { editingTitle: false } })
+                    e.preventDefault()
+                  }}
+                />
+                : <span className='text-lg font-bold text-primary-500'>
+                  {title || 'Untitled'}
+                </span>
+            }
+            {renderIconButton(EditPen,
+              () => nestedUpdate({ ui: { editingTitle: true } }),
+              { variant: 'elevated' }
+            )}
+            {
+              id &&
+              <Chip classes={{ chip: 'ml-4' }} color='secondary'>
+                {`ID: ${id}`}
               </Chip>
             }
+            <div className='flex ml-auto'>
+              {renderIconButton(Download,
+                () => window.alert('not implemented'),
+              )}
+              {renderButton(<>EXPORT</>,
+                () => window.alert('not implemented'),
+              )}
+              {renderButton(
+                <div className='flex items-center'>
+                  OPEN IN EDITOR
+                  <ArrowExpand size='md' className='stroke-current text-white ml-2' />
+                </div>,
+                () => window.alert('not implemented'),
+                { variant: 'filled' }
+              )}
+            </div>
           </div>
-        </div>
-
-        {
-          dataReady &&
-          <>
-            <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-              <Typography color='textSecondary' variant='subtitle1'>
-                {`${dataSourceType} ${dataSourceID}`}
-              </Typography>
-              <Typography style={{ fontWeight: 200 }} color='textSecondary' variant='subtitle2'>
-                {dataSourceName || ''}
-              </Typography>
-            </div>
-            <Divider orientation='vertical' className={classes.verticalDivider} />
-            <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-              <Typography style={{ fontStyle: 'italic', fontWeight: 200 }} color='textSecondary' variant='subtitle1'>
-                {`${rows.length} rows`}
-              </Typography>
-              <Typography style={{ fontStyle: 'italic', fontWeight: 200 }} color='textSecondary' variant='subtitle2'>
-                {`${columns.length} columns`}
-              </Typography>
-            </div>
-          </>
         }
-      </div>
+        ExpandIcon={Icons.ChevronDown}
+      >
+        {renderWidgetMeta}
+      </Accordion.Panel>
+    </Accordion>
+
+
+  return (
+    <>
+      <Layout className='w-full flex row-span-1 col-span-2 shadow'>
+        {renderWidgetTitle}
+      </Layout>
+
       <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
         <div className={!showTable
           ? classes.hidden

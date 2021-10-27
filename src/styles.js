@@ -1,22 +1,4 @@
 export default {
-  widgetTitleBarItem: {
-    marginRight: '1rem',
-  },
-  widgetTitleBar: {
-    width: '100%',
-    display: 'flex',
-    gridColumn: '1 / 3',
-    gridRow: '1',
-    order: 1,
-    background: '#e6e6e6',
-    paddingLeft: '1.5rem',
-    paddingRight: '1.5rem',
-    paddingTop: '0.4rem',
-    paddingBottom: '0.4rem',
-    fontWeight: '400',
-    borderTopLeftRadius: '1rem',
-    alignItems: 'center',
-  },
   warningContainer: {
     flex: 1,
     display: 'flex',
@@ -40,7 +22,7 @@ export default {
     padding: '1rem',
     borderWidth: 'thin',
     borderColor: '#d6d6d6',
-    background: '#f7f7f7',
+    background: '#FEFEFE',
     overflow: 'auto',
   },
   get outerContainerViewMode() {
