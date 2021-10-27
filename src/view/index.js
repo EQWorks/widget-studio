@@ -4,9 +4,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@eqworks/lumen-ui'
 import { Loader, Layout } from '@eqworks/lumen-labs'
 
+import { DashboardLayout, Table } from '../components/icons'
+import CustomSwitch from '../components/custom-switch'
 import ResultsTable from './table'
 import modes from '../constants/modes'
-import { useStoreState } from '../store'
+import { useStoreState, useStoreActions } from '../store'
 import styles from '../styles'
 import WidgetAdapter from './adapter'
 import WidgetTitleBar from './title-bar'
@@ -17,6 +19,9 @@ const useStyles = makeStyles(styles)
 const WidgetView = () => {
 
   const classes = useStyles()
+
+  // store actions
+  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
 
   // widget state
   const type = useStoreState((state) => state.type)
@@ -56,14 +61,20 @@ const WidgetView = () => {
         : 'Data loaded successfully',
   }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
 
-
   return (
     <>
-      <Layout className='w-full flex row-span-1 col-span-2 shadow'>
+      <Layout.Header className='w-full flex row-span-1 col-span-3 shadow'>
         <WidgetTitleBar />
-      </Layout>
+      </Layout.Header>
 
       <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
+        <CustomSwitch
+          className='mt-3 ml-5'
+          labels={['widget', 'table']}
+          icons={[DashboardLayout, Table]}
+          value={showTable}
+          update={(val) => nestedUpdate({ ui: { showTable: val } })}
+        />
         <div className={!showTable
           ? classes.hidden
           : mode !== modes.VIEW
