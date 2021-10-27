@@ -76,7 +76,8 @@
     "react-query": "^3.19.0",
     "react-router-dom": "5.2.0",
     "size-limit": "^4.5.7",
-    "tailwindcss": "yarn:@tailwindcss/postcss7-compat@^2.1.2"
+    "tailwindcss": "yarn:@tailwindcss/postcss7-compat@^2.1.2",
+    "tailwindcss-children": "^2.1.0"
   },
   "dependencies": {
     "@eqworks/chart-system": "^0.6.2",
