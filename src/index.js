@@ -10,6 +10,7 @@ import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
 import WidgetEditor from './editor'
 import WidgetView from './view'
+import './styles/index.css'
 
 
 // put styles in separate file for readability
