@@ -2,15 +2,14 @@ import React, { useMemo } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@eqworks/lumen-ui'
-import { Accordion, Icons, TextField, Button, Chip, Loader, Layout } from '@eqworks/lumen-labs'
-import { ArrowExpand, EditPen, Download } from '../components/icons'
-import OverflowMarquee from '../components/overflow-marquee'
+import { Loader, Layout } from '@eqworks/lumen-labs'
 
 import ResultsTable from './table'
 import modes from '../constants/modes'
-import { useStoreState, useStoreActions } from '../store'
+import { useStoreState } from '../store'
 import styles from '../styles'
 import WidgetAdapter from './adapter'
+import WidgetTitleBar from './title-bar'
 
 
 const useStyles = makeStyles(styles)
@@ -19,15 +18,8 @@ const WidgetView = () => {
 
   const classes = useStyles()
 
-  // store actions
-  const update = useStoreActions((state) => state.update)
-  const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
-
   // widget state
-  const id = useStoreState((state) => state.id)
   const type = useStoreState((state) => state.type)
-  const title = useStoreState((state) => state.title)
-  const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
   const isReady = useStoreState((state) => state.isReady)
 
@@ -42,8 +34,6 @@ const WidgetView = () => {
   const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
-  const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
-  const editingTitle = useStoreState((state) => state.ui.editingTitle)
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
@@ -66,130 +56,11 @@ const WidgetView = () => {
         : 'Data loaded successfully',
   }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
 
-  const [tentativeTitle, setTentativeTitle] = React.useState(title)
-  React.useEffect(() => {
-    setTentativeTitle(title)
-  }, [title])
-
-  const renderButton = (children, onClick, props) =>
-    <Button
-      classes={{ button: 'ml-2' }}
-      variant='borderless'
-      size='md'
-      onClick={onClick}
-      {...props}
-    >
-      {children}
-    </Button>
-
-  const renderIconButton = (Component, onClick, props = {}) =>
-    renderButton(<Component size='md' />, onClick, props)
-
-  const renderDetailItems = (items) =>
-    <div className={`w-full grid items-center grid-cols-${items.length} divide-x divide-secondary-300`}>
-      {
-        items.map(([title, info], i) => (
-          <div key={i} className='flex pl-3 pr-3 flex-col '>
-            <span className='m-0 text-xs text-secondary-500 tracking-wider'>
-              {`${title}:`}
-            </span>
-            <OverflowMarquee >
-              <div className='flex-none whitespace-nowrap min-w-0'>
-                <span className='flex-initial text-xs font-mono bg-secondary-200 text-secondary-800'>
-                  {info}
-                </span>
-              </div>
-            </OverflowMarquee>
-          </div>
-        )
-        )
-      }
-    </div>
-
-
-  const renderWidgetMeta =
-    <div className='flex bg-transparent p-3'>
-      {renderDetailItems([
-        ['CREATED DATE', '09/09/09 10:23 AM'],
-        ['LAST UPDATED', '09/09/09 10:23 AM'],
-        ['DATA VOLUME', dataReady
-          ? `${columns.length} columns ${rows.length} rows`
-          : '...',
-        ],
-        ['DATA SOURCE', dataReady
-          ? `${dataSourceType} ${dataSourceID} ${dataSourceName || ''}`
-          : '...',
-        ],
-      ])}
-    </div>
-
-  const renderWidgetTitle =
-    <Accordion color='secondary' className='w-full p-2' >
-      <Accordion.Panel
-        color='transparent'
-        classes={{ icon: 'h-full', header: 'children:not-first:flex-1' }}
-        header={
-          <div className='flex items-center'>
-            {
-              editingTitle
-                ? <TextField
-                  autoFocus
-                  size='lg'
-                  value={tentativeTitle}
-                  onChange={(v) => setTentativeTitle(v)}
-                  onBlur={() => {
-                    setTentativeTitle(title)
-                    nestedUpdate({ ui: { editingTitle: false } })
-                  }}
-                  onSubmit={(e) => {
-                    update({ title: e.target.children[0].children[0].value })
-                    nestedUpdate({ ui: { editingTitle: false } })
-                    e.preventDefault()
-                  }}
-                />
-                : <span className='text-lg font-bold text-primary-500'>
-                  {title || 'Untitled'}
-                </span>
-            }
-            {renderIconButton(EditPen,
-              () => nestedUpdate({ ui: { editingTitle: true } }),
-              { variant: 'elevated' }
-            )}
-            {
-              id &&
-              <Chip classes={{ chip: 'ml-4' }} color='secondary'>
-                {`ID: ${id}`}
-              </Chip>
-            }
-            <div className='flex ml-auto'>
-              {renderIconButton(Download,
-                () => window.alert('not implemented'),
-              )}
-              {renderButton(<>EXPORT</>,
-                () => window.alert('not implemented'),
-              )}
-              {renderButton(
-                <div className='flex items-center'>
-                  OPEN IN EDITOR
-                  <ArrowExpand size='md' className='stroke-current text-white ml-2' />
-                </div>,
-                () => window.alert('not implemented'),
-                { variant: 'filled' }
-              )}
-            </div>
-          </div>
-        }
-        ExpandIcon={Icons.ChevronDown}
-      >
-        {renderWidgetMeta}
-      </Accordion.Panel>
-    </Accordion>
-
 
   return (
     <>
       <Layout className='w-full flex row-span-1 col-span-2 shadow'>
-        {renderWidgetTitle}
+        <WidgetTitleBar />
       </Layout>
 
       <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
