@@ -72,7 +72,6 @@ const WidgetTitleBar = () => {
       }
     </div>
 
-
   const renderWidgetMeta =
     <div className='flex bg-transparent p-3'>
       {renderDetailItems([
@@ -88,6 +87,38 @@ const WidgetTitleBar = () => {
         ],
       ])}
     </div>
+
+  const renderWidgetTitle =
+    editingTitle
+      ? <TextField
+        autoFocus
+        size='lg'
+        value={tentativeTitle}
+        onChange={(v) => setTentativeTitle(v)}
+        onBlur={() => {
+          setTentativeTitle(title)
+          nestedUpdate({ ui: { editingTitle: false } })
+        }}
+        onSubmit={(e) => {
+          update({ title: e.target.children[0].children[0].value })
+          nestedUpdate({ ui: { editingTitle: false } })
+          e.preventDefault()
+        }}
+      />
+      : <>
+        <span className='text-lg font-bold text-primary-500'>
+          {title || 'Untitled'}
+        </span>
+        {renderButton(
+          <EditPen
+            size="md"
+            className='fill-current text-secondary-600'
+          />,
+          () => nestedUpdate({ ui: { editingTitle: true } }),
+          { className: 'px-4 border-none', type: 'secondary' }
+        )}
+      </>
+
   return (
     <Accordion color='secondary' className='w-full' >
       <Accordion.Panel
@@ -99,37 +130,7 @@ const WidgetTitleBar = () => {
         }}
         header={
           <div className='flex items-center'>
-            {
-              editingTitle
-                ? <TextField
-                  autoFocus
-                  size='lg'
-                  value={tentativeTitle}
-                  onChange={(v) => setTentativeTitle(v)}
-                  onBlur={() => {
-                    setTentativeTitle(title)
-                    nestedUpdate({ ui: { editingTitle: false } })
-                  }}
-                  onSubmit={(e) => {
-                    update({ title: e.target.children[0].children[0].value })
-                    nestedUpdate({ ui: { editingTitle: false } })
-                    e.preventDefault()
-                  }}
-                />
-                : <>
-                  <span className='text-lg font-bold text-primary-500'>
-                    {title || 'Untitled'}
-                  </span>
-                  {renderButton(
-                    <EditPen
-                      size="md"
-                      className='fill-current text-secondary-600'
-                    />,
-                    () => nestedUpdate({ ui: { editingTitle: true } }),
-                    { className: 'px-4 border-none', type: 'secondary' }
-                  )}
-                </>
-            }
+            {renderWidgetTitle}
             {
               id &&
               <Chip classes={{ chip: 'text-secondary-600 bg-secondary-300 py-0.5 px-2 rounded-md uppercase' }} color='secondary'>
