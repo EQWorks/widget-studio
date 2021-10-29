@@ -14,7 +14,7 @@ const CustomSwitch = ({ labels, icons, value, update, className }) => (
             disabled={selected}
             onClick={() => update(!value)}
           >
-            <span className={`px-4 flex ${!selected && 'hover:text-secondary-600'} items-center text-${selected ? 'primary' : 'secondary'}-500`}>
+            <span className={`px-4 flex ${!selected && 'hover:text-secondary-600'} items-center transition duration-500 ease-in-out text-${selected ? 'primary' : 'secondary'}-500`}>
               {
                 icons[i] &&
                 createElement(icons[i], { className: 'fill-current pr-0.5 mr-1' })
