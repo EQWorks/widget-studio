@@ -1,18 +1,14 @@
 import React, { useEffect, createElement } from 'react'
 
-import { makeStyles } from '@material-ui/core/styles'
-import { Loader } from '@eqworks/lumen-ui'
-import IconButton from '@material-ui/core/IconButton'
-import Clear from '@material-ui/icons/Clear'
+import { Icons as _Icons, Button } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import BarControls from './controls/bar-controls'
 import PieControls from './controls/pie-controls'
 import LineControls from './controls/line-controls'
 import ScatterControls from './controls/scatter-controls'
-
+import { Controls } from '../../components/icons'
 import Icons from './icons'
-import styles from '../styles'
 
 
 const controls = {
@@ -22,18 +18,15 @@ const controls = {
   scatter: ScatterControls,
 }
 
-// put styles in separate file for readability
-const useStyles = makeStyles(styles)
-
 const WidgetControls = () => {
-  const classes = useStyles()
 
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const update = useStoreActions(actions => actions.update)
   const resetWidget = useStoreActions(actions => actions.resetWidget)
   const type = useStoreState((state) => state.type)
   const columns = useStoreState((state) => state.columns)
 
-  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const dataReady = useStoreState((state) => state.dataReady)
 
   useEffect(() => {
@@ -42,33 +35,46 @@ const WidgetControls = () => {
   }, [columns, update])
 
   return (
-    <div className={classes.container}>
-      {
-        dataSourceLoading &&
-        <div className={classes.loaderContainer}>
-          <Loader open />
-        </div>
-      }
-      <div className={dataReady ? classes.controlHeader : classes.hidden}>
-        <Icons disabled={!columns.length} />
+    <div className='flex flex-col border border-neutral-100 p-5 row-span-3'>
+      <div className={`flex items-center ${showWidgetControls ? '' : 'flex-1'}`}>
+        {
+          showWidgetControls &&
+          <span className='flex-1 font-bold text-secondary-800'>Controls</span>
+        }
+        <Button
+          variant='borderless'
+          className={`border-none ${showWidgetControls ? '' : 'h-full'}`}
+          onClick={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
+        >
+          {
+            showWidgetControls
+              ? <_Icons.Close size='md' className='fill-current text-secondary-500 h-min w-auto' />
+              : <Controls size='md' className='h-full stroke-current text-secondary-500 w-5 ' />
+          }
+        </Button>
       </div>
-      {dataReady && type && columns &&
-        <div className={classes.controls}>
-          {createElement(controls[type])}
-        </div>
-      }
-      {
-        dataReady &&
-        <div className={classes.controlFooter}>
-          <IconButton
-            size='small'
-            onClick={resetWidget}
-          >
-            <Clear />
-          </IconButton>
-        </div>
-      }
-    </div>
+      <div className={`${showWidgetControls ? '' : 'hidden'}`} >
+        {
+          dataReady &&
+          <>
+            <Icons disabled={!columns.length} />
+            {
+              type && columns &&
+              createElement(controls[type])
+            }
+            <div className={'p-2 flex justify-end'}>
+              <Button
+                variant='borderless'
+                className='border-none'
+                onClick={resetWidget}
+              >
+                <_Icons.Close size='md' className='fill-current text-secondary-500 h-min w-auto' />
+              </Button>
+            </div>
+          </>
+        }
+      </div>
+    </div >
   )
 }
 

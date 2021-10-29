@@ -1,25 +1,17 @@
 import React, { useEffect } from 'react'
-
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import { Layout } from '@eqworks/lumen-labs'
 
-import styles from './styles'
 import modes from './constants/modes'
 import { useStoreState, useStoreActions } from './store'
 import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
-import WidgetEditor from './editor'
 import WidgetView from './view'
+import WidgetTitleBar from './view/title-bar'
 import './styles/index.css'
+import WidgetControls from './editor/widget-controls'
 
-
-// put styles in separate file for readability
-const useStyles = makeStyles(styles)
 
 const Widget = ({ id, mode: _mode, staticData }) => {
-
-  const classes = useStyles()
 
   // easy-peasy actions
   const loadConfig = useStoreActions(actions => actions.loadConfig)
@@ -55,21 +47,19 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   }, [_mode, id, loadConfig, mode, update, nestedUpdate, staticData])
 
   return (
-    <Layout className={`border border-neutral-100
-    ${mode === modes.EDITOR
-      ? classes.outerContainer
-      : mode === modes.VIEW
-        ? classes.outerContainerViewMode
-        : mode === modes.QL
-          ? classes.outerContainerQLMode
-          : ''}`
-    }>
-      <WidgetView />
-      {
-        mode !== modes.VIEW &&
-        <WidgetEditor />
-      }
-    </Layout >
+    <div className='border border-neutral-100' >
+      <WidgetTitleBar className='w-full flex row-span-1 col-span-3 p-4 shadow-light-10' />
+      <div className='flex flex-row'>
+        <div className='flex-1 flex flex-col'>
+          <WidgetView />
+        </div>
+        {
+          mode !== modes.VIEW &&
+          <WidgetControls />
+        }
+      </div>
+    </div >
+    // <FilterControls />
   )
 }
 
