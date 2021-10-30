@@ -8,6 +8,7 @@ const config = {
     extend: {
       flex: ['children-not-first'],
       textColor: ['children'],
+      textOverflow: ['children'],
     },
   },
   theme: {
