@@ -1,14 +1,13 @@
-import React, { useMemo, useRef } from 'react'
+import React, { Children, useMemo, useRef } from 'react'
 import PropTypes from 'prop-types'
-import Marquee from 'react-fast-marquee'
+import { Tooltip } from '@eqworks/lumen-labs'
 
 
-const OverflowMarquee = ({ children }) => {
+const OverflowTooltip = ({ children, ...props }) => {
   const content = useRef(null)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const xOverflow = useMemo(() => content.current?.scrollWidth > content.current?.clientWidth, [content.current?.scrollWidth, content.current?.clientWidth])
-  const renderChildren = React.Children.map(children, (child) => child)
-
+  const renderChildren = Children.map(children, child => child)
   return (
     <>
       <span ref={content} className='invisible overflow-hidden max-h-0'>
@@ -16,19 +15,19 @@ const OverflowMarquee = ({ children }) => {
       </span>
       {
         xOverflow
-          ? <Marquee gradient={false}>
-            <span className='pr-3'>
+          ? <Tooltip {...props} >
+            <span className='max-w-full overflow-hidden children:truncate'>
               {renderChildren}
             </span>
-          </Marquee>
+          </Tooltip>
           : renderChildren
       }
     </>
   )
 }
 
-OverflowMarquee.propTypes = {
+OverflowTooltip.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export default OverflowMarquee
+export default OverflowTooltip

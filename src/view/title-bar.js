@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import { Accordion, Icons, TextField, Button, Chip } from '@eqworks/lumen-labs'
 
 import { ArrowExpand, EditPen, Download } from '../components/icons'
-import OverflowMarquee from '../components/overflow-marquee'
 import { useStoreState, useStoreActions } from '../store'
+import OverflowTooltip from '../components/overflow-tooltip'
 
 
 const WidgetTitleBar = () => {
@@ -59,13 +59,17 @@ const WidgetTitleBar = () => {
             <span className='m-0 text-xs text-secondary-500 tracking-wider'>
               {`${title}:`}
             </span>
-            <OverflowMarquee >
+            <OverflowTooltip
+              description={info}
+              classes={{ content: 'whitespace-nowrap' }}
+              position={i === 0 ? 'right' : 'left'}
+            >
               <div className='flex-none whitespace-nowrap min-w-0'>
-                <span className='font-medium tracking-wide flex-initial text-xs font-mono bg-secondary-200 text-secondary-800'>
+                <span className='flex-none whitespace-nowrap min-w-0 font-medium tracking-wide flex-initial text-xs font-mono bg-secondary-200 text-secondary-800'>
                   {info}
                 </span>
               </div>
-            </OverflowMarquee>
+            </OverflowTooltip>
           </div>
         )
         )
