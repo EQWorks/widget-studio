@@ -55,6 +55,8 @@ export default {
     padding: '1rem',
     borderRadius: '0.5rem',
     marginBottom: '0.5rem',
+    display: 'flex',
+    flexDirection: 'column',
   },
   linkedSelectPrimary: {
     flex: '2',

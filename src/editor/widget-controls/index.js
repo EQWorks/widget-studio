@@ -35,7 +35,7 @@ const WidgetControls = () => {
   }, [columns, update])
 
   return (
-    <div className='flex flex-col border border-neutral-100 p-5 row-span-3'>
+    <div className='flex flex-col border border-neutral-100 p-5'>
       <div className={`flex items-center ${showWidgetControls ? '' : 'flex-1'}`}>
         {
           showWidgetControls &&
