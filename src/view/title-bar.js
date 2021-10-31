@@ -54,27 +54,38 @@ const WidgetTitleBar = () => {
   const renderDetailItems = (items) =>
     <div className={`w-full grid items-center grid-cols-${items.length} divide-x divide-secondary-300`}>
       {
-        items.map(([title, info], i) => (
-          <div key={i} className='flex pl-3 pr-3 flex-col '>
-            <span className='m-0 text-xs text-secondary-500 tracking-wider'>
-              {`${title}:`}
-            </span>
-            <OverflowTooltip
-              description={info}
-              classes={{ content: 'whitespace-nowrap' }}
-              position={i === 0 ? 'right' : 'left'}
-            >
-              <div className='flex-none whitespace-nowrap min-w-0'>
-                <span className='flex-none whitespace-nowrap min-w-0 font-medium tracking-wide flex-initial text-xs font-mono bg-secondary-200 text-secondary-800'>
-                  {info}
-                </span>
-              </div>
-            </OverflowTooltip>
-          </div>
-        )
+        items.map(([title, info, hyperlink], i) => {
+          const config = 'flex-none whitespace-nowrap min-w-0 font-semibold tracking-wide flex-initial text-xs font-mono bg-secondary-200 py-1 px-0.5'
+          return (
+            <div key={i} className='flex pl-3 pr-3 flex-col '>
+              <span className='m-0 text-xs text-secondary-500 tracking-wider'>
+                {`${title}:`}
+              </span>
+              <OverflowTooltip
+                description={info}
+                classes={{ content: 'whitespace-nowrap' }}
+                position={i === 0 ? 'right' : 'left'}
+              >
+                <div className='flex-none whitespace-nowrap min-w-0'>
+                  {
+                    hyperlink
+                      ? <a href={hyperlink}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        className={`${config} font-bold text-primary-500 underline`}
+                      > {info} </a>
+                      : <span className={`${config} text-secondary-800`}>
+                        {info}
+                      </span>
+                  }
+                </div>
+              </OverflowTooltip>
+            </div >
+          )
+        }
         )
       }
-    </div>
+    </div >
 
   const renderWidgetMeta =
     <div className='flex bg-transparent p-3'>
@@ -85,9 +96,11 @@ const WidgetTitleBar = () => {
           ? `${columns.length} columns ${rows.length} rows`
           : '...',
         ],
-        ['DATA SOURCE', dataReady
-          ? `${dataSourceType} ${dataSourceID} ${dataSourceName || ''}`
-          : '...',
+        ['DATA SOURCE',
+          dataReady
+            ? `${dataSourceType} ${dataSourceID} ${dataSourceName || ''}`
+            : '...',
+          'https://www.google.com/search?q=not+implemented',
         ],
       ])}
     </div>
