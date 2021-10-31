@@ -68,19 +68,21 @@ const WidgetView = () => {
 
   return (
     dataReady ?
-      <>
+      <div className='w-full h-full flex flex-col'>
         <CustomSwitch
-          className='mt-3 ml-5'
+          className='flex-0 mt-3 ml-5'
           labels={['widget', 'table']}
           icons={[DashboardLayout, Table]}
           value={showTable}
           update={(val) => nestedUpdate({ ui: { showTable: val } })}
         />
-        <FadeBetween value={showTable}>
-          <ResultsTable results={rows} />
-          {isReady ? <WidgetAdapter /> : renderWidgetWarning}
-        </FadeBetween>
-      </>
+        <div className='flex-1'>
+          <FadeBetween value={showTable}>
+            <ResultsTable results={rows} />
+            {isReady ? <WidgetAdapter /> : renderWidgetWarning}
+          </FadeBetween>
+        </div>
+      </div>
       :
       renderWidgetWarning
   )
