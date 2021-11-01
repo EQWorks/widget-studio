@@ -49,15 +49,13 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   return (
     <div className='flex flex-col items-stretch border border-neutral-100 w-full h-full' >
       <WidgetTitleBar className='flex-initial flex p-4 shadow-light-10' />
-      <div className='min-h-0 flex flex-row'>
+      <div className='min-h-0 flex flex-row justify-end'>
         <div className='min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch'>
           <WidgetView />
         </div>
         {
           mode !== modes.VIEW &&
-          <div className='min-h-0 overflow-auto flex-initial min-w-0 flex'>
-            <WidgetControls />
-          </div >
+          <WidgetControls />
         }
       </div>
     </div >
