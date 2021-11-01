@@ -63,6 +63,7 @@ export default {
     order: 3,
     flex: '1 1 0',
     minWidth: 0,
+    minHeight: 200,
     gridRow: 2,
     overflow: 'auto',
   },
