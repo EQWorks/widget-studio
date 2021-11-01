@@ -47,7 +47,7 @@ const stateDefaults = {
   ui: {
     mode: null,
     showTable: false,
-    showWidgetControls: false,
+    showWidgetControls: true,
     showFilterControls: false,
     showDataSourceControls: false,
     staticData: false,
