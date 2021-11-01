@@ -1,22 +1,47 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { useStoreState } from '../../../store'
+
 import { LocusMap } from '@eqworks/react-maps'
 import { getCursor } from '@eqworks/react-maps/dist/utils'
 import { makeStyles } from '@material-ui/core/styles'
+import modes from '../../../constants/modes'
 
 
 const useStyles = makeStyles({
   mapWrapper: (props) => ({
     position: 'absolute',
-    width: props.width - 10,
-      height: props.height ? props.height - 10 : '10px',
-      margin: '5px',
+    width: props.width,
+    height: props.height,
+    margin: props.margin,
   }),
 })
 
 const Map = ({ width, height, ...props }) => {
-  const classes = useStyles({ width, height })
+  const mode = useStoreState(state => state.ui.mode)
+
+  let finalMargin = '5px 0 0 0'
+  if (mode === modes.EDITOR) {
+    finalMargin = '5px'
+  }
+  if (mode === modes.QL) {
+    finalMargin = '5px 5px 0 0'
+  }
+  let finalWidth = width
+  if (mode === modes.EDITOR) {
+    finalWidth = width - 10
+  }
+  if (mode === modes.QL) {
+    finalWidth = width - 5
+  }
+  let finalHeight = height - 5
+  if (mode === modes.EDITOR) {
+    finalHeight = height - 10
+  }
+
+  const classes = useStyles({ width: finalWidth, height: finalHeight, margin: finalMargin })
+
   return (
     <div className={classes.mapWrapper}>
       <LocusMap { ...props } />
@@ -29,8 +54,6 @@ Map.propTypes = {
   height: PropTypes.number.isRequired,
   props: PropTypes.object.isRequired,
 }
-
-
 
 const getKeyValues = (objArray, key) => objArray.filter(o => o.map_vis === key)[0]
 
