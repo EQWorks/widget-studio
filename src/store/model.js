@@ -36,6 +36,7 @@ const stateDefaults = [
   { key: 'groupKey', defaultValue: null, resettable: true },
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
+  { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'renderableValueKeys', defaultValue: [], resettable: true },
   { key: 'options', defaultValue: {}, resettable: true },
   {
@@ -94,6 +95,7 @@ export default {
       (state) => state.groupKey,
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
+      (state) => state.mapValueKeys,
       (state) => state.genericOptions,
       (state) => state.options,
       (state) => state.isReady,
@@ -107,6 +109,7 @@ export default {
       groupKey,
       indexKey,
       renderableValueKeys,
+      mapValueKeys,
       genericOptions,
       options,
       isReady,
@@ -118,6 +121,7 @@ export default {
           type,
           filters,
           valueKeys: renderableValueKeys,
+          mapValueKeys,
           group,
           groupKey,
           indexKey,
@@ -148,6 +152,7 @@ export default {
       (state) => state.columns,
       (state) => state.type,
       (state) => state.renderableValueKeys,
+      (state) => state.mapValueKeys,
       (state) => state.indexKey,
       (state) => state.groupKey,
     ],
@@ -156,12 +161,13 @@ export default {
       columns,
       type,
       renderableValueKeys,
+      mapValueKeys,
       indexKey,
       groupKey,
     ) => (
-      Boolean(type && columns.length && rows.length && (indexKey || groupKey) && renderableValueKeys.length)
+      Boolean(type && columns.length && rows.length && (indexKey || groupKey) &&
+        ((type !== 'map' && renderableValueKeys.length) || (type === 'map' && mapValueKeys.length)))
     )),
-
 
   dataReady: computed(
     [
