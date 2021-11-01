@@ -139,6 +139,7 @@ const WidgetTitleBar = () => {
   return (
     <Accordion color='secondary' className='w-full' >
       <Accordion.Panel
+        autoHeight
         color='transparent'
         classes={{
           iconRoot: 'bg-opacity-0 children:text-primary-500',
