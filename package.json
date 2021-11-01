@@ -84,6 +84,7 @@
     "axios": "^0.20.0",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",
+    "lodash.debounce": "^4.0.8",
     "prop-types": "^15.7.2",
     "react-fast-marquee": "^1.2.1",
     "react-resize-detector": "^6.7.6"
