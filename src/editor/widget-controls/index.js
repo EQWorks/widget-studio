@@ -35,25 +35,28 @@ const WidgetControls = () => {
   }, [columns, update])
 
   return (
-    <div className='flex flex-col border border-neutral-100 p-5'>
-      <div className={`flex items-center ${showWidgetControls ? '' : 'flex-1'}`}>
-        {
-          showWidgetControls &&
-          <span className='flex-1 font-bold text-secondary-800'>Controls</span>
-        }
-        <Button
-          variant='borderless'
-          className={`border-none ${showWidgetControls ? '' : 'h-full'}`}
-          onClick={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
-        >
-          {
-            showWidgetControls
-              ? <_Icons.Close size='md' className='fill-current text-secondary-500 h-min w-auto' />
-              : <Controls size='md' className='h-full stroke-current text-secondary-500 w-5 ' />
-          }
-        </Button>
-      </div>
-      <div className={`${showWidgetControls ? '' : 'hidden'}`} >
+    <div className='flex flex-col items-center justify-center border border-neutral-100 p-5' >
+      {
+        showWidgetControls
+          ? <div className={'w-full flex flex-row items-center'}>
+            <span className='flex-1 font-bold text-secondary-800' > Controls</span >
+            <Button
+              variant='borderless'
+              className={`border-none ${showWidgetControls ? '' : 'h-full'}`}
+              onClick={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
+            >
+              <_Icons.Close size='md' className='fill-current text-secondary-500 h-min w-auto' />
+            </Button>
+          </div >
+          : <Button
+            variant='borderless'
+            className={'absolute border-none h-full'}
+            onClick={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
+          >
+            <Controls size='md' className='h-full stroke-current text-secondary-500 w-5' />
+          </Button>
+      }
+      <div className={`${showWidgetControls ? 'w-auto' : 'pointer-events-none w-0 whitespace-nowrap overflow-hidden'}`} >
         {
           dataReady &&
           <>
