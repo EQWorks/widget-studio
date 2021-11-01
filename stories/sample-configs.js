@@ -162,7 +162,7 @@ export default {
     'title': 'My example map widget',
     'type': 'map',
     'filters': { 'visits': [0, 100] },
-    'valueKeys': [
+    'mapValueKeys': [
       {
         'key': 'visits',
         'agg': 'sum',
