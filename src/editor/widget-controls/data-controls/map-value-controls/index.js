@@ -15,7 +15,7 @@ const MapValueControls = () => {
 
   // common state
   const groupKey = useStoreState((state) => state.groupKey)
-  const valueKeys = useStoreState((state) => state.valueKeys)
+  const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
 
@@ -31,23 +31,23 @@ const MapValueControls = () => {
       <WidgetControlCard title='Value keys' >
         <MapLinkedSelect
           categories={Object.values(mapVis)}
-          values={valueKeys}
+          values={mapValueKeys}
           data={numericColumns}
           subData={groupKey ? Object.keys(aggFuncDict) : []}
-          update={(val) => nestedUpdate({ valueKeys: val })}
+          update={(val) => nestedUpdate({ mapValueKeys: val })}
           callback={(i, val) => {
             if (i === -1) { // add a key
-              const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+              const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
               valueKeysCopy.push(val)
-              update({ valueKeys: valueKeysCopy })
+              update({ mapValueKeys: valueKeysCopy })
             } else { // modify a key
-              update({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
+              update({ mapValueKeys: mapValueKeys.map((v, _i) => i === _i ? val : v) })
             }
           }}
           deleteCallback={(i) => {
-            const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+            const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
             valueKeysCopy.splice(i, 1)
-            update({ valueKeys: valueKeysCopy })
+            update({ mapValueKeys: valueKeysCopy })
           }}
         />
       </WidgetControlCard>

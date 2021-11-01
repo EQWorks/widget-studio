@@ -46,6 +46,7 @@ const WidgetAdapter = ({ width, height }) => {
   const filters = useStoreState((state) => state.filters)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
+  const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const config = useStoreState((state) => state.config)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
@@ -86,16 +87,17 @@ const WidgetAdapter = ({ width, height }) => {
   ), [group, groupKey, truncatedData])
 
   // if grouping enabled, aggregate each column from valueKeys in groupedData according to defined 'agg' property
-  const aggregatedData = useMemo(() => (
-    group
+  const aggregatedData = useMemo(() => {
+    const finalValueKeys = type === 'map' ? mapValueKeys : valueKeys
+    return group
       ? Object.entries(groupedData).map(([_groupKey, values]) => (
-        valueKeys.reduce((res, { key, agg = 'sum' }) => {
+        finalValueKeys.reduce((res, { key, agg = 'sum' }) => {
           res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
           return res
         }, { [groupKey]: _groupKey })
       ))
       : null
-  ), [group, groupKey, groupedData, valueKeys])
+  }, [type, group, groupKey, groupedData, valueKeys, mapValueKeys])
 
   const mapEnrichedData = useMemo(() => (
     type === 'map'
