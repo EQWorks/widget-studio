@@ -13,7 +13,9 @@ const config = {
   },
   theme: {
     extend: {
-      // place extended styles here
+      transitionProperty: {
+        'max-width': 'max-width',
+      },
     },
   },
 }
