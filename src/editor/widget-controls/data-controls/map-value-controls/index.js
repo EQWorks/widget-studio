@@ -5,6 +5,7 @@ import { useStoreState, useStoreActions } from '../../../../store'
 import CustomSelect from '../../../shared-components/custom-select'
 import MapLinkedSelect from './map-linked-select'
 import WidgetControlCard from '../../../shared-components/widget-control-card'
+import { mapVis } from '../../../../constants/map'
 
 
 const MapValueControls = () => {
@@ -29,18 +30,24 @@ const MapValueControls = () => {
       </WidgetControlCard>
       <WidgetControlCard title='Value keys' >
         <MapLinkedSelect
+          categories={Object.values(mapVis)}
           values={valueKeys}
           data={numericColumns}
           subData={groupKey ? Object.keys(aggFuncDict) : []}
           update={(val) => nestedUpdate({ valueKeys: val })}
           callback={(i, val) => {
-            if (i === valueKeys.length) {
+            if (i === -1) { // add a key
               const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
               valueKeysCopy.push(val)
               update({ valueKeys: valueKeysCopy })
-            } else {
+            } else { // modify a key
               update({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
             }
+          }}
+          deleteCallback={(i) => {
+            const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+            valueKeysCopy.splice(i, 1)
+            update({ valueKeys: valueKeysCopy })
           }}
         />
       </WidgetControlCard>

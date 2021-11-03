@@ -19,7 +19,6 @@ const LinkedSelect = ({
   subData,
   subInit,
   controlled,
-  type,
 }) => {
   const classes = useStyles()
 
@@ -56,13 +55,12 @@ const LinkedSelect = ({
         />
       </div>
       {deletable &&
-        <IconButton onClick={type === 'map' ?
-          () => {
+        <IconButton
+          onClick={() => {
             deleteCallback()
             setChoice('')
             setSubChoice('')
-          } :
-          deleteCallback}
+          }}
         >
           <Delete />
         </IconButton>
@@ -80,7 +78,6 @@ LinkedSelect.propTypes = {
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   init: PropTypes.string,
   subInit: PropTypes.string,
-  type: PropTypes.string,
 }
 
 LinkedSelect.defaultProps = {
@@ -89,7 +86,6 @@ LinkedSelect.defaultProps = {
   controlled: true,
   init: '',
   subInit: '',
-  type: '',
 }
 
 export default LinkedSelect
