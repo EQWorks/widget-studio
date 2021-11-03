@@ -47,7 +47,7 @@ const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCa
             init={key}
             subData={subData}
             subInit={agg}
-            deletable
+            clearable
             deleteCallback={() => deleteCallback(match)}
             type='map'
           />

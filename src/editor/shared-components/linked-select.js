@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import IconButton from '@material-ui/core/IconButton'
-import { Delete } from '@material-ui/icons'
+import { Delete, Clear } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
 import CustomSelect from './custom-select'
@@ -12,6 +12,7 @@ const useStyles = makeStyles(styles)
 
 const LinkedSelect = ({
   deletable,
+  clearable,
   deleteCallback,
   callback,
   data,
@@ -55,6 +56,11 @@ const LinkedSelect = ({
         />
       </div>
       {deletable &&
+        <IconButton onClick={deleteCallback} >
+          <Delete />
+        </IconButton>
+      }
+      {clearable &&
         <IconButton
           onClick={() => {
             deleteCallback()
@@ -62,7 +68,7 @@ const LinkedSelect = ({
             setSubChoice('')
           }}
         >
-          <Delete />
+          <Clear />
         </IconButton>
       }
     </div>
@@ -71,6 +77,7 @@ const LinkedSelect = ({
 
 LinkedSelect.propTypes = {
   deletable: PropTypes.bool,
+  clearable: PropTypes.bool,
   deleteCallback: PropTypes.func,
   callback: PropTypes.func.isRequired,
   controlled: PropTypes.bool,
@@ -82,6 +89,7 @@ LinkedSelect.propTypes = {
 
 LinkedSelect.defaultProps = {
   deletable: false,
+  clearable: false,
   deleteCallback: () => console.error('Not implemented'),
   controlled: true,
   init: '',
