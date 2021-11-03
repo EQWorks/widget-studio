@@ -14,7 +14,7 @@ import MapControls from './controls/map-controls'
 
 import Icons from './icons'
 import styles from '../styles'
-import { coordKeys } from '../../constants'
+import { coordKeys } from '../../constants/map'
 
 
 const controls = {

@@ -12,3 +12,8 @@ export const coordKeys = [
   'target_lon',
   'geometry',
 ]
+
+export const mapVis = {
+  RADIUS: 'radius',
+  FILL: 'fill',
+}
