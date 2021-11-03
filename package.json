@@ -79,7 +79,7 @@
   },
   "dependencies": {
     "@eqworks/chart-system": "^0.6.2",
-    "@eqworks/react-maps": "0.7.5-alpha.4",
+    "@eqworks/react-maps": "^0.7.5",
     "axios": "^0.20.0",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",
