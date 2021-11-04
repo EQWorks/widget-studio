@@ -16,6 +16,9 @@ const config = {
       transitionProperty: {
         'max-width': 'max-width',
       },
+      boxShadow: {
+        'widget': 'inset -4px 4px 4px rgba(54, 111, 228, 0.1)',
+      },
     },
   },
 }
