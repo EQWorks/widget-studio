@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
-import MapAdapter from './adapters/map'
+import MapAdapter from './adapters/react-maps'
 
 
 // declare which adapter handles each widget type
