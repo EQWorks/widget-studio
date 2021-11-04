@@ -29,7 +29,7 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
   }, [choice, controlled, init, subChoice, subInit])
 
   return (
-    <div className={classes.controlRow}>
+    <div className='flex'>
       <div className={classes.linkedSelectPrimary} >
         <CustomSelect
           data={data}

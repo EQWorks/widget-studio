@@ -36,28 +36,6 @@ export default {
     alignItems: 'stretch',
     flex: 1,
   },
-  controlRow: {
-    display: 'flex',
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-  },
-  controlCardHeader: {
-    alignSelf: 'flex-start',
-    marginBottom: '0.5rem',
-    marginTop: '0.5rem',
-    marginRight: '1rem',
-    alignItems: 'center',
-    display: 'flex',
-  },
-  controlCard: {
-    background: '#F1F1F1',
-    padding: '1rem',
-    borderRadius: '0.5rem',
-    marginBottom: '0.5rem',
-    display: 'flex',
-    flexDirection: 'column',
-  },
   linkedSelectPrimary: {
     flex: '2',
   },

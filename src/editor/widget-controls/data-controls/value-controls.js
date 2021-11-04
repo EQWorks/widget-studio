@@ -63,7 +63,7 @@ const ValueControls = ({ groupingOptional }) => {
         groupingOptional ?
           <>
             <WidgetControlCard
-              title={group ? 'Group by' : 'Index by'}
+              title={group ? 'Group By' : 'Index By'}
               titleExtra={
                 <CustomToggle
                   value={group}
@@ -94,14 +94,14 @@ const ValueControls = ({ groupingOptional }) => {
           </>
           :
           <>
-            <WidgetControlCard title='Group by' >
+            <WidgetControlCard title='Group By' >
               <CustomSelect
                 data={stringColumns}
                 chosenValue={groupKey}
                 setChosenValue={val => update({ groupKey: val })}
               />
             </WidgetControlCard>
-            <WidgetControlCard title='Value keys' >
+            <WidgetControlCard title='Value Keys' >
               {groupedValueKeysSelect}
             </WidgetControlCard>
           </>

@@ -8,7 +8,7 @@ import { useStoreState, useStoreActions } from '../store'
 import OverflowTooltip from '../components/overflow-tooltip'
 
 
-const WidgetTitleBar = () => {
+const WidgetTitleBar = ({ className }) => {
 
   // store actions
   const update = useStoreActions((state) => state.update)
@@ -36,7 +36,7 @@ const WidgetTitleBar = () => {
 
   const renderButton = (children, onClick, props) =>
     <Button
-      classes={{ button: 'ml-2 uppercase p-1.5 tracking-wider' }}
+      classes={{ button: 'ml-2 uppercase p-1.5 py-1 tracking-wider' }}
       variant='borderless'
       size='md'
       onClick={e => {
@@ -55,7 +55,7 @@ const WidgetTitleBar = () => {
     <div className={`w-full grid items-center grid-cols-${items.length} divide-x divide-secondary-300`}>
       {
         items.map(([title, info, hyperlink], i) => {
-          const config = 'flex-none whitespace-nowrap min-w-0 font-semibold tracking-wide flex-initial text-xs font-mono bg-secondary-200 py-1 px-0.5'
+          const config = 'flex-none whitespace-nowrap min-w-0 font-semibold tracking-wide flex-initial text-xs font-mono bg-secondary-200 p-0.5'
           return (
             <div key={i} className='flex pl-3 pr-3 flex-col '>
               <span className='m-0 text-xs text-secondary-500 tracking-wider'>
@@ -137,7 +137,7 @@ const WidgetTitleBar = () => {
       </>
 
   return (
-    <Accordion color='secondary' className='w-full' >
+    <Accordion color='secondary' className={className}>
       <Accordion.Panel
         autoHeight
         color='transparent'
@@ -182,7 +182,11 @@ const WidgetTitleBar = () => {
 }
 
 WidgetTitleBar.propTypes = {
+  className: PropTypes.string,
   children: PropTypes.node.isRequired,
+}
+WidgetTitleBar.defaultProps = {
+  className: '',
 }
 
 export default WidgetTitleBar

@@ -16,7 +16,7 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
   return (
     <>
-      <div className={classes.controlRow}>
+      <div className='flex'>
         <Typography
           className={classes.linkedSelectPrimary}
           color='textSecondary'

@@ -47,10 +47,10 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   }, [_mode, id, loadConfig, mode, update, nestedUpdate, staticData])
 
   return (
-    <div className='flex flex-col items-stretch border border-neutral-100 w-full h-full' >
-      <WidgetTitleBar className='flex-initial flex p-4 shadow-light-10' />
+    <div className='rounded-sm overflow-hidden flex flex-col items-stretch border-2 border-neutral-100 w-full h-full' >
+      <WidgetTitleBar className='flex-initial flex p-4 border-b-2 border-neutral-100' />
       <div className='min-h-0 flex flex-row justify-end'>
-        <div className='min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch'>
+        <div className='pt-1 min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch shadow-widget'>
           <WidgetView />
         </div>
         {
