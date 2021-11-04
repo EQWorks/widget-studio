@@ -6,7 +6,7 @@ import { makeStyles } from '@eqworks/lumen-labs'
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 
-import MapAdapter from './adapters/map'
+import MapAdapter from './adapters/react-maps'
 
 
 const classes = makeStyles({
