@@ -5,7 +5,7 @@ import useTransformedData from '../../hooks/use-transformed-data'
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 import useDebouncedResizeObserver from '../../hooks/use-debounced-resize-observer'
-import MapAdapter from './adapters/map'
+import MapAdapter from './adapters/react-maps'
 
 
 // declare which adapter handles each widget type
