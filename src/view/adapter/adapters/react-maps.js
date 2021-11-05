@@ -20,25 +20,15 @@ const useStyles = makeStyles({
 
 const Map = ({ width, height, ...props }) => {
   const mode = useStoreState(state => state.ui.mode)
+  const MODE_DIMENSIONS = Object.freeze({
+    [modes.EDITOR]: { margin: '5px', width: width - 10, height: height - 10 },
+    [modes.QL]: { margin: '5px 5px 0 0', width: width - 5, height: height - 5 },
+    [modes.VIEW]: { margin: '5px 0 0 0', width: width, height: height - 5 },
+  })
 
-  let finalMargin = '5px 0 0 0'
-  if (mode === modes.EDITOR) {
-    finalMargin = '5px'
-  }
-  if (mode === modes.QL) {
-    finalMargin = '5px 5px 0 0'
-  }
-  let finalWidth = width
-  if (mode === modes.EDITOR) {
-    finalWidth = width - 10
-  }
-  if (mode === modes.QL) {
-    finalWidth = width - 5
-  }
-  let finalHeight = height - 5
-  if (mode === modes.EDITOR) {
-    finalHeight = height - 10
-  }
+  const finalMargin = MODE_DIMENSIONS[mode].margin || 0
+  const finalWidth = MODE_DIMENSIONS[mode].width || width
+  const finalHeight = MODE_DIMENSIONS[mode].height || height
 
   const classes = useStyles({ width: finalWidth, height: finalHeight, margin: finalMargin })
 
