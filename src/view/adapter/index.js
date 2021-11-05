@@ -123,13 +123,15 @@ const WidgetAdapter = ({ width, height }) => {
   ), [group, indexKey, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
-  const finalData = useMemo(() => (
-    type === 'map'
-      ? mapEnrichedData
-      : group
-        ? aggregatedData
-        : indexedData
-  ), [aggregatedData, group, indexedData, mapEnrichedData, type])
+  const finalData = useMemo(() => {
+    if (type === 'map') {
+      return mapEnrichedData
+    }
+    if (group) {
+      return aggregatedData
+    }
+    return indexedData
+  }, [aggregatedData, group, indexedData, mapEnrichedData, type])
 
   // pass the processed data to the rendering adapter and memoize the results
   const adaptedDataAndConfig = useMemo(() => adapt(finalData ?? [], config), [adapt, config, finalData])
