@@ -1,43 +1,30 @@
-import React, { useMemo, createElement } from 'react'
+import React, { useMemo } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Divider from '@material-ui/core/Divider'
-import MapIcon from '@material-ui/icons/Map'
-import PieChartIcon from '@material-ui/icons/PieChart'
-import InsertChartIcon from '@material-ui/icons/InsertChart'
-import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
-import TimelineIcon from '@material-ui/icons/Timeline'
 import { Typography } from '@eqworks/lumen-ui'
-import { Chip, Loader } from '@eqworks/lumen-labs'
+import { Loader, Layout } from '@eqworks/lumen-labs'
 
+import { DashboardLayout, Table } from '../components/icons'
+import CustomSwitch from '../components/custom-switch'
 import ResultsTable from './table'
 import modes from '../constants/modes'
 import { useStoreState, useStoreActions } from '../store'
 import styles from '../styles'
 import WidgetAdapter from './adapter'
+import WidgetTitleBar from './title-bar'
 
 
 const useStyles = makeStyles(styles)
-
-const icons = {
-  map: MapIcon,
-  pie: PieChartIcon,
-  bar: InsertChartIcon,
-  scatter: ScatterPlotIcon,
-  line: TimelineIcon,
-}
 
 const WidgetView = () => {
 
   const classes = useStyles()
 
   // store actions
-  const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
+  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
 
   // widget state
   const type = useStoreState((state) => state.type)
-  const title = useStoreState((state) => state.title)
-  const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
   const isReady = useStoreState((state) => state.isReady)
 
@@ -52,7 +39,6 @@ const WidgetView = () => {
   const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
-  const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
@@ -77,73 +63,33 @@ const WidgetView = () => {
 
   return (
     <>
-      <div className={classes.widgetTitleBar}>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          {
-            dataReady &&
-            <div className={classes.widgetTitleBarItem}>
-              <Typography style={{ fontWeight: 600 }} color='textPrimary' variant='h6'>
-                {title || 'Untitled'}
-              </Typography>
-            </div>
-          }
-          <div className={classes.widgetTitleBarItem}>
-            {type && createElement(icons[type], { color: 'secondary' })}
-          </div>
-          <div className={classes.widgetTitleBarItem}>
-            {
-              dataReady &&
-              <Chip
-                color='secondary'
-                onClick={() => nestedUpdate({ ui: { showTable: !showTable } })}
-              >
-                {`${showTable ? 'Hide' : 'View'} Table`}
-              </Chip>
-            }
-          </div>
-        </div>
+      <Layout.Header className='w-full flex row-span-1 col-span-3 p-4 shadow-light-10'>
+        <WidgetTitleBar />
+      </Layout.Header>
 
-        {
-          dataReady &&
-          <>
-            <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-              <Typography color='textSecondary' variant='subtitle1'>
-                {`${dataSourceType} ${dataSourceID}`}
-              </Typography>
-              <Typography style={{ fontWeight: 200 }} color='textSecondary' variant='subtitle2'>
-                {dataSourceName || ''}
-              </Typography>
-            </div>
-            <Divider orientation='vertical' className={classes.verticalDivider} />
-            <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-              <Typography style={{ fontStyle: 'italic', fontWeight: 200 }} color='textSecondary' variant='subtitle1'>
-                {`${rows.length} rows`}
-              </Typography>
-              <Typography style={{ fontStyle: 'italic', fontWeight: 200 }} color='textSecondary' variant='subtitle2'>
-                {`${columns.length} columns`}
-              </Typography>
-            </div>
-          </>
-        }
-      </div>
-      <div className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
+      <Layout.Content className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
+        <CustomSwitch
+          className='mt-3 ml-5'
+          labels={['widget', 'table']}
+          icons={[DashboardLayout, Table]}
+          value={showTable}
+          update={(val) => nestedUpdate({ ui: { showTable: val } })}
+        />
         <div className={!showTable
           ? classes.hidden
           : mode !== modes.VIEW
             ? classes.table
-            : ''
-        }>
+            : ''}>
           <ResultsTable results={rows} />
         </div>
-        <div className={showTable ? classes.hidden : classes.widgetContainer}>
+        <div className={`flex h-full flex-1 ${showTable ? 'invisible' : 'visible'}`}>
           {
-
-            // config object ready?
+          // config object ready?
             dataReady && isReady ?
-              // render widget
+            // render widget
               <WidgetAdapter />
               :
-              // guide the user to configure the widget
+            // guide the user to configure the widget
               <div className={classes.warningContainer}>
                 {
                   dataSourceLoading ?
@@ -166,7 +112,7 @@ const WidgetView = () => {
               </div>
           }
         </div>
-      </div>
+      </Layout.Content>
     </>
   )
 }

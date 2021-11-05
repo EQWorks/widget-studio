@@ -35,6 +35,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.CD_GITHUB_TOKEN }}
       - run: yarn lint
+      - run: yarn build-tailwindcss-prod
       - run: yarn build
       - run: yarn size-limit
       - run: npx depcheck

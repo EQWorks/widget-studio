@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
+import { Layout } from '@eqworks/lumen-labs'
 
 import styles from './styles'
 import modes from './constants/modes'
@@ -10,6 +11,7 @@ import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
 import WidgetEditor from './editor'
 import WidgetView from './view'
+import './styles/index.css'
 
 
 // put styles in separate file for readability
@@ -21,6 +23,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
 
   // easy-peasy actions
   const loadConfig = useStoreActions(actions => actions.loadConfig)
+  const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // ui state
@@ -34,7 +37,8 @@ const Widget = ({ id, mode: _mode, staticData }) => {
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${modes}.`)
     }
 
-    // dispatch ui state options
+    // dispatch state
+    update({ id })
     nestedUpdate({ ui: { mode: validatedMode, staticData } })
 
     // if there is a widget ID,
@@ -48,24 +52,24 @@ const Widget = ({ id, mode: _mode, staticData }) => {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_mode, id, loadConfig, mode, nestedUpdate, staticData])
+  }, [_mode, id, loadConfig, mode, update, nestedUpdate, staticData])
 
   return (
-    <div className={
-      mode === modes.EDITOR
-        ? classes.outerContainer
-        : mode === modes.VIEW
-          ? classes.outerContainerViewMode
-          : mode === modes.QL
-            ? classes.outerContainerQLMode
-            : ''
+    <Layout className={`border border-neutral-100
+    ${mode === modes.EDITOR
+      ? classes.outerContainer
+      : mode === modes.VIEW
+        ? classes.outerContainerViewMode
+        : mode === modes.QL
+          ? classes.outerContainerQLMode
+          : ''}`
     }>
       <WidgetView />
       {
         mode !== modes.VIEW &&
         <WidgetEditor />
       }
-    </div >
+    </Layout >
   )
 }
 

@@ -1274,6 +1274,18 @@
     prop-types "^15.7.2"
     react-router-prop-types "^1.0.4"
 
+"@eqworks/lumen-labs@^0.1.0-alpha.12":
+  version "0.1.0-alpha.12"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.12/8902a1ab66c3443891b7d52b2313150f087e2c2fc15d60ef11aa96b479f339b2#5920a757cafe73b0d553ec7d0c0e25a66b9d141b"
+  integrity sha512-H4tiaasZAYU4pPyOalOVrIcczgPKWc1nqxnTSs/FqXd7LwHr0w0PxHx5t5dv9MVdYq7NA/Zg1fAlDJeaYB2Y3g==
+  dependencies:
+    "@headlessui/react" "^1.4.0"
+    clsx "^1.1.1"
+    goober "^2.0.39"
+    prop-types "^15.7.2"
+    react-virtualized-auto-sizer "^1.0.5"
+    react-window "^1.8.6"
+
 "@eqworks/lumen-labs@^0.1.0-alpha.6":
   version "0.1.0-alpha.10"
   resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.10/84dd8799b104d417c582363a2dc80bfdf53f047fba86af4f798192c5ac6f369e#2d47f7681a4ccfa53a6b7f91c5f6832da68763ae"
@@ -10888,6 +10900,11 @@ react-fast-compare@^3.0.1, react-fast-compare@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
+react-fast-marquee@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-fast-marquee/-/react-fast-marquee-1.2.1.tgz#8a8ee91ec0cee04bcff7f1ea5c3fd5a2c4dc227d"
+  integrity sha512-rd9ZDhiUrrL2puZNlnb633df/1gjtknuIaf749LIgTLXa18fzPIdFBrz4VjERu1ECUdU9tniaF5FuosNt/GYKQ==
+
 react-helmet-async@^1.0.7:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/react-helmet-async/-/react-helmet-async-1.1.2.tgz#653b7e6bbfdd239c5dcd6b8df2811c7a363b8334"
@@ -12417,6 +12434,14 @@ table@^6.0.9:
     slice-ansi "^4.0.0"
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
+
+tailwindcss-children@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss-children/-/tailwindcss-children-2.1.0.tgz#364ef860f62bc7e31bc66548c4eae945fed1ac6f"
+  integrity sha512-ND+qLjco864/h85VUhF8LpNimZefcskGUdt9R94NXA+QWNqKVp5HmfILYgPioCZ+zUr7LmV+C6ijpaiwTSKZxA==
+  dependencies:
+    lodash "^4.17.15"
+    postcss-selector-parser "^6.0.2"
 
 tapable@^1.0.0, tapable@^1.1.3:
   version "1.1.3"

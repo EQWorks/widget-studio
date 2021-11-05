@@ -1,9 +1,7 @@
 export default {
   container: {
-    padding: '0.5rem',
     display: 'flex',
     flexDirection: 'column',
-    marginLeft: '1rem',
   },
   filterControlsContainer: {
     display: 'flex',
@@ -53,7 +51,7 @@ export default {
     display: 'flex',
   },
   controlCard: {
-    background: '#dedede',
+    background: '#F1F1F1',
     padding: '1rem',
     borderRadius: '0.5rem',
     marginBottom: '0.5rem',
