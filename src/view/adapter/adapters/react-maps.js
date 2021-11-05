@@ -7,6 +7,7 @@ import { LocusMap } from '@eqworks/react-maps'
 import { getCursor } from '@eqworks/react-maps/dist/utils'
 import { makeStyles } from '@material-ui/core/styles'
 import modes from '../../../constants/modes'
+import { mapVis } from '../../../constants/map'
 
 
 const useStyles = makeStyles({
@@ -57,19 +58,19 @@ export default {
       dataId: 'testWIReport',
       geometry: { longitude: 'lon', latitude: 'lat' },
       visualizations: {
-        radius: config?.valueKeys ?
+        [mapVis.RADIUS]: config?.valueKeys ?
           {
             value: {
-              field: `${getKeyValues(config.valueKeys, 'radius')?.key}_${getKeyValues(config.valueKeys, 'radius')?.agg}`,
+              field: `${getKeyValues(config.valueKeys, mapVis.RADIUS)?.key}_${getKeyValues(config.valueKeys, mapVis.RADIUS)?.agg}`,
             },
             valueOptions: [5, 15],
             dataScale: 'linear',
           }:
           null,
-        fill: getKeyValues(config?.valueKeys, 'fill')?.key ?
+        [mapVis.FILL]: getKeyValues(config?.valueKeys, mapVis.FILL)?.key ?
           {
             value: {
-              field: `${getKeyValues(config.valueKeys, 'fill')?.key}_${getKeyValues(config.valueKeys, 'fill')?.agg}`,
+              field: `${getKeyValues(config.valueKeys, mapVis.FILL)?.key}_${getKeyValues(config.valueKeys, mapVis.FILL)?.agg}`,
             },
             valueOptions: [[214, 232, 253], [39, 85, 196]],
             dataScale: 'linear',

@@ -88,30 +88,32 @@ const WidgetAdapter = ({ width, height }) => {
   // if grouping enabled, aggregate each column from valueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
-      ? Object.entries(groupedData).map(([_groupKey, values]) => {
-        let aggValueKeys = valueKeys.reduce((res, { key, agg }) => {
-          if (!agg) {
-            agg = 'sum'
-          }
-          // key can be '' for map widget
-          if(key) {
-            res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
-          }
+      ? Object.entries(groupedData).map(([_groupKey, values]) => (
+        valueKeys.reduce((res, { key, agg = 'sum' }) => {
+          res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
           return res
         }, { [groupKey]: _groupKey })
+      ))
+      : null
+  ), [group, groupKey, groupedData, valueKeys])
+
+  const mapEnrichedData = useMemo(() => (
+    type === 'map'
+      ? aggregatedData.map((d) => {
         //---TODO - Erika: refactor this to include all types of coord keys
         // add coordinates for map widget data
-        if (type === 'map' && groupedData[_groupKey].lat?.length && groupedData[_groupKey].lon?.length) {
-          aggValueKeys = {
-            ...aggValueKeys,
-            lat: groupedData[_groupKey].lat[0],
-            lon: groupedData[_groupKey].lon[0],
-          }
+        if (d.lat && d.lon) {
+          return d
         }
-        return aggValueKeys
+        const { lat: [_lat], lon: [_lon] } = groupedData[d[groupKey]]
+        return {
+          ...d,
+          lat: _lat,
+          lon: _lon,
+        }
       })
       : null
-  ), [group, groupKey, groupedData, valueKeys, type])
+  ), [aggregatedData, groupKey, groupedData, type])
 
   // simply sort the data if grouping is not enabled
   const indexedData = useMemo(() => (
@@ -121,11 +123,15 @@ const WidgetAdapter = ({ width, height }) => {
   ), [group, indexKey, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
-  const finalData = useMemo(() => (
-    group
-      ? aggregatedData
-      : indexedData
-  ), [aggregatedData, group, indexedData])
+  const finalData = useMemo(() => {
+    if (type === 'map') {
+      return mapEnrichedData
+    }
+    if (group) {
+      return aggregatedData
+    }
+    return indexedData
+  }, [aggregatedData, group, indexedData, mapEnrichedData, type])
 
   // pass the processed data to the rendering adapter and memoize the results
   const adaptedDataAndConfig = useMemo(() => adapt(finalData ?? [], config), [adapt, config, finalData])
