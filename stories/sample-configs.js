@@ -287,7 +287,7 @@ export default {
       },
     ],
     'group': true,
-    'groupKey': 'poi_name',
+    'mapGroupKey': 'poi_name',
     'dataSource': {
       'type': 'Execution',
       'id': '913',

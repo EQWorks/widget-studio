@@ -60,8 +60,8 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { options, ...config }) => {
-    const { groupKey, mapValueKeys } = config
-    const mapLayer = Object.keys(MAP_LAYER_VIS).filter(layer => MAP_LAYER_GEO_KEYS[layer].includes(groupKey))[0]
+    const { mapGroupKey, mapValueKeys } = config
+    const mapLayer = Object.keys(MAP_LAYER_VIS).filter(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))[0]
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
 
