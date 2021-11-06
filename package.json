@@ -82,6 +82,7 @@
   "dependencies": {
     "@eqworks/chart-system": "^0.6.2",
     "axios": "^0.20.0",
+    "clsx": "^1.1.1",
     "easy-peasy": "^5.0.3",
     "json2csv": "^5.0.5",
     "lodash.debounce": "^4.0.8",
