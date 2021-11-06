@@ -12,43 +12,49 @@ import styles from '../../../styles'
 
 const useStyles = makeStyles(styles)
 
-const MapLinkedSelect = ({ values, data, subData, callback }) => {
+const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCallback  }) => {
   const classes = useStyles()
   const remainingValues = useMemo(() => data.filter((name) =>
     !(values.map(v => v.key).includes(name))), [data, values])
 
-  return values.map(({ key, agg, map_vis }, i) => (
-    <div key={i}>
-      <div className={classes.controlRowMap}>
-        <Typography
-          className={classes.linkedSelectPrimary}
-          color='textSecondary'
-          variant='body1'
-        >
-          {map_vis.charAt(0).toUpperCase() + map_vis.slice(1)}
-        </Typography>
-        <Typography
-          className={classes.linkedSelectSub}
-          color='textSecondary'
-          variant='body1'
-        >
-          {'Aggregation'}
-        </Typography>
-      </div>
-      <Divider className={classes.controlDivider} />
-      <LinkedSelect
-        key={map_vis}
-        callback={([_k, _v]) => callback(i, { key: _k, agg: _v, map_vis: map_vis })}
-        data={remainingValues}
-        init={key}
-        subData={subData}
-        subInit={agg}
-        deletable
-        deleteCallback={() => callback(i, { key: '', agg: '', map_vis: map_vis })}
-        type='map'
-      />
-    </div>
-  ))
+  return (
+    categories.map((map_vis, i) => {
+      const match = values.findIndex(v => v.map_vis === map_vis)
+      const { key, agg } = match === -1 ? {} : values[match]
+      return (
+        <div key={i}>
+          <div className={classes.controlRowMap}>
+            <Typography
+              className={classes.linkedSelectPrimary}
+              color='textSecondary'
+              variant='body1'
+            >
+              {map_vis.charAt(0).toUpperCase() + map_vis.slice(1)}
+            </Typography>
+            <Typography
+              className={classes.linkedSelectSub}
+              color='textSecondary'
+              variant='body1'
+            >
+              {'Aggregation'}
+            </Typography>
+          </div>
+          <Divider className={classes.controlDivider} />
+          <LinkedSelect
+            key={map_vis}
+            callback={([_k, _v]) => callback(match, { key: _k, agg: _v, map_vis })}
+            data={remainingValues}
+            init={key}
+            subData={subData}
+            subInit={agg}
+            clearable
+            deleteCallback={() => deleteCallback(match)}
+            type='map'
+          />
+        </div>
+      )
+    })
+  )
 }
 
 export default MapLinkedSelect
