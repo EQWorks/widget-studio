@@ -50,6 +50,7 @@ const WidgetAdapter = ({ width, height }) => {
   const config = useStoreState((state) => state.config)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
+  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
 
   // record the correct adapter for use later (after data processing)
   const { component, adapt } = useMemo(() => adapterDict[type], [type])
@@ -66,14 +67,16 @@ const WidgetAdapter = ({ width, height }) => {
     })
   ), [rows, filters])
 
+  const finalGroupKey = useMemo(() => type === 'map' ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
+
   // if grouping enabled, memoize grouped and reorganized version of data that will be easy to aggregate
   const groupedData = useMemo(() => (
     group
       ? truncatedData.reduce((res, r) => {
-        const group = r[groupKey]
+        const group = r[finalGroupKey]
         res[group] = res[group] || {}
         Object.entries(r).forEach(([k, v]) => {
-          if (k !== groupKey) {
+          if (k !== finalGroupKey) {
             if (res[group][k]) {
               res[group][k].push(v)
             } else {
@@ -84,7 +87,7 @@ const WidgetAdapter = ({ width, height }) => {
         return res
       }, {})
       : null
-  ), [group, groupKey, truncatedData])
+  ), [group, finalGroupKey, truncatedData])
 
   // if grouping enabled, aggregate each column from valueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => {
@@ -94,10 +97,10 @@ const WidgetAdapter = ({ width, height }) => {
         finalValueKeys.reduce((res, { key, agg = 'sum' }) => {
           res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
           return res
-        }, { [groupKey]: _groupKey })
+        }, { [finalGroupKey]: _groupKey })
       ))
       : null
-  }, [type, group, groupKey, groupedData, valueKeys, mapValueKeys])
+  }, [type, group, finalGroupKey, groupedData, valueKeys, mapValueKeys])
 
   const mapEnrichedData = useMemo(() => (
     type === 'map'
@@ -107,7 +110,7 @@ const WidgetAdapter = ({ width, height }) => {
         if (d.lat && d.lon) {
           return d
         }
-        const { lat: [_lat], lon: [_lon] } = groupedData[d[groupKey]]
+        const { lat: [_lat], lon: [_lon] } = groupedData[d[finalGroupKey]]
         return {
           ...d,
           lat: _lat,
@@ -115,7 +118,7 @@ const WidgetAdapter = ({ width, height }) => {
         }
       })
       : null
-  ), [aggregatedData, groupKey, groupedData, type])
+  ), [aggregatedData, finalGroupKey, groupedData, type])
 
   // simply sort the data if grouping is not enabled
   const indexedData = useMemo(() => (

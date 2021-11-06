@@ -15,16 +15,16 @@ import { MAP_LAYER_GEO_KEYS, COORD_KEYS } from '../../constants/map'
 const Icons = ({ disabled }) => {
   const updateStore = useStoreActions((actions) => actions.update)
   const current = useStoreState((state) => state.type)
-  const groupKey = useStoreState((state) => state.groupKey)
+  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const rows = useStoreState((state) => state.rows)
 
   const dataKeys = rows?.length ? Object.keys(rows[0]) : null
   // TO DO (ERIKA) - this is just temporary for scatterplot and available mvt tile layers
   // in the future we implement this with a complex validation process for specific geometry keys
-  const mapIconAvailability = (MAP_LAYER_GEO_KEYS.scatterplot.includes(groupKey) &&
+  const mapIconAvailability = (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey) &&
       dataKeys?.some(key => COORD_KEYS.latitude.includes(key)) &&
       dataKeys?.some(key => COORD_KEYS.longitude.includes(key))) ||
-    MAP_LAYER_GEO_KEYS.MVT.includes(groupKey)
+    MAP_LAYER_GEO_KEYS.MVT.includes(mapGroupKey)
 
   const mapIcons = [
     { type: 'map', Component: MapIcon, available: mapIconAvailability, cat: ['Geometry'], minAxis: 2 },

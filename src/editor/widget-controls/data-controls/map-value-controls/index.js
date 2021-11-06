@@ -14,23 +14,23 @@ const MapValueControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
-  const groupKey = useStoreState((state) => state.groupKey)
+  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
 
-  // restrict selection list for groupKey to only valid map geo keysq
+  // restrict selection list for mapGroupKey to only valid map geo keysq
   const mapGeoKeys = Object.values(MAP_LAYER_GEO_KEYS).reduce((agg, val) => [...agg, ...val], [])
   const mapGroupByKeys = stringColumns.filter(val => mapGeoKeys.includes(val))
-  const mapLayer = Object.keys(MAP_LAYER_VIS).filter(layer => MAP_LAYER_GEO_KEYS[layer].includes(groupKey))[0]
+  const mapLayer = Object.keys(MAP_LAYER_VIS).filter(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))[0]
 
   return (
     <>
       <WidgetControlCard title='Group by' >
         <CustomSelect
           data={mapGroupByKeys}
-          value={groupKey}
-          setChosenValue={val => update({ groupKey: val })}
+          value={mapGroupKey}
+          setChosenValue={val => update({ mapGroupKey: val })}
         />
       </WidgetControlCard>
       <WidgetControlCard title='Value keys' >
@@ -38,7 +38,7 @@ const MapValueControls = () => {
           categories={MAP_LAYER_VIS[mapLayer]}
           values={mapValueKeys}
           data={numericColumns}
-          subData={groupKey ? Object.keys(aggFuncDict) : []}
+          subData={mapGroupKey ? Object.keys(aggFuncDict) : []}
           update={(val) => nestedUpdate({ mapValueKeys: val })}
           callback={(i, val) => {
             if (i === -1) { // add a key
