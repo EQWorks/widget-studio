@@ -5,7 +5,7 @@ import { useStoreState, useStoreActions } from '../../../../store'
 import CustomSelect from '../../../shared-components/custom-select'
 import MapLinkedSelect from './map-linked-select'
 import WidgetControlCard from '../../../shared-components/widget-control-card'
-import { MAP_VIS, MAP_LAYER_GEO_KEYS } from '../../../../constants/map'
+import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS } from '../../../../constants/map'
 
 
 const MapValueControls = () => {
@@ -22,6 +22,7 @@ const MapValueControls = () => {
   // restrict selection list for groupKey to only valid map geo keysq
   const mapGeoKeys = Object.values(MAP_LAYER_GEO_KEYS).reduce((agg, val) => [...agg, ...val], [])
   const mapGroupByKeys = stringColumns.filter(val => mapGeoKeys.includes(val))
+  const mapLayer = Object.keys(MAP_LAYER_VIS).filter(layer => MAP_LAYER_GEO_KEYS[layer].includes(groupKey))[0]
 
   return (
     <>
@@ -34,7 +35,7 @@ const MapValueControls = () => {
       </WidgetControlCard>
       <WidgetControlCard title='Value keys' >
         <MapLinkedSelect
-          categories={Object.values(MAP_VIS)}
+          categories={MAP_LAYER_VIS[mapLayer]}
           values={mapValueKeys}
           data={numericColumns}
           subData={groupKey ? Object.keys(aggFuncDict) : []}
