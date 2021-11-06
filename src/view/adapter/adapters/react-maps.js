@@ -50,7 +50,11 @@ const Map = ({ width, height, ...props }) => {
 Map.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  props: PropTypes.object.isRequired,
+  props: PropTypes.object,
+}
+
+Map.defaultProps = {
+  props: {},
 }
 
 export default {
@@ -81,13 +85,13 @@ export default {
         layer: mapLayer,
         dataId: 'testWIReport',
         geometry,
-        visualizations: Object.fromEntries(mapValueKeys.map(({ key, agg, map_vis }) => [
-          map_vis,
+        visualizations: Object.fromEntries(mapValueKeys.map(({ key, agg, mapVis }) => [
+          mapVis,
           {
             value: {
               field: `${key}_${agg}`,
             },
-            valueOptions: VIS_OPTIONS.values[map_vis],
+            valueOptions: VIS_OPTIONS.values[mapVis],
             dataScale: VIS_OPTIONS.scale,
           },
         ])),
