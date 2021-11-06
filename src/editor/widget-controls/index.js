@@ -14,7 +14,7 @@ import MapControls from './controls/map-controls'
 
 import Icons from './icons'
 import styles from '../styles'
-import { coordKeys } from '../../constants/map'
+import { COORD_KEYS } from '../../constants/map'
 
 
 const controls = {
@@ -41,7 +41,9 @@ const WidgetControls = () => {
 
   useEffect(() => {
     update({ numericColumns: columns.filter(({ category, name }) =>
-      category === 'Numeric' && !coordKeys.some(key => name.includes(key)))
+      category === 'Numeric' &&
+      !COORD_KEYS?.latitude?.some(key => name === key) &&
+      !COORD_KEYS?.longitude?.some(key => name === key))
       .map(({ name }) => name) })
     update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
   }, [columns, update])
