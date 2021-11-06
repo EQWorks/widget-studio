@@ -18,8 +18,8 @@ const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCa
     !(values.map(v => v.key).includes(name))), [data, values])
 
   return (
-    categories.map((map_vis, i) => {
-      const match = values.findIndex(v => v.map_vis === map_vis)
+    categories.map((mapVis, i) => {
+      const match = values.findIndex(v => v.mapVis === mapVis)
       const { key, agg } = match === -1 ? {} : values[match]
       return (
         <div key={i}>
@@ -29,7 +29,7 @@ const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCa
               color='textSecondary'
               variant='body1'
             >
-              {map_vis.charAt(0).toUpperCase() + map_vis.slice(1)}
+              {mapVis.charAt(0).toUpperCase() + mapVis.slice(1)}
             </Typography>
             <Typography
               className={classes.linkedSelectSub}
@@ -41,8 +41,8 @@ const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCa
           </div>
           <Divider className={classes.controlDivider} />
           <LinkedSelect
-            key={map_vis}
-            callback={([_k, _v]) => callback(match, { key: _k, agg: _v, map_vis })}
+            key={mapVis}
+            callback={([_k, _v]) => callback(match, { key: _k, agg: _v, mapVis })}
             data={remainingValues}
             init={key}
             subData={subData}
