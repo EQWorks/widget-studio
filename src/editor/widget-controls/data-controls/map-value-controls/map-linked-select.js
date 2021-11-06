@@ -18,11 +18,11 @@ const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCa
     !(values.map(v => v.key).includes(name))), [data, values])
 
   return (
-    categories.map((map_vis) => {
+    categories.map((map_vis, i) => {
       const match = values.findIndex(v => v.map_vis === map_vis)
       const { key, agg } = match === -1 ? {} : values[match]
       return (
-        <>
+        <div key={i}>
           <div className={classes.controlRowMap}>
             <Typography
               className={classes.linkedSelectPrimary}
@@ -51,7 +51,7 @@ const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCa
             deleteCallback={() => deleteCallback(match)}
             type='map'
           />
-        </>
+        </div>
       )
     })
   )
