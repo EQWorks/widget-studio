@@ -1,6 +1,6 @@
 import React, { createElement } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from '@eqworks/lumen-labs'
+import CustomButton from '../components/custom-button'
 
 
 const CustomSwitch = ({ labels, icons, value, update, className }) => (
@@ -9,7 +9,7 @@ const CustomSwitch = ({ labels, icons, value, update, className }) => (
       labels.map((l, i) => {
         const selected = (i !== 0 && value) || (i === 0 && !value)
         return <div key={i}>
-          <Button
+          <CustomButton
             className={`border-none uppercase cursor-${selected ? 'default' : 'pointer'}`}
             disabled={selected}
             onClick={() => update(!value)}
@@ -21,7 +21,7 @@ const CustomSwitch = ({ labels, icons, value, update, className }) => (
               }
               <span className='text-xs font-semibold tracking-wider'>{l}</span>
             </span>
-          </Button>
+          </CustomButton>
         </div>
       })
     }

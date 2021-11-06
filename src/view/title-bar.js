@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { Accordion, Icons, TextField, Button, Chip } from '@eqworks/lumen-labs'
+import { Button, Accordion, Icons, TextField, Chip } from '@eqworks/lumen-labs'
 
 import { ArrowExpand, EditPen, Download } from '../components/icons'
 import { useStoreState, useStoreActions } from '../store'
@@ -36,7 +36,8 @@ const WidgetTitleBar = ({ className }) => {
 
   const renderButton = (children, onClick, props) =>
     <Button
-      classes={{ button: 'ml-2 uppercase p-1.5 py-1 tracking-wider' }}
+      classes={{ button: 'outline-none focus:outline-none ml-2 uppercase p-1.5 py-1 tracking-wider' }}
+      type='primary'
       variant='borderless'
       size='md'
       onClick={e => {
