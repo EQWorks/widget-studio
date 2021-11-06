@@ -33,6 +33,7 @@ const stateDefaults = {
   filters: {},
   group: false,
   groupKey: null,
+  mapGroupKey: null,
   indexKey: null,
   valueKeys: [],
   mapValueKeys: [],
@@ -77,6 +78,7 @@ export default {
       (state) => state.filters,
       (state) => state.group,
       (state) => state.groupKey,
+      (state) => state.mapGroupKey,
       (state) => state.indexKey,
       (state) => state.valueKeys,
       (state) => state.mapValueKeys,
@@ -91,6 +93,7 @@ export default {
       filters,
       group,
       groupKey,
+      mapGroupKey,
       indexKey,
       valueKeys,
       mapValueKeys,
@@ -108,6 +111,7 @@ export default {
           mapValueKeys,
           group,
           groupKey,
+          mapGroupKey,
           indexKey,
           options,
           genericOptions,
@@ -126,6 +130,7 @@ export default {
       (state) => state.mapValueKeys,
       (state) => state.indexKey,
       (state) => state.groupKey,
+      (state) => state.mapGroupKey,
     ],
     (
       rows,
@@ -135,9 +140,11 @@ export default {
       mapValueKeys,
       indexKey,
       groupKey,
+      mapGroupKey,
     ) => (
-      Boolean(type && columns.length && rows.length && (indexKey || groupKey) &&
-              ((type !== 'map' && valueKeys.length) || (type === 'map' && mapValueKeys.length)))
+      Boolean(type && columns.length && rows.length &&
+        ((type !== 'map' && valueKeys.length && (indexKey || groupKey)) ||
+          (type === 'map' && mapValueKeys.length && mapGroupKey)))
     )),
 
   dataReady: computed(
