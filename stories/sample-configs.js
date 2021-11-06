@@ -166,12 +166,12 @@ export default {
       {
         'key': 'visits',
         'agg': 'sum',
-        'map_vis': 'radius',
+        'mapVis': 'radius',
       },
       {
         'key': 'unique_visitors',
         'agg': 'sum',
-        'map_vis': 'fill',
+        'mapVis': 'fill',
       },
     ],
     'group': true,
