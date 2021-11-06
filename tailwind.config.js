@@ -19,6 +19,9 @@ const config = {
       boxShadow: {
         'widget': 'inset -4px 4px 4px rgba(54, 111, 228, 0.1)',
       },
+      borderWidth: {
+        'custom-1': '0.3rem',
+      },
     },
   },
 }
