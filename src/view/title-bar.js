@@ -36,7 +36,7 @@ const WidgetTitleBar = ({ className }) => {
 
   const renderButton = (children, onClick, props) =>
     <Button
-      classes={{ button: 'outline-none focus:outline-none ml-2 uppercase p-1.5 py-1 tracking-wider' }}
+      classes={{ button: 'outline-none focus:outline-none ml-2 uppercase p-1.5 py-1 tracking-widest' }}
       type='primary'
       variant='borderless'
       size='md'
