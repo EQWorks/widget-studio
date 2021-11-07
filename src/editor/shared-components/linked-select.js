@@ -1,17 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import IconButton from '@material-ui/core/IconButton'
-import { Delete } from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles'
 
-import CustomSelect from './custom-select'
-import styles from '../styles'
+import { Trash } from '../../components/icons'
+import _CustomSelect from '../../components/custom-select'
+import CustomButton from '../../components/custom-button'
 
 
-const useStyles = makeStyles(styles)
-const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData, subInit, controlled }) => {
-
-  const classes = useStyles()
+const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData, subInit, controlled, placeholders }) => {
 
   const [choice, setChoice] = useState(init)
   const [subChoice, setSubChoice] = useState(subInit)
@@ -29,26 +24,28 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
   }, [choice, controlled, init, subChoice, subInit])
 
   return (
-    <div className='flex'>
-      <div className={classes.linkedSelectPrimary} >
-        <CustomSelect
-          data={data}
-          chosenValue={choice}
-          setChosenValue={setChoice}
+    <div className='flex align-stretch'>
+      <div className='flex-0'>
+        <_CustomSelect
+          data={subData}
+          value={subChoice}
+          onSelect={setSubChoice}
+          disabled={subDisabled}
+          placeholder={placeholders[1]}
         />
       </div>
-      <div className={classes.linkedSelectSub}>
-        <CustomSelect
-          data={subData}
-          chosenValue={subChoice}
-          setChosenValue={setSubChoice}
-          disabled={subDisabled}
+      <div className='flex-1'>
+        <_CustomSelect
+          data={data}
+          value={choice}
+          onSelect={setChoice}
+          placeholder={placeholders[0]}
         />
       </div>
       {deletable &&
-        <IconButton onClick={deleteCallback}>
-          <Delete />
-        </IconButton>
+        <CustomButton type='danger' className='rounded-md ml-2 m-0.5 flex align-center justify-center transition-width ease-in-out duration-300 w-5 hover:w-8 bg-secondary-100 hover:bg-error-200' onClick={deleteCallback}>
+          <Trash className='fill-current text-secondary-400 transition-all ease-in-out duration-300 h-full' />
+        </CustomButton>
       }
     </div>
   )
@@ -62,6 +59,7 @@ LinkedSelect.propTypes = {
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   init: PropTypes.string,
   subInit: PropTypes.string,
+  placeholders: PropTypes.arrayOf(PropTypes.string),
 }
 
 LinkedSelect.defaultProps = {
@@ -70,6 +68,7 @@ LinkedSelect.defaultProps = {
   controlled: true,
   init: '',
   subInit: '',
+  placeholders: ['Select', 'Select'],
 }
 
 export default LinkedSelect
