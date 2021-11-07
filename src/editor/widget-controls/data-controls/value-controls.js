@@ -70,7 +70,7 @@ const ValueControls = ({ groupingOptional }) => {
               <div className='flex mb-2 text-xs text-secondary-600'>
                 <span className='flex-1'>Group By:</span>
                 <span className={clsx('font-semibold mr-2', {
-                  ['text-primary-500']: !group,
+                  ['text-secondary-600']: !group,
                   ['text-secondary-500']: group,
                 })}>OFF</span>
                 <SwitchRect

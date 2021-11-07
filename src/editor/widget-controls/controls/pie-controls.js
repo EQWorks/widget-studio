@@ -34,17 +34,17 @@ const PieControls = () => {
             <CustomToggle
               value={donut}
               label='Donut'
-              callback={(val) => nestedUpdate({ options: { donut: val } })}
+              onChange={(val) => nestedUpdate({ options: { donut: val } })}
             />
             <CustomToggle
               value={showPercentage}
               label='Show Percentage'
-              callback={(val) => nestedUpdate({ options: { showPercentage: val } })}
+              onChange={(val) => nestedUpdate({ options: { showPercentage: val } })}
             />
             <CustomToggle
               value={showLegend}
               label='Show Legend'
-              callback={(val) => nestedUpdate({ options: { showLegend: val } })}
+              onChange={(val) => nestedUpdate({ options: { showLegend: val } })}
             />
           </WidgetControlCard>
         </>

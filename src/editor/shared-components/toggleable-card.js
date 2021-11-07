@@ -14,7 +14,7 @@ const ToggleableCard = ({ init, callback, title, altTitle, children }) => {
         titleExtra={
           <CustomToggle
             value={toggle}
-            callback={(val) => {
+            onChange={(val) => {
               callback(val)
               setToggle(val)
             }}
