@@ -28,7 +28,10 @@ const LineControls = () => {
         mode === modes.EDITOR &&
         <>
           <GenericOptionControls />
-          <WidgetControlCard title='Styling'>
+          <WidgetControlCard
+            clearable
+            title='Styling'
+          >
             <CustomToggle
               value={spline}
               label='Spline interpolation'

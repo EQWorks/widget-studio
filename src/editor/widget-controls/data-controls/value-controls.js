@@ -107,7 +107,10 @@ const ValueControls = ({ groupingOptional }) => {
           </>
           :
           <>
-            <WidgetControlCard title='Group By'>
+            <WidgetControlCard
+              clearable
+              title='Group By'
+            >
               <CustomSelect
                 data={stringColumns}
                 value={groupKey}

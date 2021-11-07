@@ -28,7 +28,10 @@ const BarControls = () => {
         mode === modes.EDITOR &&
         <>
           <GenericOptionControls />
-          <WidgetControlCard title='Styling'>
+          <WidgetControlCard
+            clearable
+            title='Styling'
+          >
             <CustomToggle
               value={stacked}
               label='Stacked'

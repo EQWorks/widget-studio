@@ -18,9 +18,6 @@ const CustomToggle = ({ label, value, onChange, disabled }) => {
     disabled={disabled}
     label={label}
     classes={{
-      checkbox: clsx({
-        'bg-red-500': disabled,
-      }),
       label: clsx('ml-2 text-sm', {
         'text-secondary-500': !disabled,
         'text-secondary-300': disabled,

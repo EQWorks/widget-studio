@@ -64,7 +64,10 @@ const WidgetControls = ({ className }) => {
             </CustomButton>
           </div >
           <div className='px-4 py-2'>
-            <WidgetControlCard title='Select Widget Type'>
+            <WidgetControlCard
+              title='Select Widget Type'
+              clearable
+            >
               <Icons disabled={!columns.length || !dataReady} />
             </WidgetControlCard>
 
