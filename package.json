@@ -48,7 +48,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@eqworks/common-login": "^0.9.0-alpha.1",
-    "@eqworks/lumen-labs": "^0.1.0-alpha.12",
+    "@eqworks/lumen-labs": "EQWorks/lumen-labs#tmp/widget-studio-dependency",
     "@eqworks/lumen-ui": "^1.0.0",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@material-ui/core": "^4.11.0",

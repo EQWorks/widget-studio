@@ -1274,15 +1274,15 @@
     prop-types "^15.7.2"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.12":
+"@eqworks/lumen-labs@EQWorks/lumen-labs#tmp/widget-studio-dependency":
   version "0.1.0-alpha.12"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.12/8902a1ab66c3443891b7d52b2313150f087e2c2fc15d60ef11aa96b479f339b2#5920a757cafe73b0d553ec7d0c0e25a66b9d141b"
-  integrity sha512-H4tiaasZAYU4pPyOalOVrIcczgPKWc1nqxnTSs/FqXd7LwHr0w0PxHx5t5dv9MVdYq7NA/Zg1fAlDJeaYB2Y3g==
+  resolved "https://codeload.github.com/EQWorks/lumen-labs/tar.gz/d2b0280d742c20e318dea2fc566160f5cc7cd501"
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
     goober "^2.0.39"
     prop-types "^15.7.2"
+    react-resize-detector "^6.7.6"
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
