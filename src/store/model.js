@@ -197,7 +197,6 @@ export default {
         actions.nestedUpdate({
           ui: {
             showWidgetControls: true,
-            showFilterControls: true,
             dataSourceName: views[0].name,
             dataSourceError: null,
           },
