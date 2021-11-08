@@ -125,7 +125,7 @@ const WidgetTitleBar = ({ className }) => {
       />
       : <>
         <span className='text-lg font-bold text-primary-500'>
-          {title || 'Untitled'}
+          {title || 'Untitled Widget'}
         </span>
         {renderButton(
           <EditPen

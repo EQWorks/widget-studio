@@ -52,7 +52,7 @@ const WidgetView = () => {
   }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
 
   const renderWidgetWarning =
-    <div className='flex-1 flex flex-col justify-center items-center'>
+    <div className='h-full flex-1 flex flex-col justify-center items-center'>
       {
         dataSourceLoading ?
           <div className='m-3'>

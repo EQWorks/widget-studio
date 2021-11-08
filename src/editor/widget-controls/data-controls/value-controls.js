@@ -74,6 +74,7 @@ const ValueControls = ({ groupingOptional }) => {
                   ['text-secondary-500']: group,
                 })}>OFF</span>
                 <SwitchRect
+                  id='group'
                   checked={group}
                   onChange={toggleGroup}
                 />

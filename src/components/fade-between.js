@@ -9,8 +9,8 @@ const FadeBetween = ({ value, children }) => {
   const [tallest, setTallest] = useState(0)
   // "refs" for determining the tallest element
   const measuredRefs = [
-    useCallback((node) => setTallest(node.scrollHeight <= node.clientHeight), []),
-    useCallback((node) => setTallest(node.scrollHeight > node.clientHeight), []),
+    useCallback((node) => setTallest(node?.scrollHeight <= node?.clientHeight), []),
+    useCallback((node) => setTallest(node?.scrollHeight > node?.clientHeight), []),
   ]
   // only allow scroll if the taller element is
   const doScroll = useMemo(() => !value && tallest || value && !tallest, [tallest, value])
