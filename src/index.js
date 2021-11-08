@@ -9,6 +9,7 @@ import WidgetView from './view'
 import WidgetTitleBar from './view/title-bar'
 import './styles/index.css'
 import WidgetControls from './editor/widget-controls'
+import FilterControls from './editor/widget-controls/data-controls/filter-controls'
 
 
 const Widget = ({ id, mode: _mode, staticData }) => {
@@ -53,13 +54,10 @@ const Widget = ({ id, mode: _mode, staticData }) => {
         <div className='pt-1 min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch shadow-widget'>
           <WidgetView />
         </div>
-        {
-          mode !== modes.VIEW &&
-          <WidgetControls />
-        }
+        {mode !== modes.VIEW && <WidgetControls />}
       </div>
+      {mode === modes.EDITOR && <FilterControls />}
     </div >
-    // <FilterControls />
   )
 }
 
