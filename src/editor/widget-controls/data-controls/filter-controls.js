@@ -17,18 +17,21 @@ const FilterControls = () => {
   const [addingFilter, setAddingFilter] = useState(false)
   const [disabledFilters, setDisabledFilters] = useState({})
 
-  const filters = useStoreState((state) => state.filters)
-  const rows = useStoreState((state) => state.rows)
-  const numericColumns = useStoreState((state) => state.numericColumns)
-  const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
-
+  // common actions
   const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
+  // common state
+  const filters = useStoreState((state) => state.filters)
+  const rows = useStoreState((state) => state.rows)
+  const numericColumns = useStoreState((state) => state.numericColumns)
+  const dataReady = useStoreState((state) => state.dataReady)
+
+  // ui state
+  const showFilterControls = useStoreState((state) => state.ui.showFilterControls)
 
   const min = useCallback((key) => Math.min.apply(null, rows.map(r => r[key])), [rows])
   const max = useCallback((key) => Math.max.apply(null, rows.map(r => r[key])), [rows])
-
 
   const card = (key, range, enabled) => {
     return <ToggleableCard key={key}
@@ -62,6 +65,7 @@ const FilterControls = () => {
 
   return (
     <CustomAccordion
+      disabled={!dataReady}
       direction='horizontal'
       title='Filters'
       icon={Filter}

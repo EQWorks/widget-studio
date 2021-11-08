@@ -66,6 +66,7 @@ const WidgetControls = () => {
 
   return (
     <CustomAccordion
+      disabled={!dataReady}
       icon={Controls}
       title={'Controls'}
       footer={footer}
@@ -80,10 +81,8 @@ const WidgetControls = () => {
           <Icons disabled={!columns.length || !dataReady} />
         </WidgetControlCard>
         {
-          dataReady && type && columns &&
-          createElement(controls[type])
+          createElement(controls[type || 'line'])
         }
-
       </div>
     </CustomAccordion>
   )
