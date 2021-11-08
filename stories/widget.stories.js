@@ -21,12 +21,15 @@ Object.values(modes).forEach(mode => {
       // generate an editor story
       storiesOf(`${mode.toUpperCase()} mode`, module)
         .add(label, () => (
-          <Resizable style={{ margin: '1rem' }} >
+          <Resizable
+            style={{ margin: '1rem' }}
+            defaultSize={mode === modes.VIEW ? { height: '500' } : {}}
+          >
             <Widget
               mode={mode}
               id={id}
             />
-          </Resizable>
+          </Resizable >
         ))
     }
   })
@@ -46,14 +49,14 @@ Object.values(modes).forEach(mode => {
           style={{
             display: 'grid',
             gridTemplateColumns: fullscreen ? 'auto' : '1fr 1fr',
-            gridAutoRows: fullscreen ? '100vh' : 'min-content',
+            gridAutoRows: fullscreen ? '100vh' : '60vh',
           }} >
           {
 
             Object.keys(sampleConfigs).map(id =>
               <div key={id} style={{ margin: '2rem' }}>
                 <Widget
-                  mode={mode}
+                  mode='view_only'
                   id={id}
                   staticData
                 />
