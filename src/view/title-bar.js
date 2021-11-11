@@ -152,7 +152,9 @@ const WidgetTitleBar = ({ className }) => {
             {renderWidgetTitle}
             {
               id &&
-              <Chip classes={{ chip: 'text-secondary-600 bg-secondary-300 py-0.5 px-2 rounded-md uppercase' }} color='secondary'>
+              <Chip classes={{
+                chip: 'select-text text-secondary-600 bg-secondary-300 py-0.5 px-2 rounded-md uppercase',
+              }} color='secondary'>
                 {`id: ${id}`}
               </Chip>
             }
