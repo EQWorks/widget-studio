@@ -9,10 +9,14 @@ const config = {
       flex: ['children-not-first'],
       textColor: ['children'],
       textOverflow: ['children'],
+      margin: ['hover'],
     },
   },
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'min-min': 'min-content min-content',
+      },
       transitionProperty: {
         'max-width': 'max-width',
       },
