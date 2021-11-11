@@ -26,8 +26,8 @@ const Icons = ({ disabled }) => {
   const update = useStoreActions((actions) => actions.update)
   const current = useStoreState((state) => state.type)
   const iconButtonClass = (type) => clsx('outline-none focus:outline-none border-white border-custom-1 shadow-light-10 hover:shadow-light-20 h-10 w-10 p-1.5 flex items-center justify-center mr-3 rounded-xl transition-all duration-300 ease-in-out', {
-    ['text-primary-400 hover:text-primary-500 bg-primary-100 hover:bg-primary-200']: true,
-    ['text-primary-600 hover:text-primary-700 bg-primary-200 hover:bg-primary-300']: type === current,
+    ['text-primary-500 hover:text-primary-600 active:text-primary-700 bg-primary-50 hover:bg-primary-100']: true,
+    ['text-primary-700 hover:text-primary-700 bg-primary-200 hover:bg-primary-200']: type === current,
   })
   return (
     <div className='flex'>
