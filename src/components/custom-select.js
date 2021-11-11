@@ -8,9 +8,9 @@ const CustomSelect = ({ data, multiSelect, value, onSelect, ...props }) => {
   return (
     <DropdownSelect
       classes={{
-        button: 'w-full h-full',
+        button: 'w-full h-full tracking-widest',
         menu: 'w-full',
-        contentTitle: 'normal-case text-primary-600 tracking-widest',
+        contentTitle: 'normal-case text-primary-600',
         listContainer: 'normal-case',
       }}
       setSelectedOption={multiSelect ? value?.map(v => ({ title: v })) : { title: value }}

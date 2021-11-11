@@ -36,7 +36,7 @@ const CustomAccordion = ({ disabled, direction, title, footer, icon, open, toggl
                 })}
               </CustomButton>
             </div>
-            <div ref={ref} className={`relative z-10 border-l-2 border-neutral-100 transition-max-width overflow-x-hidden ease-in-out flex justify-end duration-1000 ${open ? 'max-w-full' : 'max-w-0'}`}>
+            <div ref={ref} className={`whitespace-nowrap relative z-10 border-l-2 border-neutral-100 transition-max-width overflow-x-hidden ease-in-out flex justify-end duration-1000 ${open ? 'max-w-full' : 'max-w-0'}`}>
               {
                 disabled &&
                 <div className='absolute z-30 bg-secondary-50 opacity-50 w-full h-full' />

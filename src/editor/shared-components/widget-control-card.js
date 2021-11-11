@@ -8,10 +8,10 @@ import clsx from 'clsx'
 
 const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEmpty, children }) => (
   (children || showIfEmpty) &&
-  <div className='rounded-sm my-1 border border-secondary-200'>
+  <div className='rounded-sm my-1 border border-neutral-100'>
     {
       title &&
-      <div className='p-2 py-1.5 bg-secondary-200 text-secondary-700 font-semibold text-sm flex align-center'>
+      <div className='p-2 py-1.5 bg-neutral-100 text-secondary-700 font-semibold text-sm flex align-center'>
         <div className='flex-1'>
           {`${title}:`}
         </div>
