@@ -8,14 +8,14 @@ const CustomSelect = ({ data, multiSelect, value, onSelect, ...props }) => {
   return (
     <DropdownSelect
       classes={{
-        button: 'w-full',
+        button: 'w-full h-full',
         menu: 'w-full',
-        contentTitle: 'normal-case text-primary-600 font-medium tracking-widest',
+        contentTitle: 'normal-case text-primary-600 tracking-widest',
         listContainer: 'normal-case',
       }}
       setSelectedOption={multiSelect ? value?.map(v => ({ title: v })) : { title: value }}
       multiSelect={multiSelect}
-      endIcon={<Icons.ChevronDown />}
+      endIcon={<Icons.ArrowDown size='md' />}
       data={transformedData}
       onSelect={({ title }) => onSelect(title)}
       {...props}

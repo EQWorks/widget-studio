@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { Trash } from '../../components/icons'
-import _CustomSelect from '../../components/custom-select'
+import CustomSelect from '../../components/custom-select'
 import CustomButton from '../../components/custom-button'
+import clsx from 'clsx'
 
 
 const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData, subInit, controlled, placeholders }) => {
@@ -23,31 +24,46 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [choice, controlled, init, subChoice, subInit])
 
+  const renderSub =
+    <CustomSelect
+      data={subData}
+      value={subChoice}
+      onSelect={setSubChoice}
+      disabled={subDisabled}
+      placeholder={placeholders[1]}
+    />
+
+  const renderPrimary =
+    <CustomSelect
+      data={data}
+      value={choice}
+      onSelect={setChoice}
+      placeholder={placeholders[0]}
+    />
+
+  const renderDelete =
+    <CustomButton
+      type='danger'
+      onClick={deleteCallback}
+      className={clsx('rounded-md flex align-center justify-center my-0.5',
+        'transition-width ease-in-out duration-300',
+        'w-5 hover:w-7 ml-3 hover:ml-1',
+        'bg-secondary-100 hover:bg-error-200'
+      )}
+    >
+      <Trash className='fill-current text-secondary-400 transition-all ease-in-out duration-300 h-full' />
+    </CustomButton>
+
   return (
-    <div className='flex align-stretch'>
-      <div className='flex-0'>
-        <_CustomSelect
-          data={subData}
-          value={subChoice}
-          onSelect={setSubChoice}
-          disabled={subDisabled}
-          placeholder={placeholders[1]}
-        />
+    <>
+      <div className='col-span-1'> {renderSub} </div>
+      <div className={clsx('col-span-1 min-w-0', { 'flex justify-end': deletable })}>
+        <div className='flex-1'>
+          {renderPrimary}
+        </div>
+        {deletable && renderDelete}
       </div>
-      <div className='flex-1'>
-        <_CustomSelect
-          data={data}
-          value={choice}
-          onSelect={setChoice}
-          placeholder={placeholders[0]}
-        />
-      </div>
-      {deletable &&
-        <CustomButton type='danger' className='rounded-md ml-2 m-0.5 flex align-center justify-center transition-width ease-in-out duration-300 w-5 hover:w-8 bg-secondary-100 hover:bg-error-200' onClick={deleteCallback}>
-          <Trash className='fill-current text-secondary-400 transition-all ease-in-out duration-300 h-full' />
-        </CustomButton>
-      }
-    </div>
+    </>
   )
 }
 LinkedSelect.propTypes = {

@@ -37,20 +37,25 @@ const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEm
     }
     {
       children &&
-      <div className='table w-full h-full'>
-        {description &&
-          <div className='table-cell w-0'>
-            <div className='px-3 pt-2 pb-1 break-word italic text-xs text-secondary-400 tracking-wide'>
-              {description}
+      (description
+        ? <>
+          <div className='table w-100'>
+            <div className='table-cell w-0'>
+              <div className='px-3 pt-2 pb-1 break-word italic text-xs text-secondary-400 tracking-wide'>
+                {description}
+              </div>
+            </div>
+            <div className='table-row w-100'>
+              <div className='w-full h-full flex flex-col px-3 py-2'>
+                {children}
+              </div>
             </div>
           </div>
-        }
-        <div className='table-row h-full'>
-          <div className='h-full flex flex-col px-3 py-2'>
-            {children}
-          </div>
+        </>
+        : <div className='flex flex-col px-3 py-2'>
+          {children}
         </div>
-      </div>
+      )
     }
   </div>
 )

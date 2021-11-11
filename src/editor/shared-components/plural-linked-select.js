@@ -9,22 +9,21 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
 
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
   return (
-    <>
+    <div className='grid grid-cols-min-min'>
       {
         values.map((v, i) => {
           return (
-            <div key={i} className='mb-2'>
-              <LinkedSelect
-                callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
-                data={remainingValues}
-                init={v[primaryKey]}
-                subData={subData}
-                subInit={v[secondaryKey]}
-                deletable={values?.length > 1}
-                deleteCallback={() => deleteCallback(i)}
-                placeholders={titles}
-              />
-            </div>
+            <LinkedSelect
+              key={i}
+              callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
+              data={remainingValues}
+              init={v[primaryKey]}
+              subData={subData}
+              subInit={v[secondaryKey]}
+              deletable={values?.length > 1}
+              deleteCallback={() => deleteCallback(i)}
+              placeholders={titles}
+            />
           )
         })
       }
@@ -40,7 +39,7 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
           placeholders={titles}
         />
       }
-    </>
+    </div >
   )
 }
 
