@@ -9,7 +9,7 @@ import {
   Bar,
   Line,
   Scatter,
-  Map,
+  // Map,
 } from '../../components/icons'
 import { useStoreActions, useStoreState } from '../../store'
 
@@ -19,7 +19,7 @@ const mapIcons = {
   bar: Bar,
   scatter: Scatter,
   line: Line,
-  map: Map,
+  // map: Map,
 }
 
 const Icons = ({ disabled }) => {
