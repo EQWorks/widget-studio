@@ -34,7 +34,7 @@ const ValueControls = ({ groupingOptional }) => {
     update({ valueKeys: [] })
   }
 
-  const groupedValueKeysSelect =
+  const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
       titles={['Key', 'Aggregation']}
       values={valueKeys}
@@ -90,21 +90,25 @@ const ValueControls = ({ groupingOptional }) => {
                 placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
               />
             </WidgetControlCard>
-            <WidgetControlCard clearable title='Value Keys'>
-              {
-                group ?
-                  groupedValueKeysSelect
-                  :
-                  <CustomSelect
-                    multiSelect
-                    value={valueKeys.map(({ key }) => key)}
-                    data={numericColumns.filter(c => c !== indexKey)}
-                    onSelect={(val) =>
-                      update({ valueKeys: val.map(v => ({ key: v })) })
-                    }
-                  />
-              }
-            </WidgetControlCard>
+            {
+              group ?
+                <WidgetControlCard grow clearable title='Value Keys'>
+                  {renderGroupedValueKeysSelect}
+                </WidgetControlCard>
+                :
+                <WidgetControlCard clearable title='Value Keys'>
+                  <div className='flex-grow-0'>
+                    <CustomSelect
+                      multiSelect
+                      value={valueKeys.map(({ key }) => key)}
+                      data={numericColumns.filter(c => c !== indexKey)}
+                      onSelect={(val) =>
+                        update({ valueKeys: val.map(v => ({ key: v })) })
+                      }
+                    />
+                  </div>
+                </WidgetControlCard>
+            }
           </>
           :
           <>
@@ -119,11 +123,12 @@ const ValueControls = ({ groupingOptional }) => {
               />
             </WidgetControlCard>
             <WidgetControlCard
+              grow
               clearable
               title='Value Keys'
               description='Select up to 3 keys, open in editor for more options.'
             >
-              {groupedValueKeysSelect}
+              {renderGroupedValueKeysSelect}
             </WidgetControlCard>
           </>
       }

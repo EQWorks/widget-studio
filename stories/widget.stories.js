@@ -5,7 +5,6 @@ import { Resizable } from 're-resizable'
 import modes from '../src/constants/modes'
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
-import WidgetControlCard from '../src/editor/shared-components/widget-control-card'
 import CustomToggle from '../src/editor/shared-components/custom-toggle'
 
 
@@ -38,13 +37,13 @@ Object.values(modes).forEach(mode => {
     .add(mode, () => {
       const [fullscreen, setFullscreen] = useState(false)
       return <>
-        <WidgetControlCard title={'Story controls'}>
+        <div className='bg-secondary-300 p-3'>
           <CustomToggle
             label='Fullscreen widgets'
             value={fullscreen}
-            callback={v => setFullscreen(v)}
+            onChange={v => setFullscreen(v)}
           />
-        </WidgetControlCard>
+        </div>
         <div
           style={{
             display: 'grid',
@@ -56,7 +55,7 @@ Object.values(modes).forEach(mode => {
             Object.keys(sampleConfigs).map(id =>
               <div key={id} style={{ margin: '2rem' }}>
                 <Widget
-                  mode='view_only'
+                  mode={mode}
                   id={id}
                   staticData
                 />

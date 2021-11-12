@@ -5,7 +5,7 @@ import WidgetControlCard from './widget-control-card'
 import CustomToggle from './custom-toggle'
 
 
-const ToggleableCard = ({ init, callback, title, altTitle, children }) => {
+const ToggleableCard = ({ init, callback, title, altTitle, children, ...props }) => {
   const [toggle, setToggle] = useState(init)
   return (
     <>
@@ -21,6 +21,7 @@ const ToggleableCard = ({ init, callback, title, altTitle, children }) => {
             }}
           />
         }
+        {...props}
       >
         {
           Array.isArray(children) ?
