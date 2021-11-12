@@ -17,12 +17,12 @@ const MapValueControls = () => {
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const numericColumns = useStoreState((state) => state.numericColumns)
-  const stringColumns = useStoreState((state) => state.stringColumns)
+  const columns = useStoreState((state) => state.columns)
 
   // restrict selection list for mapGroupKey to only valid map geo keysq
   const mapGeoKeys = Object.values(MAP_LAYER_GEO_KEYS).reduce((agg, val) => [...agg, ...val], [])
-  const mapGroupByKeys = stringColumns.filter(val => mapGeoKeys.includes(val))
-  const mapLayer = Object.keys(MAP_LAYER_VIS).filter(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))[0]
+  const mapGroupByKeys = columns.filter(val => mapGeoKeys.includes(val.name))
+  const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
 
   return (
     <>
