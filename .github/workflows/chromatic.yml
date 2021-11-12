@@ -40,6 +40,7 @@ jobs:
           exitZeroOnChanges: true
           autoAcceptChanges: true
         env:
+          NODE_ENV: "development"
           STORYBOOK_API_HOST: "https://api.locus.place"
           STORYBOOK_API_STAGE: "dev"
           STORYBOOK_KEY_WARDEN_HOST: "https://auth.eqworks.io"
