@@ -16,14 +16,13 @@ const Icons = ({ disabled }) => {
   const updateStore = useStoreActions((actions) => actions.update)
   const current = useStoreState((state) => state.type)
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
-  const rows = useStoreState((state) => state.rows)
+  const columns = useStoreState((state) => state.columns)
 
-  const dataKeys = rows?.length ? Object.keys(rows[0]) : null
   // TO DO (ERIKA) - this is just temporary for scatterplot and available mvt tile layers
   // in the future we implement this with a complex validation process for specific geometry keys
   const mapIconAvailability = (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey) &&
-      dataKeys?.some(key => COORD_KEYS.latitude.includes(key)) &&
-      dataKeys?.some(key => COORD_KEYS.longitude.includes(key))) ||
+      columns?.some(key => COORD_KEYS.latitude.includes(key.name)) &&
+      columns?.some(key => COORD_KEYS.longitude.includes(key.name))) ||
     MAP_LAYER_GEO_KEYS.MVT.includes(mapGroupKey)
 
   const mapIcons = [
