@@ -45,13 +45,18 @@ const WidgetControls = () => {
   const columns = useStoreState((state) => state.columns)
   const dataReady = useStoreState((state) => state.dataReady)
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
+  const allowReset = useStoreState((state) => state.ui.allowReset)
 
   const footer = <>
     <div className='flex-1'>
-      {renderButton(<>
-        <Trash size='md' className='mr-1.5 fill-current text-primary-500' />
-        RESET
-      </>, resetWidget)}
+      {renderButton(
+        <>
+          <Trash size='md' className={`mr-1.5 fill-current ${allowReset ? 'text-primary-500' : 'text-secondary-500'}`} />
+          RESET
+        </>,
+        resetWidget,
+        { disabled: !allowReset }
+      )}
     </div>
     {renderButton(
       <>

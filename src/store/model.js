@@ -1,4 +1,4 @@
-import { computed, action, thunk } from 'easy-peasy'
+import { computed, action, thunk, thunkOn } from 'easy-peasy'
 import { requestConfig, requestData } from '../util/fetch'
 
 
@@ -23,47 +23,58 @@ const widgetDefaults = {
   },
 }
 
-const stateDefaults = {
-  id: null,
-  title: '',
-  type: '',
-  filters: {},
-  group: false,
-  groupKey: null,
-  indexKey: null,
-  valueKeys: [],
-  options: {},
-  genericOptions: {
-    subPlots: false,
+const stateDefaults = [
+  { key: 'id', defaultValue: null, resettable: false },
+  { key: 'title', defaultValue: '', resettable: false },
+  { key: 'type', defaultValue: '', resettable: false },
+  { key: 'filters', defaultValue: {}, resettable: true },
+  { key: 'group', defaultValue: false, resettable: true },
+  { key: 'groupKey', defaultValue: null, resettable: true },
+  { key: 'indexKey', defaultValue: null, resettable: true },
+  { key: 'valueKeys', defaultValue: [], resettable: true },
+  { key: 'options', defaultValue: {}, resettable: true },
+  {
+    key: 'genericOptions', defaultValue: {
+      subPlots: false,
+    }, resettable: true,
   },
-  dataSource: {
-    type: null,
-    id: null,
+  {
+    key: 'dataSource', defaultValue: {
+      type: null,
+      id: null,
+    },
+    resettable: false,
   },
-  rows: [],
-  columns: [],
-  stringColumns: [],
-  numericColumns: [],
-  ui: {
-    mode: null,
-    showTable: false,
-    showWidgetControls: true,
-    showFilterControls: false,
-    showDataSourceControls: false,
-    staticData: false,
-    dataSourceLoading: false,
-    dataSourceError: null,
-    dataSourceName: null,
-    editingTitle: false,
+  { key: 'rows', defaultValue: [], resettable: false },
+  { key: 'columns', defaultValue: [], resettable: false },
+  { key: 'stringColumns', defaultValue: [], resettable: false },
+  { key: 'numericColumns', defaultValue: [], resettable: false },
+  {
+    key: 'ui',
+    defaultValue: {
+      mode: null,
+      showTable: false,
+      showWidgetControls: true,
+      showFilterControls: false,
+      showDataSourceControls: false,
+      staticData: false,
+      dataSourceLoading: false,
+      dataSourceError: null,
+      dataSourceName: null,
+      editingTitle: false,
+      allowReset: true,
+      recentReset: false,
+    },
+    resettable: false,
   },
-  wl: null,
-  cu: null,
-}
+  { key: 'wl', defaultValue: null, resettable: false },
+  { key: 'cu', defaultValue: null, resettable: false },
+]
 
 export default {
 
   /** STATE ------------------------------------------------------------------ */
-  ...stateDefaults,
+  ...Object.fromEntries(stateDefaults.map(({ key, defaultValue }) => ([key, defaultValue]))),
 
   /** COMPUTED STATE ------------------------------------------------------------ */
 
@@ -217,17 +228,42 @@ export default {
   update: action((state, payload) => ({ ...state, ...payload })),
 
   // perform a nested update on the store state
-  nestedUpdate: action((state, payload) => {
-    return Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
+  nestedUpdate: action((state, payload) => (
+    Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
       acc[nestKey] = { ...acc[nestKey], ...nestedPayload }
       return acc
     }, state)
-  }),
+  )),
 
   // reset all shared and unique states except data source and data ID
-  resetWidget: thunk((actions, payload, { getState }) => {
-    const { type, ui, dataSource } = getState()
-    actions.update({ ...stateDefaults, ui, dataSource })
-    actions.nestedUpdate({ options: widgetDefaults[type] })
-  }),
+  resetWidget: action((state) => ({
+    ...state,
+    options: widgetDefaults[state.type],
+    ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
+      .map(({ key, defaultValue }) => ([key, defaultValue]))),
+  })),
+
+  // on reset, set a 5 second timer during which reset cannot be re-enabled
+  onReset: thunkOn((actions) => actions.resetWidget,
+    (actions) => {
+      setTimeout(() => actions.setRecentReset(false), 1000)
+      actions.setAllowReset(false)
+      actions.setRecentReset(true)
+    }),
+
+  // re-enable reset whenever state is changed
+  onUpdate: thunkOn((actions) => actions.update,
+    (actions) => actions.setAllowReset(true)),
+  onNestedUpdate: thunkOn((actions) => actions.nestedUpdate,
+    (actions) => actions.setAllowReset(true)),
+
+  // re-enable reset whenever state is changed, outside of update() or nestedUpdate()
+  setRecentReset: action((state, payload) => ({ ...state, ui: { ...state.ui, recentReset: payload } })),
+
+  // set the ui.allowReset state outside of update() or nestedUpdate()
+  setAllowReset: action((state, payload) => (
+    !state.ui?.recentReset
+      ? { ...state, ui: { ...state.ui, allowReset: payload } }
+      : state
+  )),
 }
