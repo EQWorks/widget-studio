@@ -79,6 +79,7 @@
   "dependencies": {
     "@eqworks/chart-system": "^0.6.2",
     "@material-ui/lab": "^4.0.0-alpha.56",
+    "@react-hook/resize-observer": "^1.2.4",
     "axios": "^0.20.0",
     "clsx": "^1.1.1",
     "easy-peasy": "^5.0.3",
