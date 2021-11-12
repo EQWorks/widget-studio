@@ -4,42 +4,52 @@ import PropTypes from 'prop-types'
 import LinkedSelect from './linked-select'
 
 
-
 const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, subData, callback, deleteCallback }) => {
-
+  const getLongest = (arr) => arr.reduce((a, b) => (a.length > b.length ? a : b))
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
+
   return (
-    <div className='grid grid-cols-min-min'>
-      {
-        values.map((v, i) => {
-          return (
-            <LinkedSelect
-              key={i}
-              callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
-              data={remainingValues}
-              init={v[primaryKey]}
-              subData={subData}
-              subInit={v[secondaryKey]}
-              deletable={values?.length > 1}
-              deleteCallback={() => deleteCallback(i)}
-              placeholders={titles}
-            />
-          )
-        })
-      }
-      {
-        Boolean(remainingValues?.length) &&
+    <>
+      <div className='invisible h-0 grid grid-cols-min-min pointer-events-none'>
         <LinkedSelect
-          controlled={false}
-          callback={([_k, _v]) => callback(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
-          data={remainingValues}
-          init={''}
-          subData={subData}
-          subInit={''}
-          placeholders={titles}
+          data={[]}
+          subData={[]}
+          deletable
+          placeholders={[getLongest([titles[0], ...data]), getLongest([titles[1], ...subData])]}
         />
-      }
-    </div >
+      </div>
+      <div className='grid grid-cols-min-1fr'>
+        {
+          values.map((v, i) => {
+            return (
+              <LinkedSelect
+                key={i}
+                callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
+                data={remainingValues}
+                init={v[primaryKey]}
+                subData={subData}
+                subInit={v[secondaryKey]}
+                deletable={values?.length > 1}
+                deleteCallback={() => deleteCallback(i)}
+                placeholders={titles}
+              />
+            )
+          })
+        }
+        {
+          Boolean(remainingValues?.length) &&
+          <LinkedSelect
+            controlled={false}
+            callback={([_k, _v]) => callback(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
+            data={remainingValues}
+            init={''}
+            subData={subData}
+            subInit={''}
+            placeholders={titles}
+          />
+        }
+      </div >
+    </>
   )
 }
 

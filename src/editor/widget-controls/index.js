@@ -39,13 +39,19 @@ const renderButton = (children, onClick, props) =>
   </Button>
 
 const WidgetControls = () => {
+  // actions
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const resetWidget = useStoreActions(actions => actions.resetWidget)
+
+  // state
   const type = useStoreState((state) => state.type)
   const columns = useStoreState((state) => state.columns)
   const dataReady = useStoreState((state) => state.dataReady)
+
+  // ui state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const allowReset = useStoreState((state) => state.ui.allowReset)
+  const controlsWidth = useStoreState((state) => state.ui.controlsWidth)
 
   const footer = <>
     <div className='flex-1'>
@@ -71,6 +77,7 @@ const WidgetControls = () => {
 
   return (
     <CustomAccordion
+      expandedWidth={controlsWidth}
       disabled={!dataReady}
       icon={Controls}
       title={'Controls'}

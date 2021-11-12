@@ -64,6 +64,7 @@ const stateDefaults = [
       editingTitle: false,
       allowReset: true,
       recentReset: false,
+      controlsWidth: null,
     },
     resettable: false,
   },
