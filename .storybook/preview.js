@@ -11,10 +11,10 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <Authenticated product='locus'>
+    // <Authenticated product='locus'>
       <ThemeProvider>
         <Story />
       </ThemeProvider>
-    </Authenticated>
+    // </Authenticated>
   )
 ]
