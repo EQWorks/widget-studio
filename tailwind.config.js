@@ -21,9 +21,6 @@ const config = {
         'min-min': 'min-content min-content',
         'min-1fr': 'min-content 1fr',
       },
-      transitionProperty: {
-        'max-width': 'max-width',
-      },
       borderWidth: {
         'custom-1': '0.3rem',
       },
