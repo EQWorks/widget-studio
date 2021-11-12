@@ -42,8 +42,8 @@ const WidgetControls = () => {
   useEffect(() => {
     update({ numericColumns: columns.filter(({ category, name }) =>
       category === 'Numeric' &&
-      !COORD_KEYS?.latitude?.some(key => name === key) &&
-      !COORD_KEYS?.longitude?.some(key => name === key))
+      !COORD_KEYS.latitude.some(key => name === key) &&
+      !COORD_KEYS.longitude.some(key => name === key))
       .map(({ name }) => name) })
     update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
   }, [columns, update])
