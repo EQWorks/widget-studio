@@ -8,8 +8,9 @@ const CustomSelect = ({ data, multiSelect, value, onSelect, ...props }) => {
   return (
     <DropdownSelect
       classes={{
-        button: 'w-full h-full tracking-widest',
+        button: 'tracking-widest',
         menu: 'w-full',
+        content: 'children:overflow-hidden children:overflow-ellipsis',
         contentTitle: 'normal-case text-primary-600',
         listContainer: 'normal-case',
       }}
