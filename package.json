@@ -88,7 +88,6 @@
     "lodash.debounce": "^4.0.8",
     "nanoid": "^3.1.30",
     "prop-types": "^15.7.2",
-    "react-fast-marquee": "^1.2.1",
     "react-resize-detector": "^6.7.6"
   },
   "size-limit": [
