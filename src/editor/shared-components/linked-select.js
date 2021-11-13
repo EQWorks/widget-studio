@@ -56,8 +56,8 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
 
   return (
     <>
-      <div className='col-span-1'> {renderSub} </div>
-      <div className={clsx('col-span-1 min-w-0', { 'flex justify-end': deletable })}>
+      <div className='max-w-xs col-span-1'> {renderSub} </div>
+      <div className={clsx('max-w-xs col-span-1', { 'flex justify-end': deletable })}>
         <div className='flex-1'>
           {renderPrimary}
         </div>
