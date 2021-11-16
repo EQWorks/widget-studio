@@ -10,6 +10,7 @@ const config = {
       textColor: ['children'],
       textOverflow: ['children'],
       margin: ['hover'],
+      fill: ['children'],
     },
   },
   theme: {
