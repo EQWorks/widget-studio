@@ -24,6 +24,7 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
             return (
               <LinkedSelect
                 key={i}
+                className={`${i > 0 ? 'mt-2' : ''}`}
                 callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
                 data={remainingValues}
                 init={v[primaryKey]}
@@ -39,6 +40,7 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
         {
           Boolean(remainingValues?.length) &&
           <LinkedSelect
+            className='mt-2'
             controlled={false}
             callback={([_k, _v]) => callback(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
             data={remainingValues}

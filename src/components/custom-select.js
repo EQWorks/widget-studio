@@ -3,16 +3,18 @@ import PropTypes from 'prop-types'
 import { DropdownSelect, Icons } from '@eqworks/lumen-labs'
 
 
-const CustomSelect = ({ data, multiSelect, value, onSelect, ...props }) => {
+const CustomSelect = ({ classes, data, multiSelect, value, onSelect, ...props }) => {
   const transformedData = useMemo(() => ([{ items: data.map(d => ({ title: d })) }]), [data])
   return (
     <DropdownSelect
       classes={{
-        button: 'tracking-widest',
+        root: 'shadow-light-10 border-2 border-secondary-200 rounded-md',
+        button: 'tracking-widest border-none',
         menu: 'w-full',
-        content: 'children:overflow-hidden children:overflow-ellipsis',
+        content: 'children:overflow-hidden children:overflow-ellipsis children:fill-current children:text-secondary-400',
         contentTitle: 'normal-case text-primary-600',
         listContainer: 'normal-case',
+        ...classes,
       }}
       setSelectedOption={multiSelect ? value?.map(v => ({ title: v })) : { title: value }}
       multiSelect={multiSelect}
@@ -25,12 +27,14 @@ const CustomSelect = ({ data, multiSelect, value, onSelect, ...props }) => {
 }
 
 CustomSelect.propTypes = {
+  classes: PropTypes.object,
   data: PropTypes.array,
   multiSelect: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   onSelect: PropTypes.func.isRequired,
 }
 CustomSelect.defaultProps = {
+  classes: {},
   data: [],
   multiSelect: false,
   value: '',
