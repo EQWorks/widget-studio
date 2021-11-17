@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { Button, Accordion, Icons, TextField, Chip } from '@eqworks/lumen-labs'
+import clsx from 'clsx'
 
 import { ArrowExpand, EditPen, Download } from '../components/icons'
 import { useStoreState, useStoreActions } from '../store'
@@ -33,6 +34,8 @@ const WidgetTitleBar = ({ className }) => {
   useEffect(() => {
     setTentativeTitle(title)
   }, [title])
+
+  const [showClipboardNoti, setShowClipboardNoti] = useState(false)
 
   const renderButton = (children, onClick, props) =>
     <Button
@@ -138,7 +141,7 @@ const WidgetTitleBar = ({ className }) => {
       </>
 
   return (
-    <Accordion color='secondary' className={className}>
+    <Accordion color='secondary' className={`pt-0 ${className}`}>
       <Accordion.Panel
         autoHeight
         color='transparent'
@@ -148,15 +151,34 @@ const WidgetTitleBar = ({ className }) => {
           header: 'flex items-center children:not-first:flex-1',
         }}
         header={
-          <div className='flex items-center'>
+          <div className='py-2 flex items-center'>
             {renderWidgetTitle}
             {
               id &&
-              <Chip classes={{
-                chip: 'select-text text-secondary-600 bg-secondary-300 py-0.5 px-2 rounded-md uppercase',
-              }} color='secondary'>
-                {`id: ${id}`}
-              </Chip>
+              <>
+                <Chip
+                  classes={{
+                    chip: 'select-text text-secondary-600 bg-secondary-300 py-0.5 px-2 rounded-md uppercase',
+                  }}
+                  color='secondary'
+                  onClick={e => {
+                    e.stopPropagation()
+                    if (window.isSecureContext) {
+                      navigator.clipboard.writeText(id)
+                      setShowClipboardNoti(true)
+                      setTimeout(() => setShowClipboardNoti(false), 2000)
+                    }
+                  }}
+                >
+                  {`id: ${id}`}
+                </Chip>
+                <div className={clsx('ml-2 rounded-md p-3 border border-secondary-100 shadow-light-40 text-xs text-secondary-600 transition-opacity ease-in-out duration-300', {
+                  'opacity-0': !showClipboardNoti,
+                  'opacity-1': showClipboardNoti,
+                })}>
+                  ID copied to clipboard
+                </div>
+              </>
             }
             <div className='flex ml-auto'>
               {renderIconButton(Download,
@@ -179,8 +201,8 @@ const WidgetTitleBar = ({ className }) => {
         ExpandIcon={Icons.ChevronDown}
       >
         {renderWidgetMeta}
-      </Accordion.Panel>
-    </Accordion>
+      </Accordion.Panel >
+    </Accordion >
   )
 }
 
