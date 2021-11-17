@@ -17,9 +17,9 @@ This project provides a declarative `Widget` component with a simple interface.
 
 - `id`: `string`
   - identifier for a widget config JSON that this widget will read from and update. 
-- `studio`: `bool`
-  - default `false`
-  - If `studio === true`, one container is rendered that encapsulates the chart, widget configuration controls, data source selection, and raw data view. Otherwise, only the chart and title are rendered. 
+- `mode`: `string`
+  - default `'view_only'`
+  - possible values are `'view_only'`, `'ql'`, and `'editor'`. 
 - `staticData`: `bool`
   - default `false`
   - If `staticData === true`, controls for modifying the widget's data source are not exposed to the frontend.
@@ -27,20 +27,18 @@ This project provides a declarative `Widget` component with a simple interface.
 ---
 ## Usage scenarios
 
-1. A `Widget` has no `id`, so its initial configuration is empty, but its studio features are enabled so it has the capacity to construct a config. This widget is "starting from scratch."
+1. A `Widget` has no `id`, so its initial configuration is empty, but its studio features are enabled so it has the capacity to modify its own configuration. This widget is "starting from scratch."
 ```jsx
-<Widget studio /> 
+<Widget mode='editor' /> 
 ```
 
 2. A `Widget` has an `id` that determines its initial configuration. Its configuration is controlled by the enabled studio features. This widget is essentially a "loaded" widget.
 ```jsx
-<Widget studio id={someID} />
+<Widget mode='editor' id={someID} />
 ```
 
-3. A `Widget` has an `id` that determines its initial configuration. This configuration cannot change because the studio features are not enabled. This widget is essentially a read-only chart with a title.
+3. A `Widget` has an `id` that determines its initial configuration. This configuration cannot change because the editor features are not enabled. This widget is essentially read-only.
 
 ```jsx
-<Widget id={someID} />
+<Widget mode='view_only' id={someID} />
 ```
-
-\* *Currently, the widget config database is not implemented and configs are instead retrieved from a hardcoded file.*
