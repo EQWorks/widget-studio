@@ -2,6 +2,10 @@
 
 System to generate and control widgets, graduated from `ml-ui`
 
+
+https://user-images.githubusercontent.com/53827672/142273023-d2d30728-9bbe-4daa-8d23-4a0f0f2b4f5d.mov
+
+
 ## Getting started
 In `widget-studio` project root:
 ```shell
@@ -11,6 +15,7 @@ $ yarn start
 ```
 
 Navigate to http://localhost:6008 to view the development storybook.
+
 
 ## Short intro
 This project provides a declarative `Widget` component with a simple interface.
