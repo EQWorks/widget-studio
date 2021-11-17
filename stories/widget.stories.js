@@ -77,18 +77,3 @@ storiesOf('Blank widget (no ID)', module)
       />
     </Resizable>
   ))
-
-// showcase behaviour without explicit widget ID
-storiesOf('Incorrect usage')
-  .add('Editor-mode widget with data control disabled and no widget ID', () => (
-    <Widget
-      mode='editor'
-      staticData
-    />
-  ))
-
-  .add('View-mode widget without ID', () => (
-    <Widget
-      mode='view_only'
-    />
-  ))
