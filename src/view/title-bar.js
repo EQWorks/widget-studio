@@ -61,7 +61,7 @@ const WidgetTitleBar = ({ className }) => {
         items.map(([title, info, hyperlink], i) => {
           const config = 'flex-none whitespace-nowrap min-w-0 font-semibold tracking-wide flex-initial text-xs font-mono bg-secondary-200 p-0.5'
           return (
-            <div key={i} className='flex pl-3 pr-3 flex-col '>
+            <div key={i} className='flex pl-3 pr-3 flex-col overflow-hidden'>
               <span className='m-0 text-xs text-secondary-500 tracking-wider'>
                 {`${title}:`}
               </span>
