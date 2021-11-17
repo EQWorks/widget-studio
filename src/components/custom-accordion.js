@@ -24,7 +24,7 @@ const CustomAccordion = ({ disabled, direction, title, footer, icon, open, toggl
       {
         direction === 'vertical'
           ? <>
-            <div style={{ height }} className={`relative z-10 border-l-2 border-neutral-100 overflow-hidden transition-width duration-200 ease-in ${open ? 'w-0 border-l-none' : 'w-16 delay-500'}`}>
+            <div style={{ height }} className={`shadow-blue-20 border-l border-neutral-100 overflow-hidden transition-width duration-200 ease-in ${open ? 'w-0 border-l-none' : 'w-16 delay-500'}`}>
               <CustomButton
                 variant='borderless'
                 className={'w-full justify-center border-none h-full'}
@@ -36,7 +36,7 @@ const CustomAccordion = ({ disabled, direction, title, footer, icon, open, toggl
                 })}
               </CustomButton>
             </div>
-            <div ref={ref} className={`whitespace-nowrap relative z-10 border-l-2 border-neutral-100 transition-max-width overflow-x-hidden ease-in-out flex justify-end duration-1000 ${open ? 'max-w-full' : 'max-w-0'}`}>
+            <div ref={ref} className={`shadow-blue-40 whitespace-nowrap border-l border-neutral-100 transition-max-width overflow-x-hidden ease-in-out flex justify-end duration-1000 ${open ? 'max-w-full' : 'max-w-0'}`}>
               {
                 disabled &&
                 <div className='absolute z-30 bg-secondary-50 opacity-50 w-full h-full' />

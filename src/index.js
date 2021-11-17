@@ -51,11 +51,10 @@ const Widget = ({ id, mode: _mode, staticData }) => {
 
   return (
     <div className='bg-white rounded-sm overflow-hidden flex flex-col items-stretch border-2 border-neutral-100 w-full h-full' >
-      <WidgetTitleBar className='flex-initial flex p-4 border-b-2 border-neutral-100' />
+      <WidgetTitleBar className='flex-initial flex p-4 border-b-2 border-neutral-100 shadow-blue-20' />
       <div className='flex-1 min-h-0 flex flex-row justify-end'>
         <div className={clsx('p-4 pt-1 min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
           'h-full': mode === modes.VIEW,
-          'shadow-widget': mode !== modes.VIEW,
         })}>
           <WidgetView />
         </div>
