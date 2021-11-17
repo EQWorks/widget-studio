@@ -5,9 +5,8 @@ import Marquee from 'react-fast-marquee'
 
 const OverflowMarquee = ({ children }) => {
   const content = useRef(null)
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const xOverflow = useMemo(() => content.current?.scrollWidth > content.current?.clientWidth, [content.current?.scrollWidth, content.current?.clientWidth])
-
   const renderChildren = React.Children.map(children, (child) => child)
 
   return (

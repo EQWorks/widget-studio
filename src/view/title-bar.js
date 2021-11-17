@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { Accordion, Icons, TextField, Button, Chip } from '@eqworks/lumen-labs'
+import { Button, Accordion, Icons, TextField, Chip } from '@eqworks/lumen-labs'
+import clsx from 'clsx'
 
 import { ArrowExpand, EditPen, Download } from '../components/icons'
-import OverflowMarquee from '../components/overflow-marquee'
 import { useStoreState, useStoreActions } from '../store'
+import OverflowTooltip from '../components/overflow-tooltip'
 
 
-const WidgetTitleBar = () => {
+const WidgetTitleBar = ({ className }) => {
 
   // store actions
   const update = useStoreActions((state) => state.update)
@@ -34,9 +35,12 @@ const WidgetTitleBar = () => {
     setTentativeTitle(title)
   }, [title])
 
+  const [showClipboardNoti, setShowClipboardNoti] = useState(false)
+
   const renderButton = (children, onClick, props) =>
     <Button
-      classes={{ button: 'ml-2 uppercase p-1.5 tracking-wider' }}
+      classes={{ button: 'outline-none focus:outline-none ml-2 uppercase p-1.5 py-1 tracking-widest' }}
+      type='primary'
       variant='borderless'
       size='md'
       onClick={e => {
@@ -54,23 +58,38 @@ const WidgetTitleBar = () => {
   const renderDetailItems = (items) =>
     <div className={`w-full grid items-center grid-cols-${items.length} divide-x divide-secondary-300`}>
       {
-        items.map(([title, info], i) => (
-          <div key={i} className='flex pl-3 pr-3 flex-col '>
-            <span className='m-0 text-xs text-secondary-500 tracking-wider'>
-              {`${title}:`}
-            </span>
-            <OverflowMarquee >
-              <div className='flex-none whitespace-nowrap min-w-0'>
-                <span className='font-medium tracking-wide flex-initial text-xs font-mono bg-secondary-200 text-secondary-800'>
-                  {info}
-                </span>
-              </div>
-            </OverflowMarquee>
-          </div>
-        )
+        items.map(([title, info, hyperlink], i) => {
+          const config = 'flex-none whitespace-nowrap min-w-0 font-semibold tracking-wide flex-initial text-xs font-mono bg-secondary-200 p-0.5'
+          return (
+            <div key={i} className='flex pl-3 pr-3 flex-col '>
+              <span className='m-0 text-xs text-secondary-500 tracking-wider'>
+                {`${title}:`}
+              </span>
+              <OverflowTooltip
+                description={info}
+                classes={{ content: 'whitespace-nowrap' }}
+                position={i === 0 ? 'right' : 'left'}
+              >
+                <div className='flex-none whitespace-nowrap min-w-0'>
+                  {
+                    hyperlink
+                      ? <a href={hyperlink}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        className={`${config} font-bold text-primary-500 underline`}
+                      > {info} </a>
+                      : <span className={`${config} text-secondary-800`}>
+                        {info}
+                      </span>
+                  }
+                </div>
+              </OverflowTooltip>
+            </div >
+          )
+        }
         )
       }
-    </div>
+    </div >
 
   const renderWidgetMeta =
     <div className='flex bg-transparent p-3'>
@@ -81,9 +100,11 @@ const WidgetTitleBar = () => {
           ? `${columns.length} columns ${rows.length} rows`
           : '...',
         ],
-        ['DATA SOURCE', dataReady
-          ? `${dataSourceType} ${dataSourceID} ${dataSourceName || ''}`
-          : '...',
+        ['DATA SOURCE',
+          dataReady
+            ? `${dataSourceType} ${dataSourceID} ${dataSourceName || ''}`
+            : '...',
+          'https://www.google.com/search?q=not+implemented',
         ],
       ])}
     </div>
@@ -107,7 +128,7 @@ const WidgetTitleBar = () => {
       />
       : <>
         <span className='text-lg font-bold text-primary-500'>
-          {title || 'Untitled'}
+          {title || 'Untitled Widget'}
         </span>
         {renderButton(
           <EditPen
@@ -120,8 +141,9 @@ const WidgetTitleBar = () => {
       </>
 
   return (
-    <Accordion color='secondary' className='w-full' >
+    <Accordion color='secondary' className={`pt-0 ${className}`}>
       <Accordion.Panel
+        autoHeight
         color='transparent'
         classes={{
           iconRoot: 'bg-opacity-0 children:text-primary-500',
@@ -129,13 +151,34 @@ const WidgetTitleBar = () => {
           header: 'flex items-center children:not-first:flex-1',
         }}
         header={
-          <div className='flex items-center'>
+          <div className='py-2 flex items-center'>
             {renderWidgetTitle}
             {
               id &&
-              <Chip classes={{ chip: 'text-secondary-600 bg-secondary-300 py-0.5 px-2 rounded-md uppercase' }} color='secondary'>
-                {`id: ${id}`}
-              </Chip>
+              <>
+                <Chip
+                  classes={{
+                    chip: 'select-text text-secondary-600 bg-secondary-300 py-0.5 px-2 rounded-md uppercase',
+                  }}
+                  color='secondary'
+                  onClick={e => {
+                    e.stopPropagation()
+                    if (window.isSecureContext) {
+                      navigator.clipboard.writeText(id)
+                      setShowClipboardNoti(true)
+                      setTimeout(() => setShowClipboardNoti(false), 2000)
+                    }
+                  }}
+                >
+                  {`id: ${id}`}
+                </Chip>
+                <div className={clsx('ml-2 rounded-md p-3 border border-secondary-100 shadow-light-40 text-xs text-secondary-600 transition-opacity ease-in-out duration-300', {
+                  'opacity-0': !showClipboardNoti,
+                  'opacity-1': showClipboardNoti,
+                })}>
+                  ID copied to clipboard
+                </div>
+              </>
             }
             <div className='flex ml-auto'>
               {renderIconButton(Download,
@@ -158,13 +201,17 @@ const WidgetTitleBar = () => {
         ExpandIcon={Icons.ChevronDown}
       >
         {renderWidgetMeta}
-      </Accordion.Panel>
-    </Accordion>
+      </Accordion.Panel >
+    </Accordion >
   )
 }
 
 WidgetTitleBar.propTypes = {
+  className: PropTypes.string,
   children: PropTypes.node.isRequired,
+}
+WidgetTitleBar.defaultProps = {
+  className: '',
 }
 
 export default WidgetTitleBar

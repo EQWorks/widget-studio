@@ -8,11 +8,21 @@ const config = {
     extend: {
       flex: ['children-not-first'],
       textColor: ['children'],
+      textOverflow: ['children'],
+      margin: ['hover'],
     },
   },
   theme: {
     extend: {
-      // place extended styles here
+      gridTemplateColumns: {
+        'min-min': 'min-content min-content',
+      },
+      transitionProperty: {
+        'max-width': 'max-width',
+      },
+      borderWidth: {
+        'custom-1': '0.3rem',
+      },
     },
   },
 }

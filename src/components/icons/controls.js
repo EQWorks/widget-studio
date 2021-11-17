@@ -10,7 +10,7 @@ const iconSize = Object.freeze({
 const Controls = ({ className, size, ...props }) => {
   return (
     <svg
-      className={`${iconSize[size]} ${className}`}
+      className={`${size ? iconSize[size] : ''} ${className}`}
       viewBox="0 0 10 10"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -32,6 +32,6 @@ const Controls = ({ className, size, ...props }) => {
 }
 
 Controls.propTypes = { className: PropTypes.string, size: PropTypes.string }
-Controls.defaultProps = { className: '', size: 'lg' }
+Controls.defaultProps = { className: '', size: null }
 
 export default Controls

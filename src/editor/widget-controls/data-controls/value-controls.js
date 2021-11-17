@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 
 import { aggFuncDict } from '../../../view/adapter'
 import { useStoreState, useStoreActions } from '../../../store'
-import CustomSelect from '../../shared-components/custom-select'
-import CustomToggle from '../../shared-components/custom-toggle'
+import CustomSelect from '../../../components/custom-select'
 import PluralLinkedSelect from '../../shared-components/plural-linked-select'
 import WidgetControlCard from '../../shared-components/widget-control-card'
+import { SwitchRect } from '@eqworks/lumen-labs'
+import clsx from 'clsx'
 
 
 const ValueControls = ({ groupingOptional }) => {
@@ -28,8 +29,8 @@ const ValueControls = ({ groupingOptional }) => {
     }
   }, [group, groupingOptional, update])
 
-  const toggleGroup = (val) => {
-    update({ group: val })
+  const toggleGroup = () => {
+    update({ group: !group })
     update({ valueKeys: [] })
   }
 
@@ -63,29 +64,42 @@ const ValueControls = ({ groupingOptional }) => {
         groupingOptional ?
           <>
             <WidgetControlCard
-              title={group ? 'Group by' : 'Index by'}
-              titleExtra={
-                <CustomToggle
-                  value={group}
-                  callback={toggleGroup} />
-              }
+              clearable
+              title={group ? 'Group By' : 'Index By'}
             >
+              <div className='flex mb-2 text-xs text-secondary-600'>
+                <span className='flex-1'>Group By:</span>
+                <span className={clsx('font-semibold mr-2', {
+                  ['text-secondary-600']: !group,
+                  ['text-secondary-500']: group,
+                })}>OFF</span>
+                <SwitchRect
+                  id='group'
+                  checked={group}
+                  onChange={toggleGroup}
+                />
+                <span className={clsx('font-semibold ml-2', {
+                  ['text-primary-500']: group,
+                  ['text-secondary-500']: !group,
+                })}>ON</span>
+              </div>
               <CustomSelect
                 data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
-                chosenValue={group ? groupKey : indexKey}
-                setChosenValue={val => update(group ? { groupKey: val } : { indexKey: val })}
+                value={group ? groupKey : indexKey}
+                onSelect={val => update(group ? { groupKey: val } : { indexKey: val })}
+                placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
               />
             </WidgetControlCard>
-            <WidgetControlCard title='Value Keys'>
+            <WidgetControlCard clearable title='Value Keys'>
               {
                 group ?
                   groupedValueKeysSelect
                   :
                   <CustomSelect
-                    multi
-                    chosenValue={valueKeys.map(({ key }) => key)}
+                    multiSelect
+                    value={valueKeys.map(({ key }) => key)}
                     data={numericColumns.filter(c => c !== indexKey)}
-                    setChosenValue={(val) =>
+                    onSelect={(val) =>
                       update({ valueKeys: val.map(v => ({ key: v })) })
                     }
                   />
@@ -94,14 +108,21 @@ const ValueControls = ({ groupingOptional }) => {
           </>
           :
           <>
-            <WidgetControlCard title='Group by' >
+            <WidgetControlCard
+              clearable
+              title='Group By'
+            >
               <CustomSelect
                 data={stringColumns}
-                chosenValue={groupKey}
-                setChosenValue={val => update({ groupKey: val })}
+                value={groupKey}
+                onSelect={val => update({ groupKey: val })}
               />
             </WidgetControlCard>
-            <WidgetControlCard title='Value keys' >
+            <WidgetControlCard
+              clearable
+              title='Value Keys'
+              description='Select up to 3 keys, open in editor for more options.'
+            >
               {groupedValueKeysSelect}
             </WidgetControlCard>
           </>

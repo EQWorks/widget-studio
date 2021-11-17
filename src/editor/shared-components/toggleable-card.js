@@ -10,11 +10,12 @@ const ToggleableCard = ({ init, callback, title, altTitle, children }) => {
   return (
     <>
       <WidgetControlCard
+        showIfEmpty
         title={toggle ? title : altTitle ?? title}
         titleExtra={
           <CustomToggle
             value={toggle}
-            callback={(val) => {
+            onChange={(val) => {
               callback(val)
               setToggle(val)
             }}

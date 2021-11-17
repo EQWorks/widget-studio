@@ -28,16 +28,19 @@ const LineControls = () => {
         mode === modes.EDITOR &&
         <>
           <GenericOptionControls />
-          <WidgetControlCard title='Styling'>
+          <WidgetControlCard
+            clearable
+            title='Styling'
+          >
             <CustomToggle
               value={spline}
               label='Spline interpolation'
-              callback={(val) => nestedUpdate({ options: { spline: val } })}
+              onChange={(val) => nestedUpdate({ options: { spline: val } })}
             />
             <CustomToggle
               value={showTicks}
               label='Show ticks'
-              callback={(val) => nestedUpdate({ options: { showTicks: val } })}
+              onChange={(val) => nestedUpdate({ options: { showTicks: val } })}
             />
           </WidgetControlCard>
         </>

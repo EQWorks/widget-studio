@@ -1,38 +1,15 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import Divider from '@material-ui/core/Divider'
-import { makeStyles } from '@material-ui/core/styles'
-import { Typography } from '@eqworks/lumen-ui'
 
 import LinkedSelect from './linked-select'
-import styles from '../styles'
 
 
-const useStyles = makeStyles(styles)
 
 const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, subData, callback, deleteCallback }) => {
 
-  const classes = useStyles()
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
   return (
-    <>
-      <div className={classes.controlRow}>
-        <Typography
-          className={classes.linkedSelectPrimary}
-          color='textSecondary'
-          variant='body1'
-        >
-          {titles[0]}
-        </Typography>
-        <Typography
-          className={classes.linkedSelectSub}
-          color='textSecondary'
-          variant='body1'
-        >
-          {titles[1]}
-        </Typography>
-      </div>
-      <Divider className={classes.controlDivider} />
+    <div className='grid grid-cols-min-min'>
       {
         values.map((v, i) => {
           return (
@@ -43,8 +20,9 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
               init={v[primaryKey]}
               subData={subData}
               subInit={v[secondaryKey]}
-              deletable
+              deletable={values?.length > 1}
               deleteCallback={() => deleteCallback(i)}
+              placeholders={titles}
             />
           )
         })
@@ -58,9 +36,10 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
           init={''}
           subData={subData}
           subInit={''}
+          placeholders={titles}
         />
       }
-    </>
+    </div >
   )
 }
 

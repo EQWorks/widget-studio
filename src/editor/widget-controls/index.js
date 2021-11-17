@@ -1,18 +1,17 @@
-import React, { useEffect, createElement } from 'react'
+import React, { createElement } from 'react'
+import PropTypes from 'prop-types'
 
-import { makeStyles } from '@material-ui/core/styles'
-import { Loader } from '@eqworks/lumen-ui'
-import IconButton from '@material-ui/core/IconButton'
-import Clear from '@material-ui/icons/Clear'
+import { Button } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import BarControls from './controls/bar-controls'
 import PieControls from './controls/pie-controls'
 import LineControls from './controls/line-controls'
 import ScatterControls from './controls/scatter-controls'
-
+import { Controls, Save, Trash } from '../../components/icons'
 import Icons from './icons'
-import styles from '../styles'
+import WidgetControlCard from '../shared-components/widget-control-card'
+import CustomAccordion from '../../components/custom-accordion'
 
 
 const controls = {
@@ -22,54 +21,78 @@ const controls = {
   scatter: ScatterControls,
 }
 
-// put styles in separate file for readability
-const useStyles = makeStyles(styles)
+const renderButton = (children, onClick, props) =>
+  <Button
+    classes={{ button: 'outline-none focus:outline-none uppercase px-1.5 py-1.5 tracking-widest' }}
+    type='primary'
+    variant='borderless'
+    size='md'
+    onClick={e => {
+      e.stopPropagation()
+      onClick(e)
+    }}
+    {...props}
+  >
+    <div className='flex'>
+      {children}
+    </div>
+  </Button>
 
 const WidgetControls = () => {
-  const classes = useStyles()
-
-  const update = useStoreActions(actions => actions.update)
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const resetWidget = useStoreActions(actions => actions.resetWidget)
   const type = useStoreState((state) => state.type)
   const columns = useStoreState((state) => state.columns)
-
-  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const dataReady = useStoreState((state) => state.dataReady)
+  const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
 
-  useEffect(() => {
-    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
-    update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
-  }, [columns, update])
+  const footer = <>
+    <div className='flex-1'>
+      {renderButton(<>
+        <Trash size='md' className='mr-1.5 fill-current text-primary-500' />
+        RESET
+      </>, resetWidget)}
+    </div>
+    {renderButton(
+      <>
+        SAVE & UPDATE
+        <Save size='md' className='ml-1.5 fill-current text-white' />
+      </>,
+      () => alert('not implemented'),
+      { variant: 'filled' }
+    )
+    }
+  </>
 
   return (
-    <div className={classes.container}>
-      {
-        dataSourceLoading &&
-        <div className={classes.loaderContainer}>
-          <Loader open />
-        </div>
-      }
-      <div className={dataReady ? classes.controlHeader : classes.hidden}>
-        <Icons disabled={!columns.length} />
+    <CustomAccordion
+      disabled={!dataReady}
+      icon={Controls}
+      title={'Controls'}
+      footer={footer}
+      open={showWidgetControls}
+      toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
+    >
+      <div className='flex flex-col'>
+        <WidgetControlCard
+          title='Select Widget Type'
+          clearable
+        >
+          <Icons disabled={!columns.length || !dataReady} />
+        </WidgetControlCard>
+        {
+          createElement(controls[type || 'line'])
+        }
       </div>
-      {dataReady && type && columns &&
-        <div className={classes.controls}>
-          {createElement(controls[type])}
-        </div>
-      }
-      {
-        dataReady &&
-        <div className={classes.controlFooter}>
-          <IconButton
-            size='small'
-            onClick={resetWidget}
-          >
-            <Clear />
-          </IconButton>
-        </div>
-      }
-    </div>
+    </CustomAccordion>
   )
+}
+
+WidgetControls.propTypes = {
+  className: PropTypes.string,
+}
+WidgetControls.defaultProps = {
+  className: '',
 }
 
 export default WidgetControls

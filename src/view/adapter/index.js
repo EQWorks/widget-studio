@@ -1,8 +1,9 @@
-import { createElement, useMemo } from 'react'
+import React, { useState, useEffect, createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
+import useDebouncedResizeObserver from '../../hooks/use-debounced-resize-observer'
 
 // declare which adapter handles each widget type
 const adapterDict = {
@@ -115,8 +116,28 @@ const WidgetAdapter = () => {
   // pass the processed data to the rendering adapter and memoize the results
   const adaptedDataAndConfig = useMemo(() => adapt(finalData ?? [], config), [adapt, config, finalData])
 
+  // debounce component resizing to improve performance
+  const { size, ref } = useDebouncedResizeObserver(20)
+
+  // smooth transitions when resizing
+  const [delayedSize, setDelayedSize] = useState({})
+  const [hide, setHide] = useState(false)
+  useEffect(() => {
+    setHide(true)
+    setTimeout(() => {
+      setDelayedSize(size)
+      setTimeout(() => setHide(false), 400)
+    }, 300)
+  }, [size])
+
   // render the component
-  return createElement(component, adaptedDataAndConfig)
+  return (
+    <div ref={ref} className='h-full flex justify-center'>
+      <div style={{ width: delayedSize.width, height: delayedSize.height }} className={`transition-opacity duration-300 ease-in-out ${hide || !delayedSize.width ? 'opacity-0' : 'opacity-1'}`}>
+        {createElement(component, adaptedDataAndConfig)}
+      </div>
+    </div>
+  )
 }
 
 export default WidgetAdapter

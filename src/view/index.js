@@ -1,24 +1,16 @@
 import React, { useMemo } from 'react'
 
-import { makeStyles } from '@material-ui/core/styles'
-import { Typography } from '@eqworks/lumen-ui'
-import { Loader, Layout } from '@eqworks/lumen-labs'
+import { Loader } from '@eqworks/lumen-labs'
 
 import { DashboardLayout, Table } from '../components/icons'
 import CustomSwitch from '../components/custom-switch'
+import FadeBetween from '../components/fade-between'
 import ResultsTable from './table'
-import modes from '../constants/modes'
 import { useStoreState, useStoreActions } from '../store'
-import styles from '../styles'
 import WidgetAdapter from './adapter'
-import WidgetTitleBar from './title-bar'
 
-
-const useStyles = makeStyles(styles)
 
 const WidgetView = () => {
-
-  const classes = useStyles()
 
   // store actions
   const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
@@ -34,9 +26,7 @@ const WidgetView = () => {
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
-  const mode = useStoreState((state) => state.ui.mode)
   const showTable = useStoreState((state) => state.ui.showTable)
-  const showDataSourceControls = useStoreState((state) => state.ui.showDataSourceControls)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
 
@@ -61,59 +51,40 @@ const WidgetView = () => {
         : 'Data loaded successfully',
   }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
 
-  return (
-    <>
-      <Layout.Header className='w-full flex row-span-1 col-span-3 p-4 shadow-light-10'>
-        <WidgetTitleBar />
-      </Layout.Header>
+  const renderWidgetWarning =
+    <div className='h-full flex-1 flex flex-col justify-center items-center'>
+      {
+        dataSourceLoading ?
+          <div className='m-3'>
+            <Loader open classes={{ icon: 'text-primary-700' }} />
+          </div>
+          :
+          <span className='font-semibold text-lg text-secondary-500'>{widgetWarning.primary}</span>
+      }
+      <span className='text-md text-secondary-500'>
+        {dataSourceLoading ? dataSourceLoadingMessage : widgetWarning.secondary}
+      </span>
+    </div>
 
-      <Layout.Content className={showDataSourceControls ? classes.hidden : classes.mainContainer}>
+  return (
+    dataReady ?
+      <div className='w-full h-full flex flex-col'>
         <CustomSwitch
-          className='mt-3 ml-5'
+          className='flex-0 mt-3 ml-5'
           labels={['widget', 'table']}
           icons={[DashboardLayout, Table]}
           value={showTable}
           update={(val) => nestedUpdate({ ui: { showTable: val } })}
         />
-        <div className={!showTable
-          ? classes.hidden
-          : mode !== modes.VIEW
-            ? classes.table
-            : ''}>
-          <ResultsTable results={rows} />
+        <div className='flex-1'>
+          <FadeBetween value={showTable}>
+            <ResultsTable results={rows} />
+            {isReady ? <WidgetAdapter /> : renderWidgetWarning}
+          </FadeBetween>
         </div>
-        <div className={`flex h-full flex-1 ${showTable ? 'invisible' : 'visible'}`}>
-          {
-          // config object ready?
-            dataReady && isReady ?
-            // render widget
-              <WidgetAdapter />
-              :
-            // guide the user to configure the widget
-              <div className={classes.warningContainer}>
-                {
-                  dataSourceLoading ?
-                    <div className={classes.loader}>
-                      <Loader open classes={{ icon: 'text-primary-700' }} />
-                    </div>
-                    :
-                    <Typography color="textSecondary" variant='h6'>
-                      {widgetWarning.primary}
-                    </Typography>
-                }
-                <Typography color="textSecondary" variant='subtitle2'>
-                  {
-                    dataSourceLoading ?
-                      dataSourceLoadingMessage
-                      :
-                      widgetWarning.secondary
-                  }
-                </Typography>
-              </div>
-          }
-        </div>
-      </Layout.Content>
-    </>
+      </div>
+      :
+      renderWidgetWarning
   )
 }
 

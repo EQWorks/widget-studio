@@ -1,47 +1,81 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import { Typography } from '@eqworks/lumen-ui'
 
-import styles from '../styles'
+import CustomButton from '../../components/custom-button'
+import { Trash } from '../../components/icons'
+import clsx from 'clsx'
 
 
-const useStyles = makeStyles(styles)
-
-const WidgetControlCard = ({ title, titleExtra, children }) => {
-
-  const classes = useStyles()
-  return (
-    children &&
-    <div className={classes.controlCard}>
-      <div className={classes.controlRow}>
-        {
-          title &&
-          <Typography
-            className={classes.controlCardHeader}
-            color='textSecondary'
-            variant='subtitle1'
-          >
-            {title}
-          </Typography>
-        }
+const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEmpty, children }) => (
+  (children || showIfEmpty) &&
+  <div className='rounded-sm my-1 border border-neutral-100'>
+    {
+      title &&
+      <div className='p-2 py-1.5 bg-neutral-100 text-secondary-700 font-semibold text-sm flex align-center'>
+        <div className='flex-1'>
+          {`${title}:`}
+        </div>
         {titleExtra}
+        {
+          clearable &&
+          <CustomButton
+            onClick={() => alert('not implemented')}
+            className={clsx(
+              'flex flex-row items-center font-medium rounded-sm tracking-wider uppercase px-1.5 py-0.5 transition-all ease-in-out duration-300',
+              'text-xs text-secondary-500 hover:text-secondary-600',
+              'bg-secondary-50 hover:bg-white',
+              'shadow-light-10 hover:shadow-light-20',
+            )}
+          >
+            <div className='flex items-center'>
+              <span className='mr-1'>clear</span>
+              <Trash size='md' className='fill-current text-secondary-600 hover:text-secondary-700' />
+            </div>
+          </CustomButton>
+        }
       </div>
-      {children}
-    </ div>
-  )
-}
+    }
+    {
+      children &&
+      (description
+        ? <>
+          <div className='table w-100'>
+            <div className='table-cell w-0'>
+              <div className='px-3 pt-2 pb-1 break-word italic text-xs text-secondary-400 tracking-wide'>
+                {description}
+              </div>
+            </div>
+            <div className='table-row w-100'>
+              <div className='w-full h-full flex flex-col px-3 py-2'>
+                {children}
+              </div>
+            </div>
+          </div>
+        </>
+        : <div className='flex flex-col px-3 py-2'>
+          {children}
+        </div>
+      )
+    }
+  </div>
+)
 
 WidgetControlCard.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
   title: PropTypes.string,
-  titleExtra: PropTypes.element,
+  titleExtra: PropTypes.node,
+  description: PropTypes.string,
+  clearable: PropTypes.bool,
+  showIfEmpty: PropTypes.bool,
 }
 
 WidgetControlCard.defaultProps = {
   children: [],
   title: '',
   titleExtra: null,
+  description: null,
+  clearable: false,
+  showIfEmpty: false,
 }
 
 export default WidgetControlCard

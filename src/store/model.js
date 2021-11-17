@@ -47,7 +47,7 @@ const stateDefaults = {
   ui: {
     mode: null,
     showTable: false,
-    showWidgetControls: false,
+    showWidgetControls: true,
     showFilterControls: false,
     showDataSourceControls: false,
     staticData: false,
@@ -197,7 +197,6 @@ export default {
         actions.nestedUpdate({
           ui: {
             showWidgetControls: true,
-            showFilterControls: true,
             dataSourceName: views[0].name,
             dataSourceError: null,
           },

@@ -28,7 +28,10 @@ const ScatterControls = () => {
         mode === modes.EDITOR &&
         <>
           <GenericOptionControls />
-          <WidgetControlCard title='Styling'>
+          <WidgetControlCard
+            clearable
+            title='Styling'
+          >
             <CustomToggle
               value={showTicks}
               label='Show ticks'

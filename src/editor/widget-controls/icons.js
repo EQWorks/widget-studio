@@ -1,50 +1,56 @@
 import React from 'react'
-
 import PropTypes from 'prop-types'
-import TimelineIcon from '@material-ui/icons/Timeline'
-import MapIcon from '@material-ui/icons/Map'
-import IconButton from '@material-ui/core/IconButton'
-import PieChartIcon from '@material-ui/icons/PieChart'
-import InsertChartIcon from '@material-ui/icons/InsertChart'
-import ScatterPlotIcon from '@material-ui/icons/ScatterPlot'
 
+import clsx from 'clsx'
+
+import CustomButton from '../../components/custom-button'
+import {
+  Pie,
+  Bar,
+  Line,
+  Scatter,
+  // Map,
+} from '../../components/icons'
 import { useStoreActions, useStoreState } from '../../store'
 
 
-const mapIcons = [
-  { type: 'map', Component: MapIcon, available: false, cat: ['Geometry'], minAxis: 2 },
-  { type: 'pie', Component: PieChartIcon, available: true, cat: ['Numeric', 'String'], minAxis: 2 },
-  { type: 'bar', Component: InsertChartIcon, available: true, cat: ['Numeric', 'String', 'Date'], minAxis: 2 },
-  { type: 'scatter', Component: ScatterPlotIcon, available: true, cat: ['Num', 'String', 'Date'], minAxis: 2 },
-  { type: 'line', Component: TimelineIcon, available: true, cat: ['Date', 'Numeric', 'String'], minAxis: 2 },
-]
-const Icons = ({ disabled }) => {
+const mapIcons = {
+  pie: Pie,
+  bar: Bar,
+  scatter: Scatter,
+  line: Line,
+  // map: Map,
+}
 
-  const updateStore = useStoreActions((actions) => actions.update)
+const Icons = ({ disabled }) => {
+  const update = useStoreActions((actions) => actions.update)
   const current = useStoreState((state) => state.type)
+  const iconButtonClass = (type) => clsx('outline-none focus:outline-none border-white border-custom-1 shadow-light-10 hover:shadow-light-20 h-10 w-10 p-1.5 flex items-center justify-center mr-3 rounded-xl transition-all duration-300 ease-in-out', {
+    ['text-primary-500 hover:text-primary-600 active:text-primary-700 bg-primary-50 hover:bg-primary-100']: true,
+    ['text-primary-700 hover:text-primary-700 bg-primary-200 hover:bg-primary-200']: type === current,
+  })
   return (
-    mapIcons.map(({ Component, type, available }, i) => {
-      return (
-        <IconButton key={i} onClick={() => updateStore({ type })} disabled={disabled || !available}>
-          <Component fontSize='large' color={
-            disabled || !available ?
-              'disabled'
-              :
-              type === current ?
-                'primary'
-                :
-                'secondary'
-          } />
-        </IconButton>
-      )
-    })
+    <div className='flex'>
+      {
+        Object.entries(mapIcons).map(([type, Icon], i) => (
+          <CustomButton
+            key={i}
+            disabled={disabled}
+            variant='borderless'
+            className={iconButtonClass(type)}
+            onClick={() => update({ type })}
+          >
+            <Icon className='overflow-visible w-full h-full fill-current' />
+          </CustomButton>
+        ))
+      }
+    </div >
   )
 }
 
 Icons.propTypes = {
   disabled: PropTypes.bool,
 }
-
 Icons.defaultProps = {
   disabled: false,
 }

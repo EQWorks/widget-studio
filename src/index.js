@@ -1,25 +1,20 @@
 import React, { useEffect } from 'react'
-
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import { Layout } from '@eqworks/lumen-labs'
 
-import styles from './styles'
+import clsx from 'clsx'
+
 import modes from './constants/modes'
 import { useStoreState, useStoreActions } from './store'
 import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
-import WidgetEditor from './editor'
 import WidgetView from './view'
+import WidgetTitleBar from './view/title-bar'
 import './styles/index.css'
+import WidgetControls from './editor/widget-controls'
+import FilterControls from './editor/widget-controls/data-controls/filter-controls'
 
-
-// put styles in separate file for readability
-const useStyles = makeStyles(styles)
 
 const Widget = ({ id, mode: _mode, staticData }) => {
-
-  const classes = useStyles()
 
   // easy-peasy actions
   const loadConfig = useStoreActions(actions => actions.loadConfig)
@@ -55,21 +50,22 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   }, [_mode, id, loadConfig, mode, update, nestedUpdate, staticData])
 
   return (
-    <Layout className={`border border-neutral-100
-    ${mode === modes.EDITOR
-      ? classes.outerContainer
-      : mode === modes.VIEW
-        ? classes.outerContainerViewMode
-        : mode === modes.QL
-          ? classes.outerContainerQLMode
-          : ''}`
-    }>
-      <WidgetView />
-      {
-        mode !== modes.VIEW &&
-        <WidgetEditor />
+    <div className='bg-white rounded-sm overflow-hidden flex flex-col items-stretch border-2 border-neutral-100 w-full h-full' >
+      <WidgetTitleBar className='flex-initial flex p-4 border-b-2 border-neutral-100 shadow-blue-20' />
+      <div className='flex-1 min-h-0 flex flex-row justify-end'>
+        <div className={clsx('p-4 pt-1 min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
+          'h-full': mode === modes.VIEW,
+        })}>
+          <WidgetView />
+        </div>
+        {mode !== modes.VIEW && <WidgetControls />}
+      </div>
+      {mode === modes.EDITOR &&
+        <div className='flex-0'>
+          <FilterControls />
+        </div>
       }
-    </Layout >
+    </div >
   )
 }
 

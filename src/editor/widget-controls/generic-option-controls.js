@@ -22,7 +22,7 @@ const GenericOptionControls = () => {
         <CustomToggle
           value={subPlots}
           label='Subplots'
-          callback={(val) => nestedUpdate({ genericOptions: { subPlots: val } })}
+          onChange={(val) => nestedUpdate({ genericOptions: { subPlots: val } })}
           disabled={valueKeys.length <= 1}
         />
       }
