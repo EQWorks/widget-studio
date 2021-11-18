@@ -14,15 +14,20 @@ const LinkedSelect = ({ className, deletable, deleteCallback, callback, data, in
   const subDisabled = useMemo(() => !choice || !subData.length, [choice, subData.length])
 
   useEffect(() => {
+    setChoice(init)
+    setSubChoice(subInit)
+  }, [subInit, init])
+
+  useEffect(() => {
     if (choice && (subChoice || subDisabled)) {
       callback([choice, subChoice])
       if (!controlled) {
-        setChoice(init)
-        setSubChoice(subInit)
+        setChoice('')
+        setSubChoice('')
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [choice, controlled, init, subChoice, subInit])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [choice, controlled, subChoice, subDisabled])
 
   const renderSub =
     <CustomSelect

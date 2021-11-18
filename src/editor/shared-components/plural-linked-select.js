@@ -45,9 +45,7 @@ const PluralLinkedSelect = ({ staticQuantity, titles, values, primaryKey, second
             controlled={false}
             callback={([_k, _v]) => callback(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
             data={remainingValues}
-            init={''}
             subData={subData}
-            subInit={''}
             placeholders={titles}
           />
         }
