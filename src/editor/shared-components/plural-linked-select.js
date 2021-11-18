@@ -4,7 +4,19 @@ import PropTypes from 'prop-types'
 import LinkedSelect from './linked-select'
 
 
-const PluralLinkedSelect = ({ staticQuantity, titles, values, primaryKey, secondaryKey, data, subData, callback, deleteCallback }) => {
+const PluralLinkedSelect = ({
+  staticQuantity,
+  titles,
+  values,
+  primaryKey,
+  secondaryKey,
+  data,
+  subData,
+  disableSubFor,
+  disableSubMessage,
+  callback,
+  deleteCallback,
+}) => {
   const getLongest = (arr) => arr.reduce((a, b) => (a.length > b.length ? a : b))
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
 
@@ -20,6 +32,8 @@ const PluralLinkedSelect = ({ staticQuantity, titles, values, primaryKey, second
       deletable={!staticQuantity && values?.length > 1}
       deleteCallback={() => deleteCallback(i)}
       placeholders={titles}
+      disableSub={disableSubFor.includes(values[i]?.[primaryKey])}
+      disableSubMessage={`${values[i]?.[primaryKey]} ${disableSubMessage}`}
     />
   )
   return (
@@ -64,11 +78,15 @@ PluralLinkedSelect.propTypes = {
   callback: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func.isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
+  disableSubFor: PropTypes.arrayOf(PropTypes.string),
+  disableSubMessage: PropTypes.string,
 }
 
 PluralLinkedSelect.defaultProps = {
   staticQuantity: null,
   titles: [],
+  disableSubFor: [],
+  disableSubMessage: '',
 }
 
 export default PluralLinkedSelect
