@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
+import { SwitchRect } from '@eqworks/lumen-labs'
+import clsx from 'clsx'
+
+import modes from '../../../constants/modes'
 import { aggFuncDict } from '../../../view/adapter'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
 import PluralLinkedSelect from '../../shared-components/plural-linked-select'
 import WidgetControlCard from '../../shared-components/widget-control-card'
-import { SwitchRect } from '@eqworks/lumen-labs'
-import clsx from 'clsx'
 
 
 const ValueControls = ({ groupingOptional }) => {
@@ -23,6 +25,9 @@ const ValueControls = ({ groupingOptional }) => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
 
+  // UI state
+  const mode = useStoreState((state) => state.ui.mode)
+
   useEffect(() => {
     if (!group && !groupingOptional) {
       update({ group: true })
@@ -36,6 +41,7 @@ const ValueControls = ({ groupingOptional }) => {
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
+      staticQuantity={mode === modes.QL ? 3 : undefined}
       titles={['Key', 'Aggregation']}
       values={valueKeys}
       primaryKey='key'
@@ -126,7 +132,7 @@ const ValueControls = ({ groupingOptional }) => {
               grow
               clearable
               title='Value Keys'
-              description='Select up to 3 keys, open in editor for more options.'
+              description={mode === modes.QL ? 'Select up to 3 keys, open in editor for more options.' : ''}
             >
               {renderGroupedValueKeysSelect}
             </WidgetControlCard>

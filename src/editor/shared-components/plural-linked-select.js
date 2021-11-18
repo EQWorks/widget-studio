@@ -4,10 +4,24 @@ import PropTypes from 'prop-types'
 import LinkedSelect from './linked-select'
 
 
-const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, subData, callback, deleteCallback }) => {
+const PluralLinkedSelect = ({ staticQuantity, titles, values, primaryKey, secondaryKey, data, subData, callback, deleteCallback }) => {
   const getLongest = (arr) => arr.reduce((a, b) => (a.length > b.length ? a : b))
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
 
+  const renderValue = i => (
+    <LinkedSelect
+      key={i}
+      className={`${i > 0 ? 'mt-2' : ''}`}
+      callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
+      data={remainingValues}
+      init={values[i]?.[primaryKey]}
+      subData={subData}
+      subInit={values[i]?.[secondaryKey]}
+      deletable={!staticQuantity && values?.length > 1}
+      deleteCallback={() => deleteCallback(i)}
+      placeholders={titles}
+    />
+  )
   return (
     <>
       <div className='invisible h-0 grid grid-cols-min-min pointer-events-none'>
@@ -20,25 +34,12 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
       </div>
       <div className='grid grid-cols-min-1fr'>
         {
-          values.map((v, i) => {
-            return (
-              <LinkedSelect
-                key={i}
-                className={`${i > 0 ? 'mt-2' : ''}`}
-                callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
-                data={remainingValues}
-                init={v[primaryKey]}
-                subData={subData}
-                subInit={v[secondaryKey]}
-                deletable={values?.length > 1}
-                deleteCallback={() => deleteCallback(i)}
-                placeholders={titles}
-              />
-            )
-          })
+          staticQuantity
+            ? [...Array(staticQuantity)].map((_, i) => renderValue(i))
+            : values.map((_, i) => renderValue(i))
         }
         {
-          Boolean(remainingValues?.length) &&
+          !staticQuantity && Boolean(remainingValues?.length) &&
           <LinkedSelect
             className='mt-2'
             controlled={false}
@@ -56,6 +57,7 @@ const PluralLinkedSelect = ({ titles, values, primaryKey, secondaryKey, data, su
 }
 
 PluralLinkedSelect.propTypes = {
+  staticQuantity: PropTypes.number,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   primaryKey: PropTypes.string.isRequired,
@@ -67,6 +69,7 @@ PluralLinkedSelect.propTypes = {
 }
 
 PluralLinkedSelect.defaultProps = {
+  staticQuantity: null,
   titles: [],
 }
 
