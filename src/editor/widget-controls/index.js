@@ -1,4 +1,4 @@
-import React, { createElement } from 'react'
+import React, { useEffect, createElement } from 'react'
 import PropTypes from 'prop-types'
 
 import { Button } from '@eqworks/lumen-labs'
@@ -39,13 +39,24 @@ const renderButton = (children, onClick, props) =>
   </Button>
 
 const WidgetControls = () => {
+  // store actions
+  const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const resetWidget = useStoreActions(actions => actions.resetWidget)
-  const type = useStoreState((state) => state.type)
+
+  // common state
   const columns = useStoreState((state) => state.columns)
+  const type = useStoreState((state) => state.type)
   const dataReady = useStoreState((state) => state.dataReady)
+
+  // UI state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const allowReset = useStoreState((state) => state.ui.allowReset)
+
+  useEffect(() => {
+    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
+    update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
+  }, [columns, update])
 
   const footer = <>
     <div className='flex-1'>

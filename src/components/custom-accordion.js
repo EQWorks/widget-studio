@@ -1,23 +1,14 @@
-import React, { useEffect, createElement } from 'react'
+import React, { createElement } from 'react'
 import PropTypes from 'prop-types'
 
 import { Icons } from '@eqworks/lumen-labs'
 
-import { useStoreState, useStoreActions } from '../store'
 import CustomButton from './custom-button'
 import { useResizeDetector } from 'react-resize-detector'
 
 
 const CustomAccordion = ({ disabled, direction, title, footer, icon, open, toggle, children }) => {
-  const update = useStoreActions(actions => actions.update)
-  const columns = useStoreState((state) => state.columns)
-
   const { height, ref } = useResizeDetector()
-
-  useEffect(() => {
-    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
-    update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
-  }, [columns, update])
 
   return (
     <>
