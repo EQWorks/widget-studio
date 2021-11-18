@@ -1,17 +1,30 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 
+import clsx from 'clsx'
+import { Tooltip } from '@eqworks/lumen-labs'
+
 import { Trash } from '../../components/icons'
 import CustomSelect from '../../components/custom-select'
 import CustomButton from '../../components/custom-button'
-import clsx from 'clsx'
 
 
-const LinkedSelect = ({ className, deletable, deleteCallback, callback, data, init, subData, subInit, controlled, placeholders }) => {
-
+const LinkedSelect = ({ className,
+  deletable,
+  deleteCallback,
+  callback,
+  data,
+  init,
+  subData,
+  subInit,
+  controlled,
+  placeholders,
+  disableSub,
+  disableSubMessage,
+}) => {
   const [choice, setChoice] = useState(init)
   const [subChoice, setSubChoice] = useState(subInit)
-  const subDisabled = useMemo(() => !choice || !subData.length, [choice, subData.length])
+  const subDisabled = useMemo(() => disableSub || !choice || !subData.length, [choice, disableSub, subData.length])
 
   useEffect(() => {
     setChoice(init)
@@ -26,7 +39,7 @@ const LinkedSelect = ({ className, deletable, deleteCallback, callback, data, in
         setSubChoice('')
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [choice, controlled, subChoice, subDisabled])
 
   const renderSub =
@@ -35,10 +48,10 @@ const LinkedSelect = ({ className, deletable, deleteCallback, callback, data, in
         root: 'shadow-light-10 border-2 border-r-0 border-secondary-200 rounded-md rounded-r-none',
       }}
       data={subData}
-      value={subChoice}
+      value={disableSub ? '' : subChoice}
       onSelect={setSubChoice}
       disabled={subDisabled}
-      placeholder={placeholders[1]}
+      placeholder={disableSub ? 'N/A' : placeholders[1]}
     />
 
   const renderPrimary =
@@ -69,7 +82,13 @@ const LinkedSelect = ({ className, deletable, deleteCallback, callback, data, in
 
   return (
     <>
-      <div className={`max-w-xs col-span-1 ${className}`}> {renderSub} </div>
+      <div className={`children:block max-w-xs col-span-1 ${className}`}> {
+        disableSub
+          ? <Tooltip position='left' arrow={false} description={disableSubMessage}>
+            {renderSub}
+          </Tooltip>
+          : renderSub
+      } </div>
       <div className={clsx(`max-w-xs col-span-1 ${className}`, { 'flex justify-end': deletable })}>
         <div className='flex-1'>
           {renderPrimary}
@@ -90,6 +109,8 @@ LinkedSelect.propTypes = {
   init: PropTypes.string,
   subInit: PropTypes.string,
   placeholders: PropTypes.arrayOf(PropTypes.string),
+  disableSub: PropTypes.bool,
+  disableSubMessage: PropTypes.string,
 }
 
 LinkedSelect.defaultProps = {
@@ -100,6 +121,8 @@ LinkedSelect.defaultProps = {
   init: '',
   subInit: '',
   placeholders: ['Select', 'Select'],
+  disableSub: false,
+  disableSubMessage: '',
 }
 
 export default LinkedSelect
