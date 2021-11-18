@@ -11,6 +11,7 @@ const config = {
       textOverflow: ['children'],
       margin: ['hover'],
       fill: ['children'],
+      display: ['children'],
     },
   },
   theme: {
