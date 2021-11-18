@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { useStoreState } from '../../store'
+import { useStoreActions, useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 import useDebouncedResizeObserver from '../../hooks/use-debounced-resize-observer'
 
@@ -40,7 +40,12 @@ export const aggFuncDict = {
 
 const WidgetAdapter = () => {
 
+  // actions
+  const update = useStoreActions((state) => state.update)
+
+  // state
   const rows = useStoreState((state) => state.rows)
+  const columns = useStoreState((state) => state.columns)
   const type = useStoreState((state) => state.type)
   const filters = useStoreState((state) => state.filters)
   const indexKey = useStoreState((state) => state.indexKey)
@@ -83,6 +88,22 @@ const WidgetAdapter = () => {
       }, {})
       : null
   ), [group, groupKey, truncatedData])
+
+  // compute list of columns that have 0 variance
+  const zeroVarianceColumns = useMemo(() => (
+    group
+      ? columns.map(({ name }) => name).filter(c => (
+        c !== groupKey &&
+        Object.values(groupedData).every(d => {
+          return d[c].length === 1
+        })))
+      : []
+  ), [columns, group, groupKey, groupedData])
+
+  // relay this to global state
+  useEffect(() => {
+    update({ zeroVarianceColumns })
+  }, [update, zeroVarianceColumns])
 
   // if grouping enabled, aggregate each column from valueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
