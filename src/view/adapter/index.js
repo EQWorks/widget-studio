@@ -109,16 +109,15 @@ const WidgetAdapter = () => {
   const aggregatedData = useMemo(() => (
     group
       ? Object.entries(groupedData).map(([_groupKey, values]) => (
-        valueKeys.reduce((res, { key, agg }) => {
-          if (!agg) {
-            agg = 'sum'
-          }
-          res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
+        valueKeys.reduce((res, { key, agg = 'sum' }) => {
+          res[`${key}_${agg}`] = zeroVarianceColumns.includes(key)
+            ? values[key]
+            : aggFuncDict[agg](values[key])
           return res
         }, { [groupKey]: _groupKey })
       ))
       : null
-  ), [group, groupKey, groupedData, valueKeys])
+  ), [group, groupKey, groupedData, valueKeys, zeroVarianceColumns])
 
   // simply sort the data if grouping is not enabled
   const indexedData = useMemo(() => (
