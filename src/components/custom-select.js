@@ -20,7 +20,7 @@ const CustomSelect = ({
         button: 'tracking-widest border-none',
         menu: 'w-full',
         content: 'children:overflow-hidden children:overflow-ellipsis children:fill-current children:text-secondary-400',
-        contentTitle: 'normal-case text-primary-600',
+        selectedOptionTitle: 'normal-case text-primary-600',
         listContainer: 'normal-case',
         ...classes,
       }}
