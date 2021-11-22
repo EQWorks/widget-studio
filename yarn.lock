@@ -1265,7 +1265,7 @@
 
 "@eqworks/lumen-labs@EQWorks/lumen-labs#tmp/widget-studio-dependency":
   version "0.1.0-alpha.12"
-  resolved "https://codeload.github.com/EQWorks/lumen-labs/tar.gz/d2b0280d742c20e318dea2fc566160f5cc7cd501"
+  resolved "https://codeload.github.com/EQWorks/lumen-labs/tar.gz/62ecf4e0441e339e5af0182428b5b25e14e995f2"
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
