@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import axios from 'axios'
 import sampleConfigs from '../../stories/sample-configs'
+import sampleData from '../../stories/sample-data'
 
 
 const api = axios.create({
@@ -103,6 +104,7 @@ export const useExecutions = () => {
   return [isLoading, data]
 }
 
+// eslint-disable-next-line no-unused-vars
 const requestQueryResults = async (id) => {
   return api.get(`/ql/queries/${id}`)
     .then(async ({ data: { executions } }) => {
@@ -124,6 +126,10 @@ const requestExecutionResults = async (id) => {
 }
 
 export const requestData = async (dataSourceType, dataSourceID) => {
+  const env = process.env.NODE_ENV || 'development'
+  if (env == 'development') {
+    return sampleData[`${dataSourceType}-${dataSourceID}`]
+  }
   var data
   if (dataSourceType == SAVED_QUERIES) {
     data = await requestQueryResults(dataSourceID)
@@ -136,5 +142,8 @@ export const requestData = async (dataSourceType, dataSourceID) => {
 
 // TODO request from db -- this is a placeholder
 export const requestConfig = async (id) => {
-  return id ? sampleConfigs[id] : null
+  const env = process.env.NODE_ENV || 'development'
+  if (env == 'development') {
+    return id ? sampleConfigs[id] : null
+  }
 }

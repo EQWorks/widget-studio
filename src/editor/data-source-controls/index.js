@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Typography, Loader } from '@eqworks/lumen-ui'
+import { Loader } from '@eqworks/lumen-labs'
 
 import WlCuSelector from './wl-cu-selector'
 import QueryExecutionSelector from './query-execution-selector'
@@ -20,9 +20,9 @@ const DataSourceControls = () => {
 
   return (
     <div className={classes.container}>
-      <Typography className={classes.title} color="textSecondary" variant='subtitle1'>
+      <div className='text-secondary-500 text-md font-medium'>
         Choose a source of data for your widget.
-      </Typography>
+      </div>
       <div className={classes.dataSelectorContainer}>
         <Loader open={wlCuLoading || dataSourcesLoading}>
           <div className={wlCuLoading ? classes.hiddenDataSelector : classes.dataSelector}>
