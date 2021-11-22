@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
@@ -24,7 +24,6 @@ const LinkedSelect = ({ className,
 }) => {
   const [choice, setChoice] = useState(init)
   const [subChoice, setSubChoice] = useState(subInit)
-  const subDisabled = useMemo(() => disableSub || !choice || !subData.length, [choice, disableSub, subData.length])
 
   useEffect(() => {
     setChoice(init)
@@ -32,7 +31,7 @@ const LinkedSelect = ({ className,
   }, [subInit, init])
 
   useEffect(() => {
-    if (choice && (subChoice || subDisabled)) {
+    if (callback && (choice || subChoice)) {
       callback([choice, subChoice])
       if (!controlled) {
         setChoice('')
@@ -40,7 +39,7 @@ const LinkedSelect = ({ className,
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [choice, controlled, subChoice, subDisabled])
+  }, [choice, controlled, subChoice])
 
   const renderSub =
     <CustomSelect
@@ -50,7 +49,7 @@ const LinkedSelect = ({ className,
       data={subData}
       value={disableSub ? '' : subChoice}
       onSelect={setSubChoice}
-      disabled={subDisabled}
+      onClear={() => setSubChoice('')}
       placeholder={disableSub ? 'N/A' : placeholders[1]}
     />
 
@@ -63,6 +62,7 @@ const LinkedSelect = ({ className,
         data={data}
         value={choice}
         onSelect={setChoice}
+        onClear={() => setChoice('')}
         placeholder={placeholders[0]}
       />
     </div>

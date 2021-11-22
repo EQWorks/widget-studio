@@ -32,6 +32,7 @@ const stateDefaults = [
   { key: 'groupKey', defaultValue: null, resettable: true },
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
+  { key: 'renderableValueKeys', defaultValue: [], resettable: true },
   { key: 'options', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
@@ -88,7 +89,7 @@ export default {
       (state) => state.group,
       (state) => state.groupKey,
       (state) => state.indexKey,
-      (state) => state.valueKeys,
+      (state) => state.renderableValueKeys,
       (state) => state.genericOptions,
       (state) => state.options,
       (state) => state.isReady,
@@ -101,7 +102,7 @@ export default {
       group,
       groupKey,
       indexKey,
-      valueKeys,
+      renderableValueKeys,
       genericOptions,
       options,
       isReady,
@@ -112,7 +113,7 @@ export default {
           title,
           type,
           filters,
-          valueKeys,
+          valueKeys: renderableValueKeys,
           group,
           groupKey,
           indexKey,
@@ -123,13 +124,26 @@ export default {
         : undefined
     )),
 
+  renderableValueKeys: computed(
+    [
+      (state) => state.valueKeys,
+      (state) => state.group,
+    ],
+    (
+      valueKeys,
+      group
+    ) => (
+      valueKeys.filter(({ key, agg }) => key && (agg || !group)
+      ))
+  ),
+
   /** checks if all initial states have been filled */
   isReady: computed(
     [
       (state) => state.rows,
       (state) => state.columns,
       (state) => state.type,
-      (state) => state.valueKeys,
+      (state) => state.renderableValueKeys,
       (state) => state.indexKey,
       (state) => state.groupKey,
     ],
@@ -137,11 +151,11 @@ export default {
       rows,
       columns,
       type,
-      valueKeys,
+      renderableValueKeys,
       indexKey,
       groupKey,
     ) => (
-      Boolean(type && columns.length && rows.length && (indexKey || groupKey) && valueKeys.length)
+      Boolean(type && columns.length && rows.length && (indexKey || groupKey) && renderableValueKeys.length)
     )),
 
 

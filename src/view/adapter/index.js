@@ -49,7 +49,7 @@ const WidgetAdapter = () => {
   const type = useStoreState((state) => state.type)
   const filters = useStoreState((state) => state.filters)
   const indexKey = useStoreState((state) => state.indexKey)
-  const valueKeys = useStoreState((state) => state.valueKeys)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const config = useStoreState((state) => state.config)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
@@ -105,11 +105,11 @@ const WidgetAdapter = () => {
     update({ zeroVarianceColumns })
   }, [update, zeroVarianceColumns])
 
-  // if grouping enabled, aggregate each column from valueKeys in groupedData according to defined 'agg' property
+  // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
       ? Object.entries(groupedData).map(([_groupKey, values]) => (
-        valueKeys.reduce((res, { key, agg = 'sum' }) => {
+        renderableValueKeys.reduce((res, { key, agg }) => {
           res[`${key}_${agg}`] = zeroVarianceColumns.includes(key)
             ? values[key]
             : aggFuncDict[agg](values[key])
@@ -117,7 +117,7 @@ const WidgetAdapter = () => {
         }, { [groupKey]: _groupKey })
       ))
       : null
-  ), [group, groupKey, groupedData, valueKeys, zeroVarianceColumns])
+  ), [group, groupKey, groupedData, renderableValueKeys, zeroVarianceColumns])
 
   // simply sort the data if grouping is not enabled
   const indexedData = useMemo(() => (
