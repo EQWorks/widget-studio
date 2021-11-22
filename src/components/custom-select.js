@@ -28,7 +28,12 @@ const CustomSelect = ({
       multiSelect={multiSelect}
       endIcon={<Icons.ArrowDown size='md' />}
       data={transformedData}
-      onSelect={({ title }) => onSelect(title)}
+      onSelect={(v) =>
+        onSelect(multiSelect
+          ? v.map(({ title }) => title)
+          : v.title
+        )
+      }
       {...props}
       onDelete={onClear}
     />
