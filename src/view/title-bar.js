@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { Button, Accordion, Icons, TextField, Chip } from '@eqworks/lumen-labs'
-import clsx from 'clsx'
 
 import { ArrowExpand, EditPen, Download } from '../components/icons'
 import { useStoreState, useStoreActions } from '../store'
 import OverflowTooltip from '../components/overflow-tooltip'
+import saveConfig from '../util/save-config'
 
 
 const WidgetTitleBar = ({ className }) => {
 
   // store actions
+  const update = useStoreActions((actions) => actions.update)
+  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
   const toast = useStoreActions((actions) => actions.toast)
 
   // widget state
@@ -19,6 +21,8 @@ const WidgetTitleBar = ({ className }) => {
   const title = useStoreState((state) => state.title)
   const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
+  const config = useStoreState((state) => state.config)
+  const dev = useStoreState((state) => state.dev)
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -174,8 +178,17 @@ const WidgetTitleBar = ({ className }) => {
               </>
             }
             <div className='flex ml-auto'>
-              {renderIconButton(Download,
-                () => window.alert('not implemented'),
+              {dev && renderIconButton(Download,
+                () => {
+                  if (config) {
+                    saveConfig(config, id)
+                  } else {
+                    toast({
+                      title: 'The widget is not fully configured.',
+                      color: 'error',
+                    })
+                  }
+                },
               )}
               {renderButton(<>export</>,
                 () => window.alert('not implemented'),
