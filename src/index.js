@@ -12,6 +12,7 @@ import WidgetTitleBar from './view/title-bar'
 import './styles/index.css'
 import WidgetControls from './editor/widget-controls'
 import FilterControls from './editor/widget-controls/data-controls/filter-controls'
+import CustomGlobalToast from './components/custom-global-toast'
 
 
 const Widget = ({ id, mode: _mode, staticData }) => {
@@ -65,6 +66,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
           <FilterControls />
         </div>
       }
+      <CustomGlobalToast />
     </div >
   )
 }
