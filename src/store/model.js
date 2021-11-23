@@ -67,6 +67,8 @@ const stateDefaults = [
       allowReset: true,
       recentReset: false,
       controlsWidth: null,
+      showToast: false,
+      toastConfig: {},
     },
     resettable: false,
   },
@@ -176,6 +178,16 @@ export default {
     )),
 
   /** ACTIONS ------------------------------------------------------------------ */
+
+  toast: thunk(async (actions, payload) => {
+    actions.nestedUpdate({
+      ui: {
+        toastConfig: payload,
+        showToast: true,
+      },
+    })
+    setTimeout(() => actions.nestedUpdate({ ui: { showToast: false } }), 3000)
+  }),
 
   loadConfig: thunk(async (actions, payload) => {
 

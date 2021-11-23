@@ -13,6 +13,7 @@ import QLModeControls from './controls/ql-mode'
 import EditorModeControls from './controls/editor-mode'
 import FilterControls from './controls/editor-mode/filter-controls'
 import WidgetTitleBar from './view/title-bar'
+import CustomGlobalToast from './components/custom-global-toast'
 
 
 const Widget = ({ id, mode: _mode, staticData }) => {
@@ -67,6 +68,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
           <FilterControls />
         </div>
       }
+      <CustomGlobalToast />
     </div >
   )
 }
