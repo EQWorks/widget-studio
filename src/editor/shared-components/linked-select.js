@@ -7,7 +7,7 @@ import CustomButton from '../../components/custom-button'
 import clsx from 'clsx'
 
 
-const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData, subInit, controlled, placeholders }) => {
+const LinkedSelect = ({ className, deletable, deleteCallback, callback, data, init, subData, subInit, controlled, placeholders }) => {
 
   const [choice, setChoice] = useState(init)
   const [subChoice, setSubChoice] = useState(subInit)
@@ -26,6 +26,9 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
 
   const renderSub =
     <CustomSelect
+      classes={{
+        root: 'shadow-light-10 border-2 border-r-0 border-secondary-200 rounded-md rounded-r-none',
+      }}
       data={subData}
       value={subChoice}
       onSelect={setSubChoice}
@@ -34,12 +37,17 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
     />
 
   const renderPrimary =
-    <CustomSelect
-      data={data}
-      value={choice}
-      onSelect={setChoice}
-      placeholder={placeholders[0]}
-    />
+    <div className='border-l border-secondary-50'>
+      <CustomSelect
+        classes={{
+          root: 'shadow-light-10 border-2 border-secondary-200 border-l-0 rounded-md rounded-l-none',
+        }}
+        data={data}
+        value={choice}
+        onSelect={setChoice}
+        placeholder={placeholders[0]}
+      />
+    </div>
 
   const renderDelete =
     <CustomButton
@@ -56,8 +64,8 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
 
   return (
     <>
-      <div className='col-span-1'> {renderSub} </div>
-      <div className={clsx('col-span-1 min-w-0', { 'flex justify-end': deletable })}>
+      <div className={`max-w-xs col-span-1 ${className}`}> {renderSub} </div>
+      <div className={clsx(`max-w-xs col-span-1 ${className}`, { 'flex justify-end': deletable })}>
         <div className='flex-1'>
           {renderPrimary}
         </div>
@@ -67,6 +75,7 @@ const LinkedSelect = ({ deletable, deleteCallback, callback, data, init, subData
   )
 }
 LinkedSelect.propTypes = {
+  className: PropTypes.string,
   deletable: PropTypes.bool,
   deleteCallback: PropTypes.func,
   callback: PropTypes.func.isRequired,
@@ -79,6 +88,7 @@ LinkedSelect.propTypes = {
 }
 
 LinkedSelect.defaultProps = {
+  className: '',
   deletable: false,
   deleteCallback: () => console.error('Not implemented'),
   controlled: true,

@@ -45,6 +45,7 @@ const WidgetControls = () => {
   const resetWidget = useStoreActions(actions => actions.resetWidget)
 
   // common state
+  // state
   const columns = useStoreState((state) => state.columns)
   const type = useStoreState((state) => state.type)
   const dataReady = useStoreState((state) => state.dataReady)
@@ -52,6 +53,7 @@ const WidgetControls = () => {
   // UI state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const allowReset = useStoreState((state) => state.ui.allowReset)
+  const controlsWidth = useStoreState((state) => state.ui.controlsWidth)
 
   useEffect(() => {
     update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
@@ -82,6 +84,7 @@ const WidgetControls = () => {
 
   return (
     <CustomAccordion
+      expandedWidth={controlsWidth}
       disabled={!dataReady}
       icon={Controls}
       title={'Controls'}

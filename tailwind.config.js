@@ -10,15 +10,17 @@ const config = {
       textColor: ['children'],
       textOverflow: ['children'],
       margin: ['hover'],
+      fill: ['children'],
     },
   },
   theme: {
     extend: {
+      padding: {
+        '1rem': '1rem',
+      },
       gridTemplateColumns: {
         'min-min': 'min-content min-content',
-      },
-      transitionProperty: {
-        'max-width': 'max-width',
+        'min-1fr': 'min-content 1fr',
       },
       borderWidth: {
         'custom-1': '0.3rem',
