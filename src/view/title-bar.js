@@ -138,7 +138,7 @@ const WidgetTitleBar = ({ className }) => {
       </>
 
   return (
-    <Accordion color='secondary' className={`pt-0 ${className}`}>
+    <Accordion color='secondary' className={`${className}`}>
       <Accordion.Panel
         autoHeight
         color='transparent'
