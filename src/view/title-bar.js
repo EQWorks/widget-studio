@@ -12,8 +12,7 @@ import OverflowTooltip from '../components/overflow-tooltip'
 const WidgetTitleBar = ({ className }) => {
 
   // store actions
-  const update = useStoreActions((state) => state.update)
-  const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
+  const toast = useStoreActions((actions) => actions.toast)
 
   // widget state
   const id = useStoreState((state) => state.id)
@@ -34,8 +33,6 @@ const WidgetTitleBar = ({ className }) => {
   useEffect(() => {
     setTentativeTitle(title)
   }, [title])
-
-  const [showClipboardNoti, setShowClipboardNoti] = useState(false)
 
   const renderButton = (children, onClick, props) =>
     <Button
@@ -165,19 +162,15 @@ const WidgetTitleBar = ({ className }) => {
                     e.stopPropagation()
                     if (window.isSecureContext) {
                       navigator.clipboard.writeText(id)
-                      setShowClipboardNoti(true)
-                      setTimeout(() => setShowClipboardNoti(false), 2000)
+                      toast({
+                        title: 'ID copied to clipboard',
+                        color: 'success',
+                      })
                     }
                   }}
                 >
                   {`id: ${id}`}
                 </Chip>
-                <div className={clsx('ml-2 rounded-md p-3 border border-secondary-100 shadow-light-40 text-xs text-secondary-600 transition-opacity ease-in-out duration-300', {
-                  'opacity-0': !showClipboardNoti,
-                  'opacity-1': showClipboardNoti,
-                })}>
-                  ID copied to clipboard
-                </div>
               </>
             }
             <div className='flex ml-auto'>
