@@ -177,6 +177,8 @@ export default {
       Boolean(dataSourceType && dataSourceID && !dataSourceLoading && !dataSourceError)
     )),
 
+  dev: computed([], () => (process.env?.NODE_ENV ?? 'development' === 'development')),
+
   /** ACTIONS ------------------------------------------------------------------ */
 
   toast: thunk(async (actions, payload) => {
