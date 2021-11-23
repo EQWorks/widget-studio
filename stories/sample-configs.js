@@ -30,6 +30,36 @@ export default {
       'subPlots': true,
     },
   },
+  'pie-2': {
+    'title': 'Percentage widget',
+    'type': 'pie',
+    'filters': {},
+    'valueKeys': [
+      {
+        'key': 'renters',
+        'agg': 'mean',
+      },
+      {
+        'key': 'owners',
+        'agg': 'mean',
+      },
+    ],
+    'group': true,
+    'groupKey': 'city',
+    'indexKey': null,
+    'options': {
+      'showPercentage': true,
+      'showLegend': true,
+      'donut': false,
+    },
+    'genericOptions': {
+      'subPlots': true,
+    },
+    'dataSource': {
+      'type': 'Execution',
+      'id': '141',
+    },
+  },
   'bar-1': {
     'title': 'My example bar widget',
     'type': 'bar',
