@@ -17,6 +17,7 @@ const ValueControls = ({ groupingOptional }) => {
 
   // common actions
   const update = useStoreActions(actions => actions.update)
+  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
   const group = useStoreState((state) => state.group)
@@ -26,6 +27,7 @@ const ValueControls = ({ groupingOptional }) => {
   const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
+  const groupByValue = useStoreState((state) => state.genericOptions.groupByValue)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -77,7 +79,7 @@ const ValueControls = ({ groupingOptional }) => {
       })}>OFF</span>
       <SwitchRect
         id={nanoid()}
-        checked={state}
+        checked={state ?? false}
         onChange={toggleState}
       />
       <span className={clsx('font-semibold ml-2', {
@@ -93,6 +95,7 @@ const ValueControls = ({ groupingOptional }) => {
         title={group ? 'Group By' : 'Index By'}
       >
         {groupingOptional && renderToggle('Group By', group, toggleGroup)}
+        {renderToggle('By Value', groupByValue, () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } }))}
         <CustomSelect
           data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
           value={group ? groupKey : indexKey}

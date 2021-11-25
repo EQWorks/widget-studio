@@ -36,6 +36,7 @@ const stateDefaults = [
   { key: 'options', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
+      groupByValue: false,
       subPlots: false,
     }, resettable: true,
   },
