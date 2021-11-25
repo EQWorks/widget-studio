@@ -8,7 +8,7 @@ import CustomButton from '../../components/custom-button'
 import { Trash } from '../../components/icons'
 
 
-const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEmpty, children, grow, ignore }) => {
+const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEmpty, children, grow, ignore, className }) => {
   const controlsWidth = useStoreState((state) => state.ui.controlsWidth)
   const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
   const target = useRef(null)
@@ -23,7 +23,7 @@ const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEm
 
   return (
     (children || showIfEmpty) &&
-    <div ref={target} className='rounded-sm my-1 border border-neutral-100'>
+    <div ref={target} className={`rounded-sm my-1 border border-neutral-100 ${className}`}>
       {
         title &&
         <div className='p-2 py-1.5 bg-neutral-100 text-secondary-700 font-semibold text-sm flex align-center'>
@@ -85,6 +85,7 @@ WidgetControlCard.propTypes = {
   showIfEmpty: PropTypes.bool,
   grow: PropTypes.bool,
   ignore: PropTypes.bool,
+  className: PropTypes.string,
 }
 
 WidgetControlCard.defaultProps = {
@@ -96,6 +97,7 @@ WidgetControlCard.defaultProps = {
   showIfEmpty: false,
   grow: false,
   ignore: false,
+  className: '',
 }
 
 export default WidgetControlCard

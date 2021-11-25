@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 
+import clsx from 'clsx'
 import { Icons } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../../store'
@@ -8,7 +9,6 @@ import CustomSelect from '../../../components/custom-select'
 import CustomSlider from '../../shared-components/custom-slider'
 import WidgetControlCard from '../../shared-components/widget-control-card'
 import CustomButton from '../../../components/custom-button'
-import { Filter } from '../../../components/icons'
 
 
 const FilterControls = () => {
@@ -33,7 +33,7 @@ const FilterControls = () => {
   const max = useCallback((key) => Math.max.apply(null, rows.map(r => r[key])), [rows])
 
   const card = (key, range, enabled) => {
-    return <ToggleableCard key={key}
+    return <ToggleableCard
       ignore
       init={enabled}
       title={key}
@@ -48,6 +48,7 @@ const FilterControls = () => {
           setDisabledFilters(remainingFilters)
         }
       }}
+      className='h-full'
     >
       <div className='flex flex-col'>
         <div className='mr-1 text-secondary-600'>
@@ -65,58 +66,62 @@ const FilterControls = () => {
 
   return (
     <>
-      <div className={`relative z-10 border-neutral-100 overflow-hidden ${showFilterControls ? 'transition-height duration-200 ease-in-out h-0 border-t-none' : 'h-16 border-t-2'}`}>
-        <CustomButton
-          variant='borderless'
-          className={'w-full justify-center border-none h-full'}
-          onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
-        >
-          <Filter size='md' className='h-full stroke-current text-secondary-500 w-full p-5' />
-        </CustomButton>
-      </div>
-      <div className={`w-full relative z-10 border-neutral-100 overflow-hidden ${showFilterControls ? 'h-auto border-t-2' : 'h-0 border-none'}`}>
-        {
-          !dataReady &&
-          <div className='absolute z-30 bg-secondary-50 opacity-50 w-full h-full' />
-        }
-        <div className={`w-full overflow-y-hidden transition-filter duration-1000 ease-in-out ${!dataReady ? 'filter blur-sm' : ''}`} >
-          <div className={'px-2 py-3 flex flex-col items-center'}>
-            <div className='w-full flex flex-row'>
-              <span className='flex-1 font-bold text-secondary-800 text-md' >Filters</span >
+      <div className='relative w-full flex items-end'>
+        <div className={clsx('flex flex-col z-50 transition-height ease-in-out duration-300 absolute w-full', {
+          'h-60 overflow-visible': showFilterControls,
+          'h-10 overflow-hidden': !showFilterControls,
+        })}>
+          <div className={`border-t bg-white flex-1 w-full transition-filter duration-1000 ease-in-out ${!dataReady ? 'filter blur-sm' : ''}`} >
+            <div className='w-full h-full flex flex-col items-center'>
               <CustomButton
+                className='h-10 children:flex-1 border-none w-full flex flex-row items-center'
                 variant='borderless'
-                className='border-none'
                 onClick={() => nestedUpdate({ ui: { showFilterControls: !showFilterControls } })}
               >
-                <Icons.Close size='md' className='fill-current text-secondary-500' />
+                <div className='px-3 flex w-full items-center'>
+                  <div className='text-left flex-1 font-bold text-secondary-800 text-md' >Filters</div >
+                  <Icons.Close size='md' className={clsx('fill-current text-secondary-500 transition-opacity duration-300 ease-in-out', {
+                    'opacity-1': showFilterControls,
+                    'opacity-0': !showFilterControls,
+                  })} />
+                </div>
               </CustomButton>
-            </div>
-            <div className='w-full grid grid-cols-3 gap-3 p-3'>
-              {Object.entries(filters).map(([key, range]) => card(key, range, true))}
-              {Object.entries(disabledFilters).map(([key, range]) => card(key, range, false))}
-              {
-                addingFilter || !Object.values(filters).length ?
-                  <WidgetControlCard ignore>
-                    <CustomSelect
-                      data={numericColumns.filter(col => !Object.keys(filters).includes(col))}
-                      onSelect={val => {
-                        nestedUpdate({ filters: { [val]: [min(val), max(val)] } })
-                        setAddingFilter(false)
-                      }}
-                    />
-                  </WidgetControlCard>
-                  :
-                  <CustomButton
-                    className='h-full bg-secondary-200 fill-current text-secondary-700'
-                    onClick={() => setAddingFilter(true)}
-                  >
-                    <Icons.Add size='lg' className='w-full' />
-                  </CustomButton>
-              }
+              <div className={clsx('flex-1 w-full grid grid-cols-3 gap-3 p-3 pt-0 flex items-stretch transition-opacity duration-1000 delay-400 ease-in-out', {
+                'opacity-0': !showFilterControls,
+                'opacity-1': showFilterControls,
+              })}>
+                {Object.entries(filters).map(([key, range]) =>
+                  <div key={key}>
+                    {
+                      card(key, range, true)
+                    }
+                  </div>
+                )}
+                {Object.entries(disabledFilters).map(([key, range]) => card(key, range, false))}
+                {
+                  addingFilter || !Object.values(filters).length ?
+                    <WidgetControlCard ignore>
+                      <CustomSelect
+                        data={numericColumns.filter(col => !Object.keys(filters).includes(col))}
+                        onSelect={val => {
+                          nestedUpdate({ filters: { [val]: [min(val), max(val)] } })
+                          setAddingFilter(false)
+                        }}
+                      />
+                    </WidgetControlCard>
+                    :
+                    <CustomButton
+                      className='h-full bg-secondary-200 fill-current text-secondary-700'
+                      onClick={() => setAddingFilter(true)}
+                    >
+                      <Icons.Add size='lg' className='w-full' />
+                    </CustomButton>
+                }
+              </div>
             </div>
           </div >
-        </div >
-      </div >
+        </div>
+      </div>
     </>
   )
 }

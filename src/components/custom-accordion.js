@@ -26,7 +26,7 @@ const CustomAccordion = ({ expandedWidth, collapsedWidth, speed, disabled, title
   return (
     <div
       ref={ref}
-      className={`shadow-blue-40 relative whitespace-nowrap relative z-50 border-l-2 border-neutral-100 transition-width ${transition} flex justify-end`}
+      className={`shadow-blue-40 relative whitespace-nowrap relative z-20 border-l-2 border-neutral-100 transition-width ${transition} flex justify-end`}
       style={{
         height: fullyOpen ? 'auto' : height,
         width: open ? `clamp(20rem, calc(${expandedWidth}px + 2*${xPadding}), 30rem)` : collapsedWidth,
