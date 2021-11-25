@@ -54,7 +54,10 @@ export default {
     },
     'genericOptions': {
       'subPlots': true,
+      'titleX': 0.19,
       'groupByValue': true,
+      'titleY': 0.71,
+      'size': 0.66,
     },
     'dataSource': {
       'type': 'Execution',
