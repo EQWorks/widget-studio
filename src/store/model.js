@@ -29,6 +29,8 @@ const stateDefaults = [
   { key: 'type', defaultValue: '', resettable: false },
   { key: 'filters', defaultValue: {}, resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
+  { key: 'groups', defaultValue: [], resettable: true },
+  { key: 'filterGroups', defaultValue: false, resettable: true },
   { key: 'groupKey', defaultValue: null, resettable: true },
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },

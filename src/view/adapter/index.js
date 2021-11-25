@@ -53,6 +53,7 @@ const WidgetAdapter = () => {
   const config = useStoreState((state) => state.config)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
+  const filterGroups = useStoreState((state) => state.filterGroups)
 
   // record the correct adapter for use later (after data processing)
   const { component, adapt } = useMemo(() => adapterDict[type], [type])
@@ -60,14 +61,14 @@ const WidgetAdapter = () => {
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
     rows.filter(obj => {
-      for (const [key, [min, max]] of Object.entries(filters)) {
+      for (const [key, [min, max]] of Object.entries(filters).filter(([k]) => k !== groupKey)) {
         if (obj[key] < min || obj[key] > max) {
           return false
         }
       }
       return true
     })
-  ), [rows, filters])
+  ), [rows, filters, groupKey])
 
   // if grouping enabled, memoize grouped and reorganized version of data that will be easy to aggregate
   const groupedData = useMemo(() => (
@@ -89,6 +90,12 @@ const WidgetAdapter = () => {
       : null
   ), [group, groupKey, truncatedData])
 
+  useEffect(() => {
+    if (groupedData) {
+      update({ groups: Object.keys(groupedData) })
+    }
+  }, [groupedData, update])
+
   // compute list of columns that have 0 variance
   const zeroVarianceColumns = useMemo(() => (
     group
@@ -105,10 +112,19 @@ const WidgetAdapter = () => {
     update({ zeroVarianceColumns })
   }, [update, zeroVarianceColumns])
 
+  // if a filter on the groupKey exists, retain only the desired groups
+  const filteredGroupedData = useMemo(() => (
+    group
+      ? filterGroups && filters[groupKey]?.length
+        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => filters[groupKey].includes(k)))
+        : groupedData
+      : null
+  ), [filterGroups, filters, group, groupKey, groupedData])
+
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
-      ? Object.entries(groupedData).map(([_groupKey, values]) => (
+      ? Object.entries(filteredGroupedData).map(([_groupKey, values]) => (
         renderableValueKeys.reduce((res, { key, agg }) => {
           res[`${key}_${agg}`] = zeroVarianceColumns.includes(key)
             ? values[key]
@@ -117,7 +133,7 @@ const WidgetAdapter = () => {
         }, { [groupKey]: _groupKey })
       ))
       : null
-  ), [group, groupKey, groupedData, renderableValueKeys, zeroVarianceColumns])
+  ), [filteredGroupedData, group, groupKey, renderableValueKeys, zeroVarianceColumns])
 
   // simply sort the data if grouping is not enabled
   const indexedData = useMemo(() => (

@@ -28,6 +28,9 @@ const ValueControls = ({ groupingOptional }) => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
   const groupByValue = useStoreState((state) => state.genericOptions.groupByValue)
+  const groups = useStoreState((state) => state.groups)
+  const filterGroups = useStoreState((state) => state.filterGroups)
+  const filters = useStoreState((state) => state.filters)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -95,13 +98,34 @@ const ValueControls = ({ groupingOptional }) => {
         title={group ? 'Group By' : 'Index By'}
       >
         {groupingOptional && renderToggle('Group By', group, toggleGroup)}
-        {renderToggle('By Value', groupByValue, () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } }))}
+        {
+          group &&
+          renderToggle('By Value', groupByValue, () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } }))
+        }
         <CustomSelect
           data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
           value={group ? groupKey : indexKey}
           onSelect={val => update(group ? { groupKey: val } : { indexKey: val })}
           placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
         />
+        {
+          group &&
+          <div className='mt-2'>
+            {
+              renderToggle('Filter', filterGroups, () => update({ filterGroups: !filterGroups }))
+            }
+            {
+              filterGroups &&
+              <CustomSelect
+                multiSelect
+                data={groups}
+                value={filters[groupKey] ?? []}
+                onSelect={val => nestedUpdate({ filters: { [groupKey]: val } })}
+                placeholder={`Filter ${groupKey}`}
+              />
+            }
+          </div>
+        }
       </WidgetControlCard>
       {
         group ?
