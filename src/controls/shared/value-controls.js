@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { SwitchRect } from '@eqworks/lumen-labs'
@@ -28,9 +28,15 @@ const ValueControls = ({ groupingOptional }) => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
   const groupByValue = useStoreState((state) => state.genericOptions.groupByValue)
+  const groups = useStoreState((state) => state.groups)
+  const filters = useStoreState((state) => state.filters)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
+
+  // local state
+  const [addingFirstGroupFilter, setAddingFirstGroupFilter] = useState(false)
+  const showGroupFilterSelect = useMemo(() => addingFirstGroupFilter || filters[groupKey]?.length, [addingFirstGroupFilter, filters, groupKey])
 
   useEffect(() => {
     if (!group && !groupingOptional) {
@@ -95,7 +101,10 @@ const ValueControls = ({ groupingOptional }) => {
         title={group ? 'Group By' : 'Index By'}
       >
         {groupingOptional && renderToggle('Group By', group, toggleGroup)}
-        {renderToggle('By Value', groupByValue, () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } }))}
+        {
+          group &&
+          renderToggle('By Value', groupByValue, () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } }))
+        }
         <CustomSelect
           data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
           value={group ? groupKey : indexKey}
@@ -103,6 +112,36 @@ const ValueControls = ({ groupingOptional }) => {
           onClear={() => update({ groupKey: null, indexKey: null })}
           placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
         />
+        {
+          group &&
+          <div className='mt-2'>
+            {
+              renderToggle('Filter', showGroupFilterSelect, ({ target: { checked } }) => {
+                if (checked) {
+                  setAddingFirstGroupFilter(!filters[groupKey]?.length)
+                } else {
+                  const filtersCopy = JSON.parse(JSON.stringify(filters))
+                  delete filtersCopy[groupKey]
+                  update({ filters: filtersCopy })
+                  setAddingFirstGroupFilter(false)
+                }
+              })
+            }
+            {
+              showGroupFilterSelect &&
+                <CustomSelect
+                  multiSelect
+                  data={groups}
+                  value={filters[groupKey] ?? []}
+                  onSelect={val => {
+                    setAddingFirstGroupFilter(false)
+                    nestedUpdate({ filters: { [groupKey]: val } })
+                  }}
+                  placeholder={`Filter ${groupKey}`}
+                />
+            }
+          </div>
+        }
       </WidgetControlCard>
       {
         group ?
