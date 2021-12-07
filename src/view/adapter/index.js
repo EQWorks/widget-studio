@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { useStoreState } from '../../store'
+import { useStoreActions, useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 import useDebouncedResizeObserver from '../../hooks/use-debounced-resize-observer'
 
@@ -40,11 +40,16 @@ export const aggFuncDict = {
 
 const WidgetAdapter = () => {
 
+  // actions
+  const update = useStoreActions((state) => state.update)
+
+  // state
   const rows = useStoreState((state) => state.rows)
+  const columns = useStoreState((state) => state.columns)
   const type = useStoreState((state) => state.type)
   const filters = useStoreState((state) => state.filters)
   const indexKey = useStoreState((state) => state.indexKey)
-  const valueKeys = useStoreState((state) => state.valueKeys)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const config = useStoreState((state) => state.config)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
@@ -84,20 +89,35 @@ const WidgetAdapter = () => {
       : null
   ), [group, groupKey, truncatedData])
 
-  // if grouping enabled, aggregate each column from valueKeys in groupedData according to defined 'agg' property
+  // compute list of columns that have 0 variance
+  const zeroVarianceColumns = useMemo(() => (
+    group
+      ? columns.map(({ name }) => name).filter(c => (
+        c !== groupKey &&
+        Object.values(groupedData).every(d => {
+          return d[c].length === 1
+        })))
+      : []
+  ), [columns, group, groupKey, groupedData])
+
+  // relay this to global state
+  useEffect(() => {
+    update({ zeroVarianceColumns })
+  }, [update, zeroVarianceColumns])
+
+  // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
       ? Object.entries(groupedData).map(([_groupKey, values]) => (
-        valueKeys.reduce((res, { key, agg }) => {
-          if (!agg) {
-            agg = 'sum'
-          }
-          res[`${key}_${agg}`] = aggFuncDict[agg](values[key])
+        renderableValueKeys.reduce((res, { key, agg }) => {
+          res[`${key}_${agg}`] = zeroVarianceColumns.includes(key)
+            ? values[key]
+            : aggFuncDict[agg](values[key])
           return res
         }, { [groupKey]: _groupKey })
       ))
       : null
-  ), [group, groupKey, groupedData, valueKeys])
+  ), [group, groupKey, groupedData, renderableValueKeys, zeroVarianceColumns])
 
   // simply sort the data if grouping is not enabled
   const indexedData = useMemo(() => (

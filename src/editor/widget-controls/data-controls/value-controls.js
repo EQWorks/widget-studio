@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
+import { SwitchRect } from '@eqworks/lumen-labs'
+import clsx from 'clsx'
+
+import modes from '../../../constants/modes'
 import { aggFuncDict } from '../../../view/adapter'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
 import PluralLinkedSelect from '../../shared-components/plural-linked-select'
 import WidgetControlCard from '../../shared-components/widget-control-card'
-import { SwitchRect } from '@eqworks/lumen-labs'
-import clsx from 'clsx'
 
 
 const ValueControls = ({ groupingOptional }) => {
@@ -20,8 +22,12 @@ const ValueControls = ({ groupingOptional }) => {
   const groupKey = useStoreState((state) => state.groupKey)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
+  const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
+
+  // UI state
+  const mode = useStoreState((state) => state.ui.mode)
 
   useEffect(() => {
     if (!group && !groupingOptional) {
@@ -36,12 +42,15 @@ const ValueControls = ({ groupingOptional }) => {
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
+      staticQuantity={mode === modes.QL ? 3 : undefined}
       titles={['Key', 'Aggregation']}
       values={valueKeys}
       primaryKey='key'
       secondaryKey='agg'
       data={numericColumns}
-      subData={groupKey ? Object.keys(aggFuncDict) : []}
+      subData={Object.keys(aggFuncDict)}
+      disableSubFor={zeroVarianceColumns}
+      disableSubMessage="doesn't require aggregation."
       callback={(i, val) => {
         if (i === valueKeys.length) {
           const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
@@ -126,7 +135,7 @@ const ValueControls = ({ groupingOptional }) => {
               grow
               clearable
               title='Value Keys'
-              description='Select up to 3 keys, open in editor for more options.'
+              description={mode === modes.QL ? 'Select up to 3 keys, open in editor for more options.' : ''}
             >
               {renderGroupedValueKeysSelect}
             </WidgetControlCard>
