@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { Icons, Tooltip } from '@eqworks/lumen-labs'
 
-import { Trash } from '../../components/icons'
-import CustomSelect from '../../components/custom-select'
-import CustomButton from '../../components/custom-button'
+import { Trash } from '../components/icons'
+import CustomSelect from '../components/custom-select'
+import CustomButton from '../components/custom-button'
 
 
 const LinkedSelect = ({ className,

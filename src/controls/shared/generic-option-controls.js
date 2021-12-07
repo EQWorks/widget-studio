@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../store'
-import CustomToggle from '../shared-components/custom-toggle'
-import WidgetControlCard from '../shared-components/widget-control-card'
+import CustomToggle from '../../components/custom-toggle'
+import WidgetControlCard from '../shared/widget-control-card'
 
 
 const GenericOptionControls = () => {

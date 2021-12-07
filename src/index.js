@@ -8,10 +8,11 @@ import { useStoreState, useStoreActions } from './store'
 import withQueryClient from './util/with-query-client'
 import withStore from './util/with-store'
 import WidgetView from './view'
-import WidgetTitleBar from './view/title-bar'
 import './styles/index.css'
-import WidgetControls from './editor/widget-controls'
-import FilterControls from './editor/widget-controls/data-controls/filter-controls'
+import QLModeControls from './controls/ql-mode'
+import EditorModeControls from './controls/editor-mode'
+import FilterControls from './controls/editor-mode/filter-controls'
+import WidgetTitleBar from './view/title-bar'
 
 
 const Widget = ({ id, mode: _mode, staticData }) => {
@@ -58,7 +59,8 @@ const Widget = ({ id, mode: _mode, staticData }) => {
         })}>
           <WidgetView />
         </div>
-        {mode !== modes.VIEW && <WidgetControls />}
+        {mode === modes.QL && <QLModeControls />}
+        {mode === modes.EDITOR && <EditorModeControls />}
       </div>
       {mode === modes.EDITOR &&
         <div className='flex-0'>

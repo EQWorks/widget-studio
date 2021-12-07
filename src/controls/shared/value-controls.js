@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 import { SwitchRect } from '@eqworks/lumen-labs'
 import clsx from 'clsx'
 
-import modes from '../../../constants/modes'
-import { aggFuncDict } from '../../../view/adapter'
-import { useStoreState, useStoreActions } from '../../../store'
-import CustomSelect from '../../../components/custom-select'
-import PluralLinkedSelect from '../../shared-components/plural-linked-select'
-import WidgetControlCard from '../../shared-components/widget-control-card'
+import modes from '../../constants/modes'
+import { aggFuncDict } from '../../view/adapter'
+import { useStoreState, useStoreActions } from '../../store'
+import CustomSelect from '../../components/custom-select'
+import PluralLinkedSelect from '../../components/plural-linked-select'
+import WidgetControlCard from '../shared/widget-control-card'
 
 
 const ValueControls = ({ groupingOptional }) => {
