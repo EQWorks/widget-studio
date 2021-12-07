@@ -5,7 +5,7 @@ import { SwitchRect } from '@eqworks/lumen-labs'
 import clsx from 'clsx'
 
 import modes from '../../constants/modes'
-import { aggFuncDict } from '../../view/adapter'
+import aggFunctions from '../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
@@ -48,7 +48,7 @@ const ValueControls = ({ groupingOptional }) => {
       primaryKey='key'
       secondaryKey='agg'
       data={numericColumns}
-      subData={Object.keys(aggFuncDict)}
+      subData={Object.keys(aggFunctions)}
       disableSubFor={zeroVarianceColumns}
       disableSubMessage="doesn't require aggregation."
       callback={(i, val) => {
