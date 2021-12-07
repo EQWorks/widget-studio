@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import CustomButton from '../components/custom-button'
 
 
-const CustomSwitch = ({ labels, icons, value, update, className }) => (
+const LabeledToggle = ({ labels, icons, value, update, className }) => (
   <div className={`flex flex-row divide-x ${className}`} >
     {
       labels.map((l, i) => {
@@ -28,7 +28,7 @@ const CustomSwitch = ({ labels, icons, value, update, className }) => (
   </div >
 )
 
-CustomSwitch.propTypes = {
+LabeledToggle.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.string).isRequired,
   icons: PropTypes.arrayOf(PropTypes.elementType).isRequired,
   value: PropTypes.bool.isRequired,
@@ -36,8 +36,8 @@ CustomSwitch.propTypes = {
   className: PropTypes.string,
 }
 
-CustomSwitch.defaultProps = {
+LabeledToggle.defaultProps = {
   className: '',
 }
 
-export default CustomSwitch
+export default LabeledToggle
