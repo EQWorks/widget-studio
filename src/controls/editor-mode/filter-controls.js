@@ -2,13 +2,13 @@ import React, { useCallback, useState } from 'react'
 
 import { Icons } from '@eqworks/lumen-labs'
 
-import { useStoreState, useStoreActions } from '../../../store'
-import ToggleableCard from '../../shared-components/toggleable-card'
-import CustomSelect from '../../../components/custom-select'
-import CustomSlider from '../../shared-components/custom-slider'
-import WidgetControlCard from '../../shared-components/widget-control-card'
-import CustomButton from '../../../components/custom-button'
-import { Filter } from '../../../components/icons'
+import { useStoreState, useStoreActions } from '../../store'
+import CustomSelect from '../../components/custom-select'
+import CustomSlider from '../../components/custom-slider'
+import CustomButton from '../../components/custom-button'
+import { Filter } from '../../components/icons'
+import WidgetControlCard from '../shared/widget-control-card'
+import ToggleableWidgetControlCard from '../shared/toggleable-widget-control-card'
 
 
 const FilterControls = () => {
@@ -33,7 +33,7 @@ const FilterControls = () => {
   const max = useCallback((key) => Math.max.apply(null, rows.map(r => r[key])), [rows])
 
   const card = (key, range, enabled) => {
-    return <ToggleableCard key={key}
+    return <ToggleableWidgetControlCard key={key}
       ignore
       init={enabled}
       title={key}
@@ -60,7 +60,7 @@ const FilterControls = () => {
           callback={val => nestedUpdate({ filters: { [key]: val } })}
         />
       </div>
-    </ToggleableCard >
+    </ToggleableWidgetControlCard >
   }
 
   return (

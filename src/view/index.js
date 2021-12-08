@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { Loader } from '@eqworks/lumen-labs'
 
 import { DashboardLayout, Table } from '../components/icons'
-import CustomSwitch from '../components/custom-switch'
+import LabeledToggle from '../components/labeled-toggle'
 import FadeBetween from '../components/fade-between'
 import ResultsTable from './table'
 import { useStoreState, useStoreActions } from '../store'
@@ -69,7 +69,7 @@ const WidgetView = () => {
   return (
     dataReady ?
       <div className='w-full h-full flex flex-col'>
-        <CustomSwitch
+        <LabeledToggle
           className='flex-0 mt-3 ml-5'
           labels={['widget', 'table']}
           icons={[DashboardLayout, Table]}

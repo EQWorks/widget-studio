@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import WidgetControlCard from './widget-control-card'
-import CustomToggle from './custom-toggle'
+import CustomToggle from '../../components/custom-toggle'
 
 
-const ToggleableCard = ({ init, callback, title, altTitle, children, ...props }) => {
+const ToggleableWidgetControlCard = ({ init, callback, title, altTitle, children, ...props }) => {
   const [toggle, setToggle] = useState(init)
   return (
     <>
@@ -44,7 +44,7 @@ const ToggleableCard = ({ init, callback, title, altTitle, children, ...props })
   )
 }
 
-ToggleableCard.propTypes = {
+ToggleableWidgetControlCard.propTypes = {
   altTitle: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
   init: PropTypes.bool,
@@ -52,11 +52,11 @@ ToggleableCard.propTypes = {
   callback: PropTypes.func.isRequired,
 }
 
-ToggleableCard.defaultProps = {
+ToggleableWidgetControlCard.defaultProps = {
   altTitle: null,
   children: [],
   init: true,
   title: '',
 }
 
-export default ToggleableCard
+export default ToggleableWidgetControlCard

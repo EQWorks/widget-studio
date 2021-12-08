@@ -4,13 +4,13 @@ import PropTypes from 'prop-types'
 import { Button } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
-import BarControls from './controls/bar-controls'
-import PieControls from './controls/pie-controls'
-import LineControls from './controls/line-controls'
-import ScatterControls from './controls/scatter-controls'
+import BarControls from './types/bar'
+import PieControls from './types/pie'
+import LineControls from './types/line'
+import ScatterControls from './types/scatter'
 import { Controls, Save, Trash } from '../../components/icons'
-import Icons from './icons'
-import WidgetControlCard from '../shared-components/widget-control-card'
+import Icons from '../shared/widget-type-icons'
+import WidgetControlCard from '../shared/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
 
 
@@ -38,7 +38,7 @@ const renderButton = (children, onClick, props) =>
     </div>
   </Button>
 
-const WidgetControls = () => {
+const QLModeControls = () => {
   // store actions
   const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
@@ -107,11 +107,11 @@ const WidgetControls = () => {
   )
 }
 
-WidgetControls.propTypes = {
+QLModeControls.propTypes = {
   className: PropTypes.string,
 }
-WidgetControls.defaultProps = {
+QLModeControls.defaultProps = {
   className: '',
 }
 
-export default WidgetControls
+export default QLModeControls

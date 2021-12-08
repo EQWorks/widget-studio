@@ -5,7 +5,7 @@ import { Resizable } from 're-resizable'
 import modes from '../src/constants/modes'
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
-import CustomToggle from '../src/editor/shared-components/custom-toggle'
+import CustomToggle from '../src/components/custom-toggle'
 
 
 Object.values(modes).forEach(mode => {

@@ -1263,9 +1263,10 @@
     react-resize-detector "^6.7.6"
     storybook "^6.1.20"
 
-"@eqworks/lumen-labs@EQWorks/lumen-labs#tmp/widget-studio-dependency":
-  version "0.1.0-alpha.12"
-  resolved "https://codeload.github.com/EQWorks/lumen-labs/tar.gz/62ecf4e0441e339e5af0182428b5b25e14e995f2"
+"@eqworks/lumen-labs@^0.1.0-alpha.14":
+  version "0.1.0-alpha.14"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.14/992984d3d1c2e1d3184ecf676d1c5a5d4685929815ee7a073c5be5b893e9103a#3c881237c0140b45dbbe666e7f640725aef1db7c"
+  integrity sha512-LB/XdSElJnU/m+o5rOsHX9Oz9EhROqYhCeq662WG5F+xPgKfv2ifVgj+KfiKevUF6W3Yrf8U++t50doSWMQ8LQ==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"

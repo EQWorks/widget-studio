@@ -2,27 +2,27 @@ import React from 'react'
 
 import modes from '../../../constants/modes'
 import { useStoreState, useStoreActions } from '../../../store'
-import CustomToggle from '../../shared-components/custom-toggle'
-import WidgetControlCard from '../../shared-components/widget-control-card'
-import ValueControls from '../data-controls/value-controls'
-import GenericOptionControls from '../generic-option-controls'
+import CustomToggle from '../../../components/custom-toggle'
+import WidgetControlCard from '../../shared/widget-control-card'
+import ValueControls from '../../shared/value-controls'
+import GenericOptionControls from '../../shared/generic-option-controls'
 
 
-const BarControls = () => {
+const ScatterControls = () => {
 
   // common actions
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // unique state
-  const stacked = useStoreState((state) => state.options.stacked)
   const showTicks = useStoreState((state) => state.options.showTicks)
+  const showLines = useStoreState((state) => state.options.showLines)
 
   // ui state
   const mode = useStoreState((state) => state.ui.mode)
 
   return (
     <>
-      <ValueControls groupingOptional={false} />
+      <ValueControls />
 
       {
         mode === modes.EDITOR &&
@@ -33,14 +33,14 @@ const BarControls = () => {
             title='Styling'
           >
             <CustomToggle
-              value={stacked}
-              label='Stacked'
-              onChange={(val) => nestedUpdate({ options: { stacked: val } })}
-            />
-            <CustomToggle
               value={showTicks}
               label='Show ticks'
-              onChange={(val) => nestedUpdate({ options: { showTicks: val } })}
+              callback={(val) => nestedUpdate({ options: { showTicks: val } })}
+            />
+            <CustomToggle
+              value={showLines}
+              label='Show lines'
+              callback={(val) => nestedUpdate({ scatter: { showLines: val } })}
             />
           </WidgetControlCard>
         </>
@@ -49,4 +49,4 @@ const BarControls = () => {
   )
 }
 
-export default BarControls
+export default ScatterControls
