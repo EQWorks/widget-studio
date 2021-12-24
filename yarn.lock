@@ -1076,9 +1076,9 @@
     regenerator-runtime "^0.13.4"
 
 "@babel/runtime@^7.12.0":
-  version "7.16.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.3.tgz#b86f0db02a04187a3c17caa77de69840165d42d5"
-  integrity sha512-WBwekcqacdY2e9AF/Q7WLFUWmdJGJTkbjqTjoMDgXkVZ3ZRUvOPsLb5KdwISoQVsbP+DQzVZW4Zhci0DvpbNTQ==
+  version "7.16.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.5.tgz#7f3e34bf8bdbbadf03fbb7b1ea0d929569c9487a"
+  integrity sha512-TXWihFIS3Pyv5hzR7j6ihmeLkZfrXGxAr5UfSl8CHf+6q/wpiYDkUau0czckpYG8QmnCIuPpdLtuA9VmuGGyMA==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -1392,10 +1392,10 @@
     slick-carousel "^1.8.1"
     use-cached "^2.0.0"
 
-"@eqworks/react-maps@^0.7.5":
-  version "0.7.5"
-  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.7.5/bb481e3e64a526b2e28cc206aff6725849c4750ac4009b9791c17abc46482bd4#f8984488a340e0749533fc0e10f64d2e4e8df4a5"
-  integrity sha512-5lcD06yg0KUdBSGY0sKigx+Sht2xd/edTw17fFrzDbLd8tONnTedmfMVdZxk8MUxexCwvR1XD7uBUc5q8QqCsA==
+"@eqworks/react-maps@0.8.0-alpha.1":
+  version "0.8.0-alpha.1"
+  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.8.0-alpha.1/adf709e7467297da58258ac1cad40bd92abd5f36399fd82428ea13c3ecbb1c4b#0ce7dd6a96c2f15690f8037582f39f20947609dd"
+  integrity sha512-3rXQi26mabrWK1Fj2APkwpET6HrgjrbJ9iXEIAzGRLlSYPfVla/tigXBfGEiIppsneYtTBPo+JeLBxTShVXXCw==
   dependencies:
     "@deck.gl/aggregation-layers" "8.4.6"
     "@deck.gl/core" "8.4.6"
@@ -1415,6 +1415,7 @@
     "@turf/circle" "^6.5.0"
     "@turf/distance" "^6.5.0"
     "@turf/helpers" "^6.5.0"
+    "@turf/union" "^6.5.0"
     d3-array "^3.1.1"
     d3-color "^3.0.1"
     d3-scale "^4.0.2"
@@ -1543,13 +1544,13 @@
     "@loaders.gl/loader-utils" "2.3.13"
 
 "@loaders.gl/core@^3.0.12":
-  version "3.0.14"
-  resolved "https://registry.yarnpkg.com/@loaders.gl/core/-/core-3.0.14.tgz#56d72034412fed5f1bf9788e117379e1b1836427"
-  integrity sha512-fMA123MZDoMV3wWMqCEc05uYZnzPLsXxIg/3AdHCCHbTQXoVPhWktzplbLG20tknPoCHgLy7/TD5ztejNrnxyA==
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/core/-/core-3.1.3.tgz#6c3748462026d9b26947d4247ca8a6d0b67f6c0d"
+  integrity sha512-dI0HSNqD9qPsSxHt6QKmPlAGWECpCNPA4xSQYbjFlH5riqZSwGdXqd7XWGJVn5gvBgob3DgroBCow2waZgWw3A==
   dependencies:
     "@babel/runtime" "^7.3.1"
-    "@loaders.gl/loader-utils" "3.0.14"
-    "@loaders.gl/worker-utils" "3.0.14"
+    "@loaders.gl/loader-utils" "3.1.3"
+    "@loaders.gl/worker-utils" "3.1.3"
     probe.gl "^3.4.0"
 
 "@loaders.gl/draco@2.3.13":
@@ -1595,14 +1596,14 @@
     "@babel/runtime" "^7.3.1"
     "@probe.gl/stats" "^3.3.0"
 
-"@loaders.gl/loader-utils@3.0.14":
-  version "3.0.14"
-  resolved "https://registry.yarnpkg.com/@loaders.gl/loader-utils/-/loader-utils-3.0.14.tgz#1bec4bcf10fa6bf80e86c5da272626a2f261d473"
-  integrity sha512-M29ULeHDdlVavyefcPlVw/6xdCYMZ7qKVSGgThJWZfgg9fGYpqJctBC2FogygSzRzanLWpDU65JLjx9QT5Y/7w==
+"@loaders.gl/loader-utils@3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/loader-utils/-/loader-utils-3.1.3.tgz#eb49e9715c5eeb83e7a525c9d372961cc3ae97f0"
+  integrity sha512-cnSfGHD6s24YW1OvLmRbXZWju5MCiRumXGuW3ua3OMacYkASNe3/cCjK+aN5RjdznQBPXxdPNBMC7Xv86s4O8w==
   dependencies:
     "@babel/runtime" "^7.3.1"
-    "@loaders.gl/worker-utils" "3.0.14"
-    "@probe.gl/stats" "^3.4.0"
+    "@loaders.gl/worker-utils" "3.1.3"
+    "@probe.gl/stats" "^3.5.0"
 
 "@loaders.gl/math@2.3.13":
   version "2.3.13"
@@ -1647,10 +1648,10 @@
     "@math.gl/web-mercator" "^3.3.0"
     "@probe.gl/stats" "^3.3.0"
 
-"@loaders.gl/worker-utils@3.0.14":
-  version "3.0.14"
-  resolved "https://registry.yarnpkg.com/@loaders.gl/worker-utils/-/worker-utils-3.0.14.tgz#3b1425d061e8220cb6d7acdc5a05e69dd24ecbcf"
-  integrity sha512-SDwB0WLE+NQXx6WAujUoXKtOiT7I0xlpEjdtaV+GzAny8wO64yUA7/6P+B6ovMT5wXqPGMwexdbtoC9zHVHQFA==
+"@loaders.gl/worker-utils@3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/worker-utils/-/worker-utils-3.1.3.tgz#223fea3da995979c55b29af05d53dd75c308c6dd"
+  integrity sha512-EOsbZzGNgNsUKOSyKkC5M1filS1Ts5AZazjFMLw9zFPcTIET22g+ej4UgXZg4Toyu/AsKxPjp6n8i0QBkOBf6Q==
   dependencies:
     "@babel/runtime" "^7.3.1"
 
@@ -2313,7 +2314,7 @@
     "@babel/runtime" "^7.0.0"
     "@probe.gl/env" "3.5.0"
 
-"@probe.gl/stats@3.5.0", "@probe.gl/stats@^3.3.0", "@probe.gl/stats@^3.4.0":
+"@probe.gl/stats@3.5.0", "@probe.gl/stats@^3.3.0", "@probe.gl/stats@^3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@probe.gl/stats/-/stats-3.5.0.tgz#774495772f06e898aae28c1d315c9edac07f3425"
   integrity sha512-IH2M+F3c8HR1DTroBARePUFG7wIewumtKA0UFqx51Z7S4hKrD60wFbpMmg0AcF4FvHAXMBoC+kYi1UKW9XbAOw==
@@ -3547,7 +3548,7 @@
     "@turf/meta" "^6.5.0"
     "@turf/rhumb-destination" "^6.5.0"
 
-"@turf/union@>=4.0.0":
+"@turf/union@>=4.0.0", "@turf/union@^6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@turf/union/-/union-6.5.0.tgz#82d28f55190608f9c7d39559b7f543393b03b82d"
   integrity sha512-igYWCwP/f0RFHIlC2c0SKDuM/ObBaqSljI3IdV/x71805QbIvY/BYGcJdyNcgEA6cylIGl/0VSlIbpJHZ9ldhw==
