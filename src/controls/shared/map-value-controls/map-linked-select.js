@@ -3,17 +3,23 @@ import PropTypes from 'prop-types'
 
 import Divider from '@material-ui/core/Divider'
 import { Typography } from '@eqworks/lumen-ui'
-import { makeStyles } from '@material-ui/core/styles'
 
-import LinkedSelect from '../../../shared-components/linked-select'
-
-import styles from '../../../styles'
+import LinkedSelect from '../../../components/linked-select'
 
 
-const useStyles = makeStyles(styles)
-
-const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCallback  }) => {
-  const classes = useStyles()
+const MapLinkedSelect = ({
+  categories,
+  values,
+  titles,
+  // primaryKey,
+  // secondaryKey,
+  data,
+  subData,
+  // disableSubFor,
+  // disableSubMessage,
+  callback,
+  deleteCallback,
+}) => {
   const remainingValues = useMemo(() => data.filter((name) =>
     !(values.map(v => v.key).includes(name))), [data, values])
 
@@ -23,23 +29,21 @@ const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCa
       const { key, agg } = match === -1 ? {} : values[match]
       return (
         <div key={i}>
-          <div className={classes.controlRowMap}>
+          <div>
             <Typography
-              className={classes.linkedSelectPrimary}
               color='textSecondary'
               variant='body1'
             >
               {mapVis.charAt(0).toUpperCase() + mapVis.slice(1)}
             </Typography>
             <Typography
-              className={classes.linkedSelectSub}
               color='textSecondary'
               variant='body1'
             >
               {'Aggregation'}
             </Typography>
           </div>
-          <Divider className={classes.controlDivider} />
+          <Divider />
           <LinkedSelect
             key={mapVis}
             callback={([_k, _v]) => callback(match, { key: _k, agg: _v, mapVis })}
@@ -49,7 +53,12 @@ const MapLinkedSelect = ({ categories, values, data, subData, callback, deleteCa
             subInit={agg}
             clearable
             deleteCallback={() => deleteCallback(match)}
-            type='map'
+            // className={`${i > 0 ? 'mt-2' : ''}`}
+            // init={values[i]?.[primaryKey]}
+            // subInit={values[i]?.[secondaryKey]}
+            placeholders={titles}
+            // disableSub={disableSubFor.includes(values[i]?.[primaryKey])}
+            // disableSubMessage={`${values[i]?.[primaryKey]} ${disableSubMessage}`}
           />
         </div>
       )
