@@ -61,20 +61,20 @@ export default {
   component: Map,
   adapt: (data, { options, ...config }) => {
     const { mapGroupKey, mapValueKeys } = config
-    const mapLayer = Object.keys(MAP_LAYER_VIS).filter(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))[0]
+    const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
 
     const getTooltipKey = (tooltipKey) =>
-      dataKeys.filter(key => MAP_LAYER_GEO_KEYS[mapLayer].includes(key) && key.includes(tooltipKey))[0]
+      dataKeys.find(key => MAP_LAYER_GEO_KEYS[mapLayer].includes(key) && key.includes(tooltipKey))
 
     const name = getTooltipKey('name')
     const id = getTooltipKey('id')
 
     let geometry = {}
     if (mapLayer === MAP_LAYERS.scatterplot) {
-      const latitude = dataKeys.filter(key => COORD_KEYS.latitude.includes(key))[0]
-      const longitude = dataKeys.filter(key => COORD_KEYS.longitude.includes(key))[0]
+      const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
+      const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
       geometry = { longitude, latitude }
     }
 
@@ -85,16 +85,18 @@ export default {
         layer: mapLayer,
         dataId: 'testWIReport',
         geometry,
-        visualizations: Object.fromEntries(mapValueKeys.map(({ key, agg, mapVis }) => [
-          mapVis,
-          {
-            value: {
-              field: `${key}_${agg}`,
+        visualizations: Object.fromEntries(mapValueKeys.map(({ key, agg, mapVis }) =>
+          [
+            mapVis,
+            {
+              value: {
+                field: `${key}_${agg}`,
+              },
+              valueOptions: VIS_OPTIONS.values[mapVis],
+              dataScale: VIS_OPTIONS.scale,
             },
-            valueOptions: VIS_OPTIONS.values[mapVis],
-            dataScale: VIS_OPTIONS.scale,
-          },
-        ])),
+          ]
+        )),
         interactions: {
           tooltip: {
             tooltipKeys: {
