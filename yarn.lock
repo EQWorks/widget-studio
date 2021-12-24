@@ -2208,10 +2208,10 @@
     slick-carousel "^1.8.1"
     use-cached "^2.0.0"
 
-"@eqworks/react-maps@^0.7.5":
-  version "0.7.5"
-  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.7.5/bb481e3e64a526b2e28cc206aff6725849c4750ac4009b9791c17abc46482bd4#f8984488a340e0749533fc0e10f64d2e4e8df4a5"
-  integrity sha512-5lcD06yg0KUdBSGY0sKigx+Sht2xd/edTw17fFrzDbLd8tONnTedmfMVdZxk8MUxexCwvR1XD7uBUc5q8QqCsA==
+"@eqworks/react-maps@0.7.5-alpha.4":
+  version "0.7.5-alpha.4"
+  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.7.5-alpha.4/e4911daeb9de839e81b462a95e1972edeabb339cc3d2ea9c1287bc93e69b862e#674dfd80aca1e5ad40f7c34ea88bebfc88ceb586"
+  integrity sha512-Kgu4AesYEYTgJhuexBy/sXtQcxOILzcrbJa9RVUlwW0C61wCgv9A9sqScqUkq96XxDwljB1gIB6jNrIbRO3eHg==
   dependencies:
     "@deck.gl/aggregation-layers" "8.4.6"
     "@deck.gl/core" "8.4.6"
@@ -15007,17 +15007,15 @@ tiny-warning@^1.0.2:
   resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
 
-<<<<<<< HEAD
 tinycolor2@^1.4.1:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.4.2.tgz#3f6a4d1071ad07676d7fa472e1fac40a719d8803"
   integrity sha512-vJhccZPs965sV/L2sU4oRQVAos0pQXwsvTLkWYdqJ+a8Q5kPFzJTuOFwy7UniPli44NKQGAglksjvOcpo95aZA==
-=======
+
 tinyqueue@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/tinyqueue/-/tinyqueue-2.0.3.tgz#64d8492ebf39e7801d7bd34062e29b45b2035f08"
   integrity sha512-ppJZNDuKGgxzkHihX8v9v9G5f+18gzaTfrukGrq6ueg0lmH4nqVnA2IPG0AEH3jKEk2GRJCUhDoqpoiw3PHLBA==
->>>>>>> deps - add latest version of @eqworks/react-maps & react-resize-detector
 
 tmp@^0.2.1:
   version "0.2.1"
