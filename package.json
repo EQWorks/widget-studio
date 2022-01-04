@@ -47,7 +47,7 @@
     "@babel/eslint-parser": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
-    "@eqworks/lumen-labs": "^0.1.0-alpha.14",
+    "@eqworks/lumen-labs": "https://github.com/EQWorks/lumen-labs/blob/tmp/build-with-change/eqworks-lumen-labs-v0.1.0-alpha.15.tgz?raw=true",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
