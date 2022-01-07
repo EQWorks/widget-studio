@@ -274,9 +274,11 @@ export default {
   // reset all shared and unique states except data source and data ID
   resetWidget: action((state) => ({
     ...state,
-    options: widgetDefaults[state.type],
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
+    options: widgetDefaults[state.type],
+    // map widget doesn't have a switch to change group state, so we have to keep it true here
+    group: state.type === 'map' ? true : state.group,
   })),
 
   // on reset, set a 5 second timer during which reset cannot be re-enabled
