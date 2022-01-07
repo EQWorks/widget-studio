@@ -124,7 +124,7 @@ export default {
           type,
           filters,
           valueKeys: renderableValueKeys,
-          mapValueKeys,
+          mapValueKeys: renderableValueKeys,
           group,
           groupKey,
           mapGroupKey,
@@ -139,14 +139,19 @@ export default {
   renderableValueKeys: computed(
     [
       (state) => state.valueKeys,
+      (state) => state.mapValueKeys,
       (state) => state.group,
+      (state) => state.type,
     ],
     (
       valueKeys,
-      group
+      mapValueKeys,
+      group,
+      type,
     ) => (
-      valueKeys.filter(({ key, agg }) => key && (agg || !group)
-      ))
+      (type !== 'map' && valueKeys.filter(({ key, agg }) => key && (agg || !group)) ||
+      (type === 'map' && mapValueKeys.filter(({ key, agg }) => key && agg)))
+    )
   ),
 
   /** checks if all initial states have been filled */
@@ -156,7 +161,6 @@ export default {
       (state) => state.columns,
       (state) => state.type,
       (state) => state.renderableValueKeys,
-      (state) => state.mapValueKeys,
       (state) => state.indexKey,
       (state) => state.groupKey,
       (state) => state.mapGroupKey,
@@ -166,14 +170,13 @@ export default {
       columns,
       type,
       renderableValueKeys,
-      mapValueKeys,
       indexKey,
       groupKey,
       mapGroupKey,
     ) => (
       Boolean(type && columns.length && rows.length &&
         ((type !== 'map' && renderableValueKeys.length && (indexKey || groupKey)) ||
-          (type === 'map' && mapValueKeys.length && mapGroupKey)))
+          (type === 'map' && renderableValueKeys.length && mapGroupKey)))
     )),
 
   dataReady: computed(
