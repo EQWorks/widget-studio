@@ -39,7 +39,7 @@ const MapValueControls = () => {
           placeholder='Select a column to group by'
         />
       </WidgetControlCard>
-      {/* we don't render controls for map until we know which mapGroupKey we use,
+      {/* we don't render controls for map widget until we know which mapGroupKey we use,
         which determines the mapLayer and, finally, the map layer controls */}
       {mapGroupKey &&
         <WidgetControlCard title='Value keys' >
@@ -47,8 +47,6 @@ const MapValueControls = () => {
             categories={MAP_LAYER_VIS[mapLayer]}
             titles={['Key', 'Aggregation']}
             values={mapValueKeys}
-            primaryKey='key'
-            secondaryKey='agg'
             data={mapNumericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
             update={(val) => nestedUpdate({ mapValueKeys: val })}
