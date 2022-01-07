@@ -11,12 +11,10 @@ const MapLinkedSelect = ({
   categories,
   values,
   titles,
-  // primaryKey,
-  // secondaryKey,
   data,
   subData,
-  // disableSubFor,
-  // disableSubMessage,
+  disableSubFor,
+  disableSubMessage,
   callback,
   deleteCallback,
 }) => {
@@ -26,7 +24,6 @@ const MapLinkedSelect = ({
   return (
     categories.map((mapVis, i) => {
       const match = values.findIndex(v => v.mapVis === mapVis)
-      const { key, agg } = match === -1 ? {} : values[match]
       return (
         <div key={i}>
           <div>
@@ -48,17 +45,15 @@ const MapLinkedSelect = ({
             key={mapVis}
             callback={([_k, _v]) => callback(match, { key: _k, agg: _v, mapVis })}
             data={remainingValues}
-            init={key}
             subData={subData}
-            subInit={agg}
+            deletable={false}
             clearable
             deleteCallback={() => deleteCallback(match)}
-            // className={`${i > 0 ? 'mt-2' : ''}`}
-            // init={values[i]?.[primaryKey]}
-            // subInit={values[i]?.[secondaryKey]}
+            init={values[match]?.key}
+            subInit={values[match]?.agg}
             placeholders={titles}
-            // disableSub={disableSubFor.includes(values[i]?.[primaryKey])}
-            // disableSubMessage={`${values[i]?.[primaryKey]} ${disableSubMessage}`}
+            disableSub={disableSubFor.includes(values[match]?.key)}
+            disableSubMessage={`${values[match]?.key} ${disableSubMessage}`}
           />
         </div>
       )
