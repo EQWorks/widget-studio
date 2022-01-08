@@ -6,6 +6,7 @@ import CustomSelect from '../../../components/custom-select'
 import MapLinkedSelect from './map-linked-select'
 import WidgetControlCard from '../widget-control-card'
 
+import modes from '../../../constants/modes'
 import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS } from '../../../constants/map'
 
 
@@ -27,6 +28,9 @@ const MapValueControls = () => {
   const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
   const mapNumericColumns = numericColumns.filter(col => !Object.values(COORD_KEYS).flat().includes(col))
 
+  // UI state
+  const mode = useStoreState((state) => state.ui.mode)
+
   return (
     <>
       <WidgetControlCard
@@ -46,7 +50,7 @@ const MapValueControls = () => {
           grow
           clearable
           title='Key(s) Configuration:'
-          description={'Select key values, open in editor for more options.'}
+          description={mode === modes.QL ? 'Select key values, open in editor for more options.' : ''}
         >
           <MapLinkedSelect
             categories={MAP_LAYER_VIS[mapLayer]}
