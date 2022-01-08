@@ -42,7 +42,12 @@ const MapValueControls = () => {
       {/* we don't render controls for map widget until we know which mapGroupKey we use,
         which determines the mapLayer and, finally, the map layer controls */}
       {mapGroupKey &&
-        <WidgetControlCard title='Value keys' >
+        <WidgetControlCard
+          grow
+          clearable
+          title='Key(s) Configuration:'
+          description={'Select key values, open in editor for more options.'}
+        >
           <MapLinkedSelect
             categories={MAP_LAYER_VIS[mapLayer]}
             titles={['Key', 'Aggregation']}
