@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import LinkedSelect from './linked-select'
+import { getLongest } from '../util'
 
 
 const PluralLinkedSelect = ({
@@ -17,8 +18,9 @@ const PluralLinkedSelect = ({
   callback,
   deleteCallback,
 }) => {
-  const getLongest = (arr) => arr.reduce((a, b) => (a.length > b.length ? a : b))
-  const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
+  const remainingValues = useMemo(() =>
+    data.filter((name) => !(values.map(v => v[primaryKey]).includes(name)))
+  ,[data, primaryKey, values])
 
   const renderValue = i => (
     <LinkedSelect
