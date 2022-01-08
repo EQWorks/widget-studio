@@ -5,6 +5,7 @@ import { Icons, Button } from '@eqworks/lumen-labs'
 
 import LinkedSelect from './linked-select'
 import clsx from 'clsx'
+import { getLongest } from '../util'
 
 
 const PluralLinkedSelect = ({
@@ -20,8 +21,6 @@ const PluralLinkedSelect = ({
   callback,
   deleteCallback,
 }) => {
-  const getLongest = (arr) => arr.reduce((a, b) => (a.length > b.length ? a : b))
-
   const renderValue = i => {
     const val = values[i]?.[primaryKey]
     return (
