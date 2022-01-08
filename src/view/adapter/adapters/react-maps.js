@@ -48,12 +48,14 @@ const Map = ({ width, height, ...props }) => {
 }
 
 Map.propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  width: PropTypes.number,
+  height: PropTypes.number,
   props: PropTypes.object,
 }
 
 Map.defaultProps = {
+  width: 0,
+  height: 0,
   props: {},
 }
 
