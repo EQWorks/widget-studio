@@ -192,8 +192,12 @@ export default {
       mapGroupKey,
     ) => (
       Boolean(type && columns.length && rows.length &&
-        ((type !== 'map' && renderableValueKeys.length && (indexKey || groupKey)) ||
-          (type === 'map' && renderableValueKeys.length && mapGroupKey)))
+        (
+          type === 'map'
+            ? renderableValueKeys.length && mapGroupKey
+            : renderableValueKeys.length && (indexKey || groupKey)
+        )
+      )
     )),
 
   dataReady: computed(
