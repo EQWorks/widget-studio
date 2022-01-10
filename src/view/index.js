@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import { Loader } from '@eqworks/lumen-labs'
 
@@ -13,7 +13,6 @@ import WidgetAdapter from './adapter'
 const WidgetView = () => {
 
   // store actions
-  const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
 
   // widget state
@@ -26,18 +25,10 @@ const WidgetView = () => {
   const dataSourceID = useStoreState((state) => state.dataSource.id)
   const dataReady = useStoreState((state) => state.dataReady)
 
-  // common state
-  const columns = useStoreState((state) => state.columns)
-
   // UI state
   const showTable = useStoreState((state) => state.ui.showTable)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
-
-  useEffect(() => {
-    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
-    update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
-  }, [columns, update])
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
