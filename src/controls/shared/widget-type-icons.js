@@ -45,7 +45,7 @@ const Icons = ({ disabled }) => {
         Object.entries(mapIcons).map(([type, Icon], i) => (
           <CustomButton
             key={i}
-            disabled={disabled || !(type !== 'map' || (type === 'map' && mapIconAvailability))}
+            disabled={disabled || (type === 'map' && !mapIconAvailability)}
             variant='borderless'
             className={iconButtonClass(type)}
             onClick={() => update({ type })}
