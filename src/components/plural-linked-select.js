@@ -5,7 +5,7 @@ import { Icons, Button } from '@eqworks/lumen-labs'
 
 import LinkedSelect from './linked-select'
 import clsx from 'clsx'
-import { getLongest } from '../util'
+import { getLongestString } from '../util'
 
 
 const PluralLinkedSelect = ({
@@ -67,7 +67,7 @@ const PluralLinkedSelect = ({
           data={[]}
           subData={[]}
           deletable
-          placeholders={[getLongest([titles[0], ...data]), getLongest([titles[1], ...subData])]}
+          placeholders={[getLongestString([titles[0], ...data]), getLongestString([titles[1], ...subData])]}
         />
       </div>
       <div className='grid grid-cols-min-1fr'>
