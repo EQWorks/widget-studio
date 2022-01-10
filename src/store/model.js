@@ -136,6 +136,20 @@ export default {
         : undefined
     )),
 
+  numericColumns: computed(
+    [(state) => state.columns],
+    (columns) => (
+      columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name)
+    )
+  ),
+
+  stringColumns: computed(
+    [(state) => state.columns],
+    (columns) => (
+      columns.filter(({ category }) => category === 'String').map(({ name }) => name)
+    )
+  ),
+
   renderableValueKeys: computed(
     [
       (state) => state.valueKeys,
