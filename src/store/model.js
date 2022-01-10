@@ -142,15 +142,18 @@ export default {
       (state) => state.mapValueKeys,
       (state) => state.group,
       (state) => state.type,
+      (state) => state.zeroVarianceColumns,
     ],
     (
       valueKeys,
       mapValueKeys,
       group,
       type,
+      zeroVarianceColumns,
     ) => (
-      (type !== 'map' && valueKeys.filter(({ key, agg }) => key && (agg || !group)) ||
-      (type === 'map' && mapValueKeys.filter(({ key, agg }) => key && agg)))
+      type === 'map'
+        ? mapValueKeys.filter(({ key, agg }) => key && (agg || zeroVarianceColumns.includes(key)))
+        : valueKeys.filter(({ key, agg }) => key && (agg || zeroVarianceColumns.includes(key) || !group))
     )
   ),
 
