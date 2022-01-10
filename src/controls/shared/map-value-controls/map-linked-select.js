@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Chip, makeStyles } from '@eqworks/lumen-labs'
 
 import LinkedSelect from '../../../components/linked-select'
-import { getLongest } from '../../../util'
+import { getLongestString } from '../../../util'
 
 
 const classes = makeStyles({
@@ -37,7 +37,7 @@ const MapLinkedSelect = ({
               subData={[]}
               deletable
               callback={() => {}}
-              placeholders={[getLongest([titles[0], ...data]), getLongest([titles[1], ...subData])]}
+              placeholders={[getLongestString([titles[0], ...data]), getLongestString([titles[1], ...subData])]}
             />
           </div>
           <Chip color={i === 0 ? 'primary' : 'success'}>
