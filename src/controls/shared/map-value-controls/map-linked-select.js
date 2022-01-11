@@ -21,7 +21,6 @@ const MapLinkedSelect = ({
   disableSubFor,
   disableSubMessage,
   callback,
-  deleteCallback,
 }) => {
   const remainingValues = useMemo(() => data.filter((name) =>
     !(values.map(v => v.key).includes(name))), [data, values])
@@ -52,7 +51,6 @@ const MapLinkedSelect = ({
               subData={subData}
               deletable={false}
               clearable
-              deleteCallback={() => deleteCallback(match)}
               init={values[match]?.key}
               subInit={values[match]?.agg}
               placeholders={titles}
@@ -69,8 +67,18 @@ const MapLinkedSelect = ({
 export default MapLinkedSelect
 
 MapLinkedSelect.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.string).isRequired,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
+  titles: PropTypes.arrayOf(PropTypes.string),
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   callback: PropTypes.func.isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
+  disableSubFor: PropTypes.arrayOf(PropTypes.string),
+  disableSubMessage: PropTypes.string,
+}
+
+MapLinkedSelect.defaultProps = {
+  titles: [],
+  disableSubFor: [],
+  disableSubMessage: '',
 }
