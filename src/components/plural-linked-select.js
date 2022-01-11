@@ -1,7 +1,10 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
+import { Icons, Button } from '@eqworks/lumen-labs'
+
 import LinkedSelect from './linked-select'
+import clsx from 'clsx'
 
 
 const PluralLinkedSelect = ({
@@ -18,7 +21,6 @@ const PluralLinkedSelect = ({
   deleteCallback,
 }) => {
   const getLongest = (arr) => arr.reduce((a, b) => (a.length > b.length ? a : b))
-  const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
 
   const renderValue = i => {
     const val = values[i]?.[primaryKey]
@@ -56,15 +58,24 @@ const PluralLinkedSelect = ({
             : values.map((_, i) => renderValue(i))
         }
         {
-          !staticQuantity && Boolean(remainingValues?.length) &&
-          <LinkedSelect
-            className='mt-2'
-            controlled={false}
-            callback={([_k, _v]) => callback(values.length, { [primaryKey]: _k, [secondaryKey]: _v })}
-            data={remainingValues}
-            subData={subData}
-            placeholders={titles}
-          />
+          !staticQuantity && values.length < data.length && (
+            <Button
+              classes={{
+                button: clsx('col-span-2 w-full outline-none focus:outline-none px-3 py-1.5 tracking-widest flex flex-col items-stretch', {
+                  'mt-2': values.length,
+                }),
+              }}
+              type='primary'
+              variant='borderless'
+              size='md'
+              onClick={() => callback(values.length, { [primaryKey]: '', [secondaryKey]: '' })}
+            >
+              <div className='w-full flex items-center'>
+                <span className='flex-1 text-left'>Add Key</span>
+                <Icons.Add size='sm' />
+              </div>
+            </Button>
+          )
         }
       </div >
     </>

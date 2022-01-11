@@ -17,7 +17,6 @@ const LinkedSelect = ({ className,
   init,
   subData,
   subInit,
-  controlled,
   placeholders,
   disableSub,
   disableSubMessage,
@@ -31,15 +30,11 @@ const LinkedSelect = ({ className,
   }, [subInit, init])
 
   useEffect(() => {
-    if (callback && (choice || subChoice)) {
+    if (callback) {
       callback([choice, subChoice])
-      if (!controlled) {
-        setChoice('')
-        setSubChoice('')
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [choice, controlled, subChoice])
+  }, [choice, subChoice])
 
   const renderSub =
     <CustomSelect
@@ -105,7 +100,6 @@ LinkedSelect.propTypes = {
   deletable: PropTypes.bool,
   deleteCallback: PropTypes.func,
   callback: PropTypes.func.isRequired,
-  controlled: PropTypes.bool,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   init: PropTypes.string,
@@ -119,7 +113,6 @@ LinkedSelect.defaultProps = {
   className: '',
   deletable: false,
   deleteCallback: () => console.error('Not implemented'),
-  controlled: true,
   init: '',
   subInit: '',
   placeholders: ['Select', 'Select'],
