@@ -10,6 +10,8 @@ import modes from '../../../constants/modes'
 import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS } from '../../../constants/map'
 
 
+const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).reduce((agg, val) => [...agg, ...val], [])
+
 const MapValueControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
@@ -22,8 +24,7 @@ const MapValueControls = () => {
   const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
 
   // restrict selection list for mapGroupKey to only valid map geo keysq
-  const mapGeoKeys = Object.values(MAP_LAYER_GEO_KEYS).reduce((agg, val) => [...agg, ...val], [])
-  const mapGroupByKeys = stringColumns.filter(val => mapGeoKeys.includes(val) )
+  const mapGroupByKeys = stringColumns.filter(val => MAP_GEO_KEYS.includes(val) )
   const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
   const mapNumericColumns = numericColumns.filter(col => !Object.values(COORD_KEYS).flat().includes(col))
 
