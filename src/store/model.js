@@ -124,7 +124,7 @@ export default {
           type,
           filters,
           valueKeys: renderableValueKeys,
-          mapValueKeys,
+          mapValueKeys: renderableValueKeys,
           group,
           groupKey,
           mapGroupKey,
@@ -136,17 +136,39 @@ export default {
         : undefined
     )),
 
+  numericColumns: computed(
+    [(state) => state.columns],
+    (columns) => (
+      columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name)
+    )
+  ),
+
+  stringColumns: computed(
+    [(state) => state.columns],
+    (columns) => (
+      columns.filter(({ category }) => category === 'String').map(({ name }) => name)
+    )
+  ),
+
   renderableValueKeys: computed(
     [
       (state) => state.valueKeys,
+      (state) => state.mapValueKeys,
       (state) => state.group,
+      (state) => state.type,
+      (state) => state.zeroVarianceColumns,
     ],
     (
       valueKeys,
-      group
+      mapValueKeys,
+      group,
+      type,
+      zeroVarianceColumns,
     ) => (
-      valueKeys.filter(({ key, agg }) => key && (agg || !group)
-      ))
+      type === 'map'
+        ? mapValueKeys.filter(({ key, agg }) => key && (agg || zeroVarianceColumns.includes(key)))
+        : valueKeys.filter(({ key, agg }) => key && (agg || zeroVarianceColumns.includes(key) || !group))
+    )
   ),
 
   /** checks if all initial states have been filled */
@@ -156,7 +178,6 @@ export default {
       (state) => state.columns,
       (state) => state.type,
       (state) => state.renderableValueKeys,
-      (state) => state.mapValueKeys,
       (state) => state.indexKey,
       (state) => state.groupKey,
       (state) => state.mapGroupKey,
@@ -166,14 +187,17 @@ export default {
       columns,
       type,
       renderableValueKeys,
-      mapValueKeys,
       indexKey,
       groupKey,
       mapGroupKey,
     ) => (
       Boolean(type && columns.length && rows.length &&
-        ((type !== 'map' && renderableValueKeys.length && (indexKey || groupKey)) ||
-          (type === 'map' && mapValueKeys.length && mapGroupKey)))
+        (
+          type === 'map'
+            ? renderableValueKeys.length && mapGroupKey
+            : renderableValueKeys.length && (indexKey || groupKey)
+        )
+      )
     )),
 
   dataReady: computed(
@@ -271,9 +295,11 @@ export default {
   // reset all shared and unique states except data source and data ID
   resetWidget: action((state) => ({
     ...state,
-    options: widgetDefaults[state.type],
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
+    options: widgetDefaults[state.type],
+    // map widget doesn't have a switch to change group state, so we have to keep it true here
+    group: state.type === 'map' ? true : state.group,
   })),
 
   // on reset, set a 5 second timer during which reset cannot be re-enabled

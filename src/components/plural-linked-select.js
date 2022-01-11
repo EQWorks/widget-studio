@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import LinkedSelect from './linked-select'
+import { getLongestString } from '../util'
 
 
 const PluralLinkedSelect = ({
@@ -17,8 +18,9 @@ const PluralLinkedSelect = ({
   callback,
   deleteCallback,
 }) => {
-  const getLongest = (arr) => arr.reduce((a, b) => (a.length > b.length ? a : b))
-  const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
+  const remainingValues = useMemo(() =>
+    data.filter((name) => !(values.map(v => v[primaryKey]).includes(name)))
+  ,[data, primaryKey, values])
 
   const renderValue = i => (
     <LinkedSelect
@@ -43,7 +45,7 @@ const PluralLinkedSelect = ({
           data={[]}
           subData={[]}
           deletable
-          placeholders={[getLongest([titles[0], ...data]), getLongest([titles[1], ...subData])]}
+          placeholders={[getLongestString([titles[0], ...data]), getLongestString([titles[1], ...subData])]}
         />
       </div>
       <div className='grid grid-cols-min-1fr'>

@@ -1,4 +1,4 @@
-import React, { useEffect, createElement } from 'react'
+import React, { createElement } from 'react'
 import PropTypes from 'prop-types'
 
 import { Button } from '@eqworks/lumen-labs'
@@ -8,6 +8,7 @@ import BarControls from './types/bar'
 import PieControls from './types/pie'
 import LineControls from './types/line'
 import ScatterControls from './types/scatter'
+import MapControls from './types/map'
 import { Controls, Save, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
@@ -19,6 +20,7 @@ const controls = {
   line: LineControls,
   pie: PieControls,
   scatter: ScatterControls,
+  map: MapControls,
 }
 
 const renderButton = (children, onClick, props) =>
@@ -40,7 +42,6 @@ const renderButton = (children, onClick, props) =>
 
 const QLModeControls = () => {
   // store actions
-  const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const resetWidget = useStoreActions(actions => actions.resetWidget)
 
@@ -54,11 +55,6 @@ const QLModeControls = () => {
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const allowReset = useStoreState((state) => state.ui.allowReset)
   const controlsWidth = useStoreState((state) => state.ui.controlsWidth)
-
-  useEffect(() => {
-    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
-    update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
-  }, [columns, update])
 
   const footer = <>
     <div className='flex-1'>

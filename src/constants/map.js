@@ -20,7 +20,6 @@ export const MAP_LAYER_VIS = {
 export const MAP_LAYER_GEO_KEYS = {
   scatterplot: [
     'poi',
-    'poi_name',
     'poi_id',
     'locus_poi_id',
     'source_poi',

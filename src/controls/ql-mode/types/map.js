@@ -2,9 +2,9 @@ import React from 'react'
 
 import modes from '../../../constants/modes'
 import { useStoreState, useStoreActions } from '../../../store'
-import CustomToggle from '../../shared-components/custom-toggle'
-import WidgetControlCard from '../../shared-components/widget-control-card'
-import MapValueControls from '../data-controls/map-value-controls'
+import CustomToggle from '../../../components/custom-toggle'
+import WidgetControlCard from '../../shared/widget-control-card'
+import MapValueControls from '../../shared//map-value-controls'
 
 
 const MapControls = () => {
@@ -22,16 +22,18 @@ const MapControls = () => {
     <>
       <MapValueControls />
       {mode === modes.EDITOR &&
-        <WidgetControlCard title='Styling'>
+        <WidgetControlCard
+          clearable
+          title='Styling'>
           <CustomToggle
             value={showTooltip}
             label='Show Tooltip'
-            callback={(val) => nestedUpdate({ options: { showTooltip: val } })}
+            onChange={(val) => nestedUpdate({ options: { showTooltip: val } })}
           />
           <CustomToggle
             value={showLegend}
             label='Show Legend'
-            callback={(val) => nestedUpdate({ options: { showLegend: val } })}
+            onChange={(val) => nestedUpdate({ options: { showLegend: val } })}
           />
         </WidgetControlCard>
       }

@@ -175,7 +175,7 @@ export default {
       },
     ],
     'group': true,
-    'mapGroupKey': 'poi_name',
+    'mapGroupKey': 'poi_id',
     'dataSource': {
       'type': 'Execution',
       'id': '913',
