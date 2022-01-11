@@ -96,6 +96,7 @@ const ValueControls = ({ groupingOptional }) => {
                 data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
                 value={group ? groupKey : indexKey}
                 onSelect={val => update(group ? { groupKey: val } : { indexKey: val })}
+                onClear={() => update({ groupKey: null, indexKey: null })}
                 placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
               />
             </WidgetControlCard>
@@ -129,6 +130,7 @@ const ValueControls = ({ groupingOptional }) => {
                 data={stringColumns}
                 value={groupKey}
                 onSelect={val => update({ groupKey: val })}
+                onClear={() => update({ groupKey: null })}
               />
             </WidgetControlCard>
             <WidgetControlCard
