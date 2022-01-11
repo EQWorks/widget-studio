@@ -20,22 +20,25 @@ const PluralLinkedSelect = ({
   const getLongest = (arr) => arr.reduce((a, b) => (a.length > b.length ? a : b))
   const remainingValues = useMemo(() => data.filter((name) => !(values.map(v => v[primaryKey]).includes(name))), [data, primaryKey, values])
 
-  const renderValue = i => (
-    <LinkedSelect
-      key={i}
-      className={`${i > 0 ? 'mt-2' : ''}`}
-      callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
-      data={remainingValues}
-      init={values[i]?.[primaryKey]}
-      subData={subData}
-      subInit={values[i]?.[secondaryKey]}
-      deletable={!staticQuantity && values?.length > 1}
-      deleteCallback={() => deleteCallback(i)}
-      placeholders={titles}
-      disableSub={disableSubFor.includes(values[i]?.[primaryKey])}
-      disableSubMessage={`${values[i]?.[primaryKey]} ${disableSubMessage}`}
-    />
-  )
+  const renderValue = i => {
+    const val = values[i]?.[primaryKey]
+    return (
+      <LinkedSelect
+        key={i}
+        className={`${i > 0 ? 'mt-2' : ''}`}
+        callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
+        data={data.filter(d => val === d || !values.map(v => v[primaryKey]).includes(d))}
+        init={val}
+        subData={subData}
+        subInit={values[i]?.[secondaryKey]}
+        deletable={!staticQuantity && values?.length > 1}
+        deleteCallback={() => deleteCallback(i)}
+        placeholders={titles}
+        disableSub={disableSubFor.includes(val)}
+        disableSubMessage={`${val} ${disableSubMessage}`}
+      />
+    )
+  }
   return (
     <>
       <div className='invisible h-0 grid grid-cols-min-min pointer-events-none'>
