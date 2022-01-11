@@ -41,6 +41,26 @@ const PluralLinkedSelect = ({
       />
     )
   }
+
+  const renderAddKeyButton = (
+    <Button
+      classes={{
+        button: clsx('col-span-2 w-full outline-none focus:outline-none px-3 py-1.5 tracking-widest flex flex-col items-stretch', {
+          'mt-2': values.length,
+        }),
+      }}
+      type='primary'
+      variant='borderless'
+      size='md'
+      onClick={() => callback(values.length, { [primaryKey]: '', [secondaryKey]: '' })}
+    >
+      <div className='w-full flex items-center'>
+        <span className='flex-1 text-left'>Add Key</span>
+        <Icons.Add size='sm' />
+      </div>
+    </Button>
+  )
+
   return (
     <>
       <div className='invisible h-0 grid grid-cols-min-min pointer-events-none'>
@@ -58,24 +78,8 @@ const PluralLinkedSelect = ({
             : values.map((_, i) => renderValue(i))
         }
         {
-          !staticQuantity && values.length < data.length && (
-            <Button
-              classes={{
-                button: clsx('col-span-2 w-full outline-none focus:outline-none px-3 py-1.5 tracking-widest flex flex-col items-stretch', {
-                  'mt-2': values.length,
-                }),
-              }}
-              type='primary'
-              variant='borderless'
-              size='md'
-              onClick={() => callback(values.length, { [primaryKey]: '', [secondaryKey]: '' })}
-            >
-              <div className='w-full flex items-center'>
-                <span className='flex-1 text-left'>Add Key</span>
-                <Icons.Add size='sm' />
-              </div>
-            </Button>
-          )
+          !staticQuantity && values.length < data.length &&
+          renderAddKeyButton
         }
       </div >
     </>
