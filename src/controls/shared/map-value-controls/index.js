@@ -13,7 +13,6 @@ import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS } from '../../../constant
 const MapValueControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
-  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
@@ -34,7 +33,6 @@ const MapValueControls = () => {
   return (
     <>
       <WidgetControlCard
-        clearable
         title='Group by' >
         <CustomSelect
           data={mapGroupByKeys}
@@ -49,7 +47,7 @@ const MapValueControls = () => {
         <WidgetControlCard
           grow
           clearable
-          title='Key(s) Configuration:'
+          title='Key(s) Configuration'
           description={mode === modes.QL ? 'Select key values, open in editor for more options.' : ''}
         >
           <MapLinkedSelect
@@ -58,7 +56,6 @@ const MapValueControls = () => {
             values={mapValueKeys}
             data={mapNumericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
-            update={(val) => nestedUpdate({ mapValueKeys: val })}
             disableSubFor={zeroVarianceColumns}
             disableSubMessage="doesn't require aggregation."
             callback={(i, val) => {
@@ -69,11 +66,6 @@ const MapValueControls = () => {
               } else { // modify a key
                 update({ mapValueKeys: mapValueKeys.map((v, _i) => i === _i ? val : v) })
               }
-            }}
-            deleteCallback={(i) => {
-              const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
-              valueKeysCopy.splice(i, 1)
-              update({ mapValueKeys: valueKeysCopy })
             }}
           />
         </WidgetControlCard>
