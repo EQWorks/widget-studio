@@ -1,10 +1,11 @@
 import React, { useState, useEffect, createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
 
 import useTransformedData from '../../hooks/use-transformed-data'
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
-import useDebouncedResizeObserver from '../../hooks/use-debounced-resize-observer'
+import { useResizeDetector } from 'react-resize-detector'
 
 // declare which adapter handles each widget type
 const adapterDict = {
@@ -41,23 +42,61 @@ const WidgetAdapter = () => {
   const adaptedDataAndConfig = useMemo(() => adapt(transformedData ?? [], config), [adapt, config, transformedData])
 
   // debounce component resizing to improve performance
-  const { size, ref } = useDebouncedResizeObserver(20)
+  const { ref, width, height } = useResizeDetector()
+  const [delayedSize, setDelayedSize] = useState({ width, height })
+  const [sizeChanging, setSizeChanging] = useState(false)
+  const [hide, setHide] = useState(false)
+  const sizeRef = React.useRef(null)
 
   // smooth transitions when resizing
-  const [delayedSize, setDelayedSize] = useState({})
-  const [hide, setHide] = useState(false)
   useEffect(() => {
-    setHide(true)
+    // log the current container size
+    sizeRef.current = { width, height }
+    // initialize the debounced size if not already
+    if (!delayedSize.width) {
+      return setDelayedSize(sizeRef.current)
+    }
+    // assume the container is "being resized" for the next 400ms
+    setSizeChanging(true)
     setTimeout(() => {
-      setDelayedSize(size)
-      setTimeout(() => setHide(false), 400)
-    }, 300)
-  }, [size])
+      setSizeChanging(false)
+    }, 400)
+    // 200ms from now, hide the container if the container is done resizing
+    setTimeout(() => {
+      if (!sizeChanging) {
+        setHide(true)
+        setTimeout(() => {
+          setHide(false)
+        }, 300)
+      }
+    }, 200)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [height, width])
+
+  // resize the actual viz while the container is hidden
+  useEffect(() => {
+    if (hide) {
+      setTimeout(() => {
+        setDelayedSize(sizeRef.current)
+      }, 200)
+    } else {
+      if (!sizeChanging) {
+        setDelayedSize(sizeRef.current)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hide])
 
   // render the component
   return (
-    <div ref={ref} className='h-full flex justify-center'>
-      <div style={{ width: delayedSize.width, height: delayedSize.height }} className={`transition-opacity duration-300 ease-in-out ${hide || !delayedSize.width ? 'opacity-0' : 'opacity-1'}`}>
+    <div ref={ref} className='relative h-full flex justify-center'>
+      <div
+        style={{ width: delayedSize.width, height: delayedSize.height }}
+        className={clsx('absolute transition-opacity duration-200 ease-in-out', {
+          'opacity-0': hide || !delayedSize?.width,
+          'opacity-1': !hide,
+        })}
+      >
         {createElement(component, adaptedDataAndConfig)}
       </div>
     </div>
