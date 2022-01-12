@@ -62,7 +62,7 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { options, ...config }) => {
-    const { mapGroupKey, mapValueKeys } = config
+    const { mapGroupKey, valueKeys } = config
     const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
@@ -87,7 +87,7 @@ export default {
         layer: mapLayer,
         dataId: 'testWIReport',
         geometry,
-        visualizations: Object.fromEntries(mapValueKeys.map(({ key, agg, mapVis }) =>
+        visualizations: Object.fromEntries(valueKeys.map(({ key, agg, mapVis }) =>
           [
             mapVis,
             {
