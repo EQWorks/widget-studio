@@ -80,7 +80,7 @@ WidgetControlCard.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
   title: PropTypes.string,
   titleExtra: PropTypes.node,
-  description: PropTypes.string,
+  description: PropTypes.node,
   clearable: PropTypes.bool,
   showIfEmpty: PropTypes.bool,
   grow: PropTypes.bool,
