@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import aggFunctions from '../../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../../store'
@@ -31,6 +31,21 @@ const MapValueControls = () => {
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
+  const widgetControlCardDescription = useMemo(() => {
+    if (!mapGroupKey) {
+      return (
+        <>
+          <p>Please select a column to group by above to enable</p>
+          <p>key(s) configurations.</p>
+        </>
+      )
+    }
+    if (mode === modes.QL) {
+      return 'Select key values, open in editor for more options.'
+    }
+    return ''
+  }, [mapGroupKey, mode])
+
   return (
     <>
       <WidgetControlCard
@@ -39,18 +54,20 @@ const MapValueControls = () => {
           data={mapGroupByKeys}
           value={mapGroupKey}
           onSelect={val => update({ mapGroupKey: val })}
+          onClear={() => update({ mapGroupKey: null })}
           placeholder='Select a column to group by'
         />
       </WidgetControlCard>
       {/* we don't render controls for map widget until we know which mapGroupKey we use,
         which determines the mapLayer and, finally, the map layer controls */}
-      {mapGroupKey &&
-        <WidgetControlCard
-          grow
-          clearable
-          title='Key(s) Configuration'
-          description={mode === modes.QL ? 'Select key values, open in editor for more options.' : ''}
-        >
+      <WidgetControlCard
+        grow
+        clearable
+        showIfEmpty
+        title='Key(s) Configuration'
+        description={widgetControlCardDescription}
+      >
+        {mapLayer &&
           <MapLinkedSelect
             categories={MAP_LAYER_VIS[mapLayer]}
             titles={['Key', 'Aggregation']}
@@ -69,8 +86,8 @@ const MapValueControls = () => {
               }
             }}
           />
-        </WidgetControlCard>
-      }
+        }
+      </WidgetControlCard>
     </>
   )
 }
