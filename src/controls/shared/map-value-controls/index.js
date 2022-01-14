@@ -7,10 +7,8 @@ import MapLinkedSelect from './map-linked-select'
 import WidgetControlCard from '../widget-control-card'
 
 import modes from '../../../constants/modes'
-import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS } from '../../../constants/map'
+import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, MAP_GEO_KEYS, COORD_KEYS } from '../../../constants/map'
 
-
-const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
 
 const MapValueControls = () => {
   // common actions
