@@ -49,13 +49,13 @@ const MapValueControls = () => {
         <CustomSelect
           data={mapGroupByKeys}
           value={mapGroupKey}
-          onSelect={val => update({ mapGroupKey: val })}
-          onClear={() => update({ mapGroupKey: null })}
+          /** update groupKey with mapGroupKey value to have it available if we switch to
+            a chart widget type */
+          onSelect={val => update({ mapGroupKey: val, groupKey: val })}
+          onClear={() => update({ mapGroupKey: null, groupKey: null })}
           placeholder='Select a column to group by'
         />
       </WidgetControlCard>
-      {/* we don't render controls for map widget until we know which mapGroupKey we use,
-        which determines the mapLayer and, finally, the map layer controls */}
       <WidgetControlCard
         grow
         clearable
