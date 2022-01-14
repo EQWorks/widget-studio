@@ -20,6 +20,7 @@ const ValueControls = ({ groupingOptional }) => {
   // common state
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
+  const mapGroupByKeys = useStoreState((state) => state.mapGroupByKeys)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
@@ -95,8 +96,15 @@ const ValueControls = ({ groupingOptional }) => {
               <CustomSelect
                 data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
                 value={group ? groupKey : indexKey}
-                onSelect={val => update(group ? { groupKey: val } : { indexKey: val })}
-                onClear={() => update({ groupKey: null, indexKey: null })}
+                onSelect={val => {
+                  update(group ? { groupKey: val } : { indexKey: val })
+                  {/** update mapGroupKey with groupKey value if it is a valid geo key so we have it
+                    available if we switch to map widget type */}
+                  if (group && mapGroupByKeys.includes(val)) {
+                    update({ mapGroupKey: val })
+                  }
+                }}
+                onClear={() => update({ groupKey: null, indexKey: null, mapGroupKey: null })}
                 placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
               />
             </WidgetControlCard>
@@ -129,8 +137,12 @@ const ValueControls = ({ groupingOptional }) => {
               <CustomSelect
                 data={stringColumns}
                 value={groupKey}
-                onSelect={val => update({ groupKey: val })}
-                onClear={() => update({ groupKey: null })}
+                onSelect={val => {
+                  update(mapGroupByKeys.includes(val)
+                    ? { groupKey: val, mapGroupKey: val }
+                    : { groupKey: val })
+                }}
+                onClear={() => update({ groupKey: null, mapGroupKey: null })}
               />
             </WidgetControlCard>
             <WidgetControlCard
