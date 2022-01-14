@@ -1,7 +1,7 @@
 export const MAP_LAYERS = {
   scatterplot: 'scatterplot',
-  MVT: 'MVT',
-  // geojson: 'geojson',
+  // MVT: 'MVT',
+  geojson: 'geojson',
 }
 
 export const MAP_VIS = {
@@ -12,9 +12,8 @@ export const MAP_VIS = {
 
 export const MAP_LAYER_VIS = {
   scatterplot: [MAP_VIS.fill, MAP_VIS.radius],
-  MVT: [MAP_VIS.fill],
-  // geoJSONPoint: [MAP_VIS.fill, MAP_VIS.radius],
-  // geoJSONPolygon: [MAP_VIS.fill, MAP_VIS.elevation],
+  // MVT: [MAP_VIS.fill],
+  geojson: [MAP_VIS.fill, MAP_VIS.elevation],
 }
 
 export const MAP_LAYER_GEO_KEYS = {
@@ -27,8 +26,7 @@ export const MAP_LAYER_GEO_KEYS = {
     'target_poi',
     'target_poi_id',
   ],
-  MVT: ['geo_ca_fsa', 'geo_ca_postalcode', 'geo_ca_da', 'geo_ca_ct', 'geo_id'],
-  // geoJSONPolygon: ['geo_ca_province'],
+  geojson: ['geo_ca_fsa', 'geo_ca_postalcode', 'geo_ca_da', 'geo_ca_ct'],
 }
 
 export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
