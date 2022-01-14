@@ -31,6 +31,8 @@ export const MAP_LAYER_GEO_KEYS = {
   // geoJSONPolygon: ['geo_ca_province'],
 }
 
+export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
+
 export const COORD_KEYS = {
   latitude: [
     'lat',
