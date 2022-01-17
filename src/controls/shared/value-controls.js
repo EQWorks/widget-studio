@@ -23,7 +23,7 @@ const ValueControls = ({ groupingOptional }) => {
   const groupKey = useStoreState((state) => state.groupKey)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
-  const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
+  const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
 
@@ -50,7 +50,7 @@ const ValueControls = ({ groupingOptional }) => {
       secondaryKey='agg'
       data={numericColumns}
       subData={Object.keys(aggFunctions)}
-      disableSubFor={zeroVarianceColumns}
+      disableSubFor={[...numericColumns, ...stringColumns]}
       disableSubMessage="doesn't require aggregation."
       callback={(i, val) => {
         if (i === valueKeys.length) {

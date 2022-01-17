@@ -11,12 +11,12 @@ const useTransformedData = () => {
 
   // state
   const rows = useStoreState((state) => state.rows)
-  const columns = useStoreState((state) => state.columns)
   const filters = useStoreState((state) => state.filters)
   const indexKey = useStoreState((state) => state.indexKey)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
+  const dataHasVariance = useStoreState((state) => state.dataHasVariance)
 
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
@@ -50,35 +50,30 @@ const useTransformedData = () => {
       : null
   ), [group, groupKey, truncatedData])
 
-  // compute list of columns that have 0 variance
-  const zeroVarianceColumns = useMemo(() => (
-    group
-      ? columns.map(({ name }) => name).filter(c => (
-        c !== groupKey &&
-        Object.values(groupedData).every(d => {
-          return d[c].length === 1
-        })))
-      : []
-  ), [columns, group, groupKey, groupedData])
-
-  // relay this to global state
+  // determine whether the configured group key has produced data with any variance, relay to global state
   useEffect(() => {
-    update({ zeroVarianceColumns })
-  }, [update, zeroVarianceColumns])
+    if (groupedData) {
+      const data = Object.values(groupedData)
+      if (data[0]) {
+        const testKey = Object.keys(data[0])[0]
+        update({ dataHasVariance: data.some(g => g[testKey].length > 1) })
+      }
+    }
+  }, [update, groupedData])
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
       ? Object.entries(groupedData).map(([_groupKey, values]) => (
         renderableValueKeys.reduce((res, { key, agg }) => {
-          res[`${key}_${agg}`] = zeroVarianceColumns.includes(key)
-            ? values[key]
-            : aggFunctions[agg](values[key])
+          res[`${key}_${agg}`] = dataHasVariance
+            ? aggFunctions[agg](values[key])
+            : values[key][0]
           return res
         }, { [groupKey]: _groupKey })
       ))
       : null
-  ), [group, groupKey, groupedData, renderableValueKeys, zeroVarianceColumns])
+  ), [dataHasVariance, group, groupKey, groupedData, renderableValueKeys])
 
   // simply sort the data if grouping is not enabled
   const indexedData = useMemo(() => (
