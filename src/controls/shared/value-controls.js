@@ -50,7 +50,7 @@ const ValueControls = ({ groupingOptional }) => {
       secondaryKey='agg'
       data={numericColumns}
       subData={Object.keys(aggFunctions)}
-      disableSubFor={[...numericColumns, ...stringColumns]}
+      disableSubs={!dataHasVariance}
       disableSubMessage="doesn't require aggregation."
       callback={(i, val) => {
         if (i === valueKeys.length) {

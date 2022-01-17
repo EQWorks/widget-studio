@@ -15,7 +15,7 @@ const PluralLinkedSelect = ({
   secondaryKey,
   data,
   subData,
-  disableSubFor,
+  disableSubs,
   disableSubMessage,
   callback,
   deleteCallback,
@@ -36,7 +36,7 @@ const PluralLinkedSelect = ({
         deletable={!staticQuantity && values?.length > 1}
         deleteCallback={() => deleteCallback(i)}
         placeholders={titles}
-        disableSub={disableSubFor.includes(val)}
+        disableSub={disableSubs}
         disableSubMessage={`${val} ${disableSubMessage}`}
       />
     )
@@ -96,14 +96,14 @@ PluralLinkedSelect.propTypes = {
   callback: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func.isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
-  disableSubFor: PropTypes.arrayOf(PropTypes.string),
+  disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
 }
 
 PluralLinkedSelect.defaultProps = {
   staticQuantity: null,
   titles: [],
-  disableSubFor: [],
+  disableSubs: false,
   disableSubMessage: '',
 }
 
