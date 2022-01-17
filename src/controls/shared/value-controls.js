@@ -20,7 +20,7 @@ const ValueControls = ({ groupingOptional }) => {
   // common state
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
-  const mapGroupByKeys = useStoreState((state) => state.mapGroupByKeys)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
@@ -100,7 +100,7 @@ const ValueControls = ({ groupingOptional }) => {
                   update(group ? { groupKey: val } : { indexKey: val })
                   {/** update mapGroupKey with groupKey value if it is a valid geo key so we have it
                     available if we switch to map widget type */}
-                  if (group && mapGroupByKeys.includes(val)) {
+                  if (group && validMapGroupKeys.includes(val)) {
                     update({ mapGroupKey: val })
                   }
                 }}
@@ -138,7 +138,7 @@ const ValueControls = ({ groupingOptional }) => {
                 data={stringColumns}
                 value={groupKey}
                 onSelect={val => {
-                  update(mapGroupByKeys.includes(val)
+                  update(validMapGroupKeys.includes(val)
                     ? { groupKey: val, mapGroupKey: val }
                     : { groupKey: val })
                 }}

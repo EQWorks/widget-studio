@@ -16,7 +16,7 @@ const MapValueControls = () => {
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
-  const mapGroupByKeys = useStoreState((state) => state.mapGroupByKeys)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
@@ -47,7 +47,7 @@ const MapValueControls = () => {
       <WidgetControlCard
         title='Group by' >
         <CustomSelect
-          data={mapGroupByKeys}
+          data={validMapGroupKeys}
           value={mapGroupKey}
           /** update groupKey with mapGroupKey value to have it available if we switch to
             a chart widget type */

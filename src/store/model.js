@@ -59,7 +59,7 @@ const stateDefaults = [
   { key: 'zeroVarianceColumns', defaultValue: [], resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
   { key: 'numericColumns', defaultValue: [], resettable: false },
-  { key: 'mapGroupByKeys', defaultValue: [], resettable: false },
+  { key: 'validMapGroupKeys', defaultValue: [], resettable: false },
   {
     key: 'ui',
     defaultValue: {
@@ -150,7 +150,7 @@ export default {
     )
   ),
 
-  mapGroupByKeys: computed(
+  validMapGroupKeys: computed(
     [
       (state) => state.columns,
       (state) => state.numericColumns,
