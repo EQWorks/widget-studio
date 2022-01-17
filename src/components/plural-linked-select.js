@@ -66,6 +66,7 @@ const PluralLinkedSelect = ({
       <div className='invisible h-0 grid grid-cols-min-min pointer-events-none'>
         <LinkedSelect
           data={[]}
+          callback={() => { }}
           subData={[]}
           deletable
           placeholders={[getLongest([titles[0], ...data]), getLongest([titles[1], ...subData])]}

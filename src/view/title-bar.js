@@ -214,10 +214,11 @@ const WidgetTitleBar = ({ className }) => {
 
 WidgetTitleBar.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 }
 WidgetTitleBar.defaultProps = {
   className: '',
+  children: null,
 }
 
 export default WidgetTitleBar

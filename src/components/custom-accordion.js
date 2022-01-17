@@ -29,7 +29,11 @@ const CustomAccordion = ({ expandedWidth, collapsedWidth, speed, disabled, title
       className={`shadow-blue-40 relative whitespace-nowrap relative z-20 border-l-2 border-neutral-100 transition-width ${transition} flex justify-end`}
       style={{
         height: fullyOpen ? 'auto' : height,
-        width: open ? `clamp(20rem, calc(${expandedWidth}px + 2*${xPadding}), 30rem)` : collapsedWidth,
+        width: open
+          ? expandedWidth && xPadding
+            ? `clamp(20rem, calc(${expandedWidth}px + 2*${xPadding}), 30rem)`
+            : 'auto'
+          : collapsedWidth || 'auto',
       }}
     >
       {
@@ -88,8 +92,8 @@ CustomAccordion.propTypes = {
   footer: PropTypes.node,
   open: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  expandedWidth: PropTypes.number.isRequired,
-  collapsedWidth: PropTypes.number,
+  expandedWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  collapsedWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   speed: PropTypes.number,
 }
 CustomAccordion.defaultProps = {
