@@ -1263,10 +1263,10 @@
     react-resize-detector "^6.7.6"
     storybook "^6.1.20"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.14":
-  version "0.1.0-alpha.14"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.14/992984d3d1c2e1d3184ecf676d1c5a5d4685929815ee7a073c5be5b893e9103a#3c881237c0140b45dbbe666e7f640725aef1db7c"
-  integrity sha512-LB/XdSElJnU/m+o5rOsHX9Oz9EhROqYhCeq662WG5F+xPgKfv2ifVgj+KfiKevUF6W3Yrf8U++t50doSWMQ8LQ==
+"@eqworks/lumen-labs@^0.1.0-alpha.23":
+  version "0.1.0-alpha.23"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.23/c3d90d2bea71babe2c2cd41533d5485474848e78bb1b6c01d62d86bf37d3e3f1#f7fb2ff2015ccb9bb65eb578d28877f46b4a3d2e"
+  integrity sha512-kZHOwOWPlVkGIYSzben7/IxGrSUZrzoUpI+VXVqnaiQHKeZO91B94FOU8cRMmawImeXyplxZRLChxRWRj0HzOA==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
