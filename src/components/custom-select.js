@@ -9,7 +9,7 @@ const CustomSelect = ({ classes, onClear, ...props }) => (
       root: 'shadow-light-10 border-2 border-secondary-200 rounded-md',
       button: 'tracking-widest border-none',
       menu: 'w-full',
-      content: 'children:overflow-hidden children:overflow-ellipsis children:fill-current children:text-secondary-400',
+      content: 'children:overflow-hidden children:overflow-ellipsis children:fill-current children:text-secondary-500',
       selectedOptionTitle: 'normal-case text-primary-600',
       listContainer: 'normal-case',
       ...classes,

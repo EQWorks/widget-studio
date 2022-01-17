@@ -1,6 +1,7 @@
 import React, { createElement } from 'react'
 import PropTypes from 'prop-types'
 import CustomButton from '../components/custom-button'
+import clsx from 'clsx'
 
 
 const LabeledToggle = ({ labels, icons, value, update, className }) => (
@@ -14,7 +15,10 @@ const LabeledToggle = ({ labels, icons, value, update, className }) => (
             disabled={selected}
             onClick={() => update(!value)}
           >
-            <span className={`px-4 flex ${!selected && 'hover:text-secondary-600'} items-center transition duration-500 ease-in-out text-${selected ? 'primary' : 'secondary'}-500`}>
+            <span className={clsx('px-4 flex items-center transition duration-500 ease-in-out', {
+              'hover:text-neutral-400 text-neutral-300': !selected,
+              'text-primary-600': selected,
+            })}>
               {
                 icons[i] &&
                 createElement(icons[i], { className: 'fill-current pr-0.5 mr-1' })

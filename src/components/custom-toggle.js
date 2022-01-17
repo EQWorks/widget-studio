@@ -19,8 +19,8 @@ const CustomToggle = ({ label, value, onChange, disabled }) => {
     label={label}
     classes={{
       label: clsx('ml-2 text-sm', {
-        'text-secondary-500': !disabled,
-        'text-secondary-300': disabled,
+        'text-secondary-600': !disabled,
+        'text-secondary-400': disabled,
       }),
     }}
   />

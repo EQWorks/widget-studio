@@ -37,14 +37,14 @@ const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEm
               onClick={() => alert('not implemented')}
               className={clsx(
                 'flex flex-row items-center font-medium rounded-sm tracking-wider uppercase px-1.5 py-0.5 transition-all ease-in-out duration-300',
-                'text-xs text-secondary-500 hover:text-secondary-600',
-                'bg-secondary-50 hover:bg-white',
+                'text-xs text-secondary-600 hover:text-secondary-800',
+                'bg-secondary-50',
                 'shadow-light-10 hover:shadow-light-20',
               )}
             >
               <div className='flex items-center'>
                 <span className='mr-1'>clear</span>
-                <Trash size='md' className='fill-current text-secondary-600 hover:text-secondary-700' />
+                <Trash size='md' className='fill-current text-secondary-600 hover:text-secondary-800' />
               </div>
             </CustomButton>
           }
@@ -56,7 +56,7 @@ const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEm
           ? <>
             <div className='table w-full'>
               <div className='table-cell w-0'>
-                <div className='px-3 pt-2 pb-1 break-word italic text-xs text-secondary-400 tracking-wide'>
+                <div className='px-3 pt-2 pb-1 break-word italic text-xs text-secondary-600 tracking-wide'>
                   {description}
                 </div>
               </div>

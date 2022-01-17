@@ -82,7 +82,7 @@ const FilterControls = () => {
         <div className={`w-full overflow-y-hidden transition-filter duration-1000 ease-in-out ${!dataReady ? 'filter blur-sm' : ''}`} >
           <div className={'px-2 py-3 flex flex-col items-center'}>
             <div className='w-full flex flex-row'>
-              <span className='flex-1 font-bold text-secondary-800 text-md' >Filters</span >
+              <span className='flex-1 font-bold text-secondary-900 text-md' >Filters</span >
               <CustomButton
                 variant='borderless'
                 className='border-none'

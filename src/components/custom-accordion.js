@@ -47,7 +47,7 @@ const CustomAccordion = ({ expandedWidth, collapsedWidth, speed, disabled, title
       >
         {createElement(icon ?? Icons.ArrowLeft, {
           size: 'md',
-          className: 'h-full stroke-current text-secondary-500 w-full p-5',
+          className: 'h-full stroke-current text-secondary-600 w-full p-5',
         })}
       </CustomButton>
       <div
@@ -59,13 +59,13 @@ const CustomAccordion = ({ expandedWidth, collapsedWidth, speed, disabled, title
       >
         <div className={`px-${xPadding} py-3 border-b border-neutral-100 flex flex-col items-center`}>
           <div className='w-full flex flex-row'>
-            <span className='flex-1 font-bold text-secondary-800 text-md' >{title}</span >
+            <span className='flex-1 font-bold text-secondary-900 text-md' >{title}</span >
             <CustomButton
               variant='borderless'
               className='border-none'
               onClick={toggle}
             >
-              <Icons.Close size='md' className='fill-current text-secondary-500 h-min w-auto' />
+              <Icons.Close size='md' className='fill-current text-secondary-600 h-min w-auto' />
             </CustomButton>
           </div>
         </div >
