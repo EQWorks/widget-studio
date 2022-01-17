@@ -22,7 +22,7 @@ const ValueControls = ({ groupingOptional }) => {
   // common state
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
-  const mapGroupByKeys = useStoreState((state) => state.mapGroupByKeys)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
@@ -113,7 +113,7 @@ const ValueControls = ({ groupingOptional }) => {
             update(group ? { groupKey: val } : { indexKey: val })
             {/** update mapGroupKey with groupKey value if it is a valid geo key so we have it
               available if we switch to map widget type */}
-            if (group && mapGroupByKeys.includes(val)) {
+            if (group && validMapGroupKeys.includes(val)) {
               update({ mapGroupKey: val })
             }
           }}
