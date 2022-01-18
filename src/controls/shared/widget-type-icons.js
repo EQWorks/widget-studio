@@ -12,7 +12,6 @@ import {
   Map,
 } from '../../components/icons'
 import { useStoreActions, useStoreState } from '../../store'
-import { MAP_LAYER_GEO_KEYS, COORD_KEYS } from '../../constants/map'
 
 
 const mapIcons = {
@@ -26,14 +25,9 @@ const mapIcons = {
 const Icons = ({ disabled }) => {
   const update = useStoreActions((actions) => actions.update)
   const current = useStoreState((state) => state.type)
-  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
-  const numericColumns = useStoreState((state) => state.numericColumns)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
 
-  // TO DO (ERIKA) - this is just temporary for scatterplot
-  // in the future we implement this with a complex validation process for specific geometry keys
-  const mapIconAvailability = MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey) &&
-    numericColumns?.some(key => COORD_KEYS.latitude.includes(key)) &&
-    numericColumns?.some(key => COORD_KEYS.longitude.includes(key))
+  const mapIconAvailability = validMapGroupKeys.length > 0
 
   const iconButtonClass = (isCurrent, isDisabled) => clsx('outline-none focus:outline-none border-white border-custom-1 shadow-light-10 hover:shadow-light-20 h-10 w-10 p-1.5 flex items-center justify-center mr-3 rounded-xl transition-all duration-300 ease-in-out', {
     ['text-primary-500 hover:text-primary-600 active:text-primary-700 bg-primary-50 hover:bg-primary-100']: !isCurrent && !isDisabled,

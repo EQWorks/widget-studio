@@ -1,5 +1,7 @@
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 import { requestConfig, requestData } from '../util/fetch'
+import { geoKeyHasCoordinates } from '../util'
+import { MAP_GEO_KEYS } from '../constants/map'
 
 
 const widgetDefaults = {
@@ -57,6 +59,7 @@ const stateDefaults = [
   { key: 'zeroVarianceColumns', defaultValue: [], resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
   { key: 'numericColumns', defaultValue: [], resettable: false },
+  { key: 'validMapGroupKeys', defaultValue: [], resettable: false },
   {
     key: 'ui',
     defaultValue: {
@@ -144,6 +147,18 @@ export default {
     [(state) => state.columns],
     (columns) => (
       columns.filter(({ category }) => category === 'String').map(({ name }) => name)
+    )
+  ),
+
+  validMapGroupKeys: computed(
+    [
+      (state) => state.columns,
+      (state) => state.numericColumns,
+    ],
+    (columns, numericColumns) => (
+      columns.filter(({ name }) =>
+        MAP_GEO_KEYS.includes(name) && geoKeyHasCoordinates(name, numericColumns))
+        .map(({ name }) => name)
     )
   ),
 

@@ -10,21 +10,17 @@ import modes from '../../../constants/modes'
 import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS } from '../../../constants/map'
 
 
-const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
-
 const MapValueControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const numericColumns = useStoreState((state) => state.numericColumns)
-  const stringColumns = useStoreState((state) => state.stringColumns)
   const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
 
-  // restrict selection list for mapGroupKey to only valid map geo keysq
-  const mapGroupByKeys = stringColumns.filter(val => MAP_GEO_KEYS.includes(val) )
   const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
   const mapNumericColumns = numericColumns.filter(col => !Object.values(COORD_KEYS).flat().includes(col))
 
@@ -51,15 +47,15 @@ const MapValueControls = () => {
       <WidgetControlCard
         title='Group by' >
         <CustomSelect
-          data={mapGroupByKeys}
+          data={validMapGroupKeys}
           value={mapGroupKey}
-          onSelect={val => update({ mapGroupKey: val })}
-          onClear={() => update({ mapGroupKey: null })}
+          /** update groupKey with mapGroupKey value to have it available if we switch to
+            a chart widget type */
+          onSelect={val => update({ mapGroupKey: val, groupKey: val })}
+          onClear={() => update({ mapGroupKey: null, groupKey: null })}
           placeholder='Select a column to group by'
         />
       </WidgetControlCard>
-      {/* we don't render controls for map widget until we know which mapGroupKey we use,
-        which determines the mapLayer and, finally, the map layer controls */}
       <WidgetControlCard
         grow
         clearable
