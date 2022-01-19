@@ -10,7 +10,7 @@ export default {
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
       x: config.groupKey,
-      y: config.valueKeys.map(({ key, agg }) => (`${key}_${agg}`)),
+      y: config.valueKeys.map(({ id }) => id),
       ...options,
       ...genericOptions,
     }),
@@ -20,7 +20,7 @@ export default {
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
       x: config.group ? config.groupKey : config.indexKey,
-      y: config.valueKeys.map(({ key, agg }) => config.group ? `${key}_${agg}` : key),
+      y: config.valueKeys.map(({ id }) => id),
       ...options,
       ...genericOptions,
     }),
@@ -30,7 +30,7 @@ export default {
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
       label: config.groupKey,
-      values: config.valueKeys.map(({ key, agg }) => (`${key}_${agg}`)),
+      values: config.valueKeys.map(({ id }) => id),
       ...options,
       ...genericOptions,
       // overrides
@@ -42,7 +42,7 @@ export default {
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
       x: config.group ? config.groupKey : config.indexKey,
-      y: config.valueKeys.map(({ key, agg }) => config.group ? `${key}_${agg}` : key),
+      y: config.valueKeys.map(({ id }) => id),
       ...options,
       ...genericOptions,
     }),

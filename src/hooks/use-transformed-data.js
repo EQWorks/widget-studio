@@ -81,8 +81,8 @@ const useTransformedData = () => {
   const aggregatedData = useMemo(() => (
     group
       ? Object.entries(filteredGroupedData).map(([_groupKey, values]) => (
-        renderableValueKeys.reduce((res, { key, agg }) => {
-          res[`${key}_${agg}`] = dataHasVariance
+        renderableValueKeys.reduce((res, { key, agg, id }) => {
+          res[id] = dataHasVariance
             ? aggFunctions[agg](values[key])
             : values[key][0]
           return res

@@ -141,8 +141,25 @@ export default {
       valueKeys,
       group
     ) => (
-      valueKeys.filter(({ key, agg }) => key && (agg || !group)
-      ))
+      valueKeys
+        .filter(({ key, agg }) => key && (agg || !group)
+        )
+        .map(({ key, agg, ...rest }) => ({
+          key,
+          ...(
+            agg
+              ? {
+                agg,
+                id: `${key}_${agg}`,
+              }
+              : {
+                id: key,
+              }
+          ),
+          ...rest,
+        })
+        )
+    )
   ),
 
   /** checks if all initial states have been filled */
