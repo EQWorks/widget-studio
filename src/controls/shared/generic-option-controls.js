@@ -20,6 +20,7 @@ const GenericOptionControls = () => {
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
   const size = useStoreState((state) => state.genericOptions.size)
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
+  const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
   const baseColor = useStoreState((state) => state.genericOptions.baseColor)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
@@ -74,6 +75,17 @@ const GenericOptionControls = () => {
             data={positions.string}
             value={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(titlePosition))]}
             onSelect={v => nestedUpdate({ genericOptions: { titlePosition: positions.dict[v] } })}
+          />
+        )
+      }
+      {
+        showLegend &&
+        renderItem(
+          'Legend position',
+          <CustomSelect
+            data={positions.string.filter(s => positions.dict[s].every(n => n === 0 || n === 1))} // only include corners
+            value={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(legendPosition))]}
+            onSelect={v => nestedUpdate({ genericOptions: { legendPosition: positions.dict[v] } })}
           />
         )
       }
