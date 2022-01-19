@@ -66,12 +66,16 @@ const FilterControls = () => {
 
   return (
     <>
-      <div className='relative w-full flex items-end'>
-        <div className={clsx('flex flex-col z-50 transition-height ease-in-out duration-300 absolute w-full', {
-          'h-60 overflow-visible': showFilterControls,
-          'h-10 overflow-hidden': !showFilterControls,
+      <div className='top-10 relative w-full flex items-end'>
+        <div className={clsx('flex flex-col z-50 transition-height ease-in-out duration-300 absolute w-full overflow-hidden', {
+          'h-60': showFilterControls,
+          'h-10': !showFilterControls,
         })}>
-          <div className={`border-t bg-white flex-1 w-full transition-filter duration-1000 ease-in-out ${!dataReady ? 'filter blur-sm' : ''}`} >
+          <div className={clsx('border bg-white flex-1 w-full transition-filter duration-1000 ease-in-out', {
+            'filter blur-sm': !dataReady,
+            'h-10': !showFilterControls,
+          }
+          )}>
             <div className='w-full h-full flex flex-col items-center'>
               <CustomButton
                 className='h-10 children:flex-1 border-none w-full flex flex-row items-center'
@@ -87,8 +91,8 @@ const FilterControls = () => {
                 </div>
               </CustomButton>
               <div className={clsx('flex-1 w-full grid grid-cols-3 gap-3 p-3 pt-0 flex items-stretch transition-opacity duration-1000 delay-400 ease-in-out', {
-                'opacity-0': !showFilterControls,
-                'opacity-1': showFilterControls,
+                'hidden': !showFilterControls,
+                'visible': showFilterControls,
               })}>
                 {Object.entries(filters).map(([key, range]) =>
                   <div key={key}>
