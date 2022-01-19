@@ -57,6 +57,7 @@ export default {
       'titlePosition': [0, 1],
       'groupByValue': true,
       'size': 0.6,
+      'baseColor': '#366fe4',
     },
     'dataSource': {
       'type': 'Execution',

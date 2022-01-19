@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { HuePicker } from 'react-color'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/widget-control-card'
@@ -19,9 +20,10 @@ const GenericOptionControls = () => {
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
   const size = useStoreState((state) => state.genericOptions.size)
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
+  const baseColor = useStoreState((state) => state.genericOptions.baseColor)
 
   const renderItem = (title, Component) => (
-    <div className='flex items-center text-sm text-secondary-500'>
+    <div className='my-1 flex items-center text-sm text-secondary-500'>
       <div className='flex-1 flex items-center'>
         {Component}
       </div>
@@ -35,12 +37,14 @@ const GenericOptionControls = () => {
     <WidgetControlCard title='Options'>
       {
         type !== 'pie' &&
-        <CustomToggle
-          value={subPlots}
-          label='Subplots'
-          onChange={(val) => nestedUpdate({ genericOptions: { subPlots: val } })}
-          disabled={valueKeys.length <= 1}
-        />
+        renderItem(
+          'Subplots',
+          <CustomToggle
+            value={subPlots}
+            onChange={(val) => nestedUpdate({ genericOptions: { subPlots: val } })}
+            disabled={valueKeys.length <= 1}
+          />
+        )
       }
       {
         renderItem(
@@ -60,6 +64,16 @@ const GenericOptionControls = () => {
             data={positions.string}
             value={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(titlePosition))]}
             onSelect={v => nestedUpdate({ genericOptions: { titlePosition: positions.dict[v] } })}
+          />
+        )
+      }
+      {
+        renderItem(
+          'Base color',
+          <HuePicker
+            width='100%'
+            color={baseColor}
+            onChange={({ hex }) => nestedUpdate({ genericOptions: { baseColor: hex } })}
           />
         )
       }
