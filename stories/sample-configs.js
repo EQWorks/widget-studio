@@ -49,10 +49,10 @@ export default {
     'indexKey': null,
     'options': {
       'showPercentage': true,
-      'showLegend': true,
       'donut': false,
     },
     'genericOptions': {
+      'showLegend': true,
       'subPlots': true,
       'titlePosition': [0, 1],
       'groupByValue': true,
@@ -95,6 +95,7 @@ export default {
       'showTicks': true,
     },
     'genericOptions': {
+      'showLegend': true,
       'subPlots': false,
     },
   },
@@ -129,6 +130,7 @@ export default {
       'showTicks': true,
     },
     'genericOptions': {
+      'showLegend': true,
       'subPlots': true,
     },
   },
@@ -156,6 +158,7 @@ export default {
       'showTicks': true,
     },
     'genericOptions': {
+      'showLegend': true,
       'subPlots': false,
     },
   },
@@ -189,6 +192,7 @@ export default {
       'showTicks': true,
     },
     'genericOptions': {
+      'showLegend': true,
       'subPlots': false,
     },
   },

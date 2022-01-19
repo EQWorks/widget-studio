@@ -17,7 +17,6 @@ const widgetDefaults = {
   pie: {
     donut: false,
     showPercentage: true,
-    showLegend: true,
   },
   scatter: {
     showTicks: true,
@@ -40,6 +39,7 @@ const stateDefaults = [
   {
     key: 'genericOptions', defaultValue: {
       groupByValue: false,
+      showLegend: true,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],

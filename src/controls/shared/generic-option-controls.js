@@ -21,6 +21,7 @@ const GenericOptionControls = () => {
   const size = useStoreState((state) => state.genericOptions.size)
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
   const baseColor = useStoreState((state) => state.genericOptions.baseColor)
+  const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
   const renderItem = (title, Component) => (
     <div className='my-1 flex items-center text-sm text-secondary-500'>
@@ -35,6 +36,15 @@ const GenericOptionControls = () => {
 
   return (
     <WidgetControlCard title='Options'>
+      {
+        renderItem(
+          'Show legend',
+          <CustomToggle
+            value={showLegend}
+            onChange={(val) => nestedUpdate({ genericOptions: { showLegend: val } })}
+          />
+        )
+      }
       {
         type !== 'pie' &&
         renderItem(
