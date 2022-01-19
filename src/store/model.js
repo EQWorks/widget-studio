@@ -1,5 +1,6 @@
 import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
+import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
 
 
@@ -101,6 +102,7 @@ export default {
       (state) => state.genericOptions,
       (state) => state.options,
       (state) => state.isReady,
+      (state) => state.formattedColumnNames,
       (state) => state.dataSource,
     ],
     (
@@ -114,6 +116,7 @@ export default {
       genericOptions,
       options,
       isReady,
+      formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
     ) => (
       isReady
@@ -125,6 +128,8 @@ export default {
           group,
           groupKey,
           indexKey,
+          ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
+          ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
           options,
           genericOptions,
           dataSource: { type: dataSourceType, id: dataSourceID },
@@ -136,29 +141,34 @@ export default {
     [
       (state) => state.valueKeys,
       (state) => state.group,
+      (state) => state.formattedColumnNames,
     ],
     (
       valueKeys,
-      group
+      group,
+      formattedColumnNames,
     ) => (
       valueKeys
         .filter(({ key, agg }) => key && (agg || !group)
         )
         .map(({ key, agg, ...rest }) => ({
           key,
-          ...(
-            agg
-              ? {
-                agg,
-                id: `${key}_${agg}`,
-              }
-              : {
-                id: key,
-              }
-          ),
+          title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}` || key,
+          ...(agg && { agg }),
           ...rest,
         })
         )
+    )
+  ),
+
+  formattedColumnNames: computed(
+    [
+      (state) => state.columns,
+    ],
+    (
+      columns
+    ) => (
+      Object.fromEntries(columns.map(({ name }) => [name, cleanUp(name)]))
     )
   ),
 

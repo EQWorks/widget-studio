@@ -17,6 +17,7 @@ const useTransformedData = () => {
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
 
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
@@ -80,23 +81,25 @@ const useTransformedData = () => {
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
-      ? Object.entries(filteredGroupedData).map(([_groupKey, values]) => (
-        renderableValueKeys.reduce((res, { key, agg, id }) => {
-          res[id] = dataHasVariance
+      ? Object.entries(filteredGroupedData).map(([group, values]) => (
+        renderableValueKeys.reduce((res, { key, agg, title }) => {
+          res[title] = dataHasVariance
             ? aggFunctions[agg](values[key])
             : values[key][0]
           return res
-        }, { [groupKey]: _groupKey })
+        }, { [formattedColumnNames[groupKey]]: group })
       ))
       : null
-  ), [dataHasVariance, filteredGroupedData, group, groupKey, renderableValueKeys])
+  ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, groupKey, renderableValueKeys])
 
-  // simply sort the data if grouping is not enabled
+  // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => (
     !group
-      ? truncatedData.sort((a, b) => a[indexKey] - b[indexKey])
+      ? truncatedData.map(d =>
+        Object.fromEntries(Object.entries(d).map(([k, v]) => [formattedColumnNames[k], v]))
+      ).sort((a, b) => a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
       : null
-  ), [group, indexKey, truncatedData])
+  ), [formattedColumnNames, group, indexKey, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
   const finalData = useMemo(() => (
