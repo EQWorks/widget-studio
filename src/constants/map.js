@@ -16,17 +16,25 @@ export const MAP_LAYER_VIS = {
   geojson: [MAP_VIS.fill, MAP_VIS.elevation],
 }
 
+export const GEO_KEY_TYPES = {
+  fsa: ['geo_ca_fsa', 'geo_cohort_fsa', 'household_fsa'],
+  postalcode: ['geo_ca_postalcode', 'geo_cohort_postalcode', 'household_postalcode'],
+  da: ['geo_ca_da'],
+  ct: ['geo_ca_ct'],
+}
+
 export const MAP_LAYER_GEO_KEYS = {
   scatterplot: [
     'poi',
     'poi_id',
     'locus_poi_id',
+    'geocohort_id',
     'source_poi',
     'source_poi_id',
     'target_poi',
     'target_poi_id',
   ],
-  geojson: ['geo_ca_fsa', 'geo_ca_postalcode', 'geo_ca_da', 'geo_ca_ct'],
+  geojson: Object.values(GEO_KEY_TYPES).flat(),
 }
 
 export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
@@ -39,8 +47,9 @@ export const COORD_KEYS = {
     'poi_latitude',
     'source_lat',
     'source_latitude',
-    'source_lon',
-    'source_longitude',
+    'source_lat',
+    'source_latitude',
+    'locus_poi_lat',
   ],
   longitude: [
     'lon',
@@ -52,6 +61,7 @@ export const COORD_KEYS = {
     'source_longitude',
     'target_lon',
     'target_longitude',
+    'locus_poi_lon',
   ],
 }
 
