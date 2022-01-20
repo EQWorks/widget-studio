@@ -22,6 +22,7 @@ const config = {
       gridTemplateColumns: {
         'min-min': 'min-content min-content',
         'min-1fr': 'min-content 1fr',
+        '1fr-min': '1fr min-content',
       },
       borderWidth: {
         'custom-1': '0.3rem',
