@@ -94,27 +94,33 @@ const useTransformedData = () => {
       : null
   ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, finalGroupKey, renderableValueKeys])
 
-  const mapEnrichedData = useMemo(() => (
-    type === 'map'
-      ? aggregatedData.map((d) => {
-        //---TODO - Erika: complete this to include coordinates for xwi report; this is only for scatterplot layer
-        // add coordinates for map widget data
-        const lat = numericColumns.find(key => COORD_KEYS.latitude.includes(key))
-        const lon = numericColumns.find(key => COORD_KEYS.longitude.includes(key))
-        if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
-          if (d[lat] && d[lon]) {
-            return d
+  const mapEnrichedData = useMemo(() => {
+    if (type === 'map') {
+      //---TODO - Erika: complete this to include coordinates for xwi report; this is only for scatterplot layer
+      // add coordinates for map widget data
+      if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+        return aggregatedData.map((d) => {
+          const lat = numericColumns.find(key => COORD_KEYS.latitude.includes(key))
+          const lon = numericColumns.find(key => COORD_KEYS.longitude.includes(key))
+          if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+            if (d[lat] && d[lon]) {
+              return d
+            }
+            const { [lat]: [_lat], [lon]: [_lon] } = groupedData[d[mapGroupKey]]
+            return {
+              ...d,
+              lat: _lat,
+              lon: _lon,
+            }
           }
-          const { [lat]: [_lat], [lon]: [_lon] } = groupedData[d[mapGroupKey]]
-          return {
-            ...d,
-            lat: _lat,
-            lon: _lon,
-          }
-        }
-      })
-      : null
-  ), [type, aggregatedData, numericColumns, mapGroupKey, groupedData])
+        })
+      }
+      if (MAP_LAYER_GEO_KEYS.geojson.includes(mapGroupKey)) {
+        return aggregatedData
+      }
+    }
+    return null
+  }, [type, aggregatedData, numericColumns, mapGroupKey, groupedData])
 
   // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => (
