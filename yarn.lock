@@ -2174,27 +2174,6 @@
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
-"@eqworks/lumen-ui@^1.1.1":
-  version "1.1.2"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-ui/1.1.2/6e96ecc419a809db31cb4e16c61f5f28cbd710a7e60007332ddad3e6f2c76389#e184faa90c4eca7fe8f1c3c2df574a72ebb36bae"
-  integrity sha512-J4m7HNP2T0UEh1ESsRAgvyNFoyKcsADQoj6c6qhGgSPps4Gqs7HcgE5UUKq8BzrY0KOhdq8CDrXnnb3SZ83pNw==
-  dependencies:
-    clsx "^1.1.1"
-    prop-types "^15.7.2"
-
-"@eqworks/react-labs@^1.12.0":
-  version "1.12.0"
-  resolved "https://npm.pkg.github.com/download/@eqworks/react-labs/1.12.0/895c4ed0bd89c744ce0df77d1676125ebb9eef67c9beff45d9ed77b0b55137c3#fc19a559e33f4c48c99e1fc7102bdba596d3e24f"
-  integrity sha512-o9MJ93PIn2tApwYP7K2WSZSbiAtB3og3wgoUJk+2hZ8yRqlE9aFHO8amDuQ+IVcJqXGCxRKkke52St+YqmkRjA==
-  dependencies:
-    axios "^0.20.0"
-    clsx "^1.1.1"
-    prop-types "^15.7.2"
-    react-slick "^0.26.1"
-    react-table "^7.6.0"
-    slick-carousel "^1.8.1"
-    use-cached "^2.0.0"
-
 "@eqworks/react-labs@^1.12.1-alpha.5":
   version "1.12.1-alpha.5"
   resolved "https://npm.pkg.github.com/download/@eqworks/react-labs/1.12.1-alpha.5/b1db590dc3bcb6847c52b64b27f17abac254206973833fda97f47f97e7acb80e#f154e5f73d36f414f943420685ec2c574ba9ad94"
@@ -2208,10 +2187,10 @@
     slick-carousel "^1.8.1"
     use-cached "^2.0.0"
 
-"@eqworks/react-maps@0.7.5-alpha.4":
-  version "0.7.5-alpha.4"
-  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.7.5-alpha.4/e4911daeb9de839e81b462a95e1972edeabb339cc3d2ea9c1287bc93e69b862e#674dfd80aca1e5ad40f7c34ea88bebfc88ceb586"
-  integrity sha512-Kgu4AesYEYTgJhuexBy/sXtQcxOILzcrbJa9RVUlwW0C61wCgv9A9sqScqUkq96XxDwljB1gIB6jNrIbRO3eHg==
+"@eqworks/react-maps@^0.8.0-alpha.7":
+  version "0.8.0-alpha.7"
+  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.8.0-alpha.7/3dc0d320057689066847bdef451b2b9dacaf4be3b73efa1c4cb1ce831077bae6#a5dda789053443270fcc52b3ae2995cdeaf6d97c"
+  integrity sha512-9RlPZSvQDl9LW0WVcv9sPZLGEW+EMFJYUr1GfP8tDdqxnZiPs4YUlu1ebEKRyEna+rxVHWU9cdjyFEaPtvTDMA==
   dependencies:
     "@deck.gl/aggregation-layers" "8.4.6"
     "@deck.gl/core" "8.4.6"
@@ -2219,8 +2198,6 @@
     "@deck.gl/layers" "8.4.6"
     "@deck.gl/mesh-layers" "8.4.6"
     "@deck.gl/react" "8.4.6"
-    "@eqworks/lumen-ui" "^1.1.1"
-    "@eqworks/react-labs" "^1.12.0"
     "@loaders.gl/core" "^3.0.12"
     "@luma.gl/constants" "^8.4.3"
     "@luma.gl/core" "^8.4.3"
@@ -2242,6 +2219,7 @@
     react-map-gl-geocoder "^2.2.0"
     react-query "^2.12.1"
     supercluster "^7.1.4"
+    use-debounce "^7.0.1"
 
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
@@ -2364,13 +2342,13 @@
     "@loaders.gl/loader-utils" "2.3.13"
 
 "@loaders.gl/core@^3.0.12":
-  version "3.0.14"
-  resolved "https://registry.yarnpkg.com/@loaders.gl/core/-/core-3.0.14.tgz#56d72034412fed5f1bf9788e117379e1b1836427"
-  integrity sha512-fMA123MZDoMV3wWMqCEc05uYZnzPLsXxIg/3AdHCCHbTQXoVPhWktzplbLG20tknPoCHgLy7/TD5ztejNrnxyA==
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/core/-/core-3.1.6.tgz#1a7de00d584a58c0e76c55e9a395a2d4e41ae9fe"
+  integrity sha512-/UA+xrgJKDW18zYU8wJ4QQLtfiC7HPU9zXZZUjsrTKE39v/Tcq8t0O3dSr2B9I8n4cy5SpgTC3gvBGJQFKe/mw==
   dependencies:
     "@babel/runtime" "^7.3.1"
-    "@loaders.gl/loader-utils" "3.0.14"
-    "@loaders.gl/worker-utils" "3.0.14"
+    "@loaders.gl/loader-utils" "3.1.6"
+    "@loaders.gl/worker-utils" "3.1.6"
     probe.gl "^3.4.0"
 
 "@loaders.gl/draco@2.3.13":
@@ -2416,14 +2394,14 @@
     "@babel/runtime" "^7.3.1"
     "@probe.gl/stats" "^3.3.0"
 
-"@loaders.gl/loader-utils@3.0.14":
-  version "3.0.14"
-  resolved "https://registry.yarnpkg.com/@loaders.gl/loader-utils/-/loader-utils-3.0.14.tgz#1bec4bcf10fa6bf80e86c5da272626a2f261d473"
-  integrity sha512-M29ULeHDdlVavyefcPlVw/6xdCYMZ7qKVSGgThJWZfgg9fGYpqJctBC2FogygSzRzanLWpDU65JLjx9QT5Y/7w==
+"@loaders.gl/loader-utils@3.1.6":
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/loader-utils/-/loader-utils-3.1.6.tgz#1f4d958e460d293284019875175a029663fb7da4"
+  integrity sha512-L9QqXjPSCs5SwUy70XIsAmR7ec10bST1nq7kU0bwIt892iQoIPI2iIHy03dsA6/RFkMI28VPA2St3yXbMeuSPw==
   dependencies:
     "@babel/runtime" "^7.3.1"
-    "@loaders.gl/worker-utils" "3.0.14"
-    "@probe.gl/stats" "^3.4.0"
+    "@loaders.gl/worker-utils" "3.1.6"
+    "@probe.gl/stats" "^3.5.0"
 
 "@loaders.gl/math@2.3.13":
   version "2.3.13"
@@ -2468,10 +2446,10 @@
     "@math.gl/web-mercator" "^3.3.0"
     "@probe.gl/stats" "^3.3.0"
 
-"@loaders.gl/worker-utils@3.0.14":
-  version "3.0.14"
-  resolved "https://registry.yarnpkg.com/@loaders.gl/worker-utils/-/worker-utils-3.0.14.tgz#3b1425d061e8220cb6d7acdc5a05e69dd24ecbcf"
-  integrity sha512-SDwB0WLE+NQXx6WAujUoXKtOiT7I0xlpEjdtaV+GzAny8wO64yUA7/6P+B6ovMT5wXqPGMwexdbtoC9zHVHQFA==
+"@loaders.gl/worker-utils@3.1.6":
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/worker-utils/-/worker-utils-3.1.6.tgz#91e9e6978973f8651b3acb142fe34a899fb18194"
+  integrity sha512-lfi+b53fhNX0sHqeGiw3WcY1b/RgLFtIrKsovKtAU08/6xQe+QlYJNET8V63HZ1osczIDDKq8eOEZAxDxEmRCA==
   dependencies:
     "@babel/runtime" "^7.3.1"
 
@@ -4487,9 +4465,9 @@
     "@types/node" "*"
 
 "@types/hammerjs@^2.0.36":
-  version "2.0.40"
-  resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.40.tgz#ded0240b6ea1ad7afc1e60374c49087aaea5dbd8"
-  integrity sha512-VbjwR1fhsn2h2KXAY4oy1fm7dCxaKy0D+deTb8Ilc3Eo3rc5+5eA4rfYmZaHgNJKxVyI0f6WIXzO2zLkVmQPHA==
+  version "2.0.41"
+  resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.41.tgz#f6ecf57d1b12d2befcce00e928a6a097c22980aa"
+  integrity sha512-ewXv/ceBaJprikMcxCmWU1FKyMAQ2X7a9Gtmzw8fcg2kIePI1crERDM818W+XYrxqdBBOdlf2rm137bU+BltCA==
 
 "@types/hast@^2.0.0":
   version "2.3.4"
@@ -9074,9 +9052,9 @@ goober@^2.0.39:
   integrity sha512-kwjegMT5018zWydhOQlQneCgCtrKJaPsru7TaBWmTYV0nsMeUrM6L6O8JmNYb9UbPMgWcmtf+9p4Y3oJabIH1A==
 
 goober@^2.0.41:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/goober/-/goober-2.1.1.tgz#2328a6dae015c3cd30fc55a70090037a244ad2f6"
-  integrity sha512-TkGCqHxE4g5DtdpwxFCi53bXRtvw0BoSgCihVSIOioe9kfkqin5wXG8BQKykN0tjzmxZJ81qU2KWinZf5qKVlw==
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/goober/-/goober-2.1.7.tgz#5b1e742a9c7014ba8586a49f2df18d539410e679"
+  integrity sha512-aCR8u3A/tTgSrZAHfJObhYC0xgdKoYm4GvE/UFmxmzgvj3TSF+3oFYWtmJ459WBewjOIoEsoOG81sDs1rn+W5w==
 
 goober@^2.0.5:
   version "2.1.0"
@@ -13256,9 +13234,9 @@ react-draggable@^4.0.3, react-draggable@^4.4.3:
     prop-types "^15.6.0"
 
 react-dropzone@^11.0.2:
-  version "11.4.2"
-  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-11.4.2.tgz#1eb99e9def4cc7520f4f58e85c853ce52c483d56"
-  integrity sha512-ocYzYn7Qgp0tFc1gQtUTOaHHSzVTwhWHxxY+r7cj2jJTPfMTZB5GWSJHdIVoxsl+EQENpjJ/6Zvcw0BqKZQ+Eg==
+  version "11.5.1"
+  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-11.5.1.tgz#f4d664437bf8af6acfccbf5040a9890c6780a49f"
+  integrity sha512-eNhttdq4ZDe3eKbXAe54Opt+sbtqmNK5NWTHf/l5d+1TdZqShJ8gMjBrya00qx5zkI//TYxRhu1d9pemTgaWwg==
   dependencies:
     attr-accept "^2.2.1"
     file-selector "^0.2.2"
@@ -15487,6 +15465,11 @@ use-composed-ref@^1.0.0:
   integrity sha512-my1lNHGWsSDAhhVAT4MKs6IjBUtG6ZG11uUqexPH9PptiIZDQOzaF4f5tEbJ2+7qvNbtXNBbU3SfmN+fXlWDhg==
   dependencies:
     ts-essentials "^2.0.3"
+
+use-debounce@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-7.0.1.tgz#380e6191cc13ad29f8e2149a12b5c37cc2891190"
+  integrity sha512-fOrzIw2wstbAJuv8PC9Vg4XgwyTLEOdq4y/Z3IhVl8DAE4svRcgyEUvrEXu+BMNgMoc3YND6qLT61kkgEKXh7Q==
 
 use-isomorphic-layout-effect@^1.0.0:
   version "1.1.1"
