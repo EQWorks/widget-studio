@@ -49,10 +49,21 @@ const MapValueControls = () => {
         <CustomSelect
           data={validMapGroupKeys}
           value={mapGroupKey}
-          /** update groupKey with mapGroupKey value to have it available if we switch to
-            a chart widget type */
-          onSelect={val => update({ mapGroupKey: val, groupKey: val })}
-          onClear={() => update({ mapGroupKey: null, groupKey: null })}
+          onSelect={val => {
+            /* update groupKey with mapGroupKey value to have it available if we switch to
+             * a chart widget type
+             */
+            update({ mapGroupKey: val, groupKey: val })
+            const newLayer = Object.keys(MAP_LAYER_VIS)
+              .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
+            /* reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
+             * as different layer requires different visualization types
+             */
+            if (newLayer !== mapLayer) {
+              update({ mapValueKeys: [] })
+            }
+          }}
+          onClear={() => update({ mapGroupKey: null, groupKey: null, mapValueKeys: [] })}
           placeholder='Select a column to group by'
         />
       </WidgetControlCard>
