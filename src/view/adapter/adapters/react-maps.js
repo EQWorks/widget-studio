@@ -14,6 +14,7 @@ import {
   MAP_LAYER_GEO_KEYS,
   VIS_OPTIONS,
   OPACITY,
+  PITCH,
 } from '../../../constants/map'
 
 
@@ -40,11 +41,14 @@ const Map = ({ width, height, ...props }) => {
 
   const classes = useStyles({ width: finalWidth, height: finalHeight, margin: finalMargin })
 
-  return (
-    <div className={classes.mapWrapper}>
-      <LocusMap { ...props } />
-    </div>
-  )
+  if (finalWidth > 0 && finalHeight > 0) {
+    return (
+      <div className={classes.mapWrapper}>
+        <LocusMap { ...props } />
+      </div>
+    )
+  }
+  return null
 }
 
 Map.propTypes = {
@@ -70,22 +74,38 @@ export default {
     const getTooltipKey = (tooltipKey) =>
       dataKeys.find(key => MAP_LAYER_GEO_KEYS[mapLayer].includes(key) && key.includes(tooltipKey))
 
-    const name = getTooltipKey('name')
-    const id = getTooltipKey('id')
-
+    let name = ''
+    let id = ''
     let geometry = {}
     if (mapLayer === MAP_LAYERS.scatterplot) {
       const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
       const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
       geometry = { longitude, latitude }
+      name = getTooltipKey('name') || getTooltipKey('id')
+      if (name) {
+        id = getTooltipKey('id')
+      }
     }
+    if (mapLayer === MAP_LAYERS.geojson) {
+      geometry = { geoKey: mapGroupKey }
+      name = mapGroupKey
+    }
+
+    // TO DO: implement logic for when we want to use geojson layer to display POIs in editor mode
+    const dataSource = mapLayer === MAP_LAYERS.geojson ?
+      {
+        tileGeom: `https://mapsource.locus.place/maps/${mapGroupKey.slice(7)}/{z}/{x}/{y}.vector.pbf?`,
+        tileData: data,
+      } :
+      data
 
     return ({
       // create a good id
-      dataConfig: [{ id: 'testWIReport', data }],
+      dataConfig: [{ id: 'testWIReport', data: dataSource }],
       layerConfig: [{
         layer: mapLayer,
         dataId: 'testWIReport',
+        dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
         geometry,
         visualizations: Object.fromEntries(valueKeys.map(({ key, agg, mapVis }) =>
           [
@@ -94,6 +114,7 @@ export default {
               value: {
                 field: `${key}_${agg}`,
               },
+              //----TO DO - ERIKA - add to state for editor
               valueOptions: VIS_OPTIONS.values[mapVis],
               dataScale: VIS_OPTIONS.scale,
             },
@@ -118,6 +139,12 @@ export default {
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: options.showLegend,
         showMapTooltip: options.showTooltip,
+        initViewState: {
+          latitude: 44.41,
+          longitude: -79.23,
+          zoom: 7,
+        },
+        pitch: valueKeys.map(({ mapVis }) => mapVis).includes('elevation') ? PITCH.elevation : 0,
       },
     })
   },
