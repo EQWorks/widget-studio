@@ -111,13 +111,15 @@ const ValueControls = ({ groupingOptional }) => {
           value={group ? groupKey : indexKey}
           onSelect={val => {
             update(group ? { groupKey: val } : { indexKey: val })
-            {/** update mapGroupKey with groupKey value if it is a valid geo key so we have it
-              available if we switch to map widget type */}
+            {/* update mapGroupKey with groupKey value if it is a valid geo key so we have it available
+              * if we switch to a map widget type;
+              * reset mapValueKeys in case mapGroupKey value requires a new map layer
+              */}
             if (group && validMapGroupKeys.includes(val)) {
-              update({ mapGroupKey: val })
+              update({ mapGroupKey: val, mapValueKeys: [] })
             }
           }}
-          onClear={() => update({ groupKey: null, indexKey: null, mapGroupKey: null })}
+          onClear={() => update({ groupKey: null, indexKey: null, mapGroupKey: null, mapValueKeys: [] })}
           placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
         />
         {
