@@ -7,4 +7,5 @@ export const getLongestString = arr => arr.reduce((a, b) => (a.length > b.length
 export const geoKeyHasCoordinates = (geoKey, numericColumns) =>
   (MAP_LAYER_GEO_KEYS.scatterplot.includes(geoKey) &&
     numericColumns?.some(key => COORD_KEYS.latitude.includes(key)) &&
-    numericColumns?.some(key => COORD_KEYS.longitude.includes(key)))
+    numericColumns?.some(key => COORD_KEYS.longitude.includes(key))) ||
+  (MAP_LAYER_GEO_KEYS.geojson.includes(geoKey))
