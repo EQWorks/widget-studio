@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createElement } from 'react'
+import React, { useMemo, useState, useEffect, createElement } from 'react'
 import PropTypes from 'prop-types'
 
 import { Icons } from '@eqworks/lumen-labs'
@@ -23,17 +23,22 @@ const CustomAccordion = ({ expandedWidth, collapsedWidth, speed, disabled, title
 
   const transition = `ease-in-out duration-${speed}`
 
+  const width = useMemo(() => {
+    if (!open) {
+      return collapsedWidth || 'auto'
+    }
+    return expandedWidth && xPadding
+      ? `clamp(20rem, calc(${expandedWidth}px + 2*${xPadding}), 30rem)`
+      : 'auto'
+  }, [collapsedWidth, expandedWidth, open])
+
   return (
     <div
       ref={ref}
       className={`shadow-blue-40 relative whitespace-nowrap relative z-20 border-l-2 border-neutral-100 transition-width ${transition} flex justify-end`}
       style={{
         height: fullyOpen ? 'auto' : height,
-        width: open
-          ? expandedWidth && xPadding
-            ? `clamp(20rem, calc(${expandedWidth}px + 2*${xPadding}), 30rem)`
-            : 'auto'
-          : collapsedWidth || 'auto',
+        width,
       }}
     >
       {
