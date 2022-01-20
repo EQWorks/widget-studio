@@ -13,6 +13,7 @@ import {
   MAP_LAYER_VIS,
   MAP_LAYER_GEO_KEYS,
   VIS_OPTIONS,
+  GEO_KEY_TYPES,
   OPACITY,
   PITCH,
 } from '../../../constants/map'
@@ -77,6 +78,7 @@ export default {
     let name = ''
     let id = ''
     let geometry = {}
+    let mapGroupKeyType = ''
     if (mapLayer === MAP_LAYERS.scatterplot) {
       const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
       const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
@@ -89,12 +91,13 @@ export default {
     if (mapLayer === MAP_LAYERS.geojson) {
       geometry = { geoKey: mapGroupKey }
       name = mapGroupKey
+      mapGroupKeyType = Object.keys(GEO_KEY_TYPES).find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
     }
 
     // TO DO: implement logic for when we want to use geojson layer to display POIs in editor mode
     const dataSource = mapLayer === MAP_LAYERS.geojson ?
       {
-        tileGeom: `https://mapsource.locus.place/maps/${mapGroupKey.slice(7)}/{z}/{x}/{y}.vector.pbf?`,
+        tileGeom: `https://mapsource.locus.place/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`,
         tileData: data,
       } :
       data
