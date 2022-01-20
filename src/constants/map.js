@@ -60,8 +60,10 @@ export const VIS_OPTIONS = {
   values: {
     fill: [[214, 232, 253], [39, 85, 196]],
     radius: [5, 15],
+    elevation: [1, 1000],
   },
   scale: 'linear',
 }
 
 export const OPACITY = 0.3
+export const PITCH = { elevation: 45 }
