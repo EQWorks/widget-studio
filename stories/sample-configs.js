@@ -300,24 +300,24 @@ export default {
   'map-2': {
     'title': 'My example map widget - polygon geojson layer',
     'type': 'map',
-    'filters': { 'visits': [0, 100] },
+    'filters': { 'spend': [0, 100] },
     'mapValueKeys': [
       {
-        'key': 'visits',
+        'key': 'impressions',
         'agg': 'sum',
         'mapVis': 'elevation',
       },
       {
-        'key': 'unique_visitors',
+        'key': 'spend',
         'agg': 'sum',
         'mapVis': 'fill',
       },
     ],
     'group': true,
-    'mapGroupKey': 'geo_ca_fsa',
+    'mapGroupKey': 'geo_cohort_fsa',
     'dataSource': {
       'type': 'Execution',
-      'id': '913',
+      'id': '1389',
     },
     'options': {
       'showTooltip': true,
