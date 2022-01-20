@@ -271,7 +271,7 @@ export default {
     },
   },
   'map-1': {
-    'title': 'My example map widget',
+    'title': 'My example map widget - scatterplot layer',
     'type': 'map',
     'filters': { 'visits': [0, 100] },
     'mapValueKeys': [
@@ -288,6 +288,33 @@ export default {
     ],
     'group': true,
     'mapGroupKey': 'poi_id',
+    'dataSource': {
+      'type': 'Execution',
+      'id': '913',
+    },
+    'options': {
+      'showTooltip': true,
+      'showLegend': true,
+    },
+  },
+  'map-2': {
+    'title': 'My example map widget - polygon geojson layer',
+    'type': 'map',
+    'filters': { 'visits': [0, 100] },
+    'mapValueKeys': [
+      {
+        'key': 'visits',
+        'agg': 'sum',
+        'mapVis': 'elevation',
+      },
+      {
+        'key': 'unique_visitors',
+        'agg': 'sum',
+        'mapVis': 'fill',
+      },
+    ],
+    'group': true,
+    'mapGroupKey': 'geo_ca_fsa',
     'dataSource': {
       'type': 'Execution',
       'id': '913',
