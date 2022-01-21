@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 
 import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
-import { COORD_KEYS, MAP_LAYER_GEO_KEYS } from '../constants/map'
+import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
 
 const useTransformedData = () => {
@@ -21,6 +21,8 @@ const useTransformedData = () => {
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
+  const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
 
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
@@ -40,10 +42,16 @@ const useTransformedData = () => {
   const groupedData = useMemo(() => (
     group
       ? truncatedData.reduce((res, r) => {
-        const group = r[finalGroupKey]
+        let newGroupKey = finalGroupKey
+        if (groupFSAByPC) {
+          // use the key for postalcode to aggregate by FSA
+          newGroupKey = validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
+        }
+        // FSAs are the first 3 letters of a postal code
+        const group = groupFSAByPC ? r[newGroupKey].slice(0,3) : r[newGroupKey]
         res[group] = res[group] || {}
         Object.entries(r).forEach(([k, v]) => {
-          if (k !== finalGroupKey) {
+          if (k !== newGroupKey) {
             if (res[group][k]) {
               res[group][k].push(v)
             } else {
@@ -54,18 +62,20 @@ const useTransformedData = () => {
         return res
       }, {})
       : null
-  ), [group, finalGroupKey, truncatedData])
+  ), [group, finalGroupKey, truncatedData, groupFSAByPC, validMapGroupKeys])
 
   // compute list of columns that have 0 variance
   const zeroVarianceColumns = useMemo(() => (
     group
       ? columns.map(({ name }) => name).filter(c => (
-        c !== finalGroupKey &&
+        // don't include the postalcode in the case it is used as the key for values for aggregation by FSA
+        c !== finalGroupKey && !(groupFSAByPC &&
+          c === validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))) &&
         Object.values(groupedData).every(d => {
           return d[c].length === 1
         })))
       : []
-  ), [columns, group, finalGroupKey, groupedData])
+  ), [columns, group, finalGroupKey, groupedData, groupFSAByPC, validMapGroupKeys])
 
   // relay this to global state
   useEffect(() => {
