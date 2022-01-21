@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 
 import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
-import { COORD_KEYS, MAP_LAYER_GEO_KEYS } from '../constants/map'
+import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
 
 const useTransformedData = () => {
@@ -22,6 +22,9 @@ const useTransformedData = () => {
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
+  const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
+
   const finalGroupKey = useMemo(() => type === 'map' ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
   // truncate the data when the filters change
@@ -40,10 +43,16 @@ const useTransformedData = () => {
   const groupedData = useMemo(() => (
     group
       ? truncatedData.reduce((res, r) => {
-        const group = r[finalGroupKey]
+        let newGroupKey = finalGroupKey
+        if (groupFSAByPC) {
+          // use the key for postalcode to aggregate by FSA
+          newGroupKey = validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
+        }
+        // FSAs are the first 3 letters of a postal code
+        const group = groupFSAByPC ? r[newGroupKey].slice(0,3) : r[newGroupKey]
         res[group] = res[group] || {}
         Object.entries(r).forEach(([k, v]) => {
-          if (k !== finalGroupKey) {
+          if (k !== newGroupKey) {
             if (res[group][k]) {
               res[group][k].push(v)
             } else {
@@ -54,7 +63,7 @@ const useTransformedData = () => {
         return res
       }, {})
       : null
-  ), [group, finalGroupKey, truncatedData])
+  ), [group, finalGroupKey, truncatedData, groupFSAByPC, validMapGroupKeys])
 
   // memoize names of groups produced by the current grouping
   useEffect(() => {
@@ -64,6 +73,20 @@ const useTransformedData = () => {
   }, [groupedData, update])
 
   // determine whether the configured group key has produced data with any variance, relay to global state
+  // compute list of columns that have 0 variance
+  // const zeroVarianceColumns = useMemo(() => (
+  //   group
+  //     ? columns.map(({ name }) => name).filter(c => (
+  //       // don't include the postalcode in the case it is used as the key for values for aggregation by FSA
+  //       c !== finalGroupKey && !(groupFSAByPC &&
+  //         c === validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))) &&
+  //       Object.values(groupedData).every(d => {
+  //         return d[c].length === 1
+  //       })))
+  //     : []
+  // ), [columns, group, finalGroupKey, groupedData, groupFSAByPC, validMapGroupKeys])
+
+  // relay this to global state
   useEffect(() => {
     if (groupedData) {
       const data = Object.values(groupedData)
@@ -74,14 +97,14 @@ const useTransformedData = () => {
     }
   }, [update, groupedData])
 
-  // if a filter on the groupKey exists, retain only the desired groups
+  // if a filter on the finalGroupKey exists, retain only the desired groups
   const filteredGroupedData = useMemo(() => (
     group
-      ? filters[groupKey]?.length
-        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => filters[groupKey].includes(k)))
+      ? filters[finalGroupKey]?.length
+        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => filters[finalGroupKey].includes(k)))
         : groupedData
       : null
-  ), [filters, group, groupKey, groupedData])
+  ), [filters, group, finalGroupKey, groupedData])
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
