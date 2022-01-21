@@ -1,7 +1,7 @@
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
-import { MAP_GEO_KEYS } from '../constants/map'
+import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
 
 const widgetDefaults = {
@@ -60,6 +60,8 @@ const stateDefaults = [
   { key: 'stringColumns', defaultValue: [], resettable: false },
   { key: 'numericColumns', defaultValue: [], resettable: false },
   { key: 'validMapGroupKeys', defaultValue: [], resettable: false },
+  // determines to use postal code geo key to aggregate by FSA
+  { key: 'groupFSAbyPC', defaultValue: false, resettable: false },
   {
     key: 'ui',
     defaultValue: {
@@ -155,11 +157,30 @@ export default {
       (state) => state.columns,
       (state) => state.numericColumns,
     ],
-    (columns, numericColumns) => (
-      columns.filter(({ name }) =>
+    (columns, numericColumns) => {
+      const dataGeoKeys = columns.filter(({ name }) =>
         MAP_GEO_KEYS.includes(name) && geoKeyHasCoordinates(name, numericColumns))
         .map(({ name }) => name)
-    )
+      // BEFORE MERGING - replace this with the commented lines below; this is just for demonstration
+      // this allows grouping by FSA when postal code key is present in the data object but no FSA
+      if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key))) {
+      // if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key)) &&
+      // !dataGeoKeys.some(key => GEO_KEY_TYPES.fsa.includes(key))) {
+        // add an artificial geo_ca_fsa key to the validMapGroupKeys if we have postalcode key but no FSA
+        dataGeoKeys.push('geo_ca_fsa')
+      }
+      return dataGeoKeys
+    }
+  ),
+
+  groupFSAByPC: computed(
+    [
+      (state) => state.mapGroupKey,
+      (state) => state.columns,
+    ],
+    (mapGroupKey, columns) => {
+      return  GEO_KEY_TYPES.fsa.includes(mapGroupKey) && !columns.map(({ name }) => name).includes(mapGroupKey)
+    }
   ),
 
   renderableValueKeys: computed(
