@@ -6,7 +6,7 @@ const config = {
   plugins: [require('tailwindcss-children')],
   variants: {
     extend: {
-      flex: ['children-not-first'],
+      flex: ['children, children-not-first'],
       textColor: ['children'],
       textOverflow: ['children'],
       margin: ['hover'],

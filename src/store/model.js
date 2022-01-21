@@ -48,7 +48,7 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
-  { key: 'zeroVarianceColumns', defaultValue: [], resettable: false },
+  { key: 'dataHasVariance', defaultValue: true, resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
   { key: 'numericColumns', defaultValue: [], resettable: false },
   {
@@ -67,6 +67,8 @@ const stateDefaults = [
       allowReset: true,
       recentReset: false,
       controlsWidth: null,
+      showToast: false,
+      toastConfig: {},
     },
     resettable: false,
   },
@@ -175,7 +177,19 @@ export default {
       Boolean(dataSourceType && dataSourceID && !dataSourceLoading && !dataSourceError)
     )),
 
+  dev: computed([], () => (process.env?.NODE_ENV ?? 'development' === 'development')),
+
   /** ACTIONS ------------------------------------------------------------------ */
+
+  toast: thunk(async (actions, payload) => {
+    actions.nestedUpdate({
+      ui: {
+        toastConfig: payload,
+        showToast: true,
+      },
+    })
+    setTimeout(() => actions.nestedUpdate({ ui: { showToast: false } }), 3000)
+  }),
 
   loadConfig: thunk(async (actions, payload) => {
 

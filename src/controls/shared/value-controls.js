@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { SwitchRect } from '@eqworks/lumen-labs'
 import clsx from 'clsx'
+import { nanoid } from 'nanoid'
 
 import modes from '../../constants/modes'
 import aggFunctions from '../../util/agg-functions'
@@ -22,7 +23,7 @@ const ValueControls = ({ groupingOptional }) => {
   const groupKey = useStoreState((state) => state.groupKey)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
-  const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
+  const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const stringColumns = useStoreState((state) => state.stringColumns)
 
@@ -49,7 +50,7 @@ const ValueControls = ({ groupingOptional }) => {
       secondaryKey='agg'
       data={numericColumns}
       subData={Object.keys(aggFunctions)}
-      disableSubFor={zeroVarianceColumns}
+      disableSubs={!dataHasVariance}
       disableSubMessage="doesn't require aggregation."
       callback={(i, val) => {
         if (i === valueKeys.length) {
@@ -67,81 +68,60 @@ const ValueControls = ({ groupingOptional }) => {
       }}
     />
 
+  const renderToggle = (title, state, toggleState) =>
+    <div className='flex mb-2 text-xs text-secondary-600'>
+      <span className='flex-1'>{title}:</span>
+      <span className={clsx('font-semibold mr-2', {
+        ['text-secondary-600']: !state,
+        ['text-secondary-500']: state,
+      })}>OFF</span>
+      <SwitchRect
+        id={nanoid()}
+        checked={state}
+        onChange={toggleState}
+      />
+      <span className={clsx('font-semibold ml-2', {
+        ['text-primary-500']: state,
+        ['text-secondary-500']: !state,
+      })}>ON</span>
+    </div>
+
   return (
     <>
+      <WidgetControlCard
+        clearable
+        title={group ? 'Group By' : 'Index By'}
+      >
+        {groupingOptional && renderToggle('Group By', group, toggleGroup)}
+        <CustomSelect
+          data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
+          value={group ? groupKey : indexKey}
+          onSelect={val => update(group ? { groupKey: val } : { indexKey: val })}
+          onClear={() => update({ groupKey: null, indexKey: null })}
+          placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
+        />
+      </WidgetControlCard>
       {
-        groupingOptional ?
-          <>
-            <WidgetControlCard
-              clearable
-              title={group ? 'Group By' : 'Index By'}
-            >
-              <div className='flex mb-2 text-xs text-secondary-600'>
-                <span className='flex-1'>Group By:</span>
-                <span className={clsx('font-semibold mr-2', {
-                  ['text-secondary-600']: !group,
-                  ['text-secondary-500']: group,
-                })}>OFF</span>
-                <SwitchRect
-                  id='group'
-                  checked={group}
-                  onChange={toggleGroup}
-                />
-                <span className={clsx('font-semibold ml-2', {
-                  ['text-primary-500']: group,
-                  ['text-secondary-500']: !group,
-                })}>ON</span>
-              </div>
-              <CustomSelect
-                data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
-                value={group ? groupKey : indexKey}
-                onSelect={val => update(group ? { groupKey: val } : { indexKey: val })}
-                onClear={() => update({ groupKey: null, indexKey: null })}
-                placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
-              />
-            </WidgetControlCard>
-            {
-              group ?
-                <WidgetControlCard grow clearable title='Value Keys'>
-                  {renderGroupedValueKeysSelect}
-                </WidgetControlCard>
-                :
-                <WidgetControlCard clearable title='Value Keys'>
-                  <div className='flex-grow-0'>
-                    <CustomSelect
-                      multiSelect
-                      value={valueKeys.map(({ key }) => key)}
-                      data={numericColumns.filter(c => c !== indexKey)}
-                      onSelect={(val) =>
-                        update({ valueKeys: val.map(v => ({ key: v })) })
-                      }
-                    />
-                  </div>
-                </WidgetControlCard>
-            }
-          </>
+        group ?
+          <WidgetControlCard
+            grow
+            clearable
+            title='Value Keys'
+            description={mode === modes.QL ? 'Select up to 3 keys, open in editor for more options.' : ''}
+          >
+            {renderGroupedValueKeysSelect}
+          </WidgetControlCard>
           :
-          <>
-            <WidgetControlCard
-              clearable
-              title='Group By'
-            >
+          <WidgetControlCard clearable title='Value Keys'>
+            <div className='flex-grow-0'>
               <CustomSelect
-                data={stringColumns}
-                value={groupKey}
-                onSelect={val => update({ groupKey: val })}
-                onClear={() => update({ groupKey: null })}
+                multiSelect
+                value={valueKeys.map(({ key }) => key)}
+                data={numericColumns.filter(c => c !== indexKey)}
+                onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
               />
-            </WidgetControlCard>
-            <WidgetControlCard
-              grow
-              clearable
-              title='Value Keys'
-              description={mode === modes.QL ? 'Select up to 3 keys, open in editor for more options.' : ''}
-            >
-              {renderGroupedValueKeysSelect}
-            </WidgetControlCard>
-          </>
+            </div>
+          </WidgetControlCard>
       }
     </>
   )

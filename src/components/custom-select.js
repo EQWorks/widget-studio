@@ -25,7 +25,7 @@ CustomSelect.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
   multiSelect: PropTypes.bool,
-  value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  value: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
   onSelect: PropTypes.func.isRequired,
   onClear: PropTypes.func,
 }

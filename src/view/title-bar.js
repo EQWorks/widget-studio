@@ -2,24 +2,27 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { Button, Accordion, Icons, TextField, Chip } from '@eqworks/lumen-labs'
-import clsx from 'clsx'
 
 import { ArrowExpand, EditPen, Download } from '../components/icons'
 import { useStoreState, useStoreActions } from '../store'
 import OverflowTooltip from '../components/overflow-tooltip'
+import saveConfig from '../util/save-config'
 
 
 const WidgetTitleBar = ({ className }) => {
 
   // store actions
-  const update = useStoreActions((state) => state.update)
-  const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
+  const update = useStoreActions((actions) => actions.update)
+  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
+  const toast = useStoreActions((actions) => actions.toast)
 
   // widget state
   const id = useStoreState((state) => state.id)
   const title = useStoreState((state) => state.title)
   const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
+  const config = useStoreState((state) => state.config)
+  const dev = useStoreState((state) => state.dev)
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -34,8 +37,6 @@ const WidgetTitleBar = ({ className }) => {
   useEffect(() => {
     setTentativeTitle(title)
   }, [title])
-
-  const [showClipboardNoti, setShowClipboardNoti] = useState(false)
 
   const renderButton = (children, onClick, props) =>
     <Button
@@ -141,7 +142,7 @@ const WidgetTitleBar = ({ className }) => {
       </>
 
   return (
-    <Accordion color='secondary' className={`pt-0 ${className}`}>
+    <Accordion color='secondary' className={`${className}`}>
       <Accordion.Panel
         autoHeight
         color='transparent'
@@ -165,24 +166,29 @@ const WidgetTitleBar = ({ className }) => {
                     e.stopPropagation()
                     if (window.isSecureContext) {
                       navigator.clipboard.writeText(id)
-                      setShowClipboardNoti(true)
-                      setTimeout(() => setShowClipboardNoti(false), 2000)
+                      toast({
+                        title: 'ID copied to clipboard',
+                        color: 'success',
+                      })
                     }
                   }}
                 >
                   {`id: ${id}`}
                 </Chip>
-                <div className={clsx('ml-2 rounded-md p-3 border border-secondary-100 shadow-light-40 text-xs text-secondary-600 transition-opacity ease-in-out duration-300', {
-                  'opacity-0': !showClipboardNoti,
-                  'opacity-1': showClipboardNoti,
-                })}>
-                  ID copied to clipboard
-                </div>
               </>
             }
             <div className='flex ml-auto'>
-              {renderIconButton(Download,
-                () => window.alert('not implemented'),
+              {dev && renderIconButton(Download,
+                () => {
+                  if (config) {
+                    saveConfig(config, id)
+                  } else {
+                    toast({
+                      title: 'The widget is not fully configured.',
+                      color: 'error',
+                    })
+                  }
+                },
               )}
               {renderButton(<>export</>,
                 () => window.alert('not implemented'),
@@ -208,10 +214,11 @@ const WidgetTitleBar = ({ className }) => {
 
 WidgetTitleBar.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 }
 WidgetTitleBar.defaultProps = {
   className: '',
+  children: null,
 }
 
 export default WidgetTitleBar

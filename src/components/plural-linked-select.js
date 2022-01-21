@@ -15,7 +15,7 @@ const PluralLinkedSelect = ({
   secondaryKey,
   data,
   subData,
-  disableSubFor,
+  disableSubs,
   disableSubMessage,
   callback,
   deleteCallback,
@@ -36,7 +36,7 @@ const PluralLinkedSelect = ({
         deletable={!staticQuantity && values?.length > 1}
         deleteCallback={() => deleteCallback(i)}
         placeholders={titles}
-        disableSub={disableSubFor.includes(val)}
+        disableSub={disableSubs}
         disableSubMessage={`${val} ${disableSubMessage}`}
       />
     )
@@ -66,6 +66,7 @@ const PluralLinkedSelect = ({
       <div className='invisible h-0 grid grid-cols-min-min pointer-events-none'>
         <LinkedSelect
           data={[]}
+          callback={() => { }}
           subData={[]}
           deletable
           placeholders={[getLongest([titles[0], ...data]), getLongest([titles[1], ...subData])]}
@@ -96,14 +97,14 @@ PluralLinkedSelect.propTypes = {
   callback: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func.isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
-  disableSubFor: PropTypes.arrayOf(PropTypes.string),
+  disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
 }
 
 PluralLinkedSelect.defaultProps = {
   staticQuantity: null,
   titles: [],
-  disableSubFor: [],
+  disableSubs: false,
   disableSubMessage: '',
 }
 
