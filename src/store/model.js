@@ -2,6 +2,7 @@ import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
+import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
 
 
 const widgetDefaults = {
@@ -59,6 +60,7 @@ const stateDefaults = [
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
   { key: 'numericColumns', defaultValue: [], resettable: false },
+  { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
   {
     key: 'ui',
     defaultValue: {
