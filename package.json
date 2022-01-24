@@ -87,6 +87,7 @@
     "json2csv": "^5.0.5",
     "nanoid": "^3.1.30",
     "prop-types": "^15.7.2",
+    "react-colorful": "^5.5.1",
     "react-resize-detector": "^6.7.6"
   },
   "size-limit": [
