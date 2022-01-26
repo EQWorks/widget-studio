@@ -1,42 +1,46 @@
-import React, { useEffect, useCallback, useMemo, useRef, useState, Children } from 'react'
+import React, { Children } from 'react'
 import PropTypes from 'prop-types'
+import { makeStyles } from '@eqworks/lumen-labs'
 
 
-const FadeBetween = ({ value, children }) => {
-  // ref for the main container
-  const container = useRef(null)
-  // track the tallest element
-  const [tallest, setTallest] = useState(0)
-  // "refs" for determining the tallest element
-  const measuredRefs = [
-    useCallback((node) => setTallest(node?.scrollHeight <= node?.clientHeight), []),
-    useCallback((node) => setTallest(node?.scrollHeight > node?.clientHeight), []),
-  ]
-  // only allow scroll if the taller element is
-  const doScroll = useMemo(() => !value && tallest || value && !tallest, [tallest, value])
-  // make sure to scroll back to top when toggling
-  useEffect(() => {
-    if (container.current) {
-      container.current.scrollTop = 0
-    }
-  }, [value])
+const classes = makeStyles({
+  container: {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+  },
+  child: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    transition: 'opacity 300ms ease-in-out ',
+  },
+  activeChild: {
+    opacity: 1,
+  },
+  hiddenChild: {
+    opacity: 0,
+    overflow: 'hidden',
+  },
+})
 
-  return (
-    <div ref={container} className={`${doScroll ? 'overflow-auto' : 'overflow-hidden'} h-full w-full relative`} >
-      {
-        Children.map(children, (child, i) =>
-          i < 2 &&
-          <div
-            ref={measuredRefs[i]}
-            className={`w-full h-full absolute transition duration-300 ease-in-out ${!!i && value || !i && !value ? 'opacity-0 pointer-events-none' : 'opacity-1'}`}
-          >
-            {child}
-          </div>
-        )
+const FadeBetween = ({ value, children }) => (
+  <div className={classes.container} >
+    {
+      Children.map(children, (child, i) => {
+        if (i < 2) {
+          const active = (!!i && value) || (!i && !value)
+          return (
+            <div className={`${classes.child} ${active ? classes.hiddenChild : classes.activeChild} `} >
+              {child}
+            </div>
+          )
+        }
       }
-    </div >
-  )
-}
+      )
+    }
+  </div >
+)
 
 FadeBetween.propTypes = {
   value: PropTypes.bool.isRequired,
