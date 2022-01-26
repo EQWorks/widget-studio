@@ -76,7 +76,6 @@ const stateDefaults = [
       editingTitle: false,
       allowReset: true,
       recentReset: false,
-      controlsWidth: null,
       showToast: false,
       toastConfig: {},
     },

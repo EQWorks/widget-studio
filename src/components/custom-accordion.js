@@ -1,94 +1,154 @@
-import React, { useMemo, useState, useEffect, createElement } from 'react'
+import React, { createElement } from 'react'
 import PropTypes from 'prop-types'
 
-import { Icons } from '@eqworks/lumen-labs'
-import { useResizeDetector } from 'react-resize-detector'
-import clsx from 'clsx'
+import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import CustomButton from './custom-button'
+import { useResizeDetector } from 'react-resize-detector'
 
 
-const xPadding = '1rem'
+const SPEED = '400ms'
+const WIDTH = '24rem'
+const COLLAPSED_WIDTH = '4rem'
+const Y_PADDING = '0.5rem'
+const X_PADDING = '1rem'
 
-const CustomAccordion = ({ expandedWidth, collapsedWidth, speed, disabled, title, footer, icon, open, toggle, children }) => {
-  const { height, ref } = useResizeDetector()
-  const [fullyOpen, setFullyOpen] = useState(open)
-  useEffect(() => {
-    if (open) {
-      setTimeout(() => setFullyOpen(true), 2 * speed)
-    } else {
-      setFullyOpen(false)
-    }
-  }, [open, speed])
+const useStyles = ({ open, disabled }) => makeStyles({
+  innerContainer: {
+    position: 'absolute',
+    overflowX: 'clip',
+    right: 0,
+    top: 0,
+    whiteSpace: 'nowrap',
+    zIndex: 20,
+    borderLeftWidth: '2px',
+    borderColor: getTailwindConfigColor('neutral-100'),
+    display: 'flex',
+  },
+  outerContainer: {
+    transitionProperty: 'width',
+    position: 'relative',
+  },
+  transition: {
+    transitionDuration: SPEED,
+    transitionTimingFunction: 'ease',
+  },
+  padded: {
+    padding: `${Y_PADDING} ${X_PADDING}`,
+    display: 'flex',
+    whiteSpace: 'nowrap',
+  },
+  barrier: {
+    position: 'absolute',
+    zIndex: 30,
+    background: getTailwindConfigColor('secondary-50'),
+    opacity: 0.5,
+    width: '100%',
+    height: '100%',
+  },
+  contentContainer: {
+    transitionProperty: 'opacity, filter',
+    opacity: + open,
+    width: '100%',
+    ...(!open && { pointerEvents: 'none' }),
+    ...(disabled && { filter: 'blur(0.25rem)' }),
+  },
+  headerContainer: {
+    padding: `0.75rem ${X_PADDING}`,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderBottom: `medium solid ${getTailwindConfigColor('neutral-100')}`,
+  },
+  header: {
+    display: 'flex',
+    width: '100%',
+  },
+  button: {
+    border: 'none',
+  },
+  tallIcon: {
+    padding: '1.25rem',
+    width: '100% !important',
+    height: '100% !important',
+  },
+  tallButton: {
+    position: 'absolute',
+    height: '100%',
+    width: COLLAPSED_WIDTH,
+    transitionProperty: 'opacity, background',
+    opacity: + !open,
+    ...(open && { pointerEvents: 'none' }),
+    '& svg': {
+      transition: `stroke ${SPEED}`,
+      stroke: getTailwindConfigColor('secondary-600'),
+    },
+    '&:hover': {
+      background: getTailwindConfigColor('secondary-50'),
+      '& svg': {
+        stroke: getTailwindConfigColor('secondary-800'),
+      },
+    },
+  },
+  title: {
+    flex: 1,
+    color: getTailwindConfigColor('secondary-900'),
+    fontWeight: 'bold',
+  },
+})
 
-  const transition = `ease-in-out duration-${speed}`
+const CustomAccordion = ({ open, disabled, title, footer, icon, toggle, children }) => {
+  const { ref, height } = useResizeDetector()
 
-  const width = useMemo(() => {
-    if (!open) {
-      return collapsedWidth || 'auto'
-    }
-    return expandedWidth && xPadding
-      ? `clamp(20rem, calc(${expandedWidth}px + 2*${xPadding}), 30rem)`
-      : 'auto'
-  }, [collapsedWidth, expandedWidth, open])
+  const width = WIDTH
+  const classes = useStyles({ open, disabled, width })
 
   return (
     <div
-      ref={ref}
-      className={clsx(`shadow-blue-40 relative whitespace-nowrap relative z-20 border-l-2 border-neutral-100 transition-width ${transition} flex justify-end`, {
-        'overflow-hidden': !open,
-        'overflow-y-auto overflow-x-hidden': open,
-      })}
+      className={`${classes.outerContainer} ${classes.transition}`}
       style={{
-        height: fullyOpen ? 'auto' : height,
-        width,
+        width: open ? width : COLLAPSED_WIDTH,
+        height,
       }}
     >
-      {
-        disabled &&
-        <div className='absolute z-30 bg-secondary-50 opacity-50 w-full h-full' />
-      }
-      <CustomButton
-        variant='borderless'
-        style={{ width: collapsedWidth }}
-        className={clsx(`absolute justify-center border-none h-full transition-opacity ${transition}`, {
-          'pointer-events-none opacity-0': open,
-          'opacity-1': !open,
-        })}
-        onClick={toggle}
-      >
-        {createElement(icon ?? Icons.ArrowLeft, {
-          size: 'md',
-          className: 'h-full stroke-current text-secondary-600 w-full p-5',
-        })}
-      </CustomButton>
       <div
-        className={clsx(`transition-filter ${transition}`, {
-          'filter blur-sm': disabled,
-          'w-0': !open,
-          'w-full': open,
-        })}
+        ref={ref}
+        className={`${classes.innerContainer} ${classes.transition} shadow-blue-40`}
+        style={{ width: open ? '100%' : COLLAPSED_WIDTH }}
       >
-        <div className={`px-${xPadding} py-3 border-b border-neutral-100 flex flex-col items-center`}>
-          <div className='w-full flex flex-row'>
-            <span className='flex-1 font-bold text-secondary-900 text-md' >{title}</span >
-            <CustomButton
-              variant='borderless'
-              className='border-none'
-              onClick={toggle}
-            >
-              <Icons.Close size='md' className='fill-current text-secondary-600 h-min w-auto' />
-            </CustomButton>
+        {disabled && <div className={classes.barrier} />}
+        <CustomButton
+          variant='borderless'
+          className={`${classes.transition} ${classes.button} ${classes.tallButton}`}
+          onClick={toggle}
+        >
+          {createElement(icon ?? Icons.ArrowLeft, {
+            size: 'md',
+            className: `${classes.tallIcon}`,
+          })}
+        </CustomButton>
+        <div className={`${classes.transition} ${classes.contentContainer}`} >
+          <div className={classes.headerContainer} >
+            <div className={classes.header} >
+              <span className={classes.title} >{title}</span >
+              <CustomButton
+                variant='borderless'
+                className={classes.button}
+                onClick={toggle}
+              >
+                <Icons.Close size='md' className='fill-current text-secondary-600 h-min w-auto' />
+              </CustomButton>
+            </div>
+          </div >
+          <div className={classes.padded} >
+            {children}
+          </div >
+          <div className={classes.padded}>
+            {footer}
           </div>
         </div >
-        <div className={`px-${xPadding} py-2`}>
-          {children}
-        </div >
-        <div className={`px-${xPadding} flex py-2 pt-3 border-t border-neutral-100`}>
-          {footer}
-        </div>
       </div >
-    </div >
+    </div>
   )
 }
 
@@ -100,9 +160,6 @@ CustomAccordion.propTypes = {
   footer: PropTypes.node,
   open: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  expandedWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  collapsedWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  speed: PropTypes.number,
 }
 CustomAccordion.defaultProps = {
   disabled: false,
@@ -110,8 +167,6 @@ CustomAccordion.defaultProps = {
   children: null,
   footer: null,
   icon: null,
-  collapsedWidth: '4rem',
-  speed: 300,
 }
 
 export default CustomAccordion

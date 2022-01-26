@@ -53,7 +53,6 @@ const QLModeControls = () => {
   // UI state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const allowReset = useStoreState((state) => state.ui.allowReset)
-  const controlsWidth = useStoreState((state) => state.ui.controlsWidth)
 
   useEffect(() => {
     update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
@@ -84,7 +83,6 @@ const QLModeControls = () => {
 
   return (
     <CustomAccordion
-      expandedWidth={controlsWidth}
       disabled={!dataReady}
       icon={Controls}
       title={'Controls'}
@@ -92,7 +90,7 @@ const QLModeControls = () => {
       open={showWidgetControls}
       toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
     >
-      <div className='flex flex-col'>
+      <div className='flex flex-col w-full'>
         <WidgetControlCard
           title='Select Widget Type'
           clearable
