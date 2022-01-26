@@ -16,7 +16,6 @@ const PieControls = () => {
   // unique state
   const donut = useStoreState((state) => state.options.donut)
   const showPercentage = useStoreState((state) => state.options.showPercentage)
-  const showLegend = useStoreState((state) => state.options.showLegend)
 
   // ui state
   const mode = useStoreState((state) => state.ui.mode)
@@ -42,11 +41,6 @@ const PieControls = () => {
               value={showPercentage}
               label='Show Percentage'
               onChange={(val) => nestedUpdate({ options: { showPercentage: val } })}
-            />
-            <CustomToggle
-              value={showLegend}
-              label='Show Legend'
-              onChange={(val) => nestedUpdate({ options: { showLegend: val } })}
             />
           </WidgetControlCard>
         </>

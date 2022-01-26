@@ -17,18 +17,19 @@ const useTransformedData = () => {
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
 
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
     rows.filter(obj => {
-      for (const [key, [min, max]] of Object.entries(filters)) {
+      for (const [key, [min, max]] of Object.entries(filters).filter(([k]) => k !== groupKey)) {
         if (obj[key] < min || obj[key] > max) {
           return false
         }
       }
       return true
     })
-  ), [rows, filters])
+  ), [rows, filters, groupKey])
 
   // if grouping enabled, memoize grouped and reorganized version of data that will be easy to aggregate
   const groupedData = useMemo(() => (
@@ -50,6 +51,13 @@ const useTransformedData = () => {
       : null
   ), [group, groupKey, truncatedData])
 
+  // memoize names of groups produced by the current grouping
+  useEffect(() => {
+    if (groupedData) {
+      update({ groups: Object.keys(groupedData) })
+    }
+  }, [groupedData, update])
+
   // determine whether the configured group key has produced data with any variance, relay to global state
   useEffect(() => {
     if (groupedData) {
@@ -61,26 +69,37 @@ const useTransformedData = () => {
     }
   }, [update, groupedData])
 
+  // if a filter on the groupKey exists, retain only the desired groups
+  const filteredGroupedData = useMemo(() => (
+    group
+      ? filters[groupKey]?.length
+        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => filters[groupKey].includes(k)))
+        : groupedData
+      : null
+  ), [filters, group, groupKey, groupedData])
+
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
-      ? Object.entries(groupedData).map(([_groupKey, values]) => (
-        renderableValueKeys.reduce((res, { key, agg }) => {
-          res[`${key}_${agg}`] = dataHasVariance
+      ? Object.entries(filteredGroupedData).map(([group, values]) => (
+        renderableValueKeys.reduce((res, { key, agg, title }) => {
+          res[title] = dataHasVariance
             ? aggFunctions[agg](values[key])
             : values[key][0]
           return res
-        }, { [groupKey]: _groupKey })
+        }, { [formattedColumnNames[groupKey]]: group })
       ))
       : null
-  ), [dataHasVariance, group, groupKey, groupedData, renderableValueKeys])
+  ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, groupKey, renderableValueKeys])
 
-  // simply sort the data if grouping is not enabled
+  // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => (
     !group
-      ? truncatedData.sort((a, b) => a[indexKey] - b[indexKey])
+      ? truncatedData.map(d =>
+        Object.fromEntries(Object.entries(d).map(([k, v]) => [formattedColumnNames[k], v]))
+      ).sort((a, b) => a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
       : null
-  ), [group, indexKey, truncatedData])
+  ), [formattedColumnNames, group, indexKey, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
   const finalData = useMemo(() => (

@@ -9,8 +9,8 @@ export default {
     component: PlotlyBarChart,
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
-      x: config.groupKey,
-      y: config.valueKeys.map(({ key, agg }) => (`${key}_${agg}`)),
+      x: config.groupKeyTitle,
+      y: config.valueKeys.map(({ title }) => title),
       ...options,
       ...genericOptions,
     }),
@@ -19,8 +19,8 @@ export default {
     component: PlotlyLineChart,
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
-      x: config.group ? config.groupKey : config.indexKey,
-      y: config.valueKeys.map(({ key, agg }) => config.group ? `${key}_${agg}` : key),
+      x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
+      y: config.valueKeys.map(({ title }) => title),
       ...options,
       ...genericOptions,
     }),
@@ -29,8 +29,8 @@ export default {
     component: PlotlyPieChart,
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
-      label: config.groupKey,
-      values: config.valueKeys.map(({ key, agg }) => (`${key}_${agg}`)),
+      label: config.groupKeyTitle,
+      values: config.valueKeys.map(({ title }) => title),
       ...options,
       ...genericOptions,
       // overrides
@@ -41,8 +41,8 @@ export default {
     component: PlotlyScatterChart,
     adapt: (data, { options, genericOptions, ...config }) => ({
       data,
-      x: config.group ? config.groupKey : config.indexKey,
-      y: config.valueKeys.map(({ key, agg }) => config.group ? `${key}_${agg}` : key),
+      x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
+      y: config.valueKeys.map(({ title }) => title),
       ...options,
       ...genericOptions,
     }),

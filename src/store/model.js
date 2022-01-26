@@ -1,4 +1,6 @@
+import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
+import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
 
 
@@ -15,7 +17,6 @@ const widgetDefaults = {
   pie: {
     donut: false,
     showPercentage: true,
-    showLegend: true,
   },
   scatter: {
     showTicks: true,
@@ -29,6 +30,7 @@ const stateDefaults = [
   { key: 'type', defaultValue: '', resettable: false },
   { key: 'filters', defaultValue: {}, resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
+  { key: 'groups', defaultValue: [], resettable: true },
   { key: 'groupKey', defaultValue: null, resettable: true },
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
@@ -36,7 +38,13 @@ const stateDefaults = [
   { key: 'options', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
+      groupByValue: false,
+      showLegend: true,
       subPlots: false,
+      size: 0.8,
+      titlePosition: [0, 0],
+      legendPosition: [1, 0],
+      baseColor: getTailwindConfigColor('primary-500'),
     }, resettable: true,
   },
   {
@@ -95,6 +103,7 @@ export default {
       (state) => state.genericOptions,
       (state) => state.options,
       (state) => state.isReady,
+      (state) => state.formattedColumnNames,
       (state) => state.dataSource,
     ],
     (
@@ -108,6 +117,7 @@ export default {
       genericOptions,
       options,
       isReady,
+      formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
     ) => (
       isReady
@@ -119,6 +129,8 @@ export default {
           group,
           groupKey,
           indexKey,
+          ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
+          ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
           options,
           genericOptions,
           dataSource: { type: dataSourceType, id: dataSourceID },
@@ -130,13 +142,35 @@ export default {
     [
       (state) => state.valueKeys,
       (state) => state.group,
+      (state) => state.formattedColumnNames,
     ],
     (
       valueKeys,
-      group
+      group,
+      formattedColumnNames,
     ) => (
-      valueKeys.filter(({ key, agg }) => key && (agg || !group)
-      ))
+      valueKeys
+        .filter(({ key, agg }) => key && (agg || !group)
+        )
+        .map(({ key, agg, ...rest }) => ({
+          key,
+          title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}` || key,
+          ...(agg && { agg }),
+          ...rest,
+        })
+        )
+    )
+  ),
+
+  formattedColumnNames: computed(
+    [
+      (state) => state.columns,
+    ],
+    (
+      columns
+    ) => (
+      Object.fromEntries(columns.map(({ name }) => [name, cleanUp(name)]))
+    )
   ),
 
   /** checks if all initial states have been filled */

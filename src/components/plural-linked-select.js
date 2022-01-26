@@ -55,7 +55,7 @@ const PluralLinkedSelect = ({
       onClick={() => callback(values.length, { [primaryKey]: '', [secondaryKey]: '' })}
     >
       <div className='w-full flex items-center'>
-        <span className='flex-1 text-left'>Add Key</span>
+        <span className='flex-1 text-left mr-1'>Add Key</span>
         <Icons.Add size='sm' />
       </div>
     </Button>

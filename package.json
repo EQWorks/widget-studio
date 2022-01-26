@@ -78,7 +78,7 @@
     "tailwindcss-children": "^2.1.0"
   },
   "dependencies": {
-    "@eqworks/chart-system": "^0.6.2",
+    "@eqworks/chart-system": "0.6.3-alpha.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@react-hook/resize-observer": "^1.2.4",
     "axios": "^0.20.0",
@@ -87,12 +87,13 @@
     "json2csv": "^5.0.5",
     "nanoid": "^3.1.30",
     "prop-types": "^15.7.2",
+    "react-color": "^2.19.3",
     "react-resize-detector": "^6.7.6"
   },
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "500 KB"
+      "limit": "600 KB"
     }
   ]
 }

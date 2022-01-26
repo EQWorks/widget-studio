@@ -35,7 +35,10 @@ const CustomAccordion = ({ expandedWidth, collapsedWidth, speed, disabled, title
   return (
     <div
       ref={ref}
-      className={`shadow-blue-40 relative whitespace-nowrap relative z-20 border-l-2 border-neutral-100 transition-width ${transition} flex justify-end`}
+      className={clsx(`shadow-blue-40 relative whitespace-nowrap relative z-20 border-l-2 border-neutral-100 transition-width ${transition} flex justify-end`, {
+        'overflow-hidden': !open,
+        'overflow-y-auto overflow-x-hidden': open,
+      })}
       style={{
         height: fullyOpen ? 'auto' : height,
         width,
