@@ -67,7 +67,7 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { options, ...config }) => {
-    const { mapGroupKey, valueKeys } = config
+    const { mapGroupKey, mapValueKeys } = config
     const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
@@ -110,7 +110,7 @@ export default {
         dataId: 'testWIReport',
         dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
         geometry,
-        visualizations: Object.fromEntries(valueKeys.map(({ key, agg, mapVis }) =>
+        visualizations: Object.fromEntries(mapValueKeys.map(({ key, agg, mapVis }) =>
           [
             mapVis,
             {
@@ -147,7 +147,7 @@ export default {
           longitude: -79.23,
           zoom: 7,
         },
-        pitch: valueKeys.map(({ mapVis }) => mapVis).includes('elevation') ? PITCH.elevation : 0,
+        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes('elevation') ? PITCH.elevation : 0,
       },
     })
   },
