@@ -43,11 +43,10 @@ const useTransformedData = () => {
   const groupedData = useMemo(() => (
     group
       ? truncatedData.reduce((res, r) => {
-        let newGroupKey = finalGroupKey
-        if (groupFSAByPC) {
-          // use the key for postalcode to aggregate by FSA
-          newGroupKey = validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
-        }
+        // use the key for postalcode to aggregate by FSA
+        const newGroupKey = groupFSAByPC
+          ? validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
+          : finalGroupKey
         // FSAs are the first 3 letters of a postal code
         const group = groupFSAByPC ? r[newGroupKey].slice(0,3) : r[newGroupKey]
         res[group] = res[group] || {}
