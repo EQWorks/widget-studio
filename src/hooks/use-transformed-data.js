@@ -42,11 +42,10 @@ const useTransformedData = () => {
   const groupedData = useMemo(() => (
     group
       ? truncatedData.reduce((res, r) => {
-        let newGroupKey = finalGroupKey
-        if (groupFSAByPC) {
-          // use the key for postalcode to aggregate by FSA
-          newGroupKey = validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
-        }
+        // use the key for postalcode to aggregate by FSA
+        const newGroupKey = groupFSAByPC
+          ? validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
+          : finalGroupKey
         // FSAs are the first 3 letters of a postal code
         const group = groupFSAByPC ? r[newGroupKey].slice(0,3) : r[newGroupKey]
         res[group] = res[group] || {}
@@ -66,16 +65,15 @@ const useTransformedData = () => {
 
   // compute list of columns that have 0 variance
   const zeroVarianceColumns = useMemo(() => (
-    group
+    group || groupFSAByPC
       ? columns.map(({ name }) => name).filter(c => (
+        c !== finalGroupKey &&
         // don't include the postalcode in the case it is used as the key for values for aggregation by FSA
-        c !== finalGroupKey && !(groupFSAByPC &&
-          c === validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))) &&
-        Object.values(groupedData).every(d => {
-          return d[c].length === 1
-        })))
+        !GEO_KEY_TYPES.postalcode.includes(c) &&
+        Object.values(groupedData).every(d => d[c].length === 1)))
       : []
-  ), [columns, group, finalGroupKey, groupedData, groupFSAByPC, validMapGroupKeys])
+  ), [columns, group, finalGroupKey, groupedData, groupFSAByPC])
+
 
   // relay this to global state
   useEffect(() => {
