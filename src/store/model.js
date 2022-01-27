@@ -214,7 +214,7 @@ export default {
       Boolean(dataSourceType && dataSourceID && !dataSourceLoading && !dataSourceError)
     )),
 
-  dev: computed([], () => (process.env?.NODE_ENV ?? 'development' === 'development')),
+  dev: computed([], () => ((process.env?.NODE_ENV || 'development') === 'development')),
 
   /** ACTIONS ------------------------------------------------------------------ */
 
