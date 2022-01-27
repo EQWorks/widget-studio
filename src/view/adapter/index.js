@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import { makeStyles } from '@eqworks/lumen-labs'
 
-import useTransformedData from '../../hooks/use-transformed-data'
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 
@@ -40,7 +39,7 @@ const WidgetAdapter = () => {
   // state
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
-  const transformedData = useTransformedData()
+  const transformedData = useStoreState((state) => state.transformedData)
 
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => adapterDict[type], [type])

@@ -57,6 +57,7 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
+  { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
   { key: 'numericColumns', defaultValue: [], resettable: false },
