@@ -51,16 +51,13 @@ const useTransformedData = () => {
       : null
   ), [group, groupKey, truncatedData])
 
-  // memoize names of groups produced by the current grouping
-  useEffect(() => {
-    if (groupedData) {
-      update({ groups: Object.keys(groupedData) })
-    }
-  }, [groupedData, update])
 
-  // determine whether the configured group key has produced data with any variance, relay to global state
+  // relay some information about the grouped data to global store
   useEffect(() => {
     if (groupedData) {
+      // names of groups produced by the current grouping
+      update({ groups: Object.keys(groupedData) })
+      // whether the configured group key has produced data with any variance
       const data = Object.values(groupedData)
       if (data[0]) {
         const testKey = Object.keys(data[0])[0]
