@@ -5,7 +5,7 @@ import { Icons, Button } from '@eqworks/lumen-labs'
 
 import LinkedSelect from './linked-select'
 import clsx from 'clsx'
-import { getLongestString } from '../util'
+import { getLongestString } from '../util/string-manipulation'
 
 
 const PluralLinkedSelect = ({

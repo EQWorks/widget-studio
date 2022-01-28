@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Chip, makeStyles } from '@eqworks/lumen-labs'
 
 import LinkedSelect from '../../../components/linked-select'
-import { getLongestString } from '../../../util'
+import { getLongestString } from '../../../util/string-manipulation'
 
 
 const classes = makeStyles({
