@@ -14,6 +14,7 @@ const CustomSelect = ({ classes, onClear, ...props }) => (
       listContainer: 'normal-case',
       ...classes,
     }}
+    overflow='vertical'
     endIcon={<Icons.ArrowDown size='md' />}
     onDelete={onClear}
     {...props}

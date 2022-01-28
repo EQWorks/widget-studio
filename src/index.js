@@ -14,6 +14,7 @@ import EditorModeControls from './controls/editor-mode'
 import FilterControls from './controls/editor-mode/filter-controls'
 import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
+import useTransformedData from './hooks/use-transformed-data'
 
 
 const Widget = ({ id, mode: _mode, staticData }) => {
@@ -25,6 +26,11 @@ const Widget = ({ id, mode: _mode, staticData }) => {
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
+
+  const transformedData = useTransformedData()
+  useEffect(() => {
+    update({ transformedData })
+  }, [transformedData, update])
 
   // on first load,
   useEffect(() => {

@@ -1,7 +1,9 @@
 import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
+
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
+import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
 
 
 const widgetDefaults = {
@@ -56,9 +58,11 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
+  { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
   { key: 'numericColumns', defaultValue: [], resettable: false },
+  { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
   {
     key: 'ui',
     defaultValue: {
@@ -74,7 +78,6 @@ const stateDefaults = [
       editingTitle: false,
       allowReset: true,
       recentReset: false,
-      controlsWidth: null,
       showToast: false,
       toastConfig: {},
     },
@@ -211,7 +214,7 @@ export default {
       Boolean(dataSourceType && dataSourceID && !dataSourceLoading && !dataSourceError)
     )),
 
-  dev: computed([], () => (process.env?.NODE_ENV ?? 'development' === 'development')),
+  dev: computed([], () => ((process.env?.NODE_ENV || 'development') === 'development')),
 
   /** ACTIONS ------------------------------------------------------------------ */
 
@@ -226,7 +229,6 @@ export default {
   }),
 
   loadConfig: thunk(async (actions, payload) => {
-
     actions.nestedUpdate({
       ui: {
         showDataSourceControls: false,
@@ -234,9 +236,15 @@ export default {
       },
     })
     requestConfig(payload)
-      .then(config => {
+      .then(({ dataSource, ...config }) => {
+        Object.entries(config)
+          .filter(([, v]) => v !== null && !Array.isArray(v) && typeof v === 'object')
+          .forEach(([k, v]) => {
+            actions.nestedUpdate({ [k]: v })
+            delete config[k]
+          })
         actions.update(config)
-        actions.loadData(config.dataSource)
+        actions.loadData(dataSource)
       })
       .catch(err => {
         actions.nestedUpdate({
@@ -248,16 +256,16 @@ export default {
       })
   }),
 
-  loadData: thunk(async (actions, { type, id }, { getState }) => {
-
+  loadData: thunk(async (actions, dataSource, { getState }) => {
     actions.nestedUpdate({
       ui: {
         showDataSourceControls: false,
         dataSourceLoading: true,
       },
+      dataSource,
     })
     const { isReady } = getState()
-    requestData(type, id)
+    requestData(dataSource.type, dataSource.id)
       .then(data => {
         if (isReady) {
           actions.resetWidget()

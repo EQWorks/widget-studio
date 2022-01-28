@@ -1,29 +1,15 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import useResizeObserver from '@react-hook/resize-observer'
 import clsx from 'clsx'
 
-import { useStoreState, useStoreActions } from '../../store'
 import CustomButton from '../../components/custom-button'
 import { Trash } from '../../components/icons'
 
 
-const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEmpty, children, grow, ignore, className }) => {
-  const controlsWidth = useStoreState((state) => state.ui.controlsWidth)
-  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
-  const target = useRef(null)
-  useResizeObserver(target, () => {
-    if (!ignore) {
-      const width = target.current?.[grow ? 'scrollWidth' : 'clientWidth']
-      if (!controlsWidth || width > controlsWidth) {
-        nestedUpdate({ ui: { controlsWidth: width } })
-      }
-    }
-  })
-
+const WidgetControlCard = ({ title, titleExtra, description, clearable, showIfEmpty, children, className }) => {
   return (
     (children || showIfEmpty) &&
-    <div ref={target} className={`rounded-sm my-1 border border-neutral-100 ${className}`}>
+    <div className={`rounded-sm my-1 border border-neutral-100 ${className}`}>
       {
         title &&
         <div className='p-2 py-1.5 bg-neutral-100 text-secondary-700 font-semibold text-sm flex align-center'>

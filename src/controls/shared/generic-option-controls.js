@@ -1,13 +1,31 @@
 import React from 'react'
 
-import { HuePicker } from 'react-color'
-
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/widget-control-card'
 import { sizes, positions } from '../../constants/viz-options'
 import CustomToggle from '../../components/custom-toggle'
 import CustomSelect from '../../components/custom-select'
+import ColorSchemeControls from './color-scheme-controls'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
+
+const styles = makeStyles({
+  controlSection: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '0.5rem',
+    marginBottom: '0.5rem',
+  },
+  controlSectionTitle: {
+    color: getTailwindConfigColor('secondary-500'),
+    fontSize: '0.9rem',
+    marginBottom: '0.25rem',
+  },
+  fullWidth: {
+    width: '100%',
+  },
+})
 
 const GenericOptionControls = () => {
 
@@ -21,34 +39,28 @@ const GenericOptionControls = () => {
   const size = useStoreState((state) => state.genericOptions.size)
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
-  const baseColor = useStoreState((state) => state.genericOptions.baseColor)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
   const renderItem = (title, Component) => (
-    <>
-      <div className='w-full'>
-        {Component}
-      </div>
-      <div className='mx-4 text-right text-sm text-secondary-600 flex items-center justify-end'>
-        {title}
-      </div>
-    </>
+    <div className={styles.controlSection}>
+      <div className={styles.controlSectionTitle} > {`${title}:`} </div>
+      <div className={styles.fullWidth}> {Component} </div>
+    </div>
   )
 
   return (
     <WidgetControlCard title='Options'>
-      <div className='grid grid-cols-1fr-min gap-2'>
-        {
-          renderItem(
-            'Show legend',
-            <CustomToggle
-              value={showLegend}
-              onChange={(val) => nestedUpdate({ genericOptions: { showLegend: val } })}
-            />
-          )
-        }
-        {
-          type !== 'pie' &&
+      {
+        renderItem(
+          'Show legend',
+          <CustomToggle
+            value={showLegend}
+            onChange={(val) => nestedUpdate({ genericOptions: { showLegend: val } })}
+          />
+        )
+      }
+      {
+        type !== 'pie' &&
           renderItem(
             'Subplots',
             <CustomToggle
@@ -57,19 +69,19 @@ const GenericOptionControls = () => {
               disabled={valueKeys.length <= 1}
             />
           )
-        }
-        {
-          renderItem(
-            'Size',
-            <CustomSelect
-              data={sizes.string}
-              value={sizes.string[sizes.numeric.indexOf(size)]}
-              onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
-            />
-          )
-        }
-        {
-          subPlots &&
+      }
+      {
+        renderItem(
+          'Size',
+          <CustomSelect
+            data={sizes.string}
+            value={sizes.string[sizes.numeric.indexOf(size)]}
+            onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
+          />
+        )
+      }
+      {
+        subPlots &&
           renderItem(
             'Title position',
             <CustomSelect
@@ -78,9 +90,9 @@ const GenericOptionControls = () => {
               onSelect={v => nestedUpdate({ genericOptions: { titlePosition: positions.dict[v] } })}
             />
           )
-        }
-        {
-          showLegend &&
+      }
+      {
+        showLegend &&
           renderItem(
             'Legend position',
             <CustomSelect
@@ -89,19 +101,13 @@ const GenericOptionControls = () => {
               onSelect={v => nestedUpdate({ genericOptions: { legendPosition: positions.dict[v] } })}
             />
           )
-        }
-        {
-          renderItem(
-            'Base color',
-            <HuePicker
-              width='100%'
-              color={baseColor}
-              onChange={({ hex }) => nestedUpdate({ genericOptions: { baseColor: hex } })}
-              className='cursor-pointer'
-            />
-          )
-        }
-      </div>
+      }
+      {
+        renderItem(
+          'Colour Scheme',
+          <ColorSchemeControls />
+        )
+      }
     </WidgetControlCard>
   )
 }

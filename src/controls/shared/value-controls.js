@@ -94,6 +94,13 @@ const ValueControls = ({ groupingOptional }) => {
       })}>ON</span>
     </div>
 
+  const clearGroupFilter = () => {
+    const filtersCopy = JSON.parse(JSON.stringify(filters))
+    delete filtersCopy[groupKey]
+    update({ filters: filtersCopy })
+    setAddingFirstGroupFilter(false)
+  }
+
   return (
     <>
       <WidgetControlCard
@@ -108,7 +115,10 @@ const ValueControls = ({ groupingOptional }) => {
         <CustomSelect
           data={group ? stringColumns : numericColumns.filter(c => !(valueKeys.map(({ key }) => key).includes(c)))}
           value={group ? groupKey : indexKey}
-          onSelect={val => update(group ? { groupKey: val } : { indexKey: val })}
+          onSelect={val => {
+            update(group ? { groupKey: val } : { indexKey: val })
+            clearGroupFilter()
+          }}
           onClear={() => update({ groupKey: null, indexKey: null })}
           placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
         />
@@ -120,10 +130,7 @@ const ValueControls = ({ groupingOptional }) => {
                 if (checked) {
                   setAddingFirstGroupFilter(!filters[groupKey]?.length)
                 } else {
-                  const filtersCopy = JSON.parse(JSON.stringify(filters))
-                  delete filtersCopy[groupKey]
-                  update({ filters: filtersCopy })
-                  setAddingFirstGroupFilter(false)
+                  clearGroupFilter()
                 }
               })
             }
