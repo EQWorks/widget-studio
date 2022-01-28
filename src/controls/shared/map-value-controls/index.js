@@ -19,7 +19,7 @@ const MapValueControls = () => {
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const numericColumns = useStoreState((state) => state.numericColumns)
-  const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
+  const dataHasVariance = useStoreState((state) => state.dataHasVariance)
 
   const mapLayer = useMemo(() => Object.keys(MAP_LAYER_VIS)
     .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
@@ -87,7 +87,7 @@ const MapValueControls = () => {
             values={mapValueKeys}
             data={mapNumericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
-            disableSubFor={zeroVarianceColumns}
+            disableSubs={!dataHasVariance}
             disableSubMessage="doesn't require aggregation."
             callback={(i, val) => {
               if (i === -1) {
