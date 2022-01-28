@@ -86,13 +86,20 @@ export const COORD_KEYS = {
 
 // ----TO DO: ERIKA - this has to be moved to state later on, when we give more options in editor
 export const VIS_OPTIONS = {
-  values: {
-    fill: [[214, 232, 253], [39, 85, 196]],
-    radius: [5, 15],
-    elevation: [1, 1000],
+  fill: {
+    valueOptions: [[214, 232, 253], [39, 85, 196]],
+    value: [39, 85, 196],
+  },
+  radius: {
+    valueOptions: [5, 15],
+    value: 10,
+  },
+  elevation: {
+    valueOptions: [1, 1000],
+    value: 0,
   },
   scale: 'linear',
 }
 
-export const OPACITY = 0.3
+export const OPACITY = 0.2
 export const PITCH = { elevation: 45 }
