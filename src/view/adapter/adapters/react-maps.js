@@ -67,7 +67,7 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { options, ...config }) => {
-    const { mapGroupKey, mapValueKeys } = config
+    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys } = config
     const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
@@ -89,8 +89,8 @@ export default {
       }
     }
     if (mapLayer === MAP_LAYERS.geojson) {
-      geometry = { geoKey: mapGroupKey }
-      name = mapGroupKey
+      geometry = { geoKey: mapGroupKeyTitle }
+      name = mapGroupKeyTitle
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES).find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
     }
 
@@ -110,12 +110,12 @@ export default {
         dataId: 'testWIReport',
         dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
         geometry,
-        visualizations: Object.fromEntries(mapValueKeys.map(({ key, agg, mapVis }) =>
+        visualizations: Object.fromEntries(mapValueKeys.map(({ title, mapVis }) =>
           [
             mapVis,
             {
               value: {
-                field: `${key}_${agg}`,
+                field: title,
               },
               //----TO DO - ERIKA - add to state for editor
               valueOptions: VIS_OPTIONS.values[mapVis],
