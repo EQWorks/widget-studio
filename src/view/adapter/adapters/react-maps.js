@@ -110,19 +110,20 @@ export default {
         dataId: 'testWIReport',
         dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
         geometry,
-        visualizations: Object.fromEntries(mapValueKeys.map(({ title, mapVis }) =>
-          [
-            mapVis,
+        visualizations:  Object.fromEntries(MAP_LAYER_VIS[mapLayer].map(vis => {
+          const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+          return  [
+            vis,
             {
-              value: {
-                field: title,
-              },
-              //----TO DO - ERIKA - add to state for editor
-              valueOptions: VIS_OPTIONS.values[mapVis],
+              value: keyTitle ?
+                { field: keyTitle } :
+                //----TO DO - ERIKA - add the options below to state for editor
+                VIS_OPTIONS[vis].value,
+              valueOptions: VIS_OPTIONS[vis].valueOptions,
               dataScale: VIS_OPTIONS.scale,
             },
           ]
-        )),
+        })),
         interactions: {
           tooltip: {
             tooltipKeys: {
