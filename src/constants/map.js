@@ -28,16 +28,32 @@ export const MAP_LAYER_GEO_KEYS = {
     'poi',
     'poi_id',
     'locus_poi_id',
-    'geocohort_id',
-    'source_poi',
-    'source_poi_id',
-    'target_poi',
-    'target_poi_id',
   ],
   geojson: Object.values(GEO_KEY_TYPES).flat(),
 }
 
 export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
+
+export const ID_KEYS = [
+  'id',
+  'geo_id',
+  'geo_cohort_id',
+  'source_poi',
+  'source_poi_id',
+  'target_poi',
+  'target_poi_id',
+  'ca_csd',
+  'geo_ca_csd',
+  'ggid',
+  'report_id',
+  'geocohort_id',
+  'locus_poi_list_id',
+  'chain_id',
+  'beacon_id',
+  'flight_code',
+  'camp_code',
+  ...MAP_GEO_KEYS,
+]
 
 export const COORD_KEYS = {
   latitude: [
@@ -45,10 +61,6 @@ export const COORD_KEYS = {
     'latitude',
     'poi_lat',
     'poi_latitude',
-    'source_lat',
-    'source_latitude',
-    'source_lat',
-    'source_latitude',
     'locus_poi_lat',
   ],
   longitude: [
@@ -57,11 +69,18 @@ export const COORD_KEYS = {
     'longitude',
     'poi_lon',
     'poi_longitude',
+    'locus_poi_lon',
+  ],
+  other: [
+    // TO DO: enable for xwi reports
+    'source_lat',
+    'source_latitude',
+    'source_lat',
+    'source_latitude',
     'source_lon',
     'source_longitude',
     'target_lon',
     'target_longitude',
-    'locus_poi_lon',
   ],
 }
 
