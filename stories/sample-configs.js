@@ -277,17 +277,20 @@ export default {
     'mapValueKeys': [
       {
         'key': 'visits',
+        'title': 'Visits (sum)',
         'agg': 'sum',
         'mapVis': 'radius',
       },
       {
         'key': 'unique_visitors',
+        'title:': 'Unique visitors (sum)',
         'agg': 'sum',
         'mapVis': 'fill',
       },
     ],
     'group': true,
     'mapGroupKey': 'poi_id',
+    'mapGroupKeyTitle': 'Poi id',
     'dataSource': {
       'type': 'Execution',
       'id': '913',
@@ -304,17 +307,20 @@ export default {
     'mapValueKeys': [
       {
         'key': 'impressions',
+        'title:': 'Impressions (sum)',
         'agg': 'sum',
         'mapVis': 'elevation',
       },
       {
         'key': 'spend',
+        'title': 'Spend (sum)',
         'agg': 'sum',
         'mapVis': 'fill',
       },
     ],
     'group': true,
     'mapGroupKey': 'geo_cohort_fsa',
+    'mapGroupKeyTitle': 'Geo cohort fsa',
     'dataSource': {
       'type': 'Execution',
       'id': '1389',
