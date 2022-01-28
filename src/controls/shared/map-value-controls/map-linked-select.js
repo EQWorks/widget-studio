@@ -18,7 +18,7 @@ const MapLinkedSelect = ({
   titles,
   data,
   subData,
-  disableSubFor,
+  disableSubs,
   disableSubMessage,
   callback,
 }) => {
@@ -54,7 +54,7 @@ const MapLinkedSelect = ({
               init={values[match]?.key}
               subInit={values[match]?.agg}
               placeholders={titles}
-              disableSub={disableSubFor.includes(values[match]?.key)}
+              disableSub={disableSubs}
               disableSubMessage={`${values[match]?.key} ${disableSubMessage}`}
             />
           </div>
@@ -73,12 +73,12 @@ MapLinkedSelect.propTypes = {
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
   callback: PropTypes.func.isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
-  disableSubFor: PropTypes.arrayOf(PropTypes.string),
+  disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
 }
 
 MapLinkedSelect.defaultProps = {
   titles: [],
-  disableSubFor: [],
+  disableSubs: false,
   disableSubMessage: '',
 }
