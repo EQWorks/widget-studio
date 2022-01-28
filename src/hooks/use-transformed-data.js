@@ -39,14 +39,16 @@ const useTransformedData = () => {
     })
   ), [rows, filters, finalGroupKey])
 
+  const newGroupKey = useMemo(() => groupFSAByPC
+    // use the key for postalcode to aggregate by FSA
+    ? validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
+    : finalGroupKey
+  , [groupFSAByPC, validMapGroupKeys, finalGroupKey])
+
   // if grouping enabled, memoize grouped and reorganized version of data that will be easy to aggregate
   const groupedData = useMemo(() => (
     group
       ? truncatedData.reduce((res, r) => {
-        // use the key for postalcode to aggregate by FSA
-        const newGroupKey = groupFSAByPC
-          ? validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
-          : finalGroupKey
         // FSAs are the first 3 letters of a postal code
         const group = groupFSAByPC ? r[newGroupKey].slice(0,3) : r[newGroupKey]
         res[group] = res[group] || {}
@@ -62,7 +64,7 @@ const useTransformedData = () => {
         return res
       }, {})
       : null
-  ), [group, finalGroupKey, truncatedData, groupFSAByPC, validMapGroupKeys])
+  ), [group, truncatedData, groupFSAByPC, newGroupKey])
 
 
   // relay some information about the grouped data to global store
@@ -114,7 +116,7 @@ const useTransformedData = () => {
             if (d[lat] && d[lon]) {
               return d
             }
-            const { [lat]: [_lat], [lon]: [_lon] } = groupedData[d[mapGroupKey]]
+            const { [lat]: [_lat], [lon]: [_lon] } = groupedData[d[formattedColumnNames[mapGroupKey]]]
             return {
               ...d,
               lat: _lat,
@@ -128,7 +130,7 @@ const useTransformedData = () => {
       }
     }
     return null
-  }, [type, aggregatedData, numericColumns, mapGroupKey, groupedData])
+  }, [type, aggregatedData, numericColumns, mapGroupKey, groupedData, formattedColumnNames])
 
   // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => (
