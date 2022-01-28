@@ -7,7 +7,7 @@ import MapLinkedSelect from './map-linked-select'
 import WidgetControlCard from '../widget-control-card'
 
 import modes from '../../../constants/modes'
-import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS } from '../../../constants/map'
+import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS, ID_KEYS } from '../../../constants/map'
 
 
 const MapValueControls = () => {
@@ -21,8 +21,14 @@ const MapValueControls = () => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const zeroVarianceColumns = useStoreState((state) => state.zeroVarianceColumns)
 
-  const mapLayer = Object.keys(MAP_LAYER_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
-  const mapNumericColumns = numericColumns.filter(col => !Object.values(COORD_KEYS).flat().includes(col))
+  const mapLayer = useMemo(() => Object.keys(MAP_LAYER_VIS)
+    .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+  , [mapGroupKey])
+
+  const mapNumericColumns = useMemo(() => numericColumns.filter(col =>
+    !Object.values(COORD_KEYS).flat().includes(col) &&
+    !ID_KEYS.includes(col))
+  , [numericColumns])
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
