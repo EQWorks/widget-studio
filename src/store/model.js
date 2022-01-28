@@ -148,6 +148,7 @@ export default {
           mapGroupKey,
           indexKey,
           ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
+          ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
           ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
           options,
           genericOptions,
@@ -155,20 +156,6 @@ export default {
         }
         : undefined
     )),
-
-  numericColumns: computed(
-    [(state) => state.columns],
-    (columns) => (
-      columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name)
-    )
-  ),
-
-  stringColumns: computed(
-    [(state) => state.columns],
-    (columns) => (
-      columns.filter(({ category }) => category === 'String').map(({ name }) => name)
-    )
-  ),
 
   validMapGroupKeys: computed(
     [
@@ -207,7 +194,6 @@ export default {
       (state) => state.mapValueKeys,
       (state) => state.group,
       (state) => state.type,
-      (state) => state.zeroVarianceColumns,
       (state) => state.formattedColumnNames,
     ],
     (
@@ -215,30 +201,30 @@ export default {
       mapValueKeys,
       group,
       type,
-      zeroVarianceColumns,
       formattedColumnNames
     ) => (
-      type === 'map'
-        ? mapValueKeys.filter(({ key, agg }) => key && (agg || zeroVarianceColumns.includes(key)))
-        : valueKeys
-          .filter(({ key, agg }) => key && (agg || !group))
-          .map(({ key, agg, ...rest }) => ({
-            key,
-            title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}` || key,
-            ...(agg && { agg }),
-            ...rest,
-          }))
+      (type === 'map' ? mapValueKeys : valueKeys)
+        .filter(({ key, agg }) => key && (agg || !group))
+        .map(({ key, agg, ...rest }) => ({
+          key,
+          title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}` || key,
+          ...(agg && { agg }),
+          ...rest,
+        }))
     )
   ),
 
   formattedColumnNames: computed(
     [
       (state) => state.columns,
+      (state) => state.groupFSAByPC,
     ],
     (
-      columns
+      columns,
+      groupFSAByPC,
     ) => (
-      Object.fromEntries(columns.map(({ name }) => [name, cleanUp(name)]))
+      Object.fromEntries(columns.map(({ name }) => [name, cleanUp(name)])
+        .concat(groupFSAByPC ? [['geo_ca_fsa', cleanUp('geo_ca_fsa')]] : []))
     )
   ),
 
