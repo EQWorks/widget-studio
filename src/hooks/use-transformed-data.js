@@ -6,14 +6,13 @@ import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
 
 const useTransformedData = () => {
-
   // actions
   const update = useStoreActions((state) => state.update)
 
   // state
   const rows = useStoreState((state) => state.rows)
   const type = useStoreState((state) => state.type)
-  const numericColumns = useStoreState((state) => state.numericColumns)
+  const columns = useStoreState((state) => state.columns)
   const filters = useStoreState((state) => state.filters)
   const indexKey = useStoreState((state) => state.indexKey)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
@@ -109,9 +108,11 @@ const useTransformedData = () => {
       //---TODO - Erika: complete this to include coordinates for xwi report; this is only for scatterplot layer
       // add coordinates for map widget data
       if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+        const lat = columns.find(({ name, category }) =>
+          COORD_KEYS.latitude.includes(name) && category === 'Numeric')?.name
+        const lon = columns.find(({ name, category }) =>
+          COORD_KEYS.longitude.includes(name) && category === 'Numeric')?.name
         return aggregatedData.map((d) => {
-          const lat = numericColumns.find(key => COORD_KEYS.latitude.includes(key))
-          const lon = numericColumns.find(key => COORD_KEYS.longitude.includes(key))
           if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
             if (d[lat] && d[lon]) {
               return d
@@ -130,7 +131,7 @@ const useTransformedData = () => {
       }
     }
     return null
-  }, [type, aggregatedData, numericColumns, mapGroupKey, groupedData, formattedColumnNames])
+  }, [type, aggregatedData, columns, mapGroupKey, groupedData, formattedColumnNames])
 
   // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => (
