@@ -192,6 +192,7 @@ export default {
       (state) => state.mapValueKeys,
       (state) => state.group,
       (state) => state.type,
+      (state) => state.dataHasVariance,
       (state) => state.formattedColumnNames,
     ],
     (
@@ -199,10 +200,11 @@ export default {
       mapValueKeys,
       group,
       type,
+      dataHasVariance,
       formattedColumnNames
     ) => (
       (type === 'map' ? mapValueKeys : valueKeys)
-        .filter(({ key, agg }) => key && (agg || !group))
+        .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
         .map(({ key, agg, ...rest }) => ({
           key,
           title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}` || key,
