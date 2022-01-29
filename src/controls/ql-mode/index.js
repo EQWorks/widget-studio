@@ -16,6 +16,8 @@ import CustomAccordion from '../../components/custom-accordion'
 import types from '../../constants/types'
 import MapValueControls from '../shared/map-value-controls'
 import ValueControls from '../shared/value-controls'
+import modes from '../../constants/modes'
+import GenericOptionControls from '../shared/generic-option-controls'
 
 
 const controls = {
@@ -54,6 +56,7 @@ const QLModeControls = () => {
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
+  const mode = useStoreState((state) => state.ui.mode)
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const allowReset = useStoreState((state) => state.ui.allowReset)
 
@@ -95,12 +98,13 @@ const QLModeControls = () => {
         >
           <Icons disabled={!dataReady} />
         </WidgetControlCard>
-        {
-          type === types.MAP
-            ? <MapValueControls />
-            : <ValueControls />
-        }
-        {isReady && createElement(controls[type])}
+        {isReady && (
+          <>
+            {type === types.MAP ? <MapValueControls /> : <ValueControls />}
+            {mode === modes.EDITOR && <GenericOptionControls />}
+            {mode === modes.EDITOR && createElement(controls[type])}
+          </>
+        )}
       </div>
     </CustomAccordion>
   )

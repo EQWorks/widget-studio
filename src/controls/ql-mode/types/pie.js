@@ -1,10 +1,8 @@
 import React from 'react'
 
-import modes from '../../../constants/modes'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomToggle from '../../../components/custom-toggle'
 import WidgetControlCard from '../../shared/widget-control-card'
-import GenericOptionControls from '../../shared/generic-option-controls'
 
 
 const PieControls = () => {
@@ -16,29 +14,22 @@ const PieControls = () => {
   const donut = useStoreState((state) => state.options.donut)
   const showPercentage = useStoreState((state) => state.options.showPercentage)
 
-  // ui state
-  const mode = useStoreState((state) => state.ui.mode)
-
   return (
-    mode === modes.EDITOR &&
-    <>
-      <GenericOptionControls />
-      <WidgetControlCard
-        clearable
-        title='Styling'
-      >
-        <CustomToggle
-          value={donut}
-          label='Donut'
-          onChange={(val) => nestedUpdate({ options: { donut: val } })}
-        />
-        <CustomToggle
-          value={showPercentage}
-          label='Show Percentage'
-          onChange={(val) => nestedUpdate({ options: { showPercentage: val } })}
-        />
-      </WidgetControlCard>
-    </>
+    <WidgetControlCard
+      clearable
+      title='Styling'
+    >
+      <CustomToggle
+        value={donut}
+        label='Donut'
+        onChange={(val) => nestedUpdate({ options: { donut: val } })}
+      />
+      <CustomToggle
+        value={showPercentage}
+        label='Show Percentage'
+        onChange={(val) => nestedUpdate({ options: { showPercentage: val } })}
+      />
+    </WidgetControlCard>
   )
 }
 
