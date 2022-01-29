@@ -1,9 +1,4 @@
 import types from './types'
-import BarControls from '../controls/ql-mode/types/bar'
-import ScatterControls from '../controls/ql-mode/types/scatter'
-import PieControls from '../controls/ql-mode/types/pie'
-import LineControls from '../controls/ql-mode/types/line'
-import MapControls from '../controls/ql-mode/types/map'
 import { Pie, Bar, Line, Scatter, Map } from '../components/icons'
 import PlotlyAdapters from '../view/adapter/adapters/chart-system/plotly'
 import ReactMapsAdapter from '../view/adapter/adapters/react-maps'
@@ -12,32 +7,87 @@ import ReactMapsAdapter from '../view/adapter/adapters/react-maps'
 export default {
   [types.LINE]: {
     icon: Line,
-    uniqueControls: LineControls,
     adapter: PlotlyAdapters[types.LINE],
     groupingOptional: true,
+    uniqueOptions: {
+      showTicks: {
+        name: 'Ticks',
+        type: Boolean,
+        default: true,
+      },
+      spline: {
+        name: 'Spline Interpolation',
+        type: Boolean,
+        default: false,
+      },
+    },
   },
   [types.BAR]: {
     icon: Bar,
-    uniqueControls: BarControls,
     adapter: PlotlyAdapters[types.BAR],
     groupingOptional: false,
+    uniqueOptions: {
+      stacked: {
+        name: 'Stacked',
+        type: Boolean,
+        default: false,
+      },
+      showTicks: {
+        name: 'Ticks',
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   [types.SCATTER]: {
     icon: Scatter,
-    uniqueControls: ScatterControls,
     adapter: PlotlyAdapters[types.SCATTER],
     groupingOptional: true,
+    uniqueOptions: {
+      showTicks: {
+        name: 'Ticks',
+        type: Boolean,
+        default: true,
+      },
+      showLines: {
+        name: 'Lines',
+        type: Boolean,
+        default: false,
+      },
+    },
   },
   [types.PIE]: {
     icon: Pie,
-    uniqueControls: PieControls,
     adapter: PlotlyAdapters[types.PIE],
     groupingOptional: false,
+    uniqueOptions: {
+      donut: {
+        name: 'Donut',
+        type: Boolean,
+        default: false,
+      },
+      showPercentage: {
+        name: 'Percentage',
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   [types.MAP]: {
     icon: Map,
-    uniqueControls: MapControls,
     adapter: ReactMapsAdapter,
     groupingOptional: false,
+    uniqueOptions: {
+      showTooltip: {
+        name: 'Tooltip',
+        type: Boolean,
+        default: true,
+      },
+      showLegend: {
+        name: 'Legend',
+        type: Boolean,
+        default: true,
+      },
+    },
   },
 }

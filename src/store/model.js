@@ -2,36 +2,13 @@ import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
 import types from '../constants/types'
+import typeInfo from '../constants/type-info'
 import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
 import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
-
-const widgetDefaults = {
-  [types.BAR]: {
-    stacked: false,
-    spline: false,
-    showTicks: true,
-  },
-  [types.LINE]: {
-    showTicks: true,
-    spline: false,
-  },
-  [types.PIE]: {
-    donut: false,
-    showPercentage: true,
-  },
-  [types.SCATTER]: {
-    showTicks: true,
-    showLines: false,
-  },
-  [types.MAP]: {
-    showTooltip: true,
-    showLegend: true,
-  },
-}
 
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
@@ -382,7 +359,7 @@ export default {
     ...state,
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
-    uniqueOptions: widgetDefaults[state.type],
+    uniqueOptions: typeInfo[state.type].uniqueOptions,
     // map widget doesn't have a switch to change group state, so we have to keep it true here
     group: state.type === types.MAP ? true : state.group,
   })),
