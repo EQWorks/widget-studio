@@ -4,29 +4,17 @@ import PropTypes from 'prop-types'
 import { Button } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
-import BarControls from './types/bar'
-import PieControls from './types/pie'
-import LineControls from './types/line'
-import ScatterControls from './types/scatter'
-import MapControls from './types/map'
 import { Controls, Save, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
 import types from '../../constants/types'
+import typeInfo from '../../constants/type-info'
 import MapValueControls from '../shared/map-value-controls'
 import ValueControls from '../shared/value-controls'
 import modes from '../../constants/modes'
 import GenericOptionControls from '../shared/generic-option-controls'
 
-
-const controls = {
-  [types.BAR]: BarControls,
-  [types.LINE]: LineControls,
-  [types.PIE]: PieControls,
-  [types.SCATTER]: ScatterControls,
-  [types.MAP]: MapControls,
-}
 
 const renderButton = (children, onClick, props) =>
   <Button
@@ -102,7 +90,7 @@ const QLModeControls = () => {
           <>
             {type === types.MAP ? <MapValueControls /> : <ValueControls />}
             {mode === modes.EDITOR && <GenericOptionControls />}
-            {mode === modes.EDITOR && createElement(controls[type])}
+            {mode === modes.EDITOR && createElement(typeInfo[type].uniqueControls)}
           </>
         )}
       </div>

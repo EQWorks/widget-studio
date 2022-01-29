@@ -10,16 +10,8 @@ import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/widget-control-card'
-import types from '../../constants/types'
+import typeInfo from '../../constants/type-info'
 
-
-const GROUPING_OPTIONAL = {
-  [types.BAR]: false,
-  [types.PIE]: false,
-  [types.LINE]: true,
-  [types.SCATTER]: true,
-  [types.MAP]: false,
-}
 
 const ValueControls = () => {
 
@@ -47,7 +39,7 @@ const ValueControls = () => {
   // local state
   const [addingFirstGroupFilter, setAddingFirstGroupFilter] = useState(false)
   const showGroupFilterSelect = useMemo(() => addingFirstGroupFilter || filters[groupKey]?.length, [addingFirstGroupFilter, filters, groupKey])
-  const groupingOptional = useMemo(() => GROUPING_OPTIONAL[type], [type])
+  const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
 
   useEffect(() => {
     if (!group && !groupingOptional) {

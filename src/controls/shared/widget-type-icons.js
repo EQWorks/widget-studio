@@ -4,24 +4,10 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
 import CustomButton from '../../components/custom-button'
-import {
-  Pie,
-  Bar,
-  Line,
-  Scatter,
-  Map,
-} from '../../components/icons'
 import { useStoreActions, useStoreState } from '../../store'
 import types from '../../constants/types'
+import typeInfo from '../../constants/type-info'
 
-
-const mapIcons = {
-  [types.PIE]: Pie,
-  [types.BAR]: Bar,
-  [types.SCATTER]: Scatter,
-  [types.LINE]: Line,
-  [types.MAP]: Map,
-}
 
 const Icons = ({ disabled }) => {
   const update = useStoreActions((actions) => actions.update)
@@ -38,7 +24,7 @@ const Icons = ({ disabled }) => {
   return (
     <div className='flex'>
       {
-        Object.entries(mapIcons).map(([type, Icon], i) => {
+        Object.entries(typeInfo).map(([type, { icon: Icon }], i) => {
           const isCurrent = type === current
           const isDisabled = disabled || (type === types.MAP && !mapIconAvailability)
           return (
