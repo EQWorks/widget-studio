@@ -5,11 +5,19 @@ import WidgetControlCard from '../shared/widget-control-card'
 import { sizes, positions } from '../../constants/viz-options'
 import CustomToggle from '../../components/custom-toggle'
 import CustomSelect from '../../components/custom-select'
+import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './color-scheme-controls'
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 
-const styles = makeStyles({
+const classes = makeStyles({
+  controlRow: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: '0.5rem',
+    marginBottom: '0.5rem',
+  },
   controlSection: {
     width: '100%',
     display: 'flex',
@@ -24,6 +32,12 @@ const styles = makeStyles({
   },
   fullWidth: {
     width: '100%',
+  },
+  outerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    height: '100%',
   },
 })
 
@@ -42,25 +56,26 @@ const GenericOptionControls = () => {
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
   const renderItem = (title, Component) => (
-    <div className={styles.controlSection}>
-      <div className={styles.controlSectionTitle} > {`${title}:`} </div>
-      <div className={styles.fullWidth}> {Component} </div>
+    <div className={classes.controlSection}>
+      <div className={classes.controlSectionTitle} > {`${title}:`} </div>
+      <div className={classes.fullWidth}> {Component} </div>
     </div>
   )
 
   return (
     <WidgetControlCard title='Options'>
-      {
-        renderItem(
-          'Show legend',
-          <CustomToggle
-            value={showLegend}
-            onChange={(val) => nestedUpdate({ genericOptions: { showLegend: val } })}
-          />
-        )
-      }
-      {
-        type !== 'pie' &&
+      <div className={classes.outerContainer}>
+        {
+          renderItem(
+            'Show legend',
+            <CustomToggle
+              value={showLegend}
+              onChange={(val) => nestedUpdate({ genericOptions: { showLegend: val } })}
+            />
+          )
+        }
+        {
+          type !== 'pie' &&
           renderItem(
             'Subplots',
             <CustomToggle
@@ -69,19 +84,19 @@ const GenericOptionControls = () => {
               disabled={valueKeys.length <= 1}
             />
           )
-      }
-      {
-        renderItem(
-          'Size',
-          <CustomSelect
-            data={sizes.string}
-            value={sizes.string[sizes.numeric.indexOf(size)]}
-            onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
-          />
-        )
-      }
-      {
-        subPlots &&
+        }
+        {
+          renderItem(
+            'Size',
+            <CustomSelect
+              data={sizes.string}
+              value={sizes.string[sizes.numeric.indexOf(size)]}
+              onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
+            />
+          )
+        }
+        {
+          subPlots &&
           renderItem(
             'Title position',
             <CustomSelect
@@ -90,24 +105,35 @@ const GenericOptionControls = () => {
               onSelect={v => nestedUpdate({ genericOptions: { titlePosition: positions.dict[v] } })}
             />
           )
-      }
-      {
-        showLegend &&
+        }
+
+        <div className={classes.controlRow}>
+          {
+            renderItem(
+              'Legend Position',
+              <XYSelect
+                value={legendPosition}
+                update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
+              />
+            )
+          }
+          {
+            renderItem(
+              'Title Position',
+              <XYSelect
+                value={titlePosition}
+                update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
+              />
+            )
+          }
+        </div>
+        {
           renderItem(
-            'Legend position',
-            <CustomSelect
-              data={positions.string.filter(s => positions.dict[s].every(n => n === 0 || n === 1))} // only include corners
-              value={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(legendPosition))]}
-              onSelect={v => nestedUpdate({ genericOptions: { legendPosition: positions.dict[v] } })}
-            />
+            'Colour Scheme',
+            <ColorSchemeControls />
           )
-      }
-      {
-        renderItem(
-          'Colour Scheme',
-          <ColorSchemeControls />
-        )
-      }
+        }
+      </div>
     </WidgetControlCard>
   )
 }
