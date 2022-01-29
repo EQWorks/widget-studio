@@ -2,15 +2,17 @@ import { useEffect, useMemo } from 'react'
 
 import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
+import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
 
 const useTransformedData = () => {
-
   // actions
   const update = useStoreActions((state) => state.update)
 
   // state
   const rows = useStoreState((state) => state.rows)
+  const type = useStoreState((state) => state.type)
+  const columns = useStoreState((state) => state.columns)
   const filters = useStoreState((state) => state.filters)
   const indexKey = useStoreState((state) => state.indexKey)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
@@ -18,27 +20,39 @@ const useTransformedData = () => {
   const groupKey = useStoreState((state) => state.groupKey)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
+  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
+  const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
+
+  const finalGroupKey = useMemo(() => type === 'map' ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
     rows.filter(obj => {
-      for (const [key, [min, max]] of Object.entries(filters).filter(([k]) => k !== groupKey)) {
+      for (const [key, [min, max]] of Object.entries(filters).filter(([k]) => k !== finalGroupKey)) {
         if (obj[key] < min || obj[key] > max) {
           return false
         }
       }
       return true
     })
-  ), [rows, filters, groupKey])
+  ), [rows, filters, finalGroupKey])
+
+  const newGroupKey = useMemo(() => groupFSAByPC
+    // use the key for postalcode to aggregate by FSA
+    ? validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
+    : finalGroupKey
+  , [groupFSAByPC, validMapGroupKeys, finalGroupKey])
 
   // if grouping enabled, memoize grouped and reorganized version of data that will be easy to aggregate
   const groupedData = useMemo(() => (
     group
       ? truncatedData.reduce((res, r) => {
-        const group = r[groupKey]
+        // FSAs are the first 3 letters of a postal code
+        const group = groupFSAByPC ? r[newGroupKey].slice(0,3) : r[newGroupKey]
         res[group] = res[group] || {}
         Object.entries(r).forEach(([k, v]) => {
-          if (k !== groupKey) {
+          if (k !== newGroupKey) {
             if (res[group][k]) {
               res[group][k].push(v)
             } else {
@@ -49,7 +63,7 @@ const useTransformedData = () => {
         return res
       }, {})
       : null
-  ), [group, groupKey, truncatedData])
+  ), [group, truncatedData, groupFSAByPC, newGroupKey])
 
 
   // relay some information about the grouped data to global store
@@ -66,14 +80,14 @@ const useTransformedData = () => {
     }
   }, [update, groupedData])
 
-  // if a filter on the groupKey exists, retain only the desired groups
+  // if a filter on the finalGroupKey exists, retain only the desired groups
   const filteredGroupedData = useMemo(() => (
     group
-      ? filters[groupKey]?.length
-        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => filters[groupKey].includes(k)))
+      ? filters[finalGroupKey]?.length
+        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => filters[finalGroupKey].includes(k)))
         : groupedData
       : null
-  ), [filters, group, groupKey, groupedData])
+  ), [filters, group, finalGroupKey, groupedData])
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
@@ -84,10 +98,40 @@ const useTransformedData = () => {
             ? aggFunctions[agg](values[key])
             : values[key][0]
           return res
-        }, { [formattedColumnNames[groupKey]]: group })
+        }, { [formattedColumnNames[finalGroupKey]]: group })
       ))
       : null
-  ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, groupKey, renderableValueKeys])
+  ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, finalGroupKey, renderableValueKeys])
+
+  const mapEnrichedData = useMemo(() => {
+    if (type === 'map') {
+      //---TODO - Erika: complete this to include coordinates for xwi report; this is only for scatterplot layer
+      // add coordinates for map widget data
+      if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+        const lat = columns.find(({ name, category }) =>
+          COORD_KEYS.latitude.includes(name) && category === 'Numeric')?.name
+        const lon = columns.find(({ name, category }) =>
+          COORD_KEYS.longitude.includes(name) && category === 'Numeric')?.name
+        return aggregatedData.map((d) => {
+          if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+            if (d[lat] && d[lon]) {
+              return d
+            }
+            const { [lat]: [_lat], [lon]: [_lon] } = groupedData[d[formattedColumnNames[mapGroupKey]]]
+            return {
+              ...d,
+              lat: _lat,
+              lon: _lon,
+            }
+          }
+        })
+      }
+      if (MAP_LAYER_GEO_KEYS.geojson.includes(mapGroupKey)) {
+        return aggregatedData
+      }
+    }
+    return null
+  }, [type, aggregatedData, columns, mapGroupKey, groupedData, formattedColumnNames])
 
   // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => (
@@ -99,11 +143,15 @@ const useTransformedData = () => {
   ), [formattedColumnNames, group, indexKey, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
-  const finalData = useMemo(() => (
-    group
-      ? aggregatedData
-      : indexedData
-  ), [aggregatedData, group, indexedData])
+  const finalData = useMemo(() => {
+    if (type === 'map') {
+      return mapEnrichedData
+    }
+    if (group) {
+      return aggregatedData
+    }
+    return indexedData
+  }, [aggregatedData, group, indexedData, mapEnrichedData, type])
 
   return finalData
 }

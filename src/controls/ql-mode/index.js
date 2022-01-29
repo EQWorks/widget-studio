@@ -8,6 +8,7 @@ import BarControls from './types/bar'
 import PieControls from './types/pie'
 import LineControls from './types/line'
 import ScatterControls from './types/scatter'
+import MapControls from './types/map'
 import { Controls, Save, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
@@ -19,6 +20,7 @@ const controls = {
   line: LineControls,
   pie: PieControls,
   scatter: ScatterControls,
+  map: MapControls,
 }
 
 const renderButton = (children, onClick, props) =>

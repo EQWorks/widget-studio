@@ -9,7 +9,7 @@ import {
   Bar,
   Line,
   Scatter,
-  // Map,
+  Map,
 } from '../../components/icons'
 import { useStoreActions, useStoreState } from '../../store'
 
@@ -19,30 +19,40 @@ const mapIcons = {
   bar: Bar,
   scatter: Scatter,
   line: Line,
-  // map: Map,
+  map: Map,
 }
 
 const Icons = ({ disabled }) => {
   const update = useStoreActions((actions) => actions.update)
   const current = useStoreState((state) => state.type)
-  const iconButtonClass = (type) => clsx('outline-none focus:outline-none border-white border-custom-1 shadow-light-10 hover:shadow-light-20 h-10 w-10 p-1.5 flex items-center justify-center mr-3 rounded-xl transition-all duration-300 ease-in-out', {
-    ['text-primary-500 hover:text-primary-600 active:text-primary-700 bg-primary-50 hover:bg-primary-100']: true,
-    ['text-primary-700 hover:text-primary-700 bg-primary-200 hover:bg-primary-200']: type === current,
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
+
+  const mapIconAvailability = validMapGroupKeys.length > 0
+
+  const iconButtonClass = (isCurrent, isDisabled) => clsx('outline-none focus:outline-none border-white border-custom-1 shadow-light-10 hover:shadow-light-20 h-10 w-10 p-1.5 flex items-center justify-center mr-3 rounded-xl transition-all duration-300 ease-in-out', {
+    ['text-primary-500 hover:text-primary-600 active:text-primary-700 bg-primary-50 hover:bg-primary-100']: !isCurrent && !isDisabled,
+    ['text-primary-700 hover:text-primary-700 bg-primary-200 hover:bg-primary-200']: isCurrent,
+    ['pointer-events-none text-secondary-400 bg-secondary-100']: isDisabled,
   })
   return (
     <div className='flex'>
       {
-        Object.entries(mapIcons).map(([type, Icon], i) => (
-          <CustomButton
-            key={i}
-            disabled={disabled}
-            variant='borderless'
-            className={iconButtonClass(type)}
-            onClick={() => update({ type })}
-          >
-            <Icon className='overflow-visible w-full h-full fill-current' />
-          </CustomButton>
-        ))
+        Object.entries(mapIcons).map(([type, Icon], i) => {
+          const isCurrent = type === current
+          const isDisabled = disabled || (type === 'map' && !mapIconAvailability)
+          return (
+            <CustomButton
+              key={i}
+              disabled={isDisabled}
+              variant='borderless'
+              className={iconButtonClass(isCurrent, isDisabled)}
+              onClick={() => update({ type })}
+            >
+              <Icon className='overflow-visible w-full h-full fill-current' />
+            </CustomButton>
+          )
+        }
+        )
       }
     </div >
   )

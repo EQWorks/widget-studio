@@ -22,6 +22,7 @@ const ValueControls = ({ groupingOptional }) => {
   // common state
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
+  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
@@ -117,9 +118,16 @@ const ValueControls = ({ groupingOptional }) => {
           value={group ? groupKey : indexKey}
           onSelect={val => {
             update(group ? { groupKey: val } : { indexKey: val })
+            {/* update mapGroupKey with groupKey value if it is a valid geo key so we have it available
+              * if we switch to a map widget type;
+              * reset mapValueKeys in case mapGroupKey value requires a new map layer
+              */}
+            if (group && validMapGroupKeys.includes(val)) {
+              update({ mapGroupKey: val, mapValueKeys: [] })
+            }
             clearGroupFilter()
           }}
-          onClear={() => update({ groupKey: null, indexKey: null })}
+          onClear={() => update({ groupKey: null, indexKey: null, mapGroupKey: null, mapValueKeys: [] })}
           placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
         />
         {

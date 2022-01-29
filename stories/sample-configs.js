@@ -270,4 +270,64 @@ export default {
       'id': '217',
     },
   },
+  'map-1': {
+    'title': 'My example map widget - scatterplot layer',
+    'type': 'map',
+    'filters': { 'visits': [0, 100] },
+    'mapValueKeys': [
+      {
+        'key': 'visits',
+        'title': 'Visits (sum)',
+        'agg': 'sum',
+        'mapVis': 'radius',
+      },
+      {
+        'key': 'unique_visitors',
+        'title:': 'Unique visitors (sum)',
+        'agg': 'sum',
+        'mapVis': 'fill',
+      },
+    ],
+    'group': true,
+    'mapGroupKey': 'poi_id',
+    'mapGroupKeyTitle': 'Poi id',
+    'dataSource': {
+      'type': 'Execution',
+      'id': '913',
+    },
+    'options': {
+      'showTooltip': true,
+      'showLegend': true,
+    },
+  },
+  'map-2': {
+    'title': 'My example map widget - polygon geojson layer',
+    'type': 'map',
+    'filters': { 'spend': [0, 100] },
+    'mapValueKeys': [
+      {
+        'key': 'impressions',
+        'title:': 'Impressions (sum)',
+        'agg': 'sum',
+        'mapVis': 'elevation',
+      },
+      {
+        'key': 'spend',
+        'title': 'Spend (sum)',
+        'agg': 'sum',
+        'mapVis': 'fill',
+      },
+    ],
+    'group': true,
+    'mapGroupKey': 'geo_cohort_fsa',
+    'mapGroupKeyTitle': 'Geo cohort fsa',
+    'dataSource': {
+      'type': 'Execution',
+      'id': '1389',
+    },
+    'options': {
+      'showTooltip': true,
+      'showLegend': true,
+    },
+  },
 }
