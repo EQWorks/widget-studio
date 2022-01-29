@@ -1,5 +1,4 @@
-import React, { createElement } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 
 import { Button } from '@eqworks/lumen-labs'
 
@@ -14,6 +13,7 @@ import MapValueControls from '../shared/map-value-controls'
 import ValueControls from '../shared/value-controls'
 import modes from '../../constants/modes'
 import GenericOptionControls from '../shared/generic-option-controls'
+import CustomToggle from '../../components/custom-toggle'
 
 
 const renderButton = (children, onClick, props) =>
@@ -42,6 +42,7 @@ const QLModeControls = () => {
   const isReady = useStoreState((state) => state.isReady)
   const type = useStoreState((state) => state.type)
   const dataReady = useStoreState((state) => state.dataReady)
+  const uniqueOptions = useStoreState((state) => state.uniqueOptions)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -70,6 +71,33 @@ const QLModeControls = () => {
     }
   </>
 
+  const renderBool = (title, value) => {
+    const [k, v] = Object.entries(value)[0]
+    return (
+      <CustomToggle
+        value={v}
+        label={title}
+        onChange={_v => nestedUpdate({ uniqueOptions: { [k]: _v } })}
+      />
+    )
+  }
+
+  const renderUniqueOptions = (
+    <WidgetControlCard
+      clearable
+      title='Styling'
+    >
+      {
+        Object.entries(typeInfo[type]?.uniqueOptions || {})
+          .map(([k, { name, type }]) => {
+            if (type === Boolean) { // TODO support other types of uniqueOptions
+              return renderBool(name, { [k]: uniqueOptions[k] })
+            }
+          })
+      }
+    </WidgetControlCard>
+  )
+
   return (
     <CustomAccordion
       disabled={!dataReady}
@@ -89,20 +117,13 @@ const QLModeControls = () => {
         {isReady && (
           <>
             {type === types.MAP ? <MapValueControls /> : <ValueControls />}
+            {mode === modes.EDITOR && renderUniqueOptions}
             {mode === modes.EDITOR && <GenericOptionControls />}
-            {mode === modes.EDITOR && createElement(typeInfo[type].uniqueControls)}
           </>
         )}
       </div>
     </CustomAccordion>
   )
-}
-
-QLModeControls.propTypes = {
-  className: PropTypes.string,
-}
-QLModeControls.defaultProps = {
-  className: '',
 }
 
 export default QLModeControls
