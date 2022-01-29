@@ -1,16 +1,17 @@
 import React, { createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
+import { useResizeDetector } from 'react-resize-detector'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState } from '../../store'
 import PlotlyAdapters from './adapters/chart-system/plotly'
-
 import MapAdapter from './adapters/react-maps'
 
 
 const classes = makeStyles({
   container: {
+    position: 'relative',
     width: '100%',
     height: '100%',
   },
@@ -43,6 +44,7 @@ const WidgetAdapter = () => {
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const transformedData = useStoreState((state) => state.transformedData)
+  const { ref, width, height } = useResizeDetector()
 
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => adapterDict[type], [type])
@@ -52,20 +54,12 @@ const WidgetAdapter = () => {
 
   // render the component
   return (
-    <div className={classes.container} >
-      {createElement(component, adaptedDataAndConfig)}
+    <div ref={ref} className={classes.container} >
+      {createElement(component, { width, height, ...adaptedDataAndConfig }
+      )}
     </div>
   )
 }
 
 export default WidgetAdapter
 
-WidgetAdapter.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-}
-
-WidgetAdapter.defaultProps = {
-  width: 0,
-  height: 0,
-}
