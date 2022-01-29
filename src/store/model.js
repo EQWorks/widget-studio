@@ -1,32 +1,33 @@
 import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
+import types from '../constants/types'
+import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
-import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
 import { geoKeyHasCoordinates } from '../util'
 import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
 
 const widgetDefaults = {
-  bar: {
+  [types.BAR]: {
     stacked: false,
     spline: false,
     showTicks: true,
   },
-  line: {
+  [types.LINE]: {
     showTicks: true,
     spline: false,
   },
-  pie: {
+  [types.PIE]: {
     donut: false,
     showPercentage: true,
   },
-  scatter: {
+  [types.SCATTER]: {
     showTicks: true,
     showLines: false,
   },
-  map: {
+  [types.MAP]: {
     showTooltip: true,
     showLegend: true,
   },
@@ -141,8 +142,8 @@ export default {
           title,
           type,
           filters,
-          valueKeys: type !== 'map' ? renderableValueKeys : [],
-          mapValueKeys: type === 'map' ? renderableValueKeys : [],
+          valueKeys: type !== types.MAP ? renderableValueKeys : [],
+          mapValueKeys: type === types.MAP ? renderableValueKeys : [],
           group,
           groupKey,
           mapGroupKey,
@@ -213,7 +214,7 @@ export default {
       dataHasVariance,
       formattedColumnNames
     ) => (
-      (type === 'map' ? mapValueKeys : valueKeys)
+      (type === types.MAP ? mapValueKeys : valueKeys)
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
         .map(({ key, agg, ...rest }) => ({
           key,
@@ -260,7 +261,7 @@ export default {
     ) => (
       Boolean(type && columns.length && rows.length &&
         (
-          type === 'map'
+          type === types.MAP
             ? renderableValueKeys.length && mapGroupKey
             : renderableValueKeys.length && (indexKey || groupKey)
         )
@@ -383,7 +384,7 @@ export default {
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
     options: widgetDefaults[state.type],
     // map widget doesn't have a switch to change group state, so we have to keep it true here
-    group: state.type === 'map' ? true : state.group,
+    group: state.type === types.MAP ? true : state.group,
   })),
 
   // on reset, set a 5 second timer during which reset cannot be re-enabled

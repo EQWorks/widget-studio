@@ -13,14 +13,15 @@ import { Controls, Save, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
+import types from '../../constants/types'
 
 
 const controls = {
-  bar: BarControls,
-  line: LineControls,
-  pie: PieControls,
-  scatter: ScatterControls,
-  map: MapControls,
+  [types.BAR]: BarControls,
+  [types.LINE]: LineControls,
+  [types.PIE]: PieControls,
+  [types.SCATTER]: ScatterControls,
+  [types.MAP]: MapControls,
 }
 
 const renderButton = (children, onClick, props) =>
@@ -46,6 +47,7 @@ const QLModeControls = () => {
   const resetWidget = useStoreActions(actions => actions.resetWidget)
 
   // state
+  const isReady = useStoreState((state) => state.isReady)
   const type = useStoreState((state) => state.type)
   const dataReady = useStoreState((state) => state.dataReady)
 
@@ -91,9 +93,7 @@ const QLModeControls = () => {
         >
           <Icons disabled={!dataReady} />
         </WidgetControlCard>
-        {
-          createElement(controls[type || 'line'])
-        }
+        {isReady && createElement(controls[type])}
       </div>
     </CustomAccordion>
   )

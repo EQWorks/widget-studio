@@ -12,14 +12,15 @@ import {
   Map,
 } from '../../components/icons'
 import { useStoreActions, useStoreState } from '../../store'
+import types from '../../constants/types'
 
 
 const mapIcons = {
-  pie: Pie,
-  bar: Bar,
-  scatter: Scatter,
-  line: Line,
-  map: Map,
+  [types.PIE]: Pie,
+  [types.BAR]: Bar,
+  [types.SCATTER]: Scatter,
+  [types.LINE]: Line,
+  [types.MAP]: Map,
 }
 
 const Icons = ({ disabled }) => {
@@ -39,7 +40,7 @@ const Icons = ({ disabled }) => {
       {
         Object.entries(mapIcons).map(([type, Icon], i) => {
           const isCurrent = type === current
-          const isDisabled = disabled || (type === 'map' && !mapIconAvailability)
+          const isDisabled = disabled || (type === types.MAP && !mapIconAvailability)
           return (
             <CustomButton
               key={i}

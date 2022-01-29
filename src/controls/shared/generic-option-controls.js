@@ -3,6 +3,7 @@ import React from 'react'
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/widget-control-card'
 import { sizes, positions } from '../../constants/viz-options'
+import types from '../../constants/types'
 import CustomToggle from '../../components/custom-toggle'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
@@ -75,7 +76,7 @@ const GenericOptionControls = () => {
           )
         }
         {
-          type !== 'pie' &&
+          type !== types.PIE &&
           renderItem(
             'Subplots',
             <CustomToggle

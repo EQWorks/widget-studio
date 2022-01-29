@@ -5,6 +5,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState } from '../../store'
+import types from '../../constants/types'
 import PlotlyAdapters from './adapters/chart-system/plotly'
 import MapAdapter from './adapters/react-maps'
 
@@ -19,10 +20,10 @@ const classes = makeStyles({
 
 // declare which adapter handles each widget type
 const adapterDict = {
-  bar: PlotlyAdapters.bar,
-  pie: PlotlyAdapters.pie,
-  scatter: PlotlyAdapters.scatter,
-  line: PlotlyAdapters.line,
+  [types.BAR]: PlotlyAdapters[types.BAR],
+  [types.PIE]: PlotlyAdapters[types.PIE],
+  [types.SCATTER]: PlotlyAdapters[types.SCATTER],
+  [types.LINE]: PlotlyAdapters[types.LINE],
   map: MapAdapter,
 }
 
@@ -62,4 +63,3 @@ const WidgetAdapter = () => {
 }
 
 export default WidgetAdapter
-
