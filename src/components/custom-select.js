@@ -1,12 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
 import { DropdownSelect, Icons } from '@eqworks/lumen-labs'
 
 
-const CustomSelect = ({ classes, onClear, ...props }) => (
+const CustomSelect = ({ classes, onClear, fullWidth, ...props }) => (
   <DropdownSelect simple
     classes={{
-      root: 'shadow-light-10 border-2 border-secondary-200 rounded-md',
+      root: clsx('shadow-light-10 border-2 border-secondary-200 rounded-md', {
+        'w-full': fullWidth,
+      }),
       button: 'tracking-widest border-none',
       menu: 'w-full',
       content: 'children:overflow-hidden children:overflow-ellipsis children:fill-current children:text-secondary-500',
@@ -29,6 +32,7 @@ CustomSelect.propTypes = {
   value: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
   onSelect: PropTypes.func.isRequired,
   onClear: PropTypes.func,
+  fullWidth: PropTypes.bool,
 }
 CustomSelect.defaultProps = {
   classes: {},
@@ -36,6 +40,7 @@ CustomSelect.defaultProps = {
   multiSelect: false,
   value: '',
   onClear: () => { },
+  fullWidth: false,
 }
 
 export default CustomSelect
