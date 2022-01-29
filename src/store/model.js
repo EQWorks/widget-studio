@@ -166,11 +166,9 @@ export default {
       const dataGeoKeys = columns.filter(({ name }) =>
         MAP_GEO_KEYS.includes(name) && geoKeyHasCoordinates(name, numericColumns))
         .map(({ name }) => name)
-      // BEFORE MERGING - replace this with the commented lines below; this is just for demonstration
       // this allows grouping by FSA when postal code key is present in the data object but no FSA
-      if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key))) {
-      // if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key)) &&
-      // !dataGeoKeys.some(key => GEO_KEY_TYPES.fsa.includes(key))) {
+      if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key)) &&
+        !dataGeoKeys.some(key => GEO_KEY_TYPES.fsa.includes(key))) {
         // add an artificial geo_ca_fsa key to the validMapGroupKeys if we have postalcode key but no FSA
         dataGeoKeys.push('geo_ca_fsa')
       }
