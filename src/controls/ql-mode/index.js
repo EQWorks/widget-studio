@@ -8,12 +8,8 @@ import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
 import types from '../../constants/types'
-import typeInfo from '../../constants/type-info'
 import MapValueControls from '../shared/map-value-controls'
 import ValueControls from '../shared/value-controls'
-import modes from '../../constants/modes'
-import GenericOptionControls from '../shared/generic-option-controls'
-import CustomToggle from '../../components/custom-toggle'
 
 
 const renderButton = (children, onClick, props) =>
@@ -42,10 +38,8 @@ const QLModeControls = () => {
   const isReady = useStoreState((state) => state.isReady)
   const type = useStoreState((state) => state.type)
   const dataReady = useStoreState((state) => state.dataReady)
-  const uniqueOptions = useStoreState((state) => state.uniqueOptions)
 
   // UI state
-  const mode = useStoreState((state) => state.ui.mode)
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const allowReset = useStoreState((state) => state.ui.allowReset)
 
@@ -71,33 +65,6 @@ const QLModeControls = () => {
     }
   </>
 
-  const renderBool = (title, value) => {
-    const [k, v] = Object.entries(value)[0]
-    return (
-      <CustomToggle
-        value={v}
-        label={title}
-        onChange={_v => nestedUpdate({ uniqueOptions: { [k]: _v } })}
-      />
-    )
-  }
-
-  const renderUniqueOptions = (
-    <WidgetControlCard
-      clearable
-      title='Styling'
-    >
-      {
-        Object.entries(typeInfo[type]?.uniqueOptions || {})
-          .map(([k, { name, type }]) => {
-            if (type === Boolean) { // TODO support other types of uniqueOptions
-              return renderBool(name, { [k]: uniqueOptions[k] })
-            }
-          })
-      }
-    </WidgetControlCard>
-  )
-
   return (
     <CustomAccordion
       disabled={!dataReady}
@@ -114,13 +81,7 @@ const QLModeControls = () => {
         >
           <Icons disabled={!dataReady} />
         </WidgetControlCard>
-        {isReady && (
-          <>
-            {type === types.MAP ? <MapValueControls /> : <ValueControls />}
-            {mode === modes.EDITOR && renderUniqueOptions}
-            {mode === modes.EDITOR && <GenericOptionControls />}
-          </>
-        )}
+        {isReady && (type === types.MAP ? <MapValueControls /> : <ValueControls />)}
       </div>
     </CustomAccordion>
   )

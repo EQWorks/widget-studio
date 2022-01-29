@@ -12,6 +12,7 @@ const useStyles = ({ baseColor, showPicker }) => makeStyles({
   outerContainer: {
     display: 'flex',
     flexDirection: 'column',
+    width: '100%',
     alignItems: 'stretch',
   },
   row: {

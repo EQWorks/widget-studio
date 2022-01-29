@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/widget-control-card'
-import { sizes, positions } from '../../constants/viz-options'
+import { sizes } from '../../constants/viz-options'
 import types from '../../constants/types'
 import CustomToggle from '../../components/custom-toggle'
 import CustomSelect from '../../components/custom-select'
@@ -12,24 +12,53 @@ import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 
 const classes = makeStyles({
-  controlRow: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: '0.5rem',
-    marginBottom: '0.5rem',
-  },
-  controlSection: {
+  section: {
+    marginBottom: '0.6rem',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    marginTop: '0.5rem',
-    marginBottom: '0.5rem',
   },
-  controlSectionTitle: {
+  sectionTitle: {
+    color: getTailwindConfigColor('secondary-800'),
+    fontWeight: 700,
+    fontSize: '0.8rem',
+    marginBottom: '0.4rem',
+  },
+  row: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    margin: '0.2rem 0',
+  },
+  inlineItemContainer: {
+    display: 'flex',
+    flex: 1,
+    alignItems: 'center',
+  },
+  itemContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '0.2rem',
+  },
+  inlineItem: {
+  },
+  item: {
+    display: 'flex',
+  },
+  inlineTitle: {
     color: getTailwindConfigColor('secondary-500'),
-    fontSize: '0.9rem',
-    marginBottom: '0.25rem',
+    fontSize: '0.8rem',
+    marginLeft: '0.4rem',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  title: {
+    color: getTailwindConfigColor('secondary-500'),
+    fontSize: '0.8rem',
+    marginBottom: '0.2rem',
+    display: 'flex',
+    alignItems: 'center',
   },
   fullWidth: {
     width: '100%',
@@ -56,25 +85,47 @@ const GenericOptionControls = () => {
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
-  const renderItem = (title, Component) => (
-    <div className={classes.controlSection}>
-      <div className={classes.controlSectionTitle} > {`${title}:`} </div>
-      <div className={classes.fullWidth}> {Component} </div>
+  const renderSection = (title, Component) => (
+    <div className={classes.section}>
+      {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
+      {Component}
     </div>
   )
+
+  const renderRow = (title, Component) => (
+    <>
+      {title && <div className={classes.title} > {`${title}:`} </div>}
+      <div className={classes.row}>
+        {Component}
+      </div>
+    </>
+  )
+  const renderItem = (title, Component) => (
+    <div className={classes.itemContainer}>
+      <div className={classes.title} > {`${title}:`} </div>
+      <div className={classes.item}>
+        {Component}
+      </div>
+    </div>
+  )
+
+  const renderBool = (title, value, disabled = false) => {
+    const [k, v] = Object.entries(value)[0]
+    return <div className={classes.inlineItemContainer}>
+      <div className={classes.inlineItem}>
+        <CustomToggle
+          value={v}
+          onChange={(val) => nestedUpdate({ genericOptions: { [k]: val } })}
+          disabled={disabled}
+        />
+      </div>
+      {title && <div className={classes.inlineTitle} > {`${title}`} </div>}
+    </div>
+  }
 
   return (
     <WidgetControlCard title='Options'>
       <div className={classes.outerContainer}>
-        {
-          renderItem(
-            'Show legend',
-            <CustomToggle
-              value={showLegend}
-              onChange={(val) => nestedUpdate({ genericOptions: { showLegend: val } })}
-            />
-          )
-        }
         {
           type !== types.PIE &&
           renderItem(
@@ -96,46 +147,66 @@ const GenericOptionControls = () => {
             />
           )
         }
-        {
-          subPlots &&
-          renderItem(
-            'Title position',
-            <CustomSelect
-              data={positions.string}
-              value={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(titlePosition))]}
-              onSelect={v => nestedUpdate({ genericOptions: { titlePosition: positions.dict[v] } })}
-            />
+        {renderSection(
+          null,
+          renderRow(
+            null,
+            <>
+              {renderItem(
+                'Legend Position',
+                <XYSelect
+                  value={legendPosition}
+                  update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
+                />
+              )}
+              {renderItem(
+                'Title Position',
+                <XYSelect
+                  value={titlePosition}
+                  update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
+                />
+              )}
+            </>
           )
-        }
-
-        <div className={classes.controlRow}>
-          {
-            renderItem(
-              'Legend Position',
-              <XYSelect
-                value={legendPosition}
-                update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
-              />
-            )
-          }
-          {
-            renderItem(
-              'Title Position',
-              <XYSelect
-                value={titlePosition}
-                update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
-              />
-            )
-          }
-        </div>
-        {
-          renderItem(
-            'Colour Scheme',
-            <ColorSchemeControls />
-          )
-        }
+        )}
+        {renderSection(
+          'Display Style',
+          <>
+            {renderRow(null,
+              <>
+                {renderBool('Legend', { showLegend })}
+                {type !== 'pie' && renderBool('Subplots', { subPlots }, valueKeys.length <= 1)}
+              </>
+            )}
+            {renderRow(null,
+              <>
+                {renderItem(
+                  'Size',
+                  <CustomSelect
+                    fullWidth
+                    data={sizes.string}
+                    value={sizes.string[sizes.numeric.indexOf(size)]}
+                    onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
+                  />
+                )}
+                {renderItem(
+                  'Another Dropdown',
+                  <CustomSelect
+                    fullWidth
+                    data={sizes.string}
+                    value={sizes.string[sizes.numeric.indexOf(size)]}
+                    onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
+                  />
+                )}
+              </>)}
+          </>
+        )}
+        {renderSection(
+          'Colour Scheme',
+          <ColorSchemeControls />
+        )}
       </div>
-    </WidgetControlCard>
+    </WidgetControlCard >
   )
 }
 
