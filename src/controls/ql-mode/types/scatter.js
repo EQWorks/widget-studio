@@ -4,7 +4,6 @@ import modes from '../../../constants/modes'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomToggle from '../../../components/custom-toggle'
 import WidgetControlCard from '../../shared/widget-control-card'
-import ValueControls from '../../shared/value-controls'
 import GenericOptionControls from '../../shared/generic-option-controls'
 
 
@@ -21,30 +20,24 @@ const ScatterControls = () => {
   const mode = useStoreState((state) => state.ui.mode)
 
   return (
+    mode === modes.EDITOR &&
     <>
-      <ValueControls />
-
-      {
-        mode === modes.EDITOR &&
-        <>
-          <GenericOptionControls />
-          <WidgetControlCard
-            clearable
-            title='Styling'
-          >
-            <CustomToggle
-              value={showTicks}
-              label='Show ticks'
-              callback={(val) => nestedUpdate({ options: { showTicks: val } })}
-            />
-            <CustomToggle
-              value={showLines}
-              label='Show lines'
-              callback={(val) => nestedUpdate({ scatter: { showLines: val } })}
-            />
-          </WidgetControlCard>
-        </>
-      }
+      <GenericOptionControls />
+      <WidgetControlCard
+        clearable
+        title='Styling'
+      >
+        <CustomToggle
+          value={showTicks}
+          label='Show ticks'
+          callback={(val) => nestedUpdate({ options: { showTicks: val } })}
+        />
+        <CustomToggle
+          value={showLines}
+          label='Show lines'
+          callback={(val) => nestedUpdate({ scatter: { showLines: val } })}
+        />
+      </WidgetControlCard>
     </>
   )
 }

@@ -4,7 +4,6 @@ import modes from '../../../constants/modes'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomToggle from '../../../components/custom-toggle'
 import WidgetControlCard from '../../shared/widget-control-card'
-import ValueControls from '../../shared/value-controls'
 import GenericOptionControls from '../../shared/generic-option-controls'
 
 
@@ -22,8 +21,6 @@ const BarControls = () => {
 
   return (
     <>
-      <ValueControls />
-
       {
         mode === modes.EDITOR &&
         <>

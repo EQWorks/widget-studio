@@ -4,7 +4,6 @@ import modes from '../../../constants/modes'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomToggle from '../../../components/custom-toggle'
 import WidgetControlCard from '../../shared/widget-control-card'
-import ValueControls from '../../shared/value-controls'
 import GenericOptionControls from '../../shared/generic-option-controls'
 
 
@@ -21,30 +20,24 @@ const LineControls = () => {
   const mode = useStoreState((state) => state.ui.mode)
 
   return (
+    mode === modes.EDITOR &&
     <>
-      <ValueControls />
-
-      {
-        mode === modes.EDITOR &&
-        <>
-          <GenericOptionControls />
-          <WidgetControlCard
-            clearable
-            title='Styling'
-          >
-            <CustomToggle
-              value={spline}
-              label='Spline interpolation'
-              onChange={(val) => nestedUpdate({ options: { spline: val } })}
-            />
-            <CustomToggle
-              value={showTicks}
-              label='Show ticks'
-              onChange={(val) => nestedUpdate({ options: { showTicks: val } })}
-            />
-          </WidgetControlCard>
-        </>
-      }
+      <GenericOptionControls />
+      <WidgetControlCard
+        clearable
+        title='Styling'
+      >
+        <CustomToggle
+          value={spline}
+          label='Spline interpolation'
+          onChange={(val) => nestedUpdate({ options: { spline: val } })}
+        />
+        <CustomToggle
+          value={showTicks}
+          label='Show ticks'
+          onChange={(val) => nestedUpdate({ options: { showTicks: val } })}
+        />
+      </WidgetControlCard>
     </>
   )
 }

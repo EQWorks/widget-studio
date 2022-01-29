@@ -14,6 +14,8 @@ import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
 import types from '../../constants/types'
+import MapValueControls from '../shared/map-value-controls'
+import ValueControls from '../shared/value-controls'
 
 
 const controls = {
@@ -93,6 +95,11 @@ const QLModeControls = () => {
         >
           <Icons disabled={!dataReady} />
         </WidgetControlCard>
+        {
+          type === types.MAP
+            ? <MapValueControls />
+            : <ValueControls />
+        }
         {isReady && createElement(controls[type])}
       </div>
     </CustomAccordion>
