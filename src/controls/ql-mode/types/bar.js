@@ -22,7 +22,7 @@ const BarControls = () => {
 
   return (
     <>
-      <ValueControls groupingOptional={false} />
+      <ValueControls />
 
       {
         mode === modes.EDITOR &&

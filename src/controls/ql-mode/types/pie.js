@@ -22,8 +22,7 @@ const PieControls = () => {
 
   return (
     <>
-      <ValueControls groupingOptional={false} />
-
+      <ValueControls />
       {
         mode === modes.EDITOR &&
         <>
