@@ -10,8 +10,8 @@ const MapControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // unique state
-  const showTooltip = useStoreState((state) => state.options.showTooltip)
-  const showLegend = useStoreState((state) => state.options.showLegend)
+  const showTooltip = useStoreState((state) => state.uniqueOptions.showTooltip)
+  const showLegend = useStoreState((state) => state.uniqueOptions.showLegend)
 
   return (
     <WidgetControlCard
@@ -20,12 +20,12 @@ const MapControls = () => {
       <CustomToggle
         value={showTooltip}
         label='Show Tooltip'
-        onChange={(val) => nestedUpdate({ options: { showTooltip: val } })}
+        onChange={(val) => nestedUpdate({ uniqueOptions: { showTooltip: val } })}
       />
       <CustomToggle
         value={showLegend}
         label='Show Legend'
-        onChange={(val) => nestedUpdate({ options: { showLegend: val } })}
+        onChange={(val) => nestedUpdate({ uniqueOptions: { showLegend: val } })}
       />
     </WidgetControlCard>
   )

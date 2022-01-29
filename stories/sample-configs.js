@@ -31,7 +31,7 @@ export default {
     'groupKey': 'geo_ca_city',
     'indexKey': null,
     'groupKeyTitle': 'Geo ca city',
-    'options': {
+    'uniqueOptions': {
       'showPercentage': true,
       'donut': true,
     },
@@ -74,7 +74,7 @@ export default {
     'groupKey': 'city',
     'indexKey': null,
     'groupKeyTitle': 'City',
-    'options': {
+    'uniqueOptions': {
       'showPercentage': true,
       'donut': false,
     },
@@ -124,7 +124,7 @@ export default {
     'groupKey': 'geo_ca_city',
     'indexKey': null,
     'groupKeyTitle': 'Geo ca city',
-    'options': {
+    'uniqueOptions': {
       'stacked': true,
       'showTicks': true,
     },
@@ -169,7 +169,7 @@ export default {
     'groupKey': null,
     'indexKey': 'impressions',
     'indexKeyTitle': 'Impressions',
-    'options': {
+    'uniqueOptions': {
       'spline': true,
       'showTicks': true,
     },
@@ -209,7 +209,7 @@ export default {
     'groupKey': null,
     'indexKey': 'impressions',
     'indexKeyTitle': 'Impressions',
-    'options': {
+    'uniqueOptions': {
       'spline': false,
       'showTicks': true,
     },
@@ -252,7 +252,7 @@ export default {
     'groupKey': 'address_postalcode',
     'indexKey': null,
     'groupKeyTitle': 'Address postalcode',
-    'options': {
+    'uniqueOptions': {
       'showTicks': true,
     },
     'genericOptions': {
@@ -295,7 +295,7 @@ export default {
       'type': 'Execution',
       'id': '913',
     },
-    'options': {
+    'uniqueOptions': {
       'showTooltip': true,
       'showLegend': true,
     },
@@ -325,7 +325,7 @@ export default {
       'type': 'Execution',
       'id': '1389',
     },
-    'options': {
+    'uniqueOptions': {
       'showTooltip': true,
       'showLegend': true,
     },

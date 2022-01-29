@@ -11,8 +11,8 @@ const ScatterControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // unique state
-  const showTicks = useStoreState((state) => state.options.showTicks)
-  const showLines = useStoreState((state) => state.options.showLines)
+  const showTicks = useStoreState((state) => state.uniqueOptions.showTicks)
+  const showLines = useStoreState((state) => state.uniqueOptions.showLines)
 
   return (
     <WidgetControlCard
@@ -22,7 +22,7 @@ const ScatterControls = () => {
       <CustomToggle
         value={showTicks}
         label='Show ticks'
-        callback={(val) => nestedUpdate({ options: { showTicks: val } })}
+        callback={(val) => nestedUpdate({ uniqueOptions: { showTicks: val } })}
       />
       <CustomToggle
         value={showLines}

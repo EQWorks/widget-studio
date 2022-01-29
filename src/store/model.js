@@ -46,7 +46,7 @@ const stateDefaults = [
   { key: 'valueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'renderableValueKeys', defaultValue: [], resettable: true },
-  { key: 'options', defaultValue: {}, resettable: true },
+  { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
       groupByValue: false,
@@ -117,7 +117,7 @@ export default {
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
       (state) => state.genericOptions,
-      (state) => state.options,
+      (state) => state.uniqueOptions,
       (state) => state.isReady,
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
@@ -132,7 +132,7 @@ export default {
       indexKey,
       renderableValueKeys,
       genericOptions,
-      options,
+      uniqueOptions,
       isReady,
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
@@ -151,7 +151,7 @@ export default {
           ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
           ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
           ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
-          options,
+          uniqueOptions,
           genericOptions,
           dataSource: { type: dataSourceType, id: dataSourceID },
         }
@@ -382,7 +382,7 @@ export default {
     ...state,
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
-    options: widgetDefaults[state.type],
+    uniqueOptions: widgetDefaults[state.type],
     // map widget doesn't have a switch to change group state, so we have to keep it true here
     group: state.type === types.MAP ? true : state.group,
   })),

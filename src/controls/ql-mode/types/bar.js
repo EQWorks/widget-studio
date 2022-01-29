@@ -11,8 +11,8 @@ const BarControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // unique state
-  const stacked = useStoreState((state) => state.options.stacked)
-  const showTicks = useStoreState((state) => state.options.showTicks)
+  const stacked = useStoreState((state) => state.uniqueOptions.stacked)
+  const showTicks = useStoreState((state) => state.uniqueOptions.showTicks)
 
   return (
     <WidgetControlCard
@@ -22,12 +22,12 @@ const BarControls = () => {
       <CustomToggle
         value={stacked}
         label='Stacked'
-        onChange={(val) => nestedUpdate({ options: { stacked: val } })}
+        onChange={(val) => nestedUpdate({ uniqueOptions: { stacked: val } })}
       />
       <CustomToggle
         value={showTicks}
         label='Show ticks'
-        onChange={(val) => nestedUpdate({ options: { showTicks: val } })}
+        onChange={(val) => nestedUpdate({ uniqueOptions: { showTicks: val } })}
       />
     </WidgetControlCard>
   )

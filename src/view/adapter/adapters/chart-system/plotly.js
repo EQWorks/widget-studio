@@ -9,31 +9,31 @@ import types from '../../../../constants/types'
 export default {
   [types.BAR]: {
     component: PlotlyBarChart,
-    adapt: (data, { options, genericOptions, ...config }) => ({
+    adapt: (data, { uniqueOptions, genericOptions, ...config }) => ({
       data,
       x: config.groupKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
-      ...options,
+      ...uniqueOptions,
       ...genericOptions,
     }),
   },
   [types.LINE]: {
     component: PlotlyLineChart,
-    adapt: (data, { options, genericOptions, ...config }) => ({
+    adapt: (data, { uniqueOptions, genericOptions, ...config }) => ({
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
-      ...options,
+      ...uniqueOptions,
       ...genericOptions,
     }),
   },
   [types.PIE]: {
     component: PlotlyPieChart,
-    adapt: (data, { options, genericOptions, ...config }) => ({
+    adapt: (data, { uniqueOptions, genericOptions, ...config }) => ({
       data,
       label: config.groupKeyTitle,
       values: config.valueKeys.map(({ title }) => title),
-      ...options,
+      ...uniqueOptions,
       ...genericOptions,
       // overrides
       subPlots: true,
@@ -41,11 +41,11 @@ export default {
   },
   [types.SCATTER]: {
     component: PlotlyScatterChart,
-    adapt: (data, { options, genericOptions, ...config }) => ({
+    adapt: (data, { uniqueOptions, genericOptions, ...config }) => ({
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
-      ...options,
+      ...uniqueOptions,
       ...genericOptions,
     }),
   },
