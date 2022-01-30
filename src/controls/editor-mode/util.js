@@ -54,6 +54,7 @@ const classes = makeStyles({
   },
 })
 export const renderSection = (title, Component) => (
+  Component &&
   <div className={classes.section}>
     {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
     {Component}
@@ -61,6 +62,7 @@ export const renderSection = (title, Component) => (
 )
 
 export const renderRow = (title, Component) => (
+  Component &&
   <>
     {title && <div className={classes.title} > {`${title}:`} </div>}
     <div className={classes.row}>
@@ -69,6 +71,7 @@ export const renderRow = (title, Component) => (
   </>
 )
 export const renderItem = (title, Component) => (
+  Component &&
   <div className={classes.itemContainer}>
     <div className={classes.title} > {`${title}:`} </div>
     <div className={classes.item}>

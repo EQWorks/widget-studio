@@ -4,7 +4,6 @@ import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/widget-control-card'
 import { sizes } from '../../constants/viz-options'
 import types from '../../constants/types'
-import CustomToggle from '../../components/custom-toggle'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
@@ -39,94 +38,61 @@ const EditorRightSidebar = () => {
   return (
     <WidgetControlCard title='Options'>
       <div className={classes.outerContainer}>
-        <UniqueOptionControls type={type} />
-        {
-          type !== types.PIE &&
-          renderItem(
-            'Subplots',
-            <CustomToggle
-              value={subPlots}
-              onChange={(val) => nestedUpdate({ genericOptions: { subPlots: val } })}
-              disabled={valueKeys.length <= 1}
-            />
-          )
-        }
-        {
-          renderItem(
-            'Size',
+        {renderSection(
+          null,
+          subPlots && renderItem(
+            'Subplot Spacing',
             <CustomSelect
+              fullWidth
               data={sizes.string}
               value={sizes.string[sizes.numeric.indexOf(size)]}
               onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
             />
           )
-        }
-        {renderSection(
-          null,
-          renderRow(
-            null,
-            <>
-              {renderItem(
-                'Legend Position',
-                <XYSelect
-                  value={legendPosition}
-                  update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
-                />
-              )}
-              {renderItem(
-                'Title Position',
-                <XYSelect
-                  value={titlePosition}
-                  update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
-                />
-              )}
-            </>
-          )
         )}
+        {type !== types.MAP &&
+          renderSection(
+            null,
+            renderRow(
+              null,
+              <>
+                {showLegend && renderItem(
+                  'Legend Position',
+                  <XYSelect
+                    value={legendPosition}
+                    update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
+                  />
+                )}
+                {renderItem(
+                  'Title Position',
+                  <XYSelect
+                    value={titlePosition}
+                    update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
+                  />
+                )}
+              </>
+            )
+          )}
         {renderSection(
-          'Display Style',
+          'Display Options',
           <>
             {renderRow(null,
               <>
-                {
-                  renderBool(
-                    'Legend',
-                    showLegend,
-                    v => nestedUpdate({ genericOptions: { showLegend: v } }),
-                  )
-                }
-                {
-                  type !== types.PIE && type !== types.MAP &&
+                {renderBool(
+                  'Legend',
+                  showLegend,
+                  v => nestedUpdate({ genericOptions: { showLegend: v } }),
+                )}
+                {type !== types.PIE && type !== types.MAP &&
                   renderBool(
                     'Subplots',
                     subPlots,
                     v => nestedUpdate({ genericOptions: { subPlots: v } }),
                     valueKeys.length <= 1
-                  )
-                }
+                  )}
               </>
             )}
-            {renderRow(null,
-              <>
-                {subPlots && renderItem(
-                  'Subplot Spacing',
-                  <CustomSelect
-                    fullWidth
-                    data={sizes.string}
-                    value={sizes.string[sizes.numeric.indexOf(size)]}
-                    onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
-                  />
-                )}
-                {renderItem(
-                  'Another Dropdown',
-                  <CustomSelect
-                    fullWidth
-                    data={sizes.string}
-                    value={sizes.string[sizes.numeric.indexOf(size)]}
-                    onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
-                  />
-                )}
-              </>)}
+            <UniqueOptionControls type={type} />
           </>
         )}
         {renderSection(
