@@ -7,7 +7,7 @@ import { useStoreActions, useStoreState } from '../../store'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
 import CustomToggle from '../../components/custom-toggle'
-import GenericOptionControls from '../shared/generic-option-controls'
+import GenericOptionControls from './generic-option-controls'
 import typeInfo from '../../constants/type-info'
 
 
