@@ -39,39 +39,40 @@ Object.values(modes).forEach(mode => {
     }
   })
 
-  storiesOf('Multiple widgets (dashboard)')
-    .add(mode, () => {
-      const [fullscreen, setFullscreen] = useState(false)
-      return <>
-        <div className='bg-secondary-300 p-3'>
-          <CustomToggle
-            label='Fullscreen widgets'
-            value={fullscreen}
-            onChange={v => setFullscreen(v)}
-          />
-        </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: fullscreen ? 'auto' : '1fr 1fr',
-            gridAutoRows: fullscreen ? '100vh' : '60vh',
-          }} >
-          {
-
-            Object.keys(sampleConfigs).map(id =>
-              <div key={id} style={{ margin: '2rem' }}>
-                <Widget
-                  mode={mode}
-                  id={id}
-                  staticData
-                />
-              </div>
-            )
-          }
-        </div>
-      </>
-    })
 })
+
+storiesOf('Multiple widgets (dashboard)')
+  .add(modes.VIEW, () => {
+    const [fullscreen, setFullscreen] = useState(false)
+    return <>
+      <div className='bg-secondary-300 p-3'>
+        <CustomToggle
+          label='Fullscreen widgets'
+          value={fullscreen}
+          onChange={v => setFullscreen(v)}
+        />
+      </div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: fullscreen ? 'auto' : '1fr 1fr',
+          gridAutoRows: fullscreen ? '100vh' : '60vh',
+        }} >
+        {
+
+          Object.keys(sampleConfigs).map(id =>
+            <div key={id} style={{ margin: '2rem' }}>
+              <Widget
+                mode={modes.VIEW}
+                id={id}
+                staticData
+              />
+            </div>
+          )
+        }
+      </div>
+    </>
+  })
 
 // add blank widget
 storiesOf('Blank widget (no ID)', module)
