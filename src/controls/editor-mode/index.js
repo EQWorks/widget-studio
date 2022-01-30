@@ -7,7 +7,7 @@ import { useStoreActions, useStoreState } from '../../store'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
 import CustomToggle from '../../components/custom-toggle'
-import GenericOptionControls from './generic-option-controls'
+import EditorRightSidebar from './right-sidebar'
 import typeInfo from '../../constants/type-info'
 
 
@@ -65,7 +65,7 @@ const EditorModeControls = () => {
         createElement(controls[type || 'line'])
       } */}
       {renderUniqueOptions}
-      <GenericOptionControls />
+      <EditorRightSidebar />
     </div>
   )
 }

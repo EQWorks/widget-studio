@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 import { HexColorPicker } from 'react-colorful'
-
-import { useStoreState, useStoreActions } from '../../store'
 import { makeStyles, Button, getTailwindConfigColor, TextField } from '@eqworks/lumen-labs'
-import { validateHex } from '../../util/colors'
-import CustomSelect from '../../components/custom-select'
+
+import { useStoreState, useStoreActions } from '../../../store'
+import { validateHex } from '../../../util/colors'
+import CustomSelect from '../../../components/custom-select'
 
 
 const useStyles = ({ baseColor, showPicker }) => makeStyles({

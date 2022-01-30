@@ -3,12 +3,12 @@ import React, { useCallback, useState } from 'react'
 import clsx from 'clsx'
 import { Icons } from '@eqworks/lumen-labs'
 
-import { useStoreState, useStoreActions } from '../../store'
-import CustomSelect from '../../components/custom-select'
-import CustomSlider from '../../components/custom-slider'
-import CustomButton from '../../components/custom-button'
-import WidgetControlCard from '../shared/widget-control-card'
-import ToggleableWidgetControlCard from '../shared/toggleable-widget-control-card'
+import { useStoreState, useStoreActions } from '../../../store'
+import CustomSelect from '../../../components/custom-select'
+import CustomSlider from '../../../components/custom-slider'
+import CustomButton from '../../../components/custom-button'
+import WidgetControlCard from '../../shared/widget-control-card'
+import ToggleableWidgetControlCard from '../../shared/toggleable-widget-control-card'
 
 
 const FilterControls = () => {
