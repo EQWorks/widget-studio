@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import modes from './constants/modes'
 import { useStoreState, useStoreActions } from './store'
@@ -19,7 +20,37 @@ import useTransformedData from './hooks/use-transformed-data'
 import './styles/fonts.css'
 
 
+const useStyles = (mode = modes.EDITOR) => makeStyles(
+  mode === modes.EDITOR
+    ? {
+      outerContainer: {
+        overflow: 'hidden',
+        backgroundColor: getTailwindConfigColor('secondary-50'),
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100vw',
+        height: '100vh',
+      },
+    }
+    : {
+      outerContainer: {
+        overflow: 'visible',
+        backgroundColor: getTailwindConfigColor('secondary-50'),
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+        borderRadius: '0.125rem',
+        borderWidth: '2px',
+      },
+    }
+)
+
+
+
 const Widget = ({ id, mode: _mode, staticData }) => {
+
+  const classes = useStyles(_mode)
 
   // easy-peasy actions
   const loadConfig = useStoreActions(actions => actions.loadConfig)
@@ -60,7 +91,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   }, [_mode, id, loadConfig, mode, update, nestedUpdate, staticData])
 
   return (
-    <div className='bg-white rounded-sm overflow-visible flex flex-col items-stretch border-2 border-neutral-100 w-full h-full' >
+    <div className={classes.outerContainer}>
       <WidgetTitleBar className='flex-initial flex p-4 border-b-2 border-neutral-100 shadow-blue-20' />
       <div className='flex-1 min-h-0 flex flex-row justify-end'>
         <div className={clsx('p-4 pt-1 min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {

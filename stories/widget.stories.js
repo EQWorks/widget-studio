@@ -17,18 +17,24 @@ Object.values(modes).forEach(mode => {
       const index = id.split('-')[1]
       const label = `${type} ${index > 1 ? '(' + index + ')' : ''}`
 
+      const renderWidget = (
+        <Widget
+          mode={mode}
+          id={id}
+        />
+      )
+
       // generate an editor story
       storiesOf(`${mode.toUpperCase()} mode`, module)
         .add(label, () => (
-          <Resizable
-            style={{ margin: '1rem' }}
-            defaultSize={mode === modes.VIEW ? { height: '500' } : {}}
-          >
-            <Widget
-              mode={mode}
-              id={id}
-            />
-          </Resizable >
+          mode === modes.EDITOR
+            ? renderWidget
+            : <Resizable
+              style={{ margin: '1rem' }}
+              defaultSize={mode === modes.VIEW ? { height: '500' } : {}}
+            >
+              {renderWidget}
+            </Resizable >
         ))
     }
   })
