@@ -16,6 +16,8 @@ import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
 
+import './styles/fonts.css'
+
 
 const Widget = ({ id, mode: _mode, staticData }) => {
 
