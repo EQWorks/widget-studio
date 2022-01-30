@@ -83,11 +83,6 @@ export default {
         type: Boolean,
         default: true,
       },
-      showLegend: {
-        name: 'Legend',
-        type: Boolean,
-        default: true,
-      },
     },
   },
 }
