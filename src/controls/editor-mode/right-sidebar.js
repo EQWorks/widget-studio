@@ -10,6 +10,7 @@ import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
 import { makeStyles } from '@eqworks/lumen-labs'
 import { renderItem, renderSection, renderRow, renderBool } from './util'
+import UniqueOptionControls from './components/unique-option-controls'
 
 
 const classes = makeStyles({
@@ -38,6 +39,7 @@ const EditorRightSidebar = () => {
   return (
     <WidgetControlCard title='Options'>
       <div className={classes.outerContainer}>
+        <UniqueOptionControls type={type} />
         {
           type !== types.PIE &&
           renderItem(
