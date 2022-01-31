@@ -98,7 +98,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
 
   return (
     <div className={classes.outerContainer}>
-      <WidgetTitleBar className='flex-initial flex p-4 border-b-2 border-neutral-100 shadow-blue-20' />
+      <WidgetTitleBar />
       <div className='flex-1 min-h-0 flex flex-row justify-end'>
         {mode === modes.EDITOR
           ? <EditorModeControls >
