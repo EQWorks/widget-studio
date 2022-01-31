@@ -64,7 +64,6 @@ const stateDefaults = [
       dataSourceLoading: false,
       dataSourceError: null,
       dataSourceName: null,
-      editingTitle: false,
       allowReset: true,
       recentReset: false,
       showToast: false,
