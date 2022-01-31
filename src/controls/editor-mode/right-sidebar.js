@@ -7,19 +7,10 @@ import types from '../../constants/types'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
-import { makeStyles } from '@eqworks/lumen-labs'
 import { renderItem, renderSection, renderRow, renderBool } from './util'
 import UniqueOptionControls from './components/unique-option-controls'
+import EditorSidebarBase from './sidebar-base'
 
-
-const classes = makeStyles({
-  outerContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    height: '100%',
-  },
-})
 
 const EditorRightSidebar = () => {
 
@@ -36,8 +27,8 @@ const EditorRightSidebar = () => {
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
   return (
-    <WidgetControlCard title='Options'>
-      <div className={classes.outerContainer}>
+    <EditorSidebarBase>
+      <WidgetControlCard title='Options'>
         {renderSection(
           null,
           subPlots && renderItem(
@@ -56,18 +47,18 @@ const EditorRightSidebar = () => {
             renderRow(
               null,
               <>
-                {showLegend && renderItem(
-                  'Legend Position',
-                  <XYSelect
-                    value={legendPosition}
-                    update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
-                  />
-                )}
                 {renderItem(
                   'Title Position',
                   <XYSelect
                     value={titlePosition}
                     update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
+                  />
+                )}
+                {showLegend && renderItem(
+                  'Legend Position',
+                  <XYSelect
+                    value={legendPosition}
+                    update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
                   />
                 )}
               </>
@@ -99,8 +90,8 @@ const EditorRightSidebar = () => {
           'Colour Scheme',
           <ColorSchemeControls />
         )}
-      </div>
-    </WidgetControlCard >
+      </WidgetControlCard >
+    </EditorSidebarBase >
   )
 }
 
