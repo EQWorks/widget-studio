@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { Button } from '@eqworks/lumen-labs'
-
 import { useStoreState, useStoreActions } from '../../store'
 import { Controls, Save, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
@@ -10,24 +8,20 @@ import CustomAccordion from '../../components/custom-accordion'
 import types from '../../constants/types'
 import MapValueControls from '../shared/map-value-controls'
 import ValueControls from '../shared/value-controls'
+import CustomButton from '../../components/custom-button'
 
 
-const renderButton = (children, onClick, props) =>
-  <Button
-    classes={{ button: 'outline-none focus:outline-none uppercase px-1.5 py-1.5 tracking-widest' }}
-    type='primary'
-    variant='borderless'
-    size='md'
-    onClick={e => {
-      e.stopPropagation()
-      onClick(e)
-    }}
+const renderButton = (children, onClick, props) => (
+  <CustomButton
+    customVariant={2}
+    onClick={onClick}
     {...props}
   >
     <div className='flex'>
       {children}
     </div>
-  </Button>
+  </CustomButton>
+)
 
 const QLModeControls = () => {
   // store actions

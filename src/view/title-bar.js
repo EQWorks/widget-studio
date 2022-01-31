@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { Button, Accordion, Icons, TextField, Chip } from '@eqworks/lumen-labs'
+import { Accordion, Icons, TextField, Chip, makeStyles } from '@eqworks/lumen-labs'
 
 import { ArrowExpand, EditPen, Download } from '../components/icons'
 import { useStoreState, useStoreActions } from '../store'
 import OverflowTooltip from '../components/overflow-tooltip'
 import saveConfig from '../util/save-config'
+import CustomButton from '../components/custom-button'
 
+
+const classes = makeStyles({
+  button: {
+    margin: '0 0.4rem',
+  },
+})
 
 const WidgetTitleBar = ({ className }) => {
 
@@ -38,20 +45,17 @@ const WidgetTitleBar = ({ className }) => {
     setTentativeTitle(title)
   }, [title])
 
-  const renderButton = (children, onClick, props) =>
-    <Button
-      classes={{ button: 'outline-none focus:outline-none ml-2 uppercase p-1.5 py-1 tracking-widest' }}
-      type='primary'
-      variant='borderless'
-      size='md'
-      onClick={e => {
-        e.stopPropagation()
-        onClick(e)
-      }}
-      {...props}
-    >
-      {children}
-    </Button>
+  const renderButton = (children, onClick, props) => (
+    <div className={classes.button}>
+      <CustomButton
+        customVariant={2}
+        onClick={onClick}
+        {...props}
+      >
+        {children}
+      </CustomButton >
+    </div>
+  )
 
   const renderIconButton = (Component, onClick, props = {}) =>
     renderButton(<Component size='md' />, onClick, props)
