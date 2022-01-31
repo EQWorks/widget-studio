@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Chip, makeStyles } from '@eqworks/lumen-labs'
@@ -22,9 +22,6 @@ const MapLinkedSelect = ({
   disableSubMessage,
   callback,
 }) => {
-  const remainingValues = useMemo(() => data.filter((name) =>
-    !(values.map(v => v.key).includes(name))), [data, values])
-
   return (
     categories.map((mapVis, i) => {
       const match = values.findIndex(v => v.mapVis === mapVis)
@@ -47,7 +44,7 @@ const MapLinkedSelect = ({
               key={mapVis}
               className={classes.linkedSelect}
               callback={([_k, _v]) => callback(match, { key: _k, agg: _v, mapVis })}
-              data={remainingValues}
+              data={data.filter(d => values[match].key === d || !(values.map(v => v.key).includes(d)))}
               subData={subData}
               deletable={false}
               clearable
