@@ -13,7 +13,7 @@ import CustomButton from '../../components/custom-button'
 
 const renderButton = (children, onClick, props) => (
   <CustomButton
-    customVariant={2}
+    customVariant={1}
     onClick={onClick}
     {...props}
   >
