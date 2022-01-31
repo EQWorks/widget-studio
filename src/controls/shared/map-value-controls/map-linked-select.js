@@ -44,7 +44,7 @@ const MapLinkedSelect = ({
               key={mapVis}
               className={classes.linkedSelect}
               callback={([_k, _v]) => callback(match, { key: _k, agg: _v, mapVis })}
-              data={data.filter(d => values[match].key === d || !(values.map(v => v.key).includes(d)))}
+              data={data.filter(d => values[match]?.key === d || !(values.map(v => v.key).includes(d)))}
               subData={subData}
               deletable={false}
               clearable
