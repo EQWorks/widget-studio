@@ -10,6 +10,7 @@ import modes from '../../constants/modes'
 
 const commonClasses = {
   outerContainer: {
+    fontFamily: 'PT Sans,sans-serif',
     height: '1.4rem',
     alignItems: 'center',
     margin: '0 0.6rem',

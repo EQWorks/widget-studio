@@ -11,6 +11,7 @@ const classes = makeStyles({
     flexDirection: 'column',
   },
   sectionTitle: {
+    fontFamily: 'PT Sans,sans-serif',
     color: getTailwindConfigColor('secondary-800'),
     fontWeight: 700,
     fontSize: '0.8rem',
@@ -39,6 +40,7 @@ const classes = makeStyles({
     display: 'flex',
   },
   inlineTitle: {
+    fontFamily: 'PT Sans,sans-serif',
     color: getTailwindConfigColor('secondary-600'),
     fontSize: '0.8rem',
     marginLeft: '0.4rem',
@@ -46,6 +48,7 @@ const classes = makeStyles({
     alignItems: 'center',
   },
   title: {
+    fontFamily: 'PT Sans,sans-serif',
     color: getTailwindConfigColor('secondary-600'),
     fontSize: '0.8rem',
     marginBottom: '0.2rem',
