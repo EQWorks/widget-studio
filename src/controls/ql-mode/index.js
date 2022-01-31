@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../store'
 import { Controls, Save, Trash } from '../../components/icons'
@@ -23,7 +24,7 @@ const renderButton = (children, onClick, props) => (
   </CustomButton>
 )
 
-const QLModeControls = () => {
+const QLModeControls = ({ children }) => {
   // store actions
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const resetWidget = useStoreActions(actions => actions.resetWidget)
@@ -60,25 +61,36 @@ const QLModeControls = () => {
   </>
 
   return (
-    <CustomAccordion
-      disabled={!dataReady}
-      icon={Controls}
-      title={'Controls'}
-      footer={footer}
-      open={showWidgetControls}
-      toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
-    >
-      <div className='flex flex-col w-full'>
-        <WidgetControlCard
-          title='Select Widget Type'
-          clearable
-        >
-          <Icons disabled={!dataReady} />
-        </WidgetControlCard>
-        {isReady && (type === types.MAP ? <MapValueControls /> : <ValueControls />)}
-      </div>
-    </CustomAccordion>
+    <>
+      {children}
+      <CustomAccordion
+        disabled={!dataReady}
+        icon={Controls}
+        title={'Controls'}
+        footer={footer}
+        open={showWidgetControls}
+        toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
+      >
+        <div className='flex flex-col w-full'>
+          <WidgetControlCard
+            title='Select Widget Type'
+            clearable
+          >
+            <Icons disabled={!dataReady} />
+          </WidgetControlCard>
+          {isReady && (type === types.MAP ? <MapValueControls /> : <ValueControls />)}
+        </div>
+      </CustomAccordion>
+    </>
   )
 }
+
+QLModeControls.propTypes = {
+  children: PropTypes.node,
+}
+QLModeControls.defaultProps = {
+  children: <></>,
+}
+
 
 export default QLModeControls

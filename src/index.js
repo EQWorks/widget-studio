@@ -96,19 +96,21 @@ const Widget = ({ id, mode: _mode, staticData }) => {
     </div>
   )
 
+  const renderViewWithControls = () => {
+    if (mode === modes.EDITOR) {
+      return <EditorModeControls > {renderView} </EditorModeControls>
+    }
+    if (mode === modes.QL) {
+      return <QLModeControls > {renderView} </QLModeControls>
+    }
+    return renderView
+  }
+
   return (
     <div className={classes.outerContainer}>
       <WidgetTitleBar />
       <div className='flex-1 min-h-0 flex flex-row justify-end'>
-        {mode === modes.EDITOR
-          ? <EditorModeControls >
-            {renderView}
-          </EditorModeControls>
-          : <>
-            {renderView}
-            {mode === modes.QL && <QLModeControls />}
-          </>
-        }
+        {renderViewWithControls()}
       </div>
       <CustomGlobalToast />
     </div >
