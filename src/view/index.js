@@ -43,7 +43,6 @@ const useStyles = (mode) => makeStyles(
 )
 
 const WidgetView = () => {
-
   // store actions
   const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
 

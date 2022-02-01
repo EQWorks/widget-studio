@@ -42,10 +42,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-
-
 const Widget = ({ id, mode: _mode, staticData }) => {
-
   const classes = useStyles(_mode)
 
   // easy-peasy actions
@@ -97,13 +94,11 @@ const Widget = ({ id, mode: _mode, staticData }) => {
 
   const renderViewWithControls = () => {
     if (mode === modes.EDITOR) {
-      return <EditorModeControls > {renderView} </EditorModeControls>
+      return <EditorModeControls>{renderView}</EditorModeControls>
     }
-
     if (mode === modes.QL) {
-      return <QLModeControls > {renderView} </QLModeControls>
+      return <QLModeControls>{renderView}</QLModeControls>
     }
-
     return renderView
   }
 

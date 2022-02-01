@@ -19,5 +19,4 @@ EditorModeControls.defaultProps = {
   children: <></>,
 }
 
-
 export default EditorModeControls

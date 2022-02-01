@@ -53,6 +53,7 @@ const classes = makeStyles({
     alignItems: 'center',
   },
 })
+
 export const renderSection = (title, Component) => (
   Component &&
   <div className={classes.section}>
@@ -70,6 +71,7 @@ export const renderRow = (title, Component) => (
     </div>
   </>
 )
+
 export const renderItem = (title, Component) => (
   Component &&
   <div className={classes.itemContainer}>

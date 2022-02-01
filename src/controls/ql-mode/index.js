@@ -92,5 +92,4 @@ QLModeControls.defaultProps = {
   children: <></>,
 }
 
-
 export default QLModeControls

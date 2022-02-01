@@ -63,7 +63,6 @@ const useStyles = (mode) => makeStyles(
     })
 
 const WidgetTitleBar = () => {
-
   const toast = useStoreActions((actions) => actions.toast)
 
   // widget state

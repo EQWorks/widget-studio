@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types'
 
-
 import { useStoreActions, useStoreState } from '../../../store'
 import typeInfo from '../../../constants/type-info'
 import types from '../../../constants/types'
 import { renderBool, renderRow } from '../util'
-
 
 
 const UniqueOptionControls = ({ type }) => {
@@ -36,6 +34,5 @@ UniqueOptionControls.propTypes = {
 UniqueOptionControls.defaultProps = {
   type: null,
 }
-
 
 export default UniqueOptionControls
