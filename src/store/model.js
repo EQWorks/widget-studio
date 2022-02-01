@@ -8,6 +8,7 @@ import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
 import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
+import { getKeyFormatFunction } from '../util/data-format-functions'
 
 
 const stateDefaults = [
@@ -92,6 +93,7 @@ export default {
       (state) => state.mapGroupKey,
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
+      (state) => state.formatDataFunctions,
       (state) => state.genericOptions,
       (state) => state.uniqueOptions,
       (state) => state.isReady,
@@ -107,6 +109,7 @@ export default {
       mapGroupKey,
       indexKey,
       renderableValueKeys,
+      formatDataFunctions,
       genericOptions,
       uniqueOptions,
       isReady,
@@ -120,6 +123,7 @@ export default {
           filters,
           valueKeys: type !== types.MAP ? renderableValueKeys : [],
           mapValueKeys: type === types.MAP ? renderableValueKeys : [],
+          formatDataFunctions,
           group,
           groupKey,
           mapGroupKey,
@@ -169,7 +173,7 @@ export default {
       (state) => state.columns,
     ],
     (mapGroupKey, columns) => {
-      return  GEO_KEY_TYPES.fsa.includes(mapGroupKey) && !columns.map(({ name }) => name).includes(mapGroupKey)
+      return GEO_KEY_TYPES.fsa.includes(mapGroupKey) && !columns.map(({ name }) => name).includes(mapGroupKey)
     }
   ),
 
@@ -213,6 +217,13 @@ export default {
       Object.fromEntries(columns.map(({ name }) => [name, cleanUp(name)])
         .concat(groupFSAByPC ? [['geo_ca_fsa', cleanUp('geo_ca_fsa')]] : []))
     )
+  ),
+
+  formatDataFunctions: computed(
+    [(state) => state.renderableValueKeys],
+    (renderableValueKeys) => Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
+      [title, getKeyFormatFunction(key)]
+    )))
   ),
 
   /** checks if all initial states have been filled */
