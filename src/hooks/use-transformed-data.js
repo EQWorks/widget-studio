@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
 import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
+import types from '../constants/types'
 
 
 const useTransformedData = () => {
@@ -24,7 +25,7 @@ const useTransformedData = () => {
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
 
-  const finalGroupKey = useMemo(() => type === 'map' ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
+  const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
@@ -104,7 +105,7 @@ const useTransformedData = () => {
   ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, finalGroupKey, renderableValueKeys])
 
   const mapEnrichedData = useMemo(() => {
-    if (type === 'map') {
+    if (type === types.MAP) {
       //---TODO - Erika: complete this to include coordinates for xwi report; this is only for scatterplot layer
       // add coordinates for map widget data
       if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
@@ -144,7 +145,7 @@ const useTransformedData = () => {
 
   // memoize the final data processing according to whether grouping is enabled
   const finalData = useMemo(() => {
-    if (type === 'map') {
+    if (type === types.MAP) {
       return mapEnrichedData
     }
     if (group) {

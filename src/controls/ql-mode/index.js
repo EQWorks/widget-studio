@@ -1,65 +1,42 @@
-import React, { useEffect, createElement } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Button } from '@eqworks/lumen-labs'
-
 import { useStoreState, useStoreActions } from '../../store'
-import BarControls from './types/bar'
-import PieControls from './types/pie'
-import LineControls from './types/line'
-import ScatterControls from './types/scatter'
-import MapControls from './types/map'
 import { Controls, Save, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
+import types from '../../constants/types'
+import MapValueControls from '../shared/map-value-controls'
+import ValueControls from '../shared/value-controls'
+import CustomButton from '../../components/custom-button'
 
 
-const controls = {
-  bar: BarControls,
-  line: LineControls,
-  pie: PieControls,
-  scatter: ScatterControls,
-  map: MapControls,
-}
-
-const renderButton = (children, onClick, props) =>
-  <Button
-    classes={{ button: 'outline-none focus:outline-none uppercase px-1.5 py-1.5 tracking-widest' }}
-    type='primary'
-    variant='borderless'
-    size='md'
-    onClick={e => {
-      e.stopPropagation()
-      onClick(e)
-    }}
+const renderButton = (children, onClick, props) => (
+  <CustomButton
+    customVariant={1}
+    onClick={onClick}
     {...props}
   >
     <div className='flex'>
       {children}
     </div>
-  </Button>
+  </CustomButton>
+)
 
-const QLModeControls = () => {
+const QLModeControls = ({ children }) => {
   // store actions
-  const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
   const resetWidget = useStoreActions(actions => actions.resetWidget)
 
-  // common state
   // state
-  const columns = useStoreState((state) => state.columns)
+  const isReady = useStoreState((state) => state.isReady)
   const type = useStoreState((state) => state.type)
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
   const allowReset = useStoreState((state) => state.ui.allowReset)
-
-  useEffect(() => {
-    update({ numericColumns: columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name) })
-    update({ stringColumns: columns.filter(({ category }) => category === 'String').map(({ name }) => name) })
-  }, [columns, update])
 
   const footer = <>
     <div className='flex-1'>
@@ -84,34 +61,35 @@ const QLModeControls = () => {
   </>
 
   return (
-    <CustomAccordion
-      disabled={!dataReady}
-      icon={Controls}
-      title={'Controls'}
-      footer={footer}
-      open={showWidgetControls}
-      toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
-    >
-      <div className='flex flex-col w-full'>
-        <WidgetControlCard
-          title='Select Widget Type'
-          clearable
-        >
-          <Icons disabled={!columns.length || !dataReady} />
-        </WidgetControlCard>
-        {
-          createElement(controls[type || 'line'])
-        }
-      </div>
-    </CustomAccordion>
+    <>
+      {children}
+      <CustomAccordion
+        disabled={!dataReady}
+        icon={Controls}
+        title={'Controls'}
+        footer={footer}
+        open={showWidgetControls}
+        toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
+      >
+        <div className='flex flex-col w-full'>
+          <WidgetControlCard
+            title='Select Widget Type'
+            clearable
+          >
+            <Icons disabled={!dataReady} />
+          </WidgetControlCard>
+          {isReady && (type === types.MAP ? <MapValueControls /> : <ValueControls />)}
+        </div>
+      </CustomAccordion>
+    </>
   )
 }
 
 QLModeControls.propTypes = {
-  className: PropTypes.string,
+  children: PropTypes.node,
 }
 QLModeControls.defaultProps = {
-  className: '',
+  children: <></>,
 }
 
 export default QLModeControls

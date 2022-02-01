@@ -17,55 +17,62 @@ Object.values(modes).forEach(mode => {
       const index = id.split('-')[1]
       const label = `${type} ${index > 1 ? '(' + index + ')' : ''}`
 
+      const renderWidget = (
+        <Widget
+          mode={mode}
+          id={id}
+        />
+      )
+
       // generate an editor story
       storiesOf(`${mode.toUpperCase()} mode`, module)
         .add(label, () => (
-          <Resizable
-            style={{ margin: '1rem' }}
-            defaultSize={mode === modes.VIEW ? { height: '500' } : {}}
-          >
-            <Widget
-              mode={mode}
-              id={id}
-            />
-          </Resizable >
+          mode === modes.EDITOR
+            ? renderWidget
+            : <Resizable
+              style={{ margin: '1rem' }}
+              defaultSize={mode === modes.VIEW ? { height: '500' } : {}}
+            >
+              {renderWidget}
+            </Resizable >
         ))
     }
   })
 
-  storiesOf('Multiple widgets (dashboard)')
-    .add(mode, () => {
-      const [fullscreen, setFullscreen] = useState(false)
-      return <>
-        <div className='bg-secondary-300 p-3'>
-          <CustomToggle
-            label='Fullscreen widgets'
-            value={fullscreen}
-            onChange={v => setFullscreen(v)}
-          />
-        </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: fullscreen ? 'auto' : '1fr 1fr',
-            gridAutoRows: fullscreen ? '100vh' : '60vh',
-          }} >
-          {
-
-            Object.keys(sampleConfigs).map(id =>
-              <div key={id} style={{ margin: '2rem' }}>
-                <Widget
-                  mode={mode}
-                  id={id}
-                  staticData
-                />
-              </div>
-            )
-          }
-        </div>
-      </>
-    })
 })
+
+storiesOf('Multiple widgets (dashboard)')
+  .add(modes.VIEW, () => {
+    const [fullscreen, setFullscreen] = useState(false)
+    return <>
+      <div className='bg-secondary-300 p-3'>
+        <CustomToggle
+          label='Fullscreen widgets'
+          value={fullscreen}
+          onChange={v => setFullscreen(v)}
+        />
+      </div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: fullscreen ? 'auto' : '1fr 1fr',
+          gridAutoRows: fullscreen ? '100vh' : '60vh',
+        }} >
+        {
+
+          Object.keys(sampleConfigs).map(id =>
+            <div key={id} style={{ margin: '2rem' }}>
+              <Widget
+                mode={modes.VIEW}
+                id={id}
+                staticData
+              />
+            </div>
+          )
+        }
+      </div>
+    </>
+  })
 
 // add blank widget
 storiesOf('Blank widget (no ID)', module)

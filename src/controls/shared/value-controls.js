@@ -1,5 +1,4 @@
 import React, { useMemo, useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 
 import { SwitchRect } from '@eqworks/lumen-labs'
 import clsx from 'clsx'
@@ -11,15 +10,17 @@ import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/widget-control-card'
+import typeInfo from '../../constants/type-info'
 
 
-const ValueControls = ({ groupingOptional }) => {
+const ValueControls = () => {
 
   // common actions
   const update = useStoreActions(actions => actions.update)
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
+  const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
@@ -38,6 +39,7 @@ const ValueControls = ({ groupingOptional }) => {
   // local state
   const [addingFirstGroupFilter, setAddingFirstGroupFilter] = useState(false)
   const showGroupFilterSelect = useMemo(() => addingFirstGroupFilter || filters[groupKey]?.length, [addingFirstGroupFilter, filters, groupKey])
+  const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
 
   useEffect(() => {
     if (!group && !groupingOptional) {
@@ -182,12 +184,6 @@ const ValueControls = ({ groupingOptional }) => {
       }
     </>
   )
-}
-ValueControls.propTypes = {
-  groupingOptional: PropTypes.bool,
-}
-ValueControls.defaultProps = {
-  groupingOptional: true,
 }
 
 export default ValueControls

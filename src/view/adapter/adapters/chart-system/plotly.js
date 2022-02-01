@@ -3,47 +3,49 @@ import PlotlyLineChart from '@eqworks/chart-system/dist/components/plotly/line'
 import PlotlyPieChart from '@eqworks/chart-system/dist/components/plotly/pie'
 import PlotlyScatterChart from '@eqworks/chart-system/dist/components/plotly/scatter'
 
+import types from '../../../../constants/types'
+
 
 export default {
-  bar: {
+  [types.BAR]: {
     component: PlotlyBarChart,
-    adapt: (data, { options, genericOptions, ...config }) => ({
+    adapt: (data, { uniqueOptions, genericOptions, ...config }) => ({
       data,
       x: config.groupKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
-      ...options,
+      ...uniqueOptions,
       ...genericOptions,
     }),
   },
-  line: {
+  [types.LINE]: {
     component: PlotlyLineChart,
-    adapt: (data, { options, genericOptions, ...config }) => ({
+    adapt: (data, { uniqueOptions, genericOptions, ...config }) => ({
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
-      ...options,
+      ...uniqueOptions,
       ...genericOptions,
     }),
   },
-  pie: {
+  [types.PIE]: {
     component: PlotlyPieChart,
-    adapt: (data, { options, genericOptions, ...config }) => ({
+    adapt: (data, { uniqueOptions, genericOptions, ...config }) => ({
       data,
       label: config.groupKeyTitle,
       values: config.valueKeys.map(({ title }) => title),
-      ...options,
+      ...uniqueOptions,
       ...genericOptions,
       // overrides
       subPlots: true,
     }),
   },
-  scatter: {
+  [types.SCATTER]: {
     component: PlotlyScatterChart,
-    adapt: (data, { options, genericOptions, ...config }) => ({
+    adapt: (data, { uniqueOptions, genericOptions, ...config }) => ({
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
-      ...options,
+      ...uniqueOptions,
       ...genericOptions,
     }),
   },

@@ -1,28 +1,77 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 
-import { Button, Accordion, Icons, TextField, Chip } from '@eqworks/lumen-labs'
+import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import { ArrowExpand, EditPen, Download } from '../components/icons'
+import { Cycle, ArrowExpand, Download, Trash, Undo, Redo } from '../components/icons'
 import { useStoreState, useStoreActions } from '../store'
 import OverflowTooltip from '../components/overflow-tooltip'
 import saveConfig from '../util/save-config'
+import CustomButton from '../components/custom-button'
+import modes from '../constants/modes'
+import EditableTitle from './title-bar/editable-title'
 
 
-const WidgetTitleBar = ({ className }) => {
+const commonClasses = {
+  left: {
+    display: 'flex',
+    justifyContent: 'start',
+  },
+  right: {
+    display: 'flex',
+    justifyContent: 'end',
+  },
+  item: {
+    margin: '0 0.2rem',
+    display: 'flex',
+    alignItems: 'center',
+  },
+}
 
-  // store actions
-  const update = useStoreActions((actions) => actions.update)
-  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
+const useStyles = (mode) => makeStyles(
+  mode === modes.EDITOR
+    ? {
+      outerContainer: {
+        background: getTailwindConfigColor('secondary-50'),
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        height: '3rem',
+        padding: '1rem',
+        borderBottom: `solid 1px ${getTailwindConfigColor('neutral-100')}`,
+      },
+      main: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+      },
+      ...commonClasses,
+    }
+    : {
+      outerContainer: {
+        background: getTailwindConfigColor('secondary-50'),
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        height: '3rem',
+        padding: '1rem',
+      },
+      main: {
+        flex: 1,
+        display: 'flex',
+      },
+      ...commonClasses,
+    })
+
+const WidgetTitleBar = () => {
   const toast = useStoreActions((actions) => actions.toast)
 
   // widget state
   const id = useStoreState((state) => state.id)
-  const title = useStoreState((state) => state.title)
   const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
+  const unsavedChanges = true // mocked for now
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -30,31 +79,10 @@ const WidgetTitleBar = ({ className }) => {
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
+  const mode = useStoreState((state) => state.ui.mode)
   const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
-  const editingTitle = useStoreState((state) => state.ui.editingTitle)
 
-  const [tentativeTitle, setTentativeTitle] = useState(title)
-  useEffect(() => {
-    setTentativeTitle(title)
-  }, [title])
-
-  const renderButton = (children, onClick, props) =>
-    <Button
-      classes={{ button: 'outline-none focus:outline-none ml-2 uppercase p-1.5 py-1 tracking-widest' }}
-      type='primary'
-      variant='borderless'
-      size='md'
-      onClick={e => {
-        e.stopPropagation()
-        onClick(e)
-      }}
-      {...props}
-    >
-      {children}
-    </Button>
-
-  const renderIconButton = (Component, onClick, props = {}) =>
-    renderButton(<Component size='md' />, onClick, props)
+  const classes = useStyles(mode)
 
   const renderDetailItems = (items) =>
     <div className={`w-full grid items-center grid-cols-${items.length} divide-x divide-secondary-300`}>
@@ -110,115 +138,151 @@ const WidgetTitleBar = ({ className }) => {
       ])}
     </div>
 
-  const renderWidgetTitle =
-    editingTitle
-      ? <TextField
-        autoFocus
-        size='lg'
-        value={tentativeTitle}
-        onChange={(v) => setTentativeTitle(v)}
-        onBlur={() => {
-          setTentativeTitle(title)
-          nestedUpdate({ ui: { editingTitle: false } })
-        }}
-        onSubmit={(e) => {
-          update({ title: e.target.children[0].children[0].value })
-          nestedUpdate({ ui: { editingTitle: false } })
-          e.preventDefault()
-        }}
-      />
-      : <>
-        <span className='text-lg font-bold text-primary-500'>
-          {title || 'Untitled Widget'}
-        </span>
-        {renderButton(
-          <EditPen
-            size="md"
-            className='fill-current text-secondary-600'
-          />,
-          () => nestedUpdate({ ui: { editingTitle: true } }),
-          { className: 'px-4 border-none', type: 'secondary' }
-        )}
-      </>
+  const renderTitleAndID = (
+    <div className={classes.main}>
+      <EditableTitle />
+      {unsavedChanges &&
+        <div className={classes.item}>
+          <Chip selectable={false} color='error' >
+            unsaved
+          </Chip>
+        </div>
+      }
+      <div className={classes.item}>
+        <Chip
+          color='secondary'
+          onClick={e => {
+            e.stopPropagation()
+
+            if (window.isSecureContext) {
+              navigator.clipboard.writeText(id)
+              toast({
+                title: 'ID copied to clipboard',
+                color: 'success',
+              })
+            }
+          }}
+        >
+          {`id: ${id}`}
+        </Chip>
+      </div >
+    </div >
+  )
+
 
   return (
-    <Accordion color='secondary' className={`${className}`}>
-      <Accordion.Panel
-        autoHeight
-        color='transparent'
-        classes={{
-          iconRoot: 'bg-opacity-0 children:text-primary-500',
-          icon: 'fill-current text-primary-500',
-          header: 'flex items-center children:not-first:flex-1',
-        }}
-        header={
-          <div className='py-2 flex items-center'>
-            {renderWidgetTitle}
-            {
-              id &&
-              <>
-                <Chip
-                  classes={{
-                    chip: 'select-text text-secondary-600 bg-secondary-300 py-0.5 px-2 rounded-md uppercase',
-                  }}
-                  color='secondary'
-                  onClick={e => {
-                    e.stopPropagation()
-                    if (window.isSecureContext) {
-                      navigator.clipboard.writeText(id)
-                      toast({
-                        title: 'ID copied to clipboard',
-                        color: 'success',
-                      })
-                    }
-                  }}
-                >
-                  {`id: ${id}`}
-                </Chip>
-              </>
-            }
-            <div className='flex ml-auto'>
-              {dev && renderIconButton(Download,
-                () => {
-                  if (config) {
-                    saveConfig(config, id)
-                  } else {
-                    toast({
-                      title: 'The widget is not fully configured.',
-                      color: 'error',
-                    })
-                  }
-                },
-              )}
-              {renderButton(<>export</>,
-                () => window.alert('not implemented'),
-              )}
-              {renderButton(
-                <div className='flex items-center'>
-                  open in editor
-                  <ArrowExpand size='md' className='stroke-current text-white ml-2' />
-                </div>,
-                () => window.alert('not implemented'),
-                { variant: 'filled' }
-              )}
-            </div>
+    mode === modes.EDITOR
+      ? (
+        <div className={classes.outerContainer}>
+          <div className={classes.left}>
+            <CustomButton
+              horizontalMargin
+              customVariant={2}
+              onClick={() => window.alert('not implemented')}
+            >
+              <Trash size='sm' />
+              reset
+            </CustomButton>
+            <CustomButton
+              horizontalMargin
+              customVariant={2}
+              onClick={() => window.alert('not implemented')}
+            >
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}>
+                undo
+                <Undo size='sm' />
+              </div>
+            </CustomButton>
+            <CustomButton
+              horizontalMargin
+              customVariant={2}
+              onClick={() => window.alert('not implemented')}
+            >
+              <Redo size='sm' />
+              redo
+            </CustomButton>
           </div>
-        }
-        ExpandIcon={Icons.ChevronDown}
-      >
-        {renderWidgetMeta}
-      </Accordion.Panel >
-    </Accordion >
+          {renderTitleAndID}
+          <div className={classes.right}>
+            <CustomButton
+              horizontalMargin
+              customVariant={2}
+              onClick={() => window.alert('not implemented')}
+            >
+              <Cycle size='sm' />
+              reload data
+            </CustomButton>
+            {/* <CustomButton
+              horizontalMargin
+              cutRight
+              customVariant={3}
+              onClick={() => window.alert('not implemented')}
+            >
+              save
+            </CustomButton>
+            <CustomButton
+              horizontalMargin
+              cutLeft
+              variant='filled'
+              // customVariant={3}
+              onClick={() => window.alert('not implemented')}
+            >
+              <Icons.ChevronDown size='sm' />
+            </CustomButton> */}
+          </div>
+        </div>
+      )
+      : (
+        <Accordion color='secondary' className='flex-initial flex p-4 border-b-2 border-neutral-100 shadow-blue-20'>
+          <Accordion.Panel
+            autoHeight
+            color='transparent'
+            classes={{
+              iconRoot: 'bg-opacity-0 children:text-primary-500',
+              icon: 'fill-current text-primary-500',
+              header: 'flex items-center children:not-first:flex-1',
+            }}
+            header={
+              <div className='py-2 flex items-center'>
+                {renderTitleAndID}
+                <div className='flex ml-auto'>
+                  {dev && config &&
+                    <CustomButton
+                      horizontalMargin
+                      customVariant={1}
+                      onClick={() => saveConfig(config, id)}
+                    >
+                      <Download size='md' />
+                    </CustomButton>}
+                  <CustomButton
+                    horizontalMargin
+                    customVariant={1}
+                    onClick={() => window.alert('not implemented')}
+                  >
+                    EXPORT
+                  </CustomButton>
+                  <CustomButton
+                    horizontalMargin
+                    variant='filled'
+                    customVariant={1}
+                    onClick={() => window.alert('not implemented')}
+                  >
+                    OPEN IN EDITOR
+                    <ArrowExpand size='md' className='stroke-current text-white ml-2' />
+                  </CustomButton>
+                </div>
+              </div>
+            }
+            ExpandIcon={Icons.ChevronDown}
+          >
+            {renderWidgetMeta}
+          </Accordion.Panel >
+        </Accordion >
+      )
   )
-}
-
-WidgetTitleBar.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.node,
-}
-WidgetTitleBar.defaultProps = {
-  className: '',
-  children: null,
 }
 
 export default WidgetTitleBar

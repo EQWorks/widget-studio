@@ -1,36 +1,14 @@
 import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
+import types from '../constants/types'
+import typeInfo from '../constants/type-info'
+import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
-import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
 import { geoKeyHasCoordinates } from '../util'
 import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 
-
-const widgetDefaults = {
-  bar: {
-    stacked: false,
-    spline: false,
-    showTicks: true,
-  },
-  line: {
-    showTicks: true,
-    spline: false,
-  },
-  pie: {
-    donut: false,
-    showPercentage: true,
-  },
-  scatter: {
-    showTicks: true,
-    showLines: false,
-  },
-  map: {
-    showTooltip: true,
-    showLegend: true,
-  },
-}
 
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
@@ -45,7 +23,7 @@ const stateDefaults = [
   { key: 'valueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'renderableValueKeys', defaultValue: [], resettable: true },
-  { key: 'options', defaultValue: {}, resettable: true },
+  { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
       groupByValue: false,
@@ -86,7 +64,6 @@ const stateDefaults = [
       dataSourceLoading: false,
       dataSourceError: null,
       dataSourceName: null,
-      editingTitle: false,
       allowReset: true,
       recentReset: false,
       showToast: false,
@@ -116,7 +93,7 @@ export default {
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
       (state) => state.genericOptions,
-      (state) => state.options,
+      (state) => state.uniqueOptions,
       (state) => state.isReady,
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
@@ -131,7 +108,7 @@ export default {
       indexKey,
       renderableValueKeys,
       genericOptions,
-      options,
+      uniqueOptions,
       isReady,
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
@@ -141,8 +118,8 @@ export default {
           title,
           type,
           filters,
-          valueKeys: type !== 'map' ? renderableValueKeys : [],
-          mapValueKeys: type === 'map' ? renderableValueKeys : [],
+          valueKeys: type !== types.MAP ? renderableValueKeys : [],
+          mapValueKeys: type === types.MAP ? renderableValueKeys : [],
           group,
           groupKey,
           mapGroupKey,
@@ -150,12 +127,22 @@ export default {
           ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
           ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
           ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
-          options,
+          uniqueOptions,
           genericOptions,
           dataSource: { type: dataSourceType, id: dataSourceID },
         }
         : undefined
     )),
+
+  numericColumns: computed(
+    [(state) => state.columns],
+    (columns) => columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name)
+  ),
+
+  stringColumns: computed(
+    [(state) => state.columns],
+    (columns) => columns.filter(({ category }) => category === 'String').map(({ name }) => name)
+  ),
 
   validMapGroupKeys: computed(
     [
@@ -203,7 +190,7 @@ export default {
       dataHasVariance,
       formattedColumnNames
     ) => (
-      (type === 'map' ? mapValueKeys : valueKeys)
+      (type === types.MAP ? mapValueKeys : valueKeys)
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
         .map(({ key, agg, ...rest }) => ({
           key,
@@ -250,7 +237,7 @@ export default {
     ) => (
       Boolean(type && columns.length && rows.length &&
         (
-          type === 'map'
+          type === types.MAP
             ? renderableValueKeys.length && mapGroupKey
             : renderableValueKeys.length && (indexKey || groupKey)
         )
@@ -371,9 +358,9 @@ export default {
     ...state,
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
-    options: widgetDefaults[state.type],
+    uniqueOptions: typeInfo[state.type].uniqueOptions,
     // map widget doesn't have a switch to change group state, so we have to keep it true here
-    group: state.type === 'map' ? true : state.group,
+    group: state.type === types.MAP ? true : state.group,
   })),
 
   // on reset, set a 5 second timer during which reset cannot be re-enabled
