@@ -12,7 +12,6 @@ import modes from '../../constants/modes'
 
 const commonClasses = {
   titleText: {
-    fontFamily: 'PT Sans,sans-serif',
     flex: 1,
   },
   clearButtonInternalContainer: {

@@ -64,7 +64,6 @@ const useStyles = (mode) => makeStyles(
 
 const WidgetTitleBar = () => {
 
-  // store actions
   const toast = useStoreActions((actions) => actions.toast)
 
   // widget state
@@ -155,6 +154,7 @@ const WidgetTitleBar = () => {
           color='secondary'
           onClick={e => {
             e.stopPropagation()
+
             if (window.isSecureContext) {
               navigator.clipboard.writeText(id)
               toast({
@@ -285,6 +285,5 @@ const WidgetTitleBar = () => {
       )
   )
 }
-
 
 export default WidgetTitleBar

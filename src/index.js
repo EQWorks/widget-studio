@@ -16,8 +16,6 @@ import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
 
-import './styles/fonts.css'
-
 
 const useStyles = (mode = modes.EDITOR) => makeStyles(
   mode === modes.EDITOR
@@ -67,6 +65,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   useEffect(() => {
     // validate mode prop
     const validatedMode = Object.values(modes).find(v => v === _mode)
+
     if (!validatedMode) {
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${modes}.`)
     }
@@ -100,9 +99,11 @@ const Widget = ({ id, mode: _mode, staticData }) => {
     if (mode === modes.EDITOR) {
       return <EditorModeControls > {renderView} </EditorModeControls>
     }
+
     if (mode === modes.QL) {
       return <QLModeControls > {renderView} </QLModeControls>
     }
+
     return renderView
   }
 

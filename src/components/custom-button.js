@@ -5,7 +5,6 @@ import { Button, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 const classes = makeStyles({
   base: {
-    fontFamily: 'Open Sans,sans-serif',
     transition: 'all 0.3s',
     outline: 'none !important',
     '&:focus': {
