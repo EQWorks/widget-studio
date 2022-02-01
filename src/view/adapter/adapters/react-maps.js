@@ -25,6 +25,7 @@ const useStyles = makeStyles({
     width: props.width,
     height: props.height,
     margin: props.margin,
+    overflow: 'hidden',
   }),
 })
 
