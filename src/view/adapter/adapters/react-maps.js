@@ -125,6 +125,7 @@ export default {
             },
           ]
         })),
+        formatData: config.formatDataFunctions,
         interactions: {
           tooltip: {
             tooltipKeys: {
