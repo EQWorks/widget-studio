@@ -162,12 +162,14 @@ const WidgetView = () => {
       !dataSourceID || !dataSourceType ? 'Please select a data source.'
         : dataSourceError ? 'Something went wrong.'
           : !rows.length ? 'Sorry, this data is empty.'
-            : type ? 'Select columns and configure your widget.'
-              : 'Select a widget type.',
+            : !transformedData?.length ? 'This configuration resulted in an empty dataset.'
+              : type ? 'Select columns and configure your widget.'
+                : 'Select a widget type.',
     secondary:
       dataSourceError ? `${dataSourceError}`
-        : 'Data loaded successfully',
-  }), [dataSourceError, dataSourceID, dataSourceType, rows.length, type])
+        : !transformedData?.length ? 'Try adjusting your filters.'
+          : 'Data loaded successfully',
+  }), [dataSourceError, dataSourceID, dataSourceType, rows.length, transformedData?.length, type])
 
   const renderWidgetWarning = (
     <div className='h-full flex-1 flex flex-col justify-center items-center'>

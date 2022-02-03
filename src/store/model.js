@@ -237,6 +237,7 @@ export default {
       (state) => state.indexKey,
       (state) => state.groupKey,
       (state) => state.mapGroupKey,
+      (state) => state.transformedData,
     ],
     (
       rows,
@@ -246,8 +247,9 @@ export default {
       indexKey,
       groupKey,
       mapGroupKey,
+      transformedData,
     ) => (
-      Boolean(type && columns.length && rows.length &&
+      Boolean(type && columns.length && rows.length && transformedData?.length &&
         (
           type === types.MAP
             ? renderableValueKeys.length && mapGroupKey
