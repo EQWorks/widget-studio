@@ -58,6 +58,7 @@ const stateDefaults = [
     defaultValue: {
       mode: null,
       showTable: false,
+      tableShowsRawData: true,
       showWidgetControls: true,
       showFilterControls: false,
       showDataSourceControls: false,
