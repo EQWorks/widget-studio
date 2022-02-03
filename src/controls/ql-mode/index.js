@@ -12,18 +12,6 @@ import ValueControls from '../shared/value-controls'
 import CustomButton from '../../components/custom-button'
 
 
-const renderButton = (children, onClick, props) => (
-  <CustomButton
-    customVariant={1}
-    onClick={onClick}
-    {...props}
-  >
-    <div className='flex'>
-      {children}
-    </div>
-  </CustomButton>
-)
-
 const QLModeControls = ({ children }) => {
   // store actions
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
@@ -40,24 +28,22 @@ const QLModeControls = ({ children }) => {
 
   const footer = <>
     <div className='flex-1'>
-      {renderButton(
-        <>
-          <Trash size='md' className={`mr-1.5 fill-current ${allowReset ? 'text-primary-500' : 'text-secondary-500'}`} />
-          RESET
-        </>,
-        resetWidget,
-        { disabled: !allowReset }
-      )}
+      <CustomButton
+        endIcon={<Trash size='sm' />}
+        onClick={resetWidget}
+        disabled={!allowReset}
+      >
+        reset
+      </CustomButton>
     </div>
-    {renderButton(
-      <>
-        SAVE & UPDATE
-        <Save size='md' className='ml-1.5 fill-current text-white' />
-      </>,
-      () => alert('not implemented'),
-      { variant: 'filled' }
-    )
-    }
+    <CustomButton
+      endIcon={<Save size='sm' />}
+      variant='filled'
+      onClick={() => alert('not implemented')}
+      disabled={!allowReset}
+    >
+      save & update
+    </CustomButton>
   </>
 
   return (
