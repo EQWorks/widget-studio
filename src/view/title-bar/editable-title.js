@@ -78,7 +78,6 @@ const EditableTitle = () => {
     <CustomButton
       className={classes.button}
       type='secondary'
-      customVariant={1}
       onClick={() => setEditing(true)}
     >
       <EditPen size="md" className='fill-current text-secondary-600' />

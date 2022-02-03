@@ -1,170 +1,115 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import { Button, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import mergeWith from 'lodash.mergewith'
 
 
-const classes = makeStyles({
-  base: {
-    transition: 'all 0.3s',
-    outline: 'none !important',
-    '&:focus': {
+const CUSTOM_SIZES = {
+  'sm': 0.714,
+  'md': 0.857,
+  'lg': 1,
+}
+
+const useStyles = (textTransform, customSize, variant, type) => {
+  const size = CUSTOM_SIZES[customSize]
+  return makeStyles({
+    button: {
+      textTransform,
+      transition: 'all 0.3s',
       outline: 'none !important',
+      '&:focus': {
+        outline: 'none !important',
+      },
+      padding: `${size / 4}rem ${size / 2}rem`,
+      fontSize: `${size}rem`,
+      display: 'flex',
+      '& svg': {
+        fill: variant === 'filled' ? 'white' : getTailwindConfigColor(`${type}-500`),
+        margin: `0 ${size / 4}rem`,
+      },
     },
-  },
-  horizontalMargin: {
-    margin: '0 0.3rem',
-  },
-  children: {
-    display: 'flex',
-    alignItems: 'center',
-    '& svg': {
+    horizontalMargin: {
       margin: '0 0.2rem',
+      width: 'inherit',
+      height: 'inherit',
+      '& button': {
+        width: '100%',
+        height: '100%',
+      },
     },
-  },
-  cutLeft: {
-    borderTopLeftRadius: '0 !important',
-    borderBottomLeftRadius: '0 !important',
-  },
-  cutRight: {
-    borderTopRightRadius: '0 !important',
-    borderBottomRightRadius: '0 !important',
-  },
-  variant1: {
-    textTransform: 'uppercase',
-  },
-  variant2: {
-    textTransform: 'uppercase',
-    padding: '0.1rem 0.3rem',
-    fontSize: '0.625rem',
-    color: `${getTailwindConfigColor('primary-500')} !important`,
-    fontWeight: 400,
-    '& svg': {
-      fill: `${getTailwindConfigColor('primary-500')} !important`,
+    children: {
+      display: 'flex',
+      alignItems: 'center',
+      '& svg': {
+        margin: '0 0.2rem',
+      },
     },
-  },
-  variant3: {
-    textTransform: 'uppercase',
-    padding: '0.1rem 0.3rem',
-    fontSize: '0.625rem',
-    background: `${getTailwindConfigColor('primary-500')} !important`,
-    color: `${getTailwindConfigColor('secondary-50')} !important`,
-    fontWeight: 400,
-    '& svg': {
-      fill: `${getTailwindConfigColor('secondary-50')} !important`,
-    },
-  },
-  variant4: {
+  })
+}
 
-  },
-})
+const CustomButton = ({
+  // custom props
+  textTransform,
+  customSize,
+  horizontalMargin,
+  // lumen-labs props
+  variant,
+  type,
+  onClick,
+  classes: { button: buttonClass = '', lumenClasses },
+  children,
+  ...props
+}) => {
+  const classes = useStyles(textTransform, customSize, variant, type)
 
-const CustomButton = ({ className, onClick, children, customVariant, horizontalMargin, cutRight, cutLeft, ...props }) => {
-
-  const _children = (
-    <div className={classes.children}>
-      {children}
-    </div>
+  const renderButton = (
+    <Button
+      classes={mergeWith(
+        lumenClasses,
+        { button: `${classes.button} ${buttonClass}` },
+        (a, b) => [a, b].join(' ')
+      )}
+      onClick={e => {
+        e.stopPropagation()
+        onClick(e)
+      }}
+      variant={variant}
+      type={type}
+      {...props}
+    >
+      <div className={classes.children}>
+        {children}
+      </div>
+    </Button>
   )
 
-  const cut = `${cutRight ? classes.cutRight : ''} ${cutLeft ? classes.cutLeft : ''}`
-
-  const customVariants = [
-    <>
-      <Button
-        className={`${className} ${classes.base}`}
-        classes={{
-          button: `${classes.base} ${cut}`,
-        }}
-        onClick={e => {
-          e.stopPropagation()
-          onClick(e)
-        }}
-        {...props}
-      >
-        {_children}
-      </Button>
-    </>,
-
-    <>
-      <Button
-        classes={{
-          button: `${classes.base} px-1.5 py-1.5 tracking-widest ${className} ${cut}`,
-        }}
-        type='primary'
-        variant='borderless'
-        size='md'
-        onClick={e => {
-          e.stopPropagation()
-          onClick(e)
-        }}
-        {...props}
-      >
-        {_children}
-      </Button >
-    </>,
-
-    <>
-      <Button
-        classes={{
-          button: `${classes.base} ${classes.variant2} tracking-widest ${cut}`,
-        }}
-        type='primary'
-        variant='outlined'
-        size='md'
-        onClick={e => {
-          e.stopPropagation()
-          onClick(e)
-        }}
-        {...props}
-      >
-        {_children}
-      </Button >
-    </>,
-
-    <>
-      <Button
-        classes={{
-          button: `${classes.base} ${classes.variant3} tracking-widest ${cut}`,
-        }}
-        type='primary'
-        variant='outlined'
-        size='md'
-        onClick={e => {
-          e.stopPropagation()
-          onClick(e)
-        }}
-        {...props}
-      >
-        {_children}
-      </Button >
-    </>,
-  ]
-
-  const final = customVariants[customVariant] || customVariants[0]
   return horizontalMargin
     ? <div className={classes.horizontalMargin}>
-      {final}
+      {renderButton}
     </div>
-    : final
+    : renderButton
 }
 
 CustomButton.propTypes = {
-  className: PropTypes.string,
-  onClick: PropTypes.func,
-  children: PropTypes.node,
-  customVariant: PropTypes.number,
+  textTransform: PropTypes.oneOf(['capitalize', 'uppercase']),
+  customSize: PropTypes.oneOf(Object.keys(CUSTOM_SIZES)),
   horizontalMargin: PropTypes.bool,
-  cutLeft: PropTypes.bool,
-  cutRight: PropTypes.bool,
+  variant: PropTypes.string,
+  type: PropTypes.string,
+  onClick: PropTypes.func,
+  classes: PropTypes.object,
+  children: PropTypes.node,
 }
 CustomButton.defaultProps = {
-  className: '',
-  onClick: () => { },
-  children: <></>,
-  customVariant: 0,
+  textTransform: 'uppercase',
+  customSize: 'sm',
   horizontalMargin: false,
-  cutLeft: false,
-  cutRight: false,
+  variant: 'borderless',
+  type: 'primary',
+  onClick: () => { },
+  classes: {},
+  children: <></>,
 }
 
 export default CustomButton

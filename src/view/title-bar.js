@@ -169,7 +169,6 @@ const WidgetTitleBar = () => {
     </div >
   )
 
-
   return (
     mode === modes.EDITOR
       ? (
@@ -177,31 +176,26 @@ const WidgetTitleBar = () => {
           <div className={classes.left}>
             <CustomButton
               horizontalMargin
-              customVariant={2}
+              variant='outlined'
               onClick={() => window.alert('not implemented')}
+              endIcon={<Trash size='sm' />}
             >
-              <Trash size='sm' />
               reset
             </CustomButton>
             <CustomButton
               horizontalMargin
-              customVariant={2}
+              variant='outlined'
               onClick={() => window.alert('not implemented')}
+              endIcon={<Undo size='sm' />}
             >
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-              }}>
-                undo
-                <Undo size='sm' />
-              </div>
+              undo
             </CustomButton>
             <CustomButton
               horizontalMargin
-              customVariant={2}
+              variant='outlined'
               onClick={() => window.alert('not implemented')}
+              startIcon={<Redo size='sm' />}
             >
-              <Redo size='sm' />
               redo
             </CustomButton>
           </div>
@@ -209,29 +203,12 @@ const WidgetTitleBar = () => {
           <div className={classes.right}>
             <CustomButton
               horizontalMargin
-              customVariant={2}
+              variant='outlined'
               onClick={() => window.alert('not implemented')}
             >
               <Cycle size='sm' />
               reload data
             </CustomButton>
-            {/* <CustomButton
-              horizontalMargin
-              cutRight
-              customVariant={3}
-              onClick={() => window.alert('not implemented')}
-            >
-              save
-            </CustomButton>
-            <CustomButton
-              horizontalMargin
-              cutLeft
-              variant='filled'
-              // customVariant={3}
-              onClick={() => window.alert('not implemented')}
-            >
-              <Icons.ChevronDown size='sm' />
-            </CustomButton> */}
           </div>
         </div>
       )
@@ -248,18 +225,16 @@ const WidgetTitleBar = () => {
             header={
               <div className='py-2 flex items-center'>
                 {renderTitleAndID}
-                <div className='flex ml-auto'>
+                <div className='flex items-stretch ml-auto'>
                   {dev && config &&
                     <CustomButton
                       horizontalMargin
-                      customVariant={1}
                       onClick={() => saveConfig(config, id)}
                     >
                       <Download size='md' />
                     </CustomButton>}
                   <CustomButton
                     horizontalMargin
-                    customVariant={1}
                     onClick={() => window.alert('not implemented')}
                   >
                     EXPORT
@@ -267,11 +242,10 @@ const WidgetTitleBar = () => {
                   <CustomButton
                     horizontalMargin
                     variant='filled'
-                    customVariant={1}
                     onClick={() => window.alert('not implemented')}
+                    endIcon={<ArrowExpand size='md' />}
                   >
                     OPEN IN EDITOR
-                    <ArrowExpand size='md' className='stroke-current text-white ml-2' />
                   </CustomButton>
                 </div>
               </div>
