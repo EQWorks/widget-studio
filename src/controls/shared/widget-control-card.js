@@ -25,7 +25,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     ? {
       outerContainer: {
         padding: '0.8rem',
-        borderBottom: `1px solid ${getTailwindConfigColor('neutral-100')}`,
+        borderBottom: `1px solid ${getTailwindConfigColor('secondary-300')}`,
       },
       titleContainer: {
         display: 'flex',

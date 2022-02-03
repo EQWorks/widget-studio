@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 import { useStoreState } from '../../store'
 
 
@@ -12,7 +12,10 @@ const useStyles = (disabled) => makeStyles({
       filter: 'blur(1rem)',
       pointerEvents: 'none',
     }),
+    borderLeft: `1px solid ${getTailwindConfigColor('secondary-300')}`,
+    borderRight: `1px solid ${getTailwindConfigColor('secondary-300')}`,
     position: 'relative',
+    width: '17.857rem',
     flex: '0 0 16rem',
     display: 'flex',
     flexDirection: 'column',
