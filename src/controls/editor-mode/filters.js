@@ -80,9 +80,9 @@ const Filters = () => {
                 <FilterDropdown
                   update={filter => update({
                     filters:
-                    filters.map((v, _i) => i === _i
-                      ? { key: k, filter }
-                      : v),
+                      filters.map((v, _i) => i === _i
+                        ? { key: k, filter }
+                        : v),
                   })}
                   column={k}
                 />
