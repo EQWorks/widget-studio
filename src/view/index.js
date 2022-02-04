@@ -19,7 +19,6 @@ const useStyles = (mode, tableExpanded) => makeStyles(
     ? {
       outerContainer: {
         width: '100%',
-        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         background: getTailwindConfigColor('neutral-100'),
@@ -35,7 +34,7 @@ const useStyles = (mode, tableExpanded) => makeStyles(
       tableContainer: {
         borderTopLeftRadius: '0.5rem',
         borderTopRightRadius: '0.5rem',
-        height: tableExpanded ? '40%' : '2.85rem',
+        height: tableExpanded ? '30rem' : '2.85rem',
         transition: 'all 0.3s',
         background: getTailwindConfigColor('secondary-50'),
       },
