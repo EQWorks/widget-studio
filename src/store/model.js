@@ -45,6 +45,7 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
+  { key: 'columnsAnalysis', defaultValue: {}, resettable: false },
   { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
@@ -138,6 +139,29 @@ export default {
         }
         : undefined
     )),
+
+  columnsAnalysis: computed(
+    [
+      (state) => state.columns,
+      (state) => state.rows,
+    ],
+    (
+      columns,
+      rows
+    ) => (
+      columns.reduce((acc, { name, category }) => {
+        const data = rows.map(r => r[name])
+        acc[name] = {
+          category,
+          ...(category === 'Numeric' && {
+            min: Math.min.apply(null, data),
+            max: Math.max.apply(null, data),
+          }),
+        }
+        return acc
+      }, {})
+    )
+  ),
 
   numericColumns: computed(
     [(state) => state.columns],
