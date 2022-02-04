@@ -74,7 +74,7 @@ const LinkedSelect = ({ className,
     <CustomButton
       type='danger'
       onClick={() => deleteCallback([choice, subChoice])}
-      className={clsx('rounded-md flex align-center justify-center my-0.5',
+      className={clsx(`col-span-1 rounded-md flex align-center justify-center my-0.5 ${className}`,
         'transition-width ease-in-out duration-300',
         'w-5 hover:w-7 ml-3 hover:ml-1',
         'bg-secondary-100 hover:bg-error-200'
@@ -85,19 +85,22 @@ const LinkedSelect = ({ className,
 
   return (
     <>
-      <div className={`col-span-1 ${className}`}> {
-        disableSub
-          ? <Tooltip position='left' arrow={false} description={disableSubMessage}>
-            {renderSub}
-          </Tooltip>
-          : renderSub
-      } </div>
-      <div className={clsx(`col-span-1 ${className}`, { 'flex justify-end': deletable })}>
-        <div className='flex-1'>
-          {renderPrimary}
-        </div>
-        {deletable && renderDelete}
+      <div className={`col-span-1 ${className}`}>
+        {
+          disableSub
+            ? <Tooltip position='left' arrow={false} description={disableSubMessage}>
+              {renderSub}
+            </Tooltip>
+            : renderSub
+        }
       </div>
+      <div className={clsx(`min-w-0 ${className}`, {
+        'col-span-2': !deletable,
+        'col-span-1': deletable,
+      })}>
+        {renderPrimary}
+      </div>
+      {deletable && renderDelete}
     </>
   )
 }

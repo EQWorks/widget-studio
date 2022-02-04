@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { createElement } from 'react'
 import PropTypes from 'prop-types'
 
-import { Icons, Button, makeStyles } from '@eqworks/lumen-labs'
+import { Icons, Button, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import LinkedSelect from './linked-select'
 import clsx from 'clsx'
@@ -11,12 +11,25 @@ const classes = makeStyles({
   outerContainer: {
     width: '100%',
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, auto)',
+    gridTemplateColumns: 'auto 1fr auto',
+  },
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '0.714rem',
+    fontWeight: 700,
+    color: getTailwindConfigColor('secondary-500'),
+    padding: '0.5rem',
+  },
+  headerIcon: {
+    height: '0.714rem !important',
+    marginRight: '0.4rem',
   },
 })
 
 const PluralLinkedSelect = ({
   staticQuantity,
+  headerIcons,
   titles,
   values,
   primaryKey,
@@ -61,7 +74,7 @@ const PluralLinkedSelect = ({
   const renderAddKeyButton = (
     <Button
       classes={{
-        button: clsx('col-span-2 w-full outline-none focus:outline-none px-3 py-1.5 tracking-widest flex flex-col items-stretch', {
+        button: clsx('col-span-3 w-full outline-none focus:outline-none px-3 py-1.5 tracking-widest flex flex-col items-stretch', {
           'mt-2': values.length,
         }),
       }}
@@ -80,6 +93,19 @@ const PluralLinkedSelect = ({
   return (
     <>
       <div className={classes.outerContainer}>
+        {Boolean(headerIcons.length) &&
+          <>
+            <span className={classes.header} >
+              {createElement(headerIcons[1], { size: 'sm', className: classes.headerIcon })}
+              {titles[1]}
+            </span>
+            <span className={classes.header} >
+              {createElement(headerIcons[0], { size: 'sm', className: classes.headerIcon })}
+              {titles[0]}
+            </span>
+            <span className={classes.header} />
+          </>
+        }
         {
           staticQuantity
             ? [...Array(staticQuantity)].map((_, i) => renderValue(i))
@@ -101,6 +127,7 @@ PluralLinkedSelect.propTypes = {
   primaryKey: PropTypes.string.isRequired,
   secondaryKey: PropTypes.string.isRequired,
   titles: PropTypes.arrayOf(PropTypes.string),
+  headerIcons: PropTypes.arrayOf(PropTypes.node),
   callback: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func.isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -114,6 +141,7 @@ PluralLinkedSelect.propTypes = {
 PluralLinkedSelect.defaultProps = {
   staticQuantity: null,
   titles: [],
+  headerIcons: [],
   disableSubs: false,
   disableSubMessage: '',
   addMessage: 'Add',
