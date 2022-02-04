@@ -2,18 +2,22 @@ export default {
   'pie-1': {
     'title': 'My example pie widget',
     'type': 'pie',
-    'filters': {
-      'city_clicks': [
-        20,
-        308,
-      ],
-      'geo_ca_city': [
-        'LAVAL',
-        'MONTREAL',
-        'MIRABEL',
-        'BROSSARD',
-      ],
-    },
+    'groupFilter': [
+      'LAVAL',
+      'MONTREAL',
+      'MIRABEL',
+      'BROSSARD',
+    ],
+    'filters': [
+      {
+        'key': 'city_clicks',
+        'filter': [
+          20,
+          308,
+
+        ],
+      },
+    ],
     'valueKeys': [
       {
         'key': 'city_clicks',
@@ -57,7 +61,7 @@ export default {
   'pie-2': {
     'title': 'Percentage widget',
     'type': 'pie',
-    'filters': {},
+    'filters': [],
     'valueKeys': [
       {
         'key': 'renters',
@@ -101,12 +105,15 @@ export default {
   'bar-1': {
     'title': 'My example bar widget',
     'type': 'bar',
-    'filters': {
-      'city_clicks': [
-        30,
-        138,
-      ],
-    },
+    'filters': [
+      {
+        'key': 'city_clicks',
+        'filter': [
+          30,
+          138,
+        ],
+      },
+    ],
     'valueKeys': [
       {
         'key': 'converted_users',
@@ -149,12 +156,15 @@ export default {
   'line-1': {
     'title': 'Another Line Widget',
     'type': 'line',
-    'filters': {
-      'clicks': [
-        117,
-        423,
-      ],
-    },
+    'filters': [
+      {
+        'key': 'clicks',
+        'filter': [
+          117,
+          423,
+        ],
+      },
+    ],
     'valueKeys': [
       {
         'key': 'clicks',
@@ -194,7 +204,7 @@ export default {
   'line-2': {
     'title': 'My example line widget',
     'type': 'line',
-    'filters': {},
+    'filters': [],
     'valueKeys': [
       {
         'key': 'spend',
@@ -230,12 +240,15 @@ export default {
   'scatter-1': {
     'title': 'My example scatter widget',
     'type': 'scatter',
-    'filters': {
-      'unique_visitors': [
-        0,
-        891,
-      ],
-    },
+    'filters': [
+      {
+        'key': 'unique_visitors',
+        'filter': [
+          0,
+          891,
+        ],
+      },
+    ],
     'valueKeys': [
       {
         'key': 'repeat_visitors',
@@ -273,7 +286,12 @@ export default {
   'map-1': {
     'title': 'My example map widget - scatterplot layer',
     'type': 'map',
-    'filters': { 'visits': [0, 100] },
+    'filters': [
+      {
+        'key': 'visits',
+        'filter': [0, 100],
+      },
+    ],
     'mapValueKeys': [
       {
         'key': 'visits',
@@ -303,7 +321,12 @@ export default {
   'map-2': {
     'title': 'My example map widget - polygon geojson layer',
     'type': 'map',
-    'filters': { 'spend': [0, 100] },
+    'filters': [
+      {
+        'key': 'spend',
+        'filter': [0, 100],
+      },
+    ],
     'mapValueKeys': [
       {
         'key': 'impressions',
