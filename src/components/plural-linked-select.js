@@ -5,7 +5,6 @@ import { Icons, Button, makeStyles } from '@eqworks/lumen-labs'
 
 import LinkedSelect from './linked-select'
 import clsx from 'clsx'
-import { getLongestString } from '../util/string-manipulation'
 
 
 const classes = makeStyles({
@@ -29,23 +28,32 @@ const PluralLinkedSelect = ({
   callback,
   deleteCallback,
   addMessage,
+  customRenderPrimary,
+  customRenderSecondary,
 }) => {
   const renderValue = i => {
-    const val = values[i]?.[primaryKey]
+    const primary = values[i]?.[primaryKey]
+    const secondary = values[i]?.[secondaryKey]
     return (
       <LinkedSelect
         key={i}
         className={`${i > 0 ? 'mt-2' : ''}`}
         callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
-        data={data.filter(d => val === d || !values.map(v => v[primaryKey]).includes(d))}
-        init={val}
+        data={data.filter(d => primary === d || !values.map(v => v[primaryKey]).includes(d))}
+        init={primary}
         subData={subData}
         subInit={values[i]?.[secondaryKey]}
         deletable={!staticQuantity && values?.length > 1}
         deleteCallback={([_k, _v]) => deleteCallback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
         placeholders={titles}
         disableSub={disableSubs}
-        disableSubMessage={`${val} ${disableSubMessage}`}
+        disableSubMessage={`${primary} ${disableSubMessage}`}
+        {...(customRenderPrimary && {
+          customRender: () => customRenderPrimary(i, primary, secondary),
+        })}
+        {...(customRenderSecondary && {
+          customRenderSub: () => customRenderSecondary(i, primary, secondary),
+        })}
       />
     )
   }
@@ -71,15 +79,6 @@ const PluralLinkedSelect = ({
 
   return (
     <>
-      <div className='invisible h-0 grid grid-cols-min-min pointer-events-none'>
-        <LinkedSelect
-          data={[]}
-          callback={() => { }}
-          subData={[]}
-          deletable
-          placeholders={[getLongestString([titles[0], ...data]), getLongestString([titles[1], ...subData])]}
-        />
-      </div>
       <div className={classes.outerContainer}>
         {
           staticQuantity
@@ -108,6 +107,8 @@ PluralLinkedSelect.propTypes = {
   disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
   addMessage: PropTypes.string,
+  customRenderPrimary: PropTypes.func,
+  customRenderSecondary: PropTypes.func,
 }
 
 PluralLinkedSelect.defaultProps = {
@@ -116,6 +117,8 @@ PluralLinkedSelect.defaultProps = {
   disableSubs: false,
   disableSubMessage: '',
   addMessage: 'Add',
+  customRenderPrimary: null,
+  customRenderSecondary: null,
 }
 
 export default PluralLinkedSelect
