@@ -6,7 +6,6 @@ import { DropdownBase } from '@eqworks/lumen-labs/dist/base-components'
 import Slider from '@material-ui/core/Slider'
 import { useStoreState } from '../../store'
 import { DROPDOWN_SELECT_CLASSES } from '../../components/custom-select'
-import mergeClasses from '../../util/merge-classes'
 
 
 const classes = makeStyles({
@@ -54,6 +53,8 @@ const FilterDropdown = ({ column, update }) => {
   const [open, setOpen] = useState(false)
   const value = useMemo(() => (filters?.find(({ key }) => key === column))?.filter || [min, max], [column, filters, max, min])
 
+  const { root, menu, ...dropdownBaseClasses } = DROPDOWN_SELECT_CLASSES
+
   return (
     <div className={classes.outerContainer}>
       <DropdownBase
@@ -61,10 +62,11 @@ const FilterDropdown = ({ column, update }) => {
         // onBlur={() => setOpen(false)}
         onClick={() => setOpen(!open)}
         placeholder='Range'
-        classes={mergeClasses({
-          root: classes.root,
-          menu: classes.menu,
-        }, DROPDOWN_SELECT_CLASSES)}
+        classes={{
+          root: [root, classes.root].join(' '),
+          menu: [menu, classes.menu].join(' '),
+          ...dropdownBaseClasses,
+        }}
         renderSelectedOptions={() =>
           column &&
           <span className={classes.range}>{

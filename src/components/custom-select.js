@@ -12,21 +12,21 @@ export const DROPDOWN_SELECT_CLASSES = {
   selectedOptionTitle: 'normal-case text-primary-600',
   listContainer: 'normal-case',
 }
+const { root, ...baseClasses } = DROPDOWN_SELECT_CLASSES
 
-const CustomSelect = ({ classes, onClear, fullWidth, ...props }) => {
-  return (
-    <DropdownSelect simple
-      classes={mergeClasses(
-        mergeClasses(classes, DROPDOWN_SELECT_CLASSES),
-        { root: fullWidth ? 'w-full' : '' }
-      )}
-      overflow='vertical'
-      endIcon={<Icons.ArrowDown size='md' />}
-      onDelete={onClear}
-      {...props}
-    />
-  )
-}
+const CustomSelect = ({ classes, onClear, fullWidth, ...props }) => (
+  <DropdownSelect simple
+    classes={{
+      root: fullWidth ? [root, 'w-full'].join(' ') : root,
+      ...baseClasses,
+      ...classes,
+    }}
+    overflow='vertical'
+    endIcon={<Icons.ArrowDown size='md' />}
+    onDelete={onClear}
+    {...props}
+  />
+)
 
 
 CustomSelect.propTypes = {
