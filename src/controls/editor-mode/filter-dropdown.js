@@ -52,7 +52,7 @@ const FilterDropdown = ({ column, update }) => {
 
   const { min, max } = columnsAnalysis[column] || {}
   const [open, setOpen] = useState(false)
-  const value = useMemo(() => filters[column], [column, filters])
+  const value = useMemo(() => (filters?.find(({ key }) => key === column))?.filter || [min, max], [column, filters, max, min])
 
   return (
     <div className={classes.outerContainer}>
