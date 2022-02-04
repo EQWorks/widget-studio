@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Button, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
-import mergeWith from 'lodash.mergewith'
+import mergeClasses from '../util/merge-classes'
 
 
 const CUSTOM_SIZES = {
@@ -65,11 +65,7 @@ const CustomButton = ({
 
   const renderButton = (
     <Button
-      classes={mergeWith(
-        lumenClasses,
-        { button: `${classes.button} ${buttonClass}` },
-        (a, b) => [a, b].join(' ')
-      )}
+      classes={mergeClasses(lumenClasses, { button: `${classes.button} ${buttonClass}` })}
       onClick={e => {
         e.stopPropagation()
         onClick(e)
