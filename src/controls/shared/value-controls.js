@@ -77,6 +77,7 @@ const ValueControls = () => {
         valueKeysCopy.splice(i, 1)
         update({ valueKeys: valueKeysCopy })
       }}
+      addMessage='Add Key'
     />
 
   const renderToggle = (title, state, toggleState) =>

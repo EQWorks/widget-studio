@@ -67,7 +67,7 @@ const LinkedSelect = ({ className,
   const renderDelete =
     <CustomButton
       type='danger'
-      onClick={deleteCallback}
+      onClick={() => deleteCallback([choice, subChoice])}
       className={clsx('rounded-md flex align-center justify-center my-0.5',
         'transition-width ease-in-out duration-300',
         'w-5 hover:w-7 ml-3 hover:ml-1',

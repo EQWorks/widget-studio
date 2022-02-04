@@ -1,12 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Icons, Button } from '@eqworks/lumen-labs'
+import { Icons, Button, makeStyles } from '@eqworks/lumen-labs'
 
 import LinkedSelect from './linked-select'
 import clsx from 'clsx'
 import { getLongestString } from '../util/string-manipulation'
 
+
+const classes = makeStyles({
+  outerContainer: {
+    width: '100%',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, auto)',
+  },
+})
 
 const PluralLinkedSelect = ({
   staticQuantity,
@@ -20,6 +28,7 @@ const PluralLinkedSelect = ({
   disableSubMessage,
   callback,
   deleteCallback,
+  addMessage,
 }) => {
   const renderValue = i => {
     const val = values[i]?.[primaryKey]
@@ -33,7 +42,7 @@ const PluralLinkedSelect = ({
         subData={subData}
         subInit={values[i]?.[secondaryKey]}
         deletable={!staticQuantity && values?.length > 1}
-        deleteCallback={() => deleteCallback(i)}
+        deleteCallback={([_k, _v]) => deleteCallback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
         placeholders={titles}
         disableSub={disableSubs}
         disableSubMessage={`${val} ${disableSubMessage}`}
@@ -54,7 +63,7 @@ const PluralLinkedSelect = ({
       onClick={() => callback(values.length, { [primaryKey]: '', [secondaryKey]: '' })}
     >
       <div className='w-full flex items-center'>
-        <span className='flex-1 text-left mr-1'>Add Key</span>
+        <span className='flex-1 text-left mr-1'>{addMessage}</span>
         <Icons.Add size='sm' />
       </div>
     </Button>
@@ -71,7 +80,7 @@ const PluralLinkedSelect = ({
           placeholders={[getLongestString([titles[0], ...data]), getLongestString([titles[1], ...subData])]}
         />
       </div>
-      <div className='grid grid-cols-min-1fr'>
+      <div className={classes.outerContainer}>
         {
           staticQuantity
             ? [...Array(staticQuantity)].map((_, i) => renderValue(i))
@@ -98,6 +107,7 @@ PluralLinkedSelect.propTypes = {
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
   disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
+  addMessage: PropTypes.string,
 }
 
 PluralLinkedSelect.defaultProps = {
@@ -105,6 +115,7 @@ PluralLinkedSelect.defaultProps = {
   titles: [],
   disableSubs: false,
   disableSubMessage: '',
+  addMessage: 'Add',
 }
 
 export default PluralLinkedSelect
