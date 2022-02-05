@@ -1,16 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Chip, makeStyles } from '@eqworks/lumen-labs'
+import { Icons, Chip, makeStyles } from '@eqworks/lumen-labs'
 
-import LinkedSelect from '../../../components/linked-select'
-import { getLongestString } from '../../../util/string-manipulation'
+import PluralLinkedSelect from '../../../components/plural-linked-select'
 
 
 const classes = makeStyles({
   keyControl1 : { marginTop: '15px' },
   linkedSelect : { marginTop: '5px' },
 })
+
+const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
 
 const MapLinkedSelect = ({
   categories,
@@ -27,34 +28,29 @@ const MapLinkedSelect = ({
       const match = values.findIndex(v => v.mapVis === mapVis)
       return (
         <div key={i} className={i === 0 ? '' : classes.keyControl1} >
-          <div className='invisible h-0 grid grid-cols-min-min pointer-events-none'>
-            <LinkedSelect
-              data={[]}
-              subData={[]}
-              deletable
-              callback={() => {}}
-              placeholders={[getLongestString([titles[0], ...data]), getLongestString([titles[1], ...subData])]}
-            />
-          </div>
           <Chip color={i === 0 ? 'primary' : 'success'}>
-            {mapVis.toUpperCase()}
+            {mapVis}
           </Chip>
-          <div className='grid grid-cols-min-1fr'>
-            <LinkedSelect
-              key={mapVis}
-              className={classes.linkedSelect}
-              callback={([_k, _v]) => callback(match, { key: _k, agg: _v, mapVis })}
-              data={data.filter(d => values[match]?.key === d || !(values.map(v => v.key).includes(d)))}
-              subData={subData}
-              deletable={false}
-              clearable
-              init={values[match]?.key}
-              subInit={values[match]?.agg}
-              placeholders={titles}
-              disableSub={disableSubs}
-              disableSubMessage={`${values[match]?.key} ${disableSubMessage}`}
-            />
-          </div>
+          <PluralLinkedSelect
+            staticQuantity={1}
+            headerIcons={[Icons.Sum, Icons.Columns]}
+            titles={titles}
+            values={values[match] ? [values[match]] : []}
+            callback={(_, v) => callback(
+              match,
+              {
+                mapVis,
+                [PRIMARY_KEY]: v[PRIMARY_KEY],
+                [SECONDARY_KEY]: v[SECONDARY_KEY],
+              }
+            )}
+            data={data.filter(d => values[match]?.key === d || !(values.map(v => v.key).includes(d)))}
+            subData={subData}
+            primaryKey={PRIMARY_KEY}
+            secondaryKey={SECONDARY_KEY}
+            disableSubs={disableSubs}
+            disableSubMessage={disableSubMessage}
+          />
         </div>
       )
     })

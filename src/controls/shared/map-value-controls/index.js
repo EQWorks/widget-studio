@@ -51,7 +51,7 @@ const MapValueControls = () => {
   return (
     <>
       <WidgetControlCard
-        title='Group by' >
+        title='Domain Configuration' >
         <CustomSelect
           data={validMapGroupKeys}
           value={mapGroupKey}
@@ -74,16 +74,15 @@ const MapValueControls = () => {
         />
       </WidgetControlCard>
       <WidgetControlCard
-        grow
         clearable
         showIfEmpty
-        title='Key(s) Configuration'
+        title='Value Configuration'
         description={widgetControlCardDescription}
       >
         {mapLayer &&
           <MapLinkedSelect
             categories={MAP_LAYER_VIS[mapLayer]}
-            titles={['Key', 'Aggregation']}
+            titles={['Column', 'Operation']}
             values={mapValueKeys}
             data={mapNumericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
