@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useStoreState } from '../../store'
-import WidgetControlCard from '../shared/widget-control-card'
+import WidgetControlCard from '../shared/components/widget-control-card'
 import types from '../../constants/types'
 import Icons from '../shared/widget-type-icons'
 import DomainControls from '../shared/domain-controls'

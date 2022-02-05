@@ -4,10 +4,10 @@ import clsx from 'clsx'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import CustomButton from '../../components/custom-button'
-import { Trash } from '../../components/icons'
-import { useStoreState } from '../../store'
-import modes from '../../constants/modes'
+import CustomButton from '../../../components/custom-button'
+import { Trash } from '../../../components/icons'
+import { useStoreState } from '../../../store'
+import modes from '../../../constants/modes'
 
 
 const commonClasses = {

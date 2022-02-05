@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../store'
-import WidgetControlCard from '../shared/widget-control-card'
+import WidgetControlCard from '../shared/components/widget-control-card'
 import { sizes } from '../../constants/viz-options'
 import types from '../../constants/types'
 import CustomSelect from '../../components/custom-select'

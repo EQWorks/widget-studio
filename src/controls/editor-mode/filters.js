@@ -1,10 +1,10 @@
 import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../store'
-import WidgetControlCard from '../shared/widget-control-card'
+import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderSection, renderRow } from './util'
 import PluralLinkedSelect from '../../components/plural-linked-select'
-import FilterDropdown from './filter-dropdown'
+import FilterDropdown from './components/filter-dropdown'
 import CustomSelect from '../../components/custom-select'
 import types from '../../constants/types'
 

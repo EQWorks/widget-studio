@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import { getTailwindConfigColor, makeStyles, TextField } from '@eqworks/lumen-labs'
 import { DropdownBase } from '@eqworks/lumen-labs/dist/base-components'
 import Slider from '@material-ui/core/Slider'
-import { useStoreState } from '../../store'
-import { DROPDOWN_SELECT_CLASSES } from '../../components/custom-select'
+import { useStoreState } from '../../../store'
+import { DROPDOWN_SELECT_CLASSES } from '../../../components/custom-select'
 
 
 const classes = makeStyles({

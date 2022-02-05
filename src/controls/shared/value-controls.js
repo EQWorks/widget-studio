@@ -7,7 +7,7 @@ import aggFunctions from '../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
-import WidgetControlCard from '../shared/widget-control-card'
+import WidgetControlCard from '../shared/components/widget-control-card'
 import typeInfo from '../../constants/type-info'
 
 

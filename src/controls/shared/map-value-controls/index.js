@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import aggFunctions from '../../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../../store'
 import MapLinkedSelect from './map-linked-select'
-import WidgetControlCard from '../widget-control-card'
+import WidgetControlCard from '../components/widget-control-card'
 
 import modes from '../../../constants/modes'
 import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS, ID_KEYS } from '../../../constants/map'

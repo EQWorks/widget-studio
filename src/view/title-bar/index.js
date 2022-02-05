@@ -2,13 +2,13 @@ import React from 'react'
 
 import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import { Cycle, ArrowExpand, Download, Trash, Undo, Redo } from '../components/icons'
-import { useStoreState, useStoreActions } from '../store'
-import saveConfig from '../util/save-config'
-import CustomButton from '../components/custom-button'
-import modes from '../constants/modes'
-import EditableTitle from './title-bar/editable-title'
-import WidgetMeta from './meta'
+import { Cycle, ArrowExpand, Download, Trash, Undo, Redo } from '../../components/icons'
+import { useStoreState, useStoreActions } from '../../store'
+import saveConfig from '../../util/save-config'
+import CustomButton from '../../components/custom-button'
+import modes from '../../constants/modes'
+import EditableTitle from './editable-title'
+import WidgetMeta from '../meta'
 
 
 const commonClasses = {
