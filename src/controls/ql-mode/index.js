@@ -10,6 +10,7 @@ import types from '../../constants/types'
 import MapValueControls from '../shared/map-value-controls'
 import ValueControls from '../shared/value-controls'
 import CustomButton from '../../components/custom-button'
+import DomainControls from '../shared/domain-controls'
 
 
 const QLModeControls = ({ children }) => {
@@ -64,6 +65,7 @@ const QLModeControls = ({ children }) => {
           >
             <Icons disabled={!dataReady} />
           </WidgetControlCard>
+          <DomainControls />
           {isReady && (type === types.MAP ? <MapValueControls /> : <ValueControls />)}
         </div>
       </CustomAccordion>
