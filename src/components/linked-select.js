@@ -43,7 +43,7 @@ const LinkedSelect = ({ className,
       ? customRenderSub(subChoice)
       : <CustomSelect
         classes={{
-          root: 'shadow-light-10 border-2 border-r-0 border-secondary-200 rounded-md rounded-r-none',
+          root: 'w-full shadow-light-10 border-2 border-r-0 border-secondary-200 rounded-md rounded-r-none',
         }}
         data={subData}
         value={disableSub ? '' : subChoice}
@@ -60,7 +60,7 @@ const LinkedSelect = ({ className,
         customRender
           ? customRender(choice)
           : <CustomSelect
-            classes={{ root: 'shadow-light-10 border-2 border-secondary-200 rounded-md border-l-0 rounded-l-none' }}
+            classes={{ root: 'w-full shadow-light-10 border-2 border-secondary-200 rounded-md border-l-0 rounded-l-none' }}
             data={data}
             value={choice}
             onSelect={setChoice}
@@ -88,7 +88,11 @@ const LinkedSelect = ({ className,
       <div className={`col-span-1 ${className}`}>
         {
           disableSub
-            ? <Tooltip position='left' arrow={false} description={disableSubMessage}>
+            ? <Tooltip
+              classes={{ container: 'w-full' }}
+              arrow={false}
+              description={disableSubMessage}
+            >
               {renderSub}
             </Tooltip>
             : renderSub

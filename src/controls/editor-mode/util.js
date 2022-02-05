@@ -22,6 +22,10 @@ const classes = makeStyles({
     flexDirection: 'row',
     margin: '0.2rem 0',
   },
+  rowContainer: {
+    width: '100%',
+    margin: '0.2rem 0',
+  },
   inlineItemContainer: {
     display: 'flex',
     flex: 1,
@@ -40,17 +44,23 @@ const classes = makeStyles({
   },
   inlineTitle: {
     color: getTailwindConfigColor('secondary-600'),
-    fontSize: '0.8rem',
+    fontSize: '0.786rem',
     marginLeft: '0.4rem',
     display: 'flex',
     alignItems: 'center',
   },
   title: {
     color: getTailwindConfigColor('secondary-600'),
-    fontSize: '0.8rem',
+    fontSize: '0.786rem',
     marginBottom: '0.2rem',
     display: 'flex',
     alignItems: 'center',
+  },
+  flex1: {
+    flex: 1,
+  },
+  flex0: {
+    flex: 0,
   },
 })
 
@@ -62,14 +72,19 @@ export const renderSection = (title, Component) => (
   </div>
 )
 
-export const renderRow = (title, Component) => (
+export const renderRow = (title, Component, titleExtra) => (
   Component &&
-  <>
-    {title && <div className={classes.title} > {`${title}:`} </div>}
+  <div className={classes.rowContainer}>
+    {(title || titleExtra) &&
+      <div className={classes.title}>
+        <span className={classes.flex1}> {`${title}:`} </span>
+        {titleExtra && titleExtra}
+      </div>
+    }
     <div className={classes.row}>
       {Component}
     </div>
-  </>
+  </div>
 )
 
 export const renderItem = (title, Component) => (
