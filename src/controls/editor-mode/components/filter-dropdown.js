@@ -59,7 +59,7 @@ const FilterDropdown = ({ column, update }) => {
     <div className={classes.outerContainer}>
       <DropdownBase
         open={open}
-        // onBlur={() => setOpen(false)}
+        onBlur={() => setOpen(false)}
         onClick={() => setOpen(!open)}
         placeholder='Range'
         classes={{
@@ -97,14 +97,15 @@ const FilterDropdown = ({ column, update }) => {
               deleteButton={false}
               placeholder={min}
               defaultValue={(value || [])[0] || ''}
-              onChange={({ target: { value: newMin } }) => update([newMin, max])} />
+              onChange={_min => update([_min, max])}
+            />
             <TextField
               label="max"
               type="number"
               deleteButton={false}
               placeholder={max}
               defaultValue={(value || [])[1] || ''}
-              onChange={({ target: { value: newMax } }) => update([min, newMax])}
+              onChange={_max => update([min, _max])}
             />
           </div>
         </div >
