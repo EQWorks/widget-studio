@@ -20,6 +20,7 @@ const classes = makeStyles({
     fontWeight: 700,
     color: getTailwindConfigColor('secondary-500'),
     padding: '0.5rem',
+    paddingTop: 0,
   },
   headerIcon: {
     height: '0.714rem !important',

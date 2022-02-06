@@ -14,10 +14,11 @@ const useStyles = ({ baseColor, showPicker }) => makeStyles({
     flexDirection: 'column',
     width: '100%',
     alignItems: 'stretch',
+    marginTop: '0.8rem',
   },
   row: {
     display: 'flex',
-    marginBottom: '1rem',
+    marginBottom: '0.6rem',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -106,7 +107,6 @@ const useStyles = ({ baseColor, showPicker }) => makeStyles({
 
 
 const ColorSchemeControls = () => {
-
   // common actions
   const update = useStoreActions((state) => state.update)
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)

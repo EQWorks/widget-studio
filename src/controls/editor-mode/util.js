@@ -5,7 +5,8 @@ import CustomToggle from '../../components/custom-toggle'
 
 const classes = makeStyles({
   section: {
-    marginBottom: '0.6rem',
+    marginTop: '0.2rem',
+    marginBottom: '0.7rem',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -67,7 +68,9 @@ const classes = makeStyles({
 export const renderSection = (title, Component) => (
   Component &&
   <div className={classes.section}>
-    {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
+    <div className={classes.sectionTitle}>
+      {title && `${title}:`}
+    </div>
     {Component}
   </div>
 )

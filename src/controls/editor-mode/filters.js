@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Icons, makeStyles } from '@eqworks/lumen-labs'
+
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderSection, renderRow } from './util'
@@ -8,7 +10,6 @@ import RangeFilter from './components/range-filter'
 import CustomSelect from '../../components/custom-select'
 import types from '../../constants/types'
 import CustomDropdown from './components/custom-dropdown'
-import { makeStyles } from '@eqworks/lumen-labs'
 
 
 const classes = makeStyles({
@@ -63,6 +64,7 @@ const Filters = () => {
           <>
             <PluralLinkedSelect
               titles={['Column', 'Range']}
+              headerIcons={[Icons.Columns, Icons.Hash]}
               values={filters}
               primaryKey='key'
               secondaryKey='range'

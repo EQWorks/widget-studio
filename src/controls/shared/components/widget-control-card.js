@@ -32,7 +32,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         fontSize: '0.875rem',
         fontWeight: 700,
         color: getTailwindConfigColor('secondary-900'),
-        marginBottom: '0.7rem',
+        marginBottom: '0.2rem',
         padding: '0 0.5rem',
       },
       clearButton: {

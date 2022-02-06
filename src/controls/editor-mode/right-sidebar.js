@@ -9,7 +9,7 @@ import types from '../../constants/types'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
-import { renderItem, renderSection, renderRow, renderBool } from './util'
+import { renderItem, renderSection, renderRow, renderBool, renderDivider } from './util'
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import Filters from './filters'
@@ -43,51 +43,46 @@ const EditorRightSidebar = () => {
     <EditorSidebarBase>
       <Filters />
       <WidgetControlCard title='Options'>
-        {renderSection(
-          null,
-          subPlots && renderItem(
-            'Subplot Spacing',
-            <CustomSelect
-              fullWidth
-              data={sizes.string}
-              value={sizes.string[sizes.numeric.indexOf(size)]}
-              onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
-            />
-          )
-        )}
         {type !== types.MAP &&
-          renderSection(
-            null,
-            renderRow(
-              null,
-              <>
-                {renderItem(
-                  'Title Position',
-                  <CustomDropdown
-                    selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(titlePosition))]}
-                    classes={{ menu: classes.xyDropdownMenu }}
-                  >
-                    <XYSelect
-                      value={titlePosition}
-                      update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
-                    />
-                  </CustomDropdown>
-                )}
-                {showLegend && renderItem(
-                  'Legend Position',
-                  <CustomDropdown
-                    selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(legendPosition))]}
-                    classes={{ menu: classes.xyDropdownMenu }}
-                  >
-                    <XYSelect
-                      value={legendPosition}
-                      update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
-                    />
-                  </CustomDropdown>
-                )}
-              </>
-            )
-          )}
+          renderSection(null,
+            <>
+              {renderRow(null,
+                <>
+                  {renderItem('Title Position',
+                    <CustomDropdown
+                      selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(titlePosition))]}
+                      classes={{ menu: classes.xyDropdownMenu }}
+                    >
+                      <XYSelect
+                        value={titlePosition}
+                        update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
+                      />
+                    </CustomDropdown>
+                  )}
+                  {showLegend && renderItem('Legend Position',
+                    <CustomDropdown
+                      selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(legendPosition))]}
+                      classes={{ menu: classes.xyDropdownMenu }}
+                    >
+                      <XYSelect
+                        value={legendPosition}
+                        update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
+                      />
+                    </CustomDropdown>
+                  )}
+                </>
+              )}
+              {subPlots && renderRow('Subplot Size',
+                <CustomSelect
+                  fullWidth
+                  data={sizes.string}
+                  value={sizes.string[sizes.numeric.indexOf(size)]}
+                  onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
+                />
+              )}
+            </>
+          )
+        }
         {renderSection(
           'Display Options',
           <>
@@ -110,10 +105,9 @@ const EditorRightSidebar = () => {
             <UniqueOptionControls type={type} />
           </>
         )}
-        {renderSection(
-          'Colour Scheme',
-          <ColorSchemeControls />
-        )}
+      </WidgetControlCard >
+      <WidgetControlCard title='Colour Scheme'>
+        <ColorSchemeControls />
       </WidgetControlCard >
     </EditorSidebarBase >
   )

@@ -9,42 +9,42 @@ const SIZE = 3
 const classes = makeStyles({
   topRight: {
     borderTopRightRadius: '0.3rem',
-    borderTopWidth: '2px',
-    borderRightWidth: '2px',
+    borderTopWidth: '3px',
+    borderRightWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   topLeft: {
     borderTopLeftRadius: '0.3rem',
-    borderTopWidth: '2px',
-    borderLeftWidth: '2px',
+    borderTopWidth: '3px',
+    borderLeftWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   bottomRight: {
     borderBottomRightRadius: '0.3rem',
-    borderBottomWidth: '2px',
-    borderRightWidth: '2px',
+    borderBottomWidth: '3px',
+    borderRightWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   bottomLeft: {
     borderBottomLeftRadius: '0.3rem',
-    borderBottomWidth: '2px',
-    borderLeftWidth: '2px',
+    borderBottomWidth: '3px',
+    borderLeftWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   top: {
-    borderTopWidth: '2px',
+    borderTopWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   bottom: {
-    borderBottomWidth: '2px',
+    borderBottomWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   left: {
-    borderLeftWidth: '2px',
+    borderLeftWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   right: {
-    borderRightWidth: '2px',
+    borderRightWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   container: {
