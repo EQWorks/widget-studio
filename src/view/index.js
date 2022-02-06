@@ -156,19 +156,27 @@ const WidgetView = () => {
   ), [dataSourceType, dataSourceID])
 
   // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
-  const widgetWarning = useMemo(() => ({
-    primary:
-      !dataSourceID || !dataSourceType ? 'Please select a data source.'
-        : dataSourceError ? 'Something went wrong.'
-          : !rows.length ? 'Sorry, this data is empty.'
-            : !transformedData?.length ? 'This configuration resulted in an empty dataset.'
-              : type ? 'Select columns and configure your widget.'
-                : 'Select a widget type.',
-    secondary:
-      dataSourceError ? `${dataSourceError}`
-        : !transformedData?.length ? 'Try adjusting your filters.'
-          : 'Data loaded successfully',
-  }), [dataSourceError, dataSourceID, dataSourceType, rows.length, transformedData?.length, type])
+  const widgetWarning = useMemo(() => {
+    let primary, secondary
+    if (!dataSourceID || !dataSourceType) {
+      primary = 'Please select a data source.'
+    } else if (dataSourceError) {
+      primary = 'Something went wrong.'
+      secondary = `${dataSourceError}`
+    } else if (!rows.length) {
+      primary = 'Sorry, this data is empty.'
+    } else if (!transformedData?.length) {
+      primary = 'This configuration resulted in an empty dataset.'
+      secondary = 'Try adjusting your filters.'
+    } else if (type) {
+      primary = 'Select columns and configure your widget.'
+    } else {
+      primary = 'Select a widget type.'
+    } if (!secondary) {
+      secondary = 'Data loaded successfully'
+    }
+    return { primary, secondary }
+  }, [dataSourceError, dataSourceID, dataSourceType, rows.length, transformedData?.length, type])
 
   const renderWidgetWarning = (
     <div className='h-full flex-1 flex flex-col justify-center items-center'>
