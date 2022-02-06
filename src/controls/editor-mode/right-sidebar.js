@@ -1,8 +1,10 @@
 import React from 'react'
 
+import { makeStyles } from '@eqworks/lumen-labs'
+
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { sizes } from '../../constants/viz-options'
+import { positions, sizes } from '../../constants/viz-options'
 import types from '../../constants/types'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
@@ -11,7 +13,17 @@ import { renderItem, renderSection, renderRow, renderBool } from './util'
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import Filters from './filters'
+import CustomDropdown from './components/custom-dropdown'
 
+
+const classes = makeStyles({
+  xyDropdownMenu: {
+    height: '5rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 const EditorRightSidebar = () => {
 
@@ -51,17 +63,27 @@ const EditorRightSidebar = () => {
               <>
                 {renderItem(
                   'Title Position',
-                  <XYSelect
-                    value={titlePosition}
-                    update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
-                  />
+                  <CustomDropdown
+                    selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(titlePosition))]}
+                    classes={{ menu: classes.xyDropdownMenu }}
+                  >
+                    <XYSelect
+                      value={titlePosition}
+                      update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
+                    />
+                  </CustomDropdown>
                 )}
                 {showLegend && renderItem(
                   'Legend Position',
-                  <XYSelect
-                    value={legendPosition}
-                    update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
-                  />
+                  <CustomDropdown
+                    selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(legendPosition))]}
+                    classes={{ menu: classes.xyDropdownMenu }}
+                  >
+                    <XYSelect
+                      value={legendPosition}
+                      update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
+                    />
+                  </CustomDropdown>
                 )}
               </>
             )
