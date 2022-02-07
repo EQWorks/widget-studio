@@ -71,7 +71,7 @@ const Filters = () => {
               headerIcons={[Icons.Columns, Icons.Hash]}
               values={filters}
               primaryKey='key'
-              secondaryKey='range'
+              secondaryKey='filter'
               data={numericColumns.filter(c => {
                 const { min, max, category } = columnsAnalysis[c] || {}
                 return min !== max && category === 'Numeric'
