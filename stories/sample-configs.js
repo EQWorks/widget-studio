@@ -2,28 +2,26 @@ export default {
   'pie-1': {
     'title': 'My example pie widget',
     'type': 'pie',
-    'groupFilter': [
-      'LAVAL',
-      'MONTREAL',
-      'MIRABEL',
-      'BROSSARD',
-    ],
     'filters': [
       {
         'key': 'city_clicks',
         'filter': [
           20,
           308,
-
         ],
       },
+    ],
+    'groupFilter': [
+      'LAVAL',
+      'MONTREAL',
+      'MIRABEL',
+      'BROSSARD',
     ],
     'valueKeys': [
       {
         'key': 'city_clicks',
         'title': 'City clicks (mean)',
         'agg': 'mean',
-        'id': 'city_clicks_mean',
       },
       {
         'key': 'city_impressions',
@@ -31,8 +29,11 @@ export default {
         'agg': 'sum',
       },
     ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
     'group': true,
     'groupKey': 'geo_ca_city',
+    'mapGroupKey': null,
     'indexKey': null,
     'groupKeyTitle': 'Geo ca city',
     'uniqueOptions': {
@@ -40,9 +41,9 @@ export default {
       'donut': true,
     },
     'genericOptions': {
+      'groupByValue': false,
       'showLegend': true,
       'subPlots': true,
-      'baseColor': '#f2ff00',
       'size': 0.6,
       'titlePosition': [
         0.5,
@@ -52,6 +53,8 @@ export default {
         1,
         0,
       ],
+      'baseColor': '#f2ff00',
+      'showWidgetTitle': false,
     },
     'dataSource': {
       'type': 'Saved query',
@@ -62,6 +65,7 @@ export default {
     'title': 'Percentage widget',
     'type': 'pie',
     'filters': [],
+    'groupFilter': [],
     'valueKeys': [
       {
         'key': 'renters',
@@ -74,8 +78,11 @@ export default {
         'agg': 'mean',
       },
     ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
     'group': true,
     'groupKey': 'city',
+    'mapGroupKey': null,
     'indexKey': null,
     'groupKeyTitle': 'City',
     'uniqueOptions': {
@@ -83,19 +90,20 @@ export default {
       'donut': false,
     },
     'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': true,
       'showLegend': true,
       'subPlots': true,
+      'size': 0.6,
       'titlePosition': [
         0,
         1,
       ],
-      'groupByValue': true,
-      'size': 0.6,
-      'baseColor': '#366fe4',
       'legendPosition': [
         1,
         0,
       ],
+      'baseColor': '#366fe4',
     },
     'dataSource': {
       'type': 'Execution',
@@ -114,12 +122,12 @@ export default {
         ],
       },
     ],
+    'groupFilter': [],
     'valueKeys': [
       {
         'key': 'converted_users',
         'title': 'Converted users (mean)',
         'agg': 'mean',
-        'id': 'converted_users_mean',
       },
       {
         'key': 'city_clicks',
@@ -127,8 +135,11 @@ export default {
         'agg': 'sum',
       },
     ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
     'group': true,
     'groupKey': 'geo_ca_city',
+    'mapGroupKey': null,
     'indexKey': null,
     'groupKeyTitle': 'Geo ca city',
     'uniqueOptions': {
@@ -136,6 +147,8 @@ export default {
       'showTicks': true,
     },
     'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
       'showLegend': true,
       'subPlots': false,
       'size': 0.6,
@@ -147,6 +160,7 @@ export default {
         1,
         1,
       ],
+      'baseColor': '#366fe4',
     },
     'dataSource': {
       'type': 'Saved query',
@@ -165,6 +179,7 @@ export default {
         ],
       },
     ],
+    'groupFilter': [],
     'valueKeys': [
       {
         'key': 'clicks',
@@ -175,8 +190,11 @@ export default {
         'title': 'Revenue',
       },
     ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
     'group': false,
     'groupKey': null,
+    'mapGroupKey': null,
     'indexKey': 'impressions',
     'indexKeyTitle': 'Impressions',
     'uniqueOptions': {
@@ -184,6 +202,8 @@ export default {
       'showTicks': true,
     },
     'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
       'showLegend': true,
       'subPlots': true,
       'size': 0.8,
@@ -195,6 +215,7 @@ export default {
         1,
         0,
       ],
+      'baseColor': '#366fe4',
     },
     'dataSource': {
       'type': 'Saved query',
@@ -205,6 +226,7 @@ export default {
     'title': 'My example line widget',
     'type': 'line',
     'filters': [],
+    'groupFilter': [],
     'valueKeys': [
       {
         'key': 'spend',
@@ -215,8 +237,11 @@ export default {
         'title': 'Clicks',
       },
     ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
     'group': false,
     'groupKey': null,
+    'mapGroupKey': null,
     'indexKey': 'impressions',
     'indexKeyTitle': 'Impressions',
     'uniqueOptions': {
@@ -224,13 +249,20 @@ export default {
       'showTicks': true,
     },
     'genericOptions': {
+      'groupByValue': false,
       'showLegend': true,
       'subPlots': false,
       'size': 0.2,
+      'titlePosition': [
+        0,
+        0,
+      ],
       'legendPosition': [
         1,
         1,
       ],
+      'baseColor': '#366fe4',
+      'showWidgetTitle': true,
     },
     'dataSource': {
       'type': 'Execution',
@@ -249,6 +281,7 @@ export default {
         ],
       },
     ],
+    'groupFilter': [],
     'valueKeys': [
       {
         'key': 'repeat_visitors',
@@ -261,22 +294,31 @@ export default {
         'agg': 'sum',
       },
     ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
     'group': true,
     'groupKey': 'address_postalcode',
+    'mapGroupKey': null,
     'indexKey': null,
     'groupKeyTitle': 'Address postalcode',
     'uniqueOptions': {
       'showTicks': true,
     },
     'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
       'showLegend': true,
       'subPlots': false,
       'size': 0.8,
-      'groupByValue': false,
+      'titlePosition': [
+        0,
+        0,
+      ],
       'legendPosition': [
         1,
         1,
       ],
+      'baseColor': '#366fe4',
     },
     'dataSource': {
       'type': 'Saved query',
@@ -289,9 +331,14 @@ export default {
     'filters': [
       {
         'key': 'visits',
-        'filter': [0, 100],
+        'filter': [
+          0,
+          100,
+        ],
       },
     ],
+    'groupFilter': [],
+    'valueKeys': [],
     'mapValueKeys': [
       {
         'key': 'visits',
@@ -301,21 +348,41 @@ export default {
       },
       {
         'key': 'unique_visitors',
-        'title:': 'Unique visitors (sum)',
+        'title': 'Unique visitors (sum)',
         'agg': 'sum',
+        'title:': 'Unique visitors (sum)',
         'mapVis': 'fill',
       },
     ],
+    'formatDataFunctions': {},
     'group': true,
+    'groupKey': null,
     'mapGroupKey': 'poi_id',
+    'indexKey': null,
     'mapGroupKeyTitle': 'Poi id',
-    'dataSource': {
-      'type': 'Execution',
-      'id': '913',
-    },
     'uniqueOptions': {
       'showTooltip': true,
       'showLegend': true,
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLegend': true,
+      'subPlots': false,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        0,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'baseColor': '#366fe4',
+    },
+    'dataSource': {
+      'type': 'Execution',
+      'id': '913',
     },
   },
   'map-2': {
@@ -324,14 +391,20 @@ export default {
     'filters': [
       {
         'key': 'spend',
-        'filter': [0, 100],
+        'filter': [
+          0,
+          100,
+        ],
       },
     ],
+    'groupFilter': [],
+    'valueKeys': [],
     'mapValueKeys': [
       {
         'key': 'impressions',
-        'title:': 'Impressions (sum)',
+        'title': 'Impressions (sum)',
         'agg': 'sum',
+        'title:': 'Impressions (sum)',
         'mapVis': 'elevation',
       },
       {
@@ -341,16 +414,35 @@ export default {
         'mapVis': 'fill',
       },
     ],
+    'formatDataFunctions': {},
     'group': true,
+    'groupKey': null,
     'mapGroupKey': 'geo_cohort_fsa',
+    'indexKey': null,
     'mapGroupKeyTitle': 'Geo cohort fsa',
-    'dataSource': {
-      'type': 'Execution',
-      'id': '1389',
-    },
     'uniqueOptions': {
       'showTooltip': true,
       'showLegend': true,
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLegend': true,
+      'subPlots': false,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        0,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'baseColor': '#366fe4',
+    },
+    'dataSource': {
+      'type': 'Execution',
+      'id': '1389',
     },
   },
 }
