@@ -1320,10 +1320,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/chart-system@^0.6.3-alpha.7":
-  version "0.6.3-alpha.7"
-  resolved "https://npm.pkg.github.com/download/@eqworks/chart-system/0.6.3-alpha.7/ae051c625c4d2edf2759a6934333d448f3b75333cf3131a3cfc59ee06935ad1b#12af0e784abc97f560ae7cdd9f0396a8c90cd817"
-  integrity sha512-h/Dtw9lPUGJD6Wm4KeY5+eP0Lg9JR6tbdH9uP9LsbfX0071jtcrh5ROgYdli4C/a+gRERpZBnc1ORdHGsHfpPw==
+"@eqworks/chart-system@^0.6.3-alpha.8":
+  version "0.6.3-alpha.8"
+  resolved "https://npm.pkg.github.com/download/@eqworks/chart-system/0.6.3-alpha.8/3d6d54a57f99e5d6917915ac0d6e4443964a260040918a39f6d7acf1eb26ccbd#ab432bb00171cf58d0f8e3917a9dbc0818bb91fd"
+  integrity sha512-y1lEL2Zk+Ev4Zbh+oKrtNj+/8b6E04MkiWXjf4QxjiEAQd8pBgeZ9493WrO1oz9wKgl2HJUcVvzFDCw6YR6cPQ==
   dependencies:
     "@eqworks/lumen-labs" "^0.1.0-alpha.25"
     "@nivo/bar" "^0.62.0"
