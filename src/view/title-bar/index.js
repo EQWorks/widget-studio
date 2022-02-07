@@ -69,8 +69,10 @@ const useStyles = (mode) => makeStyles(
 const WidgetTitleBar = () => {
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
+  const loadData = useStoreActions((actions) => actions.loadData)
 
   // widget state
+  const dataSource = useStoreState((state) => state.dataSource)
   const id = useStoreState((state) => state.id)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
@@ -158,7 +160,7 @@ const WidgetTitleBar = () => {
             <CustomButton
               horizontalMargin
               variant='outlined'
-              onClick={() => window.alert('not implemented')}
+              onClick={() => loadData(dataSource)}
             >
               <Cycle size='sm' />
               reload data
