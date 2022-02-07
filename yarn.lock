@@ -1367,10 +1367,10 @@
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.26":
-  version "0.1.0-alpha.26"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.26/924d941e7f02bcbef9ca8fcb9548b2d77cbefa1bf3c78711683941af6549d53a#9cfab90c9ea94e5c7eb58957b6eb97a422b40617"
-  integrity sha512-m4RJ3vKq3DCa0AMYZqkvICM0Xn6V8KiiG3C+H+9DDCwYScYpN3I9ppoMhHPXB2JceaD2wsHAD61d1k+UAQes7Q==
+"@eqworks/lumen-labs@^0.1.0-alpha.27":
+  version "0.1.0-alpha.27"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.27/cf018beca59339d5a4460449dacec929eaa832aa2fe43654491f091a419fcc89#5309c0c2badcfb8d948c3e7bb2f4d33ea762f5e3"
+  integrity sha512-Nn2pZELtb8kHm8yghv3fkZpJlweRh/LlLaY3pFA3Q+/Wq8To5tOhxsAdXbPPzSyNfP3NohTlPp2PIsrjzxO0oA==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
