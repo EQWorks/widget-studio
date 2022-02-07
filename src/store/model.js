@@ -352,12 +352,10 @@ export default {
       dataSource,
     })
     const { isReady } = getState()
+    const isReload = isReady
     requestData(dataSource.type, dataSource.id)
       .then(data => {
-        if (isReady) {
-          actions.resetWidget()
-        }
-        const { results: rows, columns, whitelabelID, customerID, views } = data
+        const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
         actions.update({
           rows,
           columns,
@@ -367,11 +365,17 @@ export default {
         actions.nestedUpdate({
           ui: {
             showWidgetControls: true,
-            dataSourceName: views[0].name,
+            dataSourceName: name,
             dataSourceError: null,
           },
         })
         actions.nestedUpdate({ ui: { dataSourceLoading: false } })
+        if (isReload) {
+          actions.toast({
+            title: `${name} reloaded successfully`,
+            color: 'success',
+          })
+        }
       })
       .catch(err => {
         actions.nestedUpdate({
