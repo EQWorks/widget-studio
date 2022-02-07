@@ -27,6 +27,7 @@ const DomainControls = () => {
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const percentageMode = useStoreState((state) => state.percentageMode)
   const groupByValue = useStoreState((state) => state.genericOptions.groupByValue)
 
   // local state
@@ -75,11 +76,22 @@ const DomainControls = () => {
         group && type !== types.MAP &&
         renderSection(
           null,
-          renderBool(
-            'Invert Domain',
-            groupByValue,
-            () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } })
-          )
+          <>
+            {
+              renderBool(
+                'Invert Domain',
+                groupByValue,
+                () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } })
+              )
+            }
+            {
+              renderBool(
+                'Percentage Mode',
+                percentageMode,
+                () => update({ percentageMode: !percentageMode })
+              )
+            }
+          </>
         )
       }
       {
@@ -107,7 +119,7 @@ const DomainControls = () => {
                 // if the new group key is a valid geo key,
                 if (_group && validMapGroupKeys.includes(val)) {
                   update({
-                  // update mapGroupKey with groupKey value
+                    // update mapGroupKey with groupKey value
                     mapGroupKey: val,
                     // reset mapValueKeys in case mapGroupKey value requires a new map layer
                     mapValueKeys: [],

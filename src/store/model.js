@@ -47,6 +47,7 @@ const stateDefaults = [
   { key: 'columns', defaultValue: [], resettable: false },
   { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
+  { key: 'percentageMode', defaultValue: false, resettable: true },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
   {
     key: 'ui',
