@@ -24,7 +24,6 @@ const stateDefaults = [
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
-  { key: 'renderableValueKeys', defaultValue: [], resettable: true },
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
@@ -46,15 +45,9 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
-  { key: 'columnsAnalysis', defaultValue: {}, resettable: false },
   { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
-  { key: 'stringColumns', defaultValue: [], resettable: false },
-  { key: 'numericColumns', defaultValue: [], resettable: false },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
-  { key: 'validMapGroupKeys', defaultValue: [], resettable: false },
-  // determines to use postal code geo key to aggregate by FSA
-  { key: 'groupFSAbyPC', defaultValue: false, resettable: false },
   {
     key: 'ui',
     defaultValue: {
@@ -194,6 +187,7 @@ export default {
     }
   ),
 
+  // determines to use postal code geo key to aggregate by FSA
   groupFSAByPC: computed(
     [
       (state) => state.mapGroupKey,
