@@ -9,7 +9,7 @@ import types from '../../constants/types'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
-import { renderItem, renderSection, renderRow, renderBool } from './util'
+import { renderItem, renderSection, renderRow, renderToggle } from './util'
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import Filters from './filters'
@@ -87,13 +87,13 @@ const EditorRightSidebar = () => {
           <>
             {renderRow(null,
               <>
-                {renderBool(
+                {renderToggle(
                   'Legend',
                   showLegend,
                   v => nestedUpdate({ genericOptions: { showLegend: v } }),
                 )}
                 {type !== types.PIE && type !== types.MAP &&
-                  renderBool(
+                  renderToggle(
                     'Subplots',
                     subPlots,
                     v => nestedUpdate({ genericOptions: { subPlots: v } }),

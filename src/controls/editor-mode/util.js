@@ -100,7 +100,7 @@ export const renderItem = (title, Component) => (
   </div>
 )
 
-export const renderBool = (title, value, update, disabled = false) => (
+export const renderCheckbox = (title, value, update, disabled = false) => (
   <div className={classes.inlineItemContainer}>
     <div className={classes.inlineItem}>
       <CustomToggle
@@ -110,5 +110,16 @@ export const renderBool = (title, value, update, disabled = false) => (
       />
     </div>
     {title && <div className={classes.inlineTitle} > {`${title}`} </div>}
+  </div>
+)
+
+export const renderToggle = (title, value, update, disabled = false) => (
+  <div className={classes.itemContainer}>
+    <div className={classes.title} > {title && `${title}:`} </div>
+    <CustomToggle
+      value={value}
+      onChange={update}
+      disabled={disabled}
+    />
   </div>
 )

@@ -5,7 +5,7 @@ import { Chip } from '@eqworks/lumen-labs'
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderBool, renderRow, renderSection } from '../editor-mode/util'
+import { renderToggle, renderRow, renderSection } from '../editor-mode/util'
 import typeInfo from '../../constants/type-info'
 import types from '../../constants/types'
 import CustomRadio from '../../components/custom-radio'
@@ -78,14 +78,14 @@ const DomainControls = () => {
           null,
           <>
             {
-              renderBool(
+              renderToggle(
                 'Invert Domain',
                 groupByValue,
                 () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } })
               )
             }
             {
-              renderBool(
+              renderToggle(
                 'Percentage Mode',
                 percentageMode,
                 () => update({ percentageMode: !percentageMode })

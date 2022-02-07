@@ -16,7 +16,7 @@ export default {
         default: true,
       },
       spline: {
-        name: 'Spline Interpolation',
+        name: 'Spline',
         type: Boolean,
         default: false,
       },
