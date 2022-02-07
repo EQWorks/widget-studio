@@ -121,7 +121,7 @@ export default {
         ? {
           title,
           type,
-          filters,
+          filters: filters.filter(({ key, filter }) => key && filter),
           groupFilter,
           valueKeys: type !== types.MAP ? renderableValueKeys : [],
           mapValueKeys: type === types.MAP ? renderableValueKeys : [],
