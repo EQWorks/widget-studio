@@ -87,6 +87,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
       },
       content: {
         padding: '0.5rem 0.75rem',
+        paddingTop: 0,
       },
       description: {
         color: getTailwindConfigColor('secondary-600'),

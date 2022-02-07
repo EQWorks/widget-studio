@@ -5,9 +5,10 @@ import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState } from '../store'
 import OverflowTooltip from '../components/overflow-tooltip'
+import modes from '../constants/modes'
 
 
-const useStyles = (cols) => makeStyles({
+const useStyles = (mode, cols) => makeStyles({
   outerContainer: {
     display: 'grid',
     alignItems: 'center',
@@ -19,6 +20,10 @@ const useStyles = (cols) => makeStyles({
     ':last-child': {
       borderRight: 'none',
     },
+    ...(mode === modes.QL && {
+      color: getTailwindConfigColor('secondary-500'),
+      fontSize: '0.714rem',
+    }),
   },
 })
 
@@ -33,6 +38,7 @@ const WidgetMeta = () => {
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
+  const mode = useStoreState((state) => state.ui.mode)
   const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
 
   // TODO this is mocked
@@ -51,7 +57,7 @@ const WidgetMeta = () => {
     ],
   ]), [columns.length, dataReady, dataSourceID, dataSourceName, dataSourceType, rows.length])
 
-  const classes = useStyles(detailItems.length)
+  const classes = useStyles(mode, detailItems.length)
 
   return (
     <div className={classes.outerContainer}>
