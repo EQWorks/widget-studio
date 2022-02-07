@@ -123,6 +123,7 @@ const DomainControls = () => {
         renderRow(
           null,
           <CustomRadio
+            labels={['Group By', 'Index By']}
             update={v => update({ group: v })}
             value={group}
             disableSecond={

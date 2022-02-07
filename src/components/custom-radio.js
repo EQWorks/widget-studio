@@ -23,7 +23,7 @@ const classes = makeStyles({
   },
 })
 
-const CustomRadio = ({ value, update, disableFirst, disableSecond }) => {
+const CustomRadio = ({ labels, value, update, disableFirst, disableSecond }) => {
   const [id] = useState(nanoid())
   const elValues = useMemo(() => [value.toString(), (!value).toString()], [value])
   return (
@@ -40,7 +40,7 @@ const CustomRadio = ({ value, update, disableFirst, disableSecond }) => {
           onChange={() => update(true)}
         />
         <span className={`${classes.label} ${disableFirst ? classes.disabledLabel : ''}`}>
-          Group By
+          {labels[0]}
         </span>
       </div>
       <div>
@@ -53,7 +53,7 @@ const CustomRadio = ({ value, update, disableFirst, disableSecond }) => {
           onChange={() => update(false)}
         />
         <span className={`${classes.label} ${disableSecond ? classes.disabledLabel : ''}`}>
-          Index By
+          {labels[1]}
         </span>
       </div>
     </fieldset >
@@ -61,6 +61,7 @@ const CustomRadio = ({ value, update, disableFirst, disableSecond }) => {
 }
 
 CustomRadio.propTypes = {
+  labels: PropTypes.arrayOf(PropTypes.string),
   value: PropTypes.bool.isRequired,
   update: PropTypes.func.isRequired,
   disableFirst: PropTypes.bool,
@@ -68,6 +69,7 @@ CustomRadio.propTypes = {
 }
 
 CustomRadio.defaultProps = {
+  labels: ['', ''],
   disableFirst: false,
   disableSecond: false,
 }
