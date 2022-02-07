@@ -59,10 +59,7 @@ const QLModeControls = ({ children }) => {
         toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
       >
         <div className='flex flex-col w-full'>
-          <WidgetControlCard
-            title='Select Widget Type'
-            clear={() => window.alert('not implemented')}
-          >
+          <WidgetControlCard title='Select Widget Type' >
             <Icons disabled={!dataReady} />
           </WidgetControlCard>
           <DomainControls />

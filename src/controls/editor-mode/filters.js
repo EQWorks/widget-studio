@@ -27,6 +27,7 @@ const classes = makeStyles({
 const Filters = () => {
   // common actions
   const update = useStoreActions((state) => state.update)
+  const resetValue = useStoreActions((state) => state.resetValue)
 
   // common state
   const type = useStoreState((state) => state.type)
@@ -41,7 +42,7 @@ const Filters = () => {
 
   return (
     <WidgetControlCard
-      clear={() => window.alert('not implemented')}
+      clear={() => resetValue({ filters, groupFilter })}
       title='Filters'
     >
       {renderSection(

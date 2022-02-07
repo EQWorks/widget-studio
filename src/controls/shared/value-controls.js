@@ -15,6 +15,7 @@ import { renderRow, renderSection } from '../editor-mode/util'
 const ValueControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
+  const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
   const type = useStoreState((state) => state.type)
@@ -70,7 +71,7 @@ const ValueControls = () => {
 
   return (
     <WidgetControlCard
-      clear={() => window.alert('not implemented')}
+      clear={() => resetValue({ valueKeys })}
       title='Value Configuration'
       {...mode === modes.QL &&
       { description: 'Select up to 3 keys, open in editor for more options.' }
