@@ -54,6 +54,7 @@ const EditorRightSidebar = () => {
                     >
                       <XYSelect
                         value={titlePosition}
+                        disabled={[[0.5, 0.5], [0, 0.5], [1, 0.5]]}
                         update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
                       />
                     </CustomDropdown>
