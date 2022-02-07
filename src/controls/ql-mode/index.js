@@ -61,7 +61,7 @@ const QLModeControls = ({ children }) => {
         <div className='flex flex-col w-full'>
           <WidgetControlCard
             title='Select Widget Type'
-            clearable
+            clear={() => window.alert('not implemented')}
           >
             <Icons disabled={!dataReady} />
           </WidgetControlCard>

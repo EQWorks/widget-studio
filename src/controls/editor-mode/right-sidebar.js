@@ -9,7 +9,7 @@ import types from '../../constants/types'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
-import { renderItem, renderSection, renderRow, renderBool, renderDivider } from './util'
+import { renderItem, renderSection, renderRow, renderBool } from './util'
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import Filters from './filters'
@@ -26,7 +26,6 @@ const classes = makeStyles({
 })
 
 const EditorRightSidebar = () => {
-
   // common actions
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
 
@@ -42,7 +41,7 @@ const EditorRightSidebar = () => {
   return (
     <EditorSidebarBase>
       <Filters />
-      <WidgetControlCard title='Options'>
+      <WidgetControlCard title='Styling'>
         {type !== types.MAP &&
           renderSection(null,
             <>

@@ -70,7 +70,7 @@ const ValueControls = () => {
 
   return (
     <WidgetControlCard
-      clearable
+      clear={() => window.alert('not implemented')}
       title='Value Configuration'
       {...mode === modes.QL &&
       { description: 'Select up to 3 keys, open in editor for more options.' }

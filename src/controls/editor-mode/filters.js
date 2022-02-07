@@ -40,7 +40,10 @@ const Filters = () => {
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
 
   return (
-    <WidgetControlCard title='Filters'>
+    <WidgetControlCard
+      clear={() => window.alert('not implemented')}
+      title='Filters'
+    >
       {renderSection(
         null,
         renderRow(

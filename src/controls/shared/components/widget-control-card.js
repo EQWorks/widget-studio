@@ -103,7 +103,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const WidgetControlCard = ({ title, titleExtra, description, clearable, children }) => {
+const WidgetControlCard = ({ title, titleExtra, description, clear, children }) => {
   const mode = useStoreState((state) => state.ui.mode)
   const classes = useStyles(mode)
 
@@ -113,10 +113,10 @@ const WidgetControlCard = ({ title, titleExtra, description, clearable, children
         {`${title}:`}
       </div>
       {titleExtra}
-      {clearable &&
+      {clear &&
         <CustomButton
           className={clsx(classes.clearButton, { 'shadow-light-10 hover:shadow-light-20': mode === modes.QL })}
-          onClick={() => alert('not implemented')}
+          onClick={clear}
         >
           <div className={classes.clearButtonInternalContainer}>
             clear {mode === modes.QL && <Trash size='md' />}
@@ -140,7 +140,7 @@ WidgetControlCard.propTypes = {
   title: PropTypes.string,
   titleExtra: PropTypes.node,
   description: PropTypes.node,
-  clearable: PropTypes.bool,
+  clear: PropTypes.func,
 }
 
 WidgetControlCard.defaultProps = {
@@ -148,7 +148,7 @@ WidgetControlCard.defaultProps = {
   title: '',
   titleExtra: null,
   description: null,
-  clearable: false,
+  clear: null,
 }
 
 export default WidgetControlCard

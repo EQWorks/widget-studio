@@ -48,7 +48,7 @@ const MapValueControls = () => {
 
   return (
     <WidgetControlCard
-      clearable
+      clear={() => window.alert('not implemented')}
       showIfEmpty
       title='Value Configuration'
       description={widgetControlCardDescription}
