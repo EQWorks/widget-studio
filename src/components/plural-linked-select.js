@@ -1,10 +1,9 @@
-import React, { createElement } from 'react'
+import React, { createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import { Icons, Button, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import LinkedSelect from './linked-select'
-import clsx from 'clsx'
 
 
 const classes = makeStyles({
@@ -75,9 +74,7 @@ const PluralLinkedSelect = ({
   const renderAddKeyButton = (
     <Button
       classes={{
-        button: clsx('col-span-3 w-full outline-none focus:outline-none px-3 py-1.5 tracking-widest flex flex-col items-stretch', {
-          'mt-2': values.length,
-        }),
+        button: 'col-span-3 w-full outline-none focus:outline-none px-3 py-1.5 tracking-widest flex flex-col items-stretch mt-2',
       }}
       type='primary'
       variant='borderless'
@@ -90,6 +87,8 @@ const PluralLinkedSelect = ({
       </div>
     </Button>
   )
+
+  const quantity = useMemo(() => staticQuantity ? staticQuantity : Math.max(values?.length, 1), [staticQuantity, values])
 
   return (
     <>
@@ -107,11 +106,7 @@ const PluralLinkedSelect = ({
             <span className={classes.header} />
           </>
         }
-        {
-          staticQuantity
-            ? [...Array(staticQuantity)].map((_, i) => renderValue(i))
-            : values.map((_, i) => renderValue(i))
-        }
+        {[...Array(quantity)].map((_, i) => renderValue(i))}
         {
           !staticQuantity && values.length < data.length &&
           renderAddKeyButton

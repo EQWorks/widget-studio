@@ -96,7 +96,7 @@ const Filters = () => {
                 update({ filters: filtersCopy })
               }}
               customRenderSecondary={(i, k) => {
-                const value = filters[i].filter
+                const value = filters[i]?.filter
                 return (
                   <CustomDropdown
                     selectedString={

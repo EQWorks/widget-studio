@@ -39,8 +39,8 @@ const ValueControls = () => {
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
       headerIcons={[
-        Icons.Sum,
         Icons.Columns,
+        Icons.Sum,
       ]}
       staticQuantity={mode === modes.QL ? 3 : undefined}
       titles={['Column', 'Operation']}
