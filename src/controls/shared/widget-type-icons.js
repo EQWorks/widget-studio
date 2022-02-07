@@ -38,8 +38,8 @@ const Icons = ({ disabled }) => {
                 update({ type })
                 nestedUpdate({
                   uniqueOptions:
-                    Object.entries(uniqueOptions).reduce((acc, [k, { default: _default }]) => {
-                      acc[k] = _default
+                    Object.entries(uniqueOptions).reduce((acc, [k, { defaultValue }]) => {
+                      acc[k] = defaultValue
                       return acc
                     }, {}),
                 }
