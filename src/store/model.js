@@ -320,7 +320,9 @@ export default {
         Object.entries(config)
           .filter(([, v]) => v !== null && !Array.isArray(v) && typeof v === 'object')
           .forEach(([k, v]) => {
-            actions.nestedUpdate({ [k]: v })
+            if (stateDefaults.find(({ key }) => key === k)) {
+              actions.nestedUpdate({ [k]: v })
+            }
             delete config[k]
           })
         actions.update(config)
