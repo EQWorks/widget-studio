@@ -81,50 +81,47 @@ const classes = makeStyles({
   },
   disabledCell: {
     outline: 'none',
-    cursor: 'auto',
+    cursor: 'not-allowed',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
 })
 
 
-const GRID = [...Array(SIZE * SIZE).keys()].reverse().map(i => {
-  const x = (SIZE - 1 - (i % 3)) / (SIZE - 1)
-  const y = (Math.floor(i / 3)) / (SIZE - 1)
-  return x === 0.5 && y === 0.5
-    ? null
-    : [x, y]
-})
+const GRID = [...Array(SIZE * SIZE).keys()].reverse().map(i => [(SIZE - 1 - (i % 3)) / (SIZE - 1), (Math.floor(i / 3)) / (SIZE - 1)])
 
 
-const XYSelect = ({ value: [selectedX, selectedY], update }) => (
+const XYSelect = ({ value: [selectedX, selectedY], update, disabled }) => (
   <div className={classes.container}>
     {
       GRID.map((xy, i) => {
+        const isDisabled = disabled.map(JSON.stringify).includes(JSON.stringify(xy))
         let styles = [classes.cell]
-        if (xy) {
-          const [x, y] = xy
-          if (x === selectedX && y === selectedY) {
-            styles.unshift(classes.selectedCell)
-          }
-          if (x % 1 || y % 1) {
-            if (y === 1) {
-              styles.unshift(classes.top)
-            } else if (!y) {
-              styles.unshift(classes.bottom)
-            }
-            if (x === 1) {
-              styles.unshift(classes.right)
-            } else if (!x) {
-              styles.unshift(classes.left)
-            }
-          } else if (x) {
-            styles.unshift(y ? classes.topRight : classes.bottomRight)
-          } else {
-            styles.unshift(y ? classes.topLeft : classes.bottomLeft)
-          }
-          styles.unshift(classes.activeCell)
-        } else {
+        if (isDisabled) {
           styles.unshift(classes.disabledCell)
+        } else {
+          if (xy) {
+            const [x, y] = xy
+            if (x === selectedX && y === selectedY) {
+              styles.unshift(classes.selectedCell)
+            }
+            if (x % 1 || y % 1) {
+              if (y === 1) {
+                styles.unshift(classes.top)
+              } else if (!y) {
+                styles.unshift(classes.bottom)
+              }
+              if (x === 1) {
+                styles.unshift(classes.right)
+              } else if (!x) {
+                styles.unshift(classes.left)
+              }
+            } else if (x) {
+              styles.unshift(y ? classes.topRight : classes.bottomRight)
+            } else {
+              styles.unshift(y ? classes.topLeft : classes.bottomLeft)
+            }
+            styles.unshift(classes.activeCell)
+          }
         }
         if (!(i % 2)) {
           styles.unshift(classes.oddCell)
@@ -132,7 +129,7 @@ const XYSelect = ({ value: [selectedX, selectedY], update }) => (
         return <button
           key={i}
           className={styles.join(' ')}
-          onClick={() => xy && update(xy)}
+          onClick={() => !isDisabled && update(xy)}
         />
       })
     }
@@ -140,8 +137,12 @@ const XYSelect = ({ value: [selectedX, selectedY], update }) => (
 )
 
 XYSelect.propTypes = {
-  value: PropTypes.arrayOf(PropTypes.number),
-  update: PropTypes.func,
+  value: PropTypes.arrayOf(PropTypes.number).isRequired,
+  update: PropTypes.func.isRequired,
+  disabled: PropTypes.arrayOf(PropTypes.array),
+}
+XYSelect.defaultProps = {
+  disabled: [[0.5, 0.5]],
 }
 
 export default XYSelect
