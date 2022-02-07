@@ -14,7 +14,7 @@ import { getKeyFormatFunction } from '../util/data-format-functions'
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
   { key: 'title', defaultValue: '', resettable: false },
-  { key: 'type', defaultValue: '', resettable: false },
+  { key: 'type', defaultValue: '', resettable: true },
   { key: 'filters', defaultValue: [], resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
   { key: 'groupFilter', defaultValue: [], resettable: true },
