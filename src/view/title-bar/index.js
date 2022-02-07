@@ -76,7 +76,7 @@ const WidgetTitleBar = () => {
   const id = useStoreState((state) => state.id)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
-  const unsavedChanges = true // mocked for now
+  // const unsavedChanges = true // mocked for now
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -86,13 +86,13 @@ const WidgetTitleBar = () => {
   const renderTitleAndID = (
     <div className={classes.main}>
       <EditableTitle />
-      {unsavedChanges &&
+      {/* {unsavedChanges &&
         <div className={classes.item}>
           <Chip selectable={false} color='error' >
             unsaved
           </Chip>
         </div>
-      }
+      } */}
       <div className={classes.item}>
         <Chip
           color='secondary'

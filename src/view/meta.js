@@ -43,8 +43,8 @@ const WidgetMeta = () => {
 
   // TODO this is mocked
   const detailItems = useMemo(() => ([
-    ['Created Date', '09/09/09 10:23 AM'],
-    ['Last Updated', '09/09/09 10:23 AM'],
+    // ['Created Date', '09/09/09 10:23 AM'],
+    // ['Last Updated', '09/09/09 10:23 AM'],
     ['Data Volume', dataReady
       ? `${columns.length} columns ${rows.length} rows`
       : '...',
