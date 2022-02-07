@@ -61,8 +61,9 @@ const EditorRightSidebar = () => {
                       />
                     </CustomDropdown>
                   )}
-                  {showLegend && renderItem('Legend Position',
+                  {renderItem('Legend Position',
                     <CustomDropdown
+                      disabled={!showLegend}
                       selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(legendPosition))]}
                       classes={{ menu: classes.xyDropdownMenu }}
                     >
