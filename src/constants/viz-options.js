@@ -55,5 +55,3 @@ export const positions = multiExport([
     numeric: [1, 0.5],
   },
 ])
-
-export const DEFAULT_PRESET_COLORS = ['#3232F5', '#07A0C3', '#F0C808', '#91F5AD', '#dd1c1a', '#463F3A']
