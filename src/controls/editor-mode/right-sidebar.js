@@ -52,6 +52,7 @@ const EditorRightSidebar = () => {
                     <CustomDropdown
                       selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(titlePosition))]}
                       classes={{ menu: classes.xyDropdownMenu }}
+                      disabled={!showWidgetTitle && !subPlots}
                     >
                       <XYSelect
                         value={titlePosition}

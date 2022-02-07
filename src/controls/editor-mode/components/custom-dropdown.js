@@ -31,7 +31,9 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
         open={open}
         onClick={() => !disabled && setOpen(!open)}
         disabled={disabled}
+        placeholder={disabled ? 'N/A' : 'Select'}
         renderSelectedOptions={() =>
+          !disabled &&
           <span className={classes.value}>
             {selectedString}
           </span>
