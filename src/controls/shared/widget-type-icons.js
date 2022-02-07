@@ -11,6 +11,7 @@ import typeInfo from '../../constants/type-info'
 
 const Icons = ({ disabled }) => {
   const update = useStoreActions((actions) => actions.update)
+  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
   const current = useStoreState((state) => state.type)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
 
@@ -24,7 +25,7 @@ const Icons = ({ disabled }) => {
   return (
     <div className='flex'>
       {
-        Object.entries(typeInfo).map(([type, { icon: Icon }], i) => {
+        Object.entries(typeInfo).map(([type, { icon: Icon, uniqueOptions }], i) => {
           const isCurrent = type === current
           const isDisabled = disabled || (type === types.MAP && !mapIconAvailability)
           return (
@@ -33,7 +34,17 @@ const Icons = ({ disabled }) => {
               disabled={isDisabled}
               variant='borderless'
               className={iconButtonClass(isCurrent, isDisabled)}
-              onClick={() => update({ type })}
+              onClick={() => {
+                update({ type })
+                nestedUpdate({
+                  uniqueOptions:
+                    Object.entries(uniqueOptions).reduce((acc, [k, { default: _default }]) => {
+                      acc[k] = _default
+                      return acc
+                    }, {}),
+                }
+                )
+              }}
             >
               <Icon className='overflow-visible w-full h-full fill-current' />
             </CustomButton>
