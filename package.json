@@ -91,7 +91,8 @@
     "numeral": "^2.0.6",
     "prop-types": "^15.7.2",
     "react-colorful": "^5.5.1",
-    "react-resize-detector": "^6.7.6"
+    "react-resize-detector": "^6.7.6",
+    "use-debounce": "^7.0.1"
   },
   "size-limit": [
     {
