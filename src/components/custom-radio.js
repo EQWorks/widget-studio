@@ -25,7 +25,11 @@ const classes = makeStyles({
 
 const CustomRadio = ({ labels, value, update, disableFirst, disableSecond }) => {
   const [id] = useState(nanoid())
-  const elValues = useMemo(() => [value.toString(), (!value).toString()], [value])
+  const elValues = useMemo(() => (
+    value === undefined
+      ? ['false', 'false']
+      : [value.toString(), (!value).toString()]
+  ), [value])
   return (
     <fieldset
       className={classes.outerContainer}

@@ -125,9 +125,11 @@ const DomainControls = () => {
           <CustomRadio
             labels={['Group By', 'Index By']}
             update={v => update({ group: v })}
-            value={group}
+            value={domainValue ? group : undefined}
+            disableFirst={!domainValue}
             disableSecond={
-              !groupingOptional
+              !domainValue
+              || !groupingOptional
               || (group && groupKey && columnsAnalysis[groupKey]?.category !== 'Numeric')
             }
           />
