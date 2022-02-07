@@ -10,7 +10,6 @@ const classes = makeStyles({
     fontSize: '0.857rem',
     width: '100%',
     display: 'flex',
-    marginTop: '0.4rem',
   },
   label: {
     color: getTailwindConfigColor('secondary-800'),
