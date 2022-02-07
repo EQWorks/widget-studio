@@ -33,6 +33,7 @@ const EditorRightSidebar = () => {
   const type = useStoreState((state) => state.type)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
+  const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
   const size = useStoreState((state) => state.genericOptions.size)
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
@@ -99,6 +100,12 @@ const EditorRightSidebar = () => {
                     subPlots,
                     v => nestedUpdate({ genericOptions: { subPlots: v } }),
                     valueKeys.length <= 1
+                  )}
+                {type !== types.MAP &&
+                  renderToggle(
+                    'Widget Title',
+                    showWidgetTitle,
+                    v => nestedUpdate({ genericOptions: { showWidgetTitle: v } }),
                   )}
               </>
             )}

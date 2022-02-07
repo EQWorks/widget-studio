@@ -27,6 +27,7 @@ const stateDefaults = [
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
+      showWidgetTitle: false,
       groupByValue: false,
       showLegend: true,
       subPlots: false,
