@@ -3,7 +3,7 @@ import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
 import types from '../constants/types'
 import typeInfo from '../constants/type-info'
-import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
+import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
@@ -68,6 +68,7 @@ const stateDefaults = [
       dataSourceLoading: false,
       dataSourceError: null,
       dataSourceName: null,
+      colorRepresentation: COLOR_REPRESENTATIONS[0],
       allowReset: true,
       recentReset: false,
       showToast: false,
