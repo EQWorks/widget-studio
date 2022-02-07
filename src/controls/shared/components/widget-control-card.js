@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
@@ -17,6 +16,7 @@ const commonClasses = {
   clearButtonInternalContainer: {
     display: 'flex',
     alignItems: 'center',
+    fontWeight: 600,
   },
 }
 
@@ -115,7 +115,10 @@ const WidgetControlCard = ({ title, titleExtra, description, clear, children }) 
       {titleExtra}
       {clear &&
         <CustomButton
-          className={clsx(classes.clearButton, { 'shadow-light-10 hover:shadow-light-20': mode === modes.QL })}
+          classes={{
+            button: classes.clearButton,
+          }}
+          type='secondary'
           onClick={clear}
         >
           <div className={classes.clearButtonInternalContainer}>
