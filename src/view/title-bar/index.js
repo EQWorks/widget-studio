@@ -111,6 +111,16 @@ const WidgetTitleBar = () => {
     </div >
   )
 
+  const renderDownloadConfigButton = (
+    dev && config &&
+    <CustomButton
+      horizontalMargin
+      onClick={() => saveConfig(config, id)}
+    >
+      <Download size='md' />
+    </CustomButton>
+  )
+
   return (
     mode === modes.EDITOR
       ? (
@@ -143,6 +153,7 @@ const WidgetTitleBar = () => {
           </div>
           {renderTitleAndID}
           <div className={classes.right}>
+            {renderDownloadConfigButton}
             <CustomButton
               horizontalMargin
               variant='outlined'
@@ -168,13 +179,7 @@ const WidgetTitleBar = () => {
               <div className='py-2 flex items-center'>
                 {renderTitleAndID}
                 <div className='flex items-stretch ml-auto'>
-                  {dev && config &&
-                    <CustomButton
-                      horizontalMargin
-                      onClick={() => saveConfig(config, id)}
-                    >
-                      <Download size='md' />
-                    </CustomButton>}
+                  {renderDownloadConfigButton}
                   <CustomButton
                     horizontalMargin
                     onClick={() => window.alert('not implemented')}
