@@ -393,6 +393,15 @@ export default {
     }, state)
   )),
 
+  // reset a portion of the state
+  resetValue: action((state, payload) => (
+    Object.keys(payload)
+      .reduce((acc, k) => {
+        acc[k] = stateDefaults.find(({ key }) => key === k).defaultValue
+        return acc
+      }, state)
+  )),
+
   // reset all shared and unique states except data source and data ID
   resetWidget: action((state) => ({
     ...state,
