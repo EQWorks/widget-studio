@@ -9,7 +9,7 @@ import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import typeInfo from '../../constants/type-info'
-import { renderSection } from '../editor-mode/util'
+import { renderRow, renderSection } from '../editor-mode/util'
 
 
 const ValueControls = () => {
@@ -80,14 +80,15 @@ const ValueControls = () => {
         renderSection(null,
           group
             ? renderGroupedValueKeysSelect
-            : <div className='flex-grow-0'>
+            : renderRow('Columns',
               <CustomSelect
+                fullWidth
                 multiSelect
                 value={valueKeys.map(({ key }) => key)}
                 data={numericColumns.filter(c => c !== indexKey)}
                 onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
               />
-            </div>
+            )
         )
       }
     </WidgetControlCard>
