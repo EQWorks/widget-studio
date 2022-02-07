@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -23,6 +23,16 @@ const classes = makeStyles({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  warning: {
+    background: getTailwindConfigColor('secondary-200'),
+    color: getTailwindConfigColor('secondary-600'),
+    borderRadius: '0.7rem',
+    fontSize: '0.9rem',
+    fontWeight: 500,
+    margin: '1rem',
+    padding: '2rem 1rem',
+    lineHeight: '1.4rem',
+  },
 })
 
 const EditorRightSidebar = () => {
@@ -30,6 +40,7 @@ const EditorRightSidebar = () => {
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
 
   // common state
+  const isReady = useStoreState((state) => state.isReady)
   const type = useStoreState((state) => state.type)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
@@ -38,6 +49,16 @@ const EditorRightSidebar = () => {
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
+
+  if (!isReady) {
+    return (
+      <EditorSidebarBase>
+        <div className={classes.warning}>
+          No {type ? 'columns' : 'type'} selected. Configure <strong>Widget Type</strong>, <strong>Domain</strong> and <strong>Value</strong> to unlock more options.
+        </div>
+      </EditorSidebarBase>
+    )
+  }
 
   return (
     <EditorSidebarBase>
