@@ -29,21 +29,26 @@ const DomainControls = () => {
 
   // local state
   const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
-  const domainKey = useMemo(() => {
+  const [domainKey, domainValue] = useMemo(() => {
+    let res = {}
     if (type === types.MAP) {
-      return mapGroupKey
-    } if (group) {
-      return groupKey
+      res = { mapGroupKey }
+    } else if (!group) {
+      res = { indexKey }
+    } else {
+      res = { groupKey }
     }
-    return indexKey
+    return Object.entries(res)[0]
   }, [group, groupKey, indexKey, mapGroupKey, type])
-  const eligibleDomainKeys = useMemo(() => (
+
+  const eligibleDomainValues = useMemo(() => (
     columns.map(({ name }) => name)
       .filter(c =>
         !(valueKeys.map(({ key }) => key).includes(c))
         && (type !== types.MAP || validMapGroupKeys.includes(c))
       )
   ), [columns, type, validMapGroupKeys, valueKeys])
+
   const mapLayer = useMemo(() => (
     Object.keys(MAP_LAYER_VIS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
@@ -74,8 +79,8 @@ const DomainControls = () => {
           renderRow('Column',
             <CustomSelect
               fullWidth
-              data={eligibleDomainKeys}
-              value={domainKey}
+              data={eligibleDomainValues}
+              value={domainValue}
               onSelect={val => {
                 if (type === types.MAP) {
                 // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
