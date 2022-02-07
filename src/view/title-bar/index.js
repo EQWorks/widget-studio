@@ -68,6 +68,7 @@ const useStyles = (mode) => makeStyles(
 
 const WidgetTitleBar = () => {
   const toast = useStoreActions((actions) => actions.toast)
+  const resetWidget = useStoreActions((actions) => actions.resetWidget)
 
   // widget state
   const id = useStoreState((state) => state.id)
@@ -129,7 +130,7 @@ const WidgetTitleBar = () => {
             <CustomButton
               horizontalMargin
               variant='outlined'
-              onClick={() => window.alert('not implemented')}
+              onClick={resetWidget}
               endIcon={<Trash size='sm' />}
             >
               reset
