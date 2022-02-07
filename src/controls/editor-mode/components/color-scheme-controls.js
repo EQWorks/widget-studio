@@ -120,7 +120,7 @@ const ColorSchemeControls = () => {
   // local state
   const [selectedColorIndex, setSelectedColorIndex] = useState(presetColors.indexOf(baseColor) === -1 ? presetColors.length - 1 : presetColors.indexOf(baseColor))
   const [inputError, setInputError] = useState(false)
-  const [showPicker, setShowPicker] = useState(true)
+  const [showPicker, setShowPicker] = useState(false)
   const [showInputHelper, setShowInputHelper] = useState(false)
 
   const styles = useStyles({ baseColor, showPicker })
