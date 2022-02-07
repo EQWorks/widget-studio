@@ -408,7 +408,10 @@ export default {
     ...state,
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
-    uniqueOptions: typeInfo[state.type].uniqueOptions,
+    uniqueOptions: Object.fromEntries(
+      Object.entries(typeInfo[state.type].uniqueOptions)
+        .map(([k, { default: _default }]) => [k, _default])
+    ),
     // map widget doesn't have a switch to change group state, so we have to keep it true here
     group: state.type === types.MAP ? true : state.group,
   })),
