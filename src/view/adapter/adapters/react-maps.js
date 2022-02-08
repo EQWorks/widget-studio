@@ -17,6 +17,7 @@ import {
   OPACITY,
   PITCH,
   MAP_LEGEND_POSITION,
+  MAP_LEGEND_SIZE,
 } from '../../../constants/map'
 
 
@@ -142,7 +143,7 @@ export default {
       mapConfig: {
         cursor: (layers) => getCursor({ layers }),
         legendPosition: MAP_LEGEND_POSITION[JSON.stringify(genericOptions.legendPosition)],
-        legendSize: 'widget',
+        legendSize: MAP_LEGEND_SIZE[genericOptions.legendSize],
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: uniqueOptions.showLegend,
         showMapTooltip: uniqueOptions.showTooltip,
