@@ -26,20 +26,10 @@ const DomainControls = () => {
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const domain = useStoreState((state) => state.domain)
 
   // local state
   const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
-  const [domainKey, domainValue] = useMemo(() => {
-    let res = {}
-    if (type === types.MAP) {
-      res = { mapGroupKey }
-    } else if (!group) {
-      res = { indexKey }
-    } else {
-      res = { groupKey }
-    }
-    return Object.entries(res)[0]
-  }, [group, groupKey, indexKey, mapGroupKey, type])
 
   const eligibleDomainValues = useMemo(() => (
     columns.map(({ name }) => name)
@@ -80,7 +70,7 @@ const DomainControls = () => {
             <CustomSelect
               fullWidth
               data={eligibleDomainValues}
-              value={domainValue}
+              value={domain.value}
               onSelect={val => {
                 if (type === types.MAP) {
                 // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
@@ -95,7 +85,7 @@ const DomainControls = () => {
                   const mustGroup = columnsAnalysis[val].category !== 'Numeric'
                   update({ group: mustGroup })
                   const _group = mustGroup || group
-                  update({ [domainKey]: val })
+                  update({ [domain.key]: val })
                   // if the new group key is a valid geo key,
                   if (_group && validMapGroupKeys.includes(val)) {
                     update({
@@ -125,10 +115,10 @@ const DomainControls = () => {
           <CustomRadio
             labels={['Group By', 'Index By']}
             update={v => update({ group: v })}
-            value={domainValue ? group : undefined}
-            disableFirst={!domainValue}
+            value={domain.value ? group : undefined}
+            disableFirst={!domain.value}
             disableSecond={
-              !domainValue
+              !domain.value
               || !groupingOptional
               || (group && groupKey && columnsAnalysis[groupKey]?.category !== 'Numeric')
             }

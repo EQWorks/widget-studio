@@ -163,6 +163,34 @@ export default {
     )
   ),
 
+  domain: computed(
+    [
+      (state) => state.group,
+      (state) => state.type,
+      (state) => state.mapGroupKey,
+      (state) => state.indexKey,
+      (state) => state.groupKey,
+    ],
+    (
+      group,
+      type,
+      mapGroupKey,
+      indexKey,
+      groupKey,
+    ) => {
+      let res = {}
+      if (type === types.MAP) {
+        res = { mapGroupKey }
+      } else if (!group) {
+        res = { indexKey }
+      } else {
+        res = { groupKey }
+      }
+      const [k, v] = Object.entries(res)[0]
+      return { key: k, value: v }
+    }
+  ),
+
   numericColumns: computed(
     [(state) => state.columns],
     (columns) => columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name)

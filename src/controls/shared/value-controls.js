@@ -20,7 +20,7 @@ const ValueControls = () => {
   // common state
   const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
-  const indexKey = useStoreState((state) => state.indexKey)
+  const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const numericColumns = useStoreState((state) => state.numericColumns)
@@ -86,7 +86,7 @@ const ValueControls = () => {
                 fullWidth
                 multiSelect
                 value={valueKeys.map(({ key }) => key)}
-                data={numericColumns.filter(c => c !== indexKey)}
+                data={numericColumns.filter(c => c !== domain.value)}
                 onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
               />
             )
