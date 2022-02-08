@@ -77,19 +77,15 @@ const Filters = () => {
                 return min !== max && category === 'Numeric'
               })}
               subData={[]}
-              callback={(i, { key, filter }) => {
-                const { min, max } = columnsAnalysis[key] || {}
-                const newFilter = {
-                  key,
-                  filter: key && !filter
-                    ? [min, max]
-                    : filter,
+              callback={(i, { key }) => {
+                if (i === filters.length) {
+                  update({ filters: filters.concat([{ key: null, filter: null }]) })
+                } else if (!key) {
+                  update({ filters: filters.map((v, _i) => i === _i ? { key: null, filter: null } : v) })
+                } else if (filters[i]?.key !== key) {
+                  const { min, max } = columnsAnalysis[key] || {}
+                  update({ filters: filters.map((v, _i) => i === _i ? { key, filter: [min, max] } : v) })
                 }
-                update({
-                  filters: i === filters.length
-                    ? filters.concat([newFilter])
-                    : filters.map((v, _i) => i === _i ? newFilter : v),
-                })
               }}
               deleteCallback={(i) => {
                 const filtersCopy = JSON.parse(JSON.stringify(filters))
