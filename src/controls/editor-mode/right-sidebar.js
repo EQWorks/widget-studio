@@ -40,7 +40,7 @@ const EditorRightSidebar = () => {
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
 
   // common state
-  const isReady = useStoreState((state) => state.isReady)
+  const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
@@ -50,7 +50,7 @@ const EditorRightSidebar = () => {
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
-  if (!isReady) {
+  if (!type || !domain.value || !(valueKeys?.length)) {
     return (
       <EditorSidebarBase>
         <div className={classes.warning}>
