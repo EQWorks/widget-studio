@@ -118,9 +118,8 @@ const WidgetTitleBar = () => {
     <CustomButton
       horizontalMargin
       onClick={() => saveConfig(config, id)}
-    >
-        <Icons.DownloadBold size='md' />
-    </CustomButton>
+      endIcon={<Icons.DownloadBold size='md' />}
+    />
   )
 
   return (
