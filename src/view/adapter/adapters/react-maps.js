@@ -16,6 +16,7 @@ import {
   GEO_KEY_TYPES,
   OPACITY,
   PITCH,
+  MAP_LEGEND_POSITION,
 } from '../../../constants/map'
 
 
@@ -140,10 +141,10 @@ export default {
       }],
       mapConfig: {
         cursor: (layers) => getCursor({ layers }),
-        legendPosition: 'top-right',
+        legendPosition: MAP_LEGEND_POSITION[JSON.stringify(genericOptions.legendPosition)],
         legendSize: 'widget',
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
-        showMapLegend: genericOptions.showLegend,
+        showMapLegend: uniqueOptions.showLegend,
         showMapTooltip: uniqueOptions.showTooltip,
         initViewState: {
           latitude: 44.41,
