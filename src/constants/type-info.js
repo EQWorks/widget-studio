@@ -78,6 +78,11 @@ export default {
     adapter: ReactMapsAdapter,
     groupingOptional: false,
     uniqueOptions: {
+      showLegend: {
+        name: 'Legend',
+        type: Boolean,
+        defaultValue: true,
+      },
       showTooltip: {
         name: 'Tooltip',
         type: Boolean,
