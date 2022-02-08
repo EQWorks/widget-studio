@@ -48,7 +48,7 @@ const ValueControls = () => {
       values={valueKeys}
       primaryKey='key'
       secondaryKey='agg'
-      data={numericColumns}
+      data={numericColumns.filter(c => c !== domain.value)}
       subData={Object.keys(aggFunctions)}
       disableSubs={!dataHasVariance}
       disableSubMessage="doesn't require aggregation."
