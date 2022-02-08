@@ -7,7 +7,7 @@ import WidgetControlCard from '../shared/components/widget-control-card'
 import { positions, sizes } from '../../constants/viz-options'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
-import { renderItem, renderSection, renderRow } from './util'
+import { renderItem, renderSection, renderRow } from '../shared/util'
 import UniqueOptionControls from './components/unique-option-controls'
 import CustomDropdown from './components/custom-dropdown'
 

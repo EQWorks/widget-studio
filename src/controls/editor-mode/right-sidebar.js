@@ -3,6 +3,7 @@ import React from 'react'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
+import StylingMap from './styling-map'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { positions, sizes } from '../../constants/viz-options'
 import types from '../../constants/types'
@@ -90,34 +91,45 @@ const EditorRightSidebar = () => {
           {renderSection(
             'Display Options',
             <>
-              {renderRow(null,
+              {type === types.MAP && <StylingMap />}
+              {type !== types.MAP &&
                 <>
-                  {renderToggle(
-                    'Legend',
-                    showLegend,
-                    v => userUpdate({ genericOptions: { showLegend: v } }),
-                  )}
-                  {type !== types.PIE && type !== types.MAP &&
-                    renderToggle(
-                      'Subplots',
-                      subPlots,
-                      v => userUpdate({ genericOptions: { subPlots: v } }),
-                      valueKeys.length <= 1
+                  <WidgetControlCard title='Styling'>
+                    {renderSection(null,
+                      <>
+                        {renderRow(null,
+                          <>
+                            {renderToggle(
+                              'Legend',
+                              showLegend,
+                              v => userUpdate({ genericOptions: { showLegend: v } }),
+                            )}
+                            {type !== types.PIE && type !== types.MAP &&
+                              renderToggle(
+                                'Subplots',
+                                subPlots,
+                                v => userUpdate({ genericOptions: { subPlots: v } }),
+                                valueKeys.length <= 1
+                              )}
+                            {type !== types.MAP &&
+                              renderToggle(
+                                'Widget Title',
+                                showWidgetTitle,
+                                v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
+                              )}
+                          </>
+                        )}
+                        <UniqueOptionControls type={type} />
+                      </>
                     )}
-                  {type !== types.MAP &&
-                    renderToggle(
-                      'Widget Title',
-                      showWidgetTitle,
-                      v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
-                    )}
+                  </WidgetControlCard >
+                  <WidgetControlCard title='Colour Scheme'>
+                    <ColorSchemeControls />
+                  </WidgetControlCard >
                 </>
-              )}
-              <UniqueOptionControls type={type} />
+              }
             </>
           )}
-        </WidgetControlCard >
-        <WidgetControlCard title='Colour Scheme'>
-          <ColorSchemeControls />
         </WidgetControlCard >
       </MutedBarrier>
     </EditorSidebarBase >
