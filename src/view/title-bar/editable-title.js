@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import { TextField, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { Icons, TextField, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import { EditPen } from '../../components/icons'
 import { useStoreState, useStoreActions } from '../../store'
 import CustomButton from '../../components/custom-button'
 import modes from '../../constants/modes'
@@ -76,12 +75,12 @@ const EditableTitle = () => {
 
   const renderEditButton = (
     <CustomButton
+      horizontalMargin
       className={classes.button}
       type='secondary'
       onClick={() => setEditing(true)}
-    >
-      <EditPen size="md" className='fill-current text-secondary-600' />
-    </CustomButton >
+      endIcon={<Icons.Edit size="md" />}
+    />
   )
 
   const renderTitle = (

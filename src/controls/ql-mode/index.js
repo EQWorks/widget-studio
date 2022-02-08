@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../store'
-import { Controls, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
@@ -30,7 +29,6 @@ const QLModeControls = ({ children }) => {
   const footer = <>
     <div className='flex-1'>
       <CustomButton
-        endIcon={<Trash size='sm' />}
         onClick={resetWidget}
         disabled={!allowReset}
       >
@@ -38,7 +36,7 @@ const QLModeControls = ({ children }) => {
       </CustomButton>
     </div>
     {/* <CustomButton
-      endIcon={<Save size='sm' />}
+      endIcon={<Icons.Save size='sm' />}
       variant='filled'
       onClick={() => alert('not implemented')}
       disabled={!allowReset}
@@ -52,7 +50,6 @@ const QLModeControls = ({ children }) => {
       {children}
       <CustomAccordion
         disabled={!dataReady}
-        icon={Controls}
         title={'Controls'}
         footer={footer}
         open={showWidgetControls}

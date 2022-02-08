@@ -21,9 +21,9 @@ const LabeledToggle = ({ labels, icons, value, update, className }) => (
             })}>
               {
                 icons[i] &&
-                createElement(icons[i], { className: 'fill-current pr-0.5 mr-1' })
+                createElement(icons[i], { size: 'md' })
               }
-              <span className='text-xs font-semibold tracking-wider'>{l}</span>
+              <span className='text-xs font-semibold tracking-wider ml-1'>{l}</span>
             </span>
           </CustomButton>
         </div>

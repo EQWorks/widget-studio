@@ -1,12 +1,12 @@
 import types from './types'
-import { Pie, Bar, Line, Scatter, Map } from '../components/icons'
+import { Icons } from '@eqworks/lumen-labs'
 import PlotlyAdapters from '../view/adapter/adapters/chart-system/plotly'
 import ReactMapsAdapter from '../view/adapter/adapters/react-maps'
 
 
 export default {
   [types.LINE]: {
-    icon: Line,
+    icon: Icons.LineChart,
     adapter: PlotlyAdapters[types.LINE],
     groupingOptional: true,
     uniqueOptions: {
@@ -23,7 +23,7 @@ export default {
     },
   },
   [types.BAR]: {
-    icon: Bar,
+    icon: Icons.BarChart,
     adapter: PlotlyAdapters[types.BAR],
     groupingOptional: false,
     uniqueOptions: {
@@ -40,7 +40,7 @@ export default {
     },
   },
   [types.SCATTER]: {
-    icon: Scatter,
+    icon: Icons.ScatterPlot,
     adapter: PlotlyAdapters[types.SCATTER],
     groupingOptional: true,
     uniqueOptions: {
@@ -57,7 +57,7 @@ export default {
     },
   },
   [types.PIE]: {
-    icon: Pie,
+    icon: Icons.PieChart,
     adapter: PlotlyAdapters[types.PIE],
     groupingOptional: false,
     uniqueOptions: {
@@ -74,7 +74,7 @@ export default {
     },
   },
   [types.MAP]: {
-    icon: Map,
+    icon: Icons.MapChart,
     adapter: ReactMapsAdapter,
     groupingOptional: false,
     uniqueOptions: {

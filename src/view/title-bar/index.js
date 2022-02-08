@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import { Cycle, ArrowExpand, Download, Trash, Undo, Redo } from '../../components/icons'
 import { useStoreState, useStoreActions } from '../../store'
 import saveConfig from '../../util/save-config'
 import CustomButton from '../../components/custom-button'
@@ -120,7 +119,7 @@ const WidgetTitleBar = () => {
       horizontalMargin
       onClick={() => saveConfig(config, id)}
     >
-      <Download size='md' />
+        <Icons.DownloadBold size='md' />
     </CustomButton>
   )
 
@@ -133,7 +132,6 @@ const WidgetTitleBar = () => {
               horizontalMargin
               variant='outlined'
               onClick={resetWidget}
-              endIcon={<Trash size='sm' />}
             >
               reset
             </CustomButton>
@@ -141,7 +139,7 @@ const WidgetTitleBar = () => {
               horizontalMargin
               variant='outlined'
               onClick={() => window.alert('not implemented')}
-              endIcon={<Undo size='sm' />}
+              endIcon={<Icons.Undo size='md' />}
             >
               undo
             </CustomButton>
@@ -149,7 +147,7 @@ const WidgetTitleBar = () => {
               horizontalMargin
               variant='outlined'
               onClick={() => window.alert('not implemented')}
-              startIcon={<Redo size='sm' />}
+              startIcon={<Icons.Redo size='md' />}
             >
               redo
             </CustomButton>
@@ -161,8 +159,8 @@ const WidgetTitleBar = () => {
               horizontalMargin
               variant='outlined'
               onClick={() => loadData(dataSource)}
+              startIcon={<Icons.Cycle size='md' />}
             >
-              <Cycle size='sm' />
               reload data
             </CustomButton>
           </div>
@@ -193,7 +191,8 @@ const WidgetTitleBar = () => {
                     horizontalMargin
                     variant='filled'
                     onClick={() => window.alert('not implemented')}
-                    endIcon={<ArrowExpand size='md' />}
+                    // endIcon={<ArrowExpand size='md' />}
+                    endIcon={<Icons.ShareExternalLink size='md' />}
                   >
                     OPEN IN EDITOR
                   </CustomButton>

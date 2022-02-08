@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { Icons, Tooltip } from '@eqworks/lumen-labs'
 
-import { Trash } from '../components/icons'
 import CustomSelect from '../components/custom-select'
 import CustomButton from '../components/custom-button'
 
@@ -80,7 +79,7 @@ const LinkedSelect = ({ className,
         'bg-secondary-100 hover:bg-error-200'
       )}
     >
-      <Trash className='fill-current text-secondary-400 transition-all ease-in-out duration-300 h-full' />
+      <Icons.Trash size='md' className='fill-current text-secondary-400 transition-all ease-in-out duration-300' />
     </CustomButton>
 
   return (

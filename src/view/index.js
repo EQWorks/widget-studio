@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react'
 
 import { Icons, getTailwindConfigColor, Loader, makeStyles } from '@eqworks/lumen-labs'
 
-import { DashboardLayout, Table } from '../components/icons'
 import LabeledToggle from '../components/labeled-toggle'
 import FadeBetween from '../components/fade-between'
 import ResultsTable from './table'
@@ -259,7 +258,7 @@ const WidgetView = () => {
             <LabeledToggle
               className='flex-0 mt-3 ml-5'
               labels={['widget', 'table']}
-              icons={[DashboardLayout, Table]}
+              icons={[Icons.DashboardLayout, Icons.Table]}
               value={showTable}
               update={(val) => nestedUpdate({ ui: { showTable: val } })}
             />

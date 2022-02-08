@@ -32,7 +32,7 @@ const useStyles = (textTransform, customSize, variant, type, disabled) => {
       fontSize: `${size}rem`,
       display: 'flex',
       '& svg': {
-        fill,
+        // fill,
         margin: `0 ${size / 4}rem`,
       },
     },

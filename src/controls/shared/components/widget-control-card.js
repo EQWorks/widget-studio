@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import CustomButton from '../../../components/custom-button'
-import { Trash } from '../../../components/icons'
 import { useStoreState } from '../../../store'
 import modes from '../../../constants/modes'
 
@@ -12,11 +11,6 @@ import modes from '../../../constants/modes'
 const commonClasses = {
   titleText: {
     flex: 1,
-  },
-  clearButtonInternalContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    fontWeight: 600,
   },
 }
 
@@ -121,10 +115,11 @@ const WidgetControlCard = ({ title, titleExtra, description, clear, children }) 
           }}
           type='secondary'
           onClick={clear}
+          {...(mode === modes.QL && {
+            endIcon: <Icons.Trash size='sm' />,
+          })}
         >
-          <div className={classes.clearButtonInternalContainer}>
-            clear {mode === modes.QL && <Trash size='md' />}
-          </div>
+          clear
         </CustomButton>}
     </div >
   )
