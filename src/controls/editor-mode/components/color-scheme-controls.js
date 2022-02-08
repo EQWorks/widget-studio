@@ -1,4 +1,4 @@
-import React, { createElement, useState } from 'react'
+import React, { useEffect, createElement, useState } from 'react'
 
 import { useDebouncedCallback } from 'use-debounce'
 import { colord } from 'colord'
@@ -118,15 +118,23 @@ const ColorSchemeControls = () => {
   const colorRepresentation = useStoreState((state) => state.ui.colorRepresentation)
 
   // local state
-  const [selectedColorIndex, setSelectedColorIndex] = useState(presetColors.indexOf(baseColor) === -1 ? presetColors.length - 1 : presetColors.indexOf(baseColor))
+  const [selectedColorIndex, setSelectedColorIndex] = useState(
+    presetColors.indexOf(baseColor) === -1
+      ? presetColors.length - 1
+      : presetColors.indexOf(baseColor)
+  )
   const [inputError, setInputError] = useState(false)
   const [showPicker, setShowPicker] = useState(false)
   const [showInputHelper, setShowInputHelper] = useState(false)
 
   const styles = useStyles({ baseColor, showPicker })
 
-  const updatePresetColors = () => update({ presetColors: presetColors.map((_c, i) => i === selectedColorIndex ? baseColor : _c) })
   const updateBaseColor = useDebouncedCallback(v => nestedUpdate({ genericOptions: { baseColor: colord(v).toHex() } }), 100)
+
+  useEffect(() => {
+    update({ presetColors: presetColors.map((_c, i) => i === selectedColorIndex ? baseColor : _c) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseColor, selectedColorIndex, update])
 
   return (
     <div className={styles.outerContainer}>
@@ -161,7 +169,6 @@ const ColorSchemeControls = () => {
               const color = validated.toHex()
               if (valid) {
                 nestedUpdate({ genericOptions: { baseColor: color } })
-                updatePresetColors()
                 setShowInputHelper(false)
               }
               setInputError(!valid)
