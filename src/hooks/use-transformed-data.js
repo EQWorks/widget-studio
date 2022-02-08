@@ -4,6 +4,7 @@ import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
 import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import types from '../constants/types'
+import { roundToTwoDecimals } from '../util/numeric'
 
 
 const useTransformedData = () => {
@@ -18,6 +19,7 @@ const useTransformedData = () => {
   const groupFilter = useStoreState((state) => state.groupFilter)
   const indexKey = useStoreState((state) => state.indexKey)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const percentageMode = useStoreState((state) => state.percentageMode)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
@@ -94,16 +96,41 @@ const useTransformedData = () => {
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
     group
-      ? Object.entries(filteredGroupedData).map(([group, values]) => (
-        renderableValueKeys.reduce((res, { key, agg, title }) => {
-          res[title] = dataHasVariance
+      ? Object.entries(filteredGroupedData).map(([group, values]) => {
+        const res = renderableValueKeys.reduce((res, { key, agg, title }) => {
+          const val = dataHasVariance
             ? aggFunctions[agg](values[key])
             : values[key][0]
+          // sums[title] += val
+          res[title] = val
           return res
         }, { [formattedColumnNames[finalGroupKey]]: group })
-      ))
+        return res
+
+      }
+      )
       : null
   ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, finalGroupKey, renderableValueKeys])
+
+  const percentageData = useMemo(() => {
+    if (!percentageMode) {
+      return null
+    }
+    const sums = Object.fromEntries(
+      renderableValueKeys.map(({ title }) => (
+        [title, aggregatedData.reduce((_acc, el) => _acc + el[title], 0)]
+      ))
+    )
+    const res = aggregatedData.map(d => (
+      Object.entries(d).reduce((acc, [k, v]) => {
+        acc[k] = k in sums
+          ? roundToTwoDecimals(v / sums[k] * 100)
+          : v
+        return acc
+      }, {})
+    ))
+    return res
+  }, [aggregatedData, percentageMode, renderableValueKeys])
 
   const mapEnrichedData = useMemo(() => {
     if (type === types.MAP) {
@@ -150,10 +177,10 @@ const useTransformedData = () => {
       return mapEnrichedData
     }
     if (group) {
-      return aggregatedData
+      return percentageMode ? percentageData : aggregatedData
     }
     return indexedData
-  }, [aggregatedData, group, indexedData, mapEnrichedData, type])
+  }, [aggregatedData, group, indexedData, mapEnrichedData, percentageData, percentageMode, type])
 
   return finalData
 }

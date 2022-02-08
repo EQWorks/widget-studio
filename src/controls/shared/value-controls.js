@@ -9,11 +9,13 @@ import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import typeInfo from '../../constants/type-info'
+import { renderRow, renderSection } from '../editor-mode/util'
 
 
 const ValueControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
+  const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
   const type = useStoreState((state) => state.type)
@@ -38,8 +40,8 @@ const ValueControls = () => {
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
       headerIcons={[
-        Icons.Sum,
         Icons.Columns,
+        Icons.Sum,
       ]}
       staticQuantity={mode === modes.QL ? 3 : undefined}
       titles={['Column', 'Operation']}
@@ -69,23 +71,26 @@ const ValueControls = () => {
 
   return (
     <WidgetControlCard
-      clearable
+      clear={() => resetValue({ valueKeys })}
       title='Value Configuration'
       {...mode === modes.QL &&
       { description: 'Select up to 3 keys, open in editor for more options.' }
       }
     >
       {
-        group
-          ? renderGroupedValueKeysSelect
-          : <div className='flex-grow-0'>
-            <CustomSelect
-              multiSelect
-              value={valueKeys.map(({ key }) => key)}
-              data={numericColumns.filter(c => c !== indexKey)}
-              onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
-            />
-          </div>
+        renderSection(null,
+          group
+            ? renderGroupedValueKeysSelect
+            : renderRow('Columns',
+              <CustomSelect
+                fullWidth
+                multiSelect
+                value={valueKeys.map(({ key }) => key)}
+                data={numericColumns.filter(c => c !== indexKey)}
+                onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
+              />
+            )
+        )
       }
     </WidgetControlCard>
   )

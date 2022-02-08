@@ -1,17 +1,33 @@
 import React from 'react'
 
+import { Icons, makeStyles } from '@eqworks/lumen-labs'
+
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderSection, renderRow } from './util'
 import PluralLinkedSelect from '../../components/plural-linked-select'
-import FilterDropdown from './components/filter-dropdown'
+import RangeFilter from './components/range-filter'
 import CustomSelect from '../../components/custom-select'
 import types from '../../constants/types'
+import CustomDropdown from './components/custom-dropdown'
 
+
+const classes = makeStyles({
+  dropdownMenu: {
+    width: '12rem !important',
+    overflow: 'visible !important',
+  },
+  dropdownRoot: {
+    borderTopRightRadius: '0 !important',
+    borderBottomRightRadius: '0 !important',
+    borderRight: 'none !important',
+  },
+})
 
 const Filters = () => {
   // common actions
   const update = useStoreActions((state) => state.update)
+  const resetValue = useStoreActions((state) => state.resetValue)
 
   // common state
   const type = useStoreState((state) => state.type)
@@ -25,7 +41,10 @@ const Filters = () => {
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
 
   return (
-    <WidgetControlCard title='Filters'>
+    <WidgetControlCard
+      clear={() => resetValue({ filters, groupFilter })}
+      title='Filters'
+    >
       {renderSection(
         null,
         renderRow(
@@ -49,9 +68,10 @@ const Filters = () => {
           <>
             <PluralLinkedSelect
               titles={['Column', 'Range']}
+              headerIcons={[Icons.Columns, Icons.Hash]}
               values={filters}
               primaryKey='key'
-              secondaryKey='range'
+              secondaryKey='filter'
               data={numericColumns.filter(c => {
                 const { min, max, category } = columnsAnalysis[c] || {}
                 return min !== max && category === 'Numeric'
@@ -76,17 +96,37 @@ const Filters = () => {
                 filtersCopy.splice(i, 1)
                 update({ filters: filtersCopy })
               }}
-              customRenderSecondary={(i, k) => (
-                <FilterDropdown
-                  update={filter => update({
-                    filters:
-                    filters.map((v, _i) => i === _i
-                      ? { key: k, filter }
-                      : v),
-                  })}
-                  column={k}
-                />
-              )}
+              customRenderSecondary={(i, k) => {
+                const value = filters[i]?.filter
+                return (
+                  <CustomDropdown
+                    selectedString={
+                      value &&
+                      (value.map(Intl.NumberFormat('en-US', {
+                        notation: 'compact',
+                        maximumFractionDigits: 1,
+                      }).format)
+                      ).join('-')
+                    }
+                    classes={{
+                      root: classes.dropdownRoot,
+                      menu: classes.dropdownMenu,
+                    }}
+                    placeholder='Range'
+                    disabled={!value}
+                  >
+                    <RangeFilter
+                      column={k}
+                      update={filter => update({
+                        filters:
+                          filters.map((v, _i) => i === _i
+                            ? { key: k, filter }
+                            : v),
+                      })}
+                    />
+                  </CustomDropdown>
+                )
+              }}
               addMessage='Add Range Filter'
             />
           </>

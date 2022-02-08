@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, createElement, useState } from 'react'
 
-import { HexColorPicker } from 'react-colorful'
+import { useDebouncedCallback } from 'use-debounce'
+import { colord } from 'colord'
 import { makeStyles, Button, getTailwindConfigColor, TextField } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../../store'
-import { validateHex } from '../../../util/colors'
 import CustomSelect from '../../../components/custom-select'
+import { COLOR_REPRESENTATIONS } from '../../../constants/color'
 
 
 const useStyles = ({ baseColor, showPicker }) => makeStyles({
@@ -14,10 +15,11 @@ const useStyles = ({ baseColor, showPicker }) => makeStyles({
     flexDirection: 'column',
     width: '100%',
     alignItems: 'stretch',
+    marginTop: '0.8rem',
   },
   row: {
     display: 'flex',
-    marginBottom: '1rem',
+    marginBottom: '0.6rem',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -106,7 +108,6 @@ const useStyles = ({ baseColor, showPicker }) => makeStyles({
 
 
 const ColorSchemeControls = () => {
-
   // common actions
   const update = useStoreActions((state) => state.update)
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
@@ -114,18 +115,26 @@ const ColorSchemeControls = () => {
   // common state
   const presetColors = useStoreState((state) => state.presetColors)
   const baseColor = useStoreState((state) => state.genericOptions.baseColor)
+  const colorRepresentation = useStoreState((state) => state.ui.colorRepresentation)
 
   // local state
-  const [selectedColorIndex, setSelectedColorIndex] = useState(presetColors.indexOf(baseColor) === -1 ? presetColors.length - 1 : presetColors.indexOf(baseColor))
-  // local UI state
+  const [selectedColorIndex, setSelectedColorIndex] = useState(
+    presetColors.indexOf(baseColor) === -1
+      ? presetColors.length - 1
+      : presetColors.indexOf(baseColor)
+  )
   const [inputError, setInputError] = useState(false)
-  const [inputFocus, setInputFocus] = useState(false)
-  const [showPicker, setShowPicker] = useState(true)
+  const [showPicker, setShowPicker] = useState(false)
   const [showInputHelper, setShowInputHelper] = useState(false)
 
-  const updatePresetColors = () => update({ presetColors: presetColors.map((_c, i) => i === selectedColorIndex ? baseColor : _c) })
-
   const styles = useStyles({ baseColor, showPicker })
+
+  const updateBaseColor = useDebouncedCallback(v => nestedUpdate({ genericOptions: { baseColor: colord(v).toHex() } }), 100)
+
+  useEffect(() => {
+    update({ presetColors: presetColors.map((_c, i) => i === selectedColorIndex ? baseColor : _c) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseColor, selectedColorIndex, update])
 
   return (
     <div className={styles.outerContainer}>
@@ -149,18 +158,17 @@ const ColorSchemeControls = () => {
             error={inputError}
             helperText={showInputHelper ? 'Invalid color' : undefined}
             placeholder='#ABCDEF'
-            value={inputFocus ? undefined : baseColor.toUpperCase()}
+            value={colorRepresentation?.display(baseColor)}
             onBlur={() => {
-              setInputFocus(false)
               setInputError(false)
               setShowInputHelper(false)
             }}
-            onClick={() => setInputFocus(true)}
             onChange={(v) => {
-              const valid = validateHex(v)
+              const validated = colord(v)
+              const valid = validated.parsed
+              const color = validated.toHex()
               if (valid) {
-                nestedUpdate({ genericOptions: { baseColor: v } })
-                updatePresetColors()
+                nestedUpdate({ genericOptions: { baseColor: color } })
                 setShowInputHelper(false)
               }
               setInputError(!valid)
@@ -179,21 +187,20 @@ const ColorSchemeControls = () => {
             selectedOptionTitle: 'normal-case',
             listContainer: 'normal-case',
           }}
-          data={['HEX', 'RGBA', 'RGB']}
-          value='HEX'
+          data={COLOR_REPRESENTATIONS.map(({ label }) => label)}
+          onSelect={v => nestedUpdate({ ui: { colorRepresentation: COLOR_REPRESENTATIONS.find(({ label }) => label === v) } })}
+          value={colorRepresentation.label}
           allowClear={false}
         />
       </div>
 
       <div className={styles.colorPicker}>
-        <HexColorPicker
-          // className={styles.colorPicker}
-          color={baseColor}
-          onChange={baseColor => {
-            updatePresetColors()
-            nestedUpdate({ genericOptions: { baseColor } })
-          }}
-        />
+        {
+          createElement(colorRepresentation.picker, {
+            color: colorRepresentation.set(baseColor),
+            onChange: v => updateBaseColor(v),
+          })
+        }
         <div className={styles.row}>
           {
             presetColors.map((c, i) => (

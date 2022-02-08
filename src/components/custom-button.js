@@ -10,8 +10,16 @@ const CUSTOM_SIZES = {
   'lg': 1,
 }
 
-const useStyles = (textTransform, customSize, variant, type) => {
+const useStyles = (textTransform, customSize, variant, type, disabled) => {
   const size = CUSTOM_SIZES[customSize]
+  let fill
+  if (variant === 'filled') {
+    fill = 'white'
+  } else if (disabled) {
+    fill = getTailwindConfigColor('secondary-500')
+  } else {
+    fill = getTailwindConfigColor(`${type}-500`)
+  }
   return makeStyles({
     button: {
       textTransform,
@@ -24,7 +32,7 @@ const useStyles = (textTransform, customSize, variant, type) => {
       fontSize: `${size}rem`,
       display: 'flex',
       '& svg': {
-        fill: variant === 'filled' ? 'white' : getTailwindConfigColor(`${type}-500`),
+        fill,
         margin: `0 ${size / 4}rem`,
       },
     },
@@ -58,9 +66,10 @@ const CustomButton = ({
   onClick,
   classes: { button: buttonClass = '', lumenClasses },
   children,
+  disabled,
   ...props
 }) => {
-  const classes = useStyles(textTransform, customSize, variant, type)
+  const classes = useStyles(textTransform, customSize, variant, type, disabled)
 
   const renderButton = (
     <Button
@@ -72,6 +81,7 @@ const CustomButton = ({
         e.stopPropagation()
         onClick(e)
       }}
+      disabled={disabled}
       variant={variant}
       type={type}
       {...props}
@@ -98,6 +108,7 @@ CustomButton.propTypes = {
   onClick: PropTypes.func,
   classes: PropTypes.object,
   children: PropTypes.node,
+  disabled: PropTypes.bool,
 }
 CustomButton.defaultProps = {
   textTransform: 'uppercase',
@@ -108,6 +119,7 @@ CustomButton.defaultProps = {
   onClick: () => { },
   classes: {},
   children: <></>,
+  disabled: false,
 }
 
 export default CustomButton

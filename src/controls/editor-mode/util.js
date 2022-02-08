@@ -5,7 +5,8 @@ import CustomToggle from '../../components/custom-toggle'
 
 const classes = makeStyles({
   section: {
-    marginBottom: '0.6rem',
+    marginTop: '0.2rem',
+    marginBottom: '0.7rem',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -67,7 +68,9 @@ const classes = makeStyles({
 export const renderSection = (title, Component) => (
   Component &&
   <div className={classes.section}>
-    {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
+    <div className={classes.sectionTitle}>
+      {title && `${title}:`}
+    </div>
     {Component}
   </div>
 )
@@ -97,7 +100,7 @@ export const renderItem = (title, Component) => (
   </div>
 )
 
-export const renderBool = (title, value, update, disabled = false) => (
+export const renderCheckbox = (title, value, update, disabled = false) => (
   <div className={classes.inlineItemContainer}>
     <div className={classes.inlineItem}>
       <CustomToggle
@@ -107,5 +110,16 @@ export const renderBool = (title, value, update, disabled = false) => (
       />
     </div>
     {title && <div className={classes.inlineTitle} > {`${title}`} </div>}
+  </div>
+)
+
+export const renderToggle = (title, value, update, disabled = false) => (
+  <div className={classes.itemContainer}>
+    <div className={classes.title} > {title && `${title}:`} </div>
+    <CustomToggle
+      value={value}
+      onChange={update}
+      disabled={disabled}
+    />
   </div>
 )

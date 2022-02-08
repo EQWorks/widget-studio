@@ -27,7 +27,7 @@ export const positions = multiExport([
     numeric: [0, 1],
   },
   {
-    string: 'Top-center',
+    string: 'Top',
     numeric: [0.5, 1],
   },
   {
@@ -39,13 +39,19 @@ export const positions = multiExport([
     numeric: [0, 0],
   },
   {
-    string: 'Bottom-center',
+    string: 'Bottom',
     numeric: [0.5, 0],
   },
   {
     string: 'Bottom-right',
     numeric: [1, 0],
   },
+  {
+    string: 'Left',
+    numeric: [0, 0.5],
+  },
+  {
+    string: 'Right',
+    numeric: [1, 0.5],
+  },
 ])
-
-export const DEFAULT_PRESET_COLORS = ['#3232F5', '#07A0C3', '#F0C808', '#91F5AD', '#dd1c1a', '#463F3A']

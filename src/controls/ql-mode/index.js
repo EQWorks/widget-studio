@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../store'
-import { Controls, Save, Trash } from '../../components/icons'
+import { Controls, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
@@ -37,14 +37,14 @@ const QLModeControls = ({ children }) => {
         reset
       </CustomButton>
     </div>
-    <CustomButton
+    {/* <CustomButton
       endIcon={<Save size='sm' />}
       variant='filled'
       onClick={() => alert('not implemented')}
       disabled={!allowReset}
     >
       save & update
-    </CustomButton>
+    </CustomButton> */}
   </>
 
   return (
@@ -59,10 +59,7 @@ const QLModeControls = ({ children }) => {
         toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
       >
         <div className='flex flex-col w-full'>
-          <WidgetControlCard
-            title='Select Widget Type'
-            clearable
-          >
+          <WidgetControlCard title='Select Widget Type' >
             <Icons disabled={!dataReady} />
           </WidgetControlCard>
           <DomainControls />

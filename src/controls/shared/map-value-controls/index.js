@@ -12,6 +12,7 @@ import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS, ID_KEYS } from '../../..
 const MapValueControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
+  const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
@@ -48,7 +49,7 @@ const MapValueControls = () => {
 
   return (
     <WidgetControlCard
-      clearable
+      clear={() => resetValue({ mapValueKeys })}
       showIfEmpty
       title='Value Configuration'
       description={widgetControlCardDescription}

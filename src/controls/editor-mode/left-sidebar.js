@@ -8,6 +8,7 @@ import DomainControls from '../shared/domain-controls'
 import ValueControls from '../shared/value-controls'
 import MapValueControls from '../shared/map-value-controls'
 import EditorSidebarBase from './sidebar-base'
+import DataTransformationControls from '../shared/data-transformation-controls'
 
 
 const EditorLeftSidebar = () => {
@@ -24,6 +25,7 @@ const EditorLeftSidebar = () => {
           ? <MapValueControls />
           : <ValueControls />
       }
+      <DataTransformationControls />
     </EditorSidebarBase>
   )
 }

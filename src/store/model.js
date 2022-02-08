@@ -3,7 +3,7 @@ import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
 import types from '../constants/types'
 import typeInfo from '../constants/type-info'
-import { DEFAULT_PRESET_COLORS } from '../constants/viz-options'
+import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
@@ -14,7 +14,7 @@ import { getKeyFormatFunction } from '../util/data-format-functions'
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
   { key: 'title', defaultValue: '', resettable: false },
-  { key: 'type', defaultValue: '', resettable: false },
+  { key: 'type', defaultValue: '', resettable: true },
   { key: 'filters', defaultValue: [], resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
   { key: 'groupFilter', defaultValue: [], resettable: true },
@@ -24,10 +24,10 @@ const stateDefaults = [
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
-  { key: 'renderableValueKeys', defaultValue: [], resettable: true },
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
+      showWidgetTitle: false,
       groupByValue: false,
       showLegend: true,
       subPlots: false,
@@ -46,15 +46,10 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
-  { key: 'columnsAnalysis', defaultValue: {}, resettable: false },
   { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
-  { key: 'stringColumns', defaultValue: [], resettable: false },
-  { key: 'numericColumns', defaultValue: [], resettable: false },
+  { key: 'percentageMode', defaultValue: false, resettable: true },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
-  { key: 'validMapGroupKeys', defaultValue: [], resettable: false },
-  // determines to use postal code geo key to aggregate by FSA
-  { key: 'groupFSAbyPC', defaultValue: false, resettable: false },
   {
     key: 'ui',
     defaultValue: {
@@ -68,6 +63,7 @@ const stateDefaults = [
       dataSourceLoading: false,
       dataSourceError: null,
       dataSourceName: null,
+      colorRepresentation: COLOR_REPRESENTATIONS[0],
       allowReset: true,
       recentReset: false,
       showToast: false,
@@ -91,6 +87,7 @@ export default {
       (state) => state.title,
       (state) => state.type,
       (state) => state.filters,
+      (state) => state.groupFilter,
       (state) => state.group,
       (state) => state.groupKey,
       (state) => state.mapGroupKey,
@@ -107,6 +104,7 @@ export default {
       title,
       type,
       filters,
+      groupFilter,
       group,
       groupKey,
       mapGroupKey,
@@ -123,7 +121,8 @@ export default {
         ? {
           title,
           type,
-          filters,
+          filters: filters.filter(({ key, filter }) => key && filter),
+          groupFilter,
           valueKeys: type !== types.MAP ? renderableValueKeys : [],
           mapValueKeys: type === types.MAP ? renderableValueKeys : [],
           formatDataFunctions,
@@ -193,6 +192,7 @@ export default {
     }
   ),
 
+  // determines to use postal code geo key to aggregate by FSA
   groupFSAByPC: computed(
     [
       (state) => state.mapGroupKey,
@@ -325,7 +325,9 @@ export default {
         Object.entries(config)
           .filter(([, v]) => v !== null && !Array.isArray(v) && typeof v === 'object')
           .forEach(([k, v]) => {
-            actions.nestedUpdate({ [k]: v })
+            if (stateDefaults.find(({ key }) => key === k)) {
+              actions.nestedUpdate({ [k]: v })
+            }
             delete config[k]
           })
         actions.update(config)
@@ -350,12 +352,10 @@ export default {
       dataSource,
     })
     const { isReady } = getState()
+    const isReload = isReady
     requestData(dataSource.type, dataSource.id)
       .then(data => {
-        if (isReady) {
-          actions.resetWidget()
-        }
-        const { results: rows, columns, whitelabelID, customerID, views } = data
+        const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
         actions.update({
           rows,
           columns,
@@ -365,11 +365,17 @@ export default {
         actions.nestedUpdate({
           ui: {
             showWidgetControls: true,
-            dataSourceName: views[0].name,
+            dataSourceName: name,
             dataSourceError: null,
           },
         })
         actions.nestedUpdate({ ui: { dataSourceLoading: false } })
+        if (isReload) {
+          actions.toast({
+            title: `${name} reloaded successfully`,
+            color: 'success',
+          })
+        }
       })
       .catch(err => {
         actions.nestedUpdate({
@@ -392,12 +398,24 @@ export default {
     }, state)
   )),
 
+  // reset a portion of the state
+  resetValue: action((state, payload) => (
+    Object.keys(payload)
+      .reduce((acc, k) => {
+        acc[k] = stateDefaults.find(({ key }) => key === k).defaultValue
+        return acc
+      }, state)
+  )),
+
   // reset all shared and unique states except data source and data ID
   resetWidget: action((state) => ({
     ...state,
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
-    uniqueOptions: typeInfo[state.type].uniqueOptions,
+    uniqueOptions: Object.fromEntries(
+      Object.entries(typeInfo[state.type].uniqueOptions)
+        .map(([k, { defaultValue }]) => [k, defaultValue])
+    ),
     // map widget doesn't have a switch to change group state, so we have to keep it true here
     group: state.type === types.MAP ? true : state.group,
   })),

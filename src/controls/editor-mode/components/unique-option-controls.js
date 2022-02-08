@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useStoreActions, useStoreState } from '../../../store'
 import typeInfo from '../../../constants/type-info'
 import types from '../../../constants/types'
-import { renderBool, renderRow } from '../util'
+import { renderToggle, renderRow } from '../util'
 
 
 const UniqueOptionControls = ({ type }) => {
@@ -17,7 +17,7 @@ const UniqueOptionControls = ({ type }) => {
         .map(([k, { name, type }]) => {
           switch (type) {
             case Boolean: // TODO support types other than bool
-              return renderBool(
+              return renderToggle(
                 name,
                 uniqueOptions[k],
                 v => nestedUpdate({ uniqueOptions: { [k]: v } })

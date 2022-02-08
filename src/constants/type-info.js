@@ -13,12 +13,12 @@ export default {
       showTicks: {
         name: 'Ticks',
         type: Boolean,
-        default: true,
+        defaultValue: true,
       },
       spline: {
-        name: 'Spline Interpolation',
+        name: 'Spline',
         type: Boolean,
-        default: false,
+        defaultValue: false,
       },
     },
   },
@@ -30,12 +30,12 @@ export default {
       stacked: {
         name: 'Stacked',
         type: Boolean,
-        default: false,
+        defaultValue: false,
       },
       showTicks: {
         name: 'Ticks',
         type: Boolean,
-        default: true,
+        defaultValue: true,
       },
     },
   },
@@ -47,12 +47,12 @@ export default {
       showTicks: {
         name: 'Ticks',
         type: Boolean,
-        default: true,
+        defaultValue: true,
       },
       showLines: {
         name: 'Lines',
         type: Boolean,
-        default: false,
+        defaultValue: false,
       },
     },
   },
@@ -64,12 +64,12 @@ export default {
       donut: {
         name: 'Donut',
         type: Boolean,
-        default: false,
+        defaultValue: false,
       },
       showPercentage: {
         name: 'Percentage',
         type: Boolean,
-        default: true,
+        defaultValue: true,
       },
     },
   },
@@ -81,7 +81,7 @@ export default {
       showTooltip: {
         name: 'Tooltip',
         type: Boolean,
-        default: true,
+        defaultValue: true,
       },
     },
   },

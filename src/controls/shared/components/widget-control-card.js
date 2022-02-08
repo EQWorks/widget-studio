@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
@@ -17,6 +16,7 @@ const commonClasses = {
   clearButtonInternalContainer: {
     display: 'flex',
     alignItems: 'center',
+    fontWeight: 600,
   },
 }
 
@@ -32,7 +32,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         fontSize: '0.875rem',
         fontWeight: 700,
         color: getTailwindConfigColor('secondary-900'),
-        marginBottom: '0.7rem',
+        marginBottom: '0.2rem',
         padding: '0 0.5rem',
       },
       clearButton: {
@@ -87,6 +87,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
       },
       content: {
         padding: '0.5rem 0.75rem',
+        paddingTop: 0,
       },
       description: {
         color: getTailwindConfigColor('secondary-600'),
@@ -103,7 +104,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const WidgetControlCard = ({ title, titleExtra, description, clearable, children }) => {
+const WidgetControlCard = ({ title, titleExtra, description, clear, children }) => {
   const mode = useStoreState((state) => state.ui.mode)
   const classes = useStyles(mode)
 
@@ -113,10 +114,13 @@ const WidgetControlCard = ({ title, titleExtra, description, clearable, children
         {`${title}:`}
       </div>
       {titleExtra}
-      {clearable &&
+      {clear &&
         <CustomButton
-          className={clsx(classes.clearButton, { 'shadow-light-10 hover:shadow-light-20': mode === modes.QL })}
-          onClick={() => alert('not implemented')}
+          classes={{
+            button: classes.clearButton,
+          }}
+          type='secondary'
+          onClick={clear}
         >
           <div className={classes.clearButtonInternalContainer}>
             clear {mode === modes.QL && <Trash size='md' />}
@@ -140,7 +144,7 @@ WidgetControlCard.propTypes = {
   title: PropTypes.string,
   titleExtra: PropTypes.node,
   description: PropTypes.node,
-  clearable: PropTypes.bool,
+  clear: PropTypes.func,
 }
 
 WidgetControlCard.defaultProps = {
@@ -148,7 +152,7 @@ WidgetControlCard.defaultProps = {
   title: '',
   titleExtra: null,
   description: null,
-  clearable: false,
+  clear: null,
 }
 
 export default WidgetControlCard

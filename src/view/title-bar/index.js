@@ -68,12 +68,15 @@ const useStyles = (mode) => makeStyles(
 
 const WidgetTitleBar = () => {
   const toast = useStoreActions((actions) => actions.toast)
+  const resetWidget = useStoreActions((actions) => actions.resetWidget)
+  const loadData = useStoreActions((actions) => actions.loadData)
 
   // widget state
+  const dataSource = useStoreState((state) => state.dataSource)
   const id = useStoreState((state) => state.id)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
-  const unsavedChanges = true // mocked for now
+  // const unsavedChanges = true // mocked for now
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -83,13 +86,13 @@ const WidgetTitleBar = () => {
   const renderTitleAndID = (
     <div className={classes.main}>
       <EditableTitle />
-      {unsavedChanges &&
+      {/* {unsavedChanges &&
         <div className={classes.item}>
           <Chip selectable={false} color='error' >
             unsaved
           </Chip>
         </div>
-      }
+      } */}
       <div className={classes.item}>
         <Chip
           color='secondary'
@@ -111,6 +114,16 @@ const WidgetTitleBar = () => {
     </div >
   )
 
+  const renderDownloadConfigButton = (
+    dev && config &&
+    <CustomButton
+      horizontalMargin
+      onClick={() => saveConfig(config, id)}
+    >
+      <Download size='md' />
+    </CustomButton>
+  )
+
   return (
     mode === modes.EDITOR
       ? (
@@ -119,7 +132,7 @@ const WidgetTitleBar = () => {
             <CustomButton
               horizontalMargin
               variant='outlined'
-              onClick={() => window.alert('not implemented')}
+              onClick={resetWidget}
               endIcon={<Trash size='sm' />}
             >
               reset
@@ -143,10 +156,11 @@ const WidgetTitleBar = () => {
           </div>
           {renderTitleAndID}
           <div className={classes.right}>
+            {renderDownloadConfigButton}
             <CustomButton
               horizontalMargin
               variant='outlined'
-              onClick={() => window.alert('not implemented')}
+              onClick={() => loadData(dataSource)}
             >
               <Cycle size='sm' />
               reload data
@@ -168,13 +182,7 @@ const WidgetTitleBar = () => {
               <div className='py-2 flex items-center'>
                 {renderTitleAndID}
                 <div className='flex items-stretch ml-auto'>
-                  {dev && config &&
-                    <CustomButton
-                      horizontalMargin
-                      onClick={() => saveConfig(config, id)}
-                    >
-                      <Download size='md' />
-                    </CustomButton>}
+                  {renderDownloadConfigButton}
                   <CustomButton
                     horizontalMargin
                     onClick={() => window.alert('not implemented')}
