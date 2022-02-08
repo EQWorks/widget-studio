@@ -49,11 +49,13 @@ const classes = makeStyles({
   },
   container: {
     display: 'grid',
+    justifyContent: 'center',
     gridTemplateColumns: `calc(${100 / SIZE}% + 1px) ${100 / SIZE}% calc(${100 / SIZE}% + 1px)`,
     gridTemplateRows: `calc(${100 / SIZE}% + 1px) ${100 / SIZE}% calc(${100 / SIZE}% + 1px)`,
     width: '3.7rem',
     height: '3.7rem',
     cursor: 'pointer',
+    marginBottom: '4px',
   },
   oddCell: {
     background: getTailwindConfigColor('secondary-300'),
