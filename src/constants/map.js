@@ -110,3 +110,8 @@ export const MAP_LEGEND_POSITION = {
   '[1,1]': 'top-right',
   '[1,0]': 'bottom-right',
 }
+
+export const MAP_LEGEND_SIZE = {
+  Small: 'sm',
+  Large: 'lg',
+}
