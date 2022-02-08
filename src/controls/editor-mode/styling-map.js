@@ -85,6 +85,12 @@ const StylingMap = () => {
           )}
         </>
       )}
+      {renderSection(
+        'Display Options',
+        <>
+          <UniqueOptionControls type={type} />
+        </>
+      )}
     </WidgetControlCard >
   )
 }
