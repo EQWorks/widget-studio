@@ -38,6 +38,7 @@ const stateDefaults = [
       size: 0.8,
       titlePosition: [0, 0],
       legendPosition: [1, 0],
+      legendSize: 'Small',
       baseColor: getTailwindConfigColor('primary-500'),
     }, resettable: true,
   },
