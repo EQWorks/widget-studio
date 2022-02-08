@@ -103,3 +103,10 @@ export const VIS_OPTIONS = {
 
 export const OPACITY = 0.2
 export const PITCH = { elevation: 45 }
+
+export const MAP_LEGEND_POSITION = {
+  '[0,0]': 'bottom-left',
+  '[0,1]': 'top-left',
+  '[1,1]': 'top-right',
+  '[1,0]': 'bottom-right',
+}
