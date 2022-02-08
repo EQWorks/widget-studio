@@ -27,12 +27,13 @@ const classes = makeStyles({
   },
 })
 
-const RangeFilterControl = ({ column, update }) => {
+const RangeFilterControl = ({ index, update }) => {
   const filters = useStoreState((state) => state.filters)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
 
-  const value = useMemo(() => (filters?.find(({ key }) => key === column))?.filter || [min, max], [column, filters, max, min])
-  const { min, max } = columnsAnalysis[column] || {}
+  const value = useMemo(() => filters[index]?.filter || [min, max], [filters, index, max, min])
+  const { min, max } = columnsAnalysis[filters[index]?.key] || {}
+
   return (
     <div className={classes.controls}>
       <div className={classes.slider}>
@@ -50,7 +51,7 @@ const RangeFilterControl = ({ column, update }) => {
           type="number"
           deleteButton={false}
           placeholder={min}
-          defaultValue={(value || [])[0] || ''}
+          value={(value || [])[0] || ''}
           onChange={_min => update([_min, max])}
         />
         <TextField
@@ -58,7 +59,7 @@ const RangeFilterControl = ({ column, update }) => {
           type="number"
           deleteButton={false}
           placeholder={max}
-          defaultValue={(value || [])[1] || ''}
+          value={(value || [])[1] || ''}
           onChange={_max => update([min, _max])}
         />
       </div>
@@ -67,7 +68,7 @@ const RangeFilterControl = ({ column, update }) => {
 }
 
 RangeFilterControl.propTypes = {
-  column: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
   update: PropTypes.func.isRequired,
 }
 

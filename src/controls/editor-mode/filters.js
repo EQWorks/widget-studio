@@ -116,7 +116,7 @@ const Filters = () => {
                     disabled={!value}
                   >
                     <RangeFilter
-                      column={k}
+                      index={i}
                       update={filter => update({
                         filters:
                           filters.map((v, _i) => i === _i
