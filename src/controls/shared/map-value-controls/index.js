@@ -2,9 +2,8 @@ import React, { useMemo } from 'react'
 
 import aggFunctions from '../../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../../store'
-import CustomSelect from '../../../components/custom-select'
 import MapLinkedSelect from './map-linked-select'
-import WidgetControlCard from '../widget-control-card'
+import WidgetControlCard from '../components/widget-control-card'
 
 import modes from '../../../constants/modes'
 import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS, ID_KEYS } from '../../../constants/map'
@@ -16,7 +15,6 @@ const MapValueControls = () => {
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
-  const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
@@ -49,41 +47,16 @@ const MapValueControls = () => {
   }, [mapGroupKey, mode])
 
   return (
-    <>
-      <WidgetControlCard
-        title='Group by' >
-        <CustomSelect
-          data={validMapGroupKeys}
-          value={mapGroupKey}
-          onSelect={val => {
-            /* update groupKey with mapGroupKey value to have it available if we switch to
-             * a chart widget type
-             */
-            update({ mapGroupKey: val, groupKey: val })
-            const newLayer = Object.keys(MAP_LAYER_VIS)
-              .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
-            /* reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
-             * as different layer requires different visualization types
-             */
-            if (newLayer !== mapLayer) {
-              update({ mapValueKeys: [] })
-            }
-          }}
-          onClear={() => update({ mapGroupKey: null, groupKey: null, mapValueKeys: [] })}
-          placeholder='Select a column to group by'
-        />
-      </WidgetControlCard>
-      <WidgetControlCard
-        grow
-        clearable
-        showIfEmpty
-        title='Key(s) Configuration'
-        description={widgetControlCardDescription}
-      >
-        {mapLayer &&
+    <WidgetControlCard
+      clearable
+      showIfEmpty
+      title='Value Configuration'
+      description={widgetControlCardDescription}
+    >
+      {mapLayer &&
           <MapLinkedSelect
             categories={MAP_LAYER_VIS[mapLayer]}
-            titles={['Key', 'Aggregation']}
+            titles={['Column', 'Operation']}
             values={mapValueKeys}
             data={mapNumericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
@@ -99,9 +72,8 @@ const MapValueControls = () => {
               }
             }}
           />
-        }
-      </WidgetControlCard>
-    </>
+      }
+    </WidgetControlCard>
   )
 }
 

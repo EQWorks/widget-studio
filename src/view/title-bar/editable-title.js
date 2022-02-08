@@ -102,21 +102,24 @@ const EditableTitle = () => {
     <div className={classes.outerContainer}>
       {
         editing
-          ? <TextField
-            autoFocus
-            size='lg'
-            value={tentativeTitle}
-            onChange={(v) => setTentativeTitle(v)}
-            onBlur={() => {
-              setTentativeTitle(title)
-              setEditing(false)
-            }}
+          ? <form
+            action='.'
             onSubmit={(e) => {
               update({ title: e.target.children[0].children[0].value })
               setEditing(false)
-              e.preventDefault()
             }}
-          />
+          >
+            <TextField
+              autoFocus
+              size='lg'
+              value={tentativeTitle}
+              onChange={(v) => setTentativeTitle(v)}
+              onBlur={() => {
+                setTentativeTitle(title)
+                setEditing(false)
+              }}
+            />
+          </form>
           : <>
             {renderTitle}
           </>

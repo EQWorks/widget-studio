@@ -2,13 +2,13 @@ import React from 'react'
 
 import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import { Cycle, ArrowExpand, Download, Trash, Undo, Redo } from '../components/icons'
-import { useStoreState, useStoreActions } from '../store'
-import OverflowTooltip from '../components/overflow-tooltip'
-import saveConfig from '../util/save-config'
-import CustomButton from '../components/custom-button'
-import modes from '../constants/modes'
-import EditableTitle from './title-bar/editable-title'
+import { Cycle, ArrowExpand, Download, Trash, Undo, Redo } from '../../components/icons'
+import { useStoreState, useStoreActions } from '../../store'
+import saveConfig from '../../util/save-config'
+import CustomButton from '../../components/custom-button'
+import modes from '../../constants/modes'
+import EditableTitle from './editable-title'
+import WidgetMeta from '../meta'
 
 
 const commonClasses = {
@@ -59,6 +59,10 @@ const useStyles = (mode) => makeStyles(
         flex: 1,
         display: 'flex',
       },
+      metaContainer: {
+        background: 'transparent',
+        padding: '0.75rem',
+      },
       ...commonClasses,
     })
 
@@ -67,76 +71,14 @@ const WidgetTitleBar = () => {
 
   // widget state
   const id = useStoreState((state) => state.id)
-  const columns = useStoreState((state) => state.columns)
-  const rows = useStoreState((state) => state.rows)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
   const unsavedChanges = true // mocked for now
 
-  // data source state
-  const dataSourceType = useStoreState((state) => state.dataSource.type)
-  const dataSourceID = useStoreState((state) => state.dataSource.id)
-  const dataReady = useStoreState((state) => state.dataReady)
-
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
-  const dataSourceName = useStoreState((state) => state.ui.dataSourceName)
 
   const classes = useStyles(mode)
-
-  const renderDetailItems = (items) =>
-    <div className={`w-full grid items-center grid-cols-${items.length} divide-x divide-secondary-300`}>
-      {
-        items.map(([title, info, hyperlink], i) => {
-          const config = 'flex-none whitespace-nowrap min-w-0 font-semibold tracking-wide flex-initial text-xs font-mono bg-secondary-200 p-0.5'
-          return (
-            <div key={i} className='flex pl-3 pr-3 flex-col overflow-hidden'>
-              <span className='m-0 text-xs text-secondary-500 tracking-wider'>
-                {`${title}:`}
-              </span>
-              <OverflowTooltip
-                description={info}
-                classes={{ content: 'whitespace-nowrap' }}
-                position={i === 0 ? 'right' : 'left'}
-              >
-                <div className='flex-none whitespace-nowrap min-w-0'>
-                  {
-                    hyperlink
-                      ? <a href={hyperlink}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        className={`${config} font-bold text-primary-500 underline`}
-                      > {info} </a>
-                      : <span className={`${config} text-secondary-800`}>
-                        {info}
-                      </span>
-                  }
-                </div>
-              </OverflowTooltip>
-            </div >
-          )
-        }
-        )
-      }
-    </div >
-
-  const renderWidgetMeta =
-    <div className='flex bg-transparent p-3'>
-      {renderDetailItems([
-        ['CREATED DATE', '09/09/09 10:23 AM'],
-        ['LAST UPDATED', '09/09/09 10:23 AM'],
-        ['DATA VOLUME', dataReady
-          ? `${columns.length} columns ${rows.length} rows`
-          : '...',
-        ],
-        ['DATA SOURCE',
-          dataReady
-            ? `${dataSourceType} ${dataSourceID} ${dataSourceName || ''}`
-            : '...',
-          'https://www.google.com/search?q=not+implemented',
-        ],
-      ])}
-    </div>
 
   const renderTitleAndID = (
     <div className={classes.main}>
@@ -252,7 +194,9 @@ const WidgetTitleBar = () => {
             }
             ExpandIcon={Icons.ChevronDown}
           >
-            {renderWidgetMeta}
+            <div className={classes.metaContainer}>
+              <WidgetMeta />
+            </div>
           </Accordion.Panel >
         </Accordion >
       )

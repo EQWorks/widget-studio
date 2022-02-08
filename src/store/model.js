@@ -15,8 +15,9 @@ const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
   { key: 'title', defaultValue: '', resettable: false },
   { key: 'type', defaultValue: '', resettable: false },
-  { key: 'filters', defaultValue: {}, resettable: true },
+  { key: 'filters', defaultValue: [], resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
+  { key: 'groupFilter', defaultValue: [], resettable: true },
   { key: 'groups', defaultValue: [], resettable: true },
   { key: 'groupKey', defaultValue: null, resettable: true },
   { key: 'mapGroupKey', defaultValue: null, resettable: true },
@@ -45,6 +46,7 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
+  { key: 'columnsAnalysis', defaultValue: {}, resettable: false },
   { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
   { key: 'stringColumns', defaultValue: [], resettable: false },
@@ -58,6 +60,7 @@ const stateDefaults = [
     defaultValue: {
       mode: null,
       showTable: false,
+      tableShowsRawData: true,
       showWidgetControls: true,
       showFilterControls: false,
       showDataSourceControls: false,
@@ -137,6 +140,29 @@ export default {
         }
         : undefined
     )),
+
+  columnsAnalysis: computed(
+    [
+      (state) => state.columns,
+      (state) => state.rows,
+    ],
+    (
+      columns,
+      rows
+    ) => (
+      columns.reduce((acc, { name, category }) => {
+        const data = rows.map(r => r[name])
+        acc[name] = {
+          category,
+          ...(category === 'Numeric' && {
+            min: Math.min.apply(null, data),
+            max: Math.max.apply(null, data),
+          }),
+        }
+        return acc
+      }, {})
+    )
+  ),
 
   numericColumns: computed(
     [(state) => state.columns],
@@ -236,6 +262,7 @@ export default {
       (state) => state.indexKey,
       (state) => state.groupKey,
       (state) => state.mapGroupKey,
+      (state) => state.transformedData,
     ],
     (
       rows,
@@ -245,8 +272,9 @@ export default {
       indexKey,
       groupKey,
       mapGroupKey,
+      transformedData,
     ) => (
-      Boolean(type && columns.length && rows.length &&
+      Boolean(type && columns.length && rows.length && transformedData?.length &&
         (
           type === types.MAP
             ? renderableValueKeys.length && mapGroupKey

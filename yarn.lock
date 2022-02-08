@@ -1367,6 +1367,19 @@
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
+"@eqworks/lumen-labs@^0.1.0-alpha.26":
+  version "0.1.0-alpha.26"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.26/924d941e7f02bcbef9ca8fcb9548b2d77cbefa1bf3c78711683941af6549d53a#9cfab90c9ea94e5c7eb58957b6eb97a422b40617"
+  integrity sha512-m4RJ3vKq3DCa0AMYZqkvICM0Xn6V8KiiG3C+H+9DDCwYScYpN3I9ppoMhHPXB2JceaD2wsHAD61d1k+UAQes7Q==
+  dependencies:
+    "@headlessui/react" "^1.4.0"
+    clsx "^1.1.1"
+    goober "^2.0.39"
+    prop-types "^15.7.2"
+    react-resize-detector "^6.7.6"
+    react-virtualized-auto-sizer "^1.0.5"
+    react-window "^1.8.6"
+
 "@eqworks/react-labs@^1.12.1-alpha.5":
   version "1.12.1-alpha.5"
   resolved "https://npm.pkg.github.com/download/@eqworks/react-labs/1.12.1-alpha.5/b1db590dc3bcb6847c52b64b27f17abac254206973833fda97f47f97e7acb80e#f154e5f73d36f414f943420685ec2c574ba9ad94"
@@ -9684,11 +9697,6 @@ lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
-
-lodash.mergewith@^4.6.2:
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.2.tgz#617121f89ac55f59047c7aec1ccd6654c6590f55"
-  integrity sha512-GK3g5RPZWTRSeLSpgP8Xhra+pnjBC56q9FZYe1d5RN3TJ35dbkGy3YqBSMbyCrlbi+CM9Z3Jk5yTL7RCsqboyQ==
 
 lodash.omit@^4.5.0:
   version "4.5.0"

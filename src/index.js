@@ -17,6 +17,19 @@ import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
 
 
+const commonClasses = {
+  innerContainer: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    minHeight: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'end',
+    alignItems: 'stretch',
+  },
+}
+
 const useStyles = (mode = modes.EDITOR) => makeStyles(
   mode === modes.EDITOR
     ? {
@@ -25,8 +38,9 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         display: 'flex',
         flexDirection: 'column',
         width: '100vw',
-        height: '100vh',
+        minHeight: '100vh',
       },
+      ...commonClasses,
     }
     : {
       outerContainer: {
@@ -39,6 +53,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         borderRadius: '0.125rem',
         borderWidth: '2px',
       },
+      ...commonClasses,
     }
 )
 
@@ -105,7 +120,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   return (
     <div className={classes.outerContainer}>
       <WidgetTitleBar />
-      <div className='flex-1 min-h-0 flex flex-row justify-end'>
+      <div className={classes.innerContainer}>
         {renderViewWithControls()}
       </div>
       <CustomGlobalToast />

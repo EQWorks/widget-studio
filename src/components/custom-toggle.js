@@ -6,8 +6,9 @@ import clsx from 'clsx'
 import { nanoid } from 'nanoid'
 
 
-const CustomToggle = ({ label, value, onChange, disabled }) => {
+const CustomToggle = ({ classes, label, value, onChange, disabled }) => {
   const [id] = useState(nanoid())
+  const { label: labelClass = '', ..._classes } = classes
   return <SwitchRect
     id={id}
     checked={value}
@@ -18,15 +19,18 @@ const CustomToggle = ({ label, value, onChange, disabled }) => {
     disabled={disabled}
     label={label}
     classes={{
-      label: clsx('ml-2 text-sm', {
-        'text-secondary-600': !disabled,
-        'text-secondary-400': disabled,
+      label: clsx(`${labelClass} ml-2 text-sm`, {
+        'text-secondary-600': !disabled && !value,
+        'text-secondary-400': disabled && !value,
+        'text-primary-500': value,
       }),
+      ..._classes,
     }}
   />
 }
 
 CustomToggle.propTypes = {
+  classes: PropTypes.object,
   disabled: PropTypes.bool,
   label: PropTypes.string,
   onChange: PropTypes.func.isRequired,
@@ -34,6 +38,7 @@ CustomToggle.propTypes = {
 }
 
 CustomToggle.defaultProps = {
+  classes: {},
   disabled: false,
   label: '',
   value: true,

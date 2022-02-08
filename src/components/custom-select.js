@@ -1,20 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import { DropdownSelect, Icons } from '@eqworks/lumen-labs'
 
+
+export const DROPDOWN_SELECT_CLASSES = {
+  root: 'shadow-light-10 border-2 border-secondary-200 rounded-md',
+  button: 'tracking-widest border-none max-h-20 overflow-y-auto',
+  menu: 'w-full z-50',
+  content: 'children:fill-current children:text-secondary-500',
+  selectedOptionTitle: 'normal-case text-primary-600 truncate overflow-hidden',
+  listContainer: 'normal-case',
+  innerButton: 'truncate',
+}
+const { root, ...baseClasses } = DROPDOWN_SELECT_CLASSES
 
 const CustomSelect = ({ classes, onClear, fullWidth, ...props }) => (
   <DropdownSelect simple
     classes={{
-      root: clsx('shadow-light-10 border-2 border-secondary-200 rounded-md', {
-        'w-full': fullWidth,
-      }),
-      button: 'tracking-widest border-none',
-      menu: 'w-full',
-      content: 'children:overflow-hidden children:overflow-ellipsis children:fill-current children:text-secondary-500',
-      selectedOptionTitle: 'normal-case text-primary-600',
-      listContainer: 'normal-case',
+      root: fullWidth ? [root, 'w-full'].join(' ') : root,
+      ...baseClasses,
       ...classes,
     }}
     overflow='vertical'

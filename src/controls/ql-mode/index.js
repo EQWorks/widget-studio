@@ -4,12 +4,13 @@ import PropTypes from 'prop-types'
 import { useStoreState, useStoreActions } from '../../store'
 import { Controls, Save, Trash } from '../../components/icons'
 import Icons from '../shared/widget-type-icons'
-import WidgetControlCard from '../shared/widget-control-card'
+import WidgetControlCard from '../shared/components/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
 import types from '../../constants/types'
 import MapValueControls from '../shared/map-value-controls'
 import ValueControls from '../shared/value-controls'
 import CustomButton from '../../components/custom-button'
+import DomainControls from '../shared/domain-controls'
 
 
 const QLModeControls = ({ children }) => {
@@ -64,6 +65,7 @@ const QLModeControls = ({ children }) => {
           >
             <Icons disabled={!dataReady} />
           </WidgetControlCard>
+          <DomainControls />
           {isReady && (type === types.MAP ? <MapValueControls /> : <ValueControls />)}
         </div>
       </CustomAccordion>

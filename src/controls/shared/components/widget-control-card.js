@@ -4,10 +4,10 @@ import clsx from 'clsx'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import CustomButton from '../../components/custom-button'
-import { Trash } from '../../components/icons'
-import { useStoreState } from '../../store'
-import modes from '../../constants/modes'
+import CustomButton from '../../../components/custom-button'
+import { Trash } from '../../../components/icons'
+import { useStoreState } from '../../../store'
+import modes from '../../../constants/modes'
 
 
 const commonClasses = {
@@ -25,7 +25,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     ? {
       outerContainer: {
         padding: '0.8rem',
-        borderBottom: `1px solid ${getTailwindConfigColor('neutral-100')}`,
+        borderBottom: `1px solid ${getTailwindConfigColor('secondary-300')}`,
       },
       titleContainer: {
         display: 'flex',

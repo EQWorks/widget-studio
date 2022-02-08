@@ -12,6 +12,9 @@ export const DATA_KEY_FORMATTING = {
   },
   numericOthers: {
     keyList: [],
-    formatFunction: val => numeral(val).format('0,0'),
+    formatFunction: Intl.NumberFormat('en-US', {
+      notation: 'compact',
+      maximumFractionDigits: 1,
+    }).format,
   },
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../store'
-import WidgetControlCard from '../shared/widget-control-card'
+import WidgetControlCard from '../shared/components/widget-control-card'
 import { sizes } from '../../constants/viz-options'
 import types from '../../constants/types'
 import CustomSelect from '../../components/custom-select'
@@ -10,6 +10,7 @@ import ColorSchemeControls from './components/color-scheme-controls'
 import { renderItem, renderSection, renderRow, renderBool } from './util'
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
+import Filters from './filters'
 
 
 const EditorRightSidebar = () => {
@@ -28,6 +29,7 @@ const EditorRightSidebar = () => {
 
   return (
     <EditorSidebarBase>
+      <Filters />
       <WidgetControlCard title='Options'>
         {renderSection(
           null,

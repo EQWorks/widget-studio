@@ -15,6 +15,7 @@ const useTransformedData = () => {
   const type = useStoreState((state) => state.type)
   const columns = useStoreState((state) => state.columns)
   const filters = useStoreState((state) => state.filters)
+  const groupFilter = useStoreState((state) => state.groupFilter)
   const indexKey = useStoreState((state) => state.indexKey)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const group = useStoreState((state) => state.group)
@@ -30,14 +31,14 @@ const useTransformedData = () => {
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
     rows.filter(obj => {
-      for (const [key, [min, max]] of Object.entries(filters).filter(([k]) => k !== finalGroupKey)) {
+      for (const { key, filter: [min, max] } of filters.filter(({ filter }) => Boolean(filter))) {
         if (obj[key] < min || obj[key] > max) {
           return false
         }
       }
       return true
     })
-  ), [rows, filters, finalGroupKey])
+  ), [rows, filters])
 
   const newGroupKey = useMemo(() => groupFSAByPC
     // use the key for postalcode to aggregate by FSA
@@ -84,11 +85,11 @@ const useTransformedData = () => {
   // if a filter on the finalGroupKey exists, retain only the desired groups
   const filteredGroupedData = useMemo(() => (
     group
-      ? filters[finalGroupKey]?.length
-        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => filters[finalGroupKey].includes(k)))
+      ? groupFilter?.length
+        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => groupFilter?.includes(k)))
         : groupedData
       : null
-  ), [filters, group, finalGroupKey, groupedData])
+  ), [group, groupFilter, groupedData])
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
