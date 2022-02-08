@@ -1,15 +1,16 @@
 import React from 'react'
 
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { positions, sizes } from '../../constants/viz-options'
+import { positions } from '../../constants/viz-options'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import { renderItem, renderSection, renderRow } from '../shared/util'
 import UniqueOptionControls from './components/unique-option-controls'
 import CustomDropdown from './components/custom-dropdown'
+import { MAP_LEGEND_SIZE } from '../../constants/map'
 
 
 const classes = makeStyles({
@@ -19,16 +20,6 @@ const classes = makeStyles({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  warning: {
-    background: getTailwindConfigColor('secondary-200'),
-    color: getTailwindConfigColor('secondary-600'),
-    borderRadius: '0.7rem',
-    fontSize: '0.9rem',
-    fontWeight: 500,
-    margin: '1rem',
-    padding: '2rem 1rem',
-    lineHeight: '1.4rem',
-  },
 })
 
 const StylingMap = () => {
@@ -37,9 +28,8 @@ const StylingMap = () => {
 
   // common state
   const type = useStoreState((state) => state.type)
-  const subPlots = useStoreState((state) => state.genericOptions.subPlots)
-  const size = useStoreState((state) => state.genericOptions.size)
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
+  const legendSize = useStoreState((state) => state.genericOptions.legendSize)
   const showLegend = useStoreState((state) => state.uniqueOptions.showLegend)
 
   return (
@@ -61,15 +51,17 @@ const StylingMap = () => {
                   />
                 </CustomDropdown>
               )}
+              {renderItem('Legend Size',
+                <CustomSelect
+                  allowClear={false}
+                  disabled={!showLegend}
+                  fullWidth
+                  data={Object.keys(MAP_LEGEND_SIZE)}
+                  value={legendSize}
+                  onSelect={legendSize => nestedUpdate({ genericOptions: { legendSize } })}
+                />
+              )}
             </>
-          )}
-          {subPlots && renderRow('Subplot Size',
-            <CustomSelect
-              fullWidth
-              data={sizes.string}
-              value={sizes.string[sizes.numeric.indexOf(size)]}
-              onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
-            />
           )}
         </>
       )}
