@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow, renderSection, renderToggle } from '../editor-mode/util'
+import { renderRow, renderSection, renderToggle } from './util'
 import types from '../../constants/types'
 
 

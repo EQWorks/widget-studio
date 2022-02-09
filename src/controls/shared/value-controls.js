@@ -8,7 +8,7 @@ import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow, renderSection } from '../editor-mode/util'
+import { renderRow, renderSection } from './util'
 
 
 const ValueControls = () => {
