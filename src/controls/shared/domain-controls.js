@@ -73,7 +73,7 @@ const DomainControls = () => {
               value={domain.value}
               onSelect={val => {
                 if (type === types.MAP) {
-                // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
+                  // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
                   update({ mapGroupKey: val, groupKey: val })
                   const newLayer = Object.keys(MAP_LAYER_VIS)
                     .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
@@ -83,13 +83,18 @@ const DomainControls = () => {
                   }
                 } else {
                   const mustGroup = columnsAnalysis[val].category !== 'Numeric'
-                  update({ group: mustGroup })
-                  const _group = mustGroup || group
-                  update({ [domain.key]: val })
+                  if (mustGroup) {
+                    update({ group: mustGroup })
+                  }
+                  const willGroup = mustGroup || group
+                  update(willGroup
+                    ? { groupKey: val }
+                    : { indexKey: val }
+                  )
                   // if the new group key is a valid geo key,
-                  if (_group && validMapGroupKeys.includes(val)) {
+                  if (willGroup && validMapGroupKeys.includes(val)) {
                     update({
-                    // update mapGroupKey with groupKey value
+                      // update mapGroupKey with groupKey value
                       mapGroupKey: val,
                       // reset mapValueKeys in case mapGroupKey value requires a new map layer
                       mapValueKeys: [],
