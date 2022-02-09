@@ -5,7 +5,8 @@ import { useStoreState } from '../../../store'
 
 import { LocusMap } from '@eqworks/react-maps'
 import { getCursor } from '@eqworks/react-maps/dist/utils'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@eqworks/lumen-labs'
+
 import modes from '../../../constants/modes'
 import {
   COORD_KEYS,
@@ -21,33 +22,31 @@ import {
 } from '../../../constants/map'
 
 
-const useStyles = makeStyles({
-  mapWrapper: (props) => ({
+const useStyles = ({ width, height, marginTop }) => makeStyles({
+  mapWrapper: {
     position: 'absolute',
-    width: props.width,
-    height: props.height,
-    margin: props.margin,
+    width: `${width}px`,
+    height: `calc((${height}px) - (${marginTop}rem))`,
+    marginTop: `${marginTop}rem`,
     overflow: 'hidden',
-  }),
+  },
 })
 
 const Map = ({ width, height, ...props }) => {
   const mode = useStoreState(state => state.ui.mode)
   const MODE_DIMENSIONS = Object.freeze({
-    [modes.EDITOR]: { margin: '5px', width: width - 10, height: height - 10 },
-    [modes.QL]: { margin: '5px 5px 0 0', width: width - 5, height: height - 5 },
-    [modes.VIEW]: { margin: '5px 0 0 0', width: width, height: height - 5 },
+    [modes.EDITOR]: { marginTop: 0 },
+    [modes.QL]: { marginTop: 0.75 },
+    [modes.VIEW]: { marginTop: 0.75 },
   })
 
-  const finalMargin = MODE_DIMENSIONS[mode].margin || 0
-  const finalWidth = MODE_DIMENSIONS[mode].width || width
-  const finalHeight = MODE_DIMENSIONS[mode].height || height
+  const finalMarginTop = MODE_DIMENSIONS[mode].marginTop || 0
 
-  const classes = useStyles({ width: finalWidth, height: finalHeight, margin: finalMargin })
+  const classes = useStyles({ width, height, marginTop: finalMarginTop })
 
-  if (finalWidth > 0 && finalHeight > 0) {
+  if (width > 0 && height > 0) {
     return (
-      <div className={classes.mapWrapper}>
+      <div id='LocusMap' className={classes.mapWrapper}>
         <LocusMap { ...props } />
       </div>
     )
