@@ -7,8 +7,8 @@ import PluralLinkedSelect from '../../../components/plural-linked-select'
 
 
 const classes = makeStyles({
-  keyControl1 : { marginTop: '15px' },
-  linkedSelect : { marginTop: '5px' },
+  keyControl1 : { marginTop: '0.938rem' },
+  linkedSelect : { marginTop: '0.375rem' },
 })
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -27,13 +27,16 @@ const MapLinkedSelect = ({
     categories.map((mapVis, i) => {
       const match = values.findIndex(v => v.mapVis === mapVis)
       return (
-        <div key={i} className={i === 0 ? '' : classes.keyControl1} >
-          <Chip color={i === 0 ? 'primary' : 'success'}>
+        <div key={i} className={i === 0 ? classes.linkedSelect : classes.keyControl1} >
+          <Chip color={i === 0 ? 'primary' : 'success'} classes={{ chip: 'px-5px rounded-md mb-1.5' }}>
             {mapVis}
           </Chip>
           <PluralLinkedSelect
             staticQuantity={1}
-            headerIcons={[Icons.Sum, Icons.Columns]}
+            headerIcons={[
+              Icons.Columns,
+              Icons.Sum,
+            ]}
             titles={titles}
             values={values[match] ? [values[match]] : []}
             callback={(_, v) => callback(
