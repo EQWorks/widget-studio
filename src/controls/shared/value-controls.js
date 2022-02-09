@@ -9,6 +9,7 @@ import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderRow, renderSection } from './util'
+import MutedBarrier from './muted-barrier'
 
 
 const ValueControls = () => {
@@ -59,29 +60,32 @@ const ValueControls = () => {
     />
 
   return (
-    <WidgetControlCard
-      clear={() => resetValue({ valueKeys })}
-      title='Value Configuration'
-      {...mode === modes.QL &&
-      { description: 'Select up to 3 keys, open in editor for more options.' }
-      }
-    >
-      {
-        renderSection(null,
-          group
-            ? renderGroupedValueKeysSelect
-            : renderRow('Columns',
-              <CustomSelect
-                fullWidth
-                multiSelect
-                value={valueKeys.map(({ key }) => key)}
-                data={numericColumns.filter(c => c !== domain.value)}
-                onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
-              />
-            )
-        )
-      }
-    </WidgetControlCard>
+    <MutedBarrier mute={!domain.value}>
+      <WidgetControlCard
+        clear={() => resetValue({ valueKeys })}
+        title='Value Configuration'
+        {...mode === modes.QL &&
+        { description: 'Select up to 3 keys, open in editor for more options.' }
+        }
+      >
+        {
+          renderSection(null,
+            group
+              ? renderGroupedValueKeysSelect
+              : renderRow('Columns',
+                <CustomSelect
+                  fullWidth
+                  multiSelect
+                  value={valueKeys.map(({ key }) => key)}
+                  data={numericColumns.filter(c => c !== domain.value)}
+                  onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
+                />
+              )
+          )
+        }
+      </WidgetControlCard>
+    </MutedBarrier>
+
   )
 }
 

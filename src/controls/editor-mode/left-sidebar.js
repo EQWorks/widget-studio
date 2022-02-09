@@ -29,9 +29,9 @@ const EditorLeftSidebar = () => {
           : <>
             <DomainControls />
             <ValueControls />
+            <DataTransformationControls />
           </>
       }
-      <DataTransformationControls />
     </EditorSidebarBase>
   )
 }
