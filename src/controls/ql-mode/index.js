@@ -10,6 +10,7 @@ import MapValueControls from '../shared/map-value-controls'
 import ValueControls from '../shared/value-controls'
 import CustomButton from '../../components/custom-button'
 import DomainControls from '../shared/domain-controls'
+import MapDomainControls from '../shared/map-domain-controls'
 
 
 const QLModeControls = ({ children }) => {
@@ -58,11 +59,16 @@ const QLModeControls = ({ children }) => {
           <WidgetControlCard title='Select Widget Type' >
             <Icons disabled={!dataReady} />
           </WidgetControlCard>
-          <DomainControls />
           {
             type === types.MAP
-              ? <MapValueControls />
-              : <ValueControls />
+              ? <>
+                <MapDomainControls />
+                <MapValueControls />
+              </>
+              : <>
+                <DomainControls />
+                <ValueControls />
+              </>
           }
         </div>
       </CustomAccordion>
