@@ -54,7 +54,7 @@ const EditorRightSidebar = () => {
     return (
       <EditorSidebarBase>
         <div className={classes.warning}>
-          No {type ? 'columns' : 'type'} selected. Configure <strong>Widget Type</strong>, <strong>Domain</strong> and <strong>Value</strong> to unlock more options.
+          No {type ? 'columns' : 'widget type'} selected. Configure <strong>Widget Type</strong>, <strong>Domain</strong> and <strong>Value</strong> to unlock more options.
         </div>
       </EditorSidebarBase>
     )
