@@ -18,7 +18,6 @@ const QLModeControls = ({ children }) => {
   const resetWidget = useStoreActions(actions => actions.resetWidget)
 
   // state
-  const isReady = useStoreState((state) => state.isReady)
   const type = useStoreState((state) => state.type)
   const dataReady = useStoreState((state) => state.dataReady)
 
@@ -60,7 +59,11 @@ const QLModeControls = ({ children }) => {
             <Icons disabled={!dataReady} />
           </WidgetControlCard>
           <DomainControls />
-          {isReady && (type === types.MAP ? <MapValueControls /> : <ValueControls />)}
+          {
+            type === types.MAP
+              ? <MapValueControls />
+              : <ValueControls />
+          }
         </div>
       </CustomAccordion>
     </>
