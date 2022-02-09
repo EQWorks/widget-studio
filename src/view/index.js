@@ -13,7 +13,7 @@ import WidgetMeta from './meta'
 import CustomToggle from '../components/custom-toggle'
 
 
-const useStyles = (mode, tableExpanded) => makeStyles(
+const useStyles = ({ mode, tableExpanded }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
@@ -154,7 +154,7 @@ const WidgetView = () => {
   const [tableExpanded, setTableExpanded] = useState(false)
   const [autoExpandedTable, setAutoExpandedTable] = useState(false)
 
-  const classes = useStyles(mode, tableExpanded, tableShowsRawData)
+  const classes = useStyles({ mode, tableExpanded })
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
