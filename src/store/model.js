@@ -287,9 +287,7 @@ export default {
       (state) => state.columns,
       (state) => state.type,
       (state) => state.renderableValueKeys,
-      (state) => state.indexKey,
-      (state) => state.groupKey,
-      (state) => state.mapGroupKey,
+      (state) => state.domain,
       (state) => state.transformedData,
     ],
     (
@@ -297,18 +295,11 @@ export default {
       columns,
       type,
       renderableValueKeys,
-      indexKey,
-      groupKey,
-      mapGroupKey,
+      domain,
       transformedData,
     ) => (
       Boolean(type && columns.length && rows.length && transformedData?.length &&
-        (
-          type === types.MAP
-            ? renderableValueKeys.length && mapGroupKey
-            : renderableValueKeys.length && (indexKey || groupKey)
-        )
-      )
+        renderableValueKeys.length && domain.value)
     )),
 
   dataReady: computed(
