@@ -251,10 +251,10 @@ export default {
       (type === types.MAP ? mapValueKeys : valueKeys)
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
         .map(({ key, agg, ...rest }) => ({
-          key,
-          title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}` || key,
-          ...(agg && { agg }),
           ...rest,
+          key,
+          title: `${formattedColumnNames[key]}${group && agg ? ` (${agg})` : ''}` || key,
+          ...(agg && { agg }),
         }))
     )
   ),
