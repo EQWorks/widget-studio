@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -19,6 +19,9 @@ const classes = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  value: {
+    color: getTailwindConfigColor('primary-600'),
   },
 })
 
@@ -41,7 +44,8 @@ const StylingMap = () => {
               {renderItem('Legend Position',
                 <CustomDropdown
                   disabled={!showLegend}
-                  selectedString={positions.string[positions.numeric.map(JSON.stringify).indexOf(JSON.stringify(legendPosition))]}
+                  selectedString={positions.string[positions.numeric.map(JSON.stringify)
+                    .indexOf(JSON.stringify(legendPosition))]}
                   classes={{ menu: classes.xyDropdownMenu }}
                 >
                   <XYSelect
@@ -59,6 +63,13 @@ const StylingMap = () => {
                   data={Object.keys(MAP_LEGEND_SIZE)}
                   value={legendSize}
                   onSelect={legendSize => nestedUpdate({ genericOptions: { legendSize } })}
+                  placeholder={!showLegend ? 'N/A' : 'Select'}
+                  renderSelectedOptions={() =>
+                    showLegend &&
+                    <span className={classes.value}>
+                      {legendSize}
+                    </span>
+                  }
                 />
               )}
             </>
