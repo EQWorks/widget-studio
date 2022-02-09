@@ -12,6 +12,17 @@ const commonClasses = {
   titleText: {
     flex: 1,
   },
+  description: {
+    color: getTailwindConfigColor('secondary-600'),
+    paddingLeft: '0.75rem',
+    paddingRight: '0.75rem',
+    paddingBottom: '0.25rem',
+    paddingTop: '0.5rem',
+    fontSize: '0.75rem',
+    lineHeight: '1rem',
+    fontStyle: 'italic',
+    letterSpacing: '0.025em',
+  },
 }
 
 const useStyles = (mode = modes.EDITOR) => makeStyles(
@@ -51,17 +62,6 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
       content: {
         padding: '0.5rem 0.75rem',
         paddingTop: 0,
-      },
-      description: {
-        color: getTailwindConfigColor('secondary-600'),
-        paddingLeft: '0.75rem',
-        paddingRight: '0.75rem',
-        paddingBottom: '0.25rem',
-        paddingTop: '0.5rem',
-        fontSize: '0.75rem',
-        lineHeight: '1rem',
-        fontStyle: 'italic',
-        letterSpacing: '0.025em',
       },
       ...commonClasses,
     }
