@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Icons, makeStyles } from '@eqworks/lumen-labs'
 
@@ -39,6 +39,11 @@ const Filters = () => {
   const filters = useStoreState((state) => state.filters)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const domain = useStoreState((state) => state.domain)
+
+  useEffect(() => {
+    update({ groupFilter: [] })
+  }, [domain.value, update])
 
   return (
     <WidgetControlCard
