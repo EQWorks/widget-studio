@@ -29,12 +29,6 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         marginBottom: '0.2rem',
         padding: '0 0.5rem',
       },
-      clearButton: {
-        textTransform: 'capitalize',
-        fontWeight: 600,
-        fontSize: '0.75rem',
-        color: getTailwindConfigColor('secondary-400'),
-      },
       content: {
         padding: '0 0.5rem',
       },
@@ -53,31 +47,6 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         color: getTailwindConfigColor('secondary-700'),
         background: getTailwindConfigColor('neutral-100'),
         padding: '0.4rem 0.75rem',
-      },
-      clearButton: {
-        display: 'flex',
-        padding: '0.125rem 0.375rem',
-        transitionProperty: 'all 0.3s ease',
-        fontWeight: 500,
-        letterSpacing: '0.05em',
-        textTransform: 'uppercase',
-        alignItems: 'center',
-        fontSize: '0.65rem',
-        borderRadius: '0.125rem',
-        transition: 'all 0.3s ease',
-        color: getTailwindConfigColor('secondary-600'),
-        '& svg': {
-          transition: 'all 0.3s ease',
-          fill: getTailwindConfigColor('secondary-600'),
-          marginLeft: '0.2rem',
-        },
-        '&:hover': {
-          color: getTailwindConfigColor('secondary-800'),
-          '& svg': {
-            fill: getTailwindConfigColor('secondary-800'),
-          },
-        },
-        background: getTailwindConfigColor('secondary-50'),
       },
       content: {
         padding: '0.5rem 0.75rem',
@@ -110,16 +79,14 @@ const WidgetControlCard = ({ title, titleExtra, description, clear, children }) 
       {titleExtra}
       {clear &&
         <CustomButton
-          classes={{
-            button: classes.clearButton,
-          }}
           type='secondary'
+          size={mode === modes.QL ? 'sm' : 'md'}
           onClick={clear}
           {...(mode === modes.QL && {
             endIcon: <Icons.Trash size='sm' />,
           })}
         >
-          clear
+          Clear
         </CustomButton>}
     </div >
   )

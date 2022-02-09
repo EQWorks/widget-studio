@@ -24,6 +24,13 @@ const commonClasses = {
     display: 'flex',
     alignItems: 'center',
   },
+  squareButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '1.4rem !important',
+    height: '1.4rem !important',
+  },
 }
 
 const useStyles = (mode) => makeStyles(
@@ -117,9 +124,13 @@ const WidgetTitleBar = () => {
     dev && config &&
     <CustomButton
       horizontalMargin
+      classes={{
+        button: classes.squareButton,
+      }}
       onClick={() => saveConfig(config, id)}
-      endIcon={<Icons.DownloadBold size='md' />}
-    />
+    >
+      <Icons.DownloadBold size='md' />
+    </CustomButton>
   )
 
   return (
@@ -129,6 +140,7 @@ const WidgetTitleBar = () => {
           <div className={classes.left}>
             <CustomButton
               horizontalMargin
+              size='sm'
               variant='outlined'
               onClick={resetWidget}
             >
@@ -136,6 +148,7 @@ const WidgetTitleBar = () => {
             </CustomButton>
             <CustomButton
               horizontalMargin
+              size='sm'
               variant='outlined'
               onClick={() => window.alert('not implemented')}
               endIcon={<Icons.Undo size='md' />}
@@ -144,6 +157,7 @@ const WidgetTitleBar = () => {
             </CustomButton>
             <CustomButton
               horizontalMargin
+              size='sm'
               variant='outlined'
               onClick={() => window.alert('not implemented')}
               startIcon={<Icons.Redo size='md' />}
@@ -157,6 +171,7 @@ const WidgetTitleBar = () => {
             <CustomButton
               horizontalMargin
               variant='outlined'
+              size='sm'
               onClick={() => loadData(dataSource)}
               startIcon={<Icons.Cycle size='md' />}
             >
