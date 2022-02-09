@@ -42,6 +42,7 @@ const EditorRightSidebar = () => {
   // common state
   const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
   const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
@@ -50,7 +51,7 @@ const EditorRightSidebar = () => {
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
-  if (!type || !domain.value || !(valueKeys?.length)) {
+  if (!type || !domain.value || !(renderableValueKeys?.length)) {
     return (
       <EditorSidebarBase>
         <div className={classes.warning}>
