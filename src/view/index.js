@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 
 import { Icons, getTailwindConfigColor, Loader, makeStyles } from '@eqworks/lumen-labs'
 
@@ -150,6 +150,7 @@ const WidgetView = () => {
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
 
   const [tableExpanded, setTableExpanded] = useState(false)
+  const [autoExpandedTable, setAutoExpandedTable] = useState(false)
 
   const classes = useStyles(mode, tableExpanded, tableShowsRawData)
 
@@ -160,6 +161,17 @@ const WidgetView = () => {
       :
       'Loading'
   ), [dataSourceType, dataSourceID])
+
+  // auto-expand/collapse the table when viz readiness changes
+  useEffect(() => {
+    if (!isReady) {
+      setTableExpanded(true)
+      setAutoExpandedTable(true)
+    } else if (autoExpandedTable) {
+      setTableExpanded(false)
+      setAutoExpandedTable(false)
+    }
+  }, [autoExpandedTable, isReady])
 
   // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
   const widgetWarning = useMemo(() => {
