@@ -28,10 +28,18 @@ const DomainControls = () => {
   // local state
   const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
 
+  const eligibleGroupKeyValues = useMemo(() => (
+    columns.map(({ name }) => name)
+      .filter(c => columnsAnalysis[c].category !== 'Numeric' || c.endsWith('_id'))
+  ), [columns, columnsAnalysis])
+
   const eligibleDomainValues = useMemo(() => (
     columns.map(({ name }) => name)
-      .filter(c => !(valueKeys.map(({ key }) => key).includes(c)))
-  ), [columns, valueKeys])
+      .filter(c =>
+        (groupingOptional || eligibleGroupKeyValues.includes(c))
+        && !(valueKeys.map(({ key }) => key).includes(c))
+      )
+  ), [columns, eligibleGroupKeyValues, groupingOptional, valueKeys])
 
   useEffect(() => {
     if (!group && !groupingOptional) {
@@ -62,14 +70,17 @@ const DomainControls = () => {
                 data={eligibleDomainValues}
                 value={domain.value}
                 onSelect={val => {
-                  const mustGroup = columnsAnalysis[val].category !== 'Numeric'
-                  if (mustGroup) {
-                    update({ group: mustGroup })
-                  }
-                  const willGroup = mustGroup || group
+                  const willGroup = eligibleGroupKeyValues.includes(val)
+                  update({ group: willGroup })
                   update(willGroup
-                    ? { groupKey: val }
-                    : { indexKey: val }
+                    ? {
+                      groupKey: val,
+                      indexKey: null,
+                    }
+                    : {
+                      indexKey: val,
+                      groupKey: null,
+                    }
                   )
                   // if the new group key is a valid geo key,
                   if (willGroup && validMapGroupKeys.includes(val)) {
