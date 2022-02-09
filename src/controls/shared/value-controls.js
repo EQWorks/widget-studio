@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React from 'react'
 
 import { Icons } from '@eqworks/lumen-labs'
 
@@ -8,7 +8,6 @@ import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import typeInfo from '../../constants/type-info'
 import { renderRow, renderSection } from '../editor-mode/util'
 
 
@@ -18,7 +17,6 @@ const ValueControls = () => {
   const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
-  const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
@@ -27,15 +25,6 @@ const ValueControls = () => {
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
-
-  // local state
-  const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
-
-  useEffect(() => {
-    if (!group && !groupingOptional) {
-      update({ group: true })
-    }
-  }, [group, groupingOptional, update])
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
