@@ -78,6 +78,7 @@ const stateDefaults = [
   { key: 'wl', defaultValue: null, resettable: false },
   { key: 'cu', defaultValue: null, resettable: false },
   { key: 'undoQueue', defaultValue: [], resettable: false },
+  { key: 'ignoreUndo', defaultValue: false, resettable: false },
 ]
 
 export default {
@@ -339,6 +340,7 @@ export default {
 
   loadConfig: thunk(async (actions, payload) => {
     actions.update({
+      ignoreUndo: true,
       ui: {
         showDataSourceControls: false,
         dataSourceLoading: true,
@@ -363,12 +365,14 @@ export default {
             error: err,
             dataSourceLoading: false,
           },
+          ignoreUndo: false,
         })
       })
   }),
 
   loadData: thunk(async (actions, dataSource, { getState }) => {
     actions.update({
+      ignoreUndo: true,
       ui: {
         showDataSourceControls: false,
         dataSourceLoading: true,
@@ -399,7 +403,10 @@ export default {
         }
       })
       .catch(err => { actions.update({ ui: { dataSourceError: err } }) })
-      .finally(() => actions.update({ ui: { dataSourceLoading: false } }))
+      .finally(() => actions.update({
+        ui: { dataSourceLoading: false },
+        ignoreUndo: false,
+      }))
   }),
 
   // update the store state in an "undoable" fashion
@@ -422,10 +429,14 @@ export default {
   )),
 
   // records current state as an element in the undo queue
-  recordState: action((state) => ({
-    ...state,
-    undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
-  })),
+  recordState: action(state => (
+    state.ignoreUndo
+      ? state
+      : {
+        ...state,
+        undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
+      }
+  )),
 
   // reset a portion of the state
   resetValue: action((state, payload) => (
