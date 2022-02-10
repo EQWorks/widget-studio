@@ -14,6 +14,9 @@ import { MAP_LEGEND_SIZE } from '../../constants/map'
 
 
 const classes = makeStyles({
+  displayOptions: {
+    marginTop: '0.625rem',
+  },
   xyDropdownMenu: {
     height: '5rem',
     display: 'flex',
@@ -36,8 +39,14 @@ const StylingMap = () => {
   const showLegend = useStoreState((state) => state.uniqueOptions.showLegend)
 
   return (
-    <WidgetControlCard title='Styling'>
-      {renderSection(null,
+    <WidgetControlCard title='Map Settings'>
+      <div className={classes.displayOptions}>
+        {renderSection(
+          'Display Options',
+          <UniqueOptionControls type={type} />
+        )}
+      </div>
+      {renderSection('Styling',
         <>
           {renderRow(null,
             <>
@@ -51,7 +60,7 @@ const StylingMap = () => {
                   <XYSelect
                     value={legendPosition}
                     update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
-                    disabled={[[0.5, 0.5], [0, 0.5], [1, 0.5]]}
+                    disabled={[[0.5, 0.5], [0, 0.5], [1, 0.5], [0.5, 0], [0.5, 1]]}
                   />
                 </CustomDropdown>
               )}
@@ -74,12 +83,6 @@ const StylingMap = () => {
               )}
             </>
           )}
-        </>
-      )}
-      {renderSection(
-        'Display Options',
-        <>
-          <UniqueOptionControls type={type} />
         </>
       )}
     </WidgetControlCard >
