@@ -4,7 +4,7 @@ import { Icons, getTailwindConfigColor, Loader, makeStyles } from '@eqworks/lume
 
 import LabeledToggle from '../components/labeled-toggle'
 import FadeBetween from '../components/fade-between'
-import ResultsTable from './table'
+import DataTable from './table'
 import { useStoreState, useStoreActions } from '../store'
 import WidgetAdapter from './adapter'
 import modes from '../constants/modes'
@@ -261,7 +261,7 @@ const WidgetView = () => {
                   </div>
                 </div>
                 <div className={classes.table}>
-                  <ResultsTable results={tableShowsRawData ? rows : transformedData} />
+                  <DataTable rows={tableShowsRawData ? rows : transformedData} />
                 </div>
               </div>
             </div>
@@ -276,7 +276,7 @@ const WidgetView = () => {
             />
             <div className='flex-1'>
               <FadeBetween value={showTable}>
-                <ResultsTable results={rows} />
+                <DataTable rows={rows} />
                 {renderVisualization}
               </FadeBetween>
             </div>
