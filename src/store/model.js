@@ -324,17 +324,17 @@ export default {
   /** ACTIONS ------------------------------------------------------------------ */
 
   toast: thunk(async (actions, payload) => {
-    actions.nestedUpdate({
+    actions.update({
       ui: {
         toastConfig: payload,
         showToast: true,
       },
     })
-    setTimeout(() => actions.nestedUpdate({ ui: { showToast: false } }), 3000)
+    setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
   }),
 
   loadConfig: thunk(async (actions, payload) => {
-    actions.nestedUpdate({
+    actions.update({
       ui: {
         showDataSourceControls: false,
         dataSourceLoading: true,
@@ -346,7 +346,7 @@ export default {
           .filter(([, v]) => v !== null && !Array.isArray(v) && typeof v === 'object')
           .forEach(([k, v]) => {
             if (stateDefaults.find(({ key }) => key === k)) {
-              actions.nestedUpdate({ [k]: v })
+              actions.update({ [k]: v })
             }
             delete config[k]
           })
@@ -354,7 +354,7 @@ export default {
         actions.loadData(dataSource)
       })
       .catch(err => {
-        actions.nestedUpdate({
+        actions.update({
           ui: {
             error: err,
             dataSourceLoading: false,
@@ -364,7 +364,7 @@ export default {
   }),
 
   loadData: thunk(async (actions, dataSource, { getState }) => {
-    actions.nestedUpdate({
+    actions.update({
       ui: {
         showDataSourceControls: false,
         dataSourceLoading: true,
@@ -381,15 +381,12 @@ export default {
           columns,
           wl: whitelabelID, // only used for wl-cu-selector
           cu: customerID, // only used for wl-cu-selector
-        })
-        actions.nestedUpdate({
           ui: {
             showWidgetControls: true,
             dataSourceName: name,
             dataSourceError: null,
           },
         })
-        actions.nestedUpdate({ ui: { dataSourceLoading: false } })
         if (isReload) {
           actions.toast({
             title: `${name} reloaded successfully`,
@@ -397,26 +394,12 @@ export default {
           })
         }
       })
-      .catch(err => {
-        actions.nestedUpdate({
-          ui: {
-            dataSourceError: err,
-            dataSourceLoading: false,
-          },
-        })
-      })
+      .catch(err => { actions.update({ ui: { dataSourceError: err } }) })
+      .finally(() => actions.update({ ui: { dataSourceLoading: false } }))
   }),
 
   // update the store state
   update: action((state, payload) => deepMerge(payload, state)),
-
-  // perform a nested update on the store state
-  nestedUpdate: action((state, payload) => (
-    Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
-      acc[nestKey] = { ...acc[nestKey], ...nestedPayload }
-      return acc
-    }, state)
-  )),
 
   // reset a portion of the state
   resetValue: action((state, payload) => (
@@ -453,10 +436,8 @@ export default {
   // re-enable reset whenever state is changed
   onUpdate: thunkOn((actions) => actions.update,
     (actions) => actions.setAllowReset(true)),
-  onNestedUpdate: thunkOn((actions) => actions.nestedUpdate,
-    (actions) => actions.setAllowReset(true)),
 
-  // re-enable reset whenever state is changed, outside of update() or nestedUpdate()
+  // re-enable reset whenever state is changed, outside of update()
   setRecentReset: action((state, payload) => ({ ...state, ui: { ...state.ui, recentReset: payload } })),
 
   // set the ui.allowReset state outside of update() or nestedUpdate()

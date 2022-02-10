@@ -7,9 +7,8 @@ import { renderToggle, renderRow } from '../../shared/util'
 
 
 const UniqueOptionControls = ({ type }) => {
+  const update = useStoreActions((actions) => actions.update)
   const uniqueOptions = useStoreState((state) => state.uniqueOptions)
-  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
-
   return (
     renderRow(
       null,
@@ -20,7 +19,7 @@ const UniqueOptionControls = ({ type }) => {
               return renderToggle(
                 name,
                 uniqueOptions[k],
-                v => nestedUpdate({ uniqueOptions: { [k]: v } })
+                v => update({ uniqueOptions: { [k]: v } })
               )
           }
         })

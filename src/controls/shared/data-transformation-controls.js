@@ -10,7 +10,6 @@ import MutedBarrier from './muted-barrier'
 const DataTransformationControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
-  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
   const domain = useStoreState((state) => state.domain)
@@ -39,7 +38,7 @@ const DataTransformationControls = () => {
                   renderToggle(
                     'Invert Domain',
                     groupByValue,
-                    () => nestedUpdate({ genericOptions: { groupByValue: !groupByValue } }),
+                    () => update({ genericOptions: { groupByValue: !groupByValue } }),
                     type === types.MAP
                   )
                 }

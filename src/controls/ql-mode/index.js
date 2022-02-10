@@ -15,7 +15,7 @@ import MapDomainControls from '../shared/map-domain-controls'
 
 const QLModeControls = ({ children }) => {
   // store actions
-  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
+  const update = useStoreActions(actions => actions.update)
   const resetWidget = useStoreActions(actions => actions.resetWidget)
 
   // state
@@ -53,7 +53,7 @@ const QLModeControls = ({ children }) => {
         title={'Controls'}
         footer={footer}
         open={showWidgetControls}
-        toggle={() => nestedUpdate({ ui: { showWidgetControls: !showWidgetControls } })}
+        toggle={() => update({ ui: { showWidgetControls: !showWidgetControls } })}
       >
         <div className='flex flex-col w-full'>
           <WidgetControlCard title='Select Widget Type' >
