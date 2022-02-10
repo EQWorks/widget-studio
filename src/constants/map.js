@@ -89,14 +89,20 @@ export const VIS_OPTIONS = {
   fill: {
     valueOptions: [[214, 232, 253], [39, 85, 196]],
     value: [39, 85, 196],
+    label: 'Fill Color',
+    info: 'Calculate fill color based on the selected column and operation.',
   },
   radius: {
     valueOptions: [5, 15],
     value: 10,
+    label: 'Radius',
+    info: 'Calculate radius based on the selected column and operation.',
   },
   elevation: {
     valueOptions: [1, 1000],
     value: 0,
+    label: 'Elevation',
+    info: 'Calculate elevation height based on the selected column and operation.',
   },
   scale: 'linear',
 }
