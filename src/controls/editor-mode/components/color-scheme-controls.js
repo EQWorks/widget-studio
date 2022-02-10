@@ -168,9 +168,8 @@ const ColorSchemeControls = () => {
             onChange={(v) => {
               const validated = colord(v)
               const valid = validated.parsed
-              const color = validated.toHex()
               if (valid) {
-                userUpdate({ genericOptions: { baseColor: color } })
+                updateBaseColor(validated.toHex())
                 setShowInputHelper(false)
               }
               setInputError(!valid)
