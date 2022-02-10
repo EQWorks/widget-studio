@@ -34,6 +34,7 @@ const stateDefaults = [
       showWidgetTitle: false,
       groupByValue: false,
       showLegend: true,
+      showTooltip: true,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],
