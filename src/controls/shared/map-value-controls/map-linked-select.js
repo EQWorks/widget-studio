@@ -1,14 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Icons, Chip, makeStyles } from '@eqworks/lumen-labs'
+import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import PluralLinkedSelect from '../../../components/plural-linked-select'
+import { VIS_OPTIONS } from '../../../constants/map'
 
 
 const classes = makeStyles({
-  keyControl1 : { marginTop: '0.938rem' },
-  linkedSelect : { marginTop: '0.375rem' },
+  linkedSelect:{
+    marginBottom: '0.125rem',
+  },
+  visTitle: {
+    display: 'flex',
+    alignItems: 'center',
+    color: getTailwindConfigColor('secondary-800'),
+    fontWeight: 700,
+    fontSize: '0.75rem',
+    marginBottom: '0.75rem',
+    marginTop: '0.625rem',
+    gap: '0.406rem',
+  },
 })
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -27,10 +39,24 @@ const MapLinkedSelect = ({
     categories.map((mapVis, i) => {
       const match = values.findIndex(v => v.mapVis === mapVis)
       return (
-        <div key={i} className={i === 0 ? classes.linkedSelect : classes.keyControl1} >
-          <Chip color={i === 0 ? 'primary' : 'success'} classes={{ chip: 'px-5px rounded-md mb-1.5' }}>
-            {mapVis}
-          </Chip>
+        <div key={i} className={classes.linkedSelect} >
+          <div className={classes.visTitle}>
+            {`${VIS_OPTIONS[mapVis].label}:`}
+            <s>
+              <Tooltip
+                description={VIS_OPTIONS[mapVis].info}
+                // width='16.875rem'
+                width='12rem'
+                arrow={false}
+                position='right'
+              >
+                <Icons.AlertInformation
+                  size='sm'
+                  color={getTailwindConfigColor('secondary-500')}
+                />
+              </Tooltip>
+            </s>
+          </div>
           <PluralLinkedSelect
             staticQuantity={1}
             headerIcons={[
