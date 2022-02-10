@@ -12,6 +12,9 @@ import { getKeyFormatFunction } from '../util/data-format-functions'
 import { deepMerge } from './util'
 
 
+const MAX_UNDO_STEPS = 10
+
+
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
   { key: 'title', defaultValue: '', resettable: false },
@@ -74,6 +77,7 @@ const stateDefaults = [
   },
   { key: 'wl', defaultValue: null, resettable: false },
   { key: 'cu', defaultValue: null, resettable: false },
+  { key: 'undoQueue', defaultValue: [], resettable: false },
 ]
 
 export default {
@@ -398,8 +402,30 @@ export default {
       .finally(() => actions.update({ ui: { dataSourceLoading: false } }))
   }),
 
+  // update the store state in an "undoable" fashion
+  userUpdate: thunk((actions, payload) => {
+    actions.recordState()
+    actions.update(payload)
+  }),
+
   // update the store state
   update: action((state, payload) => deepMerge(payload, state)),
+
+  // replace state with the first element from the undo queue
+  undo: action(({ undoQueue, ...state }) => (
+    undoQueue.length
+      ? {
+        ...undoQueue[0],
+        undoQueue: undoQueue.slice(1),
+      }
+      : state
+  )),
+
+  // records current state as an element in the undo queue
+  recordState: action((state) => ({
+    ...state,
+    undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
+  })),
 
   // reset a portion of the state
   resetValue: action((state, payload) => (
