@@ -68,10 +68,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   // ui state
   const mode = useStoreState(state => state.ui.mode)
 
-  const transformedData = useTransformedData()
-  useEffect(() => {
-    update({ transformedData })
-  }, [transformedData, update])
+  useTransformedData()
 
   // on first load,
   useEffect(() => {
