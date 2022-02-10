@@ -78,6 +78,7 @@ const stateDefaults = [
   { key: 'wl', defaultValue: null, resettable: false },
   { key: 'cu', defaultValue: null, resettable: false },
   { key: 'undoQueue', defaultValue: [], resettable: false },
+  { key: 'redoQueue', defaultValue: [], resettable: false },
   { key: 'ignoreUndo', defaultValue: false, resettable: false },
 ]
 
@@ -419,11 +420,22 @@ export default {
   update: action((state, payload) => deepMerge(payload, state)),
 
   // replace state with the first element from the undo queue
-  undo: action(({ undoQueue, ...state }) => (
-    undoQueue.length
+  undo: action(state => (
+    state.undoQueue.length
       ? {
-        ...undoQueue[0],
-        undoQueue: undoQueue.slice(1),
+        ...state.undoQueue[0],
+        undoQueue: state.undoQueue.slice(1),
+        redoQueue: [{ ...state }].concat(state.redoQueue).slice(0, MAX_UNDO_STEPS),
+      }
+      : state
+  )),
+
+  // replace state with the first element from the undo queue
+  redo: action(({ redoQueue, ...state }) => (
+    redoQueue.length
+      ? {
+        ...redoQueue[0],
+        redoQueue: redoQueue.slice(1),
       }
       : state
   )),
