@@ -455,11 +455,14 @@ export default {
 
   // reset a portion of the state
   resetValue: action((state, payload) => (
-    Object.keys(payload)
-      .reduce((acc, k) => {
-        acc[k] = stateDefaults.find(({ key }) => key === k).defaultValue
-        return acc
-      }, state)
+    {
+      ...Object.keys(payload)
+        .reduce((acc, k) => {
+          acc[k] = stateDefaults.find(({ key }) => key === k).defaultValue
+          return acc
+        }, { ...state }),
+      undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
+    }
   )),
 
   // reset all shared and unique states except data source and data ID
@@ -473,6 +476,8 @@ export default {
           .map(([k, { defaultValue }]) => [k, defaultValue])
       ),
     }),
+    ignoreUndo: true,
+    undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
     // map widget doesn't have a switch to change group state, so we have to keep it true here
     group: state.type === types.MAP ? true : state.group,
   })),
@@ -481,6 +486,7 @@ export default {
   onReset: thunkOn((actions) => actions.resetWidget,
     (actions) => {
       setTimeout(() => actions.setRecentReset(false), 1000)
+      setTimeout(() => actions.setIgnoreUndo(false), 1000)
       actions.setAllowReset(false)
       actions.setRecentReset(true)
     }),
@@ -488,6 +494,9 @@ export default {
   // re-enable reset whenever state is changed
   onUpdate: thunkOn((actions) => actions.update,
     (actions) => actions.setAllowReset(true)),
+
+  // setter for ignoreUndo
+  setIgnoreUndo: action((state, ignoreUndo) => ({ ...state, ignoreUndo })),
 
   // re-enable reset whenever state is changed, outside of update()
   setRecentReset: action((state, payload) => ({ ...state, ui: { ...state.ui, recentReset: payload } })),
