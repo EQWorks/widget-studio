@@ -13,6 +13,7 @@ import MutedBarrier from './muted-barrier'
 const DomainControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
+  const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
   const columns = useStoreState((state) => state.columns)
@@ -21,6 +22,7 @@ const DomainControls = () => {
   const groupKey = useStoreState((state) => state.groupKey)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const indexKey = useStoreState((state) => state.indexKey)
+  const groupFilter = useStoreState((state) => state.groupFilter)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
@@ -82,6 +84,7 @@ const DomainControls = () => {
                       groupKey: null,
                     }
                   )
+                  resetValue({ groupFilter })
                   // if the new group key is a valid geo key,
                   if (willGroup && validMapGroupKeys.includes(val)) {
                     update({

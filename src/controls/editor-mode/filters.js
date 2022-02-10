@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { Icons, makeStyles } from '@eqworks/lumen-labs'
 
@@ -8,7 +8,6 @@ import { renderSection, renderRow } from '../shared/util'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import RangeFilter from './components/range-filter'
 import CustomSelect from '../../components/custom-select'
-import types from '../../constants/types'
 import CustomDropdown from './components/custom-dropdown'
 
 
@@ -30,20 +29,13 @@ const Filters = () => {
   const resetValue = useStoreActions((state) => state.resetValue)
 
   // common state
-  const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const groups = useStoreState((state) => state.groups)
   const groupFilter = useStoreState((state) => state.groupFilter)
-  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
-  const groupKey = useStoreState((state) => state.groupKey)
   const filters = useStoreState((state) => state.filters)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
-
-  useEffect(() => {
-    update({ groupFilter: [] })
-  }, [domain.value, update])
 
   return (
     <WidgetControlCard
@@ -60,8 +52,8 @@ const Filters = () => {
             data={groups}
             value={groupFilter ?? []}
             onSelect={val => update({ groupFilter: val })}
-            placeholder={group ? `Filter ${type === types.MAP ? mapGroupKey : groupKey}` : 'N/A'}
-            disabled={!group}
+            placeholder={group && domain.value ? `Filter ${domain.value}` : 'N/A'}
+            disabled={!group || !domain.value}
           />
         )
       )
