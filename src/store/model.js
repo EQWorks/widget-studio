@@ -9,6 +9,7 @@ import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
 import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import { getKeyFormatFunction } from '../util/data-format-functions'
+import { deepMerge } from './util'
 
 
 const stateDefaults = [
