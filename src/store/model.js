@@ -325,6 +325,9 @@ export default {
       Boolean(dataSourceType && dataSourceID && !dataSourceLoading && !dataSourceError)
     )),
 
+  undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
+  redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
+
   dev: computed([], () => ((process?.env?.NODE_ENV || 'development') === 'development')),
 
   /** ACTIONS ------------------------------------------------------------------ */
