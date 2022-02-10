@@ -1,3 +1,6 @@
+import React from 'react'
+
+
 export const MAP_LAYERS = {
   scatterplot: 'scatterplot',
   // MVT: 'MVT',
@@ -90,19 +93,34 @@ export const VIS_OPTIONS = {
     valueOptions: [[214, 232, 253], [39, 85, 196]],
     value: [39, 85, 196],
     label: 'Fill Color',
-    info: 'Calculate fill color based on the selected column and operation.',
+    info: (
+      <div>
+        <p>Calculate fill color based on the </p>
+        <p>selected column and operation.</p>
+      </div>
+    ),
   },
   radius: {
     valueOptions: [5, 15],
     value: 10,
     label: 'Radius',
-    info: 'Calculate radius based on the selected column and operation.',
+    info: (
+      <div>
+        <p>Calculate radius based on the </p>
+        <p>selected column and operation.</p>
+      </div>
+    ),
   },
   elevation: {
     valueOptions: [1, 1000],
     value: 0,
     label: 'Elevation',
-    info: 'Calculate elevation height based on the selected column and operation.',
+    info: (
+      <div>
+        <p>Calculate elevation height based on</p>
+        <p>the selected column and operation.</p>
+      </div>
+    ),
   },
   scale: 'linear',
 }
