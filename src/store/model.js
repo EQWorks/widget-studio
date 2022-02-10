@@ -408,7 +408,7 @@ export default {
   }),
 
   // update the store state
-  update: action((state, payload) => ({ ...state, ...payload })),
+  update: action((state, payload) => deepMerge(payload, state)),
 
   // perform a nested update on the store state
   nestedUpdate: action((state, payload) => (
