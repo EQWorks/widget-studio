@@ -11,15 +11,18 @@ const classes = makeStyles({
   linkedSelect:{
     marginBottom: '0.125rem',
   },
-  visTitle: {
+  visTitleWrapper: {
     display: 'flex',
     alignItems: 'center',
-    color: getTailwindConfigColor('secondary-800'),
-    fontWeight: 700,
-    fontSize: '0.75rem',
     marginBottom: '0.75rem',
     marginTop: '0.625rem',
     gap: '0.406rem',
+  },
+  visTitle: {
+    height: '1rem',
+    fontWeight: 700,
+    fontSize: '0.75rem',
+    color: getTailwindConfigColor('secondary-800'),
   },
 })
 
@@ -40,13 +43,14 @@ const MapLinkedSelect = ({
       const match = values.findIndex(v => v.mapVis === mapVis)
       return (
         <div key={i} className={classes.linkedSelect} >
-          <div className={classes.visTitle}>
-            {`${VIS_OPTIONS[mapVis].label}:`}
+          <div className={classes.visTitleWrapper}>
+            <div className={classes.visTitle}>
+              {`${VIS_OPTIONS[mapVis].label}:`}
+            </div>
             <s>
               <Tooltip
                 description={VIS_OPTIONS[mapVis].info}
-                // width='16.875rem'
-                width='12rem'
+                width='13rem'
                 arrow={false}
                 position='right'
               >
