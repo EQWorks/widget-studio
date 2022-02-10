@@ -13,6 +13,7 @@ const DataTransformationControls = () => {
   const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // common state
+  const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const percentageMode = useStoreState((state) => state.percentageMode)
@@ -26,7 +27,7 @@ const DataTransformationControls = () => {
   }, [group, type, update])
 
   return (
-    <MutedBarrier mute={!renderableValueKeys.length}>
+    <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length}>
       <WidgetControlCard title='Data Transformations' >
         {
           renderSection(

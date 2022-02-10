@@ -34,6 +34,7 @@ const EditorRightSidebar = () => {
   const type = useStoreState((state) => state.type)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const valueKeys = useStoreState((state) => state.valueKeys)
+  const domain = useStoreState((state) => state.domain)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
   const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
   const size = useStoreState((state) => state.genericOptions.size)
@@ -43,12 +44,7 @@ const EditorRightSidebar = () => {
 
   return (
     <EditorSidebarBase>
-      <MutedBarrier
-        mute={!(renderableValueKeys.length)}
-        message={
-          `No ${type ? 'columns' : 'widget type'} selected. Configure Widget Type, Domain and Value to unlock more options.`
-        }
-      >
+      <MutedBarrier mute={!type || !domain?.value || !(renderableValueKeys.length)} >
         <Filters />
         <WidgetControlCard title='Styling'>
           {type !== types.MAP &&
