@@ -7,9 +7,6 @@ import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderRow, renderSection } from './util'
 import typeInfo from '../../constants/type-info'
-import types from '../../constants/types'
-import CustomRadio from '../../components/custom-radio'
-import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
 
 
 const DomainControls = () => {
@@ -21,7 +18,6 @@ const DomainControls = () => {
   const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
-  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
@@ -33,16 +29,8 @@ const DomainControls = () => {
 
   const eligibleDomainValues = useMemo(() => (
     columns.map(({ name }) => name)
-      .filter(c =>
-        !(valueKeys.map(({ key }) => key).includes(c))
-        && (type !== types.MAP || validMapGroupKeys.includes(c))
-      )
-  ), [columns, type, validMapGroupKeys, valueKeys])
-
-  const mapLayer = useMemo(() => (
-    Object.keys(MAP_LAYER_VIS)
-      .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
-  ), [mapGroupKey])
+      .filter(c => !(valueKeys.map(({ key }) => key).includes(c)))
+  ), [columns, valueKeys])
 
   useEffect(() => {
     if (!group && !groupingOptional) {
@@ -72,34 +60,23 @@ const DomainControls = () => {
               data={eligibleDomainValues}
               value={domain.value}
               onSelect={val => {
-                if (type === types.MAP) {
-                  // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
-                  update({ mapGroupKey: val, groupKey: val })
-                  const newLayer = Object.keys(MAP_LAYER_VIS)
-                    .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
-                  // reset mapValueKeys when we change to a mapGroupKey that requires a different layer, as different layer requires different visualization types
-                  if (newLayer !== mapLayer) {
-                    update({ mapValueKeys: [] })
-                  }
-                } else {
-                  const mustGroup = columnsAnalysis[val].category !== 'Numeric'
-                  if (mustGroup) {
-                    update({ group: mustGroup })
-                  }
-                  const willGroup = mustGroup || group
-                  update(willGroup
-                    ? { groupKey: val }
-                    : { indexKey: val }
-                  )
-                  // if the new group key is a valid geo key,
-                  if (willGroup && validMapGroupKeys.includes(val)) {
-                    update({
-                      // update mapGroupKey with groupKey value
-                      mapGroupKey: val,
-                      // reset mapValueKeys in case mapGroupKey value requires a new map layer
-                      mapValueKeys: [],
-                    })
-                  }
+                const mustGroup = columnsAnalysis[val].category !== 'Numeric'
+                if (mustGroup) {
+                  update({ group: mustGroup })
+                }
+                const willGroup = mustGroup || group
+                update(willGroup
+                  ? { groupKey: val }
+                  : { indexKey: val }
+                )
+                // if the new group key is a valid geo key,
+                if (willGroup && validMapGroupKeys.includes(val)) {
+                  update({
+                    // update mapGroupKey with groupKey value
+                    mapGroupKey: val,
+                    // reset mapValueKeys in case mapGroupKey value requires a new map layer
+                    mapValueKeys: [],
+                  })
                 }
               }}
               onClear={() => update({
@@ -112,22 +89,6 @@ const DomainControls = () => {
             />,
             renderCategory()
           )
-        )
-      }
-      {
-        renderRow(
-          null,
-          <CustomRadio
-            labels={['Group By', 'Index By']}
-            update={v => update({ group: v })}
-            value={domain.value ? group : undefined}
-            disableFirst={!domain.value}
-            disableSecond={
-              !domain.value
-              || !groupingOptional
-              || (group && groupKey && columnsAnalysis[groupKey]?.category !== 'Numeric')
-            }
-          />
         )
       }
     </WidgetControlCard>

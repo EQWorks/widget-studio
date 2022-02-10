@@ -5,6 +5,7 @@ import WidgetControlCard from '../shared/components/widget-control-card'
 import types from '../../constants/types'
 import Icons from '../shared/widget-type-icons'
 import DomainControls from '../shared/domain-controls'
+import MapDomainControls from '../shared/map-domain-controls'
 import ValueControls from '../shared/value-controls'
 import MapValueControls from '../shared/map-value-controls'
 import EditorSidebarBase from './sidebar-base'
@@ -19,11 +20,16 @@ const EditorLeftSidebar = () => {
       <WidgetControlCard title='Widget Type'>
         <Icons disabled={!dataReady} />
       </WidgetControlCard>
-      <DomainControls />
       {
         type && type === types.MAP
-          ? <MapValueControls />
-          : <ValueControls />
+          ? <>
+            <MapDomainControls />
+            <MapValueControls />
+          </>
+          : <>
+            <DomainControls />
+            <ValueControls />
+          </>
       }
       <DataTransformationControls />
     </EditorSidebarBase>
