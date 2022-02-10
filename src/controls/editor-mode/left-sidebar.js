@@ -21,7 +21,7 @@ const EditorLeftSidebar = () => {
       </WidgetControlCard>
       <DomainControls />
       {
-        type === types.MAP
+        type && type === types.MAP
           ? <MapValueControls />
           : <ValueControls />
       }

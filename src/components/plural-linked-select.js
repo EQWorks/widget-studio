@@ -1,12 +1,24 @@
 import React, { createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { Icons, Button, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import CustomButton from '../components/custom-button'
 
 import LinkedSelect from './linked-select'
 
 
 const classes = makeStyles({
+  addButton: {
+    marginTop: '0.5rem',
+    gridColumn: 'span 3 / span 3',
+  },
+  addButtonInterior: {
+    display: 'flex',
+    alignItems: 'center',
+    '& svg': {
+      marginLeft: '0.3rem',
+    },
+  },
   outerContainer: {
     width: '100%',
     display: 'grid',
@@ -72,20 +84,20 @@ const PluralLinkedSelect = ({
   }
 
   const renderAddKeyButton = (
-    <Button
+    <CustomButton
       classes={{
-        button: 'col-span-3 w-full outline-none focus:outline-none px-3 py-1.5 tracking-widest flex flex-col items-stretch mt-2',
+        button: classes.addButton,
       }}
       type='primary'
       variant='borderless'
       size='md'
       onClick={() => callback(values.length, { [primaryKey]: '', [secondaryKey]: '' })}
     >
-      <div className='w-full flex items-center'>
-        <span className='flex-1 text-left mr-1'>{addMessage}</span>
+      <div className={classes.addButtonInterior}>
+        {addMessage}
         <Icons.Add size='sm' />
       </div>
-    </Button>
+    </CustomButton>
   )
 
   const quantity = useMemo(() => staticQuantity ? staticQuantity : Math.max(values?.length, 1), [staticQuantity, values])

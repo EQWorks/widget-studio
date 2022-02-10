@@ -163,6 +163,34 @@ export default {
     )
   ),
 
+  domain: computed(
+    [
+      (state) => state.group,
+      (state) => state.type,
+      (state) => state.mapGroupKey,
+      (state) => state.indexKey,
+      (state) => state.groupKey,
+    ],
+    (
+      group,
+      type,
+      mapGroupKey,
+      indexKey,
+      groupKey,
+    ) => {
+      let res = {}
+      if (type === types.MAP) {
+        res = { mapGroupKey }
+      } else if (!group) {
+        res = { indexKey }
+      } else {
+        res = { groupKey }
+      }
+      const [k, v] = Object.entries(res)[0]
+      return { key: k, value: v }
+    }
+  ),
+
   numericColumns: computed(
     [(state) => state.columns],
     (columns) => columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name)
@@ -412,10 +440,12 @@ export default {
     ...state,
     ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
       .map(({ key, defaultValue }) => ([key, defaultValue]))),
-    uniqueOptions: Object.fromEntries(
-      Object.entries(typeInfo[state.type].uniqueOptions)
-        .map(([k, { defaultValue }]) => [k, defaultValue])
-    ),
+    ...(state.type && {
+      uniqueOptions: Object.fromEntries(
+        Object.entries(typeInfo[state.type].uniqueOptions)
+          .map(([k, { defaultValue }]) => [k, defaultValue])
+      ),
+    }),
     // map widget doesn't have a switch to change group state, so we have to keep it true here
     group: state.type === types.MAP ? true : state.group,
   })),

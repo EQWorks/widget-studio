@@ -9,7 +9,7 @@ import types from '../../constants/types'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
-import { renderItem, renderSection, renderRow, renderToggle } from './util'
+import { renderItem, renderSection, renderRow, renderToggle } from '../shared/util'
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import Filters from './filters'
@@ -40,8 +40,9 @@ const EditorRightSidebar = () => {
   const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
 
   // common state
-  const isReady = useStoreState((state) => state.isReady)
+  const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
   const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
@@ -50,11 +51,11 @@ const EditorRightSidebar = () => {
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
 
-  if (!isReady) {
+  if (!type || !domain.value || !(renderableValueKeys?.length)) {
     return (
       <EditorSidebarBase>
         <div className={classes.warning}>
-          No {type ? 'columns' : 'type'} selected. Configure <strong>Widget Type</strong>, <strong>Domain</strong> and <strong>Value</strong> to unlock more options.
+          No {type ? 'columns' : 'widget type'} selected. Configure <strong>Widget Type</strong>, <strong>Domain</strong> and <strong>Value</strong> to unlock more options.
         </div>
       </EditorSidebarBase>
     )

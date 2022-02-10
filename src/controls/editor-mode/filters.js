@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderSection, renderRow } from './util'
+import { renderSection, renderRow } from '../shared/util'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import RangeFilter from './components/range-filter'
 import CustomSelect from '../../components/custom-select'
@@ -39,6 +39,11 @@ const Filters = () => {
   const filters = useStoreState((state) => state.filters)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const domain = useStoreState((state) => state.domain)
+
+  useEffect(() => {
+    update({ groupFilter: [] })
+  }, [domain.value, update])
 
   return (
     <WidgetControlCard
@@ -77,19 +82,15 @@ const Filters = () => {
                 return min !== max && category === 'Numeric'
               })}
               subData={[]}
-              callback={(i, { key, filter }) => {
-                const { min, max } = columnsAnalysis[key] || {}
-                const newFilter = {
-                  key,
-                  filter: key && !filter
-                    ? [min, max]
-                    : filter,
+              callback={(i, { key }) => {
+                if (i === filters.length) {
+                  update({ filters: filters.concat([{ key: null, filter: null }]) })
+                } else if (!key) {
+                  update({ filters: filters.map((v, _i) => i === _i ? { key: null, filter: null } : v) })
+                } else if (filters[i]?.key !== key) {
+                  const { min, max } = columnsAnalysis[key] || {}
+                  update({ filters: filters.map((v, _i) => i === _i ? { key, filter: [min, max] } : v) })
                 }
-                update({
-                  filters: i === filters.length
-                    ? filters.concat([newFilter])
-                    : filters.map((v, _i) => i === _i ? newFilter : v),
-                })
               }}
               deleteCallback={(i) => {
                 const filtersCopy = JSON.parse(JSON.stringify(filters))
@@ -116,7 +117,7 @@ const Filters = () => {
                     disabled={!value}
                   >
                     <RangeFilter
-                      column={k}
+                      index={i}
                       update={filter => update({
                         filters:
                           filters.map((v, _i) => i === _i

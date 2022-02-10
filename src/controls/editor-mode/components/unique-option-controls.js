@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useStoreActions, useStoreState } from '../../../store'
 import typeInfo from '../../../constants/type-info'
 import types from '../../../constants/types'
-import { renderToggle, renderRow } from '../util'
+import { renderToggle, renderRow } from '../../shared/util'
 
 
 const UniqueOptionControls = ({ type }) => {

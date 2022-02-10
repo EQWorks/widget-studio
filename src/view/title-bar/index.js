@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import { Cycle, ArrowExpand, Download, Trash, Undo, Redo } from '../../components/icons'
 import { useStoreState, useStoreActions } from '../../store'
 import saveConfig from '../../util/save-config'
 import CustomButton from '../../components/custom-button'
@@ -24,6 +23,13 @@ const commonClasses = {
     margin: '0 0.2rem',
     display: 'flex',
     alignItems: 'center',
+  },
+  squareButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '1.4rem !important',
+    height: '1.4rem !important',
   },
 }
 
@@ -118,9 +124,12 @@ const WidgetTitleBar = () => {
     dev && config &&
     <CustomButton
       horizontalMargin
+      classes={{
+        button: classes.squareButton,
+      }}
       onClick={() => saveConfig(config, id)}
     >
-      <Download size='md' />
+      <Icons.DownloadBold size='md' />
     </CustomButton>
   )
 
@@ -131,25 +140,27 @@ const WidgetTitleBar = () => {
           <div className={classes.left}>
             <CustomButton
               horizontalMargin
+              size='sm'
               variant='outlined'
               onClick={resetWidget}
-              endIcon={<Trash size='sm' />}
             >
               reset
             </CustomButton>
             <CustomButton
               horizontalMargin
+              size='sm'
               variant='outlined'
               onClick={() => window.alert('not implemented')}
-              endIcon={<Undo size='sm' />}
+              endIcon={<Icons.Undo size='md' />}
             >
               undo
             </CustomButton>
             <CustomButton
               horizontalMargin
+              size='sm'
               variant='outlined'
               onClick={() => window.alert('not implemented')}
-              startIcon={<Redo size='sm' />}
+              startIcon={<Icons.Redo size='md' />}
             >
               redo
             </CustomButton>
@@ -160,9 +171,10 @@ const WidgetTitleBar = () => {
             <CustomButton
               horizontalMargin
               variant='outlined'
+              size='sm'
               onClick={() => loadData(dataSource)}
+              startIcon={<Icons.Cycle size='md' />}
             >
-              <Cycle size='sm' />
               reload data
             </CustomButton>
           </div>
@@ -193,7 +205,8 @@ const WidgetTitleBar = () => {
                     horizontalMargin
                     variant='filled'
                     onClick={() => window.alert('not implemented')}
-                    endIcon={<ArrowExpand size='md' />}
+                    // endIcon={<ArrowExpand size='md' />}
+                    endIcon={<Icons.ShareExternalLink size='md' />}
                   >
                     OPEN IN EDITOR
                   </CustomButton>

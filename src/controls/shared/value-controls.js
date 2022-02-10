@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React from 'react'
 
 import { Icons } from '@eqworks/lumen-labs'
 
@@ -8,8 +8,7 @@ import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import typeInfo from '../../constants/type-info'
-import { renderRow, renderSection } from '../editor-mode/util'
+import { renderRow, renderSection } from './util'
 
 
 const ValueControls = () => {
@@ -18,24 +17,14 @@ const ValueControls = () => {
   const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
-  const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
-  const indexKey = useStoreState((state) => state.indexKey)
+  const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const numericColumns = useStoreState((state) => state.numericColumns)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
-
-  // local state
-  const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
-
-  useEffect(() => {
-    if (!group && !groupingOptional) {
-      update({ group: true })
-    }
-  }, [group, groupingOptional, update])
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
@@ -48,7 +37,7 @@ const ValueControls = () => {
       values={valueKeys}
       primaryKey='key'
       secondaryKey='agg'
-      data={numericColumns}
+      data={numericColumns.filter(c => c !== domain.value)}
       subData={Object.keys(aggFunctions)}
       disableSubs={!dataHasVariance}
       disableSubMessage="doesn't require aggregation."
@@ -86,7 +75,7 @@ const ValueControls = () => {
                 fullWidth
                 multiSelect
                 value={valueKeys.map(({ key }) => key)}
-                data={numericColumns.filter(c => c !== indexKey)}
+                data={numericColumns.filter(c => c !== domain.value)}
                 onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
               />
             )

@@ -5,7 +5,7 @@ import { Chip } from '@eqworks/lumen-labs'
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow, renderSection } from '../editor-mode/util'
+import { renderRow, renderSection } from './util'
 import typeInfo from '../../constants/type-info'
 import types from '../../constants/types'
 import CustomRadio from '../../components/custom-radio'
@@ -26,20 +26,10 @@ const DomainControls = () => {
   const indexKey = useStoreState((state) => state.indexKey)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const domain = useStoreState((state) => state.domain)
 
   // local state
   const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
-  const [domainKey, domainValue] = useMemo(() => {
-    let res = {}
-    if (type === types.MAP) {
-      res = { mapGroupKey }
-    } else if (!group) {
-      res = { indexKey }
-    } else {
-      res = { groupKey }
-    }
-    return Object.entries(res)[0]
-  }, [group, groupKey, indexKey, mapGroupKey, type])
 
   const eligibleDomainValues = useMemo(() => (
     columns.map(({ name }) => name)
@@ -80,10 +70,10 @@ const DomainControls = () => {
             <CustomSelect
               fullWidth
               data={eligibleDomainValues}
-              value={domainValue}
+              value={domain.value}
               onSelect={val => {
                 if (type === types.MAP) {
-                // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
+                  // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
                   update({ mapGroupKey: val, groupKey: val })
                   const newLayer = Object.keys(MAP_LAYER_VIS)
                     .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
@@ -93,13 +83,18 @@ const DomainControls = () => {
                   }
                 } else {
                   const mustGroup = columnsAnalysis[val].category !== 'Numeric'
-                  update({ group: mustGroup })
-                  const _group = mustGroup || group
-                  update({ [domainKey]: val })
+                  if (mustGroup) {
+                    update({ group: mustGroup })
+                  }
+                  const willGroup = mustGroup || group
+                  update(willGroup
+                    ? { groupKey: val }
+                    : { indexKey: val }
+                  )
                   // if the new group key is a valid geo key,
-                  if (_group && validMapGroupKeys.includes(val)) {
+                  if (willGroup && validMapGroupKeys.includes(val)) {
                     update({
-                    // update mapGroupKey with groupKey value
+                      // update mapGroupKey with groupKey value
                       mapGroupKey: val,
                       // reset mapValueKeys in case mapGroupKey value requires a new map layer
                       mapValueKeys: [],
@@ -125,10 +120,10 @@ const DomainControls = () => {
           <CustomRadio
             labels={['Group By', 'Index By']}
             update={v => update({ group: v })}
-            value={domainValue ? group : undefined}
-            disableFirst={!domainValue}
+            value={domain.value ? group : undefined}
+            disableFirst={!domain.value}
             disableSecond={
-              !domainValue
+              !domain.value
               || !groupingOptional
               || (group && groupKey && columnsAnalysis[groupKey]?.category !== 'Numeric')
             }

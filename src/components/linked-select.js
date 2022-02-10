@@ -2,14 +2,25 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
-import { Icons, Tooltip } from '@eqworks/lumen-labs'
+import { makeStyles, Icons, Tooltip } from '@eqworks/lumen-labs'
 
-import { Trash } from '../components/icons'
 import CustomSelect from '../components/custom-select'
 import CustomButton from '../components/custom-button'
 
 
-const LinkedSelect = ({ className,
+const classes = makeStyles({
+  deleteButtonContainer: {
+    marginLeft: '0.4rem',
+    display: 'flex',
+    alignItems: 'stretch',
+  },
+  deleteButton: {
+    height: '100%',
+  },
+})
+
+const LinkedSelect = ({
+  className,
   deletable,
   deleteCallback,
   callback,
@@ -71,17 +82,16 @@ const LinkedSelect = ({ className,
     </div>
 
   const renderDelete =
-    <CustomButton
-      type='danger'
-      onClick={() => deleteCallback([choice, subChoice])}
-      className={clsx(`col-span-1 rounded-md flex align-center justify-center my-0.5 ${className}`,
-        'transition-width ease-in-out duration-300',
-        'w-5 hover:w-7 ml-3 hover:ml-1',
-        'bg-secondary-100 hover:bg-error-200'
-      )}
-    >
-      <Trash className='fill-current text-secondary-400 transition-all ease-in-out duration-300 h-full' />
-    </CustomButton>
+    <div className={`${classes.deleteButtonContainer} ${className}`}>
+      <CustomButton
+        classes={{ button: classes.deleteButton }}
+        variant='elevated'
+        type='secondary'
+        onClick={() => deleteCallback([choice, subChoice])}
+      >
+        <Icons.Trash size='md' />
+      </CustomButton>
+    </div>
 
   return (
     <>

@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react'
 
-import { getTailwindConfigColor, Loader, makeStyles } from '@eqworks/lumen-labs'
+import { Icons, getTailwindConfigColor, Loader, makeStyles } from '@eqworks/lumen-labs'
 
-import { DashboardLayout, Table } from '../components/icons'
 import LabeledToggle from '../components/labeled-toggle'
 import FadeBetween from '../components/fade-between'
 import ResultsTable from './table'
@@ -66,16 +65,23 @@ const useStyles = (mode, tableExpanded) => makeStyles(
       },
       tableCollapseButton: {
         background: `${getTailwindConfigColor('secondary-300')} !important`,
-        color: `${getTailwindConfigColor('secondary-800')} !important`,
+        '& svg': {
+          fill: `${getTailwindConfigColor('secondary-800')} !important`,
+        },
         '&:hover': {
+          '& svg': {
+            fill: `${getTailwindConfigColor('secondary-900')} !important`,
+          },
           background: `${getTailwindConfigColor('secondary-400')} !important`,
-          color: `${getTailwindConfigColor('secondary-900')} !important`,
         },
         width: '1.5rem',
         height: '1.5rem',
         fontSize: '1.6rem !important',
         lineHeight: '1.2rem !important',
         fontWeight: 700,
+        display: 'flex !important',
+        justifyContent: 'center !important',
+        alignItems: 'center !important',
       },
       table: {
         border: `2px solid ${getTailwindConfigColor('secondary-300')}`,
@@ -220,9 +226,11 @@ const WidgetView = () => {
                   type='secondary'
                   onClick={() => setTableExpanded(!tableExpanded)}
                 >
-                  {/* <div className={classes.tableCollapseButton}> */}
-                  {tableExpanded ? '-' : '+'}
-                  {/* </div> */}
+                  {
+                    tableExpanded
+                      ? <Icons.Remove size='sm' />
+                      : <Icons.Add size='sm' />
+                  }
                 </CustomButton>
               </div>
               <div className={classes.tableContentContainer}>
@@ -250,7 +258,7 @@ const WidgetView = () => {
             <LabeledToggle
               className='flex-0 mt-3 ml-5'
               labels={['widget', 'table']}
-              icons={[DashboardLayout, Table]}
+              icons={[Icons.DashboardLayout, Icons.Table]}
               value={showTable}
               update={(val) => nestedUpdate({ ui: { showTable: val } })}
             />
