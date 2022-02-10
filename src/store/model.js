@@ -406,7 +406,7 @@ export default {
           })
         }
       })
-      .catch(err => { actions.update({ ui: { dataSourceError: err } }) })
+      .catch(err => { actions.update({ ui: { dataSourceError: err.toString() } }) })
       .finally(() => actions.update({
         ui: { dataSourceLoading: false },
         ignoreUndo: false,
