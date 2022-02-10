@@ -10,7 +10,7 @@ import typeInfo from '../../constants/type-info'
 
 
 const Icons = ({ disabled }) => {
-  const update = useStoreActions((actions) => actions.update)
+  const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const current = useStoreState((state) => state.type)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
 
@@ -34,7 +34,7 @@ const Icons = ({ disabled }) => {
               variant='borderless'
               className={iconButtonClass(isCurrent, isDisabled)}
               onClick={() => {
-                update({
+                userUpdate({
                   type,
                   uniqueOptions:
                     Object.entries(uniqueOptions).reduce((acc, [k, { defaultValue }]) => {

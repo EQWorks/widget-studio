@@ -79,7 +79,13 @@ const Widget = ({ id, mode: _mode, staticData }) => {
     }
 
     // dispatch state
-    update({ id, ui: { mode: validatedMode, staticData } })
+    update({
+      id,
+      ui: {
+        mode: validatedMode,
+        staticData,
+      },
+    })
 
     // if there is a widget ID,
     if (id !== undefined && id !== null) {

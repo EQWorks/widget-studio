@@ -10,6 +10,7 @@ import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
 const MapDomainControls = () => {
   // common actions
   const update = useStoreActions(actions => actions.update)
+  const userUpdate = useStoreActions(actions => actions.userUpdate)
 
   // common state
   const columns = useStoreState((state) => state.columns)
@@ -43,7 +44,7 @@ const MapDomainControls = () => {
               value={domain.value}
               onSelect={val => {
                 // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
-                update({ mapGroupKey: val, groupKey: val })
+                userUpdate({ mapGroupKey: val, groupKey: val })
                 const newLayer = Object.keys(MAP_LAYER_VIS)
                   .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
                 // reset mapValueKeys when we change to a mapGroupKey that requires a different layer, as different layer requires different visualization types
@@ -51,7 +52,7 @@ const MapDomainControls = () => {
                   update({ mapValueKeys: [] })
                 }
               }}
-              onClear={() => update({
+              onClear={() => userUpdate({
                 groupKey: null,
                 indexKey: null,
                 mapGroupKey: null,

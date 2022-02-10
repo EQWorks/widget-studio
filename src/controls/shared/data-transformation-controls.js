@@ -8,10 +8,8 @@ import MutedBarrier from './muted-barrier'
 
 
 const DataTransformationControls = () => {
-  // common actions
   const update = useStoreActions(actions => actions.update)
-
-  // common state
+  const userUpdate = useStoreActions(actions => actions.userUpdate)
   const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
@@ -38,7 +36,7 @@ const DataTransformationControls = () => {
                   renderToggle(
                     'Invert Domain',
                     groupByValue,
-                    () => update({ genericOptions: { groupByValue: !groupByValue } }),
+                    () => userUpdate({ genericOptions: { groupByValue: !groupByValue } }),
                     type === types.MAP
                   )
                 }
@@ -46,7 +44,7 @@ const DataTransformationControls = () => {
                   renderToggle(
                     'Percentage Mode',
                     percentageMode,
-                    () => update({ percentageMode: !percentageMode }),
+                    () => userUpdate({ percentageMode: !percentageMode }),
                     type === types.MAP || (!group || type === types.PIE)
                   )
                 }

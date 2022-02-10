@@ -110,6 +110,7 @@ const useStyles = ({ baseColor, showPicker }) => makeStyles({
 const ColorSchemeControls = () => {
   // common actions
   const update = useStoreActions((state) => state.update)
+  const userUpdate = useStoreActions((state) => state.userUpdate)
 
   // common state
   const presetColors = useStoreState((state) => state.presetColors)
@@ -128,7 +129,9 @@ const ColorSchemeControls = () => {
 
   const styles = useStyles({ baseColor, showPicker })
 
-  const updateBaseColor = useDebouncedCallback(v => update({ genericOptions: { baseColor: colord(v).toHex() } }), 100)
+  const updateBaseColor = useDebouncedCallback(v => userUpdate({
+    genericOptions: { baseColor: colord(v).toHex() },
+  }), 100)
 
   useEffect(() => {
     update({ presetColors: presetColors.map((_c, i) => i === selectedColorIndex ? baseColor : _c) })
@@ -167,7 +170,7 @@ const ColorSchemeControls = () => {
               const valid = validated.parsed
               const color = validated.toHex()
               if (valid) {
-                update({ genericOptions: { baseColor: color } })
+                userUpdate({ genericOptions: { baseColor: color } })
                 setShowInputHelper(false)
               }
               setInputError(!valid)
@@ -187,7 +190,7 @@ const ColorSchemeControls = () => {
             listContainer: 'normal-case',
           }}
           data={COLOR_REPRESENTATIONS.map(({ label }) => label)}
-          onSelect={v => update({ ui: { colorRepresentation: COLOR_REPRESENTATIONS.find(({ label }) => label === v) } })}
+          onSelect={v => userUpdate({ ui: { colorRepresentation: COLOR_REPRESENTATIONS.find(({ label }) => label === v) } })}
           value={colorRepresentation.label}
           allowClear={false}
         />
@@ -209,7 +212,7 @@ const ColorSchemeControls = () => {
                   style={{ background: c }}
                   onClick={() => {
                     setSelectedColorIndex(i)
-                    update({ genericOptions: { baseColor: c } })
+                    userUpdate({ genericOptions: { baseColor: c } })
                   }}
                 />
                 <div
