@@ -7,6 +7,7 @@ import { LocusMap } from '@eqworks/react-maps'
 import { getCursor } from '@eqworks/react-maps/dist/utils'
 import { makeStyles } from '@eqworks/lumen-labs'
 
+import { cleanUp } from '../../../util/string-manipulation'
 import modes from '../../../constants/modes'
 import {
   COORD_KEYS,
@@ -75,7 +76,8 @@ export default {
     const dataKeys = Object.keys(data[0])
 
     const getTooltipKey = (tooltipKey) =>
-      dataKeys.find(key => MAP_LAYER_GEO_KEYS[mapLayer].includes(key) && key.includes(tooltipKey))
+      dataKeys.find(key => MAP_LAYER_GEO_KEYS[mapLayer].map(elem => cleanUp(elem)).includes(key) &&
+        key.toLowerCase().includes(tooltipKey))
 
     let name = ''
     let id = ''
@@ -85,9 +87,9 @@ export default {
       const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
       const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
       geometry = { longitude, latitude }
-      name = getTooltipKey('name') || getTooltipKey('id')
+      name = getTooltipKey('name') || getTooltipKey('poi')
       if (name) {
-        id = getTooltipKey('id')
+        id = getTooltipKey('id') === name ? '' : getTooltipKey('id')
       }
     }
     if (mapLayer === MAP_LAYERS.geojson) {
