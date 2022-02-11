@@ -139,6 +139,7 @@ export default {
         },
         legend: { showLegend: true },
         //----TO DO - ERIKA - add to state for editor
+        schemeColor: genericOptions.baseColor,
         opacity: OPACITY,
       }],
       mapConfig: {
