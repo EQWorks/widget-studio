@@ -417,6 +417,7 @@ export default {
   userUpdate: thunk((actions, payload) => {
     actions.recordState()
     actions.update(payload)
+    setTimeout(() => actions.setIgnoreUndo(false), 150)
   }),
 
   // update the store state
@@ -433,7 +434,7 @@ export default {
       : state
   )),
 
-  // replace state with the first element from the undo queue
+  // replace state with the first element from the redo queue
   redo: action(({ redoQueue, ...state }) => (
     redoQueue.length
       ? {
@@ -443,13 +444,14 @@ export default {
       : state
   )),
 
-  // records current state as an element in the undo queue
+  // stores a snapshot of the current state at the beginning of the undo queue
   recordState: action(state => (
     state.ignoreUndo
       ? state
       : {
         ...state,
         undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
+        ignoreUndo: true,
       }
   )),
 
