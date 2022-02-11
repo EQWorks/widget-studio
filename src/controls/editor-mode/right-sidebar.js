@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -10,6 +10,7 @@ import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
 import { renderItem, renderSection, renderRow, renderToggle } from '../shared/util'
+import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import Filters from './filters'
 import CustomDropdown from './components/custom-dropdown'
@@ -56,31 +57,38 @@ const EditorRightSidebar = () => {
             {renderSection(
               'Display Options',
               <>
-                {renderToggle(
-                  'Legend',
-                  showLegend,
-                  v => userUpdate({ genericOptions: { showLegend: v } }),
+                {renderRow(null,
+                  <>
+                    {renderToggle(
+                      'Legend',
+                      showLegend,
+                      v => userUpdate({ genericOptions: { showLegend: v } }),
+                    )}
+                    {type === types.MAP &&
+                      renderToggle(
+                        'Tooltip',
+                        showTooltip,
+                        v => userUpdate({ genericOptions: { showTooltip: v } }),
+                      )
+                    }
+                    {type !== types.MAP && type !== types.PIE &&
+                      renderToggle(
+                        'Subplots',
+                        subPlots,
+                        v => userUpdate({ genericOptions: { subPlots: v } }),
+                        valueKeys.length <= 1
+                      )}
+                    {type !== types.MAP &&
+                      renderToggle(
+                        'Widget Title',
+                        showWidgetTitle,
+                        v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
+                      )
+                    }
+                  </>
                 )}
-                {type === types.MAP &&
-                  renderToggle(
-                    'Tooltip',
-                    showTooltip,
-                    v => userUpdate({ genericOptions: { showTooltip: v } }),
-                  )
-                }
-                {type !== types.MAP && type !== types.PIE &&
-                  renderToggle(
-                    'Subplots',
-                    subPlots,
-                    v => userUpdate({ genericOptions: { subPlots: v } }),
-                    valueKeys.length <= 1
-                  )}
                 {type !== types.MAP &&
-                  renderToggle(
-                    'Widget Title',
-                    showWidgetTitle,
-                    v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
-                  )
+                  <UniqueOptionControls type={type} />
                 }
               </>
             )}
