@@ -77,6 +77,17 @@ export default {
     icon: Icons.MapChart,
     adapter: ReactMapsAdapter,
     groupingOptional: false,
-    uniqueOptions: {},
+    uniqueOptions: {
+      opacity: {
+        name: 'Opacity',
+        type: Number,
+        defaultValue: 30,
+      },
+      lineWidth: {
+        name: 'Outline Width',
+        type: Number,
+        defaultValue: 1,
+      },
+    },
   },
 }
