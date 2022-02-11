@@ -16,11 +16,13 @@ const useStyles = ({ baseColor, showPicker, type }) => makeStyles({
     flexDirection: 'column',
     width: '100%',
     alignItems: 'stretch',
-    marginTop: type === types.MAP ? 0 : '0.8rem',
+    ...(type === types.MAP && {
+      marginTop: '0.8rem',
+      marginBottom: '0.8rem',
+    }),
   },
   row: {
     display: 'flex',
-    marginBottom: '0.6rem',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
