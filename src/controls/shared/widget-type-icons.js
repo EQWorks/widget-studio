@@ -24,7 +24,7 @@ const Icons = ({ disabled }) => {
   return (
     <div className='flex'>
       {
-        Object.entries(typeInfo).map(([type, { icon: Icon, uniqueOptions }], i) => {
+        Object.entries(typeInfo).map(([type, { groupingOptional, icon: Icon, uniqueOptions }], i) => {
           const isCurrent = type === current
           const isDisabled = disabled || (type === types.MAP && !mapIconAvailability)
           return (
@@ -35,6 +35,7 @@ const Icons = ({ disabled }) => {
               className={iconButtonClass(isCurrent, isDisabled)}
               onClick={() => {
                 userUpdate({
+                  group: !groupingOptional,
                   type,
                   uniqueOptions:
                     Object.entries(uniqueOptions).reduce((acc, [k, { defaultValue }]) => {
