@@ -14,7 +14,7 @@ import MutedBarrier from './muted-barrier'
 
 const ValueControls = () => {
   // common actions
-  const update = useStoreActions(actions => actions.update)
+  const userUpdate = useStoreActions(actions => actions.userUpdate)
   const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
@@ -46,15 +46,15 @@ const ValueControls = () => {
         if (i === valueKeys.length) {
           const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
           valueKeysCopy.push(val)
-          update({ valueKeys: valueKeysCopy })
+          userUpdate({ valueKeys: valueKeysCopy })
         } else {
-          update({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
+          userUpdate({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
         }
       }}
       deleteCallback={(i) => {
         const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
         valueKeysCopy.splice(i, 1)
-        update({ valueKeys: valueKeysCopy })
+        userUpdate({ valueKeys: valueKeysCopy })
       }}
       addMessage='Add Key'
     />
@@ -78,7 +78,7 @@ const ValueControls = () => {
                   multiSelect
                   value={valueKeys.map(({ key }) => key)}
                   data={numericColumns.filter(c => c !== domain.value)}
-                  onSelect={(val) => update({ valueKeys: val.map(v => ({ key: v })) })}
+                  onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
                 />
               )
           )

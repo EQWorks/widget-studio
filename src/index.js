@@ -63,7 +63,6 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   // easy-peasy actions
   const loadConfig = useStoreActions(actions => actions.loadConfig)
   const update = useStoreActions(actions => actions.update)
-  const nestedUpdate = useStoreActions(actions => actions.nestedUpdate)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
@@ -80,8 +79,13 @@ const Widget = ({ id, mode: _mode, staticData }) => {
     }
 
     // dispatch state
-    update({ id })
-    nestedUpdate({ ui: { mode: validatedMode, staticData } })
+    update({
+      id,
+      ui: {
+        mode: validatedMode,
+        staticData,
+      },
+    })
 
     // if there is a widget ID,
     if (id !== undefined && id !== null) {
@@ -94,7 +98,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_mode, id, loadConfig, mode, update, nestedUpdate, staticData])
+  }, [_mode, id, loadConfig, mode, update, staticData])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {

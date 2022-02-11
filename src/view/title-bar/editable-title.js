@@ -55,19 +55,13 @@ const useStyles = (mode) => makeStyles(
 )
 
 const EditableTitle = () => {
-  // store actions
-  const update = useStoreActions((actions) => actions.update)
-
-  // widget state
+  const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const title = useStoreState((state) => state.title)
-
-  // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
   const classes = useStyles(mode)
 
   const [editing, setEditing] = useState(false)
-
   const [tentativeTitle, setTentativeTitle] = useState(title)
   useEffect(() => {
     setTentativeTitle(title)
@@ -104,7 +98,7 @@ const EditableTitle = () => {
           ? <form
             action='.'
             onSubmit={(e) => {
-              update({ title: e.target.children[0].children[0].value })
+              userUpdate({ title: e.target.children[0].children[0].value })
               setEditing(false)
             }}
           >

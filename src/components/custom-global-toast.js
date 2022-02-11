@@ -6,7 +6,7 @@ import clsx from 'clsx'
 
 
 const CustomGlobalToast = (props) => {
-  const nestedUpdate = useStoreActions(({ nestedUpdate }) => nestedUpdate)
+  const update = useStoreActions(({ update }) => update)
   const showToast = useStoreState(({ ui: { showToast } }) => showToast)
   const toastConfig = useStoreState(({ ui: { toastConfig } }) => toastConfig)
 
@@ -24,7 +24,7 @@ const CustomGlobalToast = (props) => {
         type='semantic-light'
         {...toastConfig}
         {...props}
-        onClose={() => nestedUpdate({ ui: { showToast: false } })}
+        onClose={() => update({ ui: { showToast: false } })}
       />
     </div >
   )

@@ -25,7 +25,7 @@ const classes = makeStyles({
 
 const Filters = () => {
   // common actions
-  const update = useStoreActions((state) => state.update)
+  const userUpdate = useStoreActions((state) => state.userUpdate)
   const resetValue = useStoreActions((state) => state.resetValue)
 
   // common state
@@ -51,7 +51,7 @@ const Filters = () => {
             multiSelect
             data={groups}
             value={groupFilter ?? []}
-            onSelect={val => update({ groupFilter: val })}
+            onSelect={val => userUpdate({ groupFilter: val })}
             placeholder={group && domain.value ? `Filter ${domain.value}` : 'N/A'}
             disabled={!group || !domain.value}
           />
@@ -76,18 +76,18 @@ const Filters = () => {
               subData={[]}
               callback={(i, { key }) => {
                 if (i === filters.length) {
-                  update({ filters: filters.concat([{ key: null, filter: null }]) })
+                  userUpdate({ filters: filters.concat([{ key: null, filter: null }]) })
                 } else if (!key) {
-                  update({ filters: filters.map((v, _i) => i === _i ? { key: null, filter: null } : v) })
+                  userUpdate({ filters: filters.map((v, _i) => i === _i ? { key: null, filter: null } : v) })
                 } else if (filters[i]?.key !== key) {
                   const { min, max } = columnsAnalysis[key] || {}
-                  update({ filters: filters.map((v, _i) => i === _i ? { key, filter: [min, max] } : v) })
+                  userUpdate({ filters: filters.map((v, _i) => i === _i ? { key, filter: [min, max] } : v) })
                 }
               }}
               deleteCallback={(i) => {
                 const filtersCopy = JSON.parse(JSON.stringify(filters))
                 filtersCopy.splice(i, 1)
-                update({ filters: filtersCopy })
+                userUpdate({ filters: filtersCopy })
               }}
               customRenderSecondary={(i, k) => {
                 const value = filters[i]?.filter
@@ -110,7 +110,7 @@ const Filters = () => {
                   >
                     <RangeFilter
                       index={i}
-                      update={filter => update({
+                      update={filter => userUpdate({
                         filters:
                           filters.map((v, _i) => i === _i
                             ? { key: k, filter }

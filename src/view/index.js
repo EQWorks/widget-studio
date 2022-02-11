@@ -129,7 +129,7 @@ const useStyles = (mode, tableExpanded) => makeStyles(
 
 const WidgetView = () => {
   // store actions
-  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
+  const update = useStoreActions((actions) => actions.update)
 
   // widget state
   const type = useStoreState((state) => state.type)
@@ -256,7 +256,7 @@ const WidgetView = () => {
                       }}
                       value={tableShowsRawData}
                       label='Raw Data'
-                      onChange={() => nestedUpdate({ ui: { tableShowsRawData: !tableShowsRawData } })}
+                      onChange={() => update({ ui: { tableShowsRawData: !tableShowsRawData } })}
                     />
                   </div>
                 </div>
@@ -272,7 +272,7 @@ const WidgetView = () => {
               labels={['widget', 'table']}
               icons={[Icons.DashboardLayout, Icons.Table]}
               value={showTable}
-              update={(val) => nestedUpdate({ ui: { showTable: val } })}
+              update={(val) => update({ ui: { showTable: val } })}
             />
             <div className='flex-1'>
               <FadeBetween value={showTable}>

@@ -27,10 +27,7 @@ const classes = makeStyles({
 })
 
 const EditorRightSidebar = () => {
-  // common actions
-  const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
-
-  // common state
+  const userUpdate = useStoreActions((state) => state.userUpdate)
   const type = useStoreState((state) => state.type)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const valueKeys = useStoreState((state) => state.valueKeys)
@@ -61,7 +58,7 @@ const EditorRightSidebar = () => {
                         <XYSelect
                           value={titlePosition}
                           disabled={[[0.5, 0.5], [0, 0.5], [1, 0.5]]}
-                          update={titlePosition => nestedUpdate({ genericOptions: { titlePosition } })}
+                          update={titlePosition => userUpdate({ genericOptions: { titlePosition } })}
                         />
                       </CustomDropdown>
                     )}
@@ -73,7 +70,7 @@ const EditorRightSidebar = () => {
                       >
                         <XYSelect
                           value={legendPosition}
-                          update={legendPosition => nestedUpdate({ genericOptions: { legendPosition } })}
+                          update={legendPosition => userUpdate({ genericOptions: { legendPosition } })}
                         />
                       </CustomDropdown>
                     )}
@@ -84,7 +81,7 @@ const EditorRightSidebar = () => {
                     fullWidth
                     data={sizes.string}
                     value={sizes.string[sizes.numeric.indexOf(size)]}
-                    onSelect={v => nestedUpdate({ genericOptions: { size: sizes.dict[v] } })}
+                    onSelect={v => userUpdate({ genericOptions: { size: sizes.dict[v] } })}
                   />
                 )}
               </>
@@ -98,20 +95,20 @@ const EditorRightSidebar = () => {
                   {renderToggle(
                     'Legend',
                     showLegend,
-                    v => nestedUpdate({ genericOptions: { showLegend: v } }),
+                    v => userUpdate({ genericOptions: { showLegend: v } }),
                   )}
                   {type !== types.PIE && type !== types.MAP &&
                     renderToggle(
                       'Subplots',
                       subPlots,
-                      v => nestedUpdate({ genericOptions: { subPlots: v } }),
+                      v => userUpdate({ genericOptions: { subPlots: v } }),
                       valueKeys.length <= 1
                     )}
                   {type !== types.MAP &&
                     renderToggle(
                       'Widget Title',
                       showWidgetTitle,
-                      v => nestedUpdate({ genericOptions: { showWidgetTitle: v } }),
+                      v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
                     )}
                 </>
               )}

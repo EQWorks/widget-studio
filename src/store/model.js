@@ -9,6 +9,10 @@ import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
 import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import { getKeyFormatFunction } from '../util/data-format-functions'
+import { deepMerge } from './util'
+
+
+const MAX_UNDO_STEPS = 10
 
 
 const stateDefaults = [
@@ -73,6 +77,9 @@ const stateDefaults = [
   },
   { key: 'wl', defaultValue: null, resettable: false },
   { key: 'cu', defaultValue: null, resettable: false },
+  { key: 'undoQueue', defaultValue: [], resettable: false },
+  { key: 'redoQueue', defaultValue: [], resettable: false },
+  { key: 'ignoreUndo', defaultValue: false, resettable: false },
 ]
 
 export default {
@@ -318,22 +325,26 @@ export default {
       Boolean(dataSourceType && dataSourceID && !dataSourceLoading && !dataSourceError)
     )),
 
+  undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
+  redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
+
   dev: computed([], () => ((process?.env?.NODE_ENV || 'development') === 'development')),
 
   /** ACTIONS ------------------------------------------------------------------ */
 
   toast: thunk(async (actions, payload) => {
-    actions.nestedUpdate({
+    actions.update({
       ui: {
         toastConfig: payload,
         showToast: true,
       },
     })
-    setTimeout(() => actions.nestedUpdate({ ui: { showToast: false } }), 3000)
+    setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
   }),
 
   loadConfig: thunk(async (actions, payload) => {
-    actions.nestedUpdate({
+    actions.update({
+      ignoreUndo: true,
       ui: {
         showDataSourceControls: false,
         dataSourceLoading: true,
@@ -345,7 +356,7 @@ export default {
           .filter(([, v]) => v !== null && !Array.isArray(v) && typeof v === 'object')
           .forEach(([k, v]) => {
             if (stateDefaults.find(({ key }) => key === k)) {
-              actions.nestedUpdate({ [k]: v })
+              actions.update({ [k]: v })
             }
             delete config[k]
           })
@@ -353,17 +364,19 @@ export default {
         actions.loadData(dataSource)
       })
       .catch(err => {
-        actions.nestedUpdate({
+        actions.update({
           ui: {
             error: err,
             dataSourceLoading: false,
           },
+          ignoreUndo: false,
         })
       })
   }),
 
   loadData: thunk(async (actions, dataSource, { getState }) => {
-    actions.nestedUpdate({
+    actions.update({
+      ignoreUndo: true,
       ui: {
         showDataSourceControls: false,
         dataSourceLoading: true,
@@ -380,15 +393,12 @@ export default {
           columns,
           wl: whitelabelID, // only used for wl-cu-selector
           cu: customerID, // only used for wl-cu-selector
-        })
-        actions.nestedUpdate({
           ui: {
             showWidgetControls: true,
             dataSourceName: name,
             dataSourceError: null,
           },
         })
-        actions.nestedUpdate({ ui: { dataSourceLoading: false } })
         if (isReload) {
           actions.toast({
             title: `${name} reloaded successfully`,
@@ -396,34 +406,75 @@ export default {
           })
         }
       })
-      .catch(err => {
-        actions.nestedUpdate({
-          ui: {
-            dataSourceError: err,
-            dataSourceLoading: false,
-          },
-        })
-      })
+      .catch(err => { actions.update({ ui: { dataSourceError: err.toString() } }) })
+      .finally(() => actions.update({
+        ui: { dataSourceLoading: false },
+        ignoreUndo: false,
+      }))
+  }),
+
+  // update the store state in an "undoable" fashion
+  userUpdate: thunk((actions, payload) => {
+    actions.recordState()
+    actions.update(payload)
+    setTimeout(() => actions.setIgnoreUndo(false), 150)
   }),
 
   // update the store state
-  update: action((state, payload) => ({ ...state, ...payload })),
+  update: action((state, payload) => deepMerge(payload, state)),
 
-  // perform a nested update on the store state
-  nestedUpdate: action((state, payload) => (
-    Object.entries(payload).reduce((acc, [nestKey, nestedPayload]) => {
-      acc[nestKey] = { ...acc[nestKey], ...nestedPayload }
-      return acc
-    }, state)
+  // replace state with the first element from the undo queue
+  undo: thunk((actions) => {
+    actions.doUndo()
+    setTimeout(() => actions.setIgnoreUndo(false), 150)
+  }),
+  doUndo: action(state => (
+    state.undoQueue.length
+      ? {
+        ...state.undoQueue[0],
+        undoQueue: state.undoQueue.slice(1),
+        redoQueue: [{ ...state }].concat(state.redoQueue).slice(0, MAX_UNDO_STEPS),
+        ignoreUndo: true,
+      }
+      : state
+  )),
+
+  // replace state with the first element from the redo queue
+  redo: thunk((actions) => {
+    actions.doRedo()
+    setTimeout(() => actions.setIgnoreUndo(false), 150)
+  }),
+  doRedo: action(({ redoQueue, ...state }) => (
+    redoQueue.length
+      ? {
+        ...redoQueue[0],
+        redoQueue: redoQueue.slice(1),
+        ignoreUndo: true,
+      }
+      : state
+  )),
+
+  // stores a snapshot of the current state at the beginning of the undo queue
+  recordState: action(state => (
+    state.ignoreUndo
+      ? state
+      : {
+        ...state,
+        undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
+        ignoreUndo: true,
+      }
   )),
 
   // reset a portion of the state
   resetValue: action((state, payload) => (
-    Object.keys(payload)
-      .reduce((acc, k) => {
-        acc[k] = stateDefaults.find(({ key }) => key === k).defaultValue
-        return acc
-      }, state)
+    {
+      ...Object.keys(payload)
+        .reduce((acc, k) => {
+          acc[k] = stateDefaults.find(({ key }) => key === k).defaultValue
+          return acc
+        }, { ...state }),
+      undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
+    }
   )),
 
   // reset all shared and unique states except data source and data ID
@@ -437,6 +488,8 @@ export default {
           .map(([k, { defaultValue }]) => [k, defaultValue])
       ),
     }),
+    ignoreUndo: true,
+    undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
     // map widget doesn't have a switch to change group state, so we have to keep it true here
     group: state.type === types.MAP ? true : state.group,
   })),
@@ -445,6 +498,7 @@ export default {
   onReset: thunkOn((actions) => actions.resetWidget,
     (actions) => {
       setTimeout(() => actions.setRecentReset(false), 1000)
+      setTimeout(() => actions.setIgnoreUndo(false), 1000)
       actions.setAllowReset(false)
       actions.setRecentReset(true)
     }),
@@ -452,10 +506,11 @@ export default {
   // re-enable reset whenever state is changed
   onUpdate: thunkOn((actions) => actions.update,
     (actions) => actions.setAllowReset(true)),
-  onNestedUpdate: thunkOn((actions) => actions.nestedUpdate,
-    (actions) => actions.setAllowReset(true)),
 
-  // re-enable reset whenever state is changed, outside of update() or nestedUpdate()
+  // setter for ignoreUndo
+  setIgnoreUndo: action((state, ignoreUndo) => ({ ...state, ignoreUndo })),
+
+  // re-enable reset whenever state is changed, outside of update()
   setRecentReset: action((state, payload) => ({ ...state, ui: { ...state.ui, recentReset: payload } })),
 
   // set the ui.allowReset state outside of update() or nestedUpdate()
