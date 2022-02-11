@@ -4,7 +4,7 @@ import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderRow, renderSection } from './util'
-import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
+import { MAP_LAYER_VALUE_VIS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
 
 
 const MapDomainControls = () => {
@@ -29,7 +29,7 @@ const MapDomainControls = () => {
   ), [columns, validMapGroupKeys, valueKeys])
 
   const mapLayer = useMemo(() => (
-    Object.keys(MAP_LAYER_VIS)
+    Object.keys(MAP_LAYER_VALUE_VIS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
   ), [mapGroupKey])
 
@@ -45,7 +45,7 @@ const MapDomainControls = () => {
               onSelect={val => {
                 // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
                 userUpdate({ mapGroupKey: val, groupKey: val })
-                const newLayer = Object.keys(MAP_LAYER_VIS)
+                const newLayer = Object.keys(MAP_LAYER_VALUE_VIS)
                   .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
                 /*
                  * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,

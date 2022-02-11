@@ -6,7 +6,7 @@ import MapLinkedSelect from './map-linked-select'
 import WidgetControlCard from '../components/widget-control-card'
 
 import modes from '../../../constants/modes'
-import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS, ID_KEYS } from '../../../constants/map'
+import { MAP_LAYER_VALUE_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS, ID_KEYS } from '../../../constants/map'
 
 
 const MapValueControls = () => {
@@ -20,10 +20,9 @@ const MapValueControls = () => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
 
-  const mapLayer = useMemo(() => (
-    Object.keys(MAP_LAYER_VIS)
-      .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
-  ), [mapGroupKey])
+  const mapLayer = useMemo(() => Object.keys(MAP_LAYER_VALUE_VIS)
+    .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+  , [mapGroupKey])
 
   const mapNumericColumns = useMemo(() => (
     numericColumns.filter(col =>
@@ -58,7 +57,7 @@ const MapValueControls = () => {
     >
       {mapLayer &&
         <MapLinkedSelect
-          categories={MAP_LAYER_VIS[mapLayer]}
+          categories={MAP_LAYER_VALUE_VIS[mapLayer]}
           titles={['Column', 'Operation']}
           values={mapValueKeys}
           data={mapNumericColumns}
