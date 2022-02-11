@@ -12,6 +12,7 @@ import CustomButton from '../components/custom-button'
 import WidgetMeta from './meta'
 import CustomToggle from '../components/custom-toggle'
 import types from '../constants/types'
+import { dataSourceTypes } from '../constants/data-source'
 
 
 const useStyles = ({ mode, tableExpanded, type }) => makeStyles(
@@ -194,7 +195,10 @@ const WidgetView = () => {
       primary = 'This configuration resulted in an empty dataset.'
       secondary = 'Try adjusting your filters.'
     }
-    return { primary, secondary: secondary || 'Data loaded successfully' }
+    if (!secondary && dataSourceType && dataSourceType !== dataSourceTypes.MANUAL) {
+      secondary = `Successfully loaded ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
+    }
+    return { primary, secondary }
   }, [dataSourceError, dataSourceID, dataSourceType, domain?.value, renderableValueKeys?.length, rows.length, transformedData?.length, type])
 
   const renderWidgetWarning = (
