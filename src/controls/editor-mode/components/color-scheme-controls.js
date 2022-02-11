@@ -7,15 +7,16 @@ import { makeStyles, Button, getTailwindConfigColor, TextField } from '@eqworks/
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
 import { COLOR_REPRESENTATIONS } from '../../../constants/color'
+import types from '../../../constants/types'
 
 
-const useStyles = ({ baseColor, showPicker }) => makeStyles({
+const useStyles = ({ baseColor, showPicker, type }) => makeStyles({
   outerContainer: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
     alignItems: 'stretch',
-    marginTop: '0.8rem',
+    marginTop: type === types.MAP ? 0 : '0.8rem',
   },
   row: {
     display: 'flex',
@@ -116,6 +117,7 @@ const ColorSchemeControls = () => {
   const presetColors = useStoreState((state) => state.presetColors)
   const baseColor = useStoreState((state) => state.genericOptions.baseColor)
   const colorRepresentation = useStoreState((state) => state.ui.colorRepresentation)
+  const type = useStoreState((state) => state.type)
 
   // local state
   const [selectedColorIndex, setSelectedColorIndex] = useState(
@@ -127,7 +129,7 @@ const ColorSchemeControls = () => {
   const [showPicker, setShowPicker] = useState(false)
   const [showInputHelper, setShowInputHelper] = useState(false)
 
-  const styles = useStyles({ baseColor, showPicker })
+  const styles = useStyles({ baseColor, showPicker, type })
 
   const updateBaseColor = useDebouncedCallback(v => userUpdate({
     genericOptions: { baseColor: colord(v).toHex() },
