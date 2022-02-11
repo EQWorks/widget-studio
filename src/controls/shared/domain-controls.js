@@ -70,7 +70,7 @@ const DomainControls = () => {
                 data={eligibleDomainValues}
                 value={domain.value}
                 onSelect={val => {
-                  const willGroup = eligibleGroupKeyValues.includes(val)
+                  const willGroup = eligibleGroupKeyValues.includes(val) && !groupingOptional
                   userUpdate({
                     group: willGroup,
                     ...(
