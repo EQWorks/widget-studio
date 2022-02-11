@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 import axios from 'axios'
 import sampleConfigs from '../../stories/sample-configs'
 import sampleData from '../../stories/sample-data'
+import { dataSourceTypes } from '../constants/data-source'
 
 
 const api = axios.create({
@@ -25,9 +26,6 @@ api.interceptors.request.use(config => {
     },
   }
 })
-
-export const SAVED_QUERIES = 'Saved query'
-export const EXECUTIONS = 'Execution'
 
 // from snoke
 export const useWhiteLabels = () => {
@@ -131,10 +129,10 @@ export const requestData = async (dataSourceType, dataSourceID) => {
     return sampleData[`${dataSourceType}-${dataSourceID}`]
   }
   var data
-  if (dataSourceType == SAVED_QUERIES) {
+  if (dataSourceType == dataSourceTypes.SAVED_QUERIES) {
     data = await requestQueryResults(dataSourceID)
   }
-  else if (dataSourceType == EXECUTIONS) {
+  else if (dataSourceType == dataSourceTypes.EXECUTIONS) {
     data = await requestExecutionResults(dataSourceID)
   }
   return data
