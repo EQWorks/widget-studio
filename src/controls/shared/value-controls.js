@@ -24,9 +24,8 @@ const ValueControls = () => {
   const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
-  const numericColumns = useStoreState((state) => state.numericColumns)
-  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
 
   const eligibleColumns = useMemo(() => columns
     .map(({ name }) => name)
@@ -56,7 +55,7 @@ const ValueControls = () => {
       values={valueKeys}
       primaryKey='key'
       secondaryKey='agg'
-      data={numericColumns.filter(c => c !== domain.value)}
+      data={eligibleColumns}
       subData={Object.keys(aggFunctions)}
       disableSubs={!dataHasVariance}
       disableSubMessage="doesn't require aggregation."
@@ -98,7 +97,7 @@ const ValueControls = () => {
                   fullWidth
                   multiSelect
                   value={valueKeys.map(({ key }) => key)}
-                  data={numericColumns.filter(c => c !== domain.value)}
+                  data={eligibleColumns}
                   onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
                 />
               )

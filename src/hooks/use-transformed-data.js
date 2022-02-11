@@ -27,12 +27,28 @@ const useTransformedData = () => {
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
+  // convert prices to numeric values
+  const normalizedPriceData = useMemo(() => {
+    const priceColumns = columns.map(({ name }) => name).filter(c => columnsAnalysis[c]?.category === 'String' && c.includes('price'))
+    return priceColumns.length
+      ? rows.map(r =>
+        Object.entries(r)
+          .reduce((acc, [k, v]) => {
+            if (priceColumns.includes(k)) {
+              acc[k] = parseFloat((v.split('$')[1])?.replace(/,/g, '')) || v
+            }
+            return acc
+          }, { ...r }))
+      : rows
+  }, [columns, columnsAnalysis, rows])
+
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
-    rows.filter(obj => {
+    normalizedPriceData.filter(obj => {
       for (const { key, filter: [min, max] } of filters.filter(({ filter }) => Boolean(filter))) {
         if (obj[key] < min || obj[key] > max) {
           return false
@@ -40,7 +56,7 @@ const useTransformedData = () => {
       }
       return true
     })
-  ), [rows, filters])
+  ), [normalizedPriceData, filters])
 
   const newGroupKey = useMemo(() => (
     groupFSAByPC
