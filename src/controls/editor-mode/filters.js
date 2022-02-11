@@ -30,9 +30,9 @@ const Filters = () => {
       title='Filters'
     >
       {
-      // NOTE - temporary fix to remove some large spaces - to be adjusted after the styling revision
-      // renderSection(
-      //   null,
+        // NOTE - temporary fix to remove some large spaces - to be adjusted after the styling revision
+        // renderSection(
+        //   null,
         renderRow(
           'Group Filter',
           <CustomSelect
@@ -45,7 +45,7 @@ const Filters = () => {
             disabled={!group || !domain.value}
           />
         )
-      // )
+        // )
       }
       {renderSection(
         null,
@@ -79,17 +79,22 @@ const Filters = () => {
                 userUpdate({ filters: filtersCopy })
               }}
               customRenderSecondary={(i, k) => {
+                const { key, filter } = filters[i] || {}
+                const { min, max } = columnsAnalysis[key] || {}
                 return (
                   <SliderControl
-                    index={i}
                     style='chart'
+                    range={true}
+                    min={min}
+                    max={max}
+                    value={filter || [min, max]}
+                    disabled={!filter}
                     update={filter => userUpdate({
                       filters:
                         filters.map((v, _i) => i === _i
                           ? { key: k, filter }
                           : v),
                     })}
-                    range={true}
                   >
                   </SliderControl>
                 )

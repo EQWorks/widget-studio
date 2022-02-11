@@ -4,7 +4,7 @@ import { TextField, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import ColorSchemeControls from './components/color-scheme-controls'
-import SliderControl  from './components/slider-control'
+import SliderControl from './components/slider-control'
 import { renderItem, renderSection, renderRow } from '../shared/util'
 import typeInfo from '../../constants/type-info'
 
@@ -32,12 +32,37 @@ const MapLayerDisplay = () => {
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const type = useStoreState((state) => state.type)
 
-  const [rangeRadius, simpleRadius, elevation] = useMemo(() => ([
-    renderableValueKeys.find(vis => (vis.mapVis === 'radius' && vis.key)),
-    JSON.stringify(mapValueKeys).includes('radius') &&
-      !renderableValueKeys.find(vis => (vis.mapVis === 'radius' && vis.key)),
-    JSON.stringify(renderableValueKeys).includes('elevation'),
-  ]), [renderableValueKeys, mapValueKeys])
+  const [rangeRadius, simpleRadius, elevation] = useMemo(() => {
+    const key = Boolean(renderableValueKeys.find(vis => (vis.mapVis === 'radius' && vis.key)))
+    return [
+      key,
+      JSON.stringify(mapValueKeys).includes('radius') && !key,
+      JSON.stringify(renderableValueKeys).includes('elevation'),
+    ]
+  }, [renderableValueKeys, mapValueKeys])
+
+  const getSliderControlProps = (option, range) => {
+    const {
+      defaultValue: {
+        value: defaultValue,
+        valueOptions: defaultValueOptions,
+      },
+      step,
+      min,
+      max,
+    } = typeInfo[type].uniqueOptions[option]
+    const { value, valueOptions } = uniqueOptions[option] || {}
+    return {
+      style: 'map',
+      range,
+      step,
+      min,
+      max,
+      value: range
+        ? valueOptions || defaultValueOptions
+        : value || defaultValue,
+    }
+  }
 
   return (
     <div className={classes.displayOptions}>
@@ -66,43 +91,26 @@ const MapLayerDisplay = () => {
           )}
           {renderRow(null,
             <div className={classes.sliderOutline}>
-              {simpleRadius &&
+              {(simpleRadius || rangeRadius) &&
                 renderItem('Radius Size (px)',
                   <SliderControl
-                    style='map'
-                    option='radius'
+                    {...getSliderControlProps('radius', rangeRadius)}
                     update={val => userUpdate({
                       uniqueOptions: {
                         radius: {
-                          value: val,
+                          ...(rangeRadius
+                            ? { valueOptions: val }
+                            : { value: val }),
                         },
                       },
                     })}
-                    range={false}
-                  />
-                )
-              }
-              {rangeRadius &&
-                renderItem('Radius Size (px)',
-                  <SliderControl
-                    style='map'
-                    option='radius'
-                    update={val => userUpdate({
-                      uniqueOptions: {
-                        radius: {
-                          valueOptions: val,
-                        },
-                      },
-                    })}
-                    range={true}
                   />
                 )
               }
               {elevation &&
                 renderItem('Elevation Height (m)',
                   <SliderControl
-                    style='map'
-                    option='elevation'
+                    {...getSliderControlProps('elevation', false)}
                     update={val => userUpdate({
                       uniqueOptions: {
                         elevation: {
@@ -110,7 +118,6 @@ const MapLayerDisplay = () => {
                         },
                       },
                     })}
-                    range={false}
                   />
                 )
               }
