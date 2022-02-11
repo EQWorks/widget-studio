@@ -75,7 +75,7 @@ const Widget = ({ id, mode: _mode, staticData }) => {
     const validatedMode = Object.values(modes).find(v => v === _mode)
 
     if (!validatedMode) {
-      throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${modes}.`)
+      throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
 
     // dispatch state
