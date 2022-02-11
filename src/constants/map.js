@@ -7,16 +7,20 @@ export const MAP_LAYERS = {
   geojson: 'geojson',
 }
 
-export const MAP_VIS = {
+// visualizations used in Value Configuration
+export const MAP_VALUE_VIS = {
   radius: 'radius',
   elevation: 'elevation',
   fill: 'fill',
 }
 
-export const MAP_LAYER_VIS = {
-  scatterplot: [MAP_VIS.fill, MAP_VIS.radius],
-  // MVT: [MAP_VIS.fill],
-  geojson: [MAP_VIS.fill, MAP_VIS.elevation],
+// other visualizations
+export const MAP_VIS_OTHERS = { lineWidth: 'lineWidth' }
+
+export const MAP_LAYER_VALUE_VIS = {
+  scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
+  // MVT: [MAP_VALUE_VIS.fill],
+  geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
 }
 
 export const GEO_KEY_TYPES = {
@@ -122,10 +126,13 @@ export const VIS_OPTIONS = {
       </div>
     ),
   },
+  lineWidth: {
+    value: 1,
+    label: 'Outline Width',
+  },
   scale: 'linear',
 }
 
-export const OPACITY = 0.2
 export const PITCH = { elevation: 45 }
 
 export const MAP_LEGEND_POSITION = {
