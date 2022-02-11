@@ -424,22 +424,32 @@ export default {
   update: action((state, payload) => deepMerge(payload, state)),
 
   // replace state with the first element from the undo queue
-  undo: action(state => (
+  undo: thunk((actions) => {
+    actions.doUndo()
+    setTimeout(() => actions.setIgnoreUndo(false), 150)
+  }),
+  doUndo: action(state => (
     state.undoQueue.length
       ? {
         ...state.undoQueue[0],
         undoQueue: state.undoQueue.slice(1),
         redoQueue: [{ ...state }].concat(state.redoQueue).slice(0, MAX_UNDO_STEPS),
+        ignoreUndo: true,
       }
       : state
   )),
 
   // replace state with the first element from the redo queue
-  redo: action(({ redoQueue, ...state }) => (
+  redo: thunk((actions) => {
+    actions.doRedo()
+    setTimeout(() => actions.setIgnoreUndo(false), 150)
+  }),
+  doRedo: action(({ redoQueue, ...state }) => (
     redoQueue.length
       ? {
         ...redoQueue[0],
         redoQueue: redoQueue.slice(1),
+        ignoreUndo: true,
       }
       : state
   )),
