@@ -5,6 +5,7 @@ import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import CustomButton from './custom-button'
 import { useResizeDetector } from 'react-resize-detector'
+import MutedBarrier from '../controls/shared/muted-barrier'
 
 
 const SPEED = '400ms'
@@ -13,7 +14,7 @@ const COLLAPSED_WIDTH = '4rem'
 const Y_PADDING = '0.5rem'
 const X_PADDING = '1rem'
 
-const useStyles = ({ open, disabled }) => makeStyles({
+const useStyles = ({ open }) => makeStyles({
   innerContainer: {
     position: 'absolute',
     overflowX: 'clip',
@@ -51,7 +52,6 @@ const useStyles = ({ open, disabled }) => makeStyles({
     opacity: + open,
     width: '100%',
     ...(!open && { pointerEvents: 'none' }),
-    ...(disabled && { filter: 'blur(0.25rem)' }),
   },
   headerContainer: {
     padding: `0.75rem ${X_PADDING}`,
@@ -104,51 +104,53 @@ const CustomAccordion = ({ open, disabled, title, footer, icon, toggle, children
   const classes = useStyles({ open, disabled, width })
 
   return (
-    <div
-      className={`${classes.outerContainer} ${classes.transition}`}
-      style={{
-        width: open ? width : COLLAPSED_WIDTH,
-        height,
-      }}
-    >
+    <MutedBarrier muted={disabled}>
       <div
-        ref={ref}
-        className={`${classes.innerContainer} ${classes.transition} shadow-blue-40`}
-        style={{ width: open ? '100%' : COLLAPSED_WIDTH }}
+        className={`${classes.outerContainer} ${classes.transition}`}
+        style={{
+          width: open ? width : COLLAPSED_WIDTH,
+          height,
+        }}
       >
-        {disabled && <div className={classes.barrier} />}
-        <CustomButton
-          variant='borderless'
-          className={`${classes.transition} ${classes.button} ${classes.tallButton}`}
-          onClick={toggle}
+        <div
+          ref={ref}
+          className={`${classes.innerContainer} ${classes.transition} shadow-blue-40`}
+          style={{ width: open ? '100%' : COLLAPSED_WIDTH }}
         >
-          {createElement(icon ?? Icons.ArrowLeft, {
-            size: 'md',
-            className: `${classes.tallIcon}`,
-          })}
-        </CustomButton>
-        <div className={`${classes.transition} ${classes.contentContainer}`} >
-          <div className={classes.headerContainer} >
-            <div className={classes.header} >
-              <span className={classes.title} >{title}</span >
-              <CustomButton
-                variant='borderless'
-                className={classes.button}
-                onClick={toggle}
-              >
-                <Icons.Close size='md' className='fill-current text-secondary-600 h-min w-auto' />
-              </CustomButton>
+          {disabled && <div className={classes.barrier} />}
+          <CustomButton
+            variant='borderless'
+            className={`${classes.transition} ${classes.button} ${classes.tallButton}`}
+            onClick={toggle}
+          >
+            {createElement(icon ?? Icons.ArrowLeft, {
+              size: 'md',
+              className: `${classes.tallIcon}`,
+            })}
+          </CustomButton>
+          <div className={`${classes.transition} ${classes.contentContainer}`} >
+            <div className={classes.headerContainer} >
+              <div className={classes.header} >
+                <span className={classes.title} >{title}</span >
+                <CustomButton
+                  variant='borderless'
+                  className={classes.button}
+                  onClick={toggle}
+                >
+                  <Icons.Close size='md' className='fill-current text-secondary-600 h-min w-auto' />
+                </CustomButton>
+              </div>
+            </div >
+            <div className={classes.padded} >
+              {children}
+            </div >
+            <div className={classes.padded}>
+              {footer}
             </div>
           </div >
-          <div className={classes.padded} >
-            {children}
-          </div >
-          <div className={classes.padded}>
-            {footer}
-          </div>
         </div >
-      </div >
-    </div>
+      </div>
+    </MutedBarrier>
   )
 }
 
