@@ -77,12 +77,6 @@ export default {
     icon: Icons.MapChart,
     adapter: ReactMapsAdapter,
     groupingOptional: false,
-    uniqueOptions: {
-      showTooltip: {
-        name: 'Tooltip',
-        type: Boolean,
-        defaultValue: true,
-      },
-    },
+    uniqueOptions: {},
   },
 }

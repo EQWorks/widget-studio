@@ -39,7 +39,7 @@ const MapValueControls = () => {
       return (
         <>
           <p>Please select a column to group by above to enable</p>
-          <p>key(s) configurations.</p>
+          <p>value configurations.</p>
         </>
       )
     }

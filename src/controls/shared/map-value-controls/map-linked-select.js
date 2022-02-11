@@ -1,14 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Icons, Chip, makeStyles } from '@eqworks/lumen-labs'
+import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import PluralLinkedSelect from '../../../components/plural-linked-select'
+import { VIS_OPTIONS } from '../../../constants/map'
 
 
 const classes = makeStyles({
-  keyControl1 : { marginTop: '15px' },
-  linkedSelect : { marginTop: '5px' },
+  linkedSelect:{
+    marginBottom: '0.125rem',
+  },
+  visTitleWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '0.75rem',
+    marginTop: '0.625rem',
+    gap: '0.406rem',
+  },
+  visTitle: {
+    height: '1rem',
+    fontWeight: 700,
+    fontSize: '0.75rem',
+    color: getTailwindConfigColor('secondary-800'),
+  },
 })
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -27,13 +42,31 @@ const MapLinkedSelect = ({
     categories.map((mapVis, i) => {
       const match = values.findIndex(v => v.mapVis === mapVis)
       return (
-        <div key={i} className={i === 0 ? '' : classes.keyControl1} >
-          <Chip color={i === 0 ? 'primary' : 'success'}>
-            {mapVis}
-          </Chip>
+        <div key={i} className={classes.linkedSelect} >
+          <div className={classes.visTitleWrapper}>
+            <div className={classes.visTitle}>
+              {`${VIS_OPTIONS[mapVis].label}:`}
+            </div>
+            <s>
+              <Tooltip
+                description={VIS_OPTIONS[mapVis].info}
+                width='13rem'
+                arrow={false}
+                position='right'
+              >
+                <Icons.AlertInformation
+                  size='sm'
+                  color={getTailwindConfigColor('secondary-500')}
+                />
+              </Tooltip>
+            </s>
+          </div>
           <PluralLinkedSelect
             staticQuantity={1}
-            headerIcons={[Icons.Sum, Icons.Columns]}
+            headerIcons={[
+              Icons.Columns,
+              Icons.Sum,
+            ]}
             titles={titles}
             values={values[match] ? [values[match]] : []}
             callback={(_, v) => callback(

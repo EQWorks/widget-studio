@@ -11,9 +11,10 @@ import modes from '../constants/modes'
 import CustomButton from '../components/custom-button'
 import WidgetMeta from './meta'
 import CustomToggle from '../components/custom-toggle'
+import types from '../constants/types'
 
 
-const useStyles = (mode, tableExpanded) => makeStyles(
+const useStyles = ({ mode, tableExpanded, type }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
@@ -28,7 +29,7 @@ const useStyles = (mode, tableExpanded) => makeStyles(
         overflow: 'hidden',
         flex: 1,
         background: 'white',
-        padding: '1.25rem',
+        padding: type === types.MAP ? 0 : '1.25rem',
       },
       tableContainer: {
         borderTopLeftRadius: '0.5rem',
@@ -154,7 +155,7 @@ const WidgetView = () => {
   const [tableExpanded, setTableExpanded] = useState(false)
   const [autoExpandedTable, setAutoExpandedTable] = useState(false)
 
-  const classes = useStyles(mode, tableExpanded, tableShowsRawData)
+  const classes = useStyles({ mode, tableExpanded, type })
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (

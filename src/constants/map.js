@@ -1,3 +1,6 @@
+import React from 'react'
+
+
 export const MAP_LAYERS = {
   scatterplot: 'scatterplot',
   // MVT: 'MVT',
@@ -89,17 +92,50 @@ export const VIS_OPTIONS = {
   fill: {
     valueOptions: [[214, 232, 253], [39, 85, 196]],
     value: [39, 85, 196],
+    label: 'Fill Color',
+    info: (
+      <div>
+        <p>Calculate fill color based on the </p>
+        <p>selected column and operation.</p>
+      </div>
+    ),
   },
   radius: {
     valueOptions: [5, 15],
     value: 10,
+    label: 'Radius',
+    info: (
+      <div>
+        <p>Calculate radius based on the </p>
+        <p>selected column and operation.</p>
+      </div>
+    ),
   },
   elevation: {
     valueOptions: [1, 1000],
     value: 0,
+    label: 'Elevation',
+    info: (
+      <div>
+        <p>Calculate elevation height based on</p>
+        <p>the selected column and operation.</p>
+      </div>
+    ),
   },
   scale: 'linear',
 }
 
 export const OPACITY = 0.2
 export const PITCH = { elevation: 45 }
+
+export const MAP_LEGEND_POSITION = {
+  '[0,0]': 'bottom-left',
+  '[0,1]': 'top-left',
+  '[1,1]': 'top-right',
+  '[1,0]': 'bottom-right',
+}
+
+export const MAP_LEGEND_SIZE = {
+  Small: 'sm',
+  Large: 'lg',
+}

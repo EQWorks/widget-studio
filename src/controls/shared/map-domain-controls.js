@@ -34,7 +34,7 @@ const MapDomainControls = () => {
   ), [mapGroupKey])
 
   return (
-    <WidgetControlCard title={'Layer Configuration'} >
+    <WidgetControlCard title={'Map Layer Configuration'} >
       {
         renderSection(null,
           renderRow('Column',
@@ -47,7 +47,10 @@ const MapDomainControls = () => {
                 userUpdate({ mapGroupKey: val, groupKey: val })
                 const newLayer = Object.keys(MAP_LAYER_VIS)
                   .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
-                // reset mapValueKeys when we change to a mapGroupKey that requires a different layer, as different layer requires different visualization types
+                /*
+                 * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
+                 * as different layer requires different visualization types
+                 */
                 if (newLayer !== mapLayer) {
                   update({ mapValueKeys: [] })
                 }
