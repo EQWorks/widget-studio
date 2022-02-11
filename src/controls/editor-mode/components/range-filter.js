@@ -1,9 +1,8 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { makeStyles, TextField } from '@eqworks/lumen-labs'
 import Slider from '@material-ui/core/Slider'
-import { useStoreState } from '../../../store'
 
 
 const classes = makeStyles({
@@ -27,18 +26,12 @@ const classes = makeStyles({
   },
 })
 
-const RangeFilterControl = ({ index, update }) => {
-  const filters = useStoreState((state) => state.filters)
-  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
-
-  const value = useMemo(() => filters[index]?.filter || [min, max], [filters, index, max, min])
-  const { min, max } = columnsAnalysis[filters[index]?.key] || {}
-
+const RangeFilterControl = ({ value, min, max, update }) => {
   return (
     <div className={classes.controls}>
       <div className={classes.slider}>
         <Slider
-          defaultValue={value}
+          defaultValue={value || [min, max]}
           onChangeCommitted={(_, newValue) => update(newValue)}
           max={max}
           min={min}
@@ -51,7 +44,7 @@ const RangeFilterControl = ({ index, update }) => {
           type="number"
           deleteButton={false}
           placeholder={min}
-          value={(value || [])[0] || ''}
+          value={value[0] || min || ''}
           onChange={_min => update([_min, max])}
         />
         <TextField
@@ -59,7 +52,7 @@ const RangeFilterControl = ({ index, update }) => {
           type="number"
           deleteButton={false}
           placeholder={max}
-          value={(value || [])[1] || ''}
+          value={value[1] || max || ''}
           onChange={_max => update([min, _max])}
         />
       </div>
@@ -70,6 +63,9 @@ const RangeFilterControl = ({ index, update }) => {
 RangeFilterControl.propTypes = {
   index: PropTypes.number.isRequired,
   update: PropTypes.func.isRequired,
+  value: PropTypes.arrayOf(PropTypes.number).isRequired,
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
 }
 
 export default RangeFilterControl

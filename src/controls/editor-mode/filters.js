@@ -90,12 +90,13 @@ const Filters = () => {
                 userUpdate({ filters: filtersCopy })
               }}
               customRenderSecondary={(i, k) => {
-                const value = filters[i]?.filter
+                const { key, filter } = filters[i] || {}
+                const { min, max } = columnsAnalysis[key] || {}
                 return (
                   <CustomDropdown
                     selectedString={
-                      value &&
-                      (value.map(Intl.NumberFormat('en-US', {
+                      filter &&
+                      (filter.map(Intl.NumberFormat('en-US', {
                         notation: 'compact',
                         maximumFractionDigits: 1,
                       }).format)
@@ -106,10 +107,12 @@ const Filters = () => {
                       menu: classes.dropdownMenu,
                     }}
                     placeholder='Range'
-                    disabled={!value}
+                    disabled={!filter}
                   >
                     <RangeFilter
-                      index={i}
+                      min={min}
+                      max={max}
+                      value={filter || [min, max]}
                       update={filter => userUpdate({
                         filters:
                           filters.map((v, _i) => i === _i
