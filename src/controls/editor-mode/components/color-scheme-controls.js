@@ -110,7 +110,7 @@ const useStyles = ({ baseColor, showPicker }) => makeStyles({
 const ColorSchemeControls = () => {
   // common actions
   const update = useStoreActions((state) => state.update)
-  const nestedUpdate = useStoreActions((state) => state.nestedUpdate)
+  const userUpdate = useStoreActions((state) => state.userUpdate)
 
   // common state
   const presetColors = useStoreState((state) => state.presetColors)
@@ -129,7 +129,9 @@ const ColorSchemeControls = () => {
 
   const styles = useStyles({ baseColor, showPicker })
 
-  const updateBaseColor = useDebouncedCallback(v => nestedUpdate({ genericOptions: { baseColor: colord(v).toHex() } }), 100)
+  const updateBaseColor = useDebouncedCallback(v => userUpdate({
+    genericOptions: { baseColor: colord(v).toHex() },
+  }), 100)
 
   useEffect(() => {
     update({ presetColors: presetColors.map((_c, i) => i === selectedColorIndex ? baseColor : _c) })
@@ -166,9 +168,8 @@ const ColorSchemeControls = () => {
             onChange={(v) => {
               const validated = colord(v)
               const valid = validated.parsed
-              const color = validated.toHex()
               if (valid) {
-                nestedUpdate({ genericOptions: { baseColor: color } })
+                updateBaseColor(validated.toHex())
                 setShowInputHelper(false)
               }
               setInputError(!valid)
@@ -188,7 +189,7 @@ const ColorSchemeControls = () => {
             listContainer: 'normal-case',
           }}
           data={COLOR_REPRESENTATIONS.map(({ label }) => label)}
-          onSelect={v => nestedUpdate({ ui: { colorRepresentation: COLOR_REPRESENTATIONS.find(({ label }) => label === v) } })}
+          onSelect={v => userUpdate({ ui: { colorRepresentation: COLOR_REPRESENTATIONS.find(({ label }) => label === v) } })}
           value={colorRepresentation.label}
           allowClear={false}
         />
@@ -210,7 +211,7 @@ const ColorSchemeControls = () => {
                   style={{ background: c }}
                   onClick={() => {
                     setSelectedColorIndex(i)
-                    nestedUpdate({ genericOptions: { baseColor: c } })
+                    userUpdate({ genericOptions: { baseColor: c } })
                   }}
                 />
                 <div

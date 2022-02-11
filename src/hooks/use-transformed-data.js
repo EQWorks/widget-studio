@@ -42,18 +42,19 @@ const useTransformedData = () => {
     })
   ), [rows, filters])
 
-  const newGroupKey = useMemo(() => groupFSAByPC
-    // use the key for postalcode to aggregate by FSA
-    ? validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
-    : finalGroupKey
-  , [groupFSAByPC, validMapGroupKeys, finalGroupKey])
+  const newGroupKey = useMemo(() => (
+    groupFSAByPC
+      // use the key for postalcode to aggregate by FSA
+      ? validMapGroupKeys.find(key => GEO_KEY_TYPES.postalcode.includes(key))
+      : finalGroupKey
+  ), [groupFSAByPC, validMapGroupKeys, finalGroupKey])
 
   // if grouping enabled, memoize grouped and reorganized version of data that will be easy to aggregate
   const groupedData = useMemo(() => (
     group
       ? truncatedData.reduce((res, r) => {
         // FSAs are the first 3 letters of a postal code
-        const group = groupFSAByPC ? r[newGroupKey].slice(0,3) : r[newGroupKey]
+        const group = groupFSAByPC ? r[newGroupKey].slice(0, 3) : r[newGroupKey]
         res[group] = res[group] || {}
         Object.entries(r).forEach(([k, v]) => {
           if (k !== newGroupKey) {
@@ -182,7 +183,9 @@ const useTransformedData = () => {
     return indexedData
   }, [aggregatedData, group, indexedData, mapEnrichedData, percentageData, percentageMode, type])
 
-  return finalData
+  useEffect(() => {
+    update({ transformedData: finalData })
+  }, [finalData, update])
 }
 
 export default useTransformedData

@@ -76,6 +76,10 @@ const WidgetTitleBar = () => {
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
+  const undo = useStoreActions((actions) => actions.undo)
+  const redo = useStoreActions((actions) => actions.redo)
+  const undoAvailable = useStoreState((state) => state.undoAvailable)
+  const redoAvailable = useStoreState((state) => state.redoAvailable)
 
   // widget state
   const dataSource = useStoreState((state) => state.dataSource)
@@ -150,7 +154,8 @@ const WidgetTitleBar = () => {
               horizontalMargin
               size='sm'
               variant='outlined'
-              onClick={() => window.alert('not implemented')}
+              onClick={undo}
+              disabled={!undoAvailable}
               endIcon={<Icons.Undo size='md' />}
             >
               undo
@@ -159,7 +164,8 @@ const WidgetTitleBar = () => {
               horizontalMargin
               size='sm'
               variant='outlined'
-              onClick={() => window.alert('not implemented')}
+              onClick={redo}
+              disabled={!redoAvailable}
               startIcon={<Icons.Redo size='md' />}
             >
               redo

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { Icons, makeStyles } from '@eqworks/lumen-labs'
 
@@ -8,7 +8,6 @@ import { renderSection, renderRow } from '../shared/util'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import RangeFilter from './components/range-filter'
 import CustomSelect from '../../components/custom-select'
-import types from '../../constants/types'
 import CustomDropdown from './components/custom-dropdown'
 
 
@@ -26,24 +25,17 @@ const classes = makeStyles({
 
 const Filters = () => {
   // common actions
-  const update = useStoreActions((state) => state.update)
+  const userUpdate = useStoreActions((state) => state.userUpdate)
   const resetValue = useStoreActions((state) => state.resetValue)
 
   // common state
-  const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const groups = useStoreState((state) => state.groups)
   const groupFilter = useStoreState((state) => state.groupFilter)
-  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
-  const groupKey = useStoreState((state) => state.groupKey)
   const filters = useStoreState((state) => state.filters)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
-
-  useEffect(() => {
-    update({ groupFilter: [] })
-  }, [domain.value, update])
 
   return (
     <WidgetControlCard
@@ -59,9 +51,9 @@ const Filters = () => {
             multiSelect
             data={groups}
             value={groupFilter ?? []}
-            onSelect={val => update({ groupFilter: val })}
-            placeholder={group ? `Filter ${type === types.MAP ? mapGroupKey : groupKey}` : 'N/A'}
-            disabled={!group}
+            onSelect={val => userUpdate({ groupFilter: val })}
+            placeholder={group && domain.value ? `Filter ${domain.value}` : 'N/A'}
+            disabled={!group || !domain.value}
           />
         )
       )
@@ -84,18 +76,18 @@ const Filters = () => {
               subData={[]}
               callback={(i, { key }) => {
                 if (i === filters.length) {
-                  update({ filters: filters.concat([{ key: null, filter: null }]) })
+                  userUpdate({ filters: filters.concat([{ key: null, filter: null }]) })
                 } else if (!key) {
-                  update({ filters: filters.map((v, _i) => i === _i ? { key: null, filter: null } : v) })
+                  userUpdate({ filters: filters.map((v, _i) => i === _i ? { key: null, filter: null } : v) })
                 } else if (filters[i]?.key !== key) {
                   const { min, max } = columnsAnalysis[key] || {}
-                  update({ filters: filters.map((v, _i) => i === _i ? { key, filter: [min, max] } : v) })
+                  userUpdate({ filters: filters.map((v, _i) => i === _i ? { key, filter: [min, max] } : v) })
                 }
               }}
               deleteCallback={(i) => {
                 const filtersCopy = JSON.parse(JSON.stringify(filters))
                 filtersCopy.splice(i, 1)
-                update({ filters: filtersCopy })
+                userUpdate({ filters: filtersCopy })
               }}
               customRenderSecondary={(i, k) => {
                 const value = filters[i]?.filter
@@ -118,7 +110,7 @@ const Filters = () => {
                   >
                     <RangeFilter
                       index={i}
-                      update={filter => update({
+                      update={filter => userUpdate({
                         filters:
                           filters.map((v, _i) => i === _i
                             ? { key: k, filter }

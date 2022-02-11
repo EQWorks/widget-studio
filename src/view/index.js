@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 
 import { Icons, getTailwindConfigColor, Loader, makeStyles } from '@eqworks/lumen-labs'
 
@@ -129,13 +129,15 @@ const useStyles = (mode, tableExpanded) => makeStyles(
 
 const WidgetView = () => {
   // store actions
-  const nestedUpdate = useStoreActions((actions) => actions.nestedUpdate)
+  const update = useStoreActions((actions) => actions.update)
 
   // widget state
   const type = useStoreState((state) => state.type)
   const rows = useStoreState((state) => state.rows)
   const isReady = useStoreState((state) => state.isReady)
   const transformedData = useStoreState((state) => state.transformedData)
+  const domain = useStoreState((state) => state.domain)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -150,6 +152,7 @@ const WidgetView = () => {
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
 
   const [tableExpanded, setTableExpanded] = useState(false)
+  const [autoExpandedTable, setAutoExpandedTable] = useState(false)
 
   const classes = useStyles(mode, tableExpanded, tableShowsRawData)
 
@@ -161,6 +164,17 @@ const WidgetView = () => {
       'Loading'
   ), [dataSourceType, dataSourceID])
 
+  // auto-expand/collapse the table when viz readiness changes
+  useEffect(() => {
+    if (!isReady) {
+      setTableExpanded(true)
+      setAutoExpandedTable(true)
+    } else if (autoExpandedTable) {
+      setTableExpanded(false)
+      setAutoExpandedTable(false)
+    }
+  }, [autoExpandedTable, isReady])
+
   // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
   const widgetWarning = useMemo(() => {
     let primary, secondary
@@ -171,18 +185,16 @@ const WidgetView = () => {
       secondary = `${dataSourceError}`
     } else if (!rows.length) {
       primary = 'Sorry, this data is empty.'
+    } else if (!type) {
+      primary = 'Select a widget type.'
+    } else if (!domain?.value || !renderableValueKeys?.length) {
+      primary = 'Select columns and configure your widget.'
     } else if (!transformedData?.length) {
       primary = 'This configuration resulted in an empty dataset.'
       secondary = 'Try adjusting your filters.'
-    } else if (type) {
-      primary = 'Select columns and configure your widget.'
-    } else {
-      primary = 'Select a widget type.'
-    } if (!secondary) {
-      secondary = 'Data loaded successfully'
     }
-    return { primary, secondary }
-  }, [dataSourceError, dataSourceID, dataSourceType, rows.length, transformedData?.length, type])
+    return { primary, secondary: secondary || 'Data loaded successfully' }
+  }, [dataSourceError, dataSourceID, dataSourceType, domain?.value, renderableValueKeys?.length, rows.length, transformedData?.length, type])
 
   const renderWidgetWarning = (
     <div className='h-full flex-1 flex flex-col justify-center items-center'>
@@ -244,7 +256,7 @@ const WidgetView = () => {
                       }}
                       value={tableShowsRawData}
                       label='Raw Data'
-                      onChange={() => nestedUpdate({ ui: { tableShowsRawData: !tableShowsRawData } })}
+                      onChange={() => update({ ui: { tableShowsRawData: !tableShowsRawData } })}
                     />
                   </div>
                 </div>
@@ -260,7 +272,7 @@ const WidgetView = () => {
               labels={['widget', 'table']}
               icons={[Icons.DashboardLayout, Icons.Table]}
               value={showTable}
-              update={(val) => nestedUpdate({ ui: { showTable: val } })}
+              update={(val) => update({ ui: { showTable: val } })}
             />
             <div className='flex-1'>
               <FadeBetween value={showTable}>

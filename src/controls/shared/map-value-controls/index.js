@@ -11,7 +11,7 @@ import { MAP_LAYER_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS, ID_KEYS } from '../../..
 
 const MapValueControls = () => {
   // common actions
-  const update = useStoreActions(actions => actions.update)
+  const userUpdate = useStoreActions(actions => actions.userUpdate)
   const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
@@ -20,14 +20,16 @@ const MapValueControls = () => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
 
-  const mapLayer = useMemo(() => Object.keys(MAP_LAYER_VIS)
-    .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
-  , [mapGroupKey])
+  const mapLayer = useMemo(() => (
+    Object.keys(MAP_LAYER_VIS)
+      .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+  ), [mapGroupKey])
 
-  const mapNumericColumns = useMemo(() => numericColumns.filter(col =>
-    !Object.values(COORD_KEYS).flat().includes(col) &&
-    !ID_KEYS.includes(col))
-  , [numericColumns])
+  const mapNumericColumns = useMemo(() => (
+    numericColumns.filter(col =>
+      !Object.values(COORD_KEYS).flat().includes(col) &&
+      !ID_KEYS.includes(col))
+  ), [numericColumns])
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -55,24 +57,24 @@ const MapValueControls = () => {
       description={widgetControlCardDescription}
     >
       {mapLayer &&
-          <MapLinkedSelect
-            categories={MAP_LAYER_VIS[mapLayer]}
-            titles={['Column', 'Operation']}
-            values={mapValueKeys}
-            data={mapNumericColumns}
-            subData={mapGroupKey ? Object.keys(aggFunctions) : []}
-            disableSubs={!dataHasVariance}
-            disableSubMessage="doesn't require aggregation."
-            callback={(i, val) => {
-              if (i === -1) {
-                const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
-                valueKeysCopy.push(val)
-                update({ mapValueKeys: valueKeysCopy })
-              } else { // modify a key
-                update({ mapValueKeys: mapValueKeys.map((v, _i) => i === _i ? val : v) })
-              }
-            }}
-          />
+        <MapLinkedSelect
+          categories={MAP_LAYER_VIS[mapLayer]}
+          titles={['Column', 'Operation']}
+          values={mapValueKeys}
+          data={mapNumericColumns}
+          subData={mapGroupKey ? Object.keys(aggFunctions) : []}
+          disableSubs={!dataHasVariance}
+          disableSubMessage="doesn't require aggregation."
+          callback={(i, val) => {
+            if (i === -1) {
+              const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
+              valueKeysCopy.push(val)
+              userUpdate({ mapValueKeys: valueKeysCopy })
+            } else { // modify a key
+              userUpdate({ mapValueKeys: mapValueKeys.map((v, _i) => i === _i ? val : v) })
+            }
+          }}
+        />
       }
     </WidgetControlCard>
   )
