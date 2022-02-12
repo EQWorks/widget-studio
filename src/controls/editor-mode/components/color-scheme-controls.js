@@ -24,6 +24,7 @@ const useStyles = ({ baseColor, showPicker, type }) => makeStyles({
   row: {
     display: 'flex',
     justifyContent: 'space-between',
+    marginBottom: '0.6rem',
     alignItems: 'center',
   },
   swatchContainer: {
