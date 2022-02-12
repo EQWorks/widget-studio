@@ -10,6 +10,7 @@ import { geoKeyHasCoordinates } from '../util'
 import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import { getKeyFormatFunction } from '../util/data-format-functions'
 import { deepMerge } from './util'
+import { dateAggregations } from '../constants/time'
 
 
 const MAX_UNDO_STEPS = 10
@@ -82,6 +83,7 @@ const stateDefaults = [
   { key: 'undoQueue', defaultValue: [], resettable: false },
   { key: 'redoQueue', defaultValue: [], resettable: false },
   { key: 'ignoreUndo', defaultValue: false, resettable: false },
+  { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
 ]
 
 export default {
@@ -238,6 +240,16 @@ export default {
     (mapGroupKey, columns) => {
       return GEO_KEY_TYPES.fsa.includes(mapGroupKey) && !columns.map(({ name }) => name).includes(mapGroupKey)
     }
+  ),
+
+  domainIsDate: computed(
+    [
+      (state) => state.domain,
+      (state) => state.columnsAnalysis,
+    ],
+    (domain, columnsAnalysis) => (
+      columnsAnalysis[domain.value]?.category === 'Date'
+    )
   ),
 
   renderableValueKeys: computed(
