@@ -15,6 +15,7 @@ import EditorModeControls from './controls/editor-mode'
 import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
+import { dataSourceTypes } from './constants/data-source'
 
 
 const commonClasses = {
@@ -61,8 +62,13 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns })
   const classes = useStyles(_mode)
 
   // easy-peasy actions
+  const loadData = useStoreActions((actions) => actions.loadData)
   const loadConfig = useStoreActions(actions => actions.loadConfig)
   const update = useStoreActions(actions => actions.update)
+
+  // common state
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
@@ -106,6 +112,13 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns })
     }
   }, [_columns, _mode, _rows, id, loadConfig, mode, staticData, update])
 
+
+  // load data if source changes
+  useEffect(() => {
+    if (!staticData && !_rows && !_columns && dataSourceType && dataSourceID) {
+      loadData({ type: dataSourceType, id: dataSourceID })
+    }
+  }, [staticData, loadData, dataSourceType, dataSourceID, _rows, _columns])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
