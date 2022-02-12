@@ -1,3 +1,5 @@
+import React from 'react'
+
 import types from './types'
 import { Icons } from '@eqworks/lumen-labs'
 import PlotlyAdapters from '../view/adapter/adapters/chart-system/plotly'
@@ -78,15 +80,79 @@ export default {
     adapter: ReactMapsAdapter,
     groupingOptional: false,
     uniqueOptions: {
+      radius: {
+        name: 'Radius (px)',
+        valueConfigName: 'Radius',
+        valueOptions: {
+          type: Array,
+          defaultValue: [5, 15],
+        },
+        value: {
+          type: Number,
+          defaultValue: [10],
+        },
+        info: (
+          <div>
+            <p>Calculate radius based on the </p>
+            <p>selected column and operation.</p>
+          </div>
+        ),
+        min: 1,
+        max: 100,
+        step: 1,
+      },
+      fill: {
+        name: 'Color Fill',
+        valueConfigName: 'Color Fill',
+        valueOptions: {
+          type: Array,
+          defaultValue: [[214, 232, 253], [39, 85, 196]],
+        },
+        value: {
+          type: Number,
+          defaultValue: [39, 85, 196],
+        },
+        info: (
+          <div>
+            <p>Calculate fill color based on the </p>
+            <p>selected column and operation.</p>
+          </div>
+        ),
+      },
+      elevation: {
+        name: 'Elevation Height',
+        valueConfigName: 'Elevation',
+        valueOptions: {
+          type: Array,
+          defaultValue: [0, 1000],
+        },
+        min: 0,
+        max: 1000,
+        step: 1,
+        info: (
+          <div>
+            <p>Calculate elevation height based on</p>
+            <p>the selected column and operation.</p>
+          </div>
+        ),
+      },
+      lineWidth: {
+        name: 'Outline Width',
+        value: {
+          type: Number,
+          defaultValue: 1,
+        },
+        min: 1,
+        max: 100,
+        step: 1,
+      },
       opacity: {
         name: 'Opacity',
         type: Number,
         defaultValue: 30,
-      },
-      lineWidth: {
-        name: 'Outline Width',
-        type: Number,
-        defaultValue: 1,
+        min: 0,
+        max: 100,
+        step: 1,
       },
     },
   },
