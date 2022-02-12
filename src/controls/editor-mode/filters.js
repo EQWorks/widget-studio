@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Icons, makeStyles } from '@eqworks/lumen-labs'
+import { DateRange, Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -46,15 +46,21 @@ const Filters = () => {
         null,
         renderRow(
           'Group Filter',
-          <CustomSelect
-            fullWidth
-            multiSelect
-            data={groups}
-            value={groupFilter ?? []}
-            onSelect={val => userUpdate({ groupFilter: val })}
-            placeholder={group && domain.value ? `Filter ${domain.value}` : 'N/A'}
-            disabled={!group || !domain.value}
-          />
+          columnsAnalysis[domain.value]?.category === 'Date'
+            ? <DateRange
+              defaultValue={groupFilter}
+              setFromValue={v => userUpdate({ groupFilter: [v, groupFilter[1]] })}
+              setToValue={v => userUpdate({ groupFilter: [groupFilter[0], v] })}
+            />
+            : <CustomSelect
+              fullWidth
+              multiSelect
+              data={groups}
+              value={groupFilter ?? []}
+              onSelect={val => userUpdate({ groupFilter: val })}
+              placeholder={group && domain.value ? `Filter ${domain.value}` : 'N/A'}
+              disabled={!group || !domain.value}
+            />
         )
       )
       }
