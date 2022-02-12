@@ -1,6 +1,3 @@
-import React from 'react'
-
-
 export const MAP_LAYERS = {
   scatterplot: 'scatterplot',
   // MVT: 'MVT',
@@ -15,7 +12,10 @@ export const MAP_VALUE_VIS = {
 }
 
 // other visualizations
-export const MAP_VIS_OTHERS = { lineWidth: 'lineWidth' }
+export const MAP_VIS_OTHERS = {
+  lineWidth: 'lineWidth',
+  lineColor: 'lineColor',
+}
 
 export const MAP_LAYER_VALUE_VIS = {
   scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
@@ -91,49 +91,8 @@ export const COORD_KEYS = {
   ],
 }
 
-// ----TO DO: ERIKA - this has to be moved to state later on, when we give more options in editor
-export const VIS_OPTIONS = {
-  fill: {
-    valueOptions: [[214, 232, 253], [39, 85, 196]],
-    value: [39, 85, 196],
-    label: 'Fill Color',
-    info: (
-      <div>
-        <p>Calculate fill color based on the </p>
-        <p>selected column and operation.</p>
-      </div>
-    ),
-  },
-  radius: {
-    valueOptions: [5, 15],
-    value: 10,
-    label: 'Radius',
-    info: (
-      <div>
-        <p>Calculate radius based on the </p>
-        <p>selected column and operation.</p>
-      </div>
-    ),
-  },
-  elevation: {
-    valueOptions: [1, 1000],
-    value: 0,
-    label: 'Elevation',
-    info: (
-      <div>
-        <p>Calculate elevation height based on</p>
-        <p>the selected column and operation.</p>
-      </div>
-    ),
-  },
-  lineWidth: {
-    value: 1,
-    label: 'Outline Width',
-  },
-  scale: 'linear',
-}
-
-export const PITCH = { elevation: 45 }
+export const LAYER_SCALE = 'linear'
+export const PITCH = 45
 
 export const MAP_LEGEND_POSITION = {
   '[0,0]': 'bottom-left',
