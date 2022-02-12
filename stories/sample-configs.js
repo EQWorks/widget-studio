@@ -167,6 +167,55 @@ export default {
       'id': '187',
     },
   },
+  'bar-3': {
+    'title': 'Time/Price Widget',
+    'type': 'bar',
+    'filters': [],
+    'groupFilter': [
+      '2019-01-01',
+      '2022-02-02',
+    ],
+    'valueKeys': [
+      {
+        'key': 'price',
+        'title': 'Price (mean)',
+        'agg': 'mean',
+      },
+    ],
+    'dateAggregation': 'Hour',
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
+    'group': true,
+    'groupKey': 'time',
+    'mapGroupKey': null,
+    'indexKey': null,
+    'groupKeyTitle': 'Time',
+    'uniqueOptions': {
+      'spline': true,
+      'showTicks': true,
+      'stacked': false,
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLegend': true,
+      'subPlots': true,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        1,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'baseColor': '#366fe4',
+    },
+    'dataSource': {
+      'type': 'Execution',
+      'id': '1458',
+    },
+  },
   'line-1': {
     'title': 'Another Line Widget',
     'type': 'line',
