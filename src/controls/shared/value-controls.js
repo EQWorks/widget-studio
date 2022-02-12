@@ -26,6 +26,7 @@ const ValueControls = () => {
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
 
   const eligibleColumns = useMemo(() => columns
     .map(({ name }) => name)
