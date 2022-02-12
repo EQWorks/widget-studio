@@ -28,6 +28,7 @@ const useTransformedData = () => {
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const domain = useStoreState((state) => state.domain)
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
@@ -102,13 +103,29 @@ const useTransformedData = () => {
   }, [update, groupedData])
 
   // if a filter on the finalGroupKey exists, retain only the desired groups
-  const filteredGroupedData = useMemo(() => (
-    group
-      ? groupFilter?.length
-        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => groupFilter?.includes(k)))
+  const filteredGroupedData = useMemo(() => {
+    if (!group) {
+      return null
+    }
+    if (!groupFilter?.length) {
+      return groupedData
+    }
+    if (columnsAnalysis[domain.value]?.category === 'Date') {
+      const min = new Date(groupFilter[0])
+      const max = new Date(groupFilter[1])
+      return min && max
+        ? Object.fromEntries(
+          Object.entries(groupedData)
+            .filter(([k]) => {
+              const d = new Date(k)
+              return min < d && d < max
+            })
+        )
         : groupedData
-      : null
-  ), [group, groupFilter, groupedData])
+    }
+    return Object.fromEntries(Object.entries(groupedData).filter(([k]) => groupFilter?.includes(k)))
+  }, [columnsAnalysis, domain.value, group, groupFilter, groupedData])
+
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => (
@@ -180,13 +197,22 @@ const useTransformedData = () => {
   }, [type, aggregatedData, columns, mapGroupKey, groupedData, formattedColumnNames])
 
   // simply format and sort data if grouping is not enabled
-  const indexedData = useMemo(() => (
-    !group
-      ? truncatedData.map(d =>
-        Object.fromEntries(Object.entries(d).map(([k, v]) => [formattedColumnNames[k], v]))
-      ).sort((a, b) => a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
-      : null
-  ), [formattedColumnNames, group, indexKey, truncatedData])
+  const indexedData = useMemo(() => {
+    if (group) return null
+    const sortFn = columnsAnalysis[indexKey]?.category === 'Date'
+      ? (a, b) => (new Date(a[formattedColumnNames[indexKey]]) - new Date(b[formattedColumnNames[indexKey]]))
+      : (a, b) => (a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
+    return (
+      truncatedData
+        .map(d => Object.fromEntries(
+          Object.entries(d)
+            .map(
+              ([k, v]) => [formattedColumnNames[k], v]
+            )
+        ))
+        .sort(sortFn)
+    )
+  }, [columnsAnalysis, formattedColumnNames, group, indexKey, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
   const finalData = useMemo(() => {
