@@ -33,7 +33,7 @@ const Filters = () => {
   const groups = useStoreState((state) => state.groups)
   const groupFilter = useStoreState((state) => state.groupFilter)
   const filters = useStoreState((state) => state.filters)
-  const numericColumns = useStoreState((state) => state.numericColumns)
+  const columns = useStoreState((state) => state.columns)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
@@ -76,9 +76,9 @@ const Filters = () => {
               values={filters}
               primaryKey='key'
               secondaryKey='filter'
-              data={numericColumns.filter(c => {
-                const { min, max, category } = columnsAnalysis[c] || {}
-                return min !== max && category === 'Numeric'
+              data={columns.map(({ name }) => name).filter(c => {
+                const { min, max, isNumeric } = columnsAnalysis[c] || {}
+                return isNumeric && min !== max
               })}
               subData={[]}
               callback={(i, { key }) => {

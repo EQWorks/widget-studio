@@ -30,7 +30,7 @@ const DomainControls = () => {
 
   const eligibleGroupKeyValues = useMemo(() => (
     columns.map(({ name }) => name)
-      .filter(c => columnsAnalysis[c].category !== 'Numeric' || c.endsWith('_id'))
+      .filter(c => !columnsAnalysis[c]?.isNumeric)
   ), [columns, columnsAnalysis])
 
   const eligibleDomainValues = useMemo(() => (

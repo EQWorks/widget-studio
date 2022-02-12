@@ -30,17 +30,10 @@ const ValueControls = () => {
 
   const eligibleColumns = useMemo(() => columns
     .map(({ name }) => name)
-    .filter(c => {
-      const { category } = columnsAnalysis[c] || {}
-      return (
-        c !== domain.value
-        && !c.endsWith('_id')
-        && (
-          category === 'Numeric'
-          || (category === 'String' && c.includes('price'))
-        )
-      )
-    }), [columns, columnsAnalysis, domain.value])
+    .filter(c => (
+      c !== domain.value
+      && columnsAnalysis[c]?.isNumeric
+    )), [columns, columnsAnalysis, domain.value])
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
