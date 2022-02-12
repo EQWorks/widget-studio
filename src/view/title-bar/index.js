@@ -214,7 +214,6 @@ const WidgetTitleBar = () => {
                     horizontalMargin
                     variant='filled'
                     onClick={() => window.alert('not implemented')}
-                    // endIcon={<ArrowExpand size='md' />}
                     endIcon={<Icons.ShareExternalLink size='md' />}
                   >
                     OPEN IN EDITOR

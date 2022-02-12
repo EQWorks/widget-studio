@@ -101,6 +101,9 @@ const useStyles = ({ mode, tableExpanded, type }) => makeStyles(
           fontSize: '0.78rem',
           color: getTailwindConfigColor('secondary-800'),
           marginRight: '1rem',
+          '&:first-child': {
+            flex: 1,
+          },
           '&:last-child': {
             marginRight: 0,
           },
