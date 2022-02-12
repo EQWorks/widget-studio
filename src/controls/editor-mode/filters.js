@@ -42,8 +42,10 @@ const Filters = () => {
       clear={() => resetValue({ filters, groupFilter })}
       title='Filters'
     >
-      {renderSection(
-        null,
+      {
+      // NOTE - temporary fix to remove some large spaces - to be adjusted after the styling revision
+      // renderSection(
+      //   null,
         renderRow(
           'Group Filter',
           <CustomSelect
@@ -56,7 +58,7 @@ const Filters = () => {
             disabled={!group || !domain.value}
           />
         )
-      )
+      // )
       }
       {renderSection(
         null,
