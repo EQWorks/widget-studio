@@ -4,25 +4,36 @@ import PropTypes from 'prop-types'
 import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 
-const useStyles = ({ mute }) => makeStyles({
+const useStyles = ({ mute, message }) => makeStyles({
   container: {
     transition: 'opacity 0.3s',
     ...(mute
       ? {
-        opacity: 0.2,
-        pointerEvents: 'none',
-        userSelect: 'none',
+        '> *': {
+          opacity: 0.2,
+          pointerEvents: 'none',
+          userSelect: 'none',
+        },
+        ...(message && {
+          '#muted-barrier-message': {
+            opacity: '1 !important',
+          },
+        }),
       }
       : {
         opacity: 1,
       }),
+    position: 'relative',
   },
   message: {
-    zIndex: 99,
+    width: 'calc(100% - 2rem)',
+    whiteSpace: 'normal',
+    wordWrap: 'break-word',
+    zIndex: 2,
     position: 'absolute',
     background: getTailwindConfigColor('secondary-200'),
     color: getTailwindConfigColor('secondary-600'),
-    borderRadius: '0.7rem',
+    borderRadius: '0.4rem',
     fontSize: '0.9rem',
     fontWeight: 500,
     margin: '1rem',
@@ -33,16 +44,16 @@ const useStyles = ({ mute }) => makeStyles({
 
 
 const MutedBarrier = ({ mute, message, children }) => {
-  const classes = useStyles({ mute })
+  const classes = useStyles({ mute, message })
   return (
     <>
-      {
-        mute && message &&
-        <div className={classes.message}>
-          {message}
-        </div>
-      }
       <div className={classes.container}>
+        {
+          mute && message &&
+          <div id='muted-barrier-message' className={classes.message}>
+            {message}
+          </div>
+        }
         {children}
       </div>
     </>
