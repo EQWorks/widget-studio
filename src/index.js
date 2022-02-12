@@ -57,7 +57,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const Widget = ({ id, mode: _mode, staticData }) => {
+const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns }) => {
   const classes = useStyles(_mode)
 
   // easy-peasy actions
@@ -85,6 +85,12 @@ const Widget = ({ id, mode: _mode, staticData }) => {
         mode: validatedMode,
         staticData,
       },
+      // use manually passed data if available
+      ...(_rows && _columns && {
+        rows: _rows,
+        columns: _columns,
+        dataSource: { type: dataSourceTypes.MANUAL, id: 1 },
+      }),
     })
 
     // if there is a widget ID,
@@ -98,7 +104,8 @@ const Widget = ({ id, mode: _mode, staticData }) => {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_mode, id, loadConfig, mode, update, staticData])
+  }, [_columns, _mode, _rows, id, loadConfig, mode, staticData, update])
+
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
@@ -133,11 +140,15 @@ Widget.propTypes = {
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
+  rows: PropTypes.array,
+  columns: PropTypes.array,
 }
 Widget.defaultProps = {
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
+  rows: null,
+  columns: null,
 }
 
 export default withQueryClient(withStore(Widget))
