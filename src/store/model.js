@@ -11,6 +11,7 @@ import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import { getKeyFormatFunction } from '../util/data-format-functions'
 import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
+import { priceStringToNumeric } from '../util/numeric'
 
 
 const MAX_UNDO_STEPS = 10
@@ -162,12 +163,19 @@ export default {
     ) => (
       columns.reduce((acc, { name, category }) => {
         const data = rows.map(r => r[name])
+        const sampleDate = category === 'Date' ? new Date(data[0]) : null
+        const isValidPrice = category === 'String' && !isNaN(priceStringToNumeric(data[0]))
+        const isNumeric = (category === 'Numeric' || isValidPrice) && !name.endsWith('_id')
         acc[name] = {
           category,
-          ...(category === 'Numeric' && {
-            min: Math.min.apply(null, data),
-            max: Math.max.apply(null, data),
-          }),
+          isValidDate: sampleDate instanceof Date && !isNaN(sampleDate),
+          isValidPrice,
+          isNumeric,
+        }
+        if (isNumeric) {
+          const numericData = isValidPrice ? data.map(priceStringToNumeric) : data
+          acc[name].min = Math.min.apply(null, numericData)
+          acc[name].max = Math.max.apply(null, numericData)
         }
         return acc
       }, {})
@@ -248,7 +256,7 @@ export default {
       (state) => state.columnsAnalysis,
     ],
     (domain, columnsAnalysis) => (
-      columnsAnalysis[domain.value]?.category === 'Date'
+      columnsAnalysis[domain.value]?.isValidDate
     )
   ),
 
