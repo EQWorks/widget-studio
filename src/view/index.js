@@ -168,14 +168,14 @@ const WidgetView = () => {
 
   // auto-expand/collapse the table when viz readiness changes
   useEffect(() => {
-    if (!isReady) {
+    if (!isReady && dataReady) {
       setTableExpanded(true)
       setAutoExpandedTable(true)
     } else if (autoExpandedTable) {
       setTableExpanded(false)
       setAutoExpandedTable(false)
     }
-  }, [autoExpandedTable, isReady])
+  }, [autoExpandedTable, isReady, dataReady])
 
   // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
   const widgetWarning = useMemo(() => {
@@ -217,9 +217,7 @@ const WidgetView = () => {
     </div>
   )
 
-  const renderVisualization = isReady ? <WidgetAdapter /> : renderWidgetWarning
-
-  if (!dataReady) return renderWidgetWarning
+  const renderVisualization = isReady && dataReady ? <WidgetAdapter /> : renderWidgetWarning
 
   return (
     <div className={classes.outerContainer}>
