@@ -362,7 +362,20 @@ export default {
     'mapGroupKeyTitle': 'Poi id',
     'uniqueOptions': {
       'opacity': 20,
-      'lineWidth': 1,
+      'lineWidth': {
+        'value': 1,
+      },
+      'radius': {
+        'valueOptions': [5, 10],
+      },
+      'fill': {
+        'value': [39, 85, 196],
+        'valueOptions': [[214, 232, 253], [39, 85, 196]],
+      },
+      'elevation': {
+        'value': 0,
+        'valueOptions': [0, 1000],
+      },
     },
     'genericOptions': {
       'showWidgetTitle': false,
@@ -423,7 +436,17 @@ export default {
     'mapGroupKeyTitle': 'Geo cohort fsa',
     'uniqueOptions': {
       'opacity': 30,
-      'lineWidth': 1,
+      'lineWidth': {
+        'value': 1,
+      },
+      'fill': {
+        'value': [39, 85, 196],
+        'valueOptions': [[214, 232, 253], [39, 85, 196]],
+      },
+      'elevation': {
+        'value': 0,
+        'valueOptions': [0, 1000],
+      },
     },
     'genericOptions': {
       'showWidgetTitle': false,
