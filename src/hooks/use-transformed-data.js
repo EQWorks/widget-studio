@@ -4,7 +4,7 @@ import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
 import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import types from '../constants/types'
-import { roundToTwoDecimals } from '../util/numeric'
+import { priceStringToNumeric, roundToTwoDecimals } from '../util/numeric'
 import { dateAggregations, dateSort } from '../constants/time'
 
 
@@ -29,7 +29,6 @@ const useTransformedData = () => {
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
-  const domain = useStoreState((state) => state.domain)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
   const dateAggregation = useStoreState((state) => state.dateAggregation)
 
@@ -43,7 +42,7 @@ const useTransformedData = () => {
         Object.entries(r)
           .reduce((acc, [k, v]) => {
             if (priceColumns.includes(k)) {
-              acc[k] = parseFloat((v.split('$')[1])?.replace(/,/g, '')) || v
+              acc[k] = priceStringToNumeric(v) || v
             }
             return acc
           }, { ...r }))
