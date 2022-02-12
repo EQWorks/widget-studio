@@ -34,6 +34,7 @@ const ValueControls = () => {
       const { category } = columnsAnalysis[c] || {}
       return (
         c !== domain.value
+        && !c.endsWith('_id')
         && (
           category === 'Numeric'
           || (category === 'String' && c.includes('price'))
