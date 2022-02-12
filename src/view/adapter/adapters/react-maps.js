@@ -15,7 +15,7 @@ import {
   MAP_LAYER_VALUE_VIS,
   MAP_VIS_OTHERS,
   MAP_LAYER_GEO_KEYS,
-  VIS_OPTIONS,
+  LAYER_SCALE,
   GEO_KEY_TYPES,
   PITCH,
   MAP_LEGEND_POSITION,
@@ -123,9 +123,9 @@ export default {
                 value: keyTitle ?
                   { field: keyTitle } :
                   //----TO DO - ERIKA - add the options below to state for editor
-                  uniqueOptions[vis],
-                valueOptions: VIS_OPTIONS[vis].valueOptions,
-                dataScale: VIS_OPTIONS.scale,
+                  uniqueOptions[vis]?.value,
+                valueOptions: uniqueOptions[vis]?.valueOptions,
+                dataScale: LAYER_SCALE,
               },
             ]
           })),
@@ -155,7 +155,7 @@ export default {
           longitude: -79.23,
           zoom: 7,
         },
-        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes('elevation') ? PITCH.elevation : 0,
+        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes('elevation') ? PITCH : 0,
       },
     })
   },
