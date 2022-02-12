@@ -23,6 +23,7 @@ const Filters = () => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
+  const domainIsDate = useStoreState((state) => state.domainIsDate)
 
   return (
     <WidgetControlCard
@@ -35,7 +36,7 @@ const Filters = () => {
         //   null,
         renderRow(
           'Group Filter',
-          columnsAnalysis[domain.value]?.category === 'Date'
+          domainIsDate
             ? <DateRange
               classes={{
                 field: 'px-1',

@@ -5,6 +5,7 @@ import aggFunctions from '../util/agg-functions'
 import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
+import { dateAggregations, dateSort } from '../constants/time'
 
 
 const useTransformedData = () => {
@@ -29,6 +30,8 @@ const useTransformedData = () => {
   const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
+  const domainIsDate = useStoreState((state) => state.domainIsDate)
+  const dateAggregation = useStoreState((state) => state.dateAggregation)
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
@@ -110,7 +113,7 @@ const useTransformedData = () => {
     if (!groupFilter?.length) {
       return groupedData
     }
-    if (columnsAnalysis[domain.value]?.category === 'Date') {
+    if (domainIsDate) {
       const min = new Date(groupFilter[0])
       const max = new Date(groupFilter[1])
       return min && max
@@ -124,27 +127,43 @@ const useTransformedData = () => {
         : groupedData
     }
     return Object.fromEntries(Object.entries(groupedData).filter(([k]) => groupFilter?.includes(k)))
-  }, [columnsAnalysis, domain.value, group, groupFilter, groupedData])
+  }, [domainIsDate, group, groupFilter, groupedData])
 
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
-  const aggregatedData = useMemo(() => (
-    group
-      ? Object.entries(filteredGroupedData).map(([group, values]) => {
-        const res = renderableValueKeys.reduce((res, { key, agg, title }) => {
-          const val = dataHasVariance
-            ? aggFunctions[agg](values[key])
-            : values[key][0]
-          // sums[title] += val
-          res[title] = val
-          return res
-        }, { [formattedColumnNames[finalGroupKey]]: group })
+  const aggregatedData = useMemo(() => {
+    if (!group) return null
+    const formattedDomain = formattedColumnNames[finalGroupKey]
+    if (domainIsDate && dateAggregations[dateAggregation]) {
+      // extra grouping required if Domain is date
+      const { groupFn, sortFn } = dateAggregations[dateAggregation]
+      const dateGroupedData = Object.entries(filteredGroupedData)
+        .reduce((acc, [k, v]) => {
+          const newKey = groupFn(k)
+          if (!acc[newKey]) {
+            acc[newKey] = []
+          }
+          acc[newKey].push(v)
+          return acc
+        }, {})
+      return Object.entries(dateGroupedData).map(([k, v]) => ({
+        [formattedDomain]: k,
+        ...Object.fromEntries(renderableValueKeys.map(({ key, agg, title }) => (
+          [title, aggFunctions[agg](v.map(_v => _v[key]).flat())]
+        ))),
+      })).sort((a, b) => sortFn(a[formattedDomain], b[formattedDomain]))
+    }
+    return Object.entries(filteredGroupedData).map(([group, values]) => {
+      const res = renderableValueKeys.reduce((res, { key, agg, title }) => {
+        const val = dataHasVariance
+          ? aggFunctions[agg](values[key])
+          : values[key][0]
+        res[title] = val
         return res
-
-      }
-      )
-      : null
-  ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, finalGroupKey, renderableValueKeys])
+      }, { [formattedDomain]: group })
+      return res
+    })
+  }, [group, domainIsDate, formattedColumnNames, dateAggregation, filteredGroupedData, renderableValueKeys, finalGroupKey, dataHasVariance])
 
   const percentageData = useMemo(() => {
     if (!percentageMode) {
@@ -199,8 +218,8 @@ const useTransformedData = () => {
   // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => {
     if (group) return null
-    const sortFn = columnsAnalysis[indexKey]?.category === 'Date'
-      ? (a, b) => (new Date(a[formattedColumnNames[indexKey]]) - new Date(b[formattedColumnNames[indexKey]]))
+    const sortFn = domainIsDate
+      ? (a, b) => dateSort(a[formattedColumnNames[indexKey]], b[formattedColumnNames[indexKey]])
       : (a, b) => (a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
     return (
       truncatedData
@@ -212,7 +231,7 @@ const useTransformedData = () => {
         ))
         .sort(sortFn)
     )
-  }, [columnsAnalysis, formattedColumnNames, group, indexKey, truncatedData])
+  }, [domainIsDate, formattedColumnNames, group, indexKey, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
   const finalData = useMemo(() => {
