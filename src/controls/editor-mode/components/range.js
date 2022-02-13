@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles, TextField } from '@eqworks/lumen-labs'
+import { TextField, makeStyles } from '@eqworks/lumen-labs'
 import Slider from '@material-ui/core/Slider'
 
 
@@ -26,8 +26,7 @@ const classes = makeStyles({
   },
 })
 
-const RangeControl = ({ update, value, min, max, step }) => {
-
+const RangeControl = ({ min, max, step, value, update }) => {
   const [rangeValue, setRangeValue] = useState(value)
 
   useEffect(() => {
@@ -55,8 +54,8 @@ const RangeControl = ({ update, value, min, max, step }) => {
           max={value[1] || max}
           step={step}
           deleteButton={false}
-          placeholder={min}
-          value={(value || [])[0]}
+          placeholder={min.toString()}
+          value={(value || [])[0] || ''}
           onChange={_min => update([Number(_min), value[1]])}
         />
         <TextField
@@ -66,8 +65,8 @@ const RangeControl = ({ update, value, min, max, step }) => {
           max={max}
           step={step}
           deleteButton={false}
-          placeholder={max}
-          value={(value || [])[1]}
+          placeholder={max.toString()}
+          value={(value || [])[1] || ''}
           onChange={_max => update([value[0],Number(_max)])}
         />
       </div>
@@ -76,17 +75,17 @@ const RangeControl = ({ update, value, min, max, step }) => {
 }
 
 RangeControl.propTypes = {
-  step: PropTypes.number,
   min: PropTypes.number,
   max: PropTypes.number,
+  step: PropTypes.number,
   value: PropTypes.array,
   update: PropTypes.func.isRequired,
 }
 
 RangeControl.defaultProps = {
-  step: 0,
   min: 0,
   max: 0,
+  step: 1,
   value: [],
   update: PropTypes.func.isRequired,
 }
