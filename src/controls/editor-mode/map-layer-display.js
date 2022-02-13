@@ -4,7 +4,7 @@ import { TextField, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import ColorSchemeControls from './components/color-scheme-controls'
-import MapLayerSlider from './components/map-layer-slider'
+import SliderControl  from './components/slider-control'
 import { renderItem, renderSection, renderRow } from '../shared/util'
 
 
@@ -59,7 +59,20 @@ const MapLayerDisplay = () => {
           {renderRow(null,
             <div className={classes.sliderOutline}>
               {activeVisualizations?.includes('radius') &&
-                <MapLayerSlider option='radius' range />
+                renderItem('Radius Size (px)',
+                  <SliderControl
+                    style='map'
+                    option='radius'
+                    update={val => userUpdate({
+                      uniqueOptions: {
+                        radius: {
+                          valueOptions: val,
+                        },
+                      },
+                    })}
+                    range={true}
+                  />
+                )
               }
               {renderItem('Outline Width (px)',
                 <TextField
