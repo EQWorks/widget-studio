@@ -16,9 +16,9 @@ const useStyles = ({ baseColor, showPicker, type }) => makeStyles({
     flexDirection: 'column',
     width: '100%',
     alignItems: 'stretch',
-    ...(type === types.MAP && {
+    ...(type !== types.MAP && {
       marginTop: '0.8rem',
-      marginBottom: '0.8rem',
+      marginBottom: '0.6rem',
     }),
   },
   row: {
