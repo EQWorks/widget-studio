@@ -58,7 +58,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns }) => {
+const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, executionID }) => {
   const classes = useStyles(_mode)
 
   // easy-peasy actions
@@ -79,11 +79,9 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns })
   useEffect(() => {
     // validate mode prop
     const validatedMode = Object.values(modes).find(v => v === _mode)
-
     if (!validatedMode) {
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
-
     // dispatch state
     update({
       id,
@@ -91,14 +89,20 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns })
         mode: validatedMode,
         staticData,
       },
+    })
+    if (_rows && _columns) {
       // use manually passed data if available
-      ...(_rows && _columns && {
+      update({
         rows: _rows,
         columns: _columns,
         dataSource: { type: dataSourceTypes.MANUAL, id: 1 },
-      }),
-    })
-
+      })
+    } else if (executionID !== -1) {
+      // use executionID if available
+      update({
+        dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
+      })
+    }
     // if there is a widget ID,
     if (id !== undefined && id !== null) {
       // fetch/read the config associated with the ID
@@ -110,7 +114,7 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns })
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_columns, _mode, _rows, id, loadConfig, mode, staticData, update])
+  }, [_columns, _mode, _rows, executionID, id, loadConfig, mode, staticData, update])
 
 
   // load data if source changes
@@ -155,6 +159,7 @@ Widget.propTypes = {
   staticData: PropTypes.bool,
   rows: PropTypes.array,
   columns: PropTypes.array,
+  executionID: PropTypes.number,
 }
 Widget.defaultProps = {
   mode: modes.VIEW,
@@ -162,6 +167,7 @@ Widget.defaultProps = {
   staticData: false,
   rows: null,
   columns: null,
+  executionID: -1,
 }
 
 export default withQueryClient(withStore(Widget))
