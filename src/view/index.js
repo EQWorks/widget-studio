@@ -161,6 +161,19 @@ const WidgetView = () => {
 
   const classes = useStyles({ mode, tableExpanded, type })
 
+  const noTransformedData = useMemo(() => (
+    !type ||
+    !domain.value ||
+    !renderableValueKeys?.length ||
+    !transformedData?.length
+  ), [domain.value, renderableValueKeys?.length, transformedData?.length, type])
+
+  useEffect(() => {
+    if (noTransformedData) {
+      update({ ui: { tableShowsRawData: true } })
+    }
+  }, [noTransformedData, update])
+
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
     dataSourceType && dataSourceID ?
@@ -257,6 +270,7 @@ const WidgetView = () => {
                   <div className={classes.tableDisplayControls}>
                     Display:
                     <CustomToggle
+                      disabled={noTransformedData}
                       classes={{
                         label: classes.tableRawToggle,
                       }}
