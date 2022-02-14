@@ -6,6 +6,7 @@ import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import types from '../constants/types'
 import { priceStringToNumeric, roundToTwoDecimals } from '../util/numeric'
 import { dateAggregations, dateSort } from '../constants/time'
+import { columnTypes } from '../constants/columns'
 
 
 const useTransformedData = () => {
@@ -36,7 +37,7 @@ const useTransformedData = () => {
 
   // convert prices to numeric values
   const normalizedPriceData = useMemo(() => {
-    const priceColumns = columns.map(({ name }) => name).filter(c => columnsAnalysis[c]?.category === 'String' && c.includes('price'))
+    const priceColumns = columns.map(({ name }) => name).filter(c => columnsAnalysis[c]?.category === columnTypes.PRICE)
     return priceColumns.length
       ? rows.map(r =>
         Object.entries(r)
@@ -190,9 +191,9 @@ const useTransformedData = () => {
       // add coordinates for map widget data
       if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
         const lat = columns.find(({ name, category }) =>
-          COORD_KEYS.latitude.includes(name) && category === 'Numeric')?.name
+          COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
         const lon = columns.find(({ name, category }) =>
-          COORD_KEYS.longitude.includes(name) && category === 'Numeric')?.name
+          COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
         return aggregatedData.map((d) => {
           if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
             if (d[lat] && d[lon]) {

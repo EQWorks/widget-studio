@@ -48,11 +48,11 @@ const DomainControls = () => {
   }, [group, groupingOptional, update])
 
   const renderCategory = () => {
-    const { category } = columnsAnalysis[group ? groupKey : indexKey] || {}
+    const { category, isNumeric } = columnsAnalysis[group ? groupKey : indexKey] || {}
     return (category &&
       <Chip
         selectable={false}
-        color={category === 'Numeric' ? 'success' : 'interactive'}
+        color={isNumeric ? 'success' : 'interactive'}
       >
         {category}
       </Chip >
