@@ -12,6 +12,8 @@ import typeInfo from '../../constants/type-info'
 const Icons = ({ disabled }) => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const current = useStoreState((state) => state.type)
+  const group = useStoreState((state) => state.group)
+  const domain = useStoreState((state) => state.domain)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
 
   const mapIconAvailability = validMapGroupKeys.length > 0
@@ -34,8 +36,15 @@ const Icons = ({ disabled }) => {
               variant='borderless'
               className={iconButtonClass(isCurrent, isDisabled)}
               onClick={() => {
+                const willGroup = !groupingOptional
                 userUpdate({
-                  group: !groupingOptional,
+                  group: willGroup,
+                  ...(
+                    willGroup !== group && {
+                      valueKeys: [],
+                      ...(domain?.key && { [domain.key]: null }),
+                    }
+                  ),
                   type,
                   uniqueOptions:
                     Object.entries(uniqueOptions).reduce((acc, [k, { defaultValue }]) => {
