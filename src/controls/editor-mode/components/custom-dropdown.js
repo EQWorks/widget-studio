@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
-import { DropdownBase } from '@eqworks/lumen-labs/dist/base-components'
+import { BaseComponents, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 import { DROPDOWN_SELECT_CLASSES } from '../../../components/custom-select'
 
 
@@ -26,7 +25,7 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
   })
   return (
     <div className={classes.outerContainer}>
-      <DropdownBase
+      <BaseComponents.DropdownBase
         ref={ref}
         open={open}
         onClick={() => !disabled && setOpen(!open)}
@@ -46,7 +45,7 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
         {...props}
       >
         {children}
-      </DropdownBase >
+      </BaseComponents.DropdownBase >
     </div >
   )
 }
