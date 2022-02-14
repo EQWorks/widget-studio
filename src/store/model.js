@@ -12,6 +12,8 @@ import { getKeyFormatFunction } from '../util/data-format-functions'
 import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
 import { priceStringToNumeric } from '../util/numeric'
+import { columnTypes } from '../constants/columns'
+import { columnInference } from '../util/columns'
 
 
 const MAX_UNDO_STEPS = 10
@@ -161,19 +163,13 @@ export default {
       columns,
       rows
     ) => (
-      columns.reduce((acc, { name, category }) => {
+      columns.reduce((acc, { name }) => {
         const data = rows.map(r => r[name])
-        const sampleDate = category === 'Date' ? new Date(data[0]) : null
-        const isValidPrice = category === 'String' && !isNaN(priceStringToNumeric(data[0]))
-        const isNumeric = (category === 'Numeric' || isValidPrice) && !name.endsWith('_id')
-        acc[name] = {
-          category,
-          isValidDate: sampleDate instanceof Date && !isNaN(sampleDate),
-          isValidPrice,
-          isNumeric,
-        }
-        if (isNumeric) {
-          const numericData = isValidPrice ? data.map(priceStringToNumeric) : data
+        acc[name] = columnInference(data, name)
+        if (acc[name].isNumeric) {
+          const numericData = acc.category === columnTypes.PRICE
+            ? data.map(priceStringToNumeric)
+            : data
           acc[name].min = Math.min.apply(null, numericData)
           acc[name].max = Math.max.apply(null, numericData)
         }
@@ -256,7 +252,7 @@ export default {
       (state) => state.columnsAnalysis,
     ],
     (domain, columnsAnalysis) => (
-      columnsAnalysis[domain.value]?.isValidDate
+      columnsAnalysis[domain.value]?.category === columnTypes.DATE
     )
   ),
 
