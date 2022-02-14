@@ -8,6 +8,10 @@ import CustomButton from '../../components/custom-button'
 import modes from '../../constants/modes'
 import EditableTitle from './editable-title'
 import WidgetMeta from '../meta'
+import { dataSourceTypes } from '../../constants/data-source'
+
+
+const SNOKE_URL = 'http://localhost:3001'
 
 
 const commonClasses = {
@@ -213,7 +217,9 @@ const WidgetTitleBar = () => {
                   <CustomButton
                     horizontalMargin
                     variant='filled'
-                    onClick={() => window.alert('not implemented')}
+                    onClick={() => dataSource.type === dataSourceTypes.EXECUTIONS
+                      && window.open(`${SNOKE_URL}/widget-studio?executionID=${dataSource.id}`)
+                    }
                     endIcon={<Icons.ShareExternalLink size='md' />}
                   >
                     OPEN IN EDITOR
