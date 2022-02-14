@@ -23,7 +23,7 @@ const classes = makeStyles({
   },
 })
 
-const textFieldlInput = 'text-interactive-600'
+const textFieldInput = 'text-interactive-600'
 
 const MapLayerDisplay = () => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
@@ -84,7 +84,7 @@ const MapLayerDisplay = () => {
                   step={1}
                   onChange={v => userUpdate({ uniqueOptions: { opacity: Number(v) } })}
                   onSubmit={(e) => e.nativeEvent.preventDefault()}
-                  classes={{ container: classes.textFieldContainer, input: textFieldlInput }}
+                  classes={{ container: classes.textFieldContainer, input: textFieldInput }}
                 />
               )}
             </div>
@@ -134,7 +134,7 @@ const MapLayerDisplay = () => {
                     step={1}
                     onChange={v => userUpdate({ uniqueOptions: { lineWidth: { value: Number(v) } } })}
                     onSubmit={(e) => e.nativeEvent.preventDefault()}
-                    classes={{ container: classes.textFieldContainer, input: textFieldlInput }}
+                    classes={{ container: classes.textFieldContainer, input: textFieldInput }}
                   />
                 )}
             </div>
