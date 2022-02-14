@@ -361,13 +361,19 @@ export default {
     'indexKey': null,
     'mapGroupKeyTitle': 'Poi id',
     'uniqueOptions': {
-      'showTooltip': true,
-      'showLegend': true,
+      'opacity': 20,
+      'lineWidth': {
+        'value': 1,
+      },
+      'radius': {
+        'valueOptions': [5, 15],
+      },
     },
     'genericOptions': {
       'showWidgetTitle': false,
       'groupByValue': false,
       'showLegend': true,
+      'showTooltip': true,
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -421,13 +427,19 @@ export default {
     'indexKey': null,
     'mapGroupKeyTitle': 'Geo cohort fsa',
     'uniqueOptions': {
-      'showTooltip': true,
-      'showLegend': true,
+      'opacity': 30,
+      'lineWidth': {
+        'value': 1,
+      },
+      'elevation': {
+        'value': 20000,
+      },
     },
     'genericOptions': {
       'showWidgetTitle': false,
       'groupByValue': false,
       'showLegend': true,
+      'showTooltip': true,
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [

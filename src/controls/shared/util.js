@@ -6,7 +6,8 @@ import CustomToggle from '../../components/custom-toggle'
 const classes = makeStyles({
   section: {
     marginTop: '0.2rem',
-    marginBottom: '0.7rem',
+    // TEMPORARY adjustment
+    // marginBottom: '0.7rem',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -21,7 +22,7 @@ const classes = makeStyles({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    margin: '0.2rem 0',
+  //   margin: '0.2rem 0',
   },
   rowContainer: {
     width: '100%',

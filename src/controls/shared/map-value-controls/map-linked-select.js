@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import PluralLinkedSelect from '../../../components/plural-linked-select'
-import { VIS_OPTIONS } from '../../../constants/map'
+import types from '../../../constants/type-info'
 
 
 const classes = makeStyles({
@@ -45,11 +45,11 @@ const MapLinkedSelect = ({
         <div key={i} className={classes.linkedSelect} >
           <div className={classes.visTitleWrapper}>
             <div className={classes.visTitle}>
-              {`${VIS_OPTIONS[mapVis].label}:`}
+              {`${types.map.uniqueOptions[mapVis].valueConfigName}:`}
             </div>
             <s>
               <Tooltip
-                description={VIS_OPTIONS[mapVis].info}
+                description={types.map.uniqueOptions[mapVis].info}
                 width='13rem'
                 arrow={false}
                 position='right'

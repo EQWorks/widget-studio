@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 import { DropdownBase } from '@eqworks/lumen-labs/dist/base-components'
+
 import { DROPDOWN_SELECT_CLASSES } from '../../../components/custom-select'
 
 
@@ -15,15 +16,17 @@ const classes = makeStyles({
   },
 })
 
-const CustomDropdown = ({ selectedString, classes: _classes, children, disabled, ...props }) => {
+const CustomDropdown = ({ selectedString, classes: _classes, children, disabled, style, ...props }) => {
   const ref = useRef(null)
   const [open, setOpen] = useState(false)
   const { root, menu, ...dropdownBaseClasses } = DROPDOWN_SELECT_CLASSES
   const click = ({ target }) => !disabled && setOpen(ref.current?.contains(target))
+
   useEffect(() => {
     document.addEventListener('click', click)
     return () => document.removeEventListener('click', click)
   })
+
   return (
     <div className={classes.outerContainer}>
       <DropdownBase
@@ -38,11 +41,14 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
             {selectedString}
           </span>
         }
-        classes={{
-          root: [root, _classes.root].join(' '),
-          menu: [menu, _classes.menu].join(' '),
-          ...dropdownBaseClasses,
-        }}
+        classes={style === 'map' ?
+          _classes :
+          {
+            root: [root, _classes.root].join(' '),
+            menu: [menu, _classes.menu].join(' '),
+            ...dropdownBaseClasses,
+          }
+        }
         {...props}
       >
         {children}
@@ -52,15 +58,19 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
 }
 
 CustomDropdown.propTypes = {
+  style: PropTypes.string,
   selectedString: PropTypes.string.isRequired,
   classes: PropTypes.object,
   disabled: PropTypes.bool,
   children: PropTypes.node.isRequired,
 }
+
 CustomDropdown.defaultProps = {
+  style: 'chart',
   classes: {
     root: '',
     menu: '',
+    button: '',
   },
   disabled: false,
 }

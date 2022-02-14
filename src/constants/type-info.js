@@ -1,3 +1,5 @@
+import React from 'react'
+
 import types from './types'
 import { Icons } from '@eqworks/lumen-labs'
 import PlotlyAdapters from '../view/adapter/adapters/chart-system/plotly'
@@ -77,6 +79,75 @@ export default {
     icon: Icons.MapChart,
     adapter: ReactMapsAdapter,
     groupingOptional: false,
-    uniqueOptions: {},
+    uniqueOptions: {
+      radius: {
+        name: 'Radius (px)',
+        valueConfigName: 'Radius',
+        type: Object,
+        defaultValue: {
+          value: 10,
+          valueOptions: [5, 15],
+        },
+        info: (
+          <div>
+            <p>Calculate radius based on the </p>
+            <p>selected column and operation.</p>
+          </div>
+        ),
+        min: 1,
+        max: 100,
+        step: 1,
+      },
+      fill: {
+        name: 'Color Fill',
+        valueConfigName: 'Color Fill',
+        type: Object,
+        defaultValue: {
+          value: [39, 85, 196],
+          valueOptions: [[214, 232, 253], [39, 85, 196]],
+        },
+        info: (
+          <div>
+            <p>Calculate fill color based on the </p>
+            <p>selected column and operation.</p>
+          </div>
+        ),
+      },
+      elevation: {
+        name: 'Elevation Height',
+        valueConfigName: 'Elevation',
+        type: Number,
+        defaultValue: {
+          value: 1000,
+        },
+        min: 0,
+        max: 500000,
+        step: 10,
+        info: (
+          <div>
+            <p>Calculate elevation height based on</p>
+            <p>the selected column and operation.</p>
+          </div>
+        ),
+      },
+      lineWidth: {
+        name: 'Outline Width',
+        type: Number,
+        defaultValue: {
+          value: 1,
+        },
+        min: 1,
+        max: 100,
+        step: 1,
+      },
+      opacity: {
+        name: 'Opacity',
+        type: Number,
+        defaultValue: 30,
+        min: 0,
+        max: 100,
+        step: 1,
+      },
+    },
   },
 }

@@ -1,27 +1,14 @@
 import React from 'react'
 
-import { Icons, makeStyles } from '@eqworks/lumen-labs'
+import { Icons } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderSection, renderRow } from '../shared/util'
 import PluralLinkedSelect from '../../components/plural-linked-select'
-import RangeFilter from './components/range-filter'
 import CustomSelect from '../../components/custom-select'
-import CustomDropdown from './components/custom-dropdown'
+import SliderControl from './components/slider-control'
 
-
-const classes = makeStyles({
-  dropdownMenu: {
-    width: '12rem !important',
-    overflow: 'visible !important',
-  },
-  dropdownRoot: {
-    borderTopRightRadius: '0 !important',
-    borderBottomRightRadius: '0 !important',
-    borderRight: 'none !important',
-  },
-})
 
 const Filters = () => {
   // common actions
@@ -42,8 +29,10 @@ const Filters = () => {
       clear={() => resetValue({ filters, groupFilter })}
       title='Filters'
     >
-      {renderSection(
-        null,
+      {
+      // NOTE - temporary fix to remove some large spaces - to be adjusted after the styling revision
+      // renderSection(
+      //   null,
         renderRow(
           'Group Filter',
           <CustomSelect
@@ -56,7 +45,7 @@ const Filters = () => {
             disabled={!group || !domain.value}
           />
         )
-      )
+      // )
       }
       {renderSection(
         null,
@@ -90,34 +79,19 @@ const Filters = () => {
                 userUpdate({ filters: filtersCopy })
               }}
               customRenderSecondary={(i, k) => {
-                const value = filters[i]?.filter
                 return (
-                  <CustomDropdown
-                    selectedString={
-                      value &&
-                      (value.map(Intl.NumberFormat('en-US', {
-                        notation: 'compact',
-                        maximumFractionDigits: 1,
-                      }).format)
-                      ).join('-')
-                    }
-                    classes={{
-                      root: classes.dropdownRoot,
-                      menu: classes.dropdownMenu,
-                    }}
-                    placeholder='Range'
-                    disabled={!value}
+                  <SliderControl
+                    index={i}
+                    style='chart'
+                    update={filter => userUpdate({
+                      filters:
+                        filters.map((v, _i) => i === _i
+                          ? { key: k, filter }
+                          : v),
+                    })}
+                    range={true}
                   >
-                    <RangeFilter
-                      index={i}
-                      update={filter => userUpdate({
-                        filters:
-                          filters.map((v, _i) => i === _i
-                            ? { key: k, filter }
-                            : v),
-                      })}
-                    />
-                  </CustomDropdown>
+                  </SliderControl>
                 )
               }}
               addMessage='Add Range Filter'

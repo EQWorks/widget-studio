@@ -12,6 +12,7 @@ import ColorSchemeControls from './components/color-scheme-controls'
 import { renderItem, renderSection, renderRow, renderToggle } from '../shared/util'
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
+import MapLayerDisplay from './map-layer-display'
 import Filters from './filters'
 import CustomDropdown from './components/custom-dropdown'
 import MutedBarrier from '../shared/muted-barrier'
@@ -156,6 +157,9 @@ const EditorRightSidebar = () => {
               )}
             </>
           )}
+          {type === types.MAP &&
+            <MapLayerDisplay />
+          }
         </WidgetControlCard >
         {type !== types.MAP &&
           <WidgetControlCard title='Colour Scheme'>

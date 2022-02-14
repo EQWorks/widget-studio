@@ -1,22 +1,26 @@
-import React from 'react'
-
-
 export const MAP_LAYERS = {
   scatterplot: 'scatterplot',
   // MVT: 'MVT',
   geojson: 'geojson',
 }
 
-export const MAP_VIS = {
+// visualizations used in Value Configuration
+export const MAP_VALUE_VIS = {
   radius: 'radius',
   elevation: 'elevation',
   fill: 'fill',
 }
 
-export const MAP_LAYER_VIS = {
-  scatterplot: [MAP_VIS.fill, MAP_VIS.radius],
-  // MVT: [MAP_VIS.fill],
-  geojson: [MAP_VIS.fill, MAP_VIS.elevation],
+// other visualizations
+export const MAP_VIS_OTHERS = {
+  lineWidth: 'lineWidth',
+  lineColor: 'lineColor',
+}
+
+export const MAP_LAYER_VALUE_VIS = {
+  scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
+  // MVT: [MAP_VALUE_VIS.fill],
+  geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
 }
 
 export const GEO_KEY_TYPES = {
@@ -87,46 +91,8 @@ export const COORD_KEYS = {
   ],
 }
 
-// ----TO DO: ERIKA - this has to be moved to state later on, when we give more options in editor
-export const VIS_OPTIONS = {
-  fill: {
-    valueOptions: [[214, 232, 253], [39, 85, 196]],
-    value: [39, 85, 196],
-    label: 'Fill Color',
-    info: (
-      <div>
-        <p>Calculate fill color based on the </p>
-        <p>selected column and operation.</p>
-      </div>
-    ),
-  },
-  radius: {
-    valueOptions: [5, 15],
-    value: 10,
-    label: 'Radius',
-    info: (
-      <div>
-        <p>Calculate radius based on the </p>
-        <p>selected column and operation.</p>
-      </div>
-    ),
-  },
-  elevation: {
-    valueOptions: [1, 1000],
-    value: 0,
-    label: 'Elevation',
-    info: (
-      <div>
-        <p>Calculate elevation height based on</p>
-        <p>the selected column and operation.</p>
-      </div>
-    ),
-  },
-  scale: 'linear',
-}
-
-export const OPACITY = 0.2
-export const PITCH = { elevation: 45 }
+export const LAYER_SCALE = 'linear'
+export const PITCH = 45
 
 export const MAP_LEGEND_POSITION = {
   '[0,0]': 'bottom-left',

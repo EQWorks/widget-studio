@@ -1393,10 +1393,10 @@
     slick-carousel "^1.8.1"
     use-cached "^2.0.0"
 
-"@eqworks/react-maps@^0.8.1":
-  version "0.8.1"
-  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.8.1/98ed5c8f517b11001627cd6427b210e4ccd3f8415e33943491a4895f1d711dbd#6527d28b12291f4216b53c1e81187451d931facb"
-  integrity sha512-X4TDfyfGDCi6Pxo5zDGohyBtgJ6iKwIKcAsdRFOuVRjOGqy5ajsaPdt1UBDn07ROy/S8CWdI0iJsy3wXvB48DQ==
+"@eqworks/react-maps@^0.8.2-alpha-1":
+  version "0.8.2-alpha-1"
+  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.8.2-alpha-1/f55b87038158203606c64cf848a93e6e77f9fc9980873bb1ed0ec61dc86d1bd2#e49b2f72a163b6e666f5fcac03effcbd827e646a"
+  integrity sha512-xnC3pD8Z9IcreYWBbo1fymz20dx9KMGpA+kyb68E0Rl9VYJ0i8FtzeloBFf+WrUdMTjljv5RbHOM5tUxezLV0w==
   dependencies:
     "@deck.gl/aggregation-layers" "8.4.6"
     "@deck.gl/core" "8.4.6"
