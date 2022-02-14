@@ -117,14 +117,23 @@ export default {
         visualizations: Object.fromEntries(
           MAP_LAYER_VALUE_VIS[mapLayer].concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
             const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+            /*
+            * we only allow to set the max elevation value, keeping the min=0, therefore,
+            * in Widget Studio in uniqueOptions, we work with one value to use in slider updates;
+            * however, the LocusMap receives an array valueOptions prop for elevation, hence
+            * the special case for elevation in this case
+            */
+            const visValue = vis === 'elevation' ? 0 : uniqueOptions[vis]?.value
             return  [
               vis,
               {
                 value: keyTitle ?
                   { field: keyTitle } :
-                  //----TO DO - ERIKA - add the options below to state for editor
-                  uniqueOptions[vis]?.value,
-                valueOptions: uniqueOptions[vis]?.valueOptions,
+                  visValue,
+                valueOptions: vis === 'elevation' ?
+                  [0, uniqueOptions[vis]?.value] :
+                  uniqueOptions[vis]?.valueOptions,
+                //----TO DO - ERIKA - add the LAYER_SCALE to state for editor when implementing constrols for scale
                 dataScale: LAYER_SCALE,
               },
             ]
@@ -139,7 +148,6 @@ export default {
           },
         },
         legend: { showLegend: true },
-        //----TO DO - ERIKA - add to state for editor
         schemeColor: genericOptions.baseColor,
         opacity: uniqueOptions.opacity / 100,
       }],
