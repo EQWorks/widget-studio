@@ -13,6 +13,7 @@ const classes = makeStyles({
   slider: {
     width: '100%',
     padding: '0 1rem',
+    display: 'flex',
   },
   inputs: {
     display: 'flex',
@@ -26,11 +27,11 @@ const classes = makeStyles({
   },
 })
 
-const RangeControl = ({ min, max, step, value, update }) => {
-  const [rangeValue, setRangeValue] = useState(value)
+const BasicSlider = ({ min, max, step, value, update }) => {
+  const [changedValue, setChangedValue] = useState(value)
 
   useEffect(() => {
-    setRangeValue(value)
+    setChangedValue(value)
   }, [value])
 
   return (
@@ -38,26 +39,29 @@ const RangeControl = ({ min, max, step, value, update }) => {
       <div className={classes.slider}>
         <Slider
           defaultValue={value}
-          value={rangeValue}
-          onChange={(_, newValue) => setRangeValue(newValue)}
-          onChangeCommitted={(_, newValue) => {update(newValue); setRangeValue(newValue)}}
+          value={changedValue}
+          onChange={(_, newValue) => setChangedValue(newValue)}
+          onChangeCommitted={(_, newValue) => {update(newValue); setChangedValue(newValue)}}
           min={min}
           max={max}
           valueLabelDisplay='auto'
         />
       </div>
       <div className={classes.inputs}>
-        <TextField
-          label='min'
-          type='number'
-          min={min}
-          max={value[1] || max}
-          step={step}
-          deleteButton={false}
-          placeholder={min.toString()}
-          value={(value || [])[0] || ''}
-          onChange={_min => update([Number(_min), value[1]])}
-        />
+        {Array.isArray(value) &&
+          <TextField
+            label='min'
+            type='number'
+            min={min}
+            max={value[1] || max}
+            step={step}
+            deleteButton={false}
+            placeholder={min.toString()}
+            value={(value || [])[0] || ''}
+            onClick={event => event.stopPropagation()}
+            onChange={_min => update([Number(_min), value[1]])}
+          />
+        }
         <TextField
           label='max'
           type='number'
@@ -66,28 +70,33 @@ const RangeControl = ({ min, max, step, value, update }) => {
           step={step}
           deleteButton={false}
           placeholder={max.toString()}
-          value={(value || [])[1] || ''}
-          onChange={_max => update([value[0],Number(_max)])}
+          value={(value || [])[1] || value || ''}
+          onChange={_max => Array.isArray(value) ?
+            update([value[0], Number(_max)]) :
+            update(Number(_max))
+          }
         />
       </div>
     </div >
   )
 }
 
-RangeControl.propTypes = {
+BasicSlider.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
-  value: PropTypes.array,
+  value: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]).isRequired,
   update: PropTypes.func.isRequired,
 }
 
-RangeControl.defaultProps = {
+BasicSlider.defaultProps = {
   min: 0,
   max: 0,
   step: 1,
-  value: [],
   update: PropTypes.func.isRequired,
 }
 
-export default RangeControl
+export default BasicSlider
