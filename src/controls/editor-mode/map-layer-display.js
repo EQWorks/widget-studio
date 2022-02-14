@@ -6,6 +6,7 @@ import { useStoreState, useStoreActions } from '../../store'
 import ColorSchemeControls from './components/color-scheme-controls'
 import SliderControl  from './components/slider-control'
 import { renderItem, renderSection, renderRow } from '../shared/util'
+import typeInfo from '../../constants/type-info'
 
 
 const classes = makeStyles({
@@ -27,10 +28,16 @@ const textFiedlInput = 'text-interactive-600'
 const MapLayerDisplay = () => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const uniqueOptions = useStoreState((state) => state.uniqueOptions)
+  const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const type = useStoreState((state) => state.type)
 
-  const activeVisualizations = useMemo(() =>
-    renderableValueKeys.map(vis => vis.mapVis), [renderableValueKeys])
+  const [rangeRadius, simpleRadius, elevation] = useMemo(() => ([
+    renderableValueKeys.find(vis => (vis.mapVis === 'radius' && vis.key)),
+    JSON.stringify(mapValueKeys).includes('radius') &&
+      !renderableValueKeys.find(vis => (vis.mapVis === 'radius' && vis.key)),
+    JSON.stringify(renderableValueKeys).includes('elevation'),
+  ]), [renderableValueKeys, mapValueKeys])
 
   return (
     <div className={classes.displayOptions}>
@@ -45,8 +52,8 @@ const MapLayerDisplay = () => {
                 <TextField
                   type='number'
                   deleteButton={false}
-                  placeholder={'0'}
-                  value={uniqueOptions.opacity.toString() ?? '100'}
+                  placeholder={'Value'}
+                  value={uniqueOptions.opacity?.toString() ?? typeInfo[type].uniqueOptions.opacity.toString()}
                   min={0}
                   max={100}
                   step={1}
@@ -58,7 +65,23 @@ const MapLayerDisplay = () => {
           )}
           {renderRow(null,
             <div className={classes.sliderOutline}>
-              {activeVisualizations?.includes('radius') &&
+              {simpleRadius &&
+                renderItem('Radius Size (px)',
+                  <SliderControl
+                    style='map'
+                    option='radius'
+                    update={val => userUpdate({
+                      uniqueOptions: {
+                        radius: {
+                          value: val,
+                        },
+                      },
+                    })}
+                    range={false}
+                  />
+                )
+              }
+              {rangeRadius &&
                 renderItem('Radius Size (px)',
                   <SliderControl
                     style='map'
@@ -74,19 +97,37 @@ const MapLayerDisplay = () => {
                   />
                 )
               }
-              {renderItem('Outline Width (px)',
-                <TextField
-                  type='number'
-                  deleteButton={false}
-                  placeholder={uniqueOptions.lineWidth.value.toString()}
-                  value={uniqueOptions.lineWidth.value.toString() ?? '1'}
-                  min={1}
-                  max={100}
-                  step={1}
-                  onChange={v => userUpdate({ uniqueOptions: { lineWidth: { value: Number(v) } } })}
-                  classes={{ container: classes.textFieldContainer, input: textFiedlInput }}
-                />
-              )}
+              {elevation &&
+                renderItem('Elevation Height (m)',
+                  <SliderControl
+                    style='map'
+                    option='elevation'
+                    update={val => userUpdate({
+                      uniqueOptions: {
+                        elevation: {
+                          value: Number(val),
+                        },
+                      },
+                    })}
+                    range={false}
+                  />
+                )
+              }
+              {!elevation &&
+                renderItem('Outline Width (px)',
+                  <TextField
+                    type='number'
+                    deleteButton={false}
+                    placeholder={'Value'}
+                    value={uniqueOptions.lineWidth?.value?.toString() ??
+                      typeInfo[type].uniqueOptions.lineWidth.toString()}
+                    min={1}
+                    max={100}
+                    step={1}
+                    onChange={v => userUpdate({ uniqueOptions: { lineWidth: { value: Number(v) } } })}
+                    classes={{ container: classes.textFieldContainer, input: textFiedlInput }}
+                  />
+                )}
             </div>
           )}
         </>
