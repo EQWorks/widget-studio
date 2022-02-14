@@ -257,6 +257,7 @@ const WidgetView = () => {
                   <div className={classes.tableDisplayControls}>
                     Display:
                     <CustomToggle
+                      disabled={!type || !domain.value || !renderableValueKeys?.length || !transformedData?.length}
                       classes={{
                         label: classes.tableRawToggle,
                       }}
