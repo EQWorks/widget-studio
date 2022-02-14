@@ -83,13 +83,10 @@ export default {
       radius: {
         name: 'Radius (px)',
         valueConfigName: 'Radius',
-        valueOptions: {
-          type: Array,
-          defaultValue: [5, 15],
-        },
-        value: {
-          type: Number,
-          defaultValue: [10],
+        type: Object,
+        defaultValue: {
+          value: 10,
+          valueOptions: [5, 15],
         },
         info: (
           <div>
@@ -104,13 +101,10 @@ export default {
       fill: {
         name: 'Color Fill',
         valueConfigName: 'Color Fill',
-        valueOptions: {
-          type: Array,
-          defaultValue: [[214, 232, 253], [39, 85, 196]],
-        },
-        value: {
-          type: Number,
-          defaultValue: [39, 85, 196],
+        type: Object,
+        defaultValue: {
+          value: [39, 85, 196],
+          valueOptions: [[214, 232, 253], [39, 85, 196]],
         },
         info: (
           <div>
@@ -122,13 +116,13 @@ export default {
       elevation: {
         name: 'Elevation Height',
         valueConfigName: 'Elevation',
-        valueOptions: {
-          type: Array,
-          defaultValue: [0, 1000],
+        type: Number,
+        defaultValue: {
+          value: 1000,
         },
         min: 0,
-        max: 1000,
-        step: 1,
+        max: 500000,
+        step: 10,
         info: (
           <div>
             <p>Calculate elevation height based on</p>
@@ -138,9 +132,9 @@ export default {
       },
       lineWidth: {
         name: 'Outline Width',
-        value: {
-          type: Number,
-          defaultValue: 1,
+        type: Number,
+        defaultValue: {
+          value: 1,
         },
         min: 1,
         max: 100,
