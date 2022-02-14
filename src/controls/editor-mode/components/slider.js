@@ -58,7 +58,6 @@ const BasicSlider = ({ min, max, step, value, update }) => {
             deleteButton={false}
             placeholder={min.toString()}
             value={(value || [])[0] || ''}
-            onClick={event => event.stopPropagation()}
             onChange={_min => update([Number(_min), value[1]])}
           />
         }

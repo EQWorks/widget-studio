@@ -5,14 +5,14 @@ import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState } from '../../../store'
 import CustomDropdown from './custom-dropdown'
-import Range from './range'
+import Slider from './slider'
 import typeInfo from '../../../constants/type-info'
 
 
 const classes = makeStyles({
-// TO DO : bring together the two stylings for buttons when we do the final styling revision
+// TO DO : bring together the two stylings for dropdown when we do the final styling revision
   dropdownMenuChart: {
-    width: '12rem !important',
+    width: '14.882rem !important',
     overflow: 'visible !important',
   },
   dropdownRootChart: {
@@ -21,7 +21,7 @@ const classes = makeStyles({
     borderRight: 'none !important',
   },
   dropdownMenuMap: {
-    width: '12rem !important',
+    width: '14.5rem !important',
     overflow: 'visible !important',
   },
   dropdownButtonMap: {
@@ -35,6 +35,7 @@ const SliderControl = ({ option, index, range, update, style }) => {
   const uniqueOptions = useStoreState((state) => state.uniqueOptions)
   const filters = useStoreState((state) => state.filters)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const type = useStoreState((state) => state.type)
 
   const [{ min, max }, step] = useMemo(() => option ?
     [
@@ -50,24 +51,39 @@ const SliderControl = ({ option, index, range, update, style }) => {
     ]
   , [option, columnsAnalysis, filters, index])
 
-  const value = useMemo(() => option ?
-    uniqueOptions[option][range? 'valueOptions' : 'value'] :
-    filters[index]?.filter || [min, max]
-  , [option, uniqueOptions, range, filters, index, max, min])
+  const value = useMemo(() => {
+    if (option) {
+      if (range) {
+        return uniqueOptions[option]?.valueOptions ||
+               typeInfo[type].uniqueOptions[option].defaultValue.valueOptions
+      }
+      return uniqueOptions[option]?.value ||
+             typeInfo[type].uniqueOptions[option].defaultValue.value
+    }
+    return filters[index]?.filter || [min, max]
+  }, [type, option, uniqueOptions, range, filters, index, max, min])
+
+  const selectedString = useMemo(() => {
+    if (range) {
+      return (option ?
+        uniqueOptions[option]?.valueOptions ||
+          typeInfo[type].uniqueOptions[option].defaultValue.valueOptions :
+        value || []).map(Intl.NumberFormat('en-US', {
+        notation: 'compact',
+        maximumFractionDigits: 1,
+      }).format)
+        .join('-')
+    }
+    return Intl.NumberFormat('en-US', {
+      notation: 'compact',
+      maximumFractionDigits: 1,
+    }).format(uniqueOptions[option]?.value ||
+      typeInfo[type].uniqueOptions[option].defaultValue.value)
+  }, [type, value, option, uniqueOptions, range])
 
   return (
     <CustomDropdown
-      selectedString={range ?
-        (uniqueOptions[option]?.valueOptions || value).map(Intl.NumberFormat('en-US', {
-          notation: 'compact',
-          maximumFractionDigits: 1,
-        }).format)
-          .join('-') :
-        Intl.NumberFormat('en-US', {
-          notation: 'compact',
-          maximumFractionDigits: 1,
-        }).format(uniqueOptions[option].value)
-      }
+      {...{ selectedString, style }}
       // NOTE - TO BE CHANGED: style 'map' or 'chart' has nothing to do witht the type of widget
       // it is used to differantiate the styling for the MapLayerDisplay section in the right panel
       classes={style === 'map' ?
@@ -81,14 +97,14 @@ const SliderControl = ({ option, index, range, update, style }) => {
         }
       }
       placeholder={range ? 'Range' : 'Value'}
-      disabled={!value}
-      style={style}
-    >
-      {range &&
-        <Range
-          {...{ value, min, max, step, update }}
-        />
+      disabled={
+        (Array.isArray(value) && !value[0] && !value[1]) ||
+        !value
       }
+    >
+      <Slider
+        {...{ value, min, max, step, update }}
+      />
     </CustomDropdown>
   )
 }
