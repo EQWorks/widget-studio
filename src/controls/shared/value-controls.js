@@ -65,7 +65,7 @@ const ValueControls = () => {
         valueKeysCopy.splice(i, 1)
         userUpdate({ valueKeys: valueKeysCopy })
       }}
-      addMessage='Add Key'
+      addMessage='Add Value'
     />
 
   return (
@@ -75,7 +75,8 @@ const ValueControls = () => {
     >
       <WidgetControlCard
         clear={() => resetValue({ valueKeys })}
-        title='Value Configuration'
+        // title={ `${group ? 'Value' : ''} Configuration` }
+        title={`${group ? 'Value' : ''} Configuration`}
         {...mode === modes.QL &&
         { description: 'Select up to 3 keys, open in editor for more options.' }
         }
