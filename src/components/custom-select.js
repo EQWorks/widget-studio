@@ -6,7 +6,7 @@ import { DropdownSelect, Icons } from '@eqworks/lumen-labs'
 export const DROPDOWN_SELECT_CLASSES = {
   root: 'shadow-light-10 border-2 border-secondary-200 rounded-md',
   button: 'tracking-widest border-none max-h-20 overflow-y-auto',
-  menu: 'w-full z-50',
+  menu: 'min-w-full z-50',
   content: 'children:fill-current children:text-secondary-500',
   selectedOptionTitle: 'normal-case text-primary-600 truncate overflow-hidden',
   listContainer: 'normal-case',
