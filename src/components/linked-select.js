@@ -33,6 +33,7 @@ const LinkedSelect = ({
   disableSubMessage,
   customRender,
   customRenderSub,
+  icons,
 }) => {
   const [choice, setChoice] = useState(init)
   const [subChoice, setSubChoice] = useState(subInit)
@@ -77,6 +78,7 @@ const LinkedSelect = ({
             onSelect={setChoice}
             onClear={() => setChoice('')}
             placeholder={placeholders[0]}
+            {...(icons && { icons })}
           />
       }
     </div>
@@ -132,6 +134,7 @@ LinkedSelect.propTypes = {
   disableSubMessage: PropTypes.string,
   customRender: PropTypes.func,
   customRenderSub: PropTypes.func,
+  icons: PropTypes.array,
 }
 
 LinkedSelect.defaultProps = {
@@ -145,6 +148,7 @@ LinkedSelect.defaultProps = {
   disableSubMessage: '',
   customRender: null,
   customRenderSub: null,
+  icons: null,
 }
 
 export default LinkedSelect
