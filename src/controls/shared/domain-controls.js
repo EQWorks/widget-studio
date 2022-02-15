@@ -14,7 +14,6 @@ const DomainControls = () => {
   const update = useStoreActions(actions => actions.update)
   const userUpdate = useStoreActions(actions => actions.userUpdate)
   const resetValue = useStoreActions(actions => actions.resetValue)
-  const columns = useStoreState((state) => state.columns)
   const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
@@ -28,18 +27,15 @@ const DomainControls = () => {
   // local state
   const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
 
-  const eligibleGroupKeyValues = useMemo(() => (
-    columns.map(({ name }) => name)
-      .filter(c => !columnsAnalysis[c]?.isNumeric)
-  ), [columns, columnsAnalysis])
-
   const eligibleDomainValues = useMemo(() => (
-    columns.map(({ name }) => name)
-      .filter(c =>
-        (groupingOptional || eligibleGroupKeyValues.includes(c))
-        && !(valueKeys.map(({ key }) => key).includes(c))
-      )
-  ), [columns, eligibleGroupKeyValues, groupingOptional, valueKeys])
+    Object.fromEntries(
+      Object.entries(columnsAnalysis)
+        .filter(([c, { isNumeric }]) =>
+          (groupingOptional || !isNumeric)
+          && !(valueKeys.map(({ key }) => key).includes(c)))
+        .map(([c, { Icon }]) => [c, { Icon }])
+    )
+  ), [columnsAnalysis, groupingOptional, valueKeys])
 
   useEffect(() => {
     if (!group && !groupingOptional) {
@@ -67,10 +63,11 @@ const DomainControls = () => {
             renderRow('Column',
               <CustomSelect
                 fullWidth
-                data={eligibleDomainValues}
+                data={Object.keys(eligibleDomainValues)}
+                icons={Object.values(eligibleDomainValues).map(({ Icon }) => Icon)}
                 value={domain.value}
                 onSelect={val => {
-                  const willGroup = eligibleGroupKeyValues.includes(val) && !groupingOptional
+                  const willGroup = !columnsAnalysis[val]?.isNumeric && !groupingOptional
                   userUpdate({
                     group: willGroup,
                     ...(

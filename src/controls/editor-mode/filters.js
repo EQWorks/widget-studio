@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { DateRange, Icons } from '@eqworks/lumen-labs'
 
@@ -20,10 +20,15 @@ const Filters = () => {
   const groups = useStoreState((state) => state.groups)
   const groupFilter = useStoreState((state) => state.groupFilter)
   const filters = useStoreState((state) => state.filters)
-  const columns = useStoreState((state) => state.columns)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
+
+  const filterData = useMemo(() => (
+    Object.fromEntries(Object.entries(columnsAnalysis)
+      .filter(([, { min, max, isNumeric }]) => isNumeric && min !== max)
+      .map(([c, { Icon }]) => [c, { Icon }]))
+  ), [columnsAnalysis])
 
   return (
     <WidgetControlCard
@@ -68,10 +73,8 @@ const Filters = () => {
               values={filters}
               primaryKey='key'
               secondaryKey='filter'
-              data={columns.map(({ name }) => name).filter(c => {
-                const { min, max, isNumeric } = columnsAnalysis[c] || {}
-                return isNumeric && min !== max
-              })}
+              valueIcons={Object.values(filterData).map(({ Icon }) => Icon)}
+              data={Object.keys(filterData)}
               subData={[]}
               callback={(i, { key }) => {
                 if (i === filters.length) {

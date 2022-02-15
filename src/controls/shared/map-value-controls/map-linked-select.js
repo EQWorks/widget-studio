@@ -5,6 +5,7 @@ import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lum
 
 import PluralLinkedSelect from '../../../components/plural-linked-select'
 import types from '../../../constants/type-info'
+import { useStoreState } from '../../../store'
 
 
 const classes = makeStyles({
@@ -38,6 +39,7 @@ const MapLinkedSelect = ({
   disableSubMessage,
   callback,
 }) => {
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   return (
     categories.map((mapVis, i) => {
       const match = values.findIndex(v => v.mapVis === mapVis)
@@ -69,6 +71,7 @@ const MapLinkedSelect = ({
             ]}
             titles={titles}
             values={values[match] ? [values[match]] : []}
+            {...(values[match] && { valueIcons: [columnsAnalysis[values[match][PRIMARY_KEY]]?.Icon] })}
             callback={(_, v) => callback(
               match,
               {
