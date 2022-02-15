@@ -11,7 +11,6 @@ import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import { getKeyFormatFunction } from '../util/data-format-functions'
 import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
-import { priceStringToNumeric } from '../util/numeric'
 import { columnTypes } from '../constants/columns'
 import { columnInference } from '../util/columns'
 
@@ -167,9 +166,7 @@ export default {
         const data = rows.map(r => r[name])
         acc[name] = columnInference(data, name)
         if (acc[name].isNumeric) {
-          const numericData = acc.category === columnTypes.PRICE
-            ? data.map(priceStringToNumeric)
-            : data
+          const numericData = acc[name].normalized || data
           acc[name].min = Math.min.apply(null, numericData)
           acc[name].max = Math.max.apply(null, numericData)
         }
