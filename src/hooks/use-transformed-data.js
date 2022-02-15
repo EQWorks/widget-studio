@@ -4,7 +4,7 @@ import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
 import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import types from '../constants/types'
-import { priceStringToNumeric, roundToTwoDecimals } from '../util/numeric'
+import { roundToTwoDecimals } from '../util/numeric'
 import { dateAggregations, dateSort } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 
@@ -35,24 +35,22 @@ const useTransformedData = () => {
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
-  // convert prices to numeric values
-  const normalizedPriceData = useMemo(() => {
-    const priceColumns = columns.map(({ name }) => name).filter(c => columnsAnalysis[c]?.category === columnTypes.PRICE)
-    return priceColumns.length
-      ? rows.map(r =>
-        Object.entries(r)
-          .reduce((acc, [k, v]) => {
-            if (priceColumns.includes(k)) {
-              acc[k] = priceStringToNumeric(v) || v
-            }
-            return acc
-          }, { ...r }))
+  // normalize data using columnsAnalysis (ex. price to numeric)
+  const normalizedData = useMemo(() => {
+    const normalizedColumns = Object.entries(columnsAnalysis).filter(([, { normalized }]) => normalized)
+    return normalizedColumns.length
+      ? normalizedColumns.reduce((acc, [c, { normalized }]) => {
+        acc.forEach((r, i) => {
+          r[c] = normalized[i]
+        })
+        return acc
+      }, [...rows])
       : rows
-  }, [columns, columnsAnalysis, rows])
+  }, [columnsAnalysis, rows])
 
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
-    normalizedPriceData.filter(obj => {
+    normalizedData.filter(obj => {
       for (const { key, filter: [min, max] } of filters.filter(({ filter }) => Boolean(filter))) {
         if (obj[key] < min || obj[key] > max) {
           return false
@@ -60,7 +58,7 @@ const useTransformedData = () => {
       }
       return true
     })
-  ), [normalizedPriceData, filters])
+  ), [normalizedData, filters])
 
   const newGroupKey = useMemo(() => (
     groupFSAByPC

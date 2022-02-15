@@ -32,6 +32,7 @@ export const columnTypeInfo = {
     ],
     Icon: Icons.Dollar,
     validate: (v) => isString(v) && !isNaN(priceStringToNumeric(v)),
+    normalize: (c) => c.map(priceStringToNumeric),
   },
   [columnTypes.DATE]: {
     parentTypes: [

@@ -20,10 +20,12 @@ export const columnInference = (columnData = [], columnName) => {
       }
     })
   const category = matches.shift() || columnTypes.STRING
+  const { Icon, normalize } = columnTypeInfo[category]
   return {
     category,
+    Icon,
     parentCategories: matches,
     isNumeric: category === columnTypes.NUMERIC || matches.includes(columnTypes.NUMERIC),
-    Icon: columnTypeInfo[category].Icon,
+    ...(normalize && { normalized: normalize(columnData) }),
   }
 }
