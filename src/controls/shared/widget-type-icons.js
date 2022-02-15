@@ -41,6 +41,7 @@ const Icons = ({ disabled }) => {
                   group: willGroup,
                   ...(
                     willGroup !== group && {
+                      groupFilter: [],
                       valueKeys: [],
                       ...(domain?.key && { [domain.key]: null }),
                     }
