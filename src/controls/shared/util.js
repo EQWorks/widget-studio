@@ -39,6 +39,13 @@ const classes = makeStyles({
     flexDirection: 'column',
     padding: '0.2rem',
   },
+  itemContainerNoGrow: {
+    flex: 0,
+    minWidth: '33%',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '0.2rem',
+  },
   inlineItem: {
   },
   item: {
@@ -81,7 +88,7 @@ export const renderRow = (title, Component, titleExtra) => (
   <div className={classes.rowContainer}>
     {(title || titleExtra) &&
       <div className={classes.title}>
-        <span className={classes.flex1}> {`${title}:`} </span>
+        <span className={classes.flex1}> {title && `${title}:`} </span>
         {titleExtra && titleExtra}
       </div>
     }
@@ -91,10 +98,13 @@ export const renderRow = (title, Component, titleExtra) => (
   </div>
 )
 
-export const renderItem = (title, Component) => (
+export const renderItem = (title, Component, titleExtra, grow = true) => (
   Component &&
-  <div className={classes.itemContainer}>
-    <div className={classes.title} > {`${title}:`} </div>
+  <div className={grow ? classes.itemContainer : classes.itemContainerNoGrow}>
+    <div className={classes.title}>
+      <span className={classes.flex1}> {title && `${title}:`} </span>
+      {titleExtra && titleExtra}
+    </div>
     <div className={classes.item}>
       {Component}
     </div>
