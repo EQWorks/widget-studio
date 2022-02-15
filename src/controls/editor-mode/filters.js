@@ -40,7 +40,7 @@ const Filters = () => {
         // renderSection(
         //   null,
         renderRow(
-          'Group Filter',
+          'Domain Filter',
           domainIsDate
             ? <DateRange
               classes={{
@@ -56,7 +56,7 @@ const Filters = () => {
               data={groups}
               value={groupFilter ?? []}
               onSelect={val => userUpdate({ groupFilter: val })}
-              placeholder={group && domain.value ? `Filter ${domain.value}` : 'N/A'}
+              placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
               disabled={!group || !domain.value}
             />
         )
@@ -65,7 +65,7 @@ const Filters = () => {
       {renderSection(
         null,
         renderRow(
-          'Value Filter',
+          'Range Filters',
           <>
             <PluralLinkedSelect
               titles={['Column', 'Range']}

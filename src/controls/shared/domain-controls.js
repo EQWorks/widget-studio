@@ -105,7 +105,7 @@ const DomainControls = () => {
                       mapGroupKey: null,
                       mapValueKeys: [],
                     })}
-                    placeholder={`Select a column to ${group ? 'group' : 'index'} by`}
+                    placeholder='Select column'
                   />,
                   renderCategory()
                 )
