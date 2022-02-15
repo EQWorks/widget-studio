@@ -94,9 +94,11 @@ const EditorRightSidebar = () => {
               </>
             )}
           </div>
-          {renderSection('Styling',
-            <>
-              {renderRow(null,
+          {
+            renderSection(
+              'Styling',
+              renderRow(
+                null,
                 <>
                   {type !== types.MAP && renderItem('Title Position',
                     <CustomDropdown
@@ -146,17 +148,30 @@ const EditorRightSidebar = () => {
                     />
                   )}
                 </>
-              )}
-              {type !== types.MAP && subPlots && renderRow('Subplot Size',
-                <CustomSelect
-                  fullWidth
-                  data={sizes.string}
-                  value={sizes.string[sizes.numeric.indexOf(size)]}
-                  onSelect={v => userUpdate({ genericOptions: { size: sizes.dict[v] } })}
-                />
-              )}
-            </>
-          )}
+              )
+            )
+          }
+          {
+            type !== types.MAP && subPlots &&
+            renderRow(
+              null,
+              <>
+                {
+                  renderItem('Subplot Size',
+                    <CustomSelect
+                      fullWidth
+                      allowClear={false}
+                      data={sizes.string}
+                      value={sizes.string[sizes.numeric.indexOf(size)]}
+                      onSelect={v => userUpdate({ genericOptions: { size: sizes.dict[v] } })}
+                    />
+                  )
+                }
+                {/* for spacing */}
+                {renderItem(null, <></>)}
+              </>
+            )
+          }
           {type === types.MAP &&
             <MapLayerDisplay />
           }
