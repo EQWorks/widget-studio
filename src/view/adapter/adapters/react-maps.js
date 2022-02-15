@@ -48,7 +48,7 @@ const Map = ({ width, height, ...props }) => {
   if (width > 0 && height > 0) {
     return (
       <div id='LocusMap' className={classes.mapWrapper}>
-        <LocusMap { ...props } />
+        <LocusMap {...props} />
       </div>
     )
   }
@@ -124,7 +124,7 @@ export default {
             * the special case for elevation in this case
             */
             const visValue = vis === 'elevation' ? 0 : uniqueOptions[vis]?.value
-            return  [
+            return [
               vis,
               {
                 value: keyTitle ?

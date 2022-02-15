@@ -33,12 +33,11 @@ const BasicSlider = ({ min, max, step, value, update }) => {
   useEffect(() => {
     setChangedValue(value)
   }, [value])
-
   return (
     <div className={classes.controls}>
       <div className={classes.slider}>
         <Slider
-          defaultValue={value}
+          defaultValue={value || [min, max]}
           value={changedValue}
           onChange={(_, newValue) => setChangedValue(newValue)}
           onChangeCommitted={(_, newValue) => {update(newValue); setChangedValue(newValue)}}

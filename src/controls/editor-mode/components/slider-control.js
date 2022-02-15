@@ -3,10 +3,9 @@ import PropTypes from 'prop-types'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import { useStoreState } from '../../../store'
 import CustomDropdown from './custom-dropdown'
 import Slider from './slider'
-import typeInfo from '../../../constants/type-info'
+import { quickNumericFormat } from '../../../util/numeric'
 
 
 const classes = makeStyles({
@@ -31,55 +30,12 @@ const classes = makeStyles({
   },
 })
 
-const SliderControl = ({ option, index, range, update, style }) => {
-  const uniqueOptions = useStoreState((state) => state.uniqueOptions)
-  const filters = useStoreState((state) => state.filters)
-  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
-  const type = useStoreState((state) => state.type)
-
-  const [{ min, max }, step] = useMemo(() => option ?
-    [
-      {
-        min: typeInfo.map.uniqueOptions[option].min,
-        max: typeInfo.map.uniqueOptions[option].max,
-      },
-      typeInfo.map.uniqueOptions[option].step,
-    ] :
-    [
-      columnsAnalysis[filters[index]?.key] || {},
-      1,
-    ]
-  , [option, columnsAnalysis, filters, index])
-
-  const value = useMemo(() => {
-    if (option) {
-      if (range) {
-        return uniqueOptions[option]?.valueOptions ||
-               typeInfo[type].uniqueOptions[option].defaultValue.valueOptions
-      }
-      return uniqueOptions[option]?.value ||
-             typeInfo[type].uniqueOptions[option].defaultValue.value
-    }
-    return filters[index]?.filter || [min, max]
-  }, [type, option, uniqueOptions, range, filters, index, max, min])
-
-  const selectedString = useMemo(() => {
-    if (range) {
-      return (option ?
-        uniqueOptions[option]?.valueOptions ||
-          typeInfo[type].uniqueOptions[option].defaultValue.valueOptions :
-        value || []).map(Intl.NumberFormat('en-US', {
-        notation: 'compact',
-        maximumFractionDigits: 1,
-      }).format)
-        .join('-')
-    }
-    return Intl.NumberFormat('en-US', {
-      notation: 'compact',
-      maximumFractionDigits: 1,
-    }).format(uniqueOptions[option]?.value ||
-      typeInfo[type].uniqueOptions[option].defaultValue.value)
-  }, [type, value, option, uniqueOptions, range])
+const SliderControl = ({ value, min, max, step, update, range, style }) => {
+  const selectedString = useMemo(() => (
+    range
+      ? value.map(quickNumericFormat).join('-')
+      : quickNumericFormat(value)
+  ), [range, value])
 
   return (
     <CustomDropdown
@@ -110,16 +66,17 @@ const SliderControl = ({ option, index, range, update, style }) => {
 }
 
 SliderControl.propTypes = {
-  option: PropTypes.string,
-  index: PropTypes.number,
   range: PropTypes.bool.isRequired,
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  step: PropTypes.number,
   update: PropTypes.func.isRequired,
   style: PropTypes.string.isRequired,
+  value: PropTypes.oneOf([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
 }
 
 SliderControl.defaultProps = {
-  option: '',
-  index: null,
+  step: 1,
 }
 
 export default SliderControl

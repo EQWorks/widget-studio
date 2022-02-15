@@ -51,9 +51,8 @@ const WidgetMeta = () => {
     ],
     ['Data Source',
       dataReady
-        ? `${dataSourceType} ${dataSourceID} ${dataSourceName || ''}`
+        ? `${dataSourceType} ${dataSourceID}${` - ${dataSourceName}` || ''}`
         : '...',
-      'https://www.google.com/search?q=not+implemented',
     ],
   ]), [columns.length, dataReady, dataSourceID, dataSourceName, dataSourceType, rows.length])
 
@@ -65,14 +64,14 @@ const WidgetMeta = () => {
         detailItems.map(([title, info, hyperlink], i) => {
           const config = 'flex-none whitespace-nowrap min-w-0 font-semibold flex-initial font-mono bg-secondary-200 p-0.5'
           return (
-            <div key={i} className='flex pl-3 pr-3 flex-col overflow-hidden'>
+            <div key={i} className='flex pl-3 pr-3 flex-col'>
               <span className='m-0'>
                 {`${title}:`}
               </span>
               <OverflowTooltip
                 description={info}
                 classes={{ content: 'whitespace-nowrap' }}
-                position={i === 0 ? 'right' : 'left'}
+                position='top'
               >
                 <div className='flex-none whitespace-nowrap min-w-0'>
                   {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { Icons } from '@eqworks/lumen-labs'
 
@@ -18,11 +18,29 @@ const ValueControls = () => {
   const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
+  const type = useStoreState((state) => state.type)
+  const columns = useStoreState((state) => state.columns)
   const group = useStoreState((state) => state.group)
   const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const numericColumns = useStoreState((state) => state.numericColumns)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+
+  const eligibleColumns = useMemo(() => columns
+    .map(({ name }) => name)
+    .filter(c => {
+      const { category } = columnsAnalysis[c] || {}
+      return (
+        c !== domain.value
+        && !c.endsWith('_id')
+        && (
+          category === 'Numeric'
+          || (category === 'String' && c.includes('price'))
+        )
+      )
+    }), [columns, columnsAnalysis, domain.value])
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -60,7 +78,10 @@ const ValueControls = () => {
     />
 
   return (
-    <MutedBarrier mute={!domain.value}>
+    <MutedBarrier
+      mute={!dataSourceLoading && (!type || !domain.value || !eligibleColumns.length)}
+      {...!eligibleColumns.length && { message: 'Sorry, there are no eligible columns in this dataset.' }}
+    >
       <WidgetControlCard
         clear={() => resetValue({ valueKeys })}
         title='Value Configuration'
@@ -85,7 +106,6 @@ const ValueControls = () => {
         }
       </WidgetControlCard>
     </MutedBarrier>
-
   )
 }
 

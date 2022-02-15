@@ -1,4 +1,5 @@
 import numeral from 'numeral'
+import { quickNumericFormat } from '../util/numeric'
 
 
 export const DATA_KEY_FORMATTING = {
@@ -12,9 +13,6 @@ export const DATA_KEY_FORMATTING = {
   },
   numericOthers: {
     keyList: [],
-    formatFunction: Intl.NumberFormat('en-US', {
-      notation: 'compact',
-      maximumFractionDigits: 1,
-    }).format,
+    formatFunction: quickNumericFormat,
   },
 }

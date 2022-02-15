@@ -15,6 +15,7 @@ import EditorModeControls from './controls/editor-mode'
 import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
+import { dataSourceTypes } from './constants/data-source'
 
 
 const commonClasses = {
@@ -57,12 +58,17 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const Widget = ({ id, mode: _mode, staticData }) => {
+const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, executionID }) => {
   const classes = useStyles(_mode)
 
   // easy-peasy actions
+  const loadData = useStoreActions((actions) => actions.loadData)
   const loadConfig = useStoreActions(actions => actions.loadConfig)
   const update = useStoreActions(actions => actions.update)
+
+  // common state
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
@@ -73,11 +79,9 @@ const Widget = ({ id, mode: _mode, staticData }) => {
   useEffect(() => {
     // validate mode prop
     const validatedMode = Object.values(modes).find(v => v === _mode)
-
     if (!validatedMode) {
-      throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${modes}.`)
+      throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
-
     // dispatch state
     update({
       id,
@@ -86,7 +90,19 @@ const Widget = ({ id, mode: _mode, staticData }) => {
         staticData,
       },
     })
-
+    if (_rows && _columns) {
+      // use manually passed data if available
+      update({
+        rows: _rows,
+        columns: _columns,
+        dataSource: { type: dataSourceTypes.MANUAL, id: 1 },
+      })
+    } else if (executionID !== -1) {
+      // use executionID if available
+      update({
+        dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
+      })
+    }
     // if there is a widget ID,
     if (id !== undefined && id !== null) {
       // fetch/read the config associated with the ID
@@ -98,7 +114,15 @@ const Widget = ({ id, mode: _mode, staticData }) => {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_mode, id, loadConfig, mode, update, staticData])
+  }, [_columns, _mode, _rows, executionID, id, loadConfig, mode, staticData, update])
+
+
+  // load data if source changes
+  useEffect(() => {
+    if (!staticData && !_rows && !_columns && dataSourceType && dataSourceID) {
+      loadData({ type: dataSourceType, id: dataSourceID })
+    }
+  }, [staticData, loadData, dataSourceType, dataSourceID, _rows, _columns])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
@@ -133,11 +157,17 @@ Widget.propTypes = {
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
+  rows: PropTypes.array,
+  columns: PropTypes.array,
+  executionID: PropTypes.number,
 }
 Widget.defaultProps = {
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
+  rows: null,
+  columns: null,
+  executionID: -1,
 }
 
 export default withQueryClient(withStore(Widget))

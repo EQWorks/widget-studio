@@ -12,6 +12,7 @@ import CustomButton from '../components/custom-button'
 import WidgetMeta from './meta'
 import CustomToggle from '../components/custom-toggle'
 import types from '../constants/types'
+import { dataSourceTypes } from '../constants/data-source'
 
 
 const useStyles = ({ mode, tableExpanded, type }) => makeStyles(
@@ -100,6 +101,9 @@ const useStyles = ({ mode, tableExpanded, type }) => makeStyles(
           fontSize: '0.78rem',
           color: getTailwindConfigColor('secondary-800'),
           marginRight: '1rem',
+          '&:first-child': {
+            flex: 1,
+          },
           '&:last-child': {
             marginRight: 0,
           },
@@ -157,6 +161,19 @@ const WidgetView = () => {
 
   const classes = useStyles({ mode, tableExpanded, type })
 
+  const noTransformedData = useMemo(() => (
+    !type ||
+    !domain.value ||
+    !renderableValueKeys?.length ||
+    !transformedData?.length
+  ), [domain.value, renderableValueKeys?.length, transformedData?.length, type])
+
+  useEffect(() => {
+    if (noTransformedData) {
+      update({ ui: { tableShowsRawData: true } })
+    }
+  }, [noTransformedData, update])
+
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
     dataSourceType && dataSourceID ?
@@ -167,14 +184,14 @@ const WidgetView = () => {
 
   // auto-expand/collapse the table when viz readiness changes
   useEffect(() => {
-    if (!isReady) {
+    if (!isReady && dataReady) {
       setTableExpanded(true)
       setAutoExpandedTable(true)
     } else if (autoExpandedTable) {
       setTableExpanded(false)
       setAutoExpandedTable(false)
     }
-  }, [autoExpandedTable, isReady])
+  }, [autoExpandedTable, isReady, dataReady])
 
   // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
   const widgetWarning = useMemo(() => {
@@ -194,7 +211,10 @@ const WidgetView = () => {
       primary = 'This configuration resulted in an empty dataset.'
       secondary = 'Try adjusting your filters.'
     }
-    return { primary, secondary: secondary || 'Data loaded successfully' }
+    if (!secondary && dataSourceType && dataSourceType !== dataSourceTypes.MANUAL) {
+      secondary = `Successfully loaded ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
+    }
+    return { primary, secondary }
   }, [dataSourceError, dataSourceID, dataSourceType, domain?.value, renderableValueKeys?.length, rows.length, transformedData?.length, type])
 
   const renderWidgetWarning = (
@@ -213,9 +233,7 @@ const WidgetView = () => {
     </div>
   )
 
-  const renderVisualization = isReady ? <WidgetAdapter /> : renderWidgetWarning
-
-  if (!dataReady) return renderWidgetWarning
+  const renderVisualization = isReady && dataReady ? <WidgetAdapter /> : renderWidgetWarning
 
   return (
     <div className={classes.outerContainer}>
@@ -252,6 +270,7 @@ const WidgetView = () => {
                   <div className={classes.tableDisplayControls}>
                     Display:
                     <CustomToggle
+                      disabled={noTransformedData}
                       classes={{
                         label: classes.tableRawToggle,
                       }}

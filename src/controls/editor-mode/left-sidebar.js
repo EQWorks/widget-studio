@@ -32,7 +32,6 @@ const EditorLeftSidebar = () => {
             <DataTransformationControls />
           </>
       }
-      {type !== types.MAP && <DataTransformationControls />}
     </EditorSidebarBase>
   )
 }
