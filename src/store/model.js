@@ -32,6 +32,7 @@ const stateDefaults = [
   { key: 'valueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
+  { key: 'sortBy', defaultValue: null, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
       showWidgetTitle: false,

@@ -32,6 +32,7 @@ const useTransformedData = () => {
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
   const dateAggregation = useStoreState((state) => state.dateAggregation)
+  const sortBy = useStoreState((state) => state.sortBy)
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
@@ -218,7 +219,11 @@ const useTransformedData = () => {
     if (group) return null
     const sortFn = domainIsDate
       ? (a, b) => dateSort(a[formattedColumnNames[indexKey]], b[formattedColumnNames[indexKey]])
-      : (a, b) => (a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
+      : (a, b) => (
+        !columnsAnalysis[indexKey]?.isNumeric && sortBy
+          ? a[formattedColumnNames[sortBy]] - b[formattedColumnNames[sortBy]]
+          : a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]]
+      )
     return (
       truncatedData
         .map(d => Object.fromEntries(
@@ -229,7 +234,7 @@ const useTransformedData = () => {
         ))
         .sort(sortFn)
     )
-  }, [domainIsDate, formattedColumnNames, group, indexKey, truncatedData])
+  }, [columnsAnalysis, domainIsDate, formattedColumnNames, group, indexKey, sortBy, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
   const finalData = useMemo(() => {

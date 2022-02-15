@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { Icons } from '@eqworks/lumen-labs'
 
@@ -14,6 +14,7 @@ import CustomSelect from '../../components/custom-select'
 
 const ValueControls = () => {
   // common actions
+  const update = useStoreActions(actions => actions.update)
   const userUpdate = useStoreActions(actions => actions.userUpdate)
   const resetValue = useStoreActions(actions => actions.resetValue)
 
@@ -25,6 +26,8 @@ const ValueControls = () => {
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const sortBy = useStoreState((state) => state.sortBy)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
 
   const eligibleColumns = useMemo(() =>
     Object.fromEntries(
@@ -34,6 +37,14 @@ const ValueControls = () => {
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
+  const allowSortBy = useMemo(() => !group && !columnsAnalysis[domain.value]?.isNumeric && renderableValueKeys.length > 1, [columnsAnalysis, domain.value, group, renderableValueKeys.length])
+
+  // set a default sortBy value if appropriate
+  useEffect(() => {
+    if (!sortBy) {
+      update({ sortBy: renderableValueKeys[0]?.key })
+    }
+  }, [allowSortBy, renderableValueKeys, sortBy, update])
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
@@ -82,18 +93,33 @@ const ValueControls = () => {
       >
         {
           renderSection(null,
-            group
-              ? renderGroupedValueKeysSelect
-              : renderRow('Columns',
-                <CustomSelect
-                  fullWidth
-                  multiSelect
-                  value={valueKeys.map(({ key }) => key)}
-                  data={Object.keys(eligibleColumns)}
-                  onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
-                  icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
-                />
-              )
+            <>
+              {
+                group
+                  ? renderGroupedValueKeysSelect
+                  : renderRow('Columns',
+                    <CustomSelect
+                      fullWidth
+                      multiSelect
+                      value={valueKeys.map(({ key }) => key)}
+                      data={Object.keys(eligibleColumns)}
+                      onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
+                      icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
+                    />
+                  )
+              }
+              {
+                allowSortBy &&
+                renderRow('Sort by',
+                  <CustomSelect
+                    allowClear={false}
+                    value={sortBy}
+                    data={renderableValueKeys.map(({ key }) => key)}
+                    onSelect={sortBy => userUpdate({ sortBy })}
+                  />
+                )
+              }
+            </>
           )
         }
       </WidgetControlCard>
