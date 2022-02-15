@@ -5,6 +5,7 @@ import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lum
 
 import PluralLinkedSelect from '../../../components/plural-linked-select'
 import types from '../../../constants/type-info'
+import { useStoreState } from '../../../store'
 
 
 const classes = makeStyles({
@@ -38,9 +39,12 @@ const MapLinkedSelect = ({
   disableSubMessage,
   callback,
 }) => {
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   return (
     categories.map((mapVis, i) => {
       const match = values.findIndex(v => v.mapVis === mapVis)
+      const _data = data.filter(d => values[match]?.key === d || !(values.map(v => v.key).includes(d)))
+      const icons = _data.map(c => columnsAnalysis[c]?.Icon)
       return (
         <div key={i} className={classes.linkedSelect} >
           <div className={classes.visTitleWrapper}>
@@ -69,6 +73,9 @@ const MapLinkedSelect = ({
             ]}
             titles={titles}
             values={values[match] ? [values[match]] : []}
+            // {...(values[match] && { valueIcons: [columnsAnalysis[values[match][PRIMARY_KEY]]?.Icon] })}
+            // {...(Icon && { valueIcons: [Icon] })}
+            {...(icons.length && { valueIcons: icons })}
             callback={(_, v) => callback(
               match,
               {
@@ -77,7 +84,7 @@ const MapLinkedSelect = ({
                 [SECONDARY_KEY]: v[SECONDARY_KEY],
               }
             )}
-            data={data.filter(d => values[match]?.key === d || !(values.map(v => v.key).includes(d)))}
+            data={_data}
             subData={subData}
             primaryKey={PRIMARY_KEY}
             secondaryKey={SECONDARY_KEY}

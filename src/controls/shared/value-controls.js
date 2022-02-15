@@ -5,11 +5,11 @@ import { Icons } from '@eqworks/lumen-labs'
 import modes from '../../constants/modes'
 import aggFunctions from '../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../store'
-import CustomSelect from '../../components/custom-select'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderRow, renderSection } from './util'
 import MutedBarrier from './muted-barrier'
+import CustomSelect from '../../components/custom-select'
 
 
 const ValueControls = () => {
@@ -19,7 +19,6 @@ const ValueControls = () => {
 
   // common state
   const type = useStoreState((state) => state.type)
-  const columns = useStoreState((state) => state.columns)
   const group = useStoreState((state) => state.group)
   const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
@@ -27,12 +26,11 @@ const ValueControls = () => {
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
 
-  const eligibleColumns = useMemo(() => columns
-    .map(({ name }) => name)
-    .filter(c => (
-      c !== domain.value
-      && columnsAnalysis[c]?.isNumeric
-    )), [columns, columnsAnalysis, domain.value])
+  const eligibleColumns = useMemo(() =>
+    Object.fromEntries(
+      Object.entries(columnsAnalysis)
+        .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric)
+    ), [columnsAnalysis, domain.value])
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -46,9 +44,10 @@ const ValueControls = () => {
       staticQuantity={mode === modes.QL ? 3 : undefined}
       titles={['Column', 'Operation']}
       values={valueKeys}
+      valueIcons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
       primaryKey='key'
       secondaryKey='agg'
-      data={eligibleColumns}
+      data={Object.keys(eligibleColumns)}
       subData={Object.keys(aggFunctions)}
       disableSubs={!dataHasVariance}
       disableSubMessage="doesn't require aggregation."
@@ -71,8 +70,8 @@ const ValueControls = () => {
 
   return (
     <MutedBarrier
-      mute={!dataSourceLoading && (!type || !domain.value || !eligibleColumns.length)}
-      {...!eligibleColumns.length && { message: 'Sorry, there are no eligible columns in this dataset.' }}
+      mute={!dataSourceLoading && (!type || !domain.value || !Object.keys(eligibleColumns)?.length)}
+      {...!Object.keys(eligibleColumns)?.length && { message: 'There are no eligible columns in this dataset.' }}
     >
       <WidgetControlCard
         clear={() => resetValue({ valueKeys })}
@@ -90,8 +89,9 @@ const ValueControls = () => {
                   fullWidth
                   multiSelect
                   value={valueKeys.map(({ key }) => key)}
-                  data={eligibleColumns}
+                  data={Object.keys(eligibleColumns)}
                   onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
+                  icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
                 />
               )
           )
