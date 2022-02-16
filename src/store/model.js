@@ -442,7 +442,6 @@ export default {
 
   // update the store state
   update: action((state, payload) => deepMerge(payload, state)),
-  simpleUpdate: action((state, payload) => ({ ...state, ...payload })),
 
   // replace state with the first element from the undo queue
   undo: thunk((actions) => {

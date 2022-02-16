@@ -75,7 +75,6 @@ const Widget = ({
   const loadData = useStoreActions((actions) => actions.loadData)
   const loadConfig = useStoreActions(actions => actions.loadConfig)
   const update = useStoreActions(actions => actions.update)
-  const simpleUpdate = useStoreActions(actions => actions.simpleUpdate)
 
   // common state
   const dev = useStoreState((state) => state.dev)
@@ -96,7 +95,7 @@ const Widget = ({
     }
     const dev = Boolean(sampleData && sampleConfigs)
     if (dev) {
-      simpleUpdate({
+      update({
         sampleData,
         sampleConfigs,
       })
@@ -140,7 +139,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_columns, _mode, _rows, executionID, id, loadConfig, mode, sampleConfigs, sampleData, simpleUpdate, staticData, update])
+  }, [_columns, _mode, _rows, executionID, id, loadConfig, mode, sampleConfigs, sampleData, staticData, update])
 
 
   // load data if source changes
