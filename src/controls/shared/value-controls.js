@@ -7,7 +7,7 @@ import aggFunctions from '../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../store'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow, renderSection } from './util'
+import { renderRow } from './util'
 import MutedBarrier from './muted-barrier'
 import CustomSelect from '../../components/custom-select'
 

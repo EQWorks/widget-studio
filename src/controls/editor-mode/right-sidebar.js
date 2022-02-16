@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
