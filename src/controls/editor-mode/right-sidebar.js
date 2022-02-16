@@ -17,6 +17,7 @@ import Filters from './filters'
 import CustomDropdown from './components/custom-dropdown'
 import MutedBarrier from '../shared/muted-barrier'
 import { MAP_LEGEND_SIZE } from '../../constants/map'
+import ExportControls from './components/export-controls'
 
 
 const classes = makeStyles({
@@ -181,6 +182,7 @@ const EditorRightSidebar = () => {
             <ColorSchemeControls />
           </WidgetControlCard >
         }
+        <ExportControls />
       </MutedBarrier>
     </EditorSidebarBase >
   )
