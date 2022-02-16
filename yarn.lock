@@ -1367,12 +1367,13 @@
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.27":
-  version "0.1.0-alpha.27"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.27/cf018beca59339d5a4460449dacec929eaa832aa2fe43654491f091a419fcc89#5309c0c2badcfb8d948c3e7bb2f4d33ea762f5e3"
-  integrity sha512-Nn2pZELtb8kHm8yghv3fkZpJlweRh/LlLaY3pFA3Q+/Wq8To5tOhxsAdXbPPzSyNfP3NohTlPp2PIsrjzxO0oA==
+"@eqworks/lumen-labs@^0.1.0-alpha.30":
+  version "0.1.0-alpha.30"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.30/b0b1af432c9e0899ebed41b6453f6203c42d02ae8d7bce519ef680d4dc960fd5#09d5c249bca2f6018979d2ad9a38a1e892181642"
+  integrity sha512-Cczn+fUCYxaqYUOlxT4ACW4M0FFdlSzsDde9YhYtcslRlMMWRRUz13LViBiJZBq9hEI7R8DMh9Lad0WniuvFpg==
   dependencies:
     "@headlessui/react" "^1.4.0"
+    "@tailwindcss/forms" "^0.4.0"
     clsx "^1.1.1"
     goober "^2.0.39"
     prop-types "^15.7.2"
@@ -1393,10 +1394,10 @@
     slick-carousel "^1.8.1"
     use-cached "^2.0.0"
 
-"@eqworks/react-maps@^0.8.2-alpha-1":
-  version "0.8.2-alpha-1"
-  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.8.2-alpha-1/f55b87038158203606c64cf848a93e6e77f9fc9980873bb1ed0ec61dc86d1bd2#e49b2f72a163b6e666f5fcac03effcbd827e646a"
-  integrity sha512-xnC3pD8Z9IcreYWBbo1fymz20dx9KMGpA+kyb68E0Rl9VYJ0i8FtzeloBFf+WrUdMTjljv5RbHOM5tUxezLV0w==
+"@eqworks/react-maps@^0.8.2":
+  version "0.8.2"
+  resolved "https://npm.pkg.github.com/download/@eqworks/react-maps/0.8.2/73a99d152d49fdbe3bd13e31d8bc34ac57b7ed5f69bb6c688e7879f40c492969#3f3773de57f176c34b1a77156d0ad29e5b1428f2"
+  integrity sha512-zXQi9CCEqdicoFxEtOyxeBqqZAnYudMdlSoL1ZSOuqZ9OVrtog30pq3qcIAeQDPqiyD+jv+CJ10Pbd0SON2gyw==
   dependencies:
     "@deck.gl/aggregation-layers" "8.4.6"
     "@deck.gl/core" "8.4.6"
@@ -3294,6 +3295,13 @@
   integrity sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==
   dependencies:
     defer-to-connect "^1.0.1"
+
+"@tailwindcss/forms@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.4.0.tgz#a46715e347a32d216a3973eb67473bd29ae3798e"
+  integrity sha512-DeaQBx6EgEeuZPQACvC+mKneJsD8am1uiJugjgQK1+/Vt+Ai0GpFBC2T2fqnUad71WgOxyrZPE6BG1VaI6YqfQ==
+  dependencies:
+    mini-svg-data-uri "^1.2.3"
 
 "@tailwindcss/postcss7-compat@^2.1.2", "tailwindcss@yarn:@tailwindcss/postcss7-compat@^2.1.2":
   version "2.2.17"
@@ -10135,6 +10143,11 @@ min-indent@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/min-indent/-/min-indent-1.0.1.tgz#a63f681673b30571fbe8bc25686ae746eefa9869"
   integrity sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==
+
+mini-svg-data-uri@^1.2.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/mini-svg-data-uri/-/mini-svg-data-uri-1.4.3.tgz#43177b2e93766ba338931a3e2a84a3dfd3a222b8"
+  integrity sha512-gSfqpMRC8IxghvMcxzzmMnWpXAChSA+vy4cia33RgerMS8Fex95akUyQZPbxJJmeBGiGmK7n/1OpUX8ksRjIdA==
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
