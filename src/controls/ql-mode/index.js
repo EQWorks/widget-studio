@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../store'
-import Icons from '../shared/type-controls'
-import WidgetControlCard from '../shared/components/widget-control-card'
+import WidgetTypeControls from '../shared/type-controls'
 import CustomAccordion from '../../components/custom-accordion'
 import types from '../../constants/types'
 import MapValueControls from '../shared/map-value-controls'
@@ -56,9 +55,7 @@ const QLModeControls = ({ children }) => {
         toggle={() => update({ ui: { showWidgetControls: !showWidgetControls } })}
       >
         <div className='flex flex-col w-full'>
-          <WidgetControlCard title='Select Widget Type' >
-            <Icons disabled={!dataReady} />
-          </WidgetControlCard>
+          <WidgetTypeControls />
           {
             type === types.MAP
               ? <>
