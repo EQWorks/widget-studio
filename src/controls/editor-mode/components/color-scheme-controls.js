@@ -218,7 +218,9 @@ const ColorSchemeControls = () => {
                     setSelectedColorIndex(i)
                     userUpdate({ genericOptions: { baseColor: c } })
                   }}
-                />
+                >
+                  <span />
+                </Button>
                 <div
                   className={
                     i === selectedColorIndex

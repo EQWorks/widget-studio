@@ -136,6 +136,7 @@ export const renderCheckbox = (title, value, update, disabled = false, key) => (
   >
     <div className={classes.inlineItem}>
       <Checkbox
+        label=''
         defaultChecked
         checked={value}
         onChange={({ checked }) => update(checked)}

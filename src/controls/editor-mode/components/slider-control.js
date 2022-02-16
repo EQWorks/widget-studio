@@ -67,16 +67,18 @@ const SliderControl = ({ value, min, max, step, update, range, style }) => {
 
 SliderControl.propTypes = {
   range: PropTypes.bool.isRequired,
-  min: PropTypes.number.isRequired,
-  max: PropTypes.number.isRequired,
+  min: PropTypes.number,
+  max: PropTypes.number,
   step: PropTypes.number,
   update: PropTypes.func.isRequired,
   style: PropTypes.string.isRequired,
-  value: PropTypes.oneOf([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
 }
 
 SliderControl.defaultProps = {
   step: 1,
+  min: null,
+  max: null,
 }
 
 export default SliderControl
