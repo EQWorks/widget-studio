@@ -8,14 +8,19 @@ import CustomSelect from '../components/custom-select'
 import CustomButton from '../components/custom-button'
 
 
-const classes = makeStyles({
+const useStyles = ({ showDelete }) => makeStyles({
   deleteButtonContainer: {
-    marginLeft: '0.4rem',
+    marginLeft: '0.2rem',
     display: 'flex',
     alignItems: 'stretch',
+    width: showDelete ? '2rem' : 0,
+    transition: 'width 0.3s',
+    overflow: 'hidden',
   },
   deleteButton: {
-    height: '100%',
+    border: 'none !important',
+    width: '100% !important',
+    justifyContent: 'center !important',
   },
 })
 
@@ -23,6 +28,7 @@ const LinkedSelect = ({
   className,
   deletable,
   deleteCallback,
+  showDelete,
   callback,
   data,
   init,
@@ -37,6 +43,7 @@ const LinkedSelect = ({
 }) => {
   const [choice, setChoice] = useState(init)
   const [subChoice, setSubChoice] = useState(subInit)
+  const classes = useStyles({ showDelete })
 
   useEffect(() => {
     setChoice(init)
@@ -87,8 +94,8 @@ const LinkedSelect = ({
     <div className={`${classes.deleteButtonContainer} ${className}`}>
       <CustomButton
         classes={{ button: classes.deleteButton }}
-        variant='elevated'
-        type='secondary'
+        variant='outlined'
+        type='error'
         onClick={() => deleteCallback([choice, subChoice])}
       >
         <Icons.Trash size='md' />
@@ -124,6 +131,7 @@ LinkedSelect.propTypes = {
   className: PropTypes.string,
   deletable: PropTypes.bool,
   deleteCallback: PropTypes.func,
+  showDelete: PropTypes.bool,
   callback: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
   subData: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -141,6 +149,7 @@ LinkedSelect.defaultProps = {
   className: '',
   deletable: false,
   deleteCallback: () => console.error('Not implemented'),
+  showDelete: false,
   init: '',
   subInit: '',
   placeholders: ['Select', 'Select'],
