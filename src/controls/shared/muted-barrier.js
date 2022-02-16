@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 
-const useStyles = ({ mute, message }) => makeStyles({
+const useStyles = ({ mute, message, variant }) => makeStyles({
   container: {
     transition: 'opacity 0.3s',
     ...(mute
@@ -25,26 +25,45 @@ const useStyles = ({ mute, message }) => makeStyles({
       }),
     position: 'relative',
   },
-  message: {
-    width: 'calc(100% - 2rem)',
-    whiteSpace: 'normal',
-    wordWrap: 'break-word',
-    zIndex: 2,
-    position: 'absolute',
-    background: getTailwindConfigColor('secondary-200'),
-    color: getTailwindConfigColor('secondary-600'),
-    borderRadius: '0.4rem',
-    fontSize: '0.9rem',
-    fontWeight: 500,
-    margin: '1rem',
-    padding: '2rem 1rem',
-    lineHeight: '1.4rem',
-  },
+  ...(variant === 0 && {
+    message: {
+      width: 'calc(100% - 2rem)',
+      whiteSpace: 'normal',
+      wordWrap: 'break-word',
+      zIndex: 2,
+      position: 'absolute',
+      background: getTailwindConfigColor('secondary-200'),
+      color: getTailwindConfigColor('secondary-600'),
+      borderRadius: '0.4rem',
+      fontSize: '0.9rem',
+      fontWeight: 500,
+      margin: '1rem',
+      padding: '2rem 1rem',
+      lineHeight: '1.4rem',
+    },
+  }),
+  ...(variant === 1 && {
+    message: {
+      whiteSpace: 'normal',
+      width: 'calc(100% - 2rem)',
+      wordWrap: 'break-word',
+      zIndex: 2,
+      position: 'absolute',
+      background: 'white',
+      color: getTailwindConfigColor('secondary-800'),
+      borderRadius: '0.4rem',
+      fontSize: '0.9rem',
+      fontWeight: 500,
+      margin: '1rem',
+      padding: '2rem 1rem',
+      lineHeight: '1.4rem',
+    },
+  }),
 })
 
 
-const MutedBarrier = ({ mute, message, children }) => {
-  const classes = useStyles({ mute, message })
+const MutedBarrier = ({ mute, message, children, variant }) => {
+  const classes = useStyles({ mute, message, variant })
   return (
     <>
       <div className={classes.container}>
@@ -63,11 +82,13 @@ MutedBarrier.propTypes = {
   mute: PropTypes.bool,
   message: PropTypes.string,
   children: PropTypes.node,
+  variant: PropTypes.number,
 }
 MutedBarrier.defaultProps = {
   mute: false,
   message: '',
   children: <></>,
+  variant: 0,
 }
 
 export default MutedBarrier

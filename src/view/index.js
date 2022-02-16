@@ -139,6 +139,7 @@ const WidgetView = () => {
   // widget state
   const type = useStoreState((state) => state.type)
   const rows = useStoreState((state) => state.rows)
+  const columns = useStoreState((state) => state.columns)
   const isReady = useStoreState((state) => state.isReady)
   const transformedData = useStoreState((state) => state.transformedData)
   const domain = useStoreState((state) => state.domain)
@@ -214,8 +215,12 @@ const WidgetView = () => {
     if (!secondary && dataSourceType && dataSourceType !== dataSourceTypes.MANUAL) {
       secondary = `Successfully loaded ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
     }
+    if (mode === modes.QL && !(rows?.length) && !(columns?.length)) {
+      primary = null
+      secondary = null
+    }
     return { primary, secondary }
-  }, [dataSourceError, dataSourceID, dataSourceType, domain?.value, renderableValueKeys?.length, rows.length, transformedData?.length, type])
+  }, [columns?.length, dataSourceError, dataSourceID, dataSourceType, domain?.value, mode, renderableValueKeys?.length, rows.length, transformedData?.length, type])
 
   const renderWidgetWarning = (
     <div className='h-full flex-1 flex flex-col justify-center items-center'>
