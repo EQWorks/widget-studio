@@ -3,10 +3,16 @@ import { storiesOf } from '@storybook/react'
 import { Resizable } from 're-resizable'
 
 import modes from '../src/constants/modes'
+import sampleData from './sample-data'
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
 import CustomToggle from '../src/components/custom-toggle'
 
+
+const devProps = {
+  sampleData,
+  sampleConfigs,
+}
 
 Object.values(modes).forEach(mode => {
   // for each non-empty sample config,
@@ -18,7 +24,7 @@ Object.values(modes).forEach(mode => {
       const label = `${type} ${index > 1 ? '(' + index + ')' : ''}`
 
       const renderWidget = (
-        <Widget
+        <Widget {...devProps}
           mode={mode}
           id={id}
         />
@@ -62,7 +68,7 @@ storiesOf('Multiple widgets (dashboard)')
 
           Object.keys(sampleConfigs).map(id =>
             <div key={id} style={{ margin: '2rem' }}>
-              <Widget
+              <Widget {...devProps}
                 mode={modes.VIEW}
                 id={id}
                 staticData
@@ -78,7 +84,7 @@ storiesOf('Multiple widgets (dashboard)')
 storiesOf('Blank widget (no ID)', module)
   .add('Blank widget (no ID)', () => (
     <Resizable style={{ margin: '1rem' }} >
-      <Widget
+      <Widget {...devProps}
         mode='editor'
       />
     </Resizable>

@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import axios from 'axios'
-import sampleConfigs from '../../stories/sample-configs'
-import sampleData from '../../stories/sample-data'
 import { dataSourceTypes } from '../constants/data-source'
 
 
@@ -123,9 +121,8 @@ const requestExecutionResults = async (id) => {
     })
 }
 
-export const requestData = async (dataSourceType, dataSourceID) => {
-  const env = process.env.NODE_ENV || 'development'
-  if (env == 'development') {
+export const requestData = async (dataSourceType, dataSourceID, sampleData = null) => {
+  if (sampleData) {
     return sampleData[`${dataSourceType}-${dataSourceID}`]
   }
   var data
@@ -139,9 +136,8 @@ export const requestData = async (dataSourceType, dataSourceID) => {
 }
 
 // TODO request from db -- this is a placeholder
-export const requestConfig = async (id) => {
-  const env = process.env.NODE_ENV || 'development'
-  if (env == 'development') {
-    return id ? sampleConfigs[id] : null
+export const requestConfig = async (id, sampleConfigs = null) => {
+  if (sampleConfigs) {
+    return sampleConfigs[id]
   }
 }
