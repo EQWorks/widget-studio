@@ -59,13 +59,23 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, executionID }) => {
+const Widget = ({
+  id,
+  mode: _mode,
+  staticData,
+  rows: _rows,
+  columns: _columns,
+  executionID,
+  sampleData,
+  sampleConfigs,
+}) => {
   const classes = useStyles(_mode)
 
   // easy-peasy actions
   const loadData = useStoreActions((actions) => actions.loadData)
   const loadConfig = useStoreActions(actions => actions.loadConfig)
   const update = useStoreActions(actions => actions.update)
+  const simpleUpdate = useStoreActions(actions => actions.simpleUpdate)
 
   // common state
   const dev = useStoreState((state) => state.dev)
@@ -84,8 +94,16 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
     if (!validatedMode) {
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
+    const dev = Boolean(sampleData && sampleConfigs)
+    if (dev) {
+      simpleUpdate({
+        sampleData,
+        sampleConfigs,
+      })
+    }
     // dispatch state
     update({
+      dev,
       id,
       ui: {
         mode: validatedMode,
@@ -122,7 +140,7 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_columns, _mode, _rows, executionID, id, loadConfig, mode, staticData, update])
+  }, [_columns, _mode, _rows, executionID, id, loadConfig, mode, sampleConfigs, sampleData, simpleUpdate, staticData, update])
 
 
   // load data if source changes
@@ -174,6 +192,8 @@ Widget.propTypes = {
   rows: PropTypes.array,
   columns: PropTypes.array,
   executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  sampleData: PropTypes.object,
+  sampleConfigs: PropTypes.object,
 }
 Widget.defaultProps = {
   mode: modes.VIEW,
@@ -182,6 +202,8 @@ Widget.defaultProps = {
   rows: null,
   columns: null,
   executionID: -1,
+  sampleData: null,
+  sampleConfigs: null,
 }
 
 export default withQueryClient(withStore(Widget))
