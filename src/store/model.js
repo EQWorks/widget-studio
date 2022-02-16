@@ -358,7 +358,7 @@ export default {
     setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
   }),
 
-  loadConfig: thunk(async (actions, payload, { getState }) => {
+  loadConfigByID: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
       ui: {
@@ -368,21 +368,7 @@ export default {
     })
     const { sampleConfigs } = getState()
     requestConfig(payload, sampleConfigs)
-      .then(({ dataSource, ...config }) => {
-        // populate state with safe default values
-        actions.update({
-          ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
-            .map(({ key, defaultValue }) => ([key, defaultValue]))),
-          ...(config?.type && {
-            uniqueOptions: Object.fromEntries(
-              Object.entries(typeInfo[config.type].uniqueOptions)
-                .map(([k, { defaultValue }]) => [k, defaultValue])),
-          }),
-        })
-        // populate state with values from config
-        actions.update(config)
-        actions.loadData(dataSource)
-      })
+      .then(actions.loadConfig)
       .catch(err => {
         actions.update({
           ui: {
@@ -392,6 +378,30 @@ export default {
           ignoreUndo: false,
         })
       })
+  }),
+
+  loadConfig: thunk(async (actions, payload) => {
+    actions.update({
+      ignoreUndo: true,
+      ui: {
+        showDataSourceControls: false,
+        dataSourceLoading: true,
+      },
+    })
+    const { dataSource, ...config } = payload
+    // populate state with safe default values
+    actions.update({
+      ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
+        .map(({ key, defaultValue }) => ([key, defaultValue]))),
+      ...(config?.type && {
+        uniqueOptions: Object.fromEntries(
+          Object.entries(typeInfo[config.type].uniqueOptions)
+            .map(([k, { defaultValue }]) => [k, defaultValue])),
+      }),
+    })
+    // populate state with values from config
+    actions.update(config)
+    actions.loadData(dataSource)
   }),
 
   loadData: thunk(async (actions, dataSource, { getState }) => {

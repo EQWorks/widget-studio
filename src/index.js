@@ -73,7 +73,7 @@ const Widget = ({
 
   // easy-peasy actions
   const loadData = useStoreActions((actions) => actions.loadData)
-  const loadConfig = useStoreActions(actions => actions.loadConfig)
+  const loadConfigByID = useStoreActions(actions => actions.loadConfigByID)
   const update = useStoreActions(actions => actions.update)
 
   // common state
@@ -131,7 +131,7 @@ const Widget = ({
     // if there is a widget ID,
     if (id !== undefined && id !== null) {
       // fetch/read the config associated with the ID
-      loadConfig(id)
+      loadConfigByID(id)
     } else if (staticData && validatedMode === modes.EDITOR) {
       // error on incorrect component usage
       throw new Error('Incorrect usage: Widgets in editor mode without an ID cannot have data source control disabled (staticData == true).')
@@ -139,7 +139,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_columns, _mode, _rows, executionID, id, loadConfig, mode, sampleConfigs, sampleData, staticData, update])
+  }, [_columns, _mode, _rows, executionID, id, loadConfig, loadConfigByID, mode, sampleConfigs, sampleData, staticData, update])
 
 
   // load data if source changes
