@@ -346,8 +346,6 @@ export default {
   undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
   redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
 
-  dev: computed([], () => ((process?.env?.NODE_ENV || 'development') === 'development')),
-
   /** ACTIONS ------------------------------------------------------------------ */
 
   toast: thunk(async (actions, payload) => {
@@ -360,7 +358,7 @@ export default {
     setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
   }),
 
-  loadConfig: thunk(async (actions, payload) => {
+  loadConfig: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
       ui: {
@@ -368,7 +366,8 @@ export default {
         dataSourceLoading: true,
       },
     })
-    requestConfig(payload)
+    const { sampleConfigs } = getState()
+    requestConfig(payload, sampleConfigs)
       .then(({ dataSource, ...config }) => {
         // populate state with safe default values
         actions.update({
@@ -404,9 +403,9 @@ export default {
       },
       dataSource,
     })
-    const { isReady } = getState()
+    const { isReady, sampleData } = getState()
     const isReload = isReady
-    requestData(dataSource.type, dataSource.id)
+    requestData(dataSource.type, dataSource.id, sampleData)
       .then(data => {
         const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
         actions.update({
@@ -443,6 +442,7 @@ export default {
 
   // update the store state
   update: action((state, payload) => deepMerge(payload, state)),
+  simpleUpdate: action((state, payload) => ({ ...state, ...payload })),
 
   // replace state with the first element from the undo queue
   undo: thunk((actions) => {
