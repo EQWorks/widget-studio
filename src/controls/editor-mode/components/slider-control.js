@@ -40,7 +40,7 @@ const SliderControl = ({ value, min, max, step, update, range, style }) => {
   return (
     <CustomDropdown
       {...{ selectedString, style }}
-      // NOTE - TO BE CHANGED: style 'map' or 'chart' has nothing to do witht the type of widget
+      // NOTE - TO BE CHANGED: style 'map' or 'chart' has nothing to do with the type of widget
       // it is used to differantiate the styling for the MapLayerDisplay section in the right panel
       classes={style === 'map' ?
         {
@@ -55,7 +55,7 @@ const SliderControl = ({ value, min, max, step, update, range, style }) => {
       placeholder={range ? 'Range' : 'Value'}
       disabled={
         (Array.isArray(value) && !value[0] && !value[1]) ||
-        !value
+          (value !== min && !value)
       }
     >
       <Slider
@@ -72,7 +72,7 @@ SliderControl.propTypes = {
   step: PropTypes.number,
   update: PropTypes.func.isRequired,
   style: PropTypes.string.isRequired,
-  value: PropTypes.oneOf([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
+  value: PropTypes.oneOf([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]).isRequired,
 }
 
 SliderControl.defaultProps = {
