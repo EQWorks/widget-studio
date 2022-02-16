@@ -10,6 +10,7 @@ import ValueControls from '../shared/value-controls'
 import CustomButton from '../../components/custom-button'
 import DomainControls from '../shared/domain-controls'
 import MapDomainControls from '../shared/map-domain-controls'
+import MutedBarrier from '../shared/muted-barrier'
 
 
 const QLModeControls = ({ children }) => {
@@ -19,6 +20,8 @@ const QLModeControls = ({ children }) => {
 
   // state
   const type = useStoreState((state) => state.type)
+  const rows = useStoreState((state) => state.rows)
+  const columns = useStoreState((state) => state.columns)
   const dataReady = useStoreState((state) => state.dataReady)
 
   // UI state
@@ -47,28 +50,30 @@ const QLModeControls = ({ children }) => {
   return (
     <>
       {children}
-      <CustomAccordion
-        disabled={!dataReady}
-        title={'Controls'}
-        footer={footer}
-        open={showWidgetControls}
-        toggle={() => update({ ui: { showWidgetControls: !showWidgetControls } })}
-      >
-        <div className='flex flex-col w-full'>
-          <WidgetTypeControls />
-          {
-            type === types.MAP
-              ? <>
-                <MapDomainControls />
-                <MapValueControls />
-              </>
-              : <>
-                <DomainControls />
-                <ValueControls />
-              </>
-          }
-        </div>
-      </CustomAccordion>
+      <MutedBarrier mute={!dataReady || (!(rows?.length) && !(columns?.length))}>
+        <CustomAccordion
+          disabled={!dataReady}
+          title={'Controls'}
+          footer={footer}
+          open={showWidgetControls}
+          toggle={() => update({ ui: { showWidgetControls: !showWidgetControls } })}
+        >
+          <div className='flex flex-col w-full'>
+            <WidgetTypeControls />
+            {
+              type === types.MAP
+                ? <>
+                  <MapDomainControls />
+                  <MapValueControls />
+                </>
+                : <>
+                  <DomainControls />
+                  <ValueControls />
+                </>
+            }
+          </div>
+        </CustomAccordion>
+      </MutedBarrier>
     </>
   )
 }

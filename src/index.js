@@ -16,6 +16,7 @@ import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
 import { dataSourceTypes } from './constants/data-source'
+import MutedBarrier from './controls/shared/muted-barrier'
 
 
 const commonClasses = {
@@ -67,6 +68,7 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
   const update = useStoreActions(actions => actions.update)
 
   // common state
+  const dev = useStoreState((state) => state.dev)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
 
@@ -95,7 +97,13 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
       update({
         rows: _rows,
         columns: _columns,
-        dataSource: { type: dataSourceTypes.MANUAL, id: 1 },
+        dataSource: {
+          type:
+            mode === modes.QL
+              ? dataSourceTypes.EXECUTIONS
+              : dataSourceTypes.MANUAL,
+          id: executionID,
+        },
       })
     } else if (executionID !== -1) {
       // use executionID if available
@@ -143,13 +151,19 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
   }
 
   return (
-    <div className={classes.outerContainer}>
-      <WidgetTitleBar />
-      <div className={classes.innerContainer}>
-        {renderViewWithControls()}
-      </div>
-      <CustomGlobalToast />
-    </div >
+    <MutedBarrier
+      variant={1}
+      mute={!dev && mode === modes.QL && !(_rows?.length) && !(_columns?.length)}
+      message='Select an execution to start building a widget.'
+    >
+      <div className={classes.outerContainer}>
+        <WidgetTitleBar />
+        <div className={classes.innerContainer}>
+          {renderViewWithControls()}
+        </div>
+        <CustomGlobalToast />
+      </div >
+    </MutedBarrier>
   )
 }
 
