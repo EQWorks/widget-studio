@@ -115,6 +115,9 @@ export default {
       (state) => state.isReady,
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
+      (state) => state.percentageMode,
+      (state) => state.presetColors,
+      (state) => state.dateAggregation,
     ],
     (
       title,
@@ -132,6 +135,9 @@ export default {
       isReady,
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
+      percentageMode,
+      presetColors,
+      dateAggregation,
     ) => (
       isReady
         ? {
@@ -152,6 +158,9 @@ export default {
           uniqueOptions,
           genericOptions,
           dataSource: { type: dataSourceType, id: dataSourceID },
+          percentageMode,
+          presetColors,
+          dateAggregation,
         }
         : undefined
     )),
