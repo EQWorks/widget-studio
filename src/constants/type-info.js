@@ -94,7 +94,7 @@ export default {
             <p>selected column and operation.</p>
           </div>
         ),
-        min: 1,
+        min: 0,
         max: 100,
         step: 1,
       },
@@ -122,7 +122,7 @@ export default {
         },
         min: 0,
         max: 500000,
-        step: 10,
+        step: 1,
         info: (
           <div>
             <p>Calculate elevation height based on</p>
@@ -136,14 +136,16 @@ export default {
         defaultValue: {
           value: 1,
         },
-        min: 1,
-        max: 100,
+        min: 0,
+        max: 20,
         step: 1,
       },
       opacity: {
         name: 'Opacity',
         type: Number,
-        defaultValue: 30,
+        defaultValue: {
+          value: 30,
+        },
         min: 0,
         max: 100,
         step: 1,
