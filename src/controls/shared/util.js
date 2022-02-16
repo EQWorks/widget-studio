@@ -1,5 +1,5 @@
 import React from 'react'
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles, Checkbox } from '@eqworks/lumen-labs'
 import CustomToggle from '../../components/custom-toggle'
 
 
@@ -111,15 +111,18 @@ export const renderItem = (title, Component, titleExtra, grow = true) => (
   </div>
 )
 
-export const renderCheckbox = (title, value, update, disabled = false) => (
-  <div className={classes.inlineItemContainer}>
+export const renderCheckbox = (title, value, update, disabled = false, key) => (
+  <div
+    {...(key && { key })}
+    className={classes.inlineItemContainer}
+  >
     <div className={classes.inlineItem}>
-      <CustomToggle
-        value={value}
-        onChange={update}
+      <Checkbox
+        defaultChecked
+        checked={value}
+        onChange={({ checked }) => update(checked)}
         disabled={disabled}
-      />
-    </div>
+      /></div>
     {title && <div className={classes.inlineTitle} > {`${title}`} </div>}
   </div>
 )
