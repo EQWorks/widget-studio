@@ -96,7 +96,7 @@ export const renderSuperSection = (Component) => (
 export const renderSection = (title, Component) => (
   Component &&
   <div className={classes.section}>
-      {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
+    {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
     {Component}
   </div>
 )
