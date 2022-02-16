@@ -66,6 +66,7 @@ const Widget = ({
   rows: _rows,
   columns: _columns,
   executionID,
+  config: _config,
   sampleData,
   sampleConfigs,
 }) => {
@@ -73,6 +74,7 @@ const Widget = ({
 
   // easy-peasy actions
   const loadData = useStoreActions((actions) => actions.loadData)
+  const loadConfig = useStoreActions((actions) => actions.loadConfig)
   const loadConfigByID = useStoreActions(actions => actions.loadConfigByID)
   const update = useStoreActions(actions => actions.update)
 
@@ -138,8 +140,10 @@ const Widget = ({
     } else if (validatedMode === modes.VIEW) {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
+    } else if (_config) {
+      loadConfig(_config)
     }
-  }, [_columns, _mode, _rows, executionID, id, loadConfig, loadConfigByID, mode, sampleConfigs, sampleData, staticData, update])
+  }, [_columns, _config, _mode, _rows, executionID, id, loadConfig, loadConfigByID, mode, sampleConfigs, sampleData, staticData, update])
 
 
   // load data if source changes
@@ -190,6 +194,7 @@ Widget.propTypes = {
   staticData: PropTypes.bool,
   rows: PropTypes.array,
   columns: PropTypes.array,
+  config: PropTypes.object,
   executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sampleData: PropTypes.object,
   sampleConfigs: PropTypes.object,
@@ -200,6 +205,7 @@ Widget.defaultProps = {
   staticData: false,
   rows: null,
   columns: null,
+  config: null,
   executionID: -1,
   sampleData: null,
   sampleConfigs: null,
