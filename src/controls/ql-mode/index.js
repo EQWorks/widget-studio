@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreState, useStoreActions } from '../../store'
-import Icons from '../shared/widget-type-icons'
+import Icons from '../shared/type-controls'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import CustomAccordion from '../../components/custom-accordion'
 import types from '../../constants/types'
