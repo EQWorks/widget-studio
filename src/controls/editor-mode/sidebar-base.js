@@ -22,10 +22,7 @@ const EditorSidebarBase = ({ children }) => (
   </div>
 )
 EditorSidebarBase.propTypes = {
-  children: PropTypes.node,
-}
-EditorSidebarBase.propTypes = {
-  children: <></>,
+  children: PropTypes.node.isRequired,
 }
 
 export default EditorSidebarBase

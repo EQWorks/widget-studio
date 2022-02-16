@@ -27,7 +27,7 @@ const UniqueOptionControls = ({ type }) => {
 }
 
 UniqueOptionControls.propTypes = {
-  type: PropTypes.oneOf(types),
+  type: PropTypes.oneOf(['', ...Object.values(types)]),
 }
 UniqueOptionControls.defaultProps = {
   type: null,
