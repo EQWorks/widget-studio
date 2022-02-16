@@ -1367,12 +1367,13 @@
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.27":
-  version "0.1.0-alpha.27"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.27/cf018beca59339d5a4460449dacec929eaa832aa2fe43654491f091a419fcc89#5309c0c2badcfb8d948c3e7bb2f4d33ea762f5e3"
-  integrity sha512-Nn2pZELtb8kHm8yghv3fkZpJlweRh/LlLaY3pFA3Q+/Wq8To5tOhxsAdXbPPzSyNfP3NohTlPp2PIsrjzxO0oA==
+"@eqworks/lumen-labs@^0.1.0-alpha.28":
+  version "0.1.0-alpha.28"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.28/965fcccfc602c4199a6e22300c4b648f7257bbc7dbf924942188868886189e2c#db0126b4f3a6debc90a3979eb9795be19df635a4"
+  integrity sha512-vdy8Hs3AABR/X0s0CO5+C/7XRs3Ot8nomfn+dmMlgQPtlINu7WjF//WJbFQkhU9JDLRJQJAYXW6+YQqetZUk1A==
   dependencies:
     "@headlessui/react" "^1.4.0"
+    "@tailwindcss/forms" "^0.4.0"
     clsx "^1.1.1"
     goober "^2.0.39"
     prop-types "^15.7.2"
@@ -3294,6 +3295,13 @@
   integrity sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==
   dependencies:
     defer-to-connect "^1.0.1"
+
+"@tailwindcss/forms@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.4.0.tgz#a46715e347a32d216a3973eb67473bd29ae3798e"
+  integrity sha512-DeaQBx6EgEeuZPQACvC+mKneJsD8am1uiJugjgQK1+/Vt+Ai0GpFBC2T2fqnUad71WgOxyrZPE6BG1VaI6YqfQ==
+  dependencies:
+    mini-svg-data-uri "^1.2.3"
 
 "@tailwindcss/postcss7-compat@^2.1.2", "tailwindcss@yarn:@tailwindcss/postcss7-compat@^2.1.2":
   version "2.2.17"
@@ -10155,6 +10163,11 @@ min-indent@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/min-indent/-/min-indent-1.0.1.tgz#a63f681673b30571fbe8bc25686ae746eefa9869"
   integrity sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==
+
+mini-svg-data-uri@^1.2.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/mini-svg-data-uri/-/mini-svg-data-uri-1.4.3.tgz#43177b2e93766ba338931a3e2a84a3dfd3a222b8"
+  integrity sha512-gSfqpMRC8IxghvMcxzzmMnWpXAChSA+vy4cia33RgerMS8Fex95akUyQZPbxJJmeBGiGmK7n/1OpUX8ksRjIdA==
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
