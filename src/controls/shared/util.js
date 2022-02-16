@@ -4,13 +4,24 @@ import CustomToggle from '../../components/custom-toggle'
 
 
 const classes = makeStyles({
+  superSection: {
+    '> *': {
+      marginBottom: '1.2rem',
+    },
+    '> :last-child': {
+      marginBottom: '0px !important',
+    },
+  },
   section: {
-    marginTop: '0.2rem',
-    // TEMPORARY adjustment
-    // marginBottom: '0.7rem',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
+    '> *': {
+      marginBottom: '0.7rem',
+    },
+    '> :last-child': {
+      marginBottom: '0px !important',
+    },
   },
   sectionTitle: {
     color: getTailwindConfigColor('secondary-800'),
@@ -22,11 +33,15 @@ const classes = makeStyles({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-  //   margin: '0.2rem 0',
+    '> *': {
+      marginRight: '0.8rem',
+    },
+    '> :last-child': {
+      marginRight: '0px !important',
+    },
   },
   rowContainer: {
     width: '100%',
-    margin: '0.2rem 0',
   },
   inlineItemContainer: {
     display: 'flex',
@@ -37,14 +52,12 @@ const classes = makeStyles({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    padding: '0.2rem',
   },
   itemContainerNoGrow: {
     flex: 0,
     minWidth: '33%',
     display: 'flex',
     flexDirection: 'column',
-    padding: '0.2rem',
   },
   inlineItem: {
   },
@@ -73,12 +86,17 @@ const classes = makeStyles({
   },
 })
 
+export const renderSuperSection = (Component) => (
+  Component &&
+  <div className={classes.superSection}>
+    {Component}
+  </div>
+)
+
 export const renderSection = (title, Component) => (
   Component &&
   <div className={classes.section}>
-    <div className={classes.sectionTitle}>
-      {title && `${title}:`}
-    </div>
+      {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
     {Component}
   </div>
 )

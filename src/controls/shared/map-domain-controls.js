@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow, renderSection } from './util'
+import { renderRow } from './util'
 import { MAP_LAYER_VALUE_VIS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
 import { Icons } from '@eqworks/lumen-labs'
 
@@ -20,7 +20,6 @@ const MapDomainControls = () => {
   const valueKeys = useStoreState((state) => state.valueKeys)
   const domain = useStoreState((state) => state.domain)
 
-
   const eligibleDomainValues = useMemo(() => (
     columns.map(({ name }) => name)
       .filter(c =>
@@ -34,40 +33,38 @@ const MapDomainControls = () => {
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
   ), [mapGroupKey])
 
-  return (
-    <WidgetControlCard title={'Map Layer Configuration'} >
-      {
-        renderSection(null,
-          renderRow('Column',
-            <CustomSelect
-              fullWidth
-              data={eligibleDomainValues}
-              icons={eligibleDomainValues.map(() => Icons.AddPin)}
-              value={domain.value}
-              onSelect={val => {
-                // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
-                userUpdate({ mapGroupKey: val, groupKey: val })
-                const newLayer = Object.keys(MAP_LAYER_VALUE_VIS)
-                  .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
-                /*
+  const renderControls = (
+    <CustomSelect
+      fullWidth
+      data={eligibleDomainValues}
+      icons={eligibleDomainValues.map(() => Icons.AddPin)}
+      value={domain.value}
+      onSelect={val => {
+        // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
+        userUpdate({ mapGroupKey: val, groupKey: val })
+        const newLayer = Object.keys(MAP_LAYER_VALUE_VIS)
+          .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
+        /*
                  * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
                  * as different layer requires different visualization types
                  */
-                if (newLayer !== mapLayer) {
-                  update({ mapValueKeys: [] })
-                }
-              }}
-              onClear={() => userUpdate({
-                groupKey: null,
-                indexKey: null,
-                mapGroupKey: null,
-                mapValueKeys: [],
-              })}
-              placeholder={'Select a column to group by'}
-            />
-          )
-        )
-      }
+        if (newLayer !== mapLayer) {
+          update({ mapValueKeys: [] })
+        }
+      }}
+      onClear={() => userUpdate({
+        groupKey: null,
+        indexKey: null,
+        mapGroupKey: null,
+        mapValueKeys: [],
+      })}
+      placeholder={'Select a column to group by'}
+    />
+  )
+
+  return (
+    <WidgetControlCard title={'Map Layer Configuration'} >
+      {renderRow('Column', renderControls)}
     </WidgetControlCard>
   )
 }

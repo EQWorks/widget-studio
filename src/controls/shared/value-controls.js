@@ -37,11 +37,15 @@ const ValueControls = () => {
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
-      headerIcons={[
-        Icons.Columns,
-        Icons.Sum,
-      ]}
-      staticQuantity={mode === modes.QL ? 3 : undefined}
+      {...(mode === modes.QL ? {
+        staticQuantity: 3,
+      }
+        : {
+          headerIcons: [
+            Icons.Columns,
+            Icons.Sum,
+          ],
+        })}
       titles={['Column', 'Operation']}
       values={valueKeys}
       valueIcons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
@@ -68,6 +72,17 @@ const ValueControls = () => {
       addMessage='Add Value'
     />
 
+  const renderNonGroupedValueKeysSelect = (
+    <CustomSelect
+      fullWidth
+      multiSelect
+      value={valueKeys.map(({ key }) => key)}
+      data={Object.keys(eligibleColumns)}
+      onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
+      icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
+    />
+  )
+
   return (
     <MutedBarrier
       mute={!dataSourceLoading && (!type || !domain.value || !Object.keys(eligibleColumns)?.length)}
@@ -75,27 +90,13 @@ const ValueControls = () => {
     >
       <WidgetControlCard
         clear={() => resetValue({ valueKeys })}
-        // title={ `${group ? 'Value' : ''} Configuration` }
-        title={`${group ? 'Value' : ''} Configuration`}
-        {...mode === modes.QL &&
-        { description: 'Select up to 3 keys, open in editor for more options.' }
-        }
+        title='Value Configuration'
+        {...mode === modes.QL && { description: 'Select up to 3 keys, open in editor for more options.' }}
       >
         {
-          renderSection(null,
-            group
-              ? renderGroupedValueKeysSelect
-              : renderRow('Columns',
-                <CustomSelect
-                  fullWidth
-                  multiSelect
-                  value={valueKeys.map(({ key }) => key)}
-                  data={Object.keys(eligibleColumns)}
-                  onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
-                  icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
-                />
-              )
-          )
+          group
+            ? renderRow(null, renderGroupedValueKeysSelect)
+            : renderRow('Columns', renderNonGroupedValueKeysSelect)
         }
       </WidgetControlCard>
     </MutedBarrier>

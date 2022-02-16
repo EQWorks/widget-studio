@@ -107,6 +107,7 @@ const WidgetTitleBar = () => {
         id &&
         <div className={classes.item}>
           <Chip
+            selectable={false}
             color='secondary'
             onClick={e => {
               e.stopPropagation()
