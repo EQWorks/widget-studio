@@ -13,6 +13,7 @@ import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { columnInference } from '../util/columns'
+import { EXPORT_TYPES } from '../constants/export'
 
 
 const MAX_UNDO_STEPS = 10
@@ -77,6 +78,8 @@ const stateDefaults = [
       recentReset: false,
       showToast: false,
       toastConfig: {},
+      exportType: EXPORT_TYPES[0],
+      screenshotRef: null,
     },
     resettable: false,
   },

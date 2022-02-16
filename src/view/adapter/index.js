@@ -1,10 +1,10 @@
-import React, { createElement, useMemo } from 'react'
+import React, { createElement, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import { useResizeDetector } from 'react-resize-detector'
 import { makeStyles } from '@eqworks/lumen-labs'
 
-import { useStoreState } from '../../store'
+import { useStoreActions, useStoreState } from '../../store'
 import typeInfo from '../../constants/type-info'
 
 
@@ -30,7 +30,7 @@ Object.entries(typeInfo).forEach(([key, { adapter }]) => {
 })
 
 const WidgetAdapter = () => {
-  // state
+  const update = useStoreActions((actions) => actions.update)
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const transformedData = useStoreState((state) => state.transformedData)
@@ -39,6 +39,10 @@ const WidgetAdapter = () => {
     refreshRate: 100,
   })
 
+
+  useEffect(() => {
+    ref?.current && update({ ui: { screenshotRef: ref.current } })
+  }, [ref, update])
 
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
