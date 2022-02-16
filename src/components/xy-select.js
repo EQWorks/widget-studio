@@ -5,69 +5,65 @@ import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 
 const SIZE = 3
+const BASE_SIZE = '51px'
+const BORDER_WIDTH = 2
 
 const classes = makeStyles({
   topRight: {
-    borderTopRightRadius: '0.3rem',
-    borderTopWidth: '3px',
-    borderRightWidth: '3px',
+    borderTopRightRadius: '0.286rem',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   topLeft: {
-    borderTopLeftRadius: '0.3rem',
-    borderTopWidth: '3px',
-    borderLeftWidth: '3px',
+    borderTopLeftRadius: '0.286rem',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   bottomRight: {
-    borderBottomRightRadius: '0.3rem',
-    borderBottomWidth: '3px',
-    borderRightWidth: '3px',
+    borderBottomRightRadius: '0.286rem',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   bottomLeft: {
-    borderBottomLeftRadius: '0.3rem',
-    borderBottomWidth: '3px',
-    borderLeftWidth: '3px',
+    borderBottomLeftRadius: '0.286rem',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   top: {
-    borderTopWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   bottom: {
-    borderBottomWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   left: {
-    borderLeftWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   right: {
-    borderRightWidth: '3px',
     borderColor: getTailwindConfigColor('secondary-400'),
   },
   container: {
     display: 'grid',
     justifyContent: 'center',
-    gridTemplateColumns: `calc(${100 / SIZE}% + 1px) ${100 / SIZE}% calc(${100 / SIZE}% + 1px)`,
-    gridTemplateRows: `calc(${100 / SIZE}% + 1px) ${100 / SIZE}% calc(${100 / SIZE}% + 1px)`,
-    width: '3.7rem',
-    height: '3.7rem',
+    gridTemplateColumns: `1fr 1fr calc(${100 / SIZE}% + ${Math.floor(SIZE / 2)}px)`,
+    gridTemplateRows: `1fr 1fr calc(${100 / SIZE}% + ${Math.ceil(SIZE / 2)}px)`,
+    width: `calc(${BASE_SIZE} + ${BORDER_WIDTH}px)`,
+    height: `calc(${BASE_SIZE} + ${BORDER_WIDTH}px)`,
     cursor: 'pointer',
-    marginBottom: '4px',
-  },
-  oddCell: {
-    background: getTailwindConfigColor('secondary-300'),
+    marginBottom: '3px',
+    '&> *': {
+      boxSizing: 'content-box',
+      borderTop: `${BORDER_WIDTH}px solid ${getTailwindConfigColor('secondary-400')}`,
+      borderLeft: `${BORDER_WIDTH}px solid ${getTailwindConfigColor('secondary-400')}`,
+    },
+    [`:nth-child(${SIZE}n)`]: {
+      borderRight: `${BORDER_WIDTH}px solid ${getTailwindConfigColor('secondary-400')}`,
+    },
+    [`:nth-child(n+${((SIZE - 1) * (SIZE)) + 1})`]: {
+      borderBottom: `${BORDER_WIDTH}px solid ${getTailwindConfigColor('secondary-400')}`,
+    },
   },
   cell: {
     outline: 'none',
     '&:focus, &:hover': {
       outline: 'none',
     },
-    border: 'solid',
-    borderWidth: '1px',
-    borderColor: getTailwindConfigColor('secondary-400'),
+    boxSizing: 'border-box',
     transition: 'all 0.3s',
   },
   activeCell: {
@@ -83,8 +79,9 @@ const classes = makeStyles({
   },
   disabledCell: {
     outline: 'none',
-    cursor: 'not-allowed',
+    cursor: 'default',
     borderColor: getTailwindConfigColor('secondary-400'),
+    background: `${getTailwindConfigColor('secondary-300')} !important`,
   },
 })
 
@@ -124,9 +121,6 @@ const XYSelect = ({ value: [selectedX, selectedY], update, disabled }) => (
             }
             styles.unshift(classes.activeCell)
           }
-        }
-        if (!(i % 2)) {
-          styles.unshift(classes.oddCell)
         }
         return <button
           key={i}
