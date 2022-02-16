@@ -167,7 +167,7 @@ PluralLinkedSelect.propTypes = {
   primaryKey: PropTypes.string.isRequired,
   secondaryKey: PropTypes.string.isRequired,
   titles: PropTypes.arrayOf(PropTypes.string),
-  headerIcons: PropTypes.arrayOf(PropTypes.node),
+  headerIcons: PropTypes.array,
   callback: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,

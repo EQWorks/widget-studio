@@ -173,7 +173,7 @@ Widget.propTypes = {
   staticData: PropTypes.bool,
   rows: PropTypes.array,
   columns: PropTypes.array,
-  executionID: PropTypes.number,
+  executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
 Widget.defaultProps = {
   mode: modes.VIEW,
