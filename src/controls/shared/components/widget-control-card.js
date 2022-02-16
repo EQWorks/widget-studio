@@ -29,19 +29,34 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
-        padding: '0.8rem',
+        padding: '1.071rem 1.429rem',
         borderBottom: `1px solid ${getTailwindConfigColor('secondary-300')}`,
       },
       titleContainer: {
         display: 'flex',
-        fontSize: '0.875rem',
+        fontSize: '1rem',
+        lineHeight: '1.429rem',
         fontWeight: 700,
         color: getTailwindConfigColor('secondary-900'),
-        marginBottom: '0.2rem',
-        padding: '0 0.5rem',
+        marginBottom: '0.857rem',
+        height: '1.429rem',
       },
       content: {
-        padding: '0 0.5rem',
+        padding: '0 0.143rem',
+        paddingTop: '0 !important',
+        '&:first-child': {
+          marginTop: '0 !important',
+          paddingTop: '0 !important',
+        },
+      },
+      clearButton: {
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center !important',
+        padding: '0 0.4rem !important',
+        '&>div': {
+          margin: '0 !important',
+        },
       },
       ...commonClasses,
     }
@@ -61,7 +76,6 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
       },
       content: {
         padding: '0.5rem 0.75rem',
-        paddingTop: 0,
       },
       ...commonClasses,
     }
@@ -84,6 +98,11 @@ const WidgetControlCard = ({ title, titleExtra, description, clear, children }) 
           onClick={clear}
           {...(mode === modes.QL && {
             endIcon: <Icons.Trash size='sm' />,
+          })}
+          {...(classes.clearButton && {
+            classes: {
+              button: classes.clearButton,
+            },
           })}
         >
           Clear

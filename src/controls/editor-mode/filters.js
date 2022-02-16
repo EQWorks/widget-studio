@@ -87,86 +87,83 @@ const Filters = () => {
     </div>
   )
 
+  const renderDomainFilter = (
+    domainIsDate
+      ? renderDateFilter
+      : <CustomSelect
+        fullWidth
+        multiSelect
+        data={groups}
+        value={groupFilter ?? []}
+        onSelect={val => userUpdate({ groupFilter: val })}
+        placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
+        disabled={!group || !domain.value}
+      />
+  )
+
+  const renderRangeFilters = (
+    <PluralLinkedSelect
+      titles={['Column', 'Range']}
+      headerIcons={[Icons.Columns, Icons.Hash]}
+      values={filters}
+      primaryKey='key'
+      secondaryKey='filter'
+      valueIcons={Object.values(filterData).map(({ Icon }) => Icon)}
+      data={Object.keys(filterData)}
+      subData={[]}
+      callback={(i, { key }) => {
+        if (i === filters.length) {
+          userUpdate({ filters: filters.concat([{ key: null, filter: null }]) })
+        } else if (!key) {
+          userUpdate({ filters: filters.map((v, _i) => i === _i ? { key: null, filter: null } : v) })
+        } else if (filters[i]?.key !== key) {
+          const { min, max } = columnsAnalysis[key] || {}
+          userUpdate({ filters: filters.map((v, _i) => i === _i ? { key, filter: [min, max] } : v) })
+        }
+      }}
+      deleteCallback={(i) => {
+        const filtersCopy = JSON.parse(JSON.stringify(filters))
+        filtersCopy.splice(i, 1)
+        userUpdate({ filters: filtersCopy })
+      }}
+      customRenderSecondary={(i, k) => {
+        const { key, filter } = filters[i] || {}
+        const { min, max } = columnsAnalysis[key] || {}
+        return (
+          <SliderControl
+            style='chart'
+            range={true}
+            min={min}
+            max={max}
+            value={filter || [min, max]}
+            disabled={!filter}
+            update={filter => userUpdate({
+              filters:
+                filters.map((v, _i) => i === _i
+                  ? { key: k, filter }
+                  : v),
+            })}
+          >
+          </SliderControl>
+        )
+      }}
+      addMessage='Add Range Filter'
+    />
+  )
+
   return (
     <WidgetControlCard
       clear={() => resetValue({ filters, groupFilter })}
       title='Filters'
     >
       {
-        // NOTE - temporary fix to remove some large spaces - to be adjusted after the styling revision
-        // renderSection(
-        //   null,
-        renderRow(
-          'Domain Filter',
-          domainIsDate
-            ? renderDateFilter
-            : <CustomSelect
-              fullWidth
-              multiSelect
-              data={groups}
-              value={groupFilter ?? []}
-              onSelect={val => userUpdate({ groupFilter: val })}
-              placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
-              disabled={!group || !domain.value}
-            />
-        )
-        // )
-      }
-      {renderSection(
-        null,
-        renderRow(
-          'Range Filters',
+        renderSection(
+          null,
           <>
-            <PluralLinkedSelect
-              titles={['Column', 'Range']}
-              headerIcons={[Icons.Columns, Icons.Hash]}
-              values={filters}
-              primaryKey='key'
-              secondaryKey='filter'
-              valueIcons={Object.values(filterData).map(({ Icon }) => Icon)}
-              data={Object.keys(filterData)}
-              subData={[]}
-              callback={(i, { key }) => {
-                if (i === filters.length) {
-                  userUpdate({ filters: filters.concat([{ key: null, filter: null }]) })
-                } else if (!key) {
-                  userUpdate({ filters: filters.map((v, _i) => i === _i ? { key: null, filter: null } : v) })
-                } else if (filters[i]?.key !== key) {
-                  const { min, max } = columnsAnalysis[key] || {}
-                  userUpdate({ filters: filters.map((v, _i) => i === _i ? { key, filter: [min, max] } : v) })
-                }
-              }}
-              deleteCallback={(i) => {
-                const filtersCopy = JSON.parse(JSON.stringify(filters))
-                filtersCopy.splice(i, 1)
-                userUpdate({ filters: filtersCopy })
-              }}
-              customRenderSecondary={(i, k) => {
-                const { key, filter } = filters[i] || {}
-                const { min, max } = columnsAnalysis[key] || {}
-                return (
-                  <SliderControl
-                    style='chart'
-                    range={true}
-                    min={min}
-                    max={max}
-                    value={filter || [min, max]}
-                    disabled={!filter}
-                    update={filter => userUpdate({
-                      filters:
-                        filters.map((v, _i) => i === _i
-                          ? { key: k, filter }
-                          : v),
-                    })}
-                  >
-                  </SliderControl>
-                )
-              }}
-              addMessage='Add Range Filter'
-            />
+            {renderRow('Domain Filter', renderDomainFilter)}
+            {renderRow('Range Filters', renderRangeFilters)}
           </>
         )
-      )
       }
     </WidgetControlCard >
   )

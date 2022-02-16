@@ -27,29 +27,26 @@ const DataTransformationControls = () => {
     <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length}>
       <WidgetControlCard title='Data Transformations' >
         {
-          renderSection(
+          renderRow(
             null,
-            renderRow(
-              null,
-              <>
-                {
-                  renderToggle(
-                    'Invert Domain',
-                    groupByValue,
-                    () => userUpdate({ genericOptions: { groupByValue: !groupByValue } }),
-                    type === types.MAP
-                  )
-                }
-                {
-                  renderToggle(
-                    'Percentage Mode',
-                    percentageMode,
-                    () => userUpdate({ percentageMode: !percentageMode }),
-                    type === types.MAP || (!group || type === types.PIE)
-                  )
-                }
-              </>
-            )
+            <>
+              {
+                renderToggle(
+                  'Invert Domain',
+                  groupByValue,
+                  () => userUpdate({ genericOptions: { groupByValue: !groupByValue } }),
+                  type === types.MAP
+                )
+              }
+              {
+                renderToggle(
+                  'Percentage Mode',
+                  percentageMode,
+                  () => userUpdate({ percentageMode: !percentageMode }),
+                  type === types.MAP || (!group || type === types.PIE)
+                )
+              }
+            </>
           )
         }
       </WidgetControlCard>
