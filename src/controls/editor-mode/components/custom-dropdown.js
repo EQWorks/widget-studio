@@ -18,7 +18,7 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
   const ref = useRef(null)
   const [open, setOpen] = useState(false)
   const { root, menu, ...dropdownBaseClasses } = DROPDOWN_SELECT_CLASSES
-  const click = ({ target }) => !disabled && setOpen(ref.current?.contains(target))
+  const click = ({ target }) => open && !disabled && setOpen(ref.current?.contains(target))
 
   useEffect(() => {
     document.addEventListener('click', click)
@@ -28,7 +28,6 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
   return (
     <div className={classes.outerContainer}>
       <BaseComponents.DropdownBase
-        ref={ref}
         open={open}
         onClick={() => !disabled && setOpen(!open)}
         disabled={disabled}
@@ -49,7 +48,9 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
         }
         {...props}
       >
-        {children}
+        <div ref={ref}>
+          {children}
+        </div>
       </BaseComponents.DropdownBase >
     </div >
   )
