@@ -149,7 +149,7 @@ export default {
         },
         legend: { showLegend: true },
         schemeColor: genericOptions.baseColor,
-        opacity: uniqueOptions.opacity / 100,
+        opacity: uniqueOptions.opacity.value / 100,
       }],
       mapConfig: {
         cursor: (layers) => getCursor({ layers }),
