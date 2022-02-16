@@ -404,9 +404,9 @@ export default {
       },
       dataSource,
     })
-    const { isReady } = getState()
+    const { dev, isReady } = getState()
     const isReload = isReady
-    requestData(dataSource.type, dataSource.id)
+    requestData(dataSource.type, dataSource.id, dev)
       .then(data => {
         const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
         actions.update({

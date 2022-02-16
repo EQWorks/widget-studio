@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, lazy } from 'react'
 import { useQuery } from 'react-query'
 import axios from 'axios'
-import sampleConfigs from '../../stories/sample-configs'
-import sampleData from '../../stories/sample-data'
 import { dataSourceTypes } from '../constants/data-source'
+
+
+const { devRequestConfig, devRequestData } = lazy(() => import('../../stories/util/dev-fetch'))
 
 
 const api = axios.create({
@@ -123,10 +124,9 @@ const requestExecutionResults = async (id) => {
     })
 }
 
-export const requestData = async (dataSourceType, dataSourceID) => {
-  const env = process.env.NODE_ENV || 'development'
-  if (env == 'development') {
-    return sampleData[`${dataSourceType}-${dataSourceID}`]
+export const requestData = async (dataSourceType, dataSourceID, devEnvironment = false) => {
+  if (devEnvironment) {
+    return devRequestData(dataSourceID, dataSourceType)
   }
   var data
   if (dataSourceType == dataSourceTypes.SAVED_QUERIES) {
@@ -139,9 +139,8 @@ export const requestData = async (dataSourceType, dataSourceID) => {
 }
 
 // TODO request from db -- this is a placeholder
-export const requestConfig = async (id) => {
-  const env = process.env.NODE_ENV || 'development'
-  if (env == 'development') {
-    return id ? sampleConfigs[id] : null
+export const requestConfig = async (id, devEnvironment) => {
+  if (devEnvironment) {
+    return devRequestConfig(id)
   }
 }
