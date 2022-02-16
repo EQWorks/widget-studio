@@ -361,7 +361,9 @@ export default {
     'indexKey': null,
     'mapGroupKeyTitle': 'Poi id',
     'uniqueOptions': {
-      'opacity': 20,
+      'opacity': {
+        'value': 20,
+      },
       'lineWidth': {
         'value': 1,
       },
@@ -427,7 +429,9 @@ export default {
     'indexKey': null,
     'mapGroupKeyTitle': 'Geo cohort fsa',
     'uniqueOptions': {
-      'opacity': 30,
+      'opacity': {
+        'value': 30,
+      },
       'lineWidth': {
         'value': 1,
       },
