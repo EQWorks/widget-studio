@@ -8,6 +8,7 @@ import CustomButton from '../../components/custom-button'
 import modes from '../../constants/modes'
 import EditableTitle from './editable-title'
 import WidgetMeta from '../meta'
+import { dataSourceTypes } from '../../constants/data-source'
 
 
 const commonClasses = {
@@ -107,6 +108,7 @@ const WidgetTitleBar = () => {
         id &&
         <div className={classes.item}>
           <Chip
+            selectable={false}
             color='secondary'
             onClick={e => {
               e.stopPropagation()
@@ -204,16 +206,38 @@ const WidgetTitleBar = () => {
                 {renderTitleAndID}
                 <div className='flex items-stretch ml-auto'>
                   {renderDownloadConfigButton}
-                  <CustomButton
+                  {/* <CustomButton
                     horizontalMargin
                     onClick={() => window.alert('not implemented')}
                   >
                     EXPORT
-                  </CustomButton>
+                  </CustomButton> */}
                   <CustomButton
                     horizontalMargin
                     variant='filled'
-                    onClick={() => window.alert('not implemented')}
+                    onClick={() => {
+                      const { id, type } = dataSource || {}
+                      if (type === dataSourceTypes.EXECUTIONS) {
+                        localStorage.setItem(`stored-widget-execution-${id}`, JSON.stringify(config))
+                        window.open(`/widget-studio?executionID=${id}`, '_blank').focus()
+                      } else {
+                        toast({
+                          type: 'semantic-light',
+                          title: 'There was a problem.',
+                          color: 'error',
+                          button:
+                            <CustomButton
+                              size='lg'
+                              type='danger'
+                              variant='elevated'
+                            >
+                              Click here to open a blank widget in the editor.
+                            </CustomButton>
+                          ,
+                          icon: <Icons.MoodWarning size='lg' />,
+                        })
+                      }
+                    }}
                     endIcon={<Icons.ShareExternalLink size='md' />}
                   >
                     OPEN IN EDITOR

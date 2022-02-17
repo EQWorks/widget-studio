@@ -8,4 +8,4 @@ export const geoKeyHasCoordinates = (geoKey, numericColumns) =>
     numericColumns?.some(key => COORD_KEYS.longitude.includes(key))) ||
   (MAP_LAYER_GEO_KEYS.geojson.includes(geoKey))
 
-export const isObject = v => v !== null && !Array.isArray(v) && typeof v === 'object'
+export const isObject = v => v !== null && !Array.isArray(v) && typeof v === 'object' && !(v instanceof HTMLElement)

@@ -16,6 +16,7 @@ import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
 import { dataSourceTypes } from './constants/data-source'
+import MutedBarrier from './controls/shared/muted-barrier'
 
 
 const commonClasses = {
@@ -58,15 +59,27 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, executionID }) => {
+const Widget = ({
+  id,
+  mode: _mode,
+  staticData,
+  rows: _rows,
+  columns: _columns,
+  executionID,
+  config: _config,
+  sampleData,
+  sampleConfigs,
+}) => {
   const classes = useStyles(_mode)
 
   // easy-peasy actions
   const loadData = useStoreActions((actions) => actions.loadData)
-  const loadConfig = useStoreActions(actions => actions.loadConfig)
+  const loadConfig = useStoreActions((actions) => actions.loadConfig)
+  const loadConfigByID = useStoreActions(actions => actions.loadConfigByID)
   const update = useStoreActions(actions => actions.update)
 
   // common state
+  const dev = useStoreState((state) => state.dev)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
 
@@ -82,8 +95,16 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
     if (!validatedMode) {
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
+    const dev = Boolean(sampleData && sampleConfigs)
+    if (dev) {
+      update({
+        sampleData,
+        sampleConfigs,
+      })
+    }
     // dispatch state
     update({
+      dev,
       id,
       ui: {
         mode: validatedMode,
@@ -95,7 +116,13 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
       update({
         rows: _rows,
         columns: _columns,
-        dataSource: { type: dataSourceTypes.MANUAL, id: 1 },
+        dataSource: {
+          type:
+            mode === modes.QL
+              ? dataSourceTypes.EXECUTIONS
+              : dataSourceTypes.MANUAL,
+          id: executionID,
+        },
       })
     } else if (executionID !== -1) {
       // use executionID if available
@@ -106,15 +133,17 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
     // if there is a widget ID,
     if (id !== undefined && id !== null) {
       // fetch/read the config associated with the ID
-      loadConfig(id)
+      loadConfigByID(id)
     } else if (staticData && validatedMode === modes.EDITOR) {
       // error on incorrect component usage
       throw new Error('Incorrect usage: Widgets in editor mode without an ID cannot have data source control disabled (staticData == true).')
     } else if (validatedMode === modes.VIEW) {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
+    } else if (_config) {
+      loadConfig(_config)
     }
-  }, [_columns, _mode, _rows, executionID, id, loadConfig, mode, staticData, update])
+  }, [_columns, _config, _mode, _rows, executionID, id, loadConfig, loadConfigByID, mode, sampleConfigs, sampleData, staticData, update])
 
 
   // load data if source changes
@@ -143,13 +172,19 @@ const Widget = ({ id, mode: _mode, staticData, rows: _rows, columns: _columns, e
   }
 
   return (
-    <div className={classes.outerContainer}>
-      <WidgetTitleBar />
-      <div className={classes.innerContainer}>
-        {renderViewWithControls()}
-      </div>
-      <CustomGlobalToast />
-    </div >
+    <MutedBarrier
+      variant={1}
+      mute={!dev && mode === modes.QL && !(_rows?.length) && !(_columns?.length)}
+      message='Select an execution to start building a widget.'
+    >
+      <div className={classes.outerContainer}>
+        <WidgetTitleBar />
+        <div className={classes.innerContainer}>
+          {renderViewWithControls()}
+        </div>
+        <CustomGlobalToast />
+      </div >
+    </MutedBarrier>
   )
 }
 
@@ -159,7 +194,10 @@ Widget.propTypes = {
   staticData: PropTypes.bool,
   rows: PropTypes.array,
   columns: PropTypes.array,
-  executionID: PropTypes.number,
+  config: PropTypes.object,
+  executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  sampleData: PropTypes.object,
+  sampleConfigs: PropTypes.object,
 }
 Widget.defaultProps = {
   mode: modes.VIEW,
@@ -167,7 +205,10 @@ Widget.defaultProps = {
   staticData: false,
   rows: null,
   columns: null,
+  config: null,
   executionID: -1,
+  sampleData: null,
+  sampleConfigs: null,
 }
 
 export default withQueryClient(withStore(Widget))

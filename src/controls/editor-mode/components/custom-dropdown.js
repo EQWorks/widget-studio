@@ -2,8 +2,17 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { BaseComponents, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
-import { DROPDOWN_SELECT_CLASSES } from '../../../components/custom-select'
+import { DROPDOWN_SELECT_CLASSES as _DROPDOWN_SELECT_CLASSES } from '../../../components/custom-select'
 
+
+// get rid of classes that aren't available in DropdownBase, to avoid prop-types warnings
+const {
+  // eslint-disable-next-line no-unused-vars
+  listContainer,
+  // eslint-disable-next-line no-unused-vars
+  selectedOptionTitle,
+  ...DROPDOWN_SELECT_CLASSES
+} = _DROPDOWN_SELECT_CLASSES
 
 const classes = makeStyles({
   outerContainer: {
@@ -18,7 +27,7 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
   const ref = useRef(null)
   const [open, setOpen] = useState(false)
   const { root, menu, ...dropdownBaseClasses } = DROPDOWN_SELECT_CLASSES
-  const click = ({ target }) => !disabled && setOpen(ref.current?.contains(target))
+  const click = ({ target }) => open && !disabled && setOpen(ref.current?.contains(target))
 
   useEffect(() => {
     document.addEventListener('click', click)
@@ -28,7 +37,6 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
   return (
     <div className={classes.outerContainer}>
       <BaseComponents.DropdownBase
-        ref={ref}
         open={open}
         onClick={() => !disabled && setOpen(!open)}
         disabled={disabled}
@@ -49,7 +57,9 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
         }
         {...props}
       >
-        {children}
+        <div ref={ref}>
+          {children}
+        </div>
       </BaseComponents.DropdownBase >
     </div >
   )

@@ -1,16 +1,27 @@
 import React from 'react'
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles, Checkbox } from '@eqworks/lumen-labs'
 import CustomToggle from '../../components/custom-toggle'
 
 
 const classes = makeStyles({
+  superSection: {
+    '> *': {
+      marginBottom: '1.2rem',
+    },
+    '> :last-child': {
+      marginBottom: '0px !important',
+    },
+  },
   section: {
-    marginTop: '0.2rem',
-    // TEMPORARY adjustment
-    // marginBottom: '0.7rem',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
+    '> *': {
+      marginBottom: '0.7rem',
+    },
+    '> :last-child': {
+      marginBottom: '0px !important',
+    },
   },
   sectionTitle: {
     color: getTailwindConfigColor('secondary-800'),
@@ -22,11 +33,15 @@ const classes = makeStyles({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-  //   margin: '0.2rem 0',
+    '> *': {
+      marginRight: '0.8rem',
+    },
+    '> :last-child': {
+      marginRight: '0px !important',
+    },
   },
   rowContainer: {
     width: '100%',
-    margin: '0.2rem 0',
   },
   inlineItemContainer: {
     display: 'flex',
@@ -37,7 +52,12 @@ const classes = makeStyles({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    padding: '0.2rem',
+  },
+  itemContainerNoGrow: {
+    flex: 0,
+    minWidth: '33%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   inlineItem: {
   },
@@ -66,12 +86,17 @@ const classes = makeStyles({
   },
 })
 
+export const renderSuperSection = (Component) => (
+  Component &&
+  <div className={classes.superSection}>
+    {Component}
+  </div>
+)
+
 export const renderSection = (title, Component) => (
   Component &&
   <div className={classes.section}>
-    <div className={classes.sectionTitle}>
-      {title && `${title}:`}
-    </div>
+    {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
     {Component}
   </div>
 )
@@ -81,7 +106,7 @@ export const renderRow = (title, Component, titleExtra) => (
   <div className={classes.rowContainer}>
     {(title || titleExtra) &&
       <div className={classes.title}>
-        <span className={classes.flex1}> {`${title}:`} </span>
+        <span className={classes.flex1}> {title && `${title}:`} </span>
         {titleExtra && titleExtra}
       </div>
     }
@@ -91,25 +116,32 @@ export const renderRow = (title, Component, titleExtra) => (
   </div>
 )
 
-export const renderItem = (title, Component) => (
+export const renderItem = (title, Component, titleExtra, grow = true) => (
   Component &&
-  <div className={classes.itemContainer}>
-    <div className={classes.title} > {`${title}:`} </div>
+  <div className={grow ? classes.itemContainer : classes.itemContainerNoGrow}>
+    <div className={classes.title}>
+      <span className={classes.flex1}> {title && `${title}:`} </span>
+      {titleExtra && titleExtra}
+    </div>
     <div className={classes.item}>
       {Component}
     </div>
   </div>
 )
 
-export const renderCheckbox = (title, value, update, disabled = false) => (
-  <div className={classes.inlineItemContainer}>
+export const renderCheckbox = (title, value, update, disabled = false, key) => (
+  <div
+    {...(key && { key })}
+    className={classes.inlineItemContainer}
+  >
     <div className={classes.inlineItem}>
-      <CustomToggle
-        value={value}
-        onChange={update}
+      <Checkbox
+        label=''
+        defaultChecked
+        checked={value}
+        onChange={({ checked }) => update(checked)}
         disabled={disabled}
-      />
-    </div>
+      /></div>
     {title && <div className={classes.inlineTitle} > {`${title}`} </div>}
   </div>
 )

@@ -13,6 +13,7 @@ import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { columnInference } from '../util/columns'
+import { EXPORT_TYPES } from '../constants/export'
 
 
 const MAX_UNDO_STEPS = 10
@@ -77,6 +78,8 @@ const stateDefaults = [
       recentReset: false,
       showToast: false,
       toastConfig: {},
+      exportType: EXPORT_TYPES[0],
+      screenshotRef: null,
     },
     resettable: false,
   },
@@ -112,6 +115,9 @@ export default {
       (state) => state.isReady,
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
+      (state) => state.percentageMode,
+      (state) => state.presetColors,
+      (state) => state.dateAggregation,
     ],
     (
       title,
@@ -129,6 +135,9 @@ export default {
       isReady,
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
+      percentageMode,
+      presetColors,
+      dateAggregation,
     ) => (
       isReady
         ? {
@@ -149,6 +158,9 @@ export default {
           uniqueOptions,
           genericOptions,
           dataSource: { type: dataSourceType, id: dataSourceID },
+          percentageMode,
+          presetColors,
+          dateAggregation,
         }
         : undefined
     )),
@@ -343,8 +355,6 @@ export default {
   undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
   redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
 
-  dev: computed([], () => ((process?.env?.NODE_ENV || 'development') === 'development')),
-
   /** ACTIONS ------------------------------------------------------------------ */
 
   toast: thunk(async (actions, payload) => {
@@ -357,7 +367,7 @@ export default {
     setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
   }),
 
-  loadConfig: thunk(async (actions, payload) => {
+  loadConfigByID: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
       ui: {
@@ -365,22 +375,9 @@ export default {
         dataSourceLoading: true,
       },
     })
-    requestConfig(payload)
-      .then(({ dataSource, ...config }) => {
-        // populate state with safe default values
-        actions.update({
-          ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
-            .map(({ key, defaultValue }) => ([key, defaultValue]))),
-          ...(config?.type && {
-            uniqueOptions: Object.fromEntries(
-              Object.entries(typeInfo[config.type].uniqueOptions)
-                .map(([k, { defaultValue }]) => [k, defaultValue])),
-          }),
-        })
-        // populate state with values from config
-        actions.update(config)
-        actions.loadData(dataSource)
-      })
+    const { sampleConfigs } = getState()
+    requestConfig(payload, sampleConfigs)
+      .then(actions.loadConfig)
       .catch(err => {
         actions.update({
           ui: {
@@ -392,6 +389,30 @@ export default {
       })
   }),
 
+  loadConfig: thunk(async (actions, payload) => {
+    actions.update({
+      ignoreUndo: true,
+      ui: {
+        showDataSourceControls: false,
+        dataSourceLoading: true,
+      },
+    })
+    const { dataSource, ...config } = payload
+    // populate state with safe default values
+    actions.update({
+      ...Object.fromEntries(stateDefaults.filter(s => s.resettable)
+        .map(({ key, defaultValue }) => ([key, defaultValue]))),
+      ...(config?.type && {
+        uniqueOptions: Object.fromEntries(
+          Object.entries(typeInfo[config.type].uniqueOptions)
+            .map(([k, { defaultValue }]) => [k, defaultValue])),
+      }),
+    })
+    // populate state with values from config
+    actions.update(config)
+    actions.loadData(dataSource)
+  }),
+
   loadData: thunk(async (actions, dataSource, { getState }) => {
     actions.update({
       ignoreUndo: true,
@@ -401,9 +422,9 @@ export default {
       },
       dataSource,
     })
-    const { isReady } = getState()
+    const { isReady, sampleData } = getState()
     const isReload = isReady
-    requestData(dataSource.type, dataSource.id)
+    requestData(dataSource.type, dataSource.id, sampleData)
       .then(data => {
         const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
         actions.update({
