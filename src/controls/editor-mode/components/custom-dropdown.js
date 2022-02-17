@@ -26,7 +26,7 @@ const classes = makeStyles({
 const CustomDropdown = ({ selectedString, classes: _classes, children, disabled, style, ...props }) => {
   const ref = useRef(null)
   const [open, setOpen] = useState(false)
-  const { root, menu, ...dropdownBaseClasses } = DROPDOWN_SELECT_CLASSES
+  const { root, menu, content, ...dropdownBaseClasses } = DROPDOWN_SELECT_CLASSES
   const click = ({ target }) => open && !disabled && setOpen(ref.current?.contains(target))
 
   useEffect(() => {
@@ -52,6 +52,7 @@ const CustomDropdown = ({ selectedString, classes: _classes, children, disabled,
           {
             root: [root, _classes.root].join(' '),
             menu: [menu, _classes.menu].join(' '),
+            content: [content, _classes.content].join(' '),
             ...dropdownBaseClasses,
           }
         }
