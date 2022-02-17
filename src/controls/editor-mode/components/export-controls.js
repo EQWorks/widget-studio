@@ -55,7 +55,9 @@ const ExportControls = () => {
             endIcon={<Icons.DownloadBold size='sm' />}
             onClick={async () => {
               const { mime, extension } = exportType || {}
-              mime && extension && setImage(await screenshot(screenshotRef, mime))
+              if (mime && extension) {
+                setImage(await screenshot(screenshotRef, mime))
+              }
             }}
           >
             export

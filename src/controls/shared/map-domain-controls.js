@@ -63,7 +63,7 @@ const MapDomainControls = () => {
   )
 
   return (
-    <WidgetControlCard title={'Map Layer Configuration'} >
+    <WidgetControlCard title={'Map Layer Configuration'}>
       {renderRow('Column', renderControls)}
     </WidgetControlCard>
   )
