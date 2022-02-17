@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/widget-studio",
-  "version": "0.1.0-alpha.7",
+  "version": "0.1.0-alpha.8",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -15,7 +15,7 @@
     "url": "https://github.com/EQWorks/widget-studio.git"
   },
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "scripts": {
     "lint": "eslint .*.js *.js stories/ src/",
