@@ -86,10 +86,7 @@ const MapLayerDisplay = () => {
     if (value <= min || !Number(value)) {
       return min
     }
-    if (value >= max) {
-      return max
-    }
-    return value
+    return value >= max ? max : value
   }, [type])
 
   return (
