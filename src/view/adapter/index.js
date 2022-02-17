@@ -34,7 +34,11 @@ const WidgetAdapter = () => {
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const transformedData = useStoreState((state) => state.transformedData)
-  const { ref, width, height } = useResizeDetector()
+  const { ref, width, height } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+  })
+
 
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])

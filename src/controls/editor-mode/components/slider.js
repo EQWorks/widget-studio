@@ -56,8 +56,8 @@ const BasicSlider = ({ min, max, step, value, update }) => {
             step={step}
             deleteButton={false}
             placeholder={min.toString()}
-            value={(value || [])[0] || ''}
-            onChange={_min => update([Number(_min), value[1]])}
+            value={(value || [])[0] || (Number(value) ? value : '')}
+            onChange={_min => update([Math.max(min, Math.min(_min, max)), value[1]])}
           />
         }
         <TextField
@@ -67,11 +67,12 @@ const BasicSlider = ({ min, max, step, value, update }) => {
           max={max}
           step={step}
           deleteButton={false}
-          placeholder={max.toString()}
-          value={(value || [])[1] || value || ''}
+          placeholder={Array.isArray(value) ? max.toString() : min.toString()}
+          value={(value || [])[1] || (Number(value) ? value : '')}
           onChange={_max => Array.isArray(value) ?
-            update([value[0], Number(_max)]) :
-            update(Number(_max))
+            // TO STILL LOOK into it - not sure I can make all this work, restrict values without compromising input
+            update([value[0], Math.max(min, Math.min(_max, max))]) :
+            update(Math.max(min, Math.min(_max, max)))
           }
         />
       </div>

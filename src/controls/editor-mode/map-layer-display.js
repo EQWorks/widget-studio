@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 
 import { TextField, makeStyles } from '@eqworks/lumen-labs'
 
@@ -7,6 +7,7 @@ import ColorSchemeControls from './components/color-scheme-controls'
 import SliderControl from './components/slider-control'
 import { renderItem, renderSection, renderRow } from '../shared/util'
 import typeInfo from '../../constants/type-info'
+import { MAP_VALUE_VIS } from '../../constants/map'
 
 
 const classes = makeStyles({
@@ -23,6 +24,12 @@ const classes = makeStyles({
   },
 })
 
+const LAYER_OPTIONS = Object.keys(typeInfo.map.uniqueOptions).reduce((acc, curr) => {
+  acc[curr] = curr
+  return acc
+}, {})
+
+
 const textFieldInput = 'text-interactive-600'
 
 const MapLayerDisplay = () => {
@@ -33,15 +40,16 @@ const MapLayerDisplay = () => {
   const type = useStoreState((state) => state.type)
 
   const [rangeRadius, simpleRadius, elevation] = useMemo(() => {
-    const key = Boolean(renderableValueKeys.find(vis => (vis.mapVis === 'radius' && vis.key)))
+    const key = Boolean(renderableValueKeys.find(vis =>
+      (vis.mapVis === MAP_VALUE_VIS.radius && vis.key)))
     return [
       key,
-      JSON.stringify(mapValueKeys).includes('radius') && !key,
-      JSON.stringify(renderableValueKeys).includes('elevation'),
+      JSON.stringify(mapValueKeys).includes(MAP_VALUE_VIS.radius) && !key,
+      JSON.stringify(renderableValueKeys).includes(MAP_VALUE_VIS.elevation),
     ]
   }, [renderableValueKeys, mapValueKeys])
 
-  const getSliderControlProps = (option, range) => {
+  const getUniqueOptionsProps = useCallback(({ option, range, textField }) => {
     const {
       defaultValue: {
         value: defaultValue,
@@ -51,18 +59,35 @@ const MapLayerDisplay = () => {
       min,
       max,
     } = typeInfo[type].uniqueOptions[option]
-    const { value, valueOptions } = uniqueOptions[option] || {}
+    let { value, valueOptions } = uniqueOptions[option] || {}
+
+    // prevents TextField value updating to values or characters outside the [min, max] range
+    if (!value) {
+      if (value <= min || !Number(value)) {
+        value = min
+      } else {
+        value = defaultValue
+      }
+    }
+
     return {
-      style: 'map',
-      range,
+      ...(textField ? '' : { style: 'map', range }),
       step,
       min,
       max,
       value: range
         ? valueOptions || defaultValueOptions
-        : value || defaultValue,
+        : value,
     }
-  }
+  }, [type, uniqueOptions])
+
+  const getTextFieldVal = useCallback(({ option, value }) => {
+    const { min, max } = typeInfo[type].uniqueOptions[option]
+    if (value <= min || !Number(value)) {
+      return min
+    }
+    return value >= max ? max : value
+  }, [type])
 
   return (
     <div className={classes.displayOptions}>
@@ -74,17 +99,21 @@ const MapLayerDisplay = () => {
           {renderRow(null,
             <div className={classes.opacityRow}>
               {renderItem('Opacity (%)',
-                <TextField
-                  type='number'
-                  deleteButton={false}
-                  placeholder={'Value'}
-                  value={uniqueOptions.opacity?.toString() ?? typeInfo[type].uniqueOptions.opacity.toString()}
-                  min={0}
-                  max={100}
-                  step={1}
-                  onChange={v => userUpdate({ uniqueOptions: { opacity: Number(v) } })}
-                  onSubmit={(e) => e.nativeEvent.preventDefault()}
-                  classes={{ container: classes.textFieldContainer, input: textFieldInput }}
+                <SliderControl
+                  {...getUniqueOptionsProps(
+                    {
+                      option: LAYER_OPTIONS.opacity,
+                      range: false,
+                      textField: false,
+                    }
+                  )}
+                  update={val => userUpdate({
+                    uniqueOptions: {
+                      opacity: {
+                        value: Number(val),
+                      },
+                    },
+                  })}
                 />
               )}
             </div>
@@ -94,13 +123,19 @@ const MapLayerDisplay = () => {
               {(simpleRadius || rangeRadius) &&
                 renderItem('Radius Size (px)',
                   <SliderControl
-                    {...getSliderControlProps('radius', rangeRadius)}
+                    {...getUniqueOptionsProps(
+                      {
+                        option: LAYER_OPTIONS.radius,
+                        range: rangeRadius,
+                        textField: false,
+                      }
+                    )}
                     update={val => userUpdate({
                       uniqueOptions: {
                         radius: {
                           ...(rangeRadius
-                            ? { valueOptions: val }
-                            : { value: val }),
+                            ? { valueOptions: [Number(val[0]), Number(val[1])] }
+                            : { value: Number(val) }),
                         },
                       },
                     })}
@@ -110,7 +145,13 @@ const MapLayerDisplay = () => {
               {elevation &&
                 renderItem('Elevation Height (m)',
                   <SliderControl
-                    {...getSliderControlProps('elevation', false)}
+                    {...getUniqueOptionsProps(
+                      {
+                        option: LAYER_OPTIONS.elevation,
+                        range: false,
+                        textField: false,
+                      }
+                    )}
                     update={val => userUpdate({
                       uniqueOptions: {
                         elevation: {
@@ -127,13 +168,25 @@ const MapLayerDisplay = () => {
                     type='number'
                     deleteButton={false}
                     placeholder={'Value'}
-                    value={uniqueOptions.lineWidth?.value?.toString() ??
-                      typeInfo[type].uniqueOptions.lineWidth.toString()}
-                    min={1}
-                    max={100}
-                    step={1}
-                    onChange={v => userUpdate({ uniqueOptions: { lineWidth: { value: Number(v) } } })}
-                    onSubmit={(e) => e.nativeEvent.preventDefault()}
+                    // TO DO - ask Catherine if we should still use this, as the Slider cannot accomodate yet a sufix and it won't
+                    // match with the simple TextField buttons for the rest of the unique controls for map
+                    // inputProps={{ suffix: 'px' }}
+                    {...getUniqueOptionsProps(
+                      {
+                        option: LAYER_OPTIONS.lineWidth,
+                        range: false,
+                        textField: true,
+                      }
+                    )}
+                    onChange={value => {
+                      userUpdate({
+                        uniqueOptions: {
+                          lineWidth: {
+                            value: Number(getTextFieldVal({ option: LAYER_OPTIONS.lineWidth, value })),
+                          },
+                        },
+                      })
+                    }}
                     classes={{ container: classes.textFieldContainer, input: textFieldInput }}
                   />
                 )}
