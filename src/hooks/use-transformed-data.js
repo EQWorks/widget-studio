@@ -7,6 +7,7 @@ import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
 import { dateAggregations, dateSort } from '../constants/time'
 import { columnTypes } from '../constants/columns'
+import { YYYYMMDDToDate } from '../util/time'
 
 
 const useTransformedData = () => {
@@ -112,8 +113,7 @@ const useTransformedData = () => {
       return groupedData
     }
     if (domainIsDate) {
-      const min = new Date(groupFilter[0])
-      const max = new Date(groupFilter[1])
+      const [min, max] = groupFilter.map(YYYYMMDDToDate)
       return min && max
         ? Object.fromEntries(
           Object.entries(groupedData)

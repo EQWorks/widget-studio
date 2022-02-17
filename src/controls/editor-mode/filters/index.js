@@ -1,51 +1,15 @@
 import React, { useMemo } from 'react'
 
-import { DateRange, Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import {  Icons } from '@eqworks/lumen-labs'
 
-import { useStoreState, useStoreActions } from '../../store'
-import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderSection, renderRow } from '../shared/util'
-import PluralLinkedSelect from '../../components/plural-linked-select'
-import CustomSelect from '../../components/custom-select'
-import SliderControl from './components/slider-control'
+import { useStoreState, useStoreActions } from '../../../store'
+import WidgetControlCard from '../../shared/components/widget-control-card'
+import { renderSection, renderRow } from '../../shared/util'
+import PluralLinkedSelect from '../../../components/plural-linked-select'
+import CustomSelect from '../../../components/custom-select'
+import SliderControl from '../components/slider-control'
+import DateDomainFilter from './date-domain-filter'
 
-
-const classes = makeStyles({
-  dateRangeOuterContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-  },
-  dateRangeHeader: {
-    fontSize: '0.7rem',
-    paddingLeft: '0.2rem',
-    color: getTailwindConfigColor('secondary-500'),
-  },
-  dateRangeRoot: {
-    width: '100%',
-    display: 'flex',
-    overflow: 'hidden !important',
-    '> *': {
-      marginRight: '0.6rem',
-      flex: 1,
-    },
-    '> :last-child': {
-      marginRight: '0px !important',
-    },
-  },
-  dateRangeField: {
-    width: '100%',
-  },
-  dateRangeInput: {
-    cursor: 'pointer !important',
-    fontSize: '0.7rem !important',
-    color: getTailwindConfigColor('secondary-800'),
-    width: '100%',
-    overflow: 'hidden !important',
-    borderRadius: '0.2rem',
-    padding: '0.2rem',
-  },
-})
 
 const Filters = () => {
   // common actions
@@ -67,29 +31,9 @@ const Filters = () => {
       .map(([c, { Icon }]) => [c, { Icon }]))
   ), [columnsAnalysis])
 
-  const renderDateFilter = (
-    <div className={classes.dateRangeOuterContainer}>
-      <div className={classes.dateRangeRoot}>
-        <span className={classes.dateRangeHeader}>Start</span>
-        <span className={classes.dateRangeHeader}>End</span>
-      </div>
-      <DateRange
-        showLabel={false}
-        classes={{
-          form: classes.dateRangeRoot,
-          field: classes.dateRangeField,
-          input: classes.dateRangeInput,
-        }}
-        defaultValue={groupFilter}
-        setFromValue={v => userUpdate({ groupFilter: [v, groupFilter[1]] })}
-        setToValue={v => userUpdate({ groupFilter: [groupFilter[0], v] })}
-      />
-    </div>
-  )
-
   const renderDomainFilter = (
     domainIsDate
-      ? renderDateFilter
+      ? <DateDomainFilter/>
       : <CustomSelect
         fullWidth
         multiSelect

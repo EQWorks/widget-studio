@@ -6,11 +6,9 @@ export const convert12to24 = v => {
     : hour
 }
 
-export const dateToYYYYMMDD = d => {
-  const offset = d.getTimezoneOffset()
-  d = new Date(d.getTime() - (offset * 60000))
-  return d.toISOString().split('T')[0]
-}
+export const dateToYYYYMMDD = d => d.toLocaleDateString('en-GB').split('/').reverse().join('-')
+
+export const YYYYMMDDToDate = s => new Date(s.split('-'))
 
 export const dateToShortString = d => d.toLocaleDateString('en-us', {
   year: 'numeric',
