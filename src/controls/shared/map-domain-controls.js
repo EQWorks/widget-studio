@@ -5,6 +5,7 @@ import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderRow, renderSection } from './util'
 import { MAP_LAYER_VALUE_VIS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
+import { Icons } from '@eqworks/lumen-labs'
 
 
 const MapDomainControls = () => {
@@ -41,6 +42,7 @@ const MapDomainControls = () => {
             <CustomSelect
               fullWidth
               data={eligibleDomainValues}
+              icons={eligibleDomainValues.map(() => Icons.AddPin)}
               value={domain.value}
               onSelect={val => {
                 // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type

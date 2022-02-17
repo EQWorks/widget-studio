@@ -5,6 +5,8 @@ import aggFunctions from '../util/agg-functions'
 import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
+import { dateAggregations, dateSort } from '../constants/time'
+import { columnTypes } from '../constants/columns'
 
 
 const useTransformedData = () => {
@@ -27,12 +29,28 @@ const useTransformedData = () => {
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const domainIsDate = useStoreState((state) => state.domainIsDate)
+  const dateAggregation = useStoreState((state) => state.dateAggregation)
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
+  // normalize data using columnsAnalysis (ex. price to numeric)
+  const normalizedData = useMemo(() => {
+    const normalizedColumns = Object.entries(columnsAnalysis).filter(([, { normalized }]) => normalized)
+    return normalizedColumns.length
+      ? normalizedColumns.reduce((acc, [c, { normalized }]) => {
+        acc.forEach((r, i) => {
+          r[c] = normalized[i]
+        })
+        return acc
+      }, [...rows])
+      : rows
+  }, [columnsAnalysis, rows])
+
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
-    rows.filter(obj => {
+    normalizedData.filter(obj => {
       for (const { key, filter: [min, max] } of filters.filter(({ filter }) => Boolean(filter))) {
         if (obj[key] < min || obj[key] > max) {
           return false
@@ -40,7 +58,7 @@ const useTransformedData = () => {
       }
       return true
     })
-  ), [rows, filters])
+  ), [normalizedData, filters])
 
   const newGroupKey = useMemo(() => (
     groupFSAByPC
@@ -86,32 +104,64 @@ const useTransformedData = () => {
   }, [update, groupedData])
 
   // if a filter on the finalGroupKey exists, retain only the desired groups
-  const filteredGroupedData = useMemo(() => (
-    group
-      ? groupFilter?.length
-        ? Object.fromEntries(Object.entries(groupedData).filter(([k]) => groupFilter?.includes(k)))
+  const filteredGroupedData = useMemo(() => {
+    if (!group) {
+      return null
+    }
+    if (!groupFilter?.length) {
+      return groupedData
+    }
+    if (domainIsDate) {
+      const min = new Date(groupFilter[0])
+      const max = new Date(groupFilter[1])
+      return min && max
+        ? Object.fromEntries(
+          Object.entries(groupedData)
+            .filter(([k]) => {
+              const d = new Date(k)
+              return min < d && d < max
+            })
+        )
         : groupedData
-      : null
-  ), [group, groupFilter, groupedData])
+    }
+    return Object.fromEntries(Object.entries(groupedData).filter(([k]) => groupFilter?.includes(k)))
+  }, [domainIsDate, group, groupFilter, groupedData])
+
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
-  const aggregatedData = useMemo(() => (
-    group
-      ? Object.entries(filteredGroupedData).map(([group, values]) => {
-        const res = renderableValueKeys.reduce((res, { key, agg, title }) => {
-          const val = dataHasVariance
-            ? aggFunctions[agg](values[key])
-            : values[key][0]
-          // sums[title] += val
-          res[title] = val
-          return res
-        }, { [formattedColumnNames[finalGroupKey]]: group })
+  const aggregatedData = useMemo(() => {
+    if (!group) return null
+    const formattedDomain = formattedColumnNames[finalGroupKey]
+    if (domainIsDate && dateAggregations[dateAggregation]) {
+      // extra grouping required if Domain is date
+      const { groupFn, sortFn } = dateAggregations[dateAggregation]
+      const dateGroupedData = Object.entries(filteredGroupedData)
+        .reduce((acc, [k, v]) => {
+          const newKey = groupFn(k)
+          if (!acc[newKey]) {
+            acc[newKey] = []
+          }
+          acc[newKey].push(v)
+          return acc
+        }, {})
+      return Object.entries(dateGroupedData).map(([k, v]) => ({
+        [formattedDomain]: k,
+        ...Object.fromEntries(renderableValueKeys.map(({ key, agg, title }) => (
+          [title, aggFunctions[agg](v.map(_v => _v[key]).flat())]
+        ))),
+      })).sort((a, b) => sortFn(a[formattedDomain], b[formattedDomain]))
+    }
+    return Object.entries(filteredGroupedData).map(([group, values]) => {
+      const res = renderableValueKeys.reduce((res, { key, agg, title }) => {
+        const val = dataHasVariance
+          ? aggFunctions[agg](values[key])
+          : values[key][0]
+        res[title] = val
         return res
-
-      }
-      )
-      : null
-  ), [dataHasVariance, filteredGroupedData, formattedColumnNames, group, finalGroupKey, renderableValueKeys])
+      }, { [formattedDomain]: group })
+      return res
+    })
+  }, [group, domainIsDate, formattedColumnNames, dateAggregation, filteredGroupedData, renderableValueKeys, finalGroupKey, dataHasVariance])
 
   const percentageData = useMemo(() => {
     if (!percentageMode) {
@@ -139,9 +189,9 @@ const useTransformedData = () => {
       // add coordinates for map widget data
       if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
         const lat = columns.find(({ name, category }) =>
-          COORD_KEYS.latitude.includes(name) && category === 'Numeric')?.name
+          COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
         const lon = columns.find(({ name, category }) =>
-          COORD_KEYS.longitude.includes(name) && category === 'Numeric')?.name
+          COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
         return aggregatedData.map((d) => {
           if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
             if (d[lat] && d[lon]) {
@@ -164,13 +214,22 @@ const useTransformedData = () => {
   }, [type, aggregatedData, columns, mapGroupKey, groupedData, formattedColumnNames])
 
   // simply format and sort data if grouping is not enabled
-  const indexedData = useMemo(() => (
-    !group
-      ? truncatedData.map(d =>
-        Object.fromEntries(Object.entries(d).map(([k, v]) => [formattedColumnNames[k], v]))
-      ).sort((a, b) => a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
-      : null
-  ), [formattedColumnNames, group, indexKey, truncatedData])
+  const indexedData = useMemo(() => {
+    if (group) return null
+    const sortFn = domainIsDate
+      ? (a, b) => dateSort(a[formattedColumnNames[indexKey]], b[formattedColumnNames[indexKey]])
+      : (a, b) => (a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
+    return (
+      truncatedData
+        .map(d => Object.fromEntries(
+          Object.entries(d)
+            .map(
+              ([k, v]) => [formattedColumnNames[k], v]
+            )
+        ))
+        .sort(sortFn)
+    )
+  }, [domainIsDate, formattedColumnNames, group, indexKey, truncatedData])
 
   // memoize the final data processing according to whether grouping is enabled
   const finalData = useMemo(() => {

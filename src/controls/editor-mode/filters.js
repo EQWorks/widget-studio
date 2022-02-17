@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
-import { Icons } from '@eqworks/lumen-labs'
+import { DateRange, Icons } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -20,9 +20,15 @@ const Filters = () => {
   const groups = useStoreState((state) => state.groups)
   const groupFilter = useStoreState((state) => state.groupFilter)
   const filters = useStoreState((state) => state.filters)
-  const numericColumns = useStoreState((state) => state.numericColumns)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
+  const domainIsDate = useStoreState((state) => state.domainIsDate)
+
+  const filterData = useMemo(() => (
+    Object.fromEntries(Object.entries(columnsAnalysis)
+      .filter(([, { min, max, isNumeric }]) => isNumeric && min !== max)
+      .map(([c, { Icon }]) => [c, { Icon }]))
+  ), [columnsAnalysis])
 
   return (
     <WidgetControlCard
@@ -35,15 +41,24 @@ const Filters = () => {
         //   null,
         renderRow(
           'Group Filter',
-          <CustomSelect
-            fullWidth
-            multiSelect
-            data={groups}
-            value={groupFilter ?? []}
-            onSelect={val => userUpdate({ groupFilter: val })}
-            placeholder={group && domain.value ? `Filter ${domain.value}` : 'N/A'}
-            disabled={!group || !domain.value}
-          />
+          domainIsDate
+            ? <DateRange
+              classes={{
+                field: 'px-1',
+              }}
+              defaultValue={groupFilter}
+              setFromValue={v => userUpdate({ groupFilter: [v, groupFilter[1]] })}
+              setToValue={v => userUpdate({ groupFilter: [groupFilter[0], v] })}
+            />
+            : <CustomSelect
+              fullWidth
+              multiSelect
+              data={groups}
+              value={groupFilter ?? []}
+              onSelect={val => userUpdate({ groupFilter: val })}
+              placeholder={group && domain.value ? `Filter ${domain.value}` : 'N/A'}
+              disabled={!group || !domain.value}
+            />
         )
         // )
       }
@@ -58,10 +73,8 @@ const Filters = () => {
               values={filters}
               primaryKey='key'
               secondaryKey='filter'
-              data={numericColumns.filter(c => {
-                const { min, max, category } = columnsAnalysis[c] || {}
-                return min !== max && category === 'Numeric'
-              })}
+              valueIcons={Object.values(filterData).map(({ Icon }) => Icon)}
+              data={Object.keys(filterData)}
               subData={[]}
               callback={(i, { key }) => {
                 if (i === filters.length) {

@@ -2,9 +2,11 @@ import React, { useEffect } from 'react'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow, renderSection, renderToggle } from './util'
+import { renderItem, renderRow, renderSection, renderToggle } from './util'
 import types from '../../constants/types'
 import MutedBarrier from './muted-barrier'
+import { DATE_RESOLUTIONS } from '../../constants/time'
+import CustomSelect from '../../components/custom-select'
 
 
 const DataTransformationControls = () => {
@@ -14,6 +16,8 @@ const DataTransformationControls = () => {
   const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const percentageMode = useStoreState((state) => state.percentageMode)
+  const dateAggregation = useStoreState((state) => state.dateAggregation)
+  const domainIsDate = useStoreState((state) => state.domainIsDate)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const groupByValue = useStoreState((state) => state.genericOptions.groupByValue)
 
@@ -46,6 +50,19 @@ const DataTransformationControls = () => {
                     percentageMode,
                     () => userUpdate({ percentageMode: !percentageMode }),
                     type === types.MAP || (!group || type === types.PIE)
+                  )
+                }
+                {
+                  renderItem(
+                    'Aggregate Dates',
+                    <CustomSelect
+                      allowClear={false}
+                      data={Object.values(DATE_RESOLUTIONS)}
+                      value={domainIsDate && group && dateAggregation}
+                      placeholder='N/A'
+                      onSelect={v => v && userUpdate({ dateAggregation: v })}
+                      disabled={!domainIsDate || !group}
+                    />
                   )
                 }
               </>
