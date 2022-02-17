@@ -1,4 +1,4 @@
-import React, { createElement } from 'react'
+import React, { createElement, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { DropdownSelect, Icons } from '@eqworks/lumen-labs'
 
@@ -14,8 +14,30 @@ export const DROPDOWN_SELECT_CLASSES = {
 }
 const { root, ...baseClasses } = DROPDOWN_SELECT_CLASSES
 
-const CustomSelect = ({ multiSelect, data, value, onSelect, classes, onClear, fullWidth, icons, ...props }) => (
-  <DropdownSelect
+const CustomSelect = ({ multiSelect, data, value, onSelect, classes, onClear, fullWidth, icons, ...props }) => {
+  const transformedData = useMemo(() => (
+    icons
+      ? [{
+        items: data.map((d, i) => ({
+          title: d,
+          startIcon: createElement(icons[i], { size: 'sm' }),
+        })),
+      }]
+      : data
+  ), [data, icons])
+  const transformedValue = useMemo(() => {
+    if (!icons) return value
+    return multiSelect
+      ? (value || []).map(title => ({ title })) || []
+      : { title: value }
+  }, [icons, multiSelect, value])
+  const getTransformedTarget = useCallback(v => {
+    if (!icons) return v
+    return multiSelect
+      ? Object.values(v).map(({ title }) => title).filter(Boolean)
+      : v.title
+  }, [icons, multiSelect])
+  return <DropdownSelect
     simple={!icons}
     classes={{
       root: fullWidth ? [root, 'w-full'].join(' ') : root,
@@ -26,37 +48,12 @@ const CustomSelect = ({ multiSelect, data, value, onSelect, classes, onClear, fu
     endIcon={<Icons.ArrowDown size='md' />}
     onDelete={onClear}
     multiSelect={multiSelect}
-    data={
-      icons
-        ? [{
-          items: data.map((d, i) => ({
-            title: d,
-            startIcon: createElement(icons[i], { size: 'sm' }),
-          })),
-        }]
-        : data
-    }
-    value={
-      icons
-        ? multiSelect
-          ? (value || []).map(title => ({ title })) || []
-          : { title: value }
-        : value
-    }
-    onSelect={
-      icons
-        ? v => (
-          onSelect(
-            multiSelect
-              ? Object.values(v).map(({ title }) => title).filter(Boolean)
-              : v.title
-          )
-        )
-        : onSelect
-    }
+    data={transformedData}
+    value={transformedValue}
+    onSelect={v => onSelect(getTransformedTarget(v))}
     {...props}
   />
-)
+}
 
 
 CustomSelect.propTypes = {
