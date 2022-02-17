@@ -170,11 +170,13 @@ const EditorRightSidebar = () => {
         </WidgetControlCard >
         {
           type !== types.MAP &&
-          <WidgetControlCard title='Color Scheme'>
-            <ColorSchemeControls />
-          </WidgetControlCard >
+          <>
+            <WidgetControlCard title='Color Scheme'>
+              <ColorSchemeControls />
+            </WidgetControlCard >
+            <ExportControls />
+          </>
         }
-        <ExportControls />
       </MutedBarrier>
     </EditorSidebarBase >
   )
