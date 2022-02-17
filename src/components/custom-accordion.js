@@ -58,11 +58,14 @@ const useStyles = ({ open }) => makeStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    borderBottom: `medium solid ${getTailwindConfigColor('neutral-100')}`,
+    borderBottom: `1px solid ${getTailwindConfigColor('neutral-100')}`,
   },
   header: {
     display: 'flex',
     width: '100%',
+  },
+  footer: {
+    borderTop: `1px solid ${getTailwindConfigColor('neutral-100')}`,
   },
   button: {
     border: 'none',
@@ -144,7 +147,7 @@ const CustomAccordion = ({ open, disabled, title, footer, icon, toggle, children
             <div className={classes.padded} >
               {children}
             </div >
-            <div className={classes.padded}>
+            <div className={`${classes.footer} ${classes.padded}`}>
               {footer}
             </div>
           </div >

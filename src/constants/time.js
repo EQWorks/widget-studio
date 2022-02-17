@@ -1,16 +1,12 @@
+import { convert12to24 } from '../util/time'
+
+
 export const DATE_RESOLUTIONS = {
   NONE: 'None',
   HOUR: 'Hour',
   DAY: 'Day',
   MONTH: 'Month',
   YEAR: 'Year',
-}
-const convert12to24 = v => {
-  let [hour, modifier] = v.split(' ')
-  hour = parseInt(hour)
-  return modifier === 'PM' && hour !== 12
-    ? hour + 12
-    : hour
 }
 var MONTHS_ORDER = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 var DAYS_ORDER = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']

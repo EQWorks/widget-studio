@@ -34,7 +34,7 @@ const QLModeControls = ({ children }) => {
         onClick={resetWidget}
         disabled={!allowReset}
       >
-        reset
+        reset all
       </CustomButton>
     </div>
     {/* <CustomButton

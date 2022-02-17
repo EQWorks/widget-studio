@@ -172,8 +172,8 @@ export default {
     'type': 'bar',
     'filters': [],
     'groupFilter': [
-      '2019-01-01',
-      '2022-02-02',
+      '2019-08-28',
+      '2020-08-27',
     ],
     'valueKeys': [
       {
@@ -182,7 +182,6 @@ export default {
         'agg': 'mean',
       },
     ],
-    'dateAggregation': 'Hour',
     'mapValueKeys': [],
     'formatDataFunctions': {},
     'group': true,
@@ -191,14 +190,15 @@ export default {
     'indexKey': null,
     'groupKeyTitle': 'Time',
     'uniqueOptions': {
-      'spline': true,
-      'showTicks': true,
       'stacked': false,
+      'showTicks': true,
+      'spline': true,
     },
     'genericOptions': {
       'showWidgetTitle': false,
       'groupByValue': false,
       'showLegend': true,
+      'showTooltip': true,
       'subPlots': true,
       'size': 0.8,
       'titlePosition': [
@@ -209,12 +209,23 @@ export default {
         1,
         0,
       ],
+      'legendSize': 'Small',
       'baseColor': '#366fe4',
     },
     'dataSource': {
       'type': 'Execution',
       'id': '1458',
     },
+    'percentageMode': false,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#463F3A',
+    ],
+    'dateAggregation': 'Hour',
   },
   'line-1': {
     'title': 'Another Line Widget',
