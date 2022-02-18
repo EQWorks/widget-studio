@@ -85,6 +85,7 @@ const WidgetTitleBar = () => {
   // widget state
   const dataSource = useStoreState((state) => state.dataSource)
   const id = useStoreState((state) => state.id)
+  const tentativeConfig = useStoreState((state) => state.tentativeConfig)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
   // const unsavedChanges = true // mocked for now
@@ -218,7 +219,7 @@ const WidgetTitleBar = () => {
                     onClick={() => {
                       const { id, type } = dataSource || {}
                       if (type === dataSourceTypes.EXECUTIONS) {
-                        localStorage.setItem(`stored-widget-execution-${id}`, JSON.stringify(config))
+                        localStorage.setItem(`stored-widget-execution-${id}`, JSON.stringify(tentativeConfig))
                         window.open(`/widget-studio?executionID=${id}`, '_blank').focus()
                       } else {
                         toast({
