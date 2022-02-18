@@ -13,7 +13,7 @@ import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection 
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import MapLayerDisplay from './map-layer-display'
-import Filters from './filters'
+import Filters from './components/filters'
 import CustomDropdown from './components/custom-dropdown'
 import MutedBarrier from '../shared/muted-barrier'
 import { MAP_LEGEND_SIZE } from '../../constants/map'
