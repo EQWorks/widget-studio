@@ -63,6 +63,9 @@ const Widget = ({
   id,
   mode: _mode,
   staticData,
+  wl,
+  cu,
+  // temporary:
   rows: _rows,
   columns: _columns,
   executionID,
@@ -106,7 +109,8 @@ const Widget = ({
     // dispatch state
     update({
       dev,
-      id,
+      wl,
+      cu,
       ui: {
         mode: validatedMode,
         staticData,
@@ -145,7 +149,7 @@ const Widget = ({
     } else if (_config) {
       loadConfig(_config)
     }
-  }, [_columns, _config, _mode, _rows, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update])
+  }, [_columns, _config, _mode, _rows, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
 
 
   // load data if source changes
@@ -200,6 +204,8 @@ Widget.propTypes = {
   executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sampleData: PropTypes.object,
   sampleConfigs: PropTypes.object,
+  wl: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  cu: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
 Widget.defaultProps = {
   mode: modes.VIEW,
@@ -211,6 +217,8 @@ Widget.defaultProps = {
   executionID: -1,
   sampleData: null,
   sampleConfigs: null,
+  wl: null,
+  cu: null,
 }
 
 export default withQueryClient(withStore(Widget))
