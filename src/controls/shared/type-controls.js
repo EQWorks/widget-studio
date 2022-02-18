@@ -8,6 +8,7 @@ import types from '../../constants/types'
 import typeInfo from '../../constants/type-info'
 import modes from '../../constants/modes'
 import WidgetControlCard from './components/widget-control-card'
+import MutedBarrier from './muted-barrier'
 
 
 const commonClasses = {
@@ -159,70 +160,73 @@ const WidgetTypeControls = () => {
   const domain = useStoreState((state) => state.domain)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const mode = useStoreState((state) => state.ui.mode)
+  const dataReady = useStoreState((state) => state.dataReady)
 
   const classes = useStyles({ mode })
 
   return (
-    <WidgetControlCard title='Widget Type'>
-      <div className={classes.outerContainer}>
-        {
-          Object.entries(typeInfo).map(([type, { groupingOptional, icon: Icon, uniqueOptions }], i) => {
-            const disabled = type === types.MAP && !(validMapGroupKeys?.length)
-            let styles = [classes.icon]
-            disabled && styles.unshift(classes.disabledIcon)
-            type === selectedType && styles.unshift(classes.selectedIcon)
-            const renderIcon = (
-              <div className={styles.join(' ')}>
-                <Icon />
-                <p className={classes.label}>
-                  {type}
-                </p>
-              </div>
-            )
-            return (
-              <button
-                key={i}
-                variant='borderless'
-                className={`${classes.button} ${disabled ? classes.disabledButton : ''}`}
-                onClick={() => {
-                  if (!disabled && type !== selectedType) {
-                    const willGroup = !groupingOptional
-                    userUpdate({
-                      group: willGroup,
-                      ...(
-                        willGroup !== group && {
-                          groupFilter: [],
-                          valueKeys: [],
-                          ...(domain?.key && { [domain.key]: null }),
-                        }
-                      ),
-                      type,
-                      uniqueOptions:
+    <MutedBarrier mute={!dataReady} >
+      <WidgetControlCard title='Widget Type'>
+        <div className={classes.outerContainer}>
+          {
+            Object.entries(typeInfo).map(([type, { groupingOptional, icon: Icon, uniqueOptions }], i) => {
+              const disabled = type === types.MAP && !(validMapGroupKeys?.length)
+              let styles = [classes.icon]
+              disabled && styles.unshift(classes.disabledIcon)
+              type === selectedType && styles.unshift(classes.selectedIcon)
+              const renderIcon = (
+                <div className={styles.join(' ')}>
+                  <Icon />
+                  <p className={classes.label}>
+                    {type}
+                  </p>
+                </div>
+              )
+              return (
+                <button
+                  key={i}
+                  variant='borderless'
+                  className={`${classes.button} ${disabled ? classes.disabledButton : ''}`}
+                  onClick={() => {
+                    if (!disabled && type !== selectedType) {
+                      const willGroup = !groupingOptional
+                      userUpdate({
+                        group: willGroup,
+                        ...(
+                          willGroup !== group && {
+                            groupFilter: [],
+                            valueKeys: [],
+                            ...(domain?.key && { [domain.key]: null }),
+                          }
+                        ),
+                        type,
+                        uniqueOptions:
                         Object.entries(uniqueOptions).reduce((acc, [k, { defaultValue }]) => {
                           acc[k] = defaultValue
                           return acc
                         }, {}),
-                    })
+                      })
+                    }
+                  }}
+                >
+                  {
+                    disabled
+                      ? <Tooltip
+                        description='No geo columns found in this dataset'
+                        {...(mode === modes.EDITOR && { width: '10rem' })}
+                      >
+                        {renderIcon}
+                      </Tooltip>
+                      : renderIcon
                   }
-                }}
-              >
-                {
-                  disabled
-                    ? <Tooltip
-                      description='No geo columns found in this dataset'
-                      {...(mode === modes.EDITOR && { width: '10rem' })}
-                    >
-                      {renderIcon}
-                    </Tooltip>
-                    : renderIcon
-                }
-              </button>
+                </button>
+              )
+            }
             )
           }
-          )
-        }
-      </div >
-    </WidgetControlCard>
+        </div >
+      </WidgetControlCard>
+    </MutedBarrier>
   )
 }
 

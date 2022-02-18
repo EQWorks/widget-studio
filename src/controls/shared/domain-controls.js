@@ -30,7 +30,6 @@ const DomainControls = () => {
   const domain = useStoreState((state) => state.domain)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
   const dateAggregation = useStoreState((state) => state.dateAggregation)
-  const dataReady = useStoreState((state) => state.dataReady)
 
   // local state
   const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
@@ -62,7 +61,7 @@ const DomainControls = () => {
 
   return (
     <MutedBarrier
-      mute={dataReady && (!type || !Object.keys(eligibleDomainValues)?.length)}
+      mute={!type || !Object.keys(eligibleDomainValues)?.length}
       {...(type && !Object.keys(eligibleDomainValues)?.length &&
         { message: 'There are no eligible columns in this dataset.' }
       )}
