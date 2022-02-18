@@ -46,12 +46,12 @@ const WidgetMeta = () => {
     // ['Created Date', '09/09/09 10:23 AM'],
     // ['Last Updated', '09/09/09 10:23 AM'],
     ['Data Volume', dataReady
-      ? `${columns.length} columns ${rows.length} rows`
+      ? `${columns.length} column${columns.length !== 1 ? 's' : ''} ${rows.length} row${rows.length !== 1 ? 's' : ''}`
       : '...',
     ],
     ['Data Source',
       dataReady
-        ? `${dataSourceType} ${dataSourceID}${` - ${dataSourceName}` || ''}`
+        ? `${dataSourceType} ${dataSourceID}${dataSourceName ? ` - ${dataSourceName}` : ''}`
         : '...',
     ],
   ]), [columns.length, dataReady, dataSourceID, dataSourceName, dataSourceType, rows.length])
