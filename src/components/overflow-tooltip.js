@@ -1,8 +1,25 @@
 import React, { useState, Children, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Tooltip } from '@eqworks/lumen-labs'
+import { makeStyles, Tooltip } from '@eqworks/lumen-labs'
 import useResizeObserver from '@react-hook/resize-observer'
 
+
+const classes = makeStyles({
+  testChildren: {
+    visibility: 'hidden',
+    height: '0px',
+    display: 'flex',
+  },
+  tooltipChildren: {
+    maxWidth: '100%',
+    overflow: 'hidden',
+    '&> *': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+  },
+})
 
 const OverflowTooltip = ({ children, ...props }) => {
   const target = useRef(null)
@@ -11,13 +28,13 @@ const OverflowTooltip = ({ children, ...props }) => {
   const renderChildren = Children.map(children, child => child)
   return (
     <>
-      <span ref={target} className='invisible h-0 flex'>
+      <span ref={target} className={classes.testChildren}>
         {renderChildren}
       </span>
       {
         xOverflow
           ? <Tooltip {...props} >
-            <span className='max-w-full overflow-hidden children:truncate'>
+            <span className={classes.tooltipChildren}>
               {renderChildren}
             </span>
           </Tooltip>
