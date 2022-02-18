@@ -14,31 +14,44 @@ export const DROPDOWN_SELECT_CLASSES = {
 }
 const { root, ...baseClasses } = DROPDOWN_SELECT_CLASSES
 
-const CustomSelect = ({ multiSelect, data, value, onSelect, classes, onClear, fullWidth, icons, ...props }) => {
+const CustomSelect = ({
+  multiSelect,
+  data,
+  value,
+  onSelect,
+  classes,
+  onClear,
+  fullWidth,
+  icons,
+  descriptions,
+  ...props
+}) => {
+  const simple = useMemo(() => !(icons || descriptions), [descriptions, icons])
   const transformedData = useMemo(() => (
-    icons
-      ? [{
+    simple
+      ? data
+      : [{
         items: data.map((d, i) => ({
           title: d,
-          startIcon: createElement(icons[i], { size: 'sm' }),
+          ...(icons && { startIcon: createElement(icons[i], { size: 'sm' }) }),
+          ...(descriptions && { description: descriptions[i] }),
         })),
       }]
-      : data
-  ), [data, icons])
+  ), [data, descriptions, icons, simple])
   const transformedValue = useMemo(() => {
-    if (!icons) return value
+    if (simple) return value
     return multiSelect
       ? (value || []).map(title => ({ title })) || []
       : { title: value }
-  }, [icons, multiSelect, value])
+  }, [multiSelect, simple, value])
   const getTransformedTarget = useCallback(v => {
-    if (!icons) return v
+    if (simple) return v
     return multiSelect
       ? Object.values(v).map(({ title }) => title).filter(Boolean)
       : v.title
-  }, [icons, multiSelect])
+  }, [multiSelect, simple])
   return <DropdownSelect
-    simple={!icons}
+    simple={simple}
     classes={{
       root: fullWidth ? [root, 'w-full'].join(' ') : root,
       ...baseClasses,
@@ -65,6 +78,7 @@ CustomSelect.propTypes = {
   onClear: PropTypes.func,
   fullWidth: PropTypes.bool,
   icons: PropTypes.arrayOf(PropTypes.elementType),
+  descriptions: PropTypes.arrayOf(PropTypes.string),
 }
 CustomSelect.defaultProps = {
   classes: {},
@@ -74,6 +88,7 @@ CustomSelect.defaultProps = {
   onClear: () => { },
   fullWidth: false,
   icons: null,
+  descriptions: null,
 }
 
 export default CustomSelect
