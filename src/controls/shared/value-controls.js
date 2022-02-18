@@ -23,7 +23,7 @@ const ValueControls = () => {
   const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
-  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const dataReady = useStoreState((state) => state.dataReady)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
 
   const eligibleColumns = useMemo(() =>
@@ -85,8 +85,10 @@ const ValueControls = () => {
 
   return (
     <MutedBarrier
-      mute={!dataSourceLoading && (!type || !domain.value || !Object.keys(eligibleColumns)?.length)}
-      {...!Object.keys(eligibleColumns)?.length && { message: 'There are no eligible columns in this dataset.' }}
+      mute={dataReady && (!type || !domain.value || !Object.keys(eligibleColumns)?.length)}
+      {...(type && domain.value && !Object.keys(eligibleColumns)?.length &&
+        { message: 'There are no eligible columns in this dataset.' }
+      )}
     >
       <WidgetControlCard
         clear={() => resetValue({ valueKeys })}
