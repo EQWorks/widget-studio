@@ -21,7 +21,7 @@ const MAX_UNDO_STEPS = 10
 
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
-  { key: 'title', defaultValue: '', resettable: false },
+  { key: 'title', defaultValue: 'Untitled Widget', resettable: false },
   { key: 'type', defaultValue: '', resettable: true },
   { key: 'filters', defaultValue: [], resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
@@ -431,8 +431,8 @@ export default {
       },
       dataSource,
     })
-    const { isReady, sampleData } = getState()
-    const isReload = isReady
+    const { sampleData, dataSource: previousDataSource } = getState()
+    const init = !previousDataSource?.id || !previousDataSource?.type
     requestData(dataSource.type, dataSource.id, sampleData)
       .then(data => {
         const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
@@ -447,9 +447,9 @@ export default {
             dataSourceError: null,
           },
         })
-        if (isReload) {
+        if (!init) {
           actions.toast({
-            title: `${name} reloaded successfully`,
+            title: `${name} loaded successfully`,
             color: 'success',
           })
         }
