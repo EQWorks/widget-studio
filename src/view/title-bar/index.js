@@ -186,6 +186,7 @@ const WidgetTitleBar = () => {
               size='sm'
               onClick={() => loadData(dataSource)}
               startIcon={<Icons.Cycle size='md' />}
+              disabled={!(dataSource?.id && dataSource?.type)}
             >
               reload data
             </CustomButton>
