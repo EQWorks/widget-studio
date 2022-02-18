@@ -98,7 +98,7 @@ export default {
 
   /** COMPUTED STATE ------------------------------------------------------------ */
 
-  config: computed(
+  tentativeConfig: computed(
     [
       (state) => state.title,
       (state) => state.type,
@@ -138,32 +138,41 @@ export default {
       percentageMode,
       presetColors,
       dateAggregation,
-    ) => (
+    ) => ({
+      title,
+      type,
+      filters: filters.filter(({ key, filter }) => key && filter),
+      groupFilter,
+      valueKeys: type !== types.MAP ? renderableValueKeys : [],
+      mapValueKeys: type === types.MAP ? renderableValueKeys : [],
+      formatDataFunctions,
+      group,
+      groupKey,
+      mapGroupKey,
+      indexKey,
+      ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
+      ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
+      ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
+      uniqueOptions,
+      genericOptions,
+      dataSource: { type: dataSourceType, id: dataSourceID },
+      percentageMode,
+      presetColors,
+      dateAggregation,
+    })),
+
+  config: computed(
+    [
+      (state) => state.tentativeConfig,
+      (state) => state.isReady,
+    ],
+    (
+      tentativeConfig,
       isReady
-        ? {
-          title,
-          type,
-          filters: filters.filter(({ key, filter }) => key && filter),
-          groupFilter,
-          valueKeys: type !== types.MAP ? renderableValueKeys : [],
-          mapValueKeys: type === types.MAP ? renderableValueKeys : [],
-          formatDataFunctions,
-          group,
-          groupKey,
-          mapGroupKey,
-          indexKey,
-          ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
-          ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
-          ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
-          uniqueOptions,
-          genericOptions,
-          dataSource: { type: dataSourceType, id: dataSourceID },
-          percentageMode,
-          presetColors,
-          dateAggregation,
-        }
-        : undefined
-    )),
+    ) => (
+      isReady ? tentativeConfig : undefined
+    )
+  ),
 
   columnsAnalysis: computed(
     [
