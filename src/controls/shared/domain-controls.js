@@ -32,23 +32,23 @@ const DomainControls = () => {
   const dateAggregation = useStoreState((state) => state.dateAggregation)
 
   // local state
-  const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
+  const { mustGroup } = useMemo(() => typeInfo[type] || {}, [type])
 
   const eligibleDomainValues = useMemo(() => (
     Object.fromEntries(
       Object.entries(columnsAnalysis)
         .filter(([c, { isNumeric }]) =>
-          (groupingOptional || !isNumeric)
+          (!mustGroup || !isNumeric)
           && !(valueKeys.map(({ key }) => key).includes(c)))
         .map(([c, { Icon }]) => [c, { Icon }])
     )
-  ), [columnsAnalysis, groupingOptional, valueKeys])
+  ), [columnsAnalysis, mustGroup, valueKeys])
 
   useEffect(() => {
-    if (!group && !groupingOptional) {
+    if (!group && mustGroup) {
       update({ group: true })
     }
-  }, [group, groupingOptional, update])
+  }, [group, mustGroup, update])
 
   const renderCategory = () => {
     const { category } = columnsAnalysis[domain.value] || {}
@@ -78,7 +78,7 @@ const DomainControls = () => {
                     icons={Object.values(eligibleDomainValues).map(({ Icon }) => Icon)}
                     value={domain.value}
                     onSelect={val => {
-                      const willGroup = !columnsAnalysis[val]?.isNumeric && !groupingOptional
+                      const willGroup = !columnsAnalysis[val]?.isNumeric && mustGroup
                       userUpdate({
                         group: willGroup,
                         ...(

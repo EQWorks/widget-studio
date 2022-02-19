@@ -10,7 +10,7 @@ export default {
   [types.LINE]: {
     icon: Icons.LineChart,
     adapter: PlotlyAdapters[types.LINE],
-    groupingOptional: true,
+    mustGroup: false,
     uniqueOptions: {
       showTicks: {
         name: 'Ticks',
@@ -27,7 +27,7 @@ export default {
   [types.BAR]: {
     icon: Icons.BarChart,
     adapter: PlotlyAdapters[types.BAR],
-    groupingOptional: false,
+    mustGroup: true,
     uniqueOptions: {
       stacked: {
         name: 'Stacked',
@@ -44,7 +44,7 @@ export default {
   [types.SCATTER]: {
     icon: Icons.ScatterPlot,
     adapter: PlotlyAdapters[types.SCATTER],
-    groupingOptional: true,
+    mustGroup: false,
     uniqueOptions: {
       showTicks: {
         name: 'Ticks',
@@ -61,7 +61,7 @@ export default {
   [types.PIE]: {
     icon: Icons.PieChart,
     adapter: PlotlyAdapters[types.PIE],
-    groupingOptional: false,
+    mustGroup: true,
     uniqueOptions: {
       donut: {
         name: 'Donut',
@@ -78,7 +78,7 @@ export default {
   [types.MAP]: {
     icon: Icons.MapChart,
     adapter: ReactMapsAdapter,
-    groupingOptional: false,
+    mustGroup: true,
     uniqueOptions: {
       radius: {
         name: 'Radius (px)',

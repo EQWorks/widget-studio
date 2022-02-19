@@ -169,7 +169,7 @@ const WidgetTypeControls = () => {
       <WidgetControlCard title='Widget Type'>
         <div className={classes.outerContainer}>
           {
-            Object.entries(typeInfo).map(([type, { groupingOptional, icon: Icon, uniqueOptions }], i) => {
+            Object.entries(typeInfo).map(([type, { mustGroup, icon: Icon, uniqueOptions }], i) => {
               const disabled = type === types.MAP && !(validMapGroupKeys?.length)
               let styles = [classes.icon]
               disabled && styles.unshift(classes.disabledIcon)
@@ -189,11 +189,10 @@ const WidgetTypeControls = () => {
                   className={`${classes.button} ${disabled ? classes.disabledButton : ''}`}
                   onClick={() => {
                     if (!disabled && type !== selectedType) {
-                      const willGroup = !groupingOptional
                       userUpdate({
-                        group: willGroup,
+                        group: mustGroup,
                         ...(
-                          willGroup !== group && {
+                          mustGroup !== group && {
                             groupFilter: [],
                             valueKeys: [],
                             ...(domain?.key && { [domain.key]: null }),
