@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo } from 'react'
 
 import { Chip, makeStyles } from '@eqworks/lumen-labs'
 
@@ -44,12 +44,6 @@ const DomainControls = () => {
     )
   ), [columnsAnalysis, mustGroup, valueKeys])
 
-  useEffect(() => {
-    if (!group && mustGroup) {
-      update({ group: true })
-    }
-  }, [group, mustGroup, update])
-
   const renderCategory = () => {
     const { category } = columnsAnalysis[domain.value] || {}
     return (category &&
@@ -78,7 +72,7 @@ const DomainControls = () => {
                     icons={Object.values(eligibleDomainValues).map(({ Icon }) => Icon)}
                     value={domain.value}
                     onSelect={val => {
-                      const willGroup = !columnsAnalysis[val]?.isNumeric && mustGroup
+                      const willGroup = mustGroup || !columnsAnalysis[val]?.isNumeric
                       userUpdate({
                         group: willGroup,
                         ...(
