@@ -2,12 +2,17 @@ import React, { useState } from 'react'
 import { storiesOf } from '@storybook/react'
 import { Resizable } from 're-resizable'
 
+import { Authenticated } from '@eqworks/common-login'
+
 import modes from '../src/constants/modes'
 import sampleData from './sample-data'
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
 import CustomToggle from '../src/components/custom-toggle'
 
+
+const DEFAULT_WL = 4
+const DEFAULT_CU = 9533
 
 const devProps = {
   sampleData,
@@ -81,11 +86,13 @@ storiesOf('Multiple widgets (dashboard)')
   })
 
 // add blank widget
-storiesOf('Blank widget (no ID)', module)
-  .add('Blank widget (no ID)', () => (
-    <Resizable style={{ margin: '1rem' }} >
-      <Widget {...devProps}
+storiesOf('Blank Widget (data source control)', module)
+  .add('Blank Widget (data source control)', () => (
+    <Authenticated product='locus'>
+      <Widget
+        wl={DEFAULT_WL}
+        cu={DEFAULT_CU}
         mode='editor'
       />
-    </Resizable>
+    </Authenticated>
   ))
