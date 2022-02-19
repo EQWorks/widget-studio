@@ -39,6 +39,8 @@ const stateDefaults = [
       groupByValue: false,
       showLegend: true,
       showTooltip: true,
+      showAxisTitles: true,
+      showSubPlotTitles: true,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],

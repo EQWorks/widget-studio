@@ -45,34 +45,69 @@ const EditorRightSidebar = () => {
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
   const legendSize = useStoreState((state) => state.genericOptions.legendSize)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
+  const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
+  const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
 
   const renderGenericOptions = (
     <>
-      {renderToggle(
-        'Legend',
-        showLegend,
-        v => userUpdate({ genericOptions: { showLegend: v } }),
-      )}
-      {type === types.MAP &&
-        renderToggle(
-          'Tooltip',
-          showTooltip,
-          v => userUpdate({ genericOptions: { showTooltip: v } }),
+      {
+        renderRow(null,
+          type !== types.MAP &&
+          <>
+            {
+              renderToggle(
+                'Title',
+                showWidgetTitle,
+                v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
+              )
+            }
+            {type !== types.PIE &&
+              renderToggle(
+                'Axis Titles',
+                showAxisTitles,
+                v => userUpdate({ genericOptions: { showAxisTitles: v } }),
+                false
+              )
+            }
+            {subPlots || type === types.PIE &&
+              renderToggle(
+                'Subplot Titles',
+                showSubPlotTitles,
+                v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
+              )
+            }
+          </>,
+          null,
+          subPlots && type !== types.PIE // really dumb, but temporary until control item layout mechanism is reworked
         )
       }
-      {type !== types.MAP && type !== types.PIE &&
-        renderToggle(
-          'Subplots',
-          subPlots,
-          v => userUpdate({ genericOptions: { subPlots: v } }),
-          valueKeys.length <= 1
-        )}
-      {type !== types.MAP &&
-        renderToggle(
-          'Title',
-          showWidgetTitle,
-          v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
+      {
+        renderRow(null,
+          <>
+            {renderToggle(
+              'Legend',
+              showLegend,
+              v => userUpdate({ genericOptions: { showLegend: v } }),
+            )}
+            {type === types.MAP
+              ? renderToggle(
+                'Tooltip',
+                showTooltip,
+                v => userUpdate({ genericOptions: { showTooltip: v } }),
+              )
+              : <>
+                {type !== types.PIE &&
+                  renderToggle(
+                    'Subplots',
+                    subPlots,
+                    v => userUpdate({ genericOptions: { subPlots: v } }),
+                    valueKeys.length <= 1
+                  )
+                }
+              </>
+            }
+          </>
         )
       }
     </>
@@ -153,7 +188,7 @@ const EditorRightSidebar = () => {
                 {renderSection(
                   'Display Options',
                   <>
-                    {renderRow(null, renderGenericOptions)}
+                    {renderGenericOptions}
                     {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
                   </>
                 )}
