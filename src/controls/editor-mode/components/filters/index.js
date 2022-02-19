@@ -31,7 +31,7 @@ const Filters = () => {
       .map(([c, { Icon }]) => [c, { Icon }]))
   ), [columnsAnalysis])
 
-  const renderDomainFilter = (
+  const renderGroupFilter = (
     domainIsDate
       ? <DateDomainFilter/>
       : <CustomSelect
@@ -104,7 +104,7 @@ const Filters = () => {
         renderSection(
           null,
           <>
-            {renderRow('Domain Filter', renderDomainFilter)}
+            {renderRow('Group Filter', renderGroupFilter)}
             {renderRow('Range Filters', renderRangeFilters)}
           </>
         )
