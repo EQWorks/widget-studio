@@ -83,13 +83,16 @@ const PluralLinkedSelect = ({
   const renderValue = i => {
     const primary = values[i]?.[primaryKey]
     const secondary = values[i]?.[secondaryKey]
+    const remainingData = data
+      .map((d, i) => ({ d, i }))
+      .filter((({ d }) => primary === d || !values.map(v => v[primaryKey]).includes(d)))
     return (
       <LinkedSelect
         key={i}
         className={`${i > 0 ? 'mt-2' : ''}`}
         callback={([_k, _v]) => callback(i, { [primaryKey]: _k, [secondaryKey]: _v })}
-        data={data.filter(d => primary === d || !values.map(v => v[primaryKey]).includes(d))}
-        {...(valueIcons && { icons: valueIcons })}
+        data={remainingData.map(({ d }) => d)}
+        {...(valueIcons && { icons: remainingData.map(({ i }) => valueIcons[i]) })}
         init={primary}
         subData={subData}
         subInit={values[i]?.[secondaryKey]}
@@ -171,7 +174,7 @@ PluralLinkedSelect.propTypes = {
   callback: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
-  valueIcons: PropTypes.array,
+  valueIcons: PropTypes.arrayOf(PropTypes.elementType),
   disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
   addMessage: PropTypes.string,
