@@ -33,12 +33,16 @@ const classes = makeStyles({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  tightRow: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
     '> *': {
-      marginRight: '0.8rem',
+      flex: 'auto !important',
     },
-    '> :last-child': {
-      marginRight: '0px !important',
-    },
+    justifyContent: 'space-between',
   },
   rowContainer: {
     width: '100%',
@@ -101,7 +105,7 @@ export const renderSection = (title, Component) => (
   </div>
 )
 
-export const renderRow = (title, Component, titleExtra) => (
+export const renderRow = (title, Component, titleExtra, tight = false) => (
   Component &&
   <div className={classes.rowContainer}>
     {(title || titleExtra) &&
@@ -110,7 +114,7 @@ export const renderRow = (title, Component, titleExtra) => (
         {titleExtra && titleExtra}
       </div>
     }
-    <div className={classes.row}>
+    <div className={tight ? classes.tightRow : classes.row}>
       {Component}
     </div>
   </div>

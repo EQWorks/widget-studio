@@ -38,8 +38,6 @@ export default {
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
-      // overrides
-      subPlots: true,
     }),
   },
   [types.SCATTER]: {
