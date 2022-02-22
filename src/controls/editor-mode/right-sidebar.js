@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
@@ -33,6 +33,7 @@ const classes = makeStyles({
 })
 
 const EditorRightSidebar = () => {
+  const update = useStoreActions((state) => state.update)
   const userUpdate = useStoreActions((state) => state.userUpdate)
   const type = useStoreState((state) => state.type)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
@@ -47,6 +48,12 @@ const EditorRightSidebar = () => {
   const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
   const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
+
+  useEffect(() => {
+    if (renderableValueKeys?.length <= 1) {
+      update({ genericOptions: { subPlots: false } })
+    }
+  }, [renderableValueKeys?.length, update])
 
   const renderGenericOptions = (
     <>
@@ -119,7 +126,7 @@ const EditorRightSidebar = () => {
           selectedString={positions.string[positions.numeric.map(JSON.stringify)
             .indexOf(JSON.stringify(titlePosition))]}
           classes={{ menu: classes.xyDropdownMenu }}
-          disabled={!showWidgetTitle && !subPlots}
+          disabled={!showWidgetTitle && (!showSubPlotTitles || !subPlots)}
         >
           <XYSelect
             value={titlePosition}
