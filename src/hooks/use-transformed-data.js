@@ -99,7 +99,7 @@ const useTransformedData = () => {
       const data = Object.values(groupedData)
       if (data[0]) {
         const testKey = Object.keys(data[0])[0]
-        update({ dataHasVariance: data.some(g => g[testKey].length > 1) })
+        update({ dataHasVariance: data.some(g => g[testKey]?.length > 1) })
       }
     }
   }, [update, groupedData])

@@ -24,6 +24,7 @@ const useStyles = ({ mute, message, variant }) => makeStyles({
         opacity: 1,
       }),
     position: 'relative',
+    ...(variant === 1 && { height: '100%' }),
   },
   ...(variant === 0 && {
     message: {

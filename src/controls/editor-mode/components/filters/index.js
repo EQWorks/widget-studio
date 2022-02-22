@@ -2,12 +2,12 @@ import React, { useMemo } from 'react'
 
 import {  Icons } from '@eqworks/lumen-labs'
 
-import { useStoreState, useStoreActions } from '../../../store'
-import WidgetControlCard from '../../shared/components/widget-control-card'
-import { renderSection, renderRow } from '../../shared/util'
-import PluralLinkedSelect from '../../../components/plural-linked-select'
-import CustomSelect from '../../../components/custom-select'
-import SliderControl from '../components/slider-control'
+import { useStoreState, useStoreActions } from '../../../../store'
+import WidgetControlCard from '../../../shared/components/widget-control-card'
+import { renderSection, renderRow } from '../../../shared/util'
+import PluralLinkedSelect from '../../../../components/plural-linked-select'
+import CustomSelect from '../../../../components/custom-select'
+import SliderControl from '../../components/slider-control'
 import DateDomainFilter from './date-domain-filter'
 
 
@@ -31,7 +31,7 @@ const Filters = () => {
       .map(([c, { Icon }]) => [c, { Icon }]))
   ), [columnsAnalysis])
 
-  const renderDomainFilter = (
+  const renderGroupFilter = (
     domainIsDate
       ? <DateDomainFilter/>
       : <CustomSelect
@@ -104,7 +104,7 @@ const Filters = () => {
         renderSection(
           null,
           <>
-            {renderRow('Domain Filter', renderDomainFilter)}
+            {renderRow('Group Filter', renderGroupFilter)}
             {renderRow('Range Filters', renderRangeFilters)}
           </>
         )

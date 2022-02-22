@@ -40,7 +40,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         display: 'flex',
         flexDirection: 'column',
         width: '100vw',
-        minHeight: '100vh',
+        minHeight: '100%',
       },
       ...commonClasses,
     }
@@ -73,6 +73,7 @@ const Widget = ({
   const classes = useStyles(_mode)
 
   // easy-peasy actions
+  const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
   const loadConfig = useStoreActions((actions) => actions.loadConfig)
   const loadConfigByID = useStoreActions(actions => actions.loadConfigByID)
@@ -113,6 +114,7 @@ const Widget = ({
     })
     if (_rows && _columns) {
       // use manually passed data if available
+      resetWidget()
       update({
         rows: _rows,
         columns: _columns,
@@ -143,7 +145,7 @@ const Widget = ({
     } else if (_config) {
       loadConfig(_config)
     }
-  }, [_columns, _config, _mode, _rows, executionID, id, loadConfig, loadConfigByID, mode, sampleConfigs, sampleData, staticData, update])
+  }, [_columns, _config, _mode, _rows, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update])
 
 
   // load data if source changes

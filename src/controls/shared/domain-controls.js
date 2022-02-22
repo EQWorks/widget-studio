@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo } from 'react'
 
 import { Chip, makeStyles } from '@eqworks/lumen-labs'
 
@@ -32,23 +32,17 @@ const DomainControls = () => {
   const dateAggregation = useStoreState((state) => state.dateAggregation)
 
   // local state
-  const groupingOptional = useMemo(() => typeInfo[type]?.groupingOptional, [type])
+  const { mustGroup } = useMemo(() => typeInfo[type] || {}, [type])
 
   const eligibleDomainValues = useMemo(() => (
     Object.fromEntries(
       Object.entries(columnsAnalysis)
         .filter(([c, { isNumeric }]) =>
-          (groupingOptional || !isNumeric)
+          (!mustGroup || !isNumeric)
           && !(valueKeys.map(({ key }) => key).includes(c)))
         .map(([c, { Icon }]) => [c, { Icon }])
     )
-  ), [columnsAnalysis, groupingOptional, valueKeys])
-
-  useEffect(() => {
-    if (!group && !groupingOptional) {
-      update({ group: true })
-    }
-  }, [group, groupingOptional, update])
+  ), [columnsAnalysis, mustGroup, valueKeys])
 
   const renderCategory = () => {
     const { category } = columnsAnalysis[domain.value] || {}
@@ -60,7 +54,12 @@ const DomainControls = () => {
   }
 
   return (
-    <MutedBarrier mute={!type}>
+    <MutedBarrier
+      mute={!type || !Object.keys(eligibleDomainValues)?.length}
+      {...(type && !Object.keys(eligibleDomainValues)?.length &&
+        { message: 'There are no eligible columns in this dataset.' }
+      )}
+    >
       <WidgetControlCard title={'Domain Configuration'} >
         {
           renderRow(null,
@@ -73,7 +72,7 @@ const DomainControls = () => {
                     icons={Object.values(eligibleDomainValues).map(({ Icon }) => Icon)}
                     value={domain.value}
                     onSelect={val => {
-                      const willGroup = !columnsAnalysis[val]?.isNumeric && !groupingOptional
+                      const willGroup = mustGroup || !columnsAnalysis[val]?.isNumeric
                       userUpdate({
                         group: willGroup,
                         ...(

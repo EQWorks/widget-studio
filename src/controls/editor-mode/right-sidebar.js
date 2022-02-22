@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
@@ -13,7 +13,7 @@ import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection 
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import MapLayerDisplay from './map-layer-display'
-import Filters from './filters'
+import Filters from './components/filters'
 import CustomDropdown from './components/custom-dropdown'
 import MutedBarrier from '../shared/muted-barrier'
 import { MAP_LEGEND_SIZE } from '../../constants/map'
@@ -33,10 +33,10 @@ const classes = makeStyles({
 })
 
 const EditorRightSidebar = () => {
+  const update = useStoreActions((state) => state.update)
   const userUpdate = useStoreActions((state) => state.userUpdate)
   const type = useStoreState((state) => state.type)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
-  const valueKeys = useStoreState((state) => state.valueKeys)
   const domain = useStoreState((state) => state.domain)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
   const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
@@ -45,34 +45,75 @@ const EditorRightSidebar = () => {
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
   const legendSize = useStoreState((state) => state.genericOptions.legendSize)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
+  const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
+  const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
+
+  useEffect(() => {
+    if (renderableValueKeys?.length <= 1) {
+      update({ genericOptions: { subPlots: false } })
+    }
+  }, [renderableValueKeys?.length, update])
 
   const renderGenericOptions = (
     <>
-      {renderToggle(
-        'Legend',
-        showLegend,
-        v => userUpdate({ genericOptions: { showLegend: v } }),
-      )}
-      {type === types.MAP &&
-        renderToggle(
-          'Tooltip',
-          showTooltip,
-          v => userUpdate({ genericOptions: { showTooltip: v } }),
+      {
+        renderRow(null,
+          type !== types.MAP &&
+          <>
+            {
+              renderToggle(
+                'Title',
+                showWidgetTitle,
+                v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
+              )
+            }
+            {type !== types.PIE &&
+              renderToggle(
+                'Axis Titles',
+                showAxisTitles,
+                v => userUpdate({ genericOptions: { showAxisTitles: v } }),
+                false
+              )
+            }
+            {(subPlots || type === types.PIE) &&
+              renderToggle(
+                'Subplot Titles',
+                showSubPlotTitles,
+                v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
+              )
+            }
+          </>,
+          null,
+          subPlots && type !== types.PIE // really dumb, but temporary until control item layout mechanism is reworked
         )
       }
-      {type !== types.MAP && type !== types.PIE &&
-        renderToggle(
-          'Subplots',
-          subPlots,
-          v => userUpdate({ genericOptions: { subPlots: v } }),
-          valueKeys.length <= 1
-        )}
-      {type !== types.MAP &&
-        renderToggle(
-          'Title',
-          showWidgetTitle,
-          v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
+      {
+        renderRow(null,
+          <>
+            {renderToggle(
+              'Legend',
+              showLegend,
+              v => userUpdate({ genericOptions: { showLegend: v } }),
+            )}
+            {type === types.MAP
+              ? renderToggle(
+                'Tooltip',
+                showTooltip,
+                v => userUpdate({ genericOptions: { showTooltip: v } }),
+              )
+              : <>
+                {type !== types.PIE &&
+                  renderToggle(
+                    'Subplots',
+                    subPlots,
+                    v => userUpdate({ genericOptions: { subPlots: v } }),
+                    renderableValueKeys?.length <= 1
+                  )
+                }
+              </>
+            }
+          </>
         )
       }
     </>
@@ -85,7 +126,7 @@ const EditorRightSidebar = () => {
           selectedString={positions.string[positions.numeric.map(JSON.stringify)
             .indexOf(JSON.stringify(titlePosition))]}
           classes={{ menu: classes.xyDropdownMenu }}
-          disabled={!showWidgetTitle && !subPlots}
+          disabled={!showWidgetTitle && (!showSubPlotTitles || !subPlots)}
         >
           <XYSelect
             value={titlePosition}
@@ -144,7 +185,7 @@ const EditorRightSidebar = () => {
 
   return (
     <EditorSidebarBase>
-      <MutedBarrier mute={!type || !domain?.value || !(renderableValueKeys.length)} >
+      <MutedBarrier mute={!type || !domain?.value || !(renderableValueKeys?.length)} >
         <Filters />
         <WidgetControlCard title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}>
           {
@@ -153,7 +194,7 @@ const EditorRightSidebar = () => {
                 {renderSection(
                   'Display Options',
                   <>
-                    {renderRow(null, renderGenericOptions)}
+                    {renderGenericOptions}
                     {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
                   </>
                 )}

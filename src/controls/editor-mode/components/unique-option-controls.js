@@ -11,8 +11,8 @@ const UniqueOptionControls = ({ type }) => {
   const uniqueOptions = useStoreState((state) => state.uniqueOptions)
   return (
     Object.entries(typeInfo[type]?.uniqueOptions || {})
-      .map(([k, { name, type }], i) => {
-        switch (type) {
+      .map(([k, { name, type: _type }], i) => {
+        switch (_type) {
           case Boolean: // TODO support types other than bool
             return renderCheckbox(
               name,

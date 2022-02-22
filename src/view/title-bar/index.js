@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { ButtonGroup, Accordion, Icons, Chip, makeStyles, getTailwindConfigColor, Tooltip } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import saveConfig from '../../util/save-config'
@@ -31,6 +31,11 @@ const commonClasses = {
     alignItems: 'center',
     width: '1.4rem !important',
     height: '1.4rem !important',
+  },
+  saveButton: {
+    marginLeft: '0.357rem',
+    display: 'flex',
+    alignItems: 'stretch',
   },
 }
 
@@ -85,6 +90,7 @@ const WidgetTitleBar = () => {
   // widget state
   const dataSource = useStoreState((state) => state.dataSource)
   const id = useStoreState((state) => state.id)
+  const tentativeConfig = useStoreState((state) => state.tentativeConfig)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
   // const unsavedChanges = true // mocked for now
@@ -185,9 +191,32 @@ const WidgetTitleBar = () => {
               size='sm'
               onClick={() => loadData(dataSource)}
               startIcon={<Icons.Cycle size='md' />}
+              disabled={!(dataSource?.id && dataSource?.type)}
             >
               reload data
             </CustomButton>
+            <div className={classes.saveButton}>
+              <Tooltip description="Coming soon" position="left" width="6rem">
+                <ButtonGroup variant='filled' size='sm'>
+                  <CustomButton
+                    disabled
+                    variant='filled'
+                    size='sm'
+                    onClick={() => loadData(dataSource)}
+                  >
+                    save
+                  </CustomButton>
+                  <CustomButton
+                    disabled
+                    variant='filled'
+                    size='sm'
+                    onClick={() => loadData(dataSource)}
+                  >
+                    <Icons.ArrowDown size='sm' />
+                  </CustomButton>
+                </ButtonGroup>
+              </Tooltip>
+            </div>
           </div>
         </div>
       )
@@ -218,7 +247,7 @@ const WidgetTitleBar = () => {
                     onClick={() => {
                       const { id, type } = dataSource || {}
                       if (type === dataSourceTypes.EXECUTIONS) {
-                        localStorage.setItem(`stored-widget-execution-${id}`, JSON.stringify(config))
+                        localStorage.setItem(`stored-widget-execution-${id}`, JSON.stringify(tentativeConfig))
                         window.open(`/widget-studio?executionID=${id}`, '_blank').focus()
                       } else {
                         toast({

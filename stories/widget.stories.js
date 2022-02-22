@@ -34,7 +34,9 @@ Object.values(modes).forEach(mode => {
       storiesOf(`${mode.toUpperCase()} mode`, module)
         .add(label, () => (
           mode === modes.EDITOR
-            ? renderWidget
+            ? <div style={{ width: '100vw', height: '100vh', background: 'blue' }}>
+              {renderWidget}
+            </div>
             : <Resizable
               style={{ margin: '1rem' }}
               defaultSize={mode === modes.VIEW ? { height: '500' } : {}}

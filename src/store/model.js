@@ -21,7 +21,7 @@ const MAX_UNDO_STEPS = 10
 
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
-  { key: 'title', defaultValue: '', resettable: false },
+  { key: 'title', defaultValue: 'Untitled Widget', resettable: false },
   { key: 'type', defaultValue: '', resettable: true },
   { key: 'filters', defaultValue: [], resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
@@ -39,6 +39,8 @@ const stateDefaults = [
       groupByValue: false,
       showLegend: true,
       showTooltip: true,
+      showAxisTitles: true,
+      showSubPlotTitles: true,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],
@@ -98,7 +100,7 @@ export default {
 
   /** COMPUTED STATE ------------------------------------------------------------ */
 
-  config: computed(
+  tentativeConfig: computed(
     [
       (state) => state.title,
       (state) => state.type,
@@ -138,32 +140,41 @@ export default {
       percentageMode,
       presetColors,
       dateAggregation,
-    ) => (
+    ) => ({
+      title,
+      type,
+      filters: filters.filter(({ key, filter }) => key && filter),
+      groupFilter,
+      valueKeys: type !== types.MAP ? renderableValueKeys : [],
+      mapValueKeys: type === types.MAP ? renderableValueKeys : [],
+      formatDataFunctions,
+      group,
+      groupKey,
+      mapGroupKey,
+      indexKey,
+      ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
+      ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
+      ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
+      uniqueOptions,
+      genericOptions,
+      dataSource: { type: dataSourceType, id: dataSourceID },
+      percentageMode,
+      presetColors,
+      dateAggregation,
+    })),
+
+  config: computed(
+    [
+      (state) => state.tentativeConfig,
+      (state) => state.isReady,
+    ],
+    (
+      tentativeConfig,
       isReady
-        ? {
-          title,
-          type,
-          filters: filters.filter(({ key, filter }) => key && filter),
-          groupFilter,
-          valueKeys: type !== types.MAP ? renderableValueKeys : [],
-          mapValueKeys: type === types.MAP ? renderableValueKeys : [],
-          formatDataFunctions,
-          group,
-          groupKey,
-          mapGroupKey,
-          indexKey,
-          ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
-          ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
-          ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
-          uniqueOptions,
-          genericOptions,
-          dataSource: { type: dataSourceType, id: dataSourceID },
-          percentageMode,
-          presetColors,
-          dateAggregation,
-        }
-        : undefined
-    )),
+    ) => (
+      isReady ? tentativeConfig : undefined
+    )
+  ),
 
   columnsAnalysis: computed(
     [
@@ -422,8 +433,8 @@ export default {
       },
       dataSource,
     })
-    const { isReady, sampleData } = getState()
-    const isReload = isReady
+    const { sampleData, dataSource: previousDataSource } = getState()
+    const init = !previousDataSource?.id || !previousDataSource?.type
     requestData(dataSource.type, dataSource.id, sampleData)
       .then(data => {
         const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
@@ -438,9 +449,9 @@ export default {
             dataSourceError: null,
           },
         })
-        if (isReload) {
+        if (!init) {
           actions.toast({
-            title: `${name} reloaded successfully`,
+            title: `${name} loaded successfully`,
             color: 'success',
           })
         }

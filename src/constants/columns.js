@@ -13,7 +13,7 @@ export const columnTypes = {
 export const columnTypeInfo = {
   // 'primitives':
   [columnTypes.NUMERIC]: {
-    color: 'green',
+    color: 'yellow',
     Icon: Icons.Hash,
     validate: (v, name) => {
       const res = !isNaN(v)
@@ -23,13 +23,13 @@ export const columnTypeInfo = {
     },
   },
   [columnTypes.STRING]: {
-    color: 'blue',
+    color: 'purple',
     Icon: Icons.Edit,
     validate: isString,
   },
   // subtypes:
   [columnTypes.PRICE]: {
-    color: 'green',
+    color: 'yellow',
     parentTypes: [
       columnTypes.NUMERIC,
     ],
@@ -38,7 +38,7 @@ export const columnTypeInfo = {
     normalize: (c) => c.map(priceStringToNumeric),
   },
   [columnTypes.DATE]: {
-    color: 'purple',
+    color: 'red',
     parentTypes: [
       columnTypes.STRING,
     ],
