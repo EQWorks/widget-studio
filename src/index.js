@@ -40,7 +40,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         display: 'flex',
         flexDirection: 'column',
         width: '100vw',
-        minHeight: '100vh',
+        minHeight: '100%',
       },
       ...commonClasses,
     }
