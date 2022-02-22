@@ -33,8 +33,10 @@ export const GEO_KEY_TYPES = {
 export const MAP_LAYER_GEO_KEYS = {
   scatterplot: [
     'poi',
+    'poi_name',
     'poi_id',
     'locus_poi_id',
+    'locus_poi_name',
   ],
   // geojson: Object.values(GEO_KEY_TYPES).flat(),
   // just remove for the moment postal codes, da & ct
