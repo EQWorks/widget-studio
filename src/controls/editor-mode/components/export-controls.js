@@ -16,6 +16,11 @@ const classes = makeStyles({
     position: 'absolute',
     display: 'none',
   },
+  exportButton: {
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: '0.714rem',
+  },
 })
 
 const ExportControls = () => {
@@ -50,18 +55,21 @@ const ExportControls = () => {
             data={EXPORT_TYPES.map(({ label }) => label)}
             onSelect={v => update({ ui: { exportType: EXPORT_TYPES[EXPORT_TYPES.map(({ label }) => label).indexOf(v)] } })}
           />
-          <CustomButton
-            variant='filled'
-            endIcon={<Icons.DownloadBold size='sm' />}
-            onClick={async () => {
-              const { mime, extension } = exportType || {}
-              if (mime && extension) {
-                setImage(await screenshot(screenshotRef, mime))
-              }
-            }}
-          >
-            export
-          </CustomButton>
+          <div className={classes.exportButton}>
+            <CustomButton
+              size='md'
+              variant='filled'
+              endIcon={<Icons.DownloadBold size='sm' />}
+              onClick={async () => {
+                const { mime, extension } = exportType || {}
+                if (mime && extension) {
+                  setImage(await screenshot(screenshotRef, mime))
+                }
+              }}
+            >
+              EXPORT
+            </CustomButton>
+          </div>
         </>
       )}
     </WidgetControlCard >
