@@ -37,8 +37,8 @@ export const MAP_LAYER_GEO_KEYS = {
     'locus_poi_id',
   ],
   // geojson: Object.values(GEO_KEY_TYPES).flat(),
-  // just remove for the moment postal codes
-  geojson: [...GEO_KEY_TYPES.fsa, ...GEO_KEY_TYPES.da, ...GEO_KEY_TYPES.ct],
+  // just remove for the moment postal codes, da & ct
+  geojson: [...GEO_KEY_TYPES.fsa],
 }
 
 export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
