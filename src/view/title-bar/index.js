@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { ButtonGroup, Accordion, Icons, Chip, makeStyles, getTailwindConfigColor, Tooltip } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import saveConfig from '../../util/save-config'
@@ -31,6 +31,11 @@ const commonClasses = {
     alignItems: 'center',
     width: '1.4rem !important',
     height: '1.4rem !important',
+  },
+  saveButton: {
+    marginLeft: '0.357rem',
+    display: 'flex',
+    alignItems: 'stretch',
   },
 }
 
@@ -190,6 +195,28 @@ const WidgetTitleBar = () => {
             >
               reload data
             </CustomButton>
+            <div className={classes.saveButton}>
+              <Tooltip description="Coming soon" position="left" width="6rem">
+                <ButtonGroup variant='filled' size='sm'>
+                  <CustomButton
+                    disabled
+                    variant='filled'
+                    size='sm'
+                    onClick={() => loadData(dataSource)}
+                  >
+                    save
+                  </CustomButton>
+                  <CustomButton
+                    disabled
+                    variant='filled'
+                    size='sm'
+                    onClick={() => loadData(dataSource)}
+                  >
+                    <Icons.ArrowDown size='sm' />
+                  </CustomButton>
+                </ButtonGroup>
+              </Tooltip>
+            </div>
           </div>
         </div>
       )

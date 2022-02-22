@@ -6,7 +6,7 @@ import { Button, makeStyles } from '@eqworks/lumen-labs'
 
 const classes = makeStyles({
   horizontalMargin: {
-    margin: '0 0.2rem',
+    margin: '0 0.357rem',
     width: 'inherit',
     height: 'inherit',
     '& button': {
