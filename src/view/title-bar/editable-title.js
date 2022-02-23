@@ -91,6 +91,8 @@ const EditableTitle = () => {
       </>
   )
 
+  const updateTitle = title => userUpdate({ title })
+
   return (
     <div className={classes.outerContainer}>
       {
@@ -98,7 +100,7 @@ const EditableTitle = () => {
           ? <form
             action='.'
             onSubmit={(e) => {
-              userUpdate({ title: e.target.children[0].children[0].value })
+              updateTitle(e.target.children[0].children[0].value)
               setEditing(false)
             }}
           >
@@ -107,7 +109,8 @@ const EditableTitle = () => {
               size='lg'
               value={tentativeTitle}
               onChange={(v) => setTentativeTitle(v)}
-              onBlur={() => {
+              onBlur={(e) => {
+                updateTitle(e.target.value)
                 setTentativeTitle(title)
                 setEditing(false)
               }}
