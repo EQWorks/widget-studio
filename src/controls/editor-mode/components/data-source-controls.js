@@ -7,7 +7,7 @@ import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
 import { renderRow } from '../../shared/util'
 import WidgetControlCard from '../../shared/components/widget-control-card'
-import { columnTypeInfo } from '../../../constants/columns'
+import { columnTypeInfo, columnTypes } from '../../../constants/columns'
 import { dataSourceTypes } from '../../../constants/data-source'
 
 
@@ -61,7 +61,7 @@ const DataSourceControls = () => {
                 {`${columns?.length} column${columns?.length !== 1 ? 's' : ''}`}
               </span>
               <span className={classes.dropdownDescriptionIcons}>
-                {[... new Set(columns.map(({ category }) => category))]
+                {[... new Set(columns.map(({ category }) => category).filter(c => Object.values(columnTypes).includes(c)))]
                   .sort()
                   .map(c => createElement(columnTypeInfo[c]?.Icon, { size: 'sm' }))}
               </span>
