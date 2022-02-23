@@ -227,13 +227,10 @@ export default {
   ),
 
   numericColumns: computed(
-    [(state) => state.columns],
-    (columns) => columns.filter(({ category }) => category === 'Numeric').map(({ name }) => name)
-  ),
-
-  stringColumns: computed(
-    [(state) => state.columns],
-    (columns) => columns.filter(({ category }) => category === 'String').map(({ name }) => name)
+    [(state) => state.columnsAnalysis],
+    (columnsAnalysis) => Object.entries(columnsAnalysis)
+      .filter(([, { isNumeric }]) => isNumeric)
+      .map(([name]) => name)
   ),
 
   validMapGroupKeys: computed(
