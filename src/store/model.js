@@ -233,11 +233,6 @@ export default {
       .map(([name]) => name)
   ),
 
-  stringColumns: computed(
-    [(state) => state.columns],
-    (columns) => columns.filter(({ category }) => category === 'String').map(({ name }) => name)
-  ),
-
   validMapGroupKeys: computed(
     [
       (state) => state.columns,
