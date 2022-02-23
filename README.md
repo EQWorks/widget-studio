@@ -1,6 +1,6 @@
 # widget-studio 
 
-System to generate and control widgets, graduated from `ml-ui`
+System to generate and control widgets, graduated from `ml-ui`. 
 
 ## Getting started
 In `widget-studio` project root:
@@ -12,35 +12,12 @@ $ yarn start
 
 Navigate to http://localhost:6008 to view the development storybook.
 
-## Short intro
-This project provides a declarative `Widget` component with a simple interface.
-
-- `id`: `string`
-  - identifier for a widget config JSON that this widget will read from and update. 
-- `studio`: `bool`
-  - default `false`
-  - If `studio === true`, one container is rendered that encapsulates the chart, widget configuration controls, data source selection, and raw data view. Otherwise, only the chart and title are rendered. 
-- `staticData`: `bool`
-  - default `false`
-  - If `staticData === true`, controls for modifying the widget's data source are not exposed to the frontend.
-
 ---
-## Usage scenarios
 
-1. A `Widget` has no `id`, so its initial configuration is empty, but its studio features are enabled so it has the capacity to construct a config. This widget is "starting from scratch."
-```jsx
-<Widget studio /> 
-```
+![image](https://user-images.githubusercontent.com/53827672/155380039-55f85ddf-6b22-4815-8173-34d92bf99aeb.png)
 
-2. A `Widget` has an `id` that determines its initial configuration. Its configuration is controlled by the enabled studio features. This widget is essentially a "loaded" widget.
-```jsx
-<Widget studio id={someID} />
-```
+![image](https://user-images.githubusercontent.com/53827672/155379886-4dcecc54-444a-44e4-8624-334b1e9e81bd.png)
 
-3. A `Widget` has an `id` that determines its initial configuration. This configuration cannot change because the studio features are not enabled. This widget is essentially a read-only chart with a title.
+![image](https://user-images.githubusercontent.com/53827672/155380165-a9a5bd37-e42e-491b-b423-ebf84ac1a311.png)
 
-```jsx
-<Widget id={someID} />
-```
-
-\* *Currently, the widget config database is not implemented and configs are instead retrieved from a hardcoded file.*
+![image](https://user-images.githubusercontent.com/53827672/155380256-95e15dbf-90bc-4a93-9e39-076a8da86452.png)
