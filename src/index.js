@@ -65,6 +65,7 @@ const Widget = ({
   staticData,
   wl,
   cu,
+  className,
   // temporary:
   rows: _rows,
   columns: _columns,
@@ -183,7 +184,7 @@ const Widget = ({
       mute={!dev && mode === modes.QL && !(_rows?.length) && !(_columns?.length)}
       message='Select an execution to start building a widget.'
     >
-      <div className={classes.outerContainer}>
+      <div className={`${classes.outerContainer} ${className}`}>
         <WidgetTitleBar />
         <div className={classes.innerContainer}>
           {renderViewWithControls()}
@@ -195,6 +196,7 @@ const Widget = ({
 }
 
 Widget.propTypes = {
+  className: PropTypes.string,
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
@@ -208,6 +210,7 @@ Widget.propTypes = {
   cu: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
 Widget.defaultProps = {
+  className: '',
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
