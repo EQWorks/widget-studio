@@ -23,21 +23,15 @@ Object.values(modes).forEach(mode => {
   // for each non-empty sample config,
   Object.entries(sampleConfigs).forEach(([id, config]) => {
     if (config && Object.keys(config).length) {
-
-      const type = config.type.charAt(0).toUpperCase() + config.type.slice(1)
-      const index = id.split('-')[1]
-      const label = `${type} ${index > 1 ? '(' + index + ')' : ''}`
-
       const renderWidget = (
         <Widget {...devProps}
           mode={mode}
           id={id}
         />
       )
-
-      // generate an editor story
+      // generate an editor story and QL preview story
       storiesOf(`${mode.toUpperCase()} mode`, module)
-        .add(label, () => (
+        .add(id, () => (
           mode === modes.EDITOR
             ? <div style={{ width: '100vw', height: '100vh', background: 'blue' }}>
               {renderWidget}
