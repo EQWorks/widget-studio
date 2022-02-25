@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { useStoreState } from '../../../store'
+import { useStoreState, useStoreActions } from '../../../store'
 
 import { LocusMap } from '@eqworks/react-maps'
 import { getCursor } from '@eqworks/react-maps/dist/utils'
@@ -36,7 +36,10 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
 })
 
 const Map = ({ width, height, ...props }) => {
+  const toast = useStoreActions((actions) => actions.toast)
   const mode = useStoreState(state => state.ui.mode)
+  const mapGroupKey = useStoreState(state => state.mapGroupKey)
+
   const MODE_DIMENSIONS = Object.freeze({
     [modes.EDITOR]: { marginTop: 0 },
     [modes.QL]: { marginTop: 0.75 },
@@ -46,6 +49,15 @@ const Map = ({ width, height, ...props }) => {
   const finalMarginTop = MODE_DIMENSIONS[mode].marginTop || 0
 
   const classes = useStyles({ width, height, marginTop: finalMarginTop })
+
+  useEffect(() => {
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey)) {
+      toast({
+        title: 'Zoom in for postal code visualization!',
+        color: 'warning',
+      })
+    }
+  })
 
   if (width > 0 && height > 0) {
     return (
