@@ -414,17 +414,17 @@ export default {
     'valueKeys': [],
     'mapValueKeys': [
       {
+        'mapVis': 'radius',
         'key': 'visits',
         'title': 'Visits (sum)',
         'agg': 'sum',
-        'mapVis': 'radius',
       },
       {
-        'key': 'unique_visitors',
         'title': 'Unique visitors (sum)',
-        'agg': 'sum',
         'title:': 'Unique visitors (sum)',
         'mapVis': 'fill',
+        'key': 'unique_visitors',
+        'agg': 'sum',
       },
     ],
     'formatDataFunctions': {},
@@ -434,14 +434,40 @@ export default {
     'indexKey': null,
     'mapGroupKeyTitle': 'Poi id',
     'uniqueOptions': {
-      'opacity': {
-        'value': 20,
+      'radius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'fill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'elevation': {
+        'value': 1000,
       },
       'lineWidth': {
         'value': 1,
       },
-      'radius': {
-        'valueOptions': [5, 15],
+      'opacity': {
+        'value': 20,
       },
     },
     'genericOptions': {
@@ -449,6 +475,8 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
+      'showAxisTitles': true,
+      'showSubPlotTitles': true,
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -459,12 +487,27 @@ export default {
         1,
         0,
       ],
+      'legendSize': 'Small',
       'baseColor': '#366fe4',
+    },
+    'mapInitViewState': {
+      'latitude': 44.41,
+      'longitude': -79.23,
+      'zoom': 7,
     },
     'dataSource': {
       'type': 'Execution',
       'id': '913',
     },
+    'percentageMode': false,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#463F3A',
+    ],
   },
   'map-2': {
     'title': 'My example map widget - polygon geojson layer',
@@ -482,17 +525,16 @@ export default {
     'valueKeys': [],
     'mapValueKeys': [
       {
+        'mapVis': 'elevation',
         'key': 'impressions',
         'title': 'Impressions (sum)',
         'agg': 'sum',
-        'title:': 'Impressions (sum)',
-        'mapVis': 'elevation',
       },
       {
-        'key': 'spend',
         'title': 'Spend (sum)',
-        'agg': 'sum',
         'mapVis': 'fill',
+        'key': 'spend',
+        'agg': 'sum',
       },
     ],
     'formatDataFunctions': {},
@@ -502,14 +544,40 @@ export default {
     'indexKey': null,
     'mapGroupKeyTitle': 'Geo cohort fsa',
     'uniqueOptions': {
-      'opacity': {
-        'value': 30,
+      'radius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'fill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'elevation': {
+        'value': 20000,
       },
       'lineWidth': {
         'value': 1,
       },
-      'elevation': {
-        'value': 20000,
+      'opacity': {
+        'value': 30,
       },
     },
     'genericOptions': {
@@ -517,6 +585,8 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
+      'showAxisTitles': true,
+      'showSubPlotTitles': true,
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -527,11 +597,26 @@ export default {
         1,
         0,
       ],
+      'legendSize': 'Small',
       'baseColor': '#366fe4',
+    },
+    'mapInitViewState': {
+      'latitude': 44.41,
+      'longitude': -79.23,
+      'zoom': 7,
     },
     'dataSource': {
       'type': 'Execution',
       'id': '1389',
     },
+    'percentageMode': false,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#366fe4',
+    ],
   },
 }
