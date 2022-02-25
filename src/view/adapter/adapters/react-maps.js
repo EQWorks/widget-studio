@@ -20,6 +20,8 @@ import {
   PITCH,
   MAP_LEGEND_POSITION,
   MAP_LEGEND_SIZE,
+  MIN_ZOOM,
+  MAX_ZOOM,
 } from '../../../constants/map'
 
 
@@ -70,7 +72,7 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
-    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys } = config
+    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys, mapInitViewState } = config
     const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
@@ -158,12 +160,14 @@ export default {
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: genericOptions.showLegend,
         showMapTooltip: genericOptions.showTooltip,
-        initViewState: {
-          latitude: 44.41,
-          longitude: -79.23,
-          zoom: 7,
-        },
-        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes('elevation') ? PITCH : 0,
+        initViewState: mapInitViewState,
+        minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+          MIN_ZOOM.postalCode :
+          MIN_ZOOM.defaultValue,
+        maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
+        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes('elevation') ?
+          PITCH.elevation :
+          PITCH.default,
       },
     })
   },
