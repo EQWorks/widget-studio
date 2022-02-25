@@ -7,7 +7,7 @@ import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
-import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
+import { MAP_GEO_KEYS, GEO_KEY_TYPES, MAP_INIT_VIEW_STATE } from '../constants/map'
 import { getKeyFormatFunction } from '../util/data-format-functions'
 import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
@@ -32,6 +32,7 @@ const stateDefaults = [
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
+  { key: 'mapInitViewState', defaultValue: MAP_INIT_VIEW_STATE, resettable: true },
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
     key: 'genericOptions', defaultValue: {
@@ -114,6 +115,7 @@ export default {
       (state) => state.formatDataFunctions,
       (state) => state.genericOptions,
       (state) => state.uniqueOptions,
+      (state) => state.mapInitViewState,
       (state) => state.isReady,
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
@@ -134,6 +136,7 @@ export default {
       formatDataFunctions,
       genericOptions,
       uniqueOptions,
+      mapInitViewState,
       isReady,
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
@@ -157,6 +160,7 @@ export default {
       ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
       uniqueOptions,
       genericOptions,
+      mapInitViewState,
       dataSource: { type: dataSourceType, id: dataSourceID },
       percentageMode,
       presetColors,
