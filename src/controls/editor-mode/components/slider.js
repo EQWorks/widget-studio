@@ -44,6 +44,7 @@ const BasicSlider = ({ min, max, step, value, update }) => {
           min={min}
           max={max}
           valueLabelDisplay='auto'
+          {...(max <= 1 && { step: 0.01 })}
         />
       </div>
       <div className={classes.inputs}>
