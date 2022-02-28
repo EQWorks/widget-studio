@@ -84,7 +84,7 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
-    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys, mapInitViewState } = config
+    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys, mapViewState } = config
     const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
@@ -172,7 +172,7 @@ export default {
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: genericOptions.showLegend,
         showMapTooltip: genericOptions.showTooltip,
-        initViewState: mapInitViewState,
+        initViewState: mapViewState,
         minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
           MIN_ZOOM.postalCode :
           MIN_ZOOM.defaultValue,

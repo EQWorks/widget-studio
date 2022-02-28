@@ -490,7 +490,7 @@ export default {
       'legendSize': 'Small',
       'baseColor': '#366fe4',
     },
-    'mapInitViewState': {
+    'mapViewState': {
       'latitude': 44.41,
       'longitude': -79.23,
       'zoom': 7,
@@ -600,7 +600,7 @@ export default {
       'legendSize': 'Small',
       'baseColor': '#366fe4',
     },
-    'mapInitViewState': {
+    'mapViewState': {
       'latitude': 44.41,
       'longitude': -79.23,
       'zoom': 7,
