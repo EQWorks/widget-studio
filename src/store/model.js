@@ -433,8 +433,8 @@ export default {
     const { sampleData, dataSource: previousDataSource } = getState()
     const init = !previousDataSource?.id || !previousDataSource?.type
     requestData(dataSource.type, dataSource.id, sampleData)
-      .then(data => {
-        const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
+      .then(({ data, name }) => {
+        const { results: rows, columns, whitelabelID, customerID } = data
         actions.update({
           rows,
           columns,
