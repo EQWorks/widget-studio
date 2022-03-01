@@ -105,7 +105,6 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
   const id = useStoreState((state) => state.id)
   const tentativeConfig = useStoreState((state) => state.tentativeConfig)
   const config = useStoreState((state) => state.config)
-  const dev = useStoreState((state) => state.dev)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)

@@ -475,7 +475,7 @@ export default {
 
   // save the widget
   save: thunk((actions, payload, { getState }) => {
-    const { tentativeConfig, id, dev } = getState()
+    const { tentativeConfig, id } = getState()
     if (tentativeConfig) {
       // saveWidget(tentativeConfig, id, dev)
       saveWidget(tentativeConfig, id, true)
