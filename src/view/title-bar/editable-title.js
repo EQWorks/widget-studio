@@ -56,6 +56,7 @@ const useStyles = (mode) => makeStyles(
 
 const EditableTitle = () => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
+  const save = useStoreActions((actions) => actions.save)
   const title = useStoreState((state) => state.title)
   const mode = useStoreState((state) => state.ui.mode)
 

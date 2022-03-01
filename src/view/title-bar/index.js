@@ -93,23 +93,23 @@ const WidgetTitleBar = () => {
   const tentativeConfig = useStoreState((state) => state.tentativeConfig)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
-  // const unsavedChanges = true // mocked for now
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
+  const allowSave = useStoreState((state) => state.ui.allowSave)
 
   const classes = useStyles(mode)
 
   const renderTitleAndID = (
     <div className={classes.main}>
       <EditableTitle />
-      {/* {unsavedChanges &&
+      {allowSave && mode === modes.EDITOR &&
         <div className={classes.item}>
           <Chip selectable={false} color='error' >
             unsaved
           </Chip>
         </div>
-      } */}
+      }
       {
         id &&
         <div className={classes.item}>
@@ -118,7 +118,6 @@ const WidgetTitleBar = () => {
             color='secondary'
             onClick={e => {
               e.stopPropagation()
-
               if (window.isSecureContext) {
                 navigator.clipboard.writeText(id)
                 toast({
@@ -146,6 +145,27 @@ const WidgetTitleBar = () => {
     >
       <Icons.DownloadBold size='md' />
     </CustomButton>
+  )
+
+  const renderSaveButton = (
+    <ButtonGroup variant='filled' size='sm'>
+      <CustomButton
+        disabled={!allowSave}
+        variant='filled'
+        size='sm'
+        onClick={save}
+      >
+        save
+      </CustomButton>
+      <CustomButton
+        disabled={!allowSave}
+        variant='filled'
+        size='sm'
+        onClick={() => { }}
+      >
+        <Icons.ArrowDown size='sm' />
+      </CustomButton>
+    </ButtonGroup>
   )
 
   return (
@@ -196,26 +216,13 @@ const WidgetTitleBar = () => {
               reload data
             </CustomButton>
             <div className={classes.saveButton}>
-              <Tooltip description="Coming soon" position="left" width="6rem">
-                <ButtonGroup variant='filled' size='sm'>
-                  <CustomButton
-                    disabled
-                    variant='filled'
-                    size='sm'
-                    onClick={() => loadData(dataSource)}
-                  >
-                    save
-                  </CustomButton>
-                  <CustomButton
-                    disabled
-                    variant='filled'
-                    size='sm'
-                    onClick={() => loadData(dataSource)}
-                  >
-                    <Icons.ArrowDown size='sm' />
-                  </CustomButton>
-                </ButtonGroup>
-              </Tooltip>
+              {
+                allowSave
+                  ? renderSaveButton
+                  : <Tooltip description="No unsaved changes" position="left" width="6rem">
+                    {renderSaveButton}
+                  </Tooltip>
+              }
             </div>
           </div>
         </div>

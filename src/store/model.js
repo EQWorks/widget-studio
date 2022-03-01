@@ -13,6 +13,7 @@ import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { columnInference } from '../util/columns'
+import { saveWidget } from '../util/crud'
 import { EXPORT_TYPES } from '../constants/export'
 
 
@@ -77,6 +78,7 @@ const stateDefaults = [
       dataSourceName: null,
       colorRepresentation: COLOR_REPRESENTATIONS[0],
       allowReset: true,
+      allowSave: true,
       recentReset: false,
       showToast: false,
       toastConfig: {},
@@ -463,10 +465,30 @@ export default {
       }))
   }),
 
+  // save the widget
+  save: thunk((actions, _, { getState }) => {
+    const { tentativeConfig, id } = getState()
+    if (tentativeConfig) {
+      // saveWidget(tentativeConfig, id, dev)
+      saveWidget(tentativeConfig, id, true)
+      actions.update({ ui: { allowSave: false } })
+      actions.toast({
+        title: `Saved ${id}`,
+        color: 'success',
+      })
+    } else {
+      actions.toast({
+        title: `There was a problem saving ${id}`,
+        color: 'error',
+      })
+    }
+  }),
+
   // update the store state in an "undoable" fashion
   userUpdate: thunk((actions, payload) => {
     actions.recordState()
     actions.update(payload)
+    actions.update({ ui: { allowSave: true } })
     setTimeout(() => actions.setIgnoreUndo(false), 150)
   }),
 
