@@ -16,7 +16,6 @@ import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
 import { dataSourceTypes } from './constants/data-source'
-import MutedBarrier from './controls/shared/muted-barrier'
 
 
 const commonClasses = {
@@ -127,7 +126,6 @@ const Widget = ({
   const dev = useStoreState((state) => state.dev)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
-  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
@@ -213,7 +211,7 @@ const Widget = ({
     // else if (dataSourceLoading) {
     //   return 'Loading...'
     // }
-  }, [_columns?.length, _rows?.length, dataSourceLoading, dev, mode])
+  }, [_columns?.length, _rows?.length, dev, mode])
 
   const renderViewWithControls = () => {
     if (mode === modes.EDITOR) {
