@@ -95,7 +95,9 @@ const Widget = ({
   wl,
   cu,
   className,
+  editable,
   // temporary:
+  editCallback,
   rows: _rows,
   columns: _columns,
   executionID,
@@ -236,6 +238,7 @@ const Widget = ({
 
 Widget.propTypes = {
   className: PropTypes.string,
+  editable: PropTypes.bool,
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
@@ -247,9 +250,11 @@ Widget.propTypes = {
   sampleConfigs: PropTypes.object,
   wl: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   cu: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  editCallback: PropTypes.func,
 }
 Widget.defaultProps = {
   className: '',
+  editable: true,
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
@@ -261,6 +266,7 @@ Widget.defaultProps = {
   sampleConfigs: null,
   wl: null,
   cu: null,
+  editCallback: null,
 }
 
 export default withQueryClient(withStore(Widget))
