@@ -401,12 +401,11 @@ export default {
       })
   }),
 
-  loadConfig: thunk(async (actions, payload) => {
+  loadConfig: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
       ui: {
         showDataSourceControls: false,
-        dataSourceLoading: true,
       },
     })
     const { dataSource, ...config } = payload
@@ -422,7 +421,11 @@ export default {
     })
     // populate state with values from config
     actions.update(config)
-    actions.loadData(dataSource)
+    const { dataSource: previousDataSource } = getState()
+    if (dataSource?.type !== previousDataSource?.type
+      && dataSource?.id !== previousDataSource?.id) {
+      actions.loadData(dataSource)
+    }
   }),
 
   loadData: thunk(async (actions, dataSource, { getState }) => {
