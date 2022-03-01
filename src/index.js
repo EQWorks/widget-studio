@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
@@ -30,12 +30,49 @@ const commonClasses = {
     justifyContent: 'end',
     alignItems: 'stretch',
   },
+  muteContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 'max(20%, 5rem)',
+    zIndex: 102,
+    background: 'rgba(100,100,100, 0.3)',
+  },
+  muteMessage: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    whiteSpace: 'normal',
+    wordWrap: 'break-word',
+    zIndex: 2,
+    position: 'absolute',
+    background: 'white',
+    color: getTailwindConfigColor('secondary-800'),
+    borderRadius: '0.4rem',
+    fontSize: '0.9rem',
+    fontWeight: 500,
+    margin: '1rem',
+    padding: '2rem 1rem',
+    lineHeight: '1.4rem',
+  },
+  titleBar: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    height: '3rem',
+    padding: '1rem',
+    borderBottom: `solid 1px ${getTailwindConfigColor('neutral-100')}`,
+  },
 }
 
 const useStyles = (mode = modes.EDITOR) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
+        position: 'relative',
         backgroundColor: getTailwindConfigColor('secondary-50'),
         display: 'flex',
         flexDirection: 'column',
@@ -46,6 +83,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
     : {
       outerContainer: {
+        position: 'relative',
         overflow: 'visible',
         backgroundColor: getTailwindConfigColor('secondary-50'),
         display: 'flex',
@@ -66,7 +104,9 @@ const Widget = ({
   wl,
   cu,
   className,
+  editable,
   // temporary:
+  editCallback,
   rows: _rows,
   columns: _columns,
   executionID,
@@ -87,6 +127,7 @@ const Widget = ({
   const dev = useStoreState((state) => state.dev)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
+  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
@@ -101,14 +142,11 @@ const Widget = ({
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
     const dev = Boolean(sampleData && sampleConfigs)
-    if (dev) {
-      update({
-        sampleData,
-        sampleConfigs,
-      })
-    }
     // dispatch state
     update({
+      sampleData,
+      sampleConfigs,
+      id,
       dev,
       wl,
       cu,
@@ -136,9 +174,11 @@ const Widget = ({
       update({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
       })
+    } else if (_config) {
+      loadConfig(_config)
     }
     // if there is a widget ID,
-    if (id !== undefined && id !== null) {
+    else if (id !== undefined && id !== null) {
       // fetch/read the config associated with the ID
       loadConfigByID(id)
     } else if (staticData && validatedMode === modes.EDITOR) {
@@ -147,8 +187,6 @@ const Widget = ({
     } else if (validatedMode === modes.VIEW) {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
-    } else if (_config) {
-      loadConfig(_config)
     }
   }, [_columns, _config, _mode, _rows, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
 
@@ -168,6 +206,15 @@ const Widget = ({
     </div>
   )
 
+  const muteMessage = useMemo(() => {
+    if (!dev && mode === modes.QL && !(_rows?.length) && !(_columns?.length)) {
+      return 'Select an execution to start building a widget.'
+    }
+    // else if (dataSourceLoading) {
+    //   return 'Loading...'
+    // }
+  }, [_columns?.length, _rows?.length, dataSourceLoading, dev, mode])
+
   const renderViewWithControls = () => {
     if (mode === modes.EDITOR) {
       return <EditorModeControls>{renderView}</EditorModeControls>
@@ -179,24 +226,28 @@ const Widget = ({
   }
 
   return (
-    <MutedBarrier
-      variant={1}
-      mute={!dev && mode === modes.QL && !(_rows?.length) && !(_columns?.length)}
-      message='Select an execution to start building a widget.'
-    >
-      <div className={`${classes.outerContainer} ${className}`}>
-        <WidgetTitleBar />
-        <div className={classes.innerContainer}>
-          {renderViewWithControls()}
+    <div className={`${muteMessage ? classes.muted : ''} ${classes.outerContainer} ${className}`}>
+      {/* <div className={classes.titleBar}> */}
+      <WidgetTitleBar editable={editable} editCallback={editCallback} />
+      {/* </div> */}
+      <div className={classes.innerContainer}>
+        {renderViewWithControls()}
+      </div>
+      <CustomGlobalToast />
+      {muteMessage && (
+        <div className={classes.muteContainer}>
+          <div className={classes.muteMessage}>
+            {muteMessage}
+          </div>
         </div>
-        <CustomGlobalToast />
-      </div >
-    </MutedBarrier>
+      )}
+    </div >
   )
 }
 
 Widget.propTypes = {
   className: PropTypes.string,
+  editable: PropTypes.bool,
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
@@ -208,9 +259,11 @@ Widget.propTypes = {
   sampleConfigs: PropTypes.object,
   wl: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   cu: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  editCallback: PropTypes.func,
 }
 Widget.defaultProps = {
   className: '',
+  editable: true,
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
@@ -222,6 +275,7 @@ Widget.defaultProps = {
   sampleConfigs: null,
   wl: null,
   cu: null,
+  editCallback: null,
 }
 
 export default withQueryClient(withStore(Widget))

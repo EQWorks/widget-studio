@@ -13,6 +13,7 @@ import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { columnInference } from '../util/columns'
+import { saveWidget } from '../util/crud'
 import { EXPORT_TYPES } from '../constants/export'
 
 
@@ -78,6 +79,7 @@ const stateDefaults = [
       dataSourceName: null,
       colorRepresentation: COLOR_REPRESENTATIONS[0],
       allowReset: true,
+      allowSave: true,
       recentReset: false,
       showToast: false,
       toastConfig: {},
@@ -122,6 +124,7 @@ export default {
       (state) => state.percentageMode,
       (state) => state.presetColors,
       (state) => state.dateAggregation,
+      (state) => state.groupOrder,
     ],
     (
       title,
@@ -143,6 +146,7 @@ export default {
       percentageMode,
       presetColors,
       dateAggregation,
+      groupOrder,
     ) => ({
       title,
       type,
@@ -165,6 +169,7 @@ export default {
       percentageMode,
       presetColors,
       dateAggregation,
+      groupOrder,
     })),
 
   config: computed(
@@ -401,12 +406,11 @@ export default {
       })
   }),
 
-  loadConfig: thunk(async (actions, payload) => {
+  loadConfig: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
       ui: {
         showDataSourceControls: false,
-        dataSourceLoading: true,
       },
     })
     const { dataSource, ...config } = payload
@@ -422,7 +426,11 @@ export default {
     })
     // populate state with values from config
     actions.update(config)
-    actions.loadData(dataSource)
+    const { dataSource: previousDataSource } = getState()
+    if (dataSource?.type !== previousDataSource?.type
+      && dataSource?.id !== previousDataSource?.id) {
+      actions.loadData(dataSource)
+    }
   }),
 
   loadData: thunk(async (actions, dataSource, { getState }) => {
@@ -437,8 +445,9 @@ export default {
     const { sampleData, dataSource: previousDataSource } = getState()
     const init = !previousDataSource?.id || !previousDataSource?.type
     requestData(dataSource.type, dataSource.id, sampleData)
-      .then(data => {
-        const { results: rows, columns, whitelabelID, customerID, views: [{ name }] } = data
+      .then(({ data, name }) => {
+      // .then((data) => {
+        const { results: rows, columns, whitelabelID, customerID } = data
         actions.update({
           rows,
           columns,
@@ -464,10 +473,30 @@ export default {
       }))
   }),
 
+  // save the widget
+  save: thunk((actions, payload, { getState }) => {
+    const { tentativeConfig, id, dev } = getState()
+    if (tentativeConfig) {
+      // saveWidget(tentativeConfig, id, dev)
+      saveWidget(tentativeConfig, id, true)
+      actions.update({ ui: { allowSave: false } })
+      actions.toast({
+        title: `Saved ${id}`,
+        color: 'success',
+      })
+    } else {
+      actions.toast({
+        title: `There was a problem saving ${id}`,
+        color: 'error',
+      })
+    }
+  }),
+
   // update the store state in an "undoable" fashion
   userUpdate: thunk((actions, payload) => {
     actions.recordState()
     actions.update(payload)
+    actions.update({ ui: { allowSave: true } })
     setTimeout(() => actions.setIgnoreUndo(false), 150)
   }),
 

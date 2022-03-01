@@ -39,6 +39,7 @@ const BasicSlider = ({ min, max, step, value, update }) => {
         <Slider
           defaultValue={value || [min, max]}
           value={changedValue}
+          step={0.01}
           onChange={(_, newValue) => setChangedValue(newValue)}
           onChangeCommitted={(_, newValue) => {update(newValue); setChangedValue(newValue)}}
           min={min}

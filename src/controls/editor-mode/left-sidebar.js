@@ -15,7 +15,7 @@ import DataSourceControls from './components/data-source-controls'
 const EditorLeftSidebar = () => {
   const type = useStoreState((state) => state.type)
   return (
-    <EditorSidebarBase>
+    <EditorSidebarBase isLeft>
       <DataSourceControls />
       <WidgetTypeControls />
       {

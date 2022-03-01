@@ -85,10 +85,15 @@ storiesOf('Multiple widgets (dashboard)')
 storiesOf('Blank Widget (data source control)', module)
   .add('Blank Widget (data source control)', () => (
     <Authenticated product='locus'>
-      <Widget
-        wl={DEFAULT_WL}
-        cu={DEFAULT_CU}
-        mode='editor'
-      />
+      <div style={{
+        width: '100vw',
+        height: '100vh',
+      }}>
+        <Widget
+          wl={DEFAULT_WL}
+          cu={DEFAULT_CU}
+          mode='editor'
+        />
+      </div>
     </Authenticated>
   ))

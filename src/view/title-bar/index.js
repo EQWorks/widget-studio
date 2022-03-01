@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import { ButtonGroup, Accordion, Icons, Chip, makeStyles, getTailwindConfigColor, Tooltip } from '@eqworks/lumen-labs'
 
@@ -39,11 +40,10 @@ const commonClasses = {
   },
 }
 
-const useStyles = (mode) => makeStyles(
+const useStyles = ({ mode, editable }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
-        background: getTailwindConfigColor('secondary-50'),
         display: 'flex',
         alignItems: 'center',
         width: '100%',
@@ -55,6 +55,10 @@ const useStyles = (mode) => makeStyles(
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
+      },
+      editButton: {
+        marginLeft: '0.357rem',
+        width: '100px',
       },
       ...commonClasses,
     }
@@ -75,10 +79,19 @@ const useStyles = (mode) => makeStyles(
         background: 'transparent',
         padding: '0.75rem',
       },
+      editButton: {
+        marginLeft: '0.357rem',
+        // width: editable ? '100px' : '0px !important',
+        transition: 'opacity 0.3s, visibility 0.3s',
+        transitionDelay: 'visibility 0.4s',
+        opacity: + editable,
+        ...(!editable && { visibility: 'hidden' }),
+      },
       ...commonClasses,
     })
 
-const WidgetTitleBar = () => {
+const WidgetTitleBar = ({ editable, editCallback }) => {
+  const save = useStoreActions((actions) => actions.save)
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
@@ -93,23 +106,23 @@ const WidgetTitleBar = () => {
   const tentativeConfig = useStoreState((state) => state.tentativeConfig)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
-  // const unsavedChanges = true // mocked for now
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
+  const allowSave = useStoreState((state) => state.ui.allowSave)
 
-  const classes = useStyles(mode)
+  const classes = useStyles({ mode, editable })
 
   const renderTitleAndID = (
     <div className={classes.main}>
       <EditableTitle />
-      {/* {unsavedChanges &&
+      {allowSave && mode === modes.EDITOR &&
         <div className={classes.item}>
           <Chip selectable={false} color='error' >
             unsaved
           </Chip>
         </div>
-      } */}
+      }
       {
         id &&
         <div className={classes.item}>
@@ -118,7 +131,6 @@ const WidgetTitleBar = () => {
             color='secondary'
             onClick={e => {
               e.stopPropagation()
-
               if (window.isSecureContext) {
                 navigator.clipboard.writeText(id)
                 toast({
@@ -136,7 +148,7 @@ const WidgetTitleBar = () => {
   )
 
   const renderDownloadConfigButton = (
-    dev && config &&
+    config &&
     <CustomButton
       horizontalMargin
       classes={{
@@ -146,6 +158,27 @@ const WidgetTitleBar = () => {
     >
       <Icons.DownloadBold size='md' />
     </CustomButton>
+  )
+
+  const renderSaveButton = (
+    <ButtonGroup variant='filled' size='sm'>
+      <CustomButton
+        disabled={!allowSave}
+        variant='filled'
+        size='sm'
+        onClick={save}
+      >
+        save
+      </CustomButton>
+      <CustomButton
+        disabled={!allowSave}
+        variant='filled'
+        size='sm'
+        onClick={() => { }}
+      >
+        <Icons.ArrowDown size='sm' />
+      </CustomButton>
+    </ButtonGroup>
   )
 
   return (
@@ -196,26 +229,13 @@ const WidgetTitleBar = () => {
               reload data
             </CustomButton>
             <div className={classes.saveButton}>
-              <Tooltip description="Coming soon" position="left" width="6rem">
-                <ButtonGroup variant='filled' size='sm'>
-                  <CustomButton
-                    disabled
-                    variant='filled'
-                    size='sm'
-                    onClick={() => loadData(dataSource)}
-                  >
-                    save
-                  </CustomButton>
-                  <CustomButton
-                    disabled
-                    variant='filled'
-                    size='sm'
-                    onClick={() => loadData(dataSource)}
-                  >
-                    <Icons.ArrowDown size='sm' />
-                  </CustomButton>
-                </ButtonGroup>
-              </Tooltip>
+              {
+                allowSave
+                  ? renderSaveButton
+                  : <Tooltip description="No unsaved changes" position="left" width="6rem">
+                    {renderSaveButton}
+                  </Tooltip>
+              }
             </div>
           </div>
         </div>
@@ -223,7 +243,7 @@ const WidgetTitleBar = () => {
       : (
         <Accordion color='secondary' className='flex-initial flex p-4 border-b-2 border-neutral-100 shadow-blue-20'>
           <Accordion.Panel
-            autoHeight
+            // autoHeight
             color='transparent'
             classes={{
               iconRoot: 'bg-opacity-0 children:text-primary-500',
@@ -234,7 +254,6 @@ const WidgetTitleBar = () => {
               <div className='py-2 flex items-center'>
                 {renderTitleAndID}
                 <div className='flex items-stretch ml-auto'>
-                  {renderDownloadConfigButton}
                   {/* <CustomButton
                     horizontalMargin
                     onClick={() => window.alert('not implemented')}
@@ -242,19 +261,25 @@ const WidgetTitleBar = () => {
                     EXPORT
                   </CustomButton> */}
                   <CustomButton
+                    classes={{
+                      button: classes.editButton,
+                    }}
                     horizontalMargin
                     variant='filled'
                     onClick={() => {
-                      const { id, type } = dataSource || {}
-                      if (type === dataSourceTypes.EXECUTIONS) {
-                        localStorage.setItem(`stored-widget-execution-${id}`, JSON.stringify(tentativeConfig))
-                        window.open(`/widget-studio?executionID=${id}`, '_blank').focus()
+                      if (editCallback) {
+                        editCallback()
                       } else {
-                        toast({
-                          type: 'semantic-light',
-                          title: 'There was a problem.',
-                          color: 'error',
-                          button:
+                        const { id, type } = dataSource || {}
+                        if (type === dataSourceTypes.EXECUTIONS) {
+                          localStorage.setItem(`stored-widget-execution-${id}`, JSON.stringify(tentativeConfig))
+                          window.open(`/widget-studio?executionID=${id}`, '_blank').focus()
+                        } else {
+                          toast({
+                            type: 'semantic-light',
+                            title: 'There was a problem.',
+                            color: 'error',
+                            button:
                             <CustomButton
                               size='lg'
                               type='danger'
@@ -262,15 +287,17 @@ const WidgetTitleBar = () => {
                             >
                               Click here to open a blank widget in the editor.
                             </CustomButton>
-                          ,
-                          icon: <Icons.MoodWarning size='lg' />,
-                        })
+                            ,
+                            icon: <Icons.MoodWarning size='lg' />,
+                          })
+                        }
                       }
                     }}
                     endIcon={<Icons.ShareExternalLink size='md' />}
                   >
                     OPEN IN EDITOR
                   </CustomButton>
+                  {renderDownloadConfigButton}
                 </div>
               </div>
             }
@@ -283,6 +310,15 @@ const WidgetTitleBar = () => {
         </Accordion >
       )
   )
+}
+
+WidgetTitleBar.propTypes = {
+  editable: PropTypes.bool,
+  editCallback: PropTypes.func,
+}
+WidgetTitleBar.defaultProps = {
+  editable: true,
+  editCallback: null,
 }
 
 export default WidgetTitleBar

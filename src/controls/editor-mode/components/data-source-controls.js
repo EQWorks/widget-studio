@@ -2,7 +2,7 @@ import React, { createElement, useMemo } from 'react'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import { useExecutions } from '../../../util/fetch'
+import { useExecutions, useSavedQueries } from '../../../util/fetch'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
 import { renderRow } from '../../shared/util'
@@ -45,14 +45,16 @@ const DataSourceControls = () => {
   const cu = useStoreState((state) => state.cu)
   const dev = useStoreState((state) => state.dev)
   const [executionsLoading, executionsList] = useExecutions()
+  const [, savedQueriesList] = useSavedQueries()
 
   const executions = useMemo(() => (
     executionsList.filter(({ customerID }) => customerID == cu || dev)
-      .map(({ queryID, executionID, columns, views = [] }) => (
-        {
+      .map(({ queryID, executionID, columns, views = [] }) => {
+        const { name } = savedQueriesList.find(({ queryID: _id }) => queryID === _id) || {}
+        return {
           id: executionID,
           queryID,
-          label: `${executionID} - ${views[0]?.name}`,
+          label: `[${executionID}] ${name || `unsaved: ${views.map(({ id }) => id).join(', ')}`}`,
           description: (
             <span key={executionID} className={classes.dropdownDescriptionContainer}>
               <span className={classes.dropdownDescriptionText}>
@@ -66,8 +68,8 @@ const DataSourceControls = () => {
             </span>
           ),
         }
-      ))
-  ), [cu, dev, executionsList])
+      })
+  ), [cu, dev, executionsList, savedQueriesList])
 
   const selected = useMemo(() => (
     executions.find(
@@ -93,7 +95,7 @@ const DataSourceControls = () => {
             onSelect={v => userUpdate({
               dataSource: {
                 type: dataSourceTypes.EXECUTIONS,
-                id: v.split(' ')[0],
+                id: v.split('[')[1].split(']')[0], // TODO something that is not this
               },
             })}
           />
