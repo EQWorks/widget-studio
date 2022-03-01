@@ -132,14 +132,11 @@ const Widget = ({
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
     const dev = Boolean(sampleData && sampleConfigs)
-    if (dev) {
-      update({
-        sampleData,
-        sampleConfigs,
-      })
-    }
     // dispatch state
     update({
+      sampleData,
+      sampleConfigs,
+      id,
       dev,
       wl,
       cu,
@@ -167,9 +164,11 @@ const Widget = ({
       update({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
       })
+    } else if (_config) {
+      loadConfig(_config)
     }
     // if there is a widget ID,
-    if (id !== undefined && id !== null) {
+    else if (id !== undefined && id !== null) {
       // fetch/read the config associated with the ID
       loadConfigByID(id)
     } else if (staticData && validatedMode === modes.EDITOR) {
@@ -178,8 +177,6 @@ const Widget = ({
     } else if (validatedMode === modes.VIEW) {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
-    } else if (_config) {
-      loadConfig(_config)
     }
   }, [_columns, _config, _mode, _rows, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
 
