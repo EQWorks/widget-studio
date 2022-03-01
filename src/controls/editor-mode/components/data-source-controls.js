@@ -48,27 +48,29 @@ const DataSourceControls = () => {
   const [, savedQueriesList] = useSavedQueries()
 
   const executions = useMemo(() => (
-    executionsList.filter(({ customerID }) => customerID == cu || dev)
-      .map(({ queryID, executionID, columns, views = [] }) => {
-        const { name } = savedQueriesList.find(({ queryID: _id }) => queryID === _id) || {}
-        return {
-          id: executionID,
-          queryID,
-          label: `[${executionID}] ${name || `unsaved: ${views.map(({ id }) => id).join(', ')}`}`,
-          description: (
-            <span key={executionID} className={classes.dropdownDescriptionContainer}>
-              <span className={classes.dropdownDescriptionText}>
-                {`${columns?.length} column${columns?.length !== 1 ? 's' : ''}`}
+    Array.isArray(executionsList)
+      ? executionsList.filter(({ customerID }) => customerID == cu || dev)
+        .map(({ queryID, executionID, columns, views = [] }) => {
+          const { name } = savedQueriesList.find(({ queryID: _id }) => queryID === _id) || {}
+          return {
+            id: executionID,
+            queryID,
+            label: `[${executionID}] ${name || `unsaved: ${views.map(({ id }) => id).join(', ')}`}`,
+            description: (
+              <span key={executionID} className={classes.dropdownDescriptionContainer}>
+                <span className={classes.dropdownDescriptionText}>
+                  {`${columns?.length} column${columns?.length !== 1 ? 's' : ''}`}
+                </span>
+                <span className={classes.dropdownDescriptionIcons}>
+                  {[... new Set(columns.map(({ category }) => category).filter(c => Object.values(columnTypes).includes(c)))]
+                    .sort()
+                    .map(c => createElement(columnTypeInfo[c]?.Icon, { size: 'sm' }))}
+                </span>
               </span>
-              <span className={classes.dropdownDescriptionIcons}>
-                {[... new Set(columns.map(({ category }) => category).filter(c => Object.values(columnTypes).includes(c)))]
-                  .sort()
-                  .map(c => createElement(columnTypeInfo[c]?.Icon, { size: 'sm' }))}
-              </span>
-            </span>
-          ),
-        }
-      })
+            ),
+          }
+        })
+      : []
   ), [cu, dev, executionsList, savedQueriesList])
 
   const selected = useMemo(() => (
@@ -91,7 +93,7 @@ const DataSourceControls = () => {
             fullWidth
             value={selected?.label}
             descriptions={executions.map(({ description }) => description)}
-            data={executions.map(({ label }) => label)}
+            data={executions?.map(({ label }) => label)}
             onSelect={v => userUpdate({
               dataSource: {
                 type: dataSourceTypes.EXECUTIONS,
