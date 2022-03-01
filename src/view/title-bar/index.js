@@ -90,7 +90,6 @@ const useStyles = ({ mode, editable }) => makeStyles(
     })
 
 const WidgetTitleBar = ({ editable, editCallback }) => {
-  const save = useStoreActions((actions) => actions.save)
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
