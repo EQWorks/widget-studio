@@ -201,9 +201,6 @@ const Widget = ({
     if (!dev && mode === modes.QL && !(_rows?.length) && !(_columns?.length)) {
       return 'Select an execution to start building a widget.'
     }
-    // else if (dataSourceLoading) {
-    //   return 'Loading...'
-    // }
   }, [_columns?.length, _rows?.length, dev, mode])
 
   const renderViewWithControls = () => {
