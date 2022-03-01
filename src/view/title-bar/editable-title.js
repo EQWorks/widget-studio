@@ -56,7 +56,6 @@ const useStyles = (mode) => makeStyles(
 
 const EditableTitle = () => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
-  const save = useStoreActions((actions) => actions.save)
   const title = useStoreState((state) => state.title)
   const mode = useStoreState((state) => state.ui.mode)
 
@@ -101,6 +100,10 @@ const EditableTitle = () => {
           ? <form
             action='.'
             onSubmit={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              e.nativeEvent.preventDefault()
+              e.nativeEvent.stopPropagation()
               updateTitle(e.target.children[0].children[0].value)
               setEditing(false)
             }}
@@ -110,6 +113,10 @@ const EditableTitle = () => {
               size='lg'
               value={tentativeTitle}
               onChange={(v) => setTentativeTitle(v)}
+              onSubmit={(e) => {
+                e.nativeEvent.preventDefault()
+                e.nativeEvent.stopPropagation()
+              }}
               onBlur={(e) => {
                 updateTitle(e.target.value)
                 setTentativeTitle(title)
