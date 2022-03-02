@@ -115,13 +115,13 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
   const renderTitleAndID = (
     <div className={classes.main}>
       <EditableTitle />
-      {allowSave && mode === modes.EDITOR &&
+      {/* {allowSave && mode === modes.EDITOR &&
         <div className={classes.item}>
           <Chip selectable={false} color='error' >
             unsaved
           </Chip>
         </div>
-      }
+      } */}
       {
         id &&
         <div className={classes.item}>
@@ -228,13 +228,14 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
               reload data
             </CustomButton>
             <div className={classes.saveButton}>
-              {
+              {/* {
                 allowSave
                   ? renderSaveButton
-                  : <Tooltip description="No unsaved changes" position="left" width="6rem">
-                    {renderSaveButton}
-                  </Tooltip>
-              }
+                  : */}
+              <Tooltip description="No unsaved changes" position="left" width="6rem">
+                {renderSaveButton}
+              </Tooltip>
+              {/* } */}
             </div>
           </div>
         </div>
