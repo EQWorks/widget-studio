@@ -13,8 +13,9 @@ import {
   COORD_KEYS,
   MAP_LAYERS,
   MAP_LAYER_VALUE_VIS,
-  MAP_VIS_OTHERS,
   MAP_LAYER_GEO_KEYS,
+  MAP_VALUE_VIS,
+  MAP_VIS_OTHERS,
   LAYER_SCALE,
   GEO_KEY_TYPES,
   PITCH,
@@ -57,7 +58,7 @@ const Map = ({ width, height, ...props }) => {
         color: 'warning',
       })
     }
-  })
+  }, [toast, mapGroupKey])
 
   if (width > 0 && height > 0) {
     return (
@@ -177,7 +178,7 @@ export default {
           MIN_ZOOM.postalCode :
           MIN_ZOOM.defaultValue,
         maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
-        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes('elevation') ?
+        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ?
           PITCH.elevation :
           PITCH.default,
       },
