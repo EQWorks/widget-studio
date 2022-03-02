@@ -188,11 +188,11 @@ const WidgetView = () => {
     if (!isReady && dataReady) {
       setTableExpanded(true)
       setAutoExpandedTable(true)
-    } else if (autoExpandedTable) {
+    } else if (autoExpandedTable && !dataSourceLoading) {
       setTableExpanded(false)
       setAutoExpandedTable(false)
     }
-  }, [autoExpandedTable, isReady, dataReady])
+  }, [autoExpandedTable, isReady, dataReady, dataSourceLoading])
 
   // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
   const widgetWarning = useMemo(() => {
