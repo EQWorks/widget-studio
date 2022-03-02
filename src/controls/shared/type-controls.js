@@ -198,6 +198,12 @@ const WidgetTypeControls = () => {
                             ...(domain?.key && { [domain.key]: null }),
                           }
                         ),
+                        ...(
+                          type === types.MAP && {
+                            filters: [],
+                            groupFilter: [],
+                          }
+                        ),
                         type,
                         uniqueOptions:
                         Object.entries(uniqueOptions).reduce((acc, [k, { defaultValue }]) => {
