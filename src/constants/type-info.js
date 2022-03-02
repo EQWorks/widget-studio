@@ -150,6 +150,15 @@ export default {
         max: 100,
         step: 1,
       },
+      mapViewState: {
+        name: 'View State',
+        type: Object,
+        defaultValue: {
+          latitude: 44.41,
+          longitude: -79.23,
+          zoom: 7,
+        },
+      },
     },
   },
 }

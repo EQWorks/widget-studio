@@ -112,12 +112,6 @@ export const MAP_LEGEND_SIZE = {
   Large: 'lg',
 }
 
-export const MAP_INIT_VIEW_STATE = {
-  latitude: 44.41,
-  longitude: -79.23,
-  zoom: 7,
-}
-
 export const PITCH = {
   defaultValue: 0,
   elevation: 45,
