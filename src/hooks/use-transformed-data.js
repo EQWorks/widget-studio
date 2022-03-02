@@ -146,7 +146,7 @@ const useTransformedData = () => {
         }, {})
       return Object.entries(dateGroupedData).map(([k, v]) => ({
         [formattedDomain]: k,
-        ...Object.fromEntries(renderableValueKeys.map(({ key, agg, title }) => (
+        ...Object.fromEntries(renderableValueKeys.map(({ key, agg = 'sum', title }) => (
           [title, aggFunctions[agg](v.map(_v => _v[key]).flat())]
         ))),
       })).sort((a, b) => sortFn(a[formattedDomain], b[formattedDomain]))
