@@ -34,6 +34,7 @@ export const MAP_LAYER_GEO_KEYS = {
   scatterplot: [
     'poi',
     'poi_id',
+    'account_name',
     'locus_poi_id',
   ],
   // geojson: Object.values(GEO_KEY_TYPES).flat(),
