@@ -184,9 +184,10 @@ const Widget = ({
   // load data if source changes
   useEffect(() => {
     if (!staticData && !_rows && !_columns && dataSourceType && dataSourceID) {
+      resetWidget()
       loadData({ type: dataSourceType, id: dataSourceID })
     }
-  }, [staticData, loadData, dataSourceType, dataSourceID, _rows, _columns])
+  }, [staticData, loadData, dataSourceType, dataSourceID, _rows, _columns, resetWidget])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
