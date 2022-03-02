@@ -39,6 +39,7 @@ const classes = makeStyles({
 })
 
 const DataSourceControls = () => {
+  const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
@@ -94,12 +95,16 @@ const DataSourceControls = () => {
             value={selected?.label}
             descriptions={executions.map(({ description }) => description)}
             data={executions?.map(({ label }) => label)}
-            onSelect={v => userUpdate({
-              dataSource: {
-                type: dataSourceTypes.EXECUTIONS,
-                id: v.split('[')[1].split(']')[0], // TODO something that is not this
-              },
-            })}
+            onSelect={v => {
+              resetWidget()
+              userUpdate({
+                dataSource: {
+                  type: dataSourceTypes.EXECUTIONS,
+                  id: v.split('[')[1].split(']')[0], // TODO something that is not this
+                },
+              })
+            }
+            }
           />
         )
       }
