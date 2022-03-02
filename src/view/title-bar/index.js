@@ -147,7 +147,7 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
   )
 
   const renderDownloadConfigButton = (
-    dev && config &&
+    (dev || location?.hostname === 'localhost') && config &&
     <CustomButton
       horizontalMargin
       classes={{
