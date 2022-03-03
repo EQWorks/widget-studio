@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { useStoreState } from '../../../store'
+import { useStoreState, useStoreActions } from '../../../store'
 
 import { LocusMap } from '@eqworks/react-maps'
 import { getCursor } from '@eqworks/react-maps/dist/utils'
@@ -13,13 +13,16 @@ import {
   COORD_KEYS,
   MAP_LAYERS,
   MAP_LAYER_VALUE_VIS,
-  MAP_VIS_OTHERS,
   MAP_LAYER_GEO_KEYS,
+  MAP_VALUE_VIS,
+  MAP_VIS_OTHERS,
   LAYER_SCALE,
   GEO_KEY_TYPES,
   PITCH,
   MAP_LEGEND_POSITION,
   MAP_LEGEND_SIZE,
+  MIN_ZOOM,
+  MAX_ZOOM,
 } from '../../../constants/map'
 
 
@@ -34,7 +37,11 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
 })
 
 const Map = ({ width, height, ...props }) => {
+  const toast = useStoreActions(actions => actions.toast)
   const mode = useStoreState(state => state.ui.mode)
+  const mapGroupKey = useStoreState(state => state.mapGroupKey)
+  const uniqueOptions = useStoreState(state => state.uniqueOptions)
+
   const MODE_DIMENSIONS = Object.freeze({
     [modes.EDITOR]: { marginTop: 0 },
     [modes.QL]: { marginTop: 0.75 },
@@ -44,6 +51,16 @@ const Map = ({ width, height, ...props }) => {
   const finalMarginTop = MODE_DIMENSIONS[mode].marginTop || 0
 
   const classes = useStyles({ width, height, marginTop: finalMarginTop })
+
+  useEffect(() => {
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
+        uniqueOptions.mapViewState.zoom < MIN_ZOOM.postalCode) {
+      toast({
+        title: 'Zoom in for postal code visualization!',
+        color: 'warning',
+      })
+    }
+  }, [toast, mapGroupKey, uniqueOptions])
 
   if (width > 0 && height > 0) {
     return (
@@ -158,12 +175,14 @@ export default {
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: genericOptions.showLegend,
         showMapTooltip: genericOptions.showTooltip,
-        initViewState: {
-          latitude: 44.41,
-          longitude: -79.23,
-          zoom: 7,
-        },
-        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes('elevation') ? PITCH : 0,
+        initViewState: uniqueOptions.mapViewState,
+        minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+          MIN_ZOOM.postalCode :
+          MIN_ZOOM.defaultValue,
+        maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
+        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ?
+          PITCH.elevation :
+          PITCH.default,
       },
     })
   },

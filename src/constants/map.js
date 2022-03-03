@@ -38,7 +38,12 @@ export const MAP_LAYER_GEO_KEYS = {
   ],
   // geojson: Object.values(GEO_KEY_TYPES).flat(),
   // just remove for the moment postal codes, da & ct
-  geojson: [...GEO_KEY_TYPES.fsa],
+  geojson: [
+    ...GEO_KEY_TYPES.fsa,
+    ...GEO_KEY_TYPES.postalcode,
+    ...GEO_KEY_TYPES.ct,
+    ...GEO_KEY_TYPES.da,
+  ],
 }
 
 export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
@@ -94,7 +99,6 @@ export const COORD_KEYS = {
 }
 
 export const LAYER_SCALE = 'linear'
-export const PITCH = 45
 
 export const MAP_LEGEND_POSITION = {
   '[0,0]': 'bottom-left',
@@ -106,4 +110,19 @@ export const MAP_LEGEND_POSITION = {
 export const MAP_LEGEND_SIZE = {
   Small: 'sm',
   Large: 'lg',
+}
+
+export const PITCH = {
+  defaultValue: 0,
+  elevation: 45,
+}
+
+export const MIN_ZOOM = {
+  defaultValue: 2,
+  postalCode: 9,
+}
+
+export const MAX_ZOOM = {
+  defaultValue: 23,
+  geojson: 14,
 }
