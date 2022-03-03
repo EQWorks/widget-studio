@@ -37,9 +37,10 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
 })
 
 const Map = ({ width, height, ...props }) => {
-  const toast = useStoreActions((actions) => actions.toast)
+  const toast = useStoreActions(actions => actions.toast)
   const mode = useStoreState(state => state.ui.mode)
   const mapGroupKey = useStoreState(state => state.mapGroupKey)
+  const uniqueOptions = useStoreState(state => state.uniqueOptions)
 
   const MODE_DIMENSIONS = Object.freeze({
     [modes.EDITOR]: { marginTop: 0 },
@@ -52,13 +53,14 @@ const Map = ({ width, height, ...props }) => {
   const classes = useStyles({ width, height, marginTop: finalMarginTop })
 
   useEffect(() => {
-    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey)) {
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
+        uniqueOptions.mapViewState.zoom < MIN_ZOOM.postalCode) {
       toast({
         title: 'Zoom in for postal code visualization!',
         color: 'warning',
       })
     }
-  }, [toast, mapGroupKey])
+  }, [toast, mapGroupKey, uniqueOptions])
 
   if (width > 0 && height > 0) {
     return (
@@ -85,7 +87,7 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
-    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys, mapViewState } = config
+    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys } = config
     const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
@@ -173,7 +175,7 @@ export default {
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: genericOptions.showLegend,
         showMapTooltip: genericOptions.showTooltip,
-        initViewState: mapViewState,
+        initViewState: uniqueOptions.mapViewState,
         minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
           MIN_ZOOM.postalCode :
           MIN_ZOOM.defaultValue,
