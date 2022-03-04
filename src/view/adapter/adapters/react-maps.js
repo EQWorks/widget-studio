@@ -53,8 +53,7 @@ const Map = ({ width, height, ...props }) => {
   const classes = useStyles({ width, height, marginTop: finalMarginTop })
 
   useEffect(() => {
-    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
-        uniqueOptions.mapViewState.zoom < MIN_ZOOM.postalCode) {
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey)) {
       toast({
         title: 'Zoom in for postal code visualization!',
         color: 'warning',
@@ -167,6 +166,10 @@ export default {
         legend: { showLegend: true },
         schemeColor: genericOptions.baseColor,
         opacity: uniqueOptions.opacity.value / 100,
+        minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+          MIN_ZOOM.postalCode :
+          MIN_ZOOM.defaultValue,
+        maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
       }],
       mapConfig: {
         cursor: (layers) => getCursor({ layers }),
@@ -175,11 +178,9 @@ export default {
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: genericOptions.showLegend,
         showMapTooltip: genericOptions.showTooltip,
-        initViewState: uniqueOptions.mapViewState,
-        minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
-          MIN_ZOOM.postalCode :
-          MIN_ZOOM.defaultValue,
-        maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
+        initViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+          uniqueOptions.mapViewState.postalCode :
+          uniqueOptions.mapViewState.value,
         pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ?
           PITCH.elevation :
           PITCH.default,
