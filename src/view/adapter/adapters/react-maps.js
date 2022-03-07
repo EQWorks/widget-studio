@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
+import { useDebounce } from 'use-debounce'
 import { useStoreState, useStoreActions } from '../../../store'
 
 import { LocusMap } from '@eqworks/react-maps'
@@ -36,11 +37,15 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
   },
 })
 
-const Map = ({ width, height, ...props }) => {
+const Map = ({ width, height, mapConfig, ...props }) => {
   const toast = useStoreActions(actions => actions.toast)
+  const userUpdate = useStoreActions(actions => actions.userUpdate)
   const mode = useStoreState(state => state.ui.mode)
   const mapGroupKey = useStoreState(state => state.mapGroupKey)
   const uniqueOptions = useStoreState(state => state.uniqueOptions)
+
+  const [currentViewport, setCurrentViewport] = useState({})
+  const [debouncedCurrentViewport] = useDebounce(currentViewport, 1000)
 
   const MODE_DIMENSIONS = Object.freeze({
     [modes.EDITOR]: { marginTop: 0 },
@@ -61,10 +66,33 @@ const Map = ({ width, height, ...props }) => {
     }
   }, [toast, mapGroupKey, uniqueOptions])
 
+  // update uniqueOptions.mapViewState with current map viewport config
+  useEffect(() => {
+    if (debouncedCurrentViewport.width) {
+      userUpdate(
+        {
+          uniqueOptions: {
+            mapViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+              { postalCode: debouncedCurrentViewport } :
+              { value: debouncedCurrentViewport },
+          },
+        }
+      )
+    }
+  }, [debouncedCurrentViewport, mapGroupKey, userUpdate])
+
   if (width > 0 && height > 0) {
     return (
       <div id='LocusMap' className={classes.mapWrapper}>
-        <LocusMap {...props} />
+        <LocusMap {
+          ...{
+            ...props,
+            mapConfig: {
+              ...mapConfig,
+              setCurrentViewport,
+            },
+          }
+        } />
       </div>
     )
   }
@@ -74,6 +102,7 @@ const Map = ({ width, height, ...props }) => {
 Map.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
+  mapConfig: PropTypes.object,
   props: PropTypes.object,
 }
 
@@ -87,7 +116,8 @@ export default {
   component: Map,
   adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
     const { mapGroupKey, mapGroupKeyTitle, mapValueKeys } = config
-    const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+    const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS)
+      .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
 
@@ -111,7 +141,8 @@ export default {
     if (mapLayer === MAP_LAYERS.geojson) {
       geometry = { geoKey: mapGroupKeyTitle }
       name = mapGroupKeyTitle
-      mapGroupKeyType = Object.keys(GEO_KEY_TYPES).find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
+      mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
+        .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
     }
 
     // TO DO: implement logic for when we want to use geojson layer to display POIs in editor mode
@@ -175,7 +206,8 @@ export default {
         cursor: (layers) => getCursor({ layers }),
         legendPosition: MAP_LEGEND_POSITION[JSON.stringify(genericOptions.legendPosition)],
         legendSize: MAP_LEGEND_SIZE[genericOptions.legendSize],
-        mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN || process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
+        mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN ||
+          process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: genericOptions.showLegend,
         showMapTooltip: genericOptions.showTooltip,
         initViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
