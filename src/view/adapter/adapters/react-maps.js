@@ -24,6 +24,7 @@ import {
   MAP_LEGEND_SIZE,
   MIN_ZOOM,
   MAX_ZOOM,
+  MAP_TOAST_ZOOM_ADJUSTMENT,
 } from '../../../constants/map'
 
 
@@ -45,7 +46,8 @@ const Map = ({ width, height, mapConfig, ...props }) => {
   const uniqueOptions = useStoreState(state => state.uniqueOptions)
 
   const [currentViewport, setCurrentViewport] = useState({})
-  const [debouncedCurrentViewport] = useDebounce(currentViewport, 1000)
+  const [debouncedCurrentViewport] = useDebounce(currentViewport, 500)
+  const [showToastMessage, setShowToastMessage] = useState(false)
 
   const MODE_DIMENSIONS = Object.freeze({
     [modes.EDITOR]: { marginTop: 0 },
@@ -58,13 +60,26 @@ const Map = ({ width, height, mapConfig, ...props }) => {
   const classes = useStyles({ width, height, marginTop: finalMarginTop })
 
   useEffect(() => {
-    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey)) {
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
+        currentViewport?.zoom < MIN_ZOOM.postalCode - MAP_TOAST_ZOOM_ADJUSTMENT &&
+        showToastMessage) {
       toast({
         title: 'Zoom in for postal code visualization!',
         color: 'warning',
       })
     }
-  }, [toast, mapGroupKey, uniqueOptions])
+  }, [toast, mapGroupKey, uniqueOptions, currentViewport, showToastMessage])
+
+  useEffect(() => {
+    // display toast message only after the initial zooming in for postal code visualization
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
+        currentViewport?.zoom >= MIN_ZOOM.postalCode) {
+      setShowToastMessage(true)
+    }
+    if (!GEO_KEY_TYPES.postalcode.includes(mapGroupKey)) {
+      setShowToastMessage(false)
+    }
+  }, [mapGroupKey, currentViewport])
 
   // update uniqueOptions.mapViewState with current map viewport config
   useEffect(() => {
@@ -102,14 +117,13 @@ const Map = ({ width, height, mapConfig, ...props }) => {
 Map.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  mapConfig: PropTypes.object,
-  props: PropTypes.object,
+  mapConfig: PropTypes.object.isRequired,
+  props: PropTypes.object.isRequired,
 }
 
 Map.defaultProps = {
   width: 0,
   height: 0,
-  props: {},
 }
 
 export default {
