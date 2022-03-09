@@ -90,7 +90,7 @@ const useStyles = ({ mode, editable }) => makeStyles(
     })
 
 const WidgetTitleBar = ({ editable, editCallback }) => {
-  // const save = useStoreActions((actions) => actions.save)
+  const save = useStoreActions((actions) => actions.save)
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
@@ -108,20 +108,20 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
-  // const allowSave = useStoreState((state) => state.ui.allowSave)
+  const allowSave = useStoreState((state) => state.ui.allowSave)
 
   const classes = useStyles({ mode, editable })
 
   const renderTitleAndID = (
     <div className={classes.main}>
       <EditableTitle />
-      {/* {allowSave && mode === modes.EDITOR &&
+      {allowSave && mode === modes.EDITOR &&
         <div className={classes.item}>
           <Chip selectable={false} color='error' >
             unsaved
           </Chip>
         </div>
-      } */}
+      }
       {
         id &&
         <div className={classes.item}>
@@ -162,12 +162,10 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
   const renderSaveButton = (
     <ButtonGroup variant='filled' size='sm'>
       <CustomButton
-        disabled
-        // disabled={!allowSave}
+        disabled={!allowSave}
         variant='filled'
         size='sm'
-        // onClick={save}
-        onClick={() => { }}
+        onClick={save}
       >
         save
       </CustomButton>
@@ -231,14 +229,14 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
               reload data
             </CustomButton>
             <div className={classes.saveButton}>
-              {/* {
+              {
                 allowSave
                   ? renderSaveButton
-                  : */}
-              <Tooltip description="No unsaved changes" position="left" width="6rem">
-                {renderSaveButton}
-              </Tooltip>
-              {/* } */}
+                  :
+                  <Tooltip description="No unsaved changes" position="left" width="6rem">
+                    {renderSaveButton}
+                  </Tooltip>
+              }
             </div>
           </div>
         </div>
