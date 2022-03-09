@@ -76,7 +76,6 @@
     "re-resizable": "^6.9.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-query": "^3.19.0",
     "react-router-dom": "~5.2.0",
     "size-limit": "^4.5.7",
     "tailwindcss": "yarn:@tailwindcss/postcss7-compat@^2.1.2",
@@ -100,6 +99,7 @@
     "react-colorful": "^5.5.1",
     "react-date-range": "^1.4.0",
     "react-resize-detector": "^6.7.6",
+    "react-query": "^3.19.0",
     "use-debounce": "^7.0.1"
   },
   "size-limit": [
