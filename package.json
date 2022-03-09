@@ -36,6 +36,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@tailwindcss/postcss7-compat": "^2.1.2",
+    "@tailwindcss/forms": "^0.4.0",
     "autoprefixer": "^9.8.6",
     "postcss": "^7",
     "react": "^16.13.1",
