@@ -119,10 +119,13 @@ export const PITCH = {
 
 export const MIN_ZOOM = {
   defaultValue: 2,
-  postalCode: 9,
+  postalCode: 10,
 }
 
 export const MAX_ZOOM = {
   defaultValue: 23,
   geojson: 14,
 }
+
+// 0.5 is an empirical value which controls better when the toast message should be displayed for PC
+export const MAP_TOAST_ZOOM_ADJUSTMENT = 0.5
