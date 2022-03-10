@@ -127,5 +127,12 @@ export const MAX_ZOOM = {
   geojson: 14,
 }
 
-// 0.5 is an empirical value which controls better when the toast message should be displayed for PC
+// 0.5 is an empirical value which controls better when the toast message should be displayed for postal code vis
 export const MAP_TOAST_ZOOM_ADJUSTMENT = 0.5
+
+export const CENSUS_REGEX = {
+  postalcode: /^([A-Z][0-9]){3}/g,
+  fsa: /^[A-Z][0-9][A-Z]/g,
+  ct: /^[0-9]{7}[.][0-9]{2}/g,
+  da: /^[0-9]{8}/g,
+}
