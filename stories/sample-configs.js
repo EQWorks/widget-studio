@@ -491,9 +491,25 @@ export default {
       'baseColor': '#366fe4',
     },
     'mapViewState': {
-      'latitude': 44.41,
-      'longitude': -79.23,
-      'zoom': 7,
+      'value': {
+        'latitude': 49.04458924229672,
+        'longitude': -87.95359000000006,
+        'zoom': 2.9427361735841195,
+        'width': 917,
+        'height': 742,
+        'bearing': 0,
+        'pitch': 0,
+        'altitude': 1.5,
+        'maxZoom': 20,
+        'minZoom': 0,
+        'maxPitch': 60,
+        'minPitch': 0,
+      },
+      'postalCode': {
+        'latitude': 43.75,
+        'longitude': -79.4,
+        'zoom': 10,
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -571,7 +587,7 @@ export default {
         ],
       },
       'elevation': {
-        'value': 20000,
+        'value': 10000,
       },
       'lineWidth': {
         'value': 1,
@@ -601,9 +617,16 @@ export default {
       'baseColor': '#366fe4',
     },
     'mapViewState': {
-      'latitude': 44.41,
-      'longitude': -79.23,
-      'zoom': 7,
+      'value': {
+        'latitude': 44.4,
+        'longitude': -79.23,
+        'zoom': 7,
+      },
+      'postalCode': {
+        'latitude': 43.75,
+        'longitude': -79.4,
+        'zoom': 10,
+      },
     },
     'dataSource': {
       'type': 'Execution',

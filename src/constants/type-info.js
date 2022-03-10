@@ -154,9 +154,16 @@ export default {
         name: 'View State',
         type: Object,
         defaultValue: {
-          latitude: 44.41,
-          longitude: -79.23,
-          zoom: 7,
+          value: {
+            latitude: 44.4,
+            longitude: -79.23,
+            zoom: 7,
+          },
+          postalCode: {
+            latitude: 43.75,
+            longitude: -79.4,
+            zoom: 10,
+          },
         },
       },
     },
