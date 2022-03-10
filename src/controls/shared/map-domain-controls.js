@@ -14,19 +14,9 @@ const MapDomainControls = () => {
   const userUpdate = useStoreActions(actions => actions.userUpdate)
 
   // common state
-  const columns = useStoreState((state) => state.columns)
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
-  const valueKeys = useStoreState((state) => state.valueKeys)
   const domain = useStoreState((state) => state.domain)
-
-  const eligibleDomainValues = useMemo(() => (
-    columns.map(({ name }) => name)
-      .filter(c =>
-        !(valueKeys.map(({ key }) => key).includes(c))
-        && validMapGroupKeys.includes(c)
-      )
-  ), [columns, validMapGroupKeys, valueKeys])
 
   const mapLayer = useMemo(() => (
     Object.keys(MAP_LAYER_VALUE_VIS)
@@ -36,8 +26,8 @@ const MapDomainControls = () => {
   const renderControls = (
     <CustomSelect
       fullWidth
-      data={eligibleDomainValues}
-      icons={eligibleDomainValues.map(() => Icons.AddPin)}
+      data={validMapGroupKeys}
+      icons={validMapGroupKeys.map(() => Icons.AddPin)}
       value={domain.value}
       onSelect={val => {
         // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
@@ -45,9 +35,9 @@ const MapDomainControls = () => {
         const newLayer = Object.keys(MAP_LAYER_VALUE_VIS)
           .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
         /*
-                 * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
-                 * as different layer requires different visualization types
-                 */
+         * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
+         * as different layer requires different visualization types
+         */
         if (newLayer !== mapLayer) {
           update({ mapValueKeys: [] })
         }
