@@ -1386,10 +1386,10 @@
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.31":
-  version "0.1.0-alpha.32"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.32/9ef1c5bd9a70a3706a95db64afbef60e7f66f45b96d6dd27dcdfb1f93fcb01af#f72e48845d401c8dca3a7e8a549ee7c0a2cb58c4"
-  integrity sha512-+8fi8DqMO9gD07J+HiM/ER3ZsvNSvdyodXaCFqLl0oZvCIZC2H0PnpbQHHh80J2vzP3efpZyVWre0FsIWqRjYg==
+"@eqworks/lumen-labs@^0.1.0-alpha.37":
+  version "0.1.0-alpha.37"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.37/df782db2d614510057df8cc89efcc97a53a17636c997f3020365187f474abfc0#1e463eaa109917beae63daf3d2f96aa04e39079d"
+  integrity sha512-VEVf1D6aSWzUl5zC6G+xlL5BAR/IxtKx8zXdi5bvedq0+wXPI2zjWVEa2aRbmHXfqqXwjyBfABs6l9qDT6hYsA==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
@@ -10223,9 +10223,9 @@ mini-create-react-context@^0.4.0:
     tiny-warning "^1.0.3"
 
 mini-svg-data-uri@^1.2.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/mini-svg-data-uri/-/mini-svg-data-uri-1.4.3.tgz#43177b2e93766ba338931a3e2a84a3dfd3a222b8"
-  integrity sha512-gSfqpMRC8IxghvMcxzzmMnWpXAChSA+vy4cia33RgerMS8Fex95akUyQZPbxJJmeBGiGmK7n/1OpUX8ksRjIdA==
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/mini-svg-data-uri/-/mini-svg-data-uri-1.4.4.tgz#8ab0aabcdf8c29ad5693ca595af19dd2ead09939"
+  integrity sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
