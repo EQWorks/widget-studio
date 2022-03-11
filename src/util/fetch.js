@@ -112,27 +112,37 @@ const requestQueryResults = async (id) => {
 }
 
 const requestExecutionResults = async (id) => {
-  return api.get(`/ql/executions/${id}`, { params: { results: 1 } })
+  const data = await api.get(`/ql/executions/${id}`, { params: { results: 1 } })
     .then(res => {
       if (res.data.status == 'SUCCEEDED') {
         return res.data
       }
       throw new Error(`execution has status ${res.data.status}`)
     })
+
+  const { executionID, queryID, views = [] } = data
+  let name = `Execution ${executionID}`
+  if (queryID) {
+    name += await api.get(`/ql/queries/${queryID}`)
+      .then(async ({ data: { name: queryName } }) => (
+        ` - ${queryName}`
+      ))
+  } else {
+    name += ` - unsaved: ${views.map(({ id }) => id).join(', ')}`
+  }
+  return { data, name }
 }
 
 export const requestData = async (dataSourceType, dataSourceID, sampleData = null) => {
   if (sampleData) {
     return sampleData[`${dataSourceType}-${dataSourceID}`]
   }
-  var data
   if (dataSourceType == dataSourceTypes.SAVED_QUERIES) {
-    data = await requestQueryResults(dataSourceID)
+    return await requestQueryResults(dataSourceID)
   }
-  else if (dataSourceType == dataSourceTypes.EXECUTIONS) {
-    data = await requestExecutionResults(dataSourceID)
+  if (dataSourceType == dataSourceTypes.EXECUTIONS) {
+    return await requestExecutionResults(dataSourceID)
   }
-  return data
 }
 
 // TODO request from db -- this is a placeholder
