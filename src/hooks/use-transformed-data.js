@@ -5,6 +5,7 @@ import aggFunctions from '../util/agg-functions'
 import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
 import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
+import { latIsValid, lonIsValid, geoKeyIsValid } from '../util/geo-validation'
 import { dateAggregations, dateSort } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { YYYYMMDDToDate } from '../util/time'
@@ -192,22 +193,33 @@ const useTransformedData = () => {
           COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
         const lon = columns.find(({ name, category }) =>
           COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
-        return aggregatedData.map((d) => {
+        return aggregatedData.reduce((acc, d) => {
           if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
-            if (d[lat] && d[lon]) {
-              return d
+            if (latIsValid(d[lat]) && lonIsValid(d[lon])) {
+              return [...acc, d]
             }
             const { [lat]: [_lat], [lon]: [_lon] } = groupedData[d[formattedColumnNames[mapGroupKey]]]
-            return {
-              ...d,
-              lat: _lat,
-              lon: _lon,
-            }
+            return latIsValid(_lat) && lonIsValid(_lon) ?
+              [
+                ...acc,
+                {
+                  ...d,
+                  lat: _lat,
+                  lon: _lon,
+                },
+              ] :
+              acc
           }
-        })
+        }, [])
       }
       if (MAP_LAYER_GEO_KEYS.geojson.includes(mapGroupKey)) {
-        return aggregatedData
+        const geoKey = Object.keys(GEO_KEY_TYPES)
+          .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
+        const formattedDomain = formattedColumnNames[mapGroupKey]
+        return aggregatedData.reduce((acc, d) => geoKeyIsValid({ geoKey, d: d[formattedDomain] }) ?
+          [...acc, d] :
+          acc
+        , [])
       }
     }
     return null
