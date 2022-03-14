@@ -70,8 +70,6 @@ const Widget = ({
   editable,
   // temporary:
   editCallback,
-  rows: _rows,
-  columns: _columns,
   executionID,
   config: _config,
   sampleData,
@@ -87,7 +85,6 @@ const Widget = ({
   const update = useStoreActions(actions => actions.update)
 
   // common state
-  const dev = useStoreState((state) => state.dev)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
 
@@ -117,21 +114,7 @@ const Widget = ({
         staticData,
       },
     })
-    if (_rows && _columns) {
-      // use manually passed data if available
-      resetWidget()
-      update({
-        rows: _rows,
-        columns: _columns,
-        dataSource: {
-          type:
-            mode === modes.QL
-              ? dataSourceTypes.EXECUTIONS
-              : dataSourceTypes.MANUAL,
-          id: executionID,
-        },
-      })
-    } else if (executionID !== -1) {
+    if (executionID !== -1) {
       // use executionID if available
       update({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
@@ -150,15 +133,15 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
     }
-  }, [_columns, _config, _mode, _rows, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
+  }, [_config, _mode, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
 
 
   // load data if source changes
   useEffect(() => {
-    if (!staticData && !_rows && !_columns && dataSourceType && dataSourceID) {
+    if (!staticData && dataSourceType && dataSourceID) {
       loadData({ type: dataSourceType, id: dataSourceID })
     }
-  }, [staticData, loadData, dataSourceType, dataSourceID, _rows, _columns])
+  }, [staticData, loadData, dataSourceType, dataSourceID])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
@@ -195,8 +178,6 @@ Widget.propTypes = {
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
-  rows: PropTypes.array,
-  columns: PropTypes.array,
   config: PropTypes.object,
   executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sampleData: PropTypes.object,
@@ -211,8 +192,6 @@ Widget.defaultProps = {
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
-  rows: null,
-  columns: null,
   config: null,
   executionID: -1,
   sampleData: null,
