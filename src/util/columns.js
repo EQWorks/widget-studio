@@ -2,7 +2,7 @@ import { columnTypes, columnTypeInfo } from '../constants/columns'
 
 
 export const columnInference = (columnData = [], columnName) => {
-  const [v] = columnData // TODO infer based on multiple samples
+  const v = columnData.find(el => el !== null && el !== undefined) // TODO infer based on multiple samples
   let checked = new Set()
   let matches = []
   Object.entries(columnTypeInfo)
