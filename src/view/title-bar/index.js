@@ -88,7 +88,7 @@ const useStyles = ({ mode, editable }) => makeStyles(
       ...commonClasses,
     })
 
-const WidgetTitleBar = ({ editable, editCallback }) => {
+const WidgetTitleBar = ({ editable, onOpenInEditor }) => {
   const update = useStoreActions((actions) => actions.update)
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
@@ -257,8 +257,8 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
                     horizontalMargin
                     variant='filled'
                     onClick={() => {
-                      editCallback
-                        ? editCallback(tentativeConfig)
+                      onOpenInEditor
+                        ? onOpenInEditor(tentativeConfig)
                         : update({ ui: { mode: modes.EDITOR } })
                     }}
                     endIcon={<Icons.ShareExternalLink size='md' />}
@@ -282,11 +282,11 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
 
 WidgetTitleBar.propTypes = {
   editable: PropTypes.bool,
-  editCallback: PropTypes.func,
+  onOpenInEditor: PropTypes.func,
 }
 WidgetTitleBar.defaultProps = {
   editable: true,
-  editCallback: null,
+  onOpenInEditor: null,
 }
 
 export default WidgetTitleBar
