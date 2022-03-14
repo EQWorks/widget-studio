@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import axios from 'axios'
 import { dataSourceTypes } from '../constants/data-source'
+import { useStoreState } from '../store'
 
 
 const api = axios.create({
@@ -84,20 +85,25 @@ export const useSavedQueries = () => {
 }
 
 export const useExecutions = () => {
+  const dev = useStoreState((state) => state.dev)
+  const sampleData = useStoreState((state) => state.sampleData)
   const _key = 'Get Query Executions'
   const { isError, error, isLoading, data = [] } = useQuery(
     _key,
-    () => api.get('/ql/executions').then(({ data = [] }) => data),
+    () => sampleData
+      ? {}
+      : api.get('/ql/executions').then(({ data = [] }) => data) ,
     { refetchOnWindowFocus: false }
   )
-
   useEffect(() => {
     if (isError) {
       console.error(`${_key}: ${error.message}`)
     }
   }, [isError, error])
 
-  return [isLoading, data]
+  return dev
+    ? [false, Object.values(sampleData).map(({ data }) => data)]
+    : [isLoading, data]
 }
 
 // eslint-disable-next-line no-unused-vars

@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/widget-studio",
-  "version": "0.1.1-alpha.2",
+  "version": "0.1.1-alpha.14",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -29,7 +29,7 @@
     "build-tailwindcss-prod": "NODE_ENV=production npx postcss src/styles/tailwind.css -o src/styles/index.css"
   },
   "peerDependencies": {
-    "@eqworks/lumen-labs": "^0.1.0-alpha.31",
+    "@eqworks/lumen-labs": "^0.1.0-alpha.37",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@eqworks/react-maps": "^0.8.4",
     "@material-ui/core": "^4.11.0",
@@ -49,7 +49,8 @@
     "@babel/eslint-parser": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
-    "@eqworks/lumen-labs": "^0.1.0-alpha.31",
+    "@eqworks/common-login": "^0.9.0-alpha.13",
+    "@eqworks/lumen-labs": "^0.1.0-alpha.37",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@eqworks/react-maps": "^0.8.4",
     "@material-ui/core": "^4.11.0",
@@ -75,7 +76,7 @@
     "re-resizable": "^6.9.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-query": "^3.19.0",
+    "react-router-dom": "~5.2.0",
     "size-limit": "^4.5.7",
     "tailwindcss": "yarn:@tailwindcss/postcss7-compat@^2.1.2",
     "tailwindcss-children": "^2.1.0"
@@ -97,6 +98,7 @@
     "prop-types": "^15.7.2",
     "react-colorful": "^5.5.1",
     "react-date-range": "^1.4.0",
+    "react-query": "^3.19.0",
     "react-resize-detector": "^6.7.6",
     "use-debounce": "^7.0.1"
   },

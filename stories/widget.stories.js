@@ -2,12 +2,17 @@ import React, { useState } from 'react'
 import { storiesOf } from '@storybook/react'
 import { Resizable } from 're-resizable'
 
+import { Authenticated } from '@eqworks/common-login'
+
 import modes from '../src/constants/modes'
 import sampleData from './sample-data'
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
 import CustomToggle from '../src/components/custom-toggle'
 
+
+const DEFAULT_WL = 4
+const DEFAULT_CU = 9533
 
 const devProps = {
   sampleData,
@@ -18,21 +23,15 @@ Object.values(modes).forEach(mode => {
   // for each non-empty sample config,
   Object.entries(sampleConfigs).forEach(([id, config]) => {
     if (config && Object.keys(config).length) {
-
-      const type = config.type.charAt(0).toUpperCase() + config.type.slice(1)
-      const index = id.split('-')[1]
-      const label = `${type} ${index > 1 ? '(' + index + ')' : ''}`
-
       const renderWidget = (
         <Widget {...devProps}
           mode={mode}
           id={id}
         />
       )
-
-      // generate an editor story
+      // generate an editor story and QL preview story
       storiesOf(`${mode.toUpperCase()} mode`, module)
-        .add(label, () => (
+        .add(id, () => (
           mode === modes.EDITOR
             ? <div style={{ width: '100vw', height: '100vh', background: 'blue' }}>
               {renderWidget}
@@ -83,11 +82,18 @@ storiesOf('Multiple widgets (dashboard)')
   })
 
 // add blank widget
-storiesOf('Blank widget (no ID)', module)
-  .add('Blank widget (no ID)', () => (
-    <Resizable style={{ margin: '1rem' }} >
-      <Widget {...devProps}
-        mode='editor'
-      />
-    </Resizable>
+storiesOf('Blank Widget (data source control)', module)
+  .add('Blank Widget (data source control)', () => (
+    <Authenticated product='locus'>
+      <div style={{
+        width: '100vw',
+        height: '100vh',
+      }}>
+        <Widget
+          wl={DEFAULT_WL}
+          cu={DEFAULT_CU}
+          mode='editor'
+        />
+      </div>
+    </Authenticated>
   ))
