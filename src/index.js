@@ -75,7 +75,6 @@ const Widget = ({
   // temporary:
   editCallback,
   executionID,
-  config: _config,
   sampleData,
   sampleConfigs,
 }) => {
@@ -125,8 +124,6 @@ const Widget = ({
       update({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
       })
-    } else if (_config) {
-      loadConfig(_config)
     }
     // if there is a widget ID,
     else if ((id === undefined || id === null) && (_id !== undefined && _id !== null)) {
@@ -139,7 +136,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [_id, _mode, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
+  }, [_id, _mode, cu, executionID, id, loadConfigByID, mode, sampleConfigs, sampleData, staticData, update, wl])
 
 
   // load data if source changes
@@ -205,7 +202,6 @@ Widget.propTypes = {
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
-  config: PropTypes.object,
   executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sampleData: PropTypes.object,
   sampleConfigs: PropTypes.object,
@@ -219,7 +215,6 @@ Widget.defaultProps = {
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
-  config: null,
   executionID: -1,
   sampleData: null,
   sampleConfigs: null,
