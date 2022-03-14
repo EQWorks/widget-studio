@@ -8,7 +8,6 @@ import { LocusMap } from '@eqworks/react-maps'
 import { getCursor } from '@eqworks/react-maps/dist/utils'
 import { makeStyles } from '@eqworks/lumen-labs'
 
-import { cleanUp } from '../../../util/string-manipulation'
 import modes from '../../../constants/modes'
 import {
   COORD_KEYS,
@@ -135,26 +134,15 @@ export default {
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
 
-    const getTooltipKey = (tooltipKey) =>
-      dataKeys.find(key => MAP_LAYER_GEO_KEYS[mapLayer].map(elem => cleanUp(elem)).includes(key) &&
-        key.toLowerCase().includes(tooltipKey))
-
-    let name = ''
-    let id = ''
     let geometry = {}
     let mapGroupKeyType = ''
     if (mapLayer === MAP_LAYERS.scatterplot) {
       const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
       const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
       geometry = { longitude, latitude }
-      name = getTooltipKey('name') || getTooltipKey('poi')
-      if (name) {
-        id = getTooltipKey('id') === name ? '' : getTooltipKey('id')
-      }
     }
     if (mapLayer === MAP_LAYERS.geojson) {
       geometry = { geoKey: mapGroupKeyTitle }
-      name = mapGroupKeyTitle
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
         .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
     }
@@ -203,8 +191,7 @@ export default {
         interactions: {
           tooltip: {
             tooltipKeys: {
-              name,
-              id,
+              name: mapGroupKeyTitle,
             },
           },
         },
