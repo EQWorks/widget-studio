@@ -71,7 +71,7 @@ const Widget = ({
   wl,
   cu,
   className,
-  editable,
+  allowOpenInEditor,
   onOpenInEditor,
   // temporary:
   executionID,
@@ -169,7 +169,7 @@ const Widget = ({
 
   const renderWidget = (
     <div className={`${classes.outerContainer} ${className}`}>
-      <WidgetTitleBar editable={editable} onOpenInEditor={onOpenInEditor} />
+      <WidgetTitleBar allowOpenInEditor={allowOpenInEditor} onOpenInEditor={onOpenInEditor} />
       <div className={classes.innerContainer}>
         {renderViewWithControls()}
       </div>
@@ -201,7 +201,7 @@ const Widget = ({
 
 Widget.propTypes = {
   className: PropTypes.string,
-  editable: PropTypes.bool,
+  allowOpenInEditor: PropTypes.bool,
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
@@ -215,7 +215,7 @@ Widget.propTypes = {
 }
 Widget.defaultProps = {
   className: '',
-  editable: true,
+  allowOpenInEditor: true,
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
