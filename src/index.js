@@ -65,7 +65,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
 )
 
 const Widget = ({
-  id,
+  id: _id,
   mode: _mode,
   staticData,
   wl,
@@ -89,6 +89,7 @@ const Widget = ({
   const update = useStoreActions(actions => actions.update)
 
   // common state
+  const id = useStoreState((state) => state.id)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
 
@@ -110,7 +111,6 @@ const Widget = ({
     update({
       sampleData,
       sampleConfigs,
-      id,
       dev,
       wl,
       cu,
@@ -129,17 +129,17 @@ const Widget = ({
       loadConfig(_config)
     }
     // if there is a widget ID,
-    else if (id !== undefined && id !== null) {
+    else if ((id === undefined || id === null) && (_id !== undefined && _id !== null)) {
       // fetch/read the config associated with the ID
-      loadConfigByID(id)
+      loadConfigByID(_id)
     } else if (staticData && validatedBaseMode === modes.EDITOR) {
       // error on incorrect component usage
       throw new Error('Incorrect usage: Widgets in editor mode without an ID cannot have data source control disabled (staticData == true).')
-    } else if (validatedBaseMode === modes.VIEW) {
+    } else if (validatedBaseMode === modes.VIEW && !id && ((id === undefined || id === null) || (_id === undefined && _id === null))) {
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [_config, _mode, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
+  }, [_id, _mode, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
 
 
   // load data if source changes

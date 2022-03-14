@@ -383,6 +383,7 @@ export default {
         showDataSourceControls: false,
         dataSourceLoading: true,
       },
+      id: payload,
     })
     const { sampleConfigs } = getState()
     requestConfig(payload, sampleConfigs)
