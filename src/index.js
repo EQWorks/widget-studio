@@ -75,7 +75,6 @@ const Widget = ({
   // temporary:
   editCallback,
   executionID,
-  config: _config,
   sampleData,
   sampleConfigs,
 }) => {
@@ -125,8 +124,6 @@ const Widget = ({
       update({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
       })
-    } else if (_config) {
-      loadConfig(_config)
     }
     // if there is a widget ID,
     else if ((id === undefined || id === null) && (_id !== undefined && _id !== null)) {
