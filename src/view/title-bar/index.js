@@ -39,7 +39,7 @@ const commonClasses = {
   },
 }
 
-const useStyles = ({ mode, editable }) => makeStyles(
+const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
@@ -82,13 +82,13 @@ const useStyles = ({ mode, editable }) => makeStyles(
         marginLeft: '0.357rem',
         transition: 'opacity 0.3s, visibility 0.3s',
         transitionDelay: 'visibility 0.4s',
-        opacity: + editable,
-        ...(!editable && { visibility: 'hidden' }),
+        opacity: + allowOpenInEditor,
+        ...(!allowOpenInEditor && { visibility: 'hidden' }),
       },
       ...commonClasses,
     })
 
-const WidgetTitleBar = ({ editable, onOpenInEditor }) => {
+const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const update = useStoreActions((actions) => actions.update)
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
@@ -109,7 +109,7 @@ const WidgetTitleBar = ({ editable, onOpenInEditor }) => {
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
-  const classes = useStyles({ mode, editable })
+  const classes = useStyles({ mode, allowOpenInEditor })
 
   const renderTitleAndID = (
     <div className={classes.main}>
@@ -281,11 +281,11 @@ const WidgetTitleBar = ({ editable, onOpenInEditor }) => {
 }
 
 WidgetTitleBar.propTypes = {
-  editable: PropTypes.bool,
+  allowOpenInEditor: PropTypes.bool,
   onOpenInEditor: PropTypes.func,
 }
 WidgetTitleBar.defaultProps = {
-  editable: true,
+  allowOpenInEditor: true,
   onOpenInEditor: null,
 }
 
