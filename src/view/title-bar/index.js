@@ -9,7 +9,6 @@ import CustomButton from '../../components/custom-button'
 import modes from '../../constants/modes'
 import EditableTitle from './editable-title'
 import WidgetMeta from '../meta'
-import { dataSourceTypes } from '../../constants/data-source'
 
 
 const commonClasses = {
@@ -90,6 +89,7 @@ const useStyles = ({ mode, editable }) => makeStyles(
     })
 
 const WidgetTitleBar = ({ editable, editCallback }) => {
+  const update = useStoreActions((actions) => actions.update)
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
@@ -257,31 +257,9 @@ const WidgetTitleBar = ({ editable, editCallback }) => {
                     horizontalMargin
                     variant='filled'
                     onClick={() => {
-                      if (editCallback) {
-                        editCallback()
-                      } else {
-                        const { id, type } = dataSource || {}
-                        if (type === dataSourceTypes.EXECUTIONS) {
-                          localStorage.setItem(`stored-widget-execution-${id}`, JSON.stringify(tentativeConfig))
-                          window.open(`/widget-studio?executionID=${id}`, '_blank').focus()
-                        } else {
-                          toast({
-                            type: 'semantic-light',
-                            title: 'There was a problem.',
-                            color: 'error',
-                            button:
-                            <CustomButton
-                              size='lg'
-                              type='danger'
-                              variant='elevated'
-                            >
-                              Click here to open a blank widget in the editor.
-                            </CustomButton>
-                            ,
-                            icon: <Icons.MoodWarning size='lg' />,
-                          })
-                        }
-                      }
+                      editCallback
+                        ? editCallback(tentativeConfig)
+                        : update({ ui: { mode: modes.EDITOR } })
                     }}
                     endIcon={<Icons.ShareExternalLink size='md' />}
                   >

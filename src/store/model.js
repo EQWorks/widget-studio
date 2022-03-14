@@ -66,6 +66,7 @@ const stateDefaults = [
     key: 'ui',
     defaultValue: {
       mode: null,
+      baseMode: null,
       showTable: false,
       tableShowsRawData: true,
       showWidgetControls: true,

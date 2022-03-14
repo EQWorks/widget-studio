@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { Modal, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import modes from './constants/modes'
 import { useStoreState, useStoreActions } from './store'
@@ -56,6 +56,10 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         borderRadius: '0.125rem',
         borderWidth: '2px',
       },
+      modal: {
+        width: '100% !important',
+        height: '100% !important',
+      },
       ...commonClasses,
     }
 )
@@ -90,14 +94,15 @@ const Widget = ({
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
+  const baseMode = useStoreState(state => state.ui.baseMode)
 
   useTransformedData()
 
   // on first load,
   useEffect(() => {
     // validate mode prop
-    const validatedMode = Object.values(modes).find(v => v === _mode)
-    if (!validatedMode) {
+    const validatedBaseMode = Object.values(modes).find(v => v === _mode)
+    if (!validatedBaseMode) {
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
     const dev = Boolean(sampleData && sampleConfigs)
@@ -110,7 +115,8 @@ const Widget = ({
       wl,
       cu,
       ui: {
-        mode: validatedMode,
+        ...(!mode && { mode: validatedBaseMode }),
+        baseMode: validatedBaseMode,
         staticData,
       },
     })
@@ -126,12 +132,12 @@ const Widget = ({
     else if (id !== undefined && id !== null) {
       // fetch/read the config associated with the ID
       loadConfigByID(id)
-    } else if (staticData && validatedMode === modes.EDITOR) {
+    } else if (staticData && validatedBaseMode === modes.EDITOR) {
       // error on incorrect component usage
       throw new Error('Incorrect usage: Widgets in editor mode without an ID cannot have data source control disabled (staticData == true).')
-    } else if (validatedMode === modes.VIEW) {
+    } else if (validatedBaseMode === modes.VIEW) {
       // error on incorrect component usage
-      throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
+      throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
   }, [_config, _mode, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
 
@@ -161,14 +167,35 @@ const Widget = ({
     return renderView
   }
 
-  return (
+  const renderWidget = (
     <div className={`${classes.outerContainer} ${className}`}>
       <WidgetTitleBar editable={editable} editCallback={editCallback} />
       <div className={classes.innerContainer}>
         {renderViewWithControls()}
       </div>
       <CustomGlobalToast />
-    </div >
+    </div>
+  )
+
+  return (
+    baseMode !== modes.EDITOR && mode === modes.EDITOR
+      ? <Modal
+        open
+        classes={{
+          container: classes.modal,
+          main: classes.modal,
+          content: classes.modal,
+        }}
+        closeModal={() => update({ ui: { mode: baseMode } })}
+      >
+        <Modal.Header >
+              Widget Editor
+        </Modal.Header >
+        <Modal.Content>
+          {renderWidget}
+        </Modal.Content>
+      </Modal>
+      : renderWidget
   )
 }
 
