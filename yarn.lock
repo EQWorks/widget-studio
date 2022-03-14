@@ -1369,10 +1369,10 @@
     react-iframe "^1.8.0"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.37":
-  version "0.1.0-alpha.37"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.37/df782db2d614510057df8cc89efcc97a53a17636c997f3020365187f474abfc0#1e463eaa109917beae63daf3d2f96aa04e39079d"
-  integrity sha512-VEVf1D6aSWzUl5zC6G+xlL5BAR/IxtKx8zXdi5bvedq0+wXPI2zjWVEa2aRbmHXfqqXwjyBfABs6l9qDT6hYsA==
+"@eqworks/lumen-labs@^0.1.0-alpha.40":
+  version "0.1.0-alpha.40"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.40/62c101c8a5d932dc3ece9bc38c4cb09a6be13b9ea1cc8e92457de0df6094f33f#43e89f9d6b145cb0a7142dd1cbea876f94842fc2"
+  integrity sha512-vmC3twy/aUgEucyPxXFB+678ffXVRK4oVQoO0qj6TzxeEpfmpGZ7e54yKSQmNxZAkq5kd53KUQEpkkM9Qg2mJA==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
@@ -1381,6 +1381,7 @@
     react-resize-detector "^6.7.6"
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
+    use-debounce "^7.0.1"
 
 "@eqworks/react-labs@^1.12.1-alpha.5":
   version "1.12.1-alpha.5"
