@@ -73,9 +73,7 @@ const MapLinkedSelect = ({
             ]}
             titles={titles}
             values={values[match] ? [values[match]] : []}
-            // {...(values[match] && { valueIcons: [columnsAnalysis[values[match][PRIMARY_KEY]]?.Icon] })}
-            // {...(Icon && { valueIcons: [Icon] })}
-            {...(icons.length && { valueIcons: icons })}
+            valueIcons={icons}
             callback={(_, v) => callback(
               match,
               {
