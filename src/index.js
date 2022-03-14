@@ -72,8 +72,8 @@ const Widget = ({
   cu,
   className,
   editable,
+  onOpenInEditor,
   // temporary:
-  editCallback,
   executionID,
   sampleData,
   sampleConfigs,
@@ -166,7 +166,7 @@ const Widget = ({
 
   const renderWidget = (
     <div className={`${classes.outerContainer} ${className}`}>
-      <WidgetTitleBar editable={editable} editCallback={editCallback} />
+      <WidgetTitleBar editable={editable} onOpenInEditor={onOpenInEditor} />
       <div className={classes.innerContainer}>
         {renderViewWithControls()}
       </div>
@@ -207,7 +207,7 @@ Widget.propTypes = {
   sampleConfigs: PropTypes.object,
   wl: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   cu: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  editCallback: PropTypes.func,
+  onOpenInEditor: PropTypes.func,
 }
 Widget.defaultProps = {
   className: '',
@@ -220,7 +220,7 @@ Widget.defaultProps = {
   sampleConfigs: null,
   wl: null,
   cu: null,
-  editCallback: null,
+  onOpenInEditor: null,
 }
 
 export default withQueryClient(withStore(Widget))
