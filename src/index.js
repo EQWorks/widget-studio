@@ -16,6 +16,7 @@ import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
 import { dataSourceTypes } from './constants/data-source'
+import CustomModal from './components/custom-modal'
 
 
 const commonClasses = {
@@ -55,10 +56,6 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         height: '100%',
         borderRadius: '0.125rem',
         borderWidth: '2px',
-      },
-      modal: {
-        width: '100% !important',
-        height: '100% !important',
       },
       ...commonClasses,
     }
@@ -179,22 +176,12 @@ const Widget = ({
 
   return (
     baseMode !== modes.EDITOR && mode === modes.EDITOR
-      ? <Modal
-        open
-        classes={{
-          container: classes.modal,
-          main: classes.modal,
-          content: classes.modal,
-        }}
-        closeModal={() => update({ ui: { mode: baseMode } })}
+      ? <CustomModal
+        title='Widget Editor'
+        onClose={() => update({ ui: { mode: baseMode } })}
       >
-        <Modal.Header >
-              Widget Editor
-        </Modal.Header >
-        <Modal.Content>
-          {renderWidget}
-        </Modal.Content>
-      </Modal>
+        {renderWidget}
+      </CustomModal >
       : renderWidget
   )
 }

@@ -21,7 +21,6 @@ const useStyles = ({ open }) => makeStyles({
     right: 0,
     top: 0,
     whiteSpace: 'nowrap',
-    zIndex: 20,
     borderLeftWidth: '2px',
     borderColor: getTailwindConfigColor('neutral-100'),
     display: 'flex',
