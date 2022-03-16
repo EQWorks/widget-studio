@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
-import { Modal, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import modes from './constants/modes'
 import { useStoreState, useStoreActions } from './store'
@@ -78,9 +78,7 @@ const Widget = ({
   const classes = useStyles(_mode)
 
   // easy-peasy actions
-  const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
-  const loadConfig = useStoreActions((actions) => actions.loadConfig)
   const loadConfigByID = useStoreActions(actions => actions.loadConfigByID)
   const update = useStoreActions(actions => actions.update)
 
