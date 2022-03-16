@@ -13,13 +13,15 @@ const classes = makeStyles({
     position: 'absolute',
     height: '100%',
     width: '100%',
-    transition: 'opacity 300ms ease-in-out ',
+    transition: 'opacity 300ms ease-in-out, visibility 0ms linear 300ms',
   },
   activeChild: {
     opacity: 1,
+    visibility: 'visible',
   },
   hiddenChild: {
     opacity: 0,
+    visibility: 'hidden',
     overflow: 'hidden',
   },
 })
