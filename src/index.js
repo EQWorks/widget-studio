@@ -112,6 +112,7 @@ const Widget = ({
       cu,
       ui: {
         ...(!mode && { mode: validatedBaseMode }),
+        ...(validatedBaseMode === modes.QL && { showTable: true }),
         baseMode: validatedBaseMode,
         staticData,
       },
