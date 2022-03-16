@@ -68,6 +68,7 @@ const stateDefaults = [
       mode: null,
       baseMode: null,
       showTable: false,
+      maximizeTable: false,
       tableShowsRawData: true,
       showWidgetControls: true,
       showFilterControls: false,
