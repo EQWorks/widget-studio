@@ -8,7 +8,7 @@ import { useStoreState } from '../store'
 const api = axios.create({
   baseURL: [
     process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
-    process.env.API_STAGE || process.env.STORYBOOK_API_STAGE || 'dev',
+    process.env.API_STAGE || process.env.STORYBOOK_API_STAGE || '',
   ].filter(v => v).join('/'),
 })
 
@@ -156,4 +156,23 @@ export const requestConfig = async (id, sampleConfigs = null) => {
   if (sampleConfigs) {
     return sampleConfigs[id]
   }
+}
+
+// get geometry for map polygons
+const getGeoPlacePolygon = async (params) => {
+  const url = `/poi/geo-place?${Object.keys(params).map(key => key + '=' + params[key]).join('&')}`
+  const { data = {} } = await api.get(url, params)
+  return data
+}
+
+// get geometry for a list of CA regions
+export const getRegionPolygons = async (regions) => {
+  return await Promise.all(regions.map(region =>
+    getGeoPlacePolygon({ region: region.toUpperCase(), country: 'CA', placeType: 'region' })))
+    .then(values => {
+      if (values?.length) {
+        return values
+      }
+    })
+    .catch(err => console.error(`Region polygon retrieval error: ${err}`))
 }
