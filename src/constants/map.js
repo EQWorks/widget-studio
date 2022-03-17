@@ -25,10 +25,16 @@ export const MAP_LAYER_VALUE_VIS = {
 
 export const GEO_KEY_TYPES = {
   fsa: ['geo_ca_fsa', 'geo_cohort_fsa', 'household_fsa'],
-  postalcode: ['geo_ca_postalcode', 'geo_cohort_postalcode', 'household_postalcode'],
+  postalcode: ['geo_ca_postalcode', 'geo_cohort_postalcode', 'household_postalcode', 'address_postalcode'],
   da: ['geo_ca_da'],
   ct: ['geo_ca_ct'],
+  region: ['geo_ca_region', 'address_region'],
 }
+
+export const GEO_KEY_TYPE_NAMES = Object.keys(GEO_KEY_TYPES).reduce((acc, curr) => {
+  acc[curr] = curr
+  return acc
+}, {})
 
 export const MAP_LAYER_GEO_KEYS = {
   scatterplot: [
@@ -43,6 +49,7 @@ export const MAP_LAYER_GEO_KEYS = {
     ...GEO_KEY_TYPES.postalcode,
     ...GEO_KEY_TYPES.ct,
     ...GEO_KEY_TYPES.da,
+    ...GEO_KEY_TYPES.region,
   ],
 }
 
@@ -135,4 +142,5 @@ export const CENSUS_REGEX = {
   fsa: /^[A-Z][0-9][A-Z]/g,
   ct: /^[0-9]{7}[.][0-9]{2}/g,
   da: /^[0-9]{8}/g,
+  region: /^(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)/g,
 }
