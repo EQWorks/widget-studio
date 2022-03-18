@@ -50,30 +50,28 @@ const QLModeControls = ({ children }) => {
   return (
     <>
       {children}
-      <MutedBarrier mute={!dataReady || (!(rows?.length) && !(columns?.length))}>
-        <CustomAccordion
-          disabled={!dataReady}
-          title={'Controls'}
-          footer={footer}
-          open={showWidgetControls}
-          toggle={() => update({ ui: { showWidgetControls: !showWidgetControls } })}
-        >
-          <div className='flex flex-col w-full'>
-            <WidgetTypeControls />
-            {
-              type === types.MAP
-                ? <>
-                  <MapDomainControls />
-                  <MapValueControls />
-                </>
-                : <>
-                  <DomainControls />
-                  <ValueControls />
-                </>
-            }
-          </div>
-        </CustomAccordion>
-      </MutedBarrier>
+      <CustomAccordion
+        disabled={!dataReady || (!(rows?.length) && !(columns?.length))}
+        title={'Controls'}
+        footer={footer}
+        open={showWidgetControls}
+        toggle={() => update({ ui: { showWidgetControls: !showWidgetControls } })}
+      >
+        <div className='flex flex-col w-full'>
+          <WidgetTypeControls />
+          {
+            type === types.MAP
+              ? <>
+                <MapDomainControls />
+                <MapValueControls />
+              </>
+              : <>
+                <DomainControls />
+                <ValueControls />
+              </>
+          }
+        </div>
+      </CustomAccordion>
     </>
   )
 }
