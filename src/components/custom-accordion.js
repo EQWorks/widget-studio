@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import CustomButton from './custom-button'
-import { useResizeDetector } from 'react-resize-detector'
 import MutedBarrier from '../controls/shared/muted-barrier'
 
 
@@ -24,9 +23,12 @@ const useStyles = ({ open }) => makeStyles({
     borderLeftWidth: '2px',
     borderColor: getTailwindConfigColor('neutral-100'),
     display: 'flex',
+    minHeight: '100%',
   },
   outerContainer: {
     transitionProperty: 'width',
+    overflowY: 'auto',
+    height: '100%',
     position: 'relative',
   },
   transition: {
@@ -47,9 +49,12 @@ const useStyles = ({ open }) => makeStyles({
     height: '100%',
   },
   contentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
     transitionProperty: 'opacity, filter',
     opacity: + open,
     width: '100%',
+    minHeight: '100%',
     ...(!open && { pointerEvents: 'none' }),
   },
   headerContainer: {
@@ -64,6 +69,7 @@ const useStyles = ({ open }) => makeStyles({
     width: '100%',
   },
   footer: {
+    marginTop: 'auto',
     borderTop: `1px solid ${getTailwindConfigColor('neutral-100')}`,
   },
   button: {
@@ -100,22 +106,16 @@ const useStyles = ({ open }) => makeStyles({
 })
 
 const CustomAccordion = ({ open, disabled, title, footer, icon, toggle, children }) => {
-  const { ref, height } = useResizeDetector()
-
   const width = WIDTH
   const classes = useStyles({ open, disabled, width })
 
   return (
-    <MutedBarrier muted={disabled}>
+    <MutedBarrier muted={disabled} className='overflow-y-auto'>
       <div
         className={`${classes.outerContainer} ${classes.transition}`}
-        style={{
-          width: open ? width : COLLAPSED_WIDTH,
-          height,
-        }}
+        style={{ width: open ? width : COLLAPSED_WIDTH }}
       >
         <div
-          ref={ref}
           className={`${classes.innerContainer} ${classes.transition} shadow-blue-40`}
           style={{ width: open ? '100%' : COLLAPSED_WIDTH }}
         >
