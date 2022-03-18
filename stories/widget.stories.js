@@ -38,7 +38,7 @@ Object.values(modes).forEach(mode => {
             </div>
             : <Resizable
               style={{ margin: '1rem' }}
-              defaultSize={mode === modes.VIEW ? { height: '500' } : {}}
+              defaultSize={{ width: '50vw', height: '50vh' }}
             >
               {renderWidget}
             </Resizable >
