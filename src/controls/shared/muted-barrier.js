@@ -42,32 +42,31 @@ const useStyles = ({ mute, message }) => makeStyles({
   },
 })
 
-
-const MutedBarrier = ({ mute, message, children }) => {
+const MutedBarrier = ({ mute, message, children, className }) => {
   const classes = useStyles({ mute, message })
   return (
-    <>
-      <div className={classes.container}>
-        {
-          mute && message &&
-          <div id='muted-barrier-message' className={classes.message}>
-            {message}
-          </div>
-        }
-        {children}
-      </div>
-    </>
+    <div className={`${classes.container} ${className}`}>
+      {
+        mute && message &&
+        <div id='muted-barrier-message' className={classes.message}>
+          {message}
+        </div>
+      }
+      {children}
+    </div>
   )
 }
 MutedBarrier.propTypes = {
   mute: PropTypes.bool,
   message: PropTypes.string,
   children: PropTypes.node,
+  className: PropTypes.string,
 }
 MutedBarrier.defaultProps = {
   mute: false,
   message: '',
   children: <></>,
+  className: '',
 }
 
 export default MutedBarrier
