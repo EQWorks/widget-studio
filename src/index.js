@@ -124,8 +124,8 @@ const Widget = ({
     } else if (_config) {
       loadConfig(_config)
     }
-    // if there is a widget ID,
-    else if ((id === undefined || id === null) && (_id !== undefined && _id !== null)) {
+    // if there is a new widget ID,
+    else if (Number(id) !== Number(_id) && _id !== undefined && _id !== null) {
       // fetch/read the config associated with the ID
       loadConfigByID(_id)
     } else if (staticData && validatedBaseMode === modes.EDITOR) {
