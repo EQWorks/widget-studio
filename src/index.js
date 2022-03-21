@@ -67,6 +67,8 @@ const Widget = ({
   staticData,
   wl,
   cu,
+  rows: _rows,
+  columns: _columns,
   className,
   allowOpenInEditor,
   onOpenInEditor,
@@ -116,8 +118,18 @@ const Widget = ({
         staticData,
       },
     })
+    // use manually passed data if available
+    if (_rows?.length && _columns?.length) {
+      update({
+        rows: _rows,
+        columns: _columns,
+        dataSource: {
+          type: dataSourceTypes.MANUAL,
+        },
+      })
+    }
+    // use executionID passed from QL if available
     if (executionID !== -1) {
-      // use executionID if available
       update({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
       })
@@ -135,7 +147,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [_id, _mode, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
+  }, [_columns, _config, _id, _mode, _rows, cu, executionID, id, loadConfigByID, mode, sampleConfigs, sampleData, staticData, update, wl])
 
 
   // load data if source changes
@@ -198,6 +210,8 @@ Widget.propTypes = {
   wl: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   cu: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onOpenInEditor: PropTypes.func,
+  rows: PropTypes.array,
+  columns: PropTypes.array,
 }
 Widget.defaultProps = {
   className: '',
@@ -212,6 +226,8 @@ Widget.defaultProps = {
   wl: null,
   cu: null,
   onOpenInEditor: null,
+  rows: null,
+  columns: null,
 }
 
 export default withQueryClient(withStore(Widget))
