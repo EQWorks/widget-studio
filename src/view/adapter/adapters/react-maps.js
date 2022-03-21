@@ -18,6 +18,7 @@ import {
   MAP_VIS_OTHERS,
   LAYER_SCALE,
   GEO_KEY_TYPES,
+  GEO_KEY_TYPE_NAMES,
   PITCH,
   MAP_LEGEND_POSITION,
   MAP_LEGEND_SIZE,
@@ -133,7 +134,6 @@ export default {
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
-
     let geometry = {}
     let mapGroupKeyType = ''
     if (mapLayer === MAP_LAYERS.scatterplot) {
@@ -148,16 +148,17 @@ export default {
     }
 
     // TO DO: implement logic for when we want to use geojson layer to display POIs in editor mode
-    const dataSource = mapLayer === MAP_LAYERS.geojson ?
+    const finalData = mapLayer === MAP_LAYERS.geojson &&
+      !GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey) ?
       {
-        tileGeom: `https://mapsource.locus.place/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`,
+        tileGeom: `${process.env.TEGOLA_SERVER_URL || process.env.STORYBOOK_TEGOLA_SERVER_URL}/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`, // <ignore scan-env>
         tileData: data,
       } :
       data
 
     return ({
       // create a good id
-      dataConfig: [{ id: 'testWIReport', data: dataSource }],
+      dataConfig: [{ id: 'testWIReport', data: finalData }],
       layerConfig: [{
         layer: mapLayer,
         dataId: 'testWIReport',
@@ -172,14 +173,14 @@ export default {
             * however, the LocusMap receives an array valueOptions prop for elevation, hence
             * the special case for elevation in this case
             */
-            const visValue = vis === 'elevation' ? 0 : uniqueOptions[vis]?.value
+            const visValue = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
             return [
               vis,
               {
                 value: keyTitle ?
                   { field: keyTitle } :
                   visValue,
-                valueOptions: vis === 'elevation' ?
+                valueOptions: vis === MAP_VALUE_VIS.elevation ?
                   [0, uniqueOptions[vis]?.value] :
                   uniqueOptions[vis]?.valueOptions,
                 //----TO DO - ERIKA - add the LAYER_SCALE to state for editor when implementing constrols for scale
