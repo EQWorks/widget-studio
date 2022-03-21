@@ -466,6 +466,123 @@ export default {
     ],
   },
   'map-1': {
+    'title': 'My example map widget - polygon geojson layer FSA & postal code',
+    'type': 'map',
+    'filters': [
+      {
+        'key': 'spend',
+        'filter': [
+          0,
+          100,
+        ],
+      },
+    ],
+    'groupFilter': [],
+    'valueKeys': [],
+    'mapValueKeys': [
+      {
+        'mapVis': 'elevation',
+        'key': 'impressions',
+        'title': 'Impressions (sum)',
+        'agg': 'sum',
+      },
+      {
+        'title': 'Spend (sum)',
+        'mapVis': 'fill',
+        'key': 'spend',
+        'agg': 'sum',
+      },
+    ],
+    'formatDataFunctions': {},
+    'group': true,
+    'groupKey': null,
+    'mapGroupKey': 'geo_cohort_fsa',
+    'indexKey': null,
+    'mapGroupKeyTitle': 'Geo cohort fsa',
+    'uniqueOptions': {
+      'radius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'fill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'elevation': {
+        'value': 10000,
+      },
+      'lineWidth': {
+        'value': 1,
+      },
+      'opacity': {
+        'value': 30,
+      },
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLegend': true,
+      'showTooltip': true,
+      'showAxisTitles': true,
+      'showSubPlotTitles': true,
+      'subPlots': false,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        0,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'legendSize': 'Small',
+      'baseColor': '#366fe4',
+    },
+    'mapViewState': {
+      'value': {
+        'latitude': 44.4,
+        'longitude': -79.23,
+        'zoom': 7,
+      },
+      'postalCode': {
+        'latitude': 43.75,
+        'longitude': -79.4,
+        'zoom': 10,
+      },
+    },
+    'dataSource': {
+      'type': 'Execution',
+      'id': '1389',
+    },
+    'percentageMode': false,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#366fe4',
+    ],
+  },
+  'map-2': {
     'title': 'My example map widget - scatterplot layer',
     'type': 'map',
     'filters': [
@@ -590,123 +707,6 @@ export default {
       '#91F5AD',
       '#dd1c1a',
       '#463F3A',
-    ],
-  },
-  'map-2': {
-    'title': 'My example map widget - polygon geojson layer',
-    'type': 'map',
-    'filters': [
-      {
-        'key': 'spend',
-        'filter': [
-          0,
-          100,
-        ],
-      },
-    ],
-    'groupFilter': [],
-    'valueKeys': [],
-    'mapValueKeys': [
-      {
-        'mapVis': 'elevation',
-        'key': 'impressions',
-        'title': 'Impressions (sum)',
-        'agg': 'sum',
-      },
-      {
-        'title': 'Spend (sum)',
-        'mapVis': 'fill',
-        'key': 'spend',
-        'agg': 'sum',
-      },
-    ],
-    'formatDataFunctions': {},
-    'group': true,
-    'groupKey': null,
-    'mapGroupKey': 'geo_cohort_fsa',
-    'indexKey': null,
-    'mapGroupKeyTitle': 'Geo cohort fsa',
-    'uniqueOptions': {
-      'radius': {
-        'value': 10,
-        'valueOptions': [
-          5,
-          15,
-        ],
-      },
-      'fill': {
-        'value': [
-          39,
-          85,
-          196,
-        ],
-        'valueOptions': [
-          [
-            214,
-            232,
-            253,
-          ],
-          [
-            39,
-            85,
-            196,
-          ],
-        ],
-      },
-      'elevation': {
-        'value': 10000,
-      },
-      'lineWidth': {
-        'value': 1,
-      },
-      'opacity': {
-        'value': 30,
-      },
-    },
-    'genericOptions': {
-      'showWidgetTitle': false,
-      'groupByValue': false,
-      'showLegend': true,
-      'showTooltip': true,
-      'showAxisTitles': true,
-      'showSubPlotTitles': true,
-      'subPlots': false,
-      'size': 0.8,
-      'titlePosition': [
-        0,
-        0,
-      ],
-      'legendPosition': [
-        1,
-        0,
-      ],
-      'legendSize': 'Small',
-      'baseColor': '#366fe4',
-    },
-    'mapViewState': {
-      'value': {
-        'latitude': 44.4,
-        'longitude': -79.23,
-        'zoom': 7,
-      },
-      'postalCode': {
-        'latitude': 43.75,
-        'longitude': -79.4,
-        'zoom': 10,
-      },
-    },
-    'dataSource': {
-      'type': 'Execution',
-      'id': '1389',
-    },
-    'percentageMode': false,
-    'presetColors': [
-      '#3232F5',
-      '#07A0C3',
-      '#F0C808',
-      '#91F5AD',
-      '#dd1c1a',
-      '#366fe4',
     ],
   },
 }
