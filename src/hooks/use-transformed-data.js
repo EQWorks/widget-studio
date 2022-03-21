@@ -167,7 +167,16 @@ const useTransformedData = () => {
       }, { [formattedDomain]: group })
       return res
     })
-  }, [group, domainIsDate, formattedColumnNames, dateAggregation, filteredGroupedData, renderableValueKeys, finalGroupKey, dataHasVariance])
+  }, [
+    group,
+    domainIsDate,
+    formattedColumnNames,
+    dateAggregation,
+    filteredGroupedData,
+    renderableValueKeys,
+    finalGroupKey,
+    dataHasVariance,
+  ])
 
   const percentageData = useMemo(() => {
     if (!percentageMode) {
@@ -219,15 +228,18 @@ const useTransformedData = () => {
       }
       if (GEO_KEY_TYPES.region.includes(mapGroupKey)) {
         const formattedDomain = formattedColumnNames[mapGroupKey]
-        const regions = Object.keys(filteredGroupedData).flat().map(region =>
-          geoKeyIsValid({ geoKey: GEO_KEY_TYPE_NAMES.region, d: region })).flat()
+        const regions = Object.keys(filteredGroupedData).reduce((acc, region) =>
+          geoKeyIsValid({ geoKey: GEO_KEY_TYPE_NAMES.region, d: region.toUpperCase().trim() }) ?
+            [...acc, region.toUpperCase().trim()] :
+            acc
+        , [])
         let regionPolygons
         try {
           regionPolygons = await getRegionPolygons(regions)
           regionPolygons = regionPolygons?.flat().reduce((acc, region) => {
             acc = {
               ...acc,
-              [region?.geometry?.name?.slice(3,5)]: region.geometry,
+              [region?.geometry?.name]: region.geometry,
             }
             return acc
           }, {})
@@ -235,18 +247,23 @@ const useTransformedData = () => {
           console.error(err)
         }
         if (regionPolygons && aggregatedData.length) {
-          return aggregatedData.map(regionData => {
-            const regionName = regionData[formattedDomain]
-            const { type, coordinates } = regionPolygons[regionName]
-            return ({
-              type: 'Feature',
-              geometry: {
-                type,
-                coordinates,
-              },
-              properties: regionData,
-            })
-          })
+          return aggregatedData.reduce((acc, regionData) => {
+            const regionName = regionData[formattedDomain].toUpperCase().trim()
+            const { type, coordinates } = regionPolygons[regionName] || {}
+            return regionPolygons[regionName] ?
+              [
+                ...acc,
+                {
+                  type: 'Feature',
+                  geometry: {
+                    type,
+                    coordinates,
+                  },
+                  properties: regionData,
+                },
+              ] :
+              acc
+          }, [])
         }
         return []
       }
@@ -255,8 +272,14 @@ const useTransformedData = () => {
           .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
         const formattedDomain = formattedColumnNames[mapGroupKey]
         return aggregatedData.reduce((acc, d) =>
-          geoKeyIsValid({ geoKey, d: d[formattedDomain].replace(' ', '') }) ?
-            [...acc, d] :
+          geoKeyIsValid({ geoKey, d: d[formattedDomain].replace(' ', '').toUpperCase() }) ?
+            [
+              ...acc,
+              {
+                ...d,
+                formattedDomain: d[formattedDomain].replace(' ', '').toUpperCase(),
+              },
+            ] :
             acc
         , [])
       }
