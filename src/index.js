@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
@@ -96,6 +96,8 @@ const Widget = ({
 
   useTransformedData()
 
+  const initDone = useMemo(() => Boolean(mode), [mode])
+
   // on first load,
   useEffect(() => {
     // validate mode prop
@@ -112,7 +114,7 @@ const Widget = ({
       wl,
       cu,
       ui: {
-        ...(!mode && { mode: validatedBaseMode }),
+        ...(!initDone && { mode: validatedBaseMode }),
         ...(validatedBaseMode === modes.QL && { showTable: true }),
         baseMode: validatedBaseMode,
         staticData,
@@ -147,8 +149,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [_columns, _config, _id, _mode, _rows, cu, executionID, id, loadConfigByID, mode, sampleConfigs, sampleData, staticData, update, wl])
-
+  }, [_columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl])
 
   // load data if source changes
   useEffect(() => {
