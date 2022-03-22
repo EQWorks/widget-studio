@@ -38,7 +38,7 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
   },
 })
 
-const Map = ({ width, height, mapConfig, ...props }) => {
+const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const toast = useStoreActions(actions => actions.toast)
   const userUpdate = useStoreActions(actions => actions.userUpdate)
   const mode = useStoreState(state => state.ui.mode)
@@ -101,7 +101,8 @@ const Map = ({ width, height, mapConfig, ...props }) => {
       <div id='LocusMap' className={classes.mapWrapper}>
         <LocusMap {
           ...{
-            ...props,
+            dataConfig,
+            layerConfig,
             mapConfig: {
               ...mapConfig,
               setCurrentViewport,
@@ -117,8 +118,9 @@ const Map = ({ width, height, mapConfig, ...props }) => {
 Map.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
+  dataConfig: PropTypes.array.isRequired,
+  layerConfig: PropTypes.array.isRequired,
   mapConfig: PropTypes.object.isRequired,
-  props: PropTypes.object.isRequired,
 }
 
 Map.defaultProps = {
@@ -146,6 +148,7 @@ export default {
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
         .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
     }
+    const { id, type } = config?.dataSource
 
     // TO DO: implement logic for when we want to use geojson layer to display POIs in editor mode
     const finalData = mapLayer === MAP_LAYERS.geojson &&
@@ -158,10 +161,10 @@ export default {
 
     return ({
       // create a good id
-      dataConfig: [{ id: 'testWIReport', data: finalData }],
+      dataConfig: [{ id: `${id}-${type}`, data: finalData }],
       layerConfig: [{
         layer: mapLayer,
-        dataId: 'testWIReport',
+        dataId: `${id}-${type}`,
         dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
         geometry,
         visualizations: Object.fromEntries(
