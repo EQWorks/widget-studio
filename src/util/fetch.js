@@ -158,21 +158,13 @@ export const requestConfig = async (id, sampleConfigs = null) => {
   }
 }
 
-// get geometry for map polygons
-const getGeoPlacePolygon = async (params) => {
-  const url = `/poi/geo-place?${Object.keys(params).map(key => key + '=' + params[key]).join('&')}`
-  const { data = {} } = await api.get(url, params)
-  return data
-}
-
-// get geometry for a list of CA regions
+// get geometry for map widget region polygons (provinces, states)
 export const getRegionPolygons = async (regions) => {
-  return await Promise.all(regions.map(region =>
-    getGeoPlacePolygon({ region: region.toUpperCase(), country: 'CA', placeType: 'region' })))
-    .then(values => {
-      if (values?.length) {
-        return values
-      }
-    })
-    .catch(err => console.error(`Region polygon retrieval error: ${err}`))
+  const url = `/poi/geo-regions?regions=${regions.join(',')}`
+  try {
+    const { data = {} } = await api.get(url, regions)
+    return data
+  } catch (err) {
+    console.error(`Region polygon retrieval error: ${err}`)
+  }
 }
