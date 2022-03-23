@@ -82,6 +82,7 @@ const Widget = ({
 
   // easy-peasy actions
   const loadData = useStoreActions((actions) => actions.loadData)
+  const loadConfig = useStoreActions(actions => actions.loadConfig)
   const loadConfigByID = useStoreActions(actions => actions.loadConfigByID)
   const update = useStoreActions(actions => actions.update)
 
@@ -149,7 +150,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [_columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl])
+  }, [_columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl])
 
   // load data if source changes
   useEffect(() => {
