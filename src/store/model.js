@@ -66,7 +66,9 @@ const stateDefaults = [
     key: 'ui',
     defaultValue: {
       mode: null,
+      baseMode: null,
       showTable: false,
+      maximizeTable: false,
       tableShowsRawData: true,
       showWidgetControls: true,
       showFilterControls: false,
@@ -382,6 +384,7 @@ export default {
         showDataSourceControls: false,
         dataSourceLoading: true,
       },
+      id: payload,
     })
     const { sampleConfigs } = getState()
     requestConfig(payload, sampleConfigs)

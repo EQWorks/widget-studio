@@ -51,7 +51,7 @@ const WidgetMeta = () => {
     ],
     ['Data Source',
       dataReady
-        ? `${dataSourceType} ${dataSourceID}${dataSourceName ? ` - ${dataSourceName}` : ''}`
+        ? dataSourceName || `${dataSourceType} ${dataSourceID}`
         : '...',
     ],
   ]), [columns.length, dataReady, dataSourceID, dataSourceName, dataSourceType, rows.length])

@@ -20,9 +20,6 @@ const useStyles = ({ isLeft, dataSourceLoading }) => makeStyles({
     width: '17.857rem !important',
     display: 'flex',
     flexDirection: 'column',
-    ':last-child': {
-      borderBottom: 'none !important',
-    },
   },
 })
 

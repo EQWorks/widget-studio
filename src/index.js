@@ -16,6 +16,7 @@ import WidgetTitleBar from './view/title-bar'
 import CustomGlobalToast from './components/custom-global-toast'
 import useTransformedData from './hooks/use-transformed-data'
 import { dataSourceTypes } from './constants/data-source'
+import CustomModal from './components/custom-modal'
 
 
 const commonClasses = {
@@ -28,34 +29,6 @@ const commonClasses = {
     flexDirection: 'row',
     justifyContent: 'end',
     alignItems: 'stretch',
-  },
-  muteContainer: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 'max(20%, 5rem)',
-    zIndex: 102,
-    background: 'rgba(100,100,100, 0.3)',
-  },
-  muteMessage: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    whiteSpace: 'normal',
-    wordWrap: 'break-word',
-    zIndex: 2,
-    position: 'absolute',
-    background: 'white',
-    color: getTailwindConfigColor('secondary-800'),
-    borderRadius: '0.4rem',
-    fontSize: '0.9rem',
-    fontWeight: 500,
-    margin: '1rem',
-    padding: '2rem 1rem',
-    lineHeight: '1.4rem',
   },
 }
 
@@ -89,17 +62,17 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
 )
 
 const Widget = ({
-  id,
+  id: _id,
   mode: _mode,
   staticData,
   wl,
   cu,
-  className,
-  editable,
-  // temporary:
-  editCallback,
   rows: _rows,
   columns: _columns,
+  className,
+  allowOpenInEditor,
+  onOpenInEditor,
+  // temporary:
   executionID,
   config: _config,
   sampleData,
@@ -108,27 +81,29 @@ const Widget = ({
   const classes = useStyles(_mode)
 
   // easy-peasy actions
-  const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
-  const loadConfig = useStoreActions((actions) => actions.loadConfig)
+  const loadConfig = useStoreActions(actions => actions.loadConfig)
   const loadConfigByID = useStoreActions(actions => actions.loadConfigByID)
   const update = useStoreActions(actions => actions.update)
 
   // common state
-  const dev = useStoreState((state) => state.dev)
+  const id = useStoreState((state) => state.id)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
+  const baseMode = useStoreState(state => state.ui.baseMode)
 
   useTransformedData()
+
+  const initDone = useMemo(() => Boolean(mode), [mode])
 
   // on first load,
   useEffect(() => {
     // validate mode prop
-    const validatedMode = Object.values(modes).find(v => v === _mode)
-    if (!validatedMode) {
+    const validatedBaseMode = Object.values(modes).find(v => v === _mode)
+    if (!validatedBaseMode) {
       throw new Error(`Invalid widget mode: ${_mode}. Valid modes are the strings ${Object.values(modes)}.`)
     }
     const dev = Boolean(sampleData && sampleConfigs)
@@ -136,57 +111,53 @@ const Widget = ({
     update({
       sampleData,
       sampleConfigs,
-      id,
       dev,
       wl,
       cu,
       ui: {
-        mode: validatedMode,
+        ...(!initDone && { mode: validatedBaseMode }),
+        ...(validatedBaseMode === modes.QL && { showTable: true }),
+        baseMode: validatedBaseMode,
         staticData,
       },
     })
-    if (_rows && _columns) {
-      // use manually passed data if available
-      resetWidget()
+    // use manually passed data if available
+    if (_rows?.length && _columns?.length) {
       update({
         rows: _rows,
         columns: _columns,
         dataSource: {
-          type:
-            mode === modes.QL
-              ? dataSourceTypes.EXECUTIONS
-              : dataSourceTypes.MANUAL,
-          id: executionID,
+          type: dataSourceTypes.MANUAL,
         },
       })
-    } else if (executionID !== -1) {
-      // use executionID if available
+    }
+    // use executionID passed from QL if available
+    if (executionID !== -1) {
       update({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
       })
     } else if (_config) {
       loadConfig(_config)
     }
-    // if there is a widget ID,
-    else if (id !== undefined && id !== null) {
+    // if there is a new widget ID,
+    else if (Number(id) !== Number(_id) && _id !== undefined && _id !== null) {
       // fetch/read the config associated with the ID
-      loadConfigByID(id)
-    } else if (staticData && validatedMode === modes.EDITOR) {
+      loadConfigByID(_id)
+    } else if (staticData && validatedBaseMode === modes.EDITOR) {
       // error on incorrect component usage
       throw new Error('Incorrect usage: Widgets in editor mode without an ID cannot have data source control disabled (staticData == true).')
-    } else if (validatedMode === modes.VIEW) {
+    } else if (validatedBaseMode === modes.VIEW && !id && ((id === undefined || id === null) || (_id === undefined && _id === null))) {
       // error on incorrect component usage
-      throw new Error(`Incorrect usage: Widgets in ${validatedMode} mode must have an ID.`)
+      throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [_columns, _config, _mode, _rows, cu, executionID, id, loadConfig, loadConfigByID, mode, resetWidget, sampleConfigs, sampleData, staticData, update, wl])
-
+  }, [_columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl])
 
   // load data if source changes
   useEffect(() => {
-    if (!staticData && !_rows && !_columns && dataSourceType && dataSourceID) {
+    if (!staticData && dataSourceType && dataSourceID) {
       loadData({ type: dataSourceType, id: dataSourceID })
     }
-  }, [staticData, loadData, dataSourceType, dataSourceID, _rows, _columns])
+  }, [staticData, loadData, dataSourceType, dataSourceID])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
@@ -195,12 +166,6 @@ const Widget = ({
       <WidgetView />
     </div>
   )
-
-  const muteMessage = useMemo(() => {
-    if (!dev && mode === modes.QL && !(_rows?.length) && !(_columns?.length)) {
-      return 'Select an execution to start building a widget.'
-    }
-  }, [_columns?.length, _rows?.length, dev, mode])
 
   const renderViewWithControls = () => {
     if (mode === modes.EDITOR) {
@@ -212,55 +177,59 @@ const Widget = ({
     return renderView
   }
 
-  return (
-    <div className={`${muteMessage ? classes.muted : ''} ${classes.outerContainer} ${className}`}>
-      <WidgetTitleBar editable={editable} editCallback={editCallback} />
+  const renderWidget = (
+    <div className={`${classes.outerContainer} ${className}`}>
+      <WidgetTitleBar allowOpenInEditor={allowOpenInEditor} onOpenInEditor={onOpenInEditor} />
       <div className={classes.innerContainer}>
         {renderViewWithControls()}
       </div>
       <CustomGlobalToast />
-      {muteMessage && (
-        <div className={classes.muteContainer}>
-          <div className={classes.muteMessage}>
-            {muteMessage}
-          </div>
-        </div>
-      )}
-    </div >
+    </div>
+  )
+
+  return (
+    baseMode !== modes.EDITOR && mode === modes.EDITOR
+      ? <CustomModal
+        title='Widget Editor'
+        onClose={() => update({ ui: { mode: baseMode } })}
+      >
+        {renderWidget}
+      </CustomModal >
+      : renderWidget
   )
 }
 
 Widget.propTypes = {
   className: PropTypes.string,
-  editable: PropTypes.bool,
+  allowOpenInEditor: PropTypes.bool,
   mode: PropTypes.string,
   id: PropTypes.string,
   staticData: PropTypes.bool,
-  rows: PropTypes.array,
-  columns: PropTypes.array,
   config: PropTypes.object,
   executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   sampleData: PropTypes.object,
   sampleConfigs: PropTypes.object,
   wl: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   cu: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  editCallback: PropTypes.func,
+  onOpenInEditor: PropTypes.func,
+  rows: PropTypes.array,
+  columns: PropTypes.array,
 }
 Widget.defaultProps = {
   className: '',
-  editable: true,
+  allowOpenInEditor: true,
   mode: modes.VIEW,
   id: undefined,
   staticData: false,
-  rows: null,
-  columns: null,
   config: null,
   executionID: -1,
   sampleData: null,
   sampleConfigs: null,
   wl: null,
   cu: null,
-  editCallback: null,
+  onOpenInEditor: null,
+  rows: null,
+  columns: null,
 }
 
 export default withQueryClient(withStore(Widget))

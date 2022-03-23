@@ -9,8 +9,6 @@ import { useStoreState, useStoreActions } from '../store'
 import WidgetAdapter from './adapter'
 import modes from '../constants/modes'
 import CustomButton from '../components/custom-button'
-import WidgetMeta from './meta'
-import CustomToggle from '../components/custom-toggle'
 import types from '../constants/types'
 import { dataSourceTypes } from '../constants/data-source'
 
@@ -48,6 +46,9 @@ const useStyles = ({ mode, tableExpanded, type }) => makeStyles(
         fontWeight: 700,
         color: getTailwindConfigColor('secondary-800'),
         borderBottom: `1px solid ${getTailwindConfigColor('secondary-300')}`,
+        ':not(:first-child)': {
+          marginLeft: '0.2rem',
+        },
       },
       tableTitle: {
         flex: 1,
@@ -60,12 +61,7 @@ const useStyles = ({ mode, tableExpanded, type }) => makeStyles(
         color: getTailwindConfigColor('secondary-500'),
         fontFamily: 'mono',
       },
-      tableContentContainer: {
-        height: tableExpanded ? '100%' : '0 !important',
-        overflow: 'auto',
-        padding: '1rem',
-      },
-      tableCollapseButton: {
+      tableHeaderButton: {
         background: `${getTailwindConfigColor('secondary-300')} !important`,
         '& svg': {
           fill: `${getTailwindConfigColor('secondary-800')} !important`,
@@ -84,40 +80,6 @@ const useStyles = ({ mode, tableExpanded, type }) => makeStyles(
         display: 'flex !important',
         justifyContent: 'center !important',
         alignItems: 'center !important',
-      },
-      table: {
-        border: `2px solid ${getTailwindConfigColor('secondary-300')}`,
-        borderRadius: '0.425rem',
-        fontSize: '0.78rem',
-        marginTop: '1rem',
-      },
-      tableExtra: {
-        display: 'flex',
-        '> *': {
-          background: getTailwindConfigColor('secondary-100'),
-          border: `2px solid ${getTailwindConfigColor('secondary-300')}`,
-          borderRadius: '0.425rem',
-          padding: '0.75rem',
-          fontSize: '0.78rem',
-          color: getTailwindConfigColor('secondary-800'),
-          marginRight: '1rem',
-          '&:first-child': {
-            flex: 1,
-          },
-          '&:last-child': {
-            marginRight: 0,
-          },
-        },
-      },
-      tableDisplayControls: {
-        flexShrink: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        fontSize: '0.85rem',
-      },
-      tableRawToggle: {
-        fontSize: '0.85rem !important',
       },
     }
     : {
@@ -152,7 +114,6 @@ const WidgetView = () => {
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
-  const tableShowsRawData = useStoreState((state) => state.ui.tableShowsRawData)
   const showTable = useStoreState((state) => state.ui.showTable)
   const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
   const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
@@ -161,19 +122,6 @@ const WidgetView = () => {
   const [autoExpandedTable, setAutoExpandedTable] = useState(false)
 
   const classes = useStyles({ mode, tableExpanded, type })
-
-  const noTransformedData = useMemo(() => (
-    !type ||
-    !domain.value ||
-    !renderableValueKeys?.length ||
-    !transformedData?.length
-  ), [domain.value, renderableValueKeys?.length, transformedData?.length, type])
-
-  useEffect(() => {
-    if (noTransformedData) {
-      update({ ui: { tableShowsRawData: true } })
-    }
-  }, [noTransformedData, update])
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
@@ -225,12 +173,11 @@ const WidgetView = () => {
   const renderWidgetWarning = (
     <div className='h-full flex-1 flex flex-col justify-center items-center'>
       {
-        dataSourceLoading ?
-          <div className='m-3'>
+        dataSourceLoading
+          ? <div className='m-3'>
             <Loader open classes={{ icon: 'text-primary-700' }} />
           </div>
-          :
-          <span className='font-semibold text-lg text-secondary-500'>{widgetWarning.primary}</span>
+          : <span className='font-semibold text-lg text-secondary-500'>{widgetWarning.primary}</span>
       }
       <span className='text-md text-secondary-500'>
         {dataSourceLoading ? dataSourceLoadingMessage : widgetWarning.secondary}
@@ -257,7 +204,7 @@ const WidgetView = () => {
                 </span>
                 <CustomButton
                   classes={{
-                    button: classes.tableCollapseButton,
+                    button: classes.tableHeaderButton,
                   }}
                   type='secondary'
                   onClick={() => setTableExpanded(!tableExpanded)}
@@ -268,27 +215,17 @@ const WidgetView = () => {
                       : <Icons.Add size='sm' />
                   }
                 </CustomButton>
+                <CustomButton
+                  classes={{
+                    button: classes.tableHeaderButton,
+                  }}
+                  type='secondary'
+                  onClick={() => update({ ui: { maximizeTable: true } })}
+                >
+                  <Icons.Expand size='sm' />
+                </CustomButton>
               </div>
-              <div className={classes.tableContentContainer}>
-                <div className={classes.tableExtra}>
-                  <WidgetMeta />
-                  <div className={classes.tableDisplayControls}>
-                    Display:
-                    <CustomToggle
-                      disabled={noTransformedData}
-                      classes={{
-                        label: classes.tableRawToggle,
-                      }}
-                      value={tableShowsRawData}
-                      label='Raw Data'
-                      onChange={() => update({ ui: { tableShowsRawData: !tableShowsRawData } })}
-                    />
-                  </div>
-                </div>
-                <div className={classes.table}>
-                  <ResultsTable results={tableShowsRawData ? rows : transformedData} />
-                </div>
-              </div>
+              <ResultsTable />
             </div>
           </>
           : <>

@@ -10,7 +10,6 @@ import ValueControls from '../shared/value-controls'
 import CustomButton from '../../components/custom-button'
 import DomainControls from '../shared/domain-controls'
 import MapDomainControls from '../shared/map-domain-controls'
-import MutedBarrier from '../shared/muted-barrier'
 
 
 const QLModeControls = ({ children }) => {
@@ -29,14 +28,12 @@ const QLModeControls = ({ children }) => {
   const allowReset = useStoreState((state) => state.ui.allowReset)
 
   const footer = <>
-    <div className='flex-1'>
-      <CustomButton
-        onClick={resetWidget}
-        disabled={!allowReset}
-      >
+    <CustomButton
+      onClick={resetWidget}
+      disabled={!allowReset}
+    >
         reset all
-      </CustomButton>
-    </div>
+    </CustomButton>
     {/* <CustomButton
       endIcon={<Icons.Save size='sm' />}
       variant='filled'
@@ -50,30 +47,28 @@ const QLModeControls = ({ children }) => {
   return (
     <>
       {children}
-      <MutedBarrier mute={!dataReady || (!(rows?.length) && !(columns?.length))}>
-        <CustomAccordion
-          disabled={!dataReady}
-          title={'Controls'}
-          footer={footer}
-          open={showWidgetControls}
-          toggle={() => update({ ui: { showWidgetControls: !showWidgetControls } })}
-        >
-          <div className='flex flex-col w-full'>
-            <WidgetTypeControls />
-            {
-              type === types.MAP
-                ? <>
-                  <MapDomainControls />
-                  <MapValueControls />
-                </>
-                : <>
-                  <DomainControls />
-                  <ValueControls />
-                </>
-            }
-          </div>
-        </CustomAccordion>
-      </MutedBarrier>
+      <CustomAccordion
+        disabled={!dataReady || (!(rows?.length) && !(columns?.length))}
+        title={'Controls'}
+        footer={footer}
+        open={showWidgetControls}
+        toggle={() => update({ ui: { showWidgetControls: !showWidgetControls } })}
+      >
+        <div className='flex flex-col w-full'>
+          <WidgetTypeControls />
+          {
+            type === types.MAP
+              ? <>
+                <MapDomainControls />
+                <MapValueControls />
+              </>
+              : <>
+                <DomainControls />
+                <ValueControls />
+              </>
+          }
+        </div>
+      </CustomAccordion>
     </>
   )
 }
