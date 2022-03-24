@@ -136,8 +136,10 @@ export default {
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
+    let finalData = data
     let geometry = {}
     let mapGroupKeyType = ''
+
     if (mapLayer === MAP_LAYERS.scatterplot) {
       const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
       const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
@@ -147,20 +149,17 @@ export default {
       geometry = { geoKey: mapGroupKeyTitle }
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
         .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
+      if (!GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)) {
+        finalData = {
+          tileGeom: `${process.env.TEGOLA_SERVER_URL || process.env.STORYBOOK_TEGOLA_SERVER_URL}/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`, // <ignore scan-env>
+          tileData: data,
+        }
+      }
     }
-    const { id, type } = config?.dataSource
 
-    // TO DO: implement logic for when we want to use geojson layer to display POIs in editor mode
-    const finalData = mapLayer === MAP_LAYERS.geojson &&
-      !GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey) ?
-      {
-        tileGeom: `${process.env.TEGOLA_SERVER_URL || process.env.STORYBOOK_TEGOLA_SERVER_URL}/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`, // <ignore scan-env>
-        tileData: data,
-      } :
-      data
+    const { id, type } = config?.dataSource || {}
 
     return ({
-      // create a good id
       dataConfig: [{ id: `${id}-${type}`, data: finalData }],
       layerConfig: [{
         layer: mapLayer,
