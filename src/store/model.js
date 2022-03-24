@@ -7,12 +7,21 @@ import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color
 import { cleanUp } from '../util/string-manipulation'
 import { requestConfig, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
-import { MAP_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
+import {
+  MAP_LAYERS,
+  MAP_GEO_KEYS,
+  GEO_KEY_TYPES,
+  MAP_LAYER_VALUE_VIS,
+  MAP_LAYER_GEO_KEYS,
+  COORD_KEYS,
+  GEO_KEY_TYPE_NAMES,
+} from '../constants/map'
 import { getKeyFormatFunction } from '../util/data-format-functions'
 import { deepMerge } from './util'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { columnInference } from '../util/columns'
+import { mapDataIsValid } from '../util/map_data_validation'
 import { EXPORT_TYPES } from '../constants/export'
 
 
@@ -254,15 +263,22 @@ export default {
     }
   ),
 
+  mapLayer: computed(
+    [
+      (state) => state.mapGroupKey,
+    ],
+    (mapGroupKey) =>
+      Object.keys(MAP_LAYER_VALUE_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+  ),
+
   // determines to use postal code geo key to aggregate by FSA
   groupFSAByPC: computed(
     [
       (state) => state.mapGroupKey,
       (state) => state.columns,
     ],
-    (mapGroupKey, columns) => {
-      return GEO_KEY_TYPES.fsa.includes(mapGroupKey) && !columns.map(({ name }) => name).includes(mapGroupKey)
-    }
+    (mapGroupKey, columns) => GEO_KEY_TYPES.fsa.includes(mapGroupKey) &&
+      !columns.map(({ name }) => name).includes(mapGroupKey)
   ),
 
   domainIsDate: computed(
@@ -333,6 +349,7 @@ export default {
       (state) => state.renderableValueKeys,
       (state) => state.domain,
       (state) => state.transformedData,
+      (state) => state.mapDataReady,
     ],
     (
       rows,
@@ -341,10 +358,49 @@ export default {
       renderableValueKeys,
       domain,
       transformedData,
+      mapDataReady,
     ) => (
-      Boolean(type && columns.length && rows.length && transformedData?.length &&
+      Boolean(type && ((type === types.MAP && mapDataReady) || type !== types.MAP) &&
+        columns.length && rows.length && transformedData?.length &&
         renderableValueKeys.length && domain.value)
     )),
+
+  /** checks if transformedData is in sync with the map layer, domain, & renderableValueKeys */
+  mapDataReady: computed(
+    [
+      (state) => state.type,
+      (state) => state.renderableValueKeys,
+      (state) => state.domain,
+      (state) => state.transformedData,
+      (state) => state.formattedColumnNames,
+      (state) => state.mapLayer,
+    ],
+    (
+      type,
+      renderableValueKeys,
+      domain,
+      transformedData,
+      formattedColumnNames,
+      mapLayer,
+    ) => {
+      if (type === types.MAP && transformedData?.length) {
+        const dataSample = transformedData[0] || {}
+        const dataKeys = Object.keys(dataSample)
+        const mapGroupKeyTitle = formattedColumnNames[domain.value]
+        const dataIsValid = mapDataIsValid({ dataSample, mapGroupKeyTitle, renderableValueKeys })
+        if (mapLayer === MAP_LAYERS.scatterplot) {
+          const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
+          const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
+          return Boolean(latitude && longitude && dataIsValid)
+        }
+        if (mapLayer === MAP_LAYERS.geojson) {
+          return GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(domain.value) ?
+            mapDataIsValid({ dataSample: dataSample.properties, mapGroupKeyTitle, renderableValueKeys }) :
+            dataIsValid
+        }
+      }
+      return false
+    }),
 
   dataReady: computed(
     [
