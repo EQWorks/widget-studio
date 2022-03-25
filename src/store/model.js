@@ -23,6 +23,7 @@ import { columnTypes } from '../constants/columns'
 import { columnInference } from '../util/columns'
 import { mapDataIsValid } from '../util/map_data_validation'
 import { EXPORT_TYPES } from '../constants/export'
+import { screenshot } from '../util/export'
 
 
 const MAX_UNDO_STEPS = 10
@@ -446,6 +447,12 @@ export default {
       },
     })
     setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
+  }),
+
+  getScreenshotBase64: thunk(async (actions, payload, { getState }) => {
+    const { ui: { screenshotRef } } = getState()
+    const type = 'image/png'
+    return await screenshot(screenshotRef, type)
   }),
 
   loadConfigByID: thunk(async (actions, payload, { getState }) => {
