@@ -154,7 +154,15 @@ export const requestData = async (dataSourceType, dataSourceID, sampleData = nul
 // TODO request from db -- this is a placeholder
 export const requestConfig = async (id, sampleConfigs = null) => {
   if (sampleConfigs) {
-    return sampleConfigs[id]
+    const sample = sampleConfigs[id]
+    return {
+      id,
+      whitelabel: sample.wl,
+      customer: sample.cu,
+      created_at: Date.now(),
+      updated_at: Date.now(),
+      config: sample,
+    }
   }
 }
 
