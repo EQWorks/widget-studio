@@ -1,5 +1,5 @@
 export default {
-  'pie-1': {
+  'dev-pie-1': {
     'title': 'My example pie widget',
     'type': 'pie',
     'filters': [
@@ -61,7 +61,7 @@ export default {
       'id': '187',
     },
   },
-  'pie-2': {
+  'dev-pie-2': {
     'title': 'Percentage widget',
     'type': 'pie',
     'filters': [],
@@ -110,7 +110,7 @@ export default {
       'id': '141',
     },
   },
-  'pie-3': {
+  'dev-pie-3': {
     'title': 'Paymi Sample 1',
     'type': 'pie',
     'filters': [],
@@ -177,7 +177,7 @@ export default {
       '#366fe4',
     ],
   },
-  'bar-1': {
+  'dev-bar-1': {
     'title': 'My example bar widget',
     'type': 'bar',
     'filters': [
@@ -234,7 +234,7 @@ export default {
       'id': '187',
     },
   },
-  'bar-2': {
+  'dev-bar-2': {
     'title': 'Time/Price Widget',
     'type': 'bar',
     'filters': [],
@@ -294,7 +294,7 @@ export default {
     ],
     'dateAggregation': 'Hour',
   },
-  'line-1': {
+  'dev-line-1': {
     'title': 'Another Line Widget',
     'type': 'line',
     'filters': [
@@ -349,7 +349,7 @@ export default {
       'id': '191',
     },
   },
-  'line-2': {
+  'dev-line-2': {
     'title': 'My example line widget',
     'type': 'line',
     'filters': [],
@@ -396,7 +396,7 @@ export default {
       'id': '305',
     },
   },
-  'scatter-1': {
+  'dev-scatter-1': {
     'title': 'My example scatter widget',
     'type': 'scatter',
     'filters': [
@@ -465,7 +465,7 @@ export default {
       '#463F3A',
     ],
   },
-  'map-1': {
+  'dev-map-1': {
     'title': 'My example map widget - polygon geojson layer FSA & postal code',
     'type': 'map',
     'filters': [
@@ -582,7 +582,7 @@ export default {
       '#366fe4',
     ],
   },
-  'map-2': {
+  'dev-map-2': {
     'title': 'My example map widget - scatterplot layer',
     'type': 'map',
     'filters': [
