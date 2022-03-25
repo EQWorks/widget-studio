@@ -93,6 +93,7 @@ const stateDefaults = [
       toastConfig: {},
       exportType: EXPORT_TYPES[0],
       screenshotRef: null,
+      image: null,
     },
     resettable: false,
   },
