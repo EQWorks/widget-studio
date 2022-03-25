@@ -50,7 +50,7 @@ const DataSourceControls = () => {
 
   const executions = useMemo(() => (
     Array.isArray(executionsList)
-      ? executionsList.filter(({ customerID }) => customerID == cu || dev)
+      ? executionsList.filter(({ customerID }) => customerID == cu || cu === -1 || dev)
         .map(({ queryID, executionID, columns, views = [] }) => {
           const { name } = savedQueriesList.find(({ queryID: _id }) => queryID === _id) || {}
           return {
