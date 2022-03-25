@@ -1376,7 +1376,7 @@
     react-iframe "^1.8.0"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.40":
+"@eqworks/lumen-labs@^0.1.0-alpha.41":
   version "0.1.0-alpha.41"
   resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.41/06d1bfbfa5551f0459af60d9874166704d225b7ee6a830586e6fb278903396e6#77313040a8775ee86f7209163104f05aceb1b885"
   integrity sha512-R2udHDgiM6fb8tC+PnVT8XKfeMah+mPH+XsgC20LXq/0eoZ1eULEWC/CsLeEFVZmHDHlsUPrqT2eDTLfbSHP1Q==
