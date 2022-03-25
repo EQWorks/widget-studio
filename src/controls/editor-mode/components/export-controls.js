@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { makeStyles, Icons } from '@eqworks/lumen-labs'
 
@@ -28,15 +28,15 @@ const ExportControls = () => {
   const title = useStoreState((state) => state.title)
   const exportType = useStoreState((state) => state.ui.exportType)
   const screenshotRef = useStoreState((state) => state.ui.screenshotRef)
+  const image = useStoreState((state) => state.ui.image)
 
   const dummyRef = useRef(null)
-  const [image, setImage] = useState(null)
   useEffect(() => {
     if (image) {
       dummyRef?.current?.click()
-      setImage(null)
+      update({ ui: { image: null } })
     }
-  }, [image])
+  }, [image, update])
   return (
     <WidgetControlCard title='Export Options'>
       <a
@@ -62,8 +62,9 @@ const ExportControls = () => {
               endIcon={<Icons.DownloadBold size='sm' />}
               onClick={async () => {
                 const { mime, extension } = exportType || {}
+                const image = await screenshot(screenshotRef)
                 if (mime && extension) {
-                  setImage(await screenshot(screenshotRef, mime))
+                  update({ ui: { image } })
                 }
               }}
             >
