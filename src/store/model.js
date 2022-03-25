@@ -81,8 +81,8 @@ const stateDefaults = [
       tableShowsRawData: true,
       showWidgetControls: true,
       showFilterControls: false,
-      showDataSourceControls: false,
       staticData: false,
+      configLoading: false,
       dataSourceLoading: false,
       dataSourceError: null,
       dataSourceName: null,
@@ -340,6 +340,19 @@ export default {
     )))
   ),
 
+  isLoading: computed(
+    [
+      (state) => state.ui.configLoading,
+      (state) => state.ui.dataSourceLoading,
+    ],
+    (
+      configLoading,
+      dataSourceLoading
+    ) => (
+      configLoading || dataSourceLoading
+    )
+  ),
+
   /** checks if all initial states have been filled */
   isReady: computed(
     [
@@ -350,6 +363,7 @@ export default {
       (state) => state.domain,
       (state) => state.transformedData,
       (state) => state.mapDataReady,
+      (state) => state.isLoading,
     ],
     (
       rows,
@@ -359,11 +373,11 @@ export default {
       domain,
       transformedData,
       mapDataReady,
-    ) => (
-      Boolean(type && ((type === types.MAP && mapDataReady) || type !== types.MAP) &&
-        columns.length && rows.length && transformedData?.length &&
-        renderableValueKeys.length && domain.value)
-    )),
+      isLoading,
+    ) => {
+      const mapReady = type !== types.MAP || mapDataReady
+      return mapReady && !isLoading && type && columns.length && rows.length && transformedData?.length && renderableValueKeys.length && domain.value
+    }),
 
   /** checks if transformedData is in sync with the map layer, domain, & renderableValueKeys */
   mapDataReady: computed(
@@ -436,10 +450,7 @@ export default {
   loadConfigByID: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
-      ui: {
-        showDataSourceControls: false,
-        dataSourceLoading: true,
-      },
+      ui: { configLoading: true },
       id: payload,
     })
     const { sampleConfigs } = getState()
@@ -459,9 +470,7 @@ export default {
   loadConfig: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
-      ui: {
-        showDataSourceControls: false,
-      },
+      ui: { configLoading: true },
     })
     const { dataSource, ...config } = payload
     // populate state with safe default values
@@ -476,6 +485,7 @@ export default {
     })
     // populate state with values from config
     actions.update(config)
+    actions.update({ ui: { configLoading: false } })
     const { dataSource: previousDataSource } = getState()
     if (dataSource?.type !== previousDataSource?.type
       && dataSource?.id !== previousDataSource?.id) {
@@ -486,10 +496,7 @@ export default {
   loadData: thunk(async (actions, dataSource, { getState }) => {
     actions.update({
       ignoreUndo: true,
-      ui: {
-        showDataSourceControls: false,
-        dataSourceLoading: true,
-      },
+      ui: { dataSourceLoading: true },
       dataSource,
     })
     const { sampleData, dataSource: previousDataSource } = getState()
