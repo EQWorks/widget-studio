@@ -31,6 +31,8 @@ const WidgetMeta = () => {
   // widget state
   const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
+  const createdAt = useStoreState((state) => state.meta.createdAt)
+  const updatedAt = useStoreState((state) => state.meta.updatedAt)
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -43,8 +45,8 @@ const WidgetMeta = () => {
 
   // TODO this is mocked
   const detailItems = useMemo(() => ([
-    // ['Created Date', '09/09/09 10:23 AM'],
-    // ['Last Updated', '09/09/09 10:23 AM'],
+    ['Created Date', new Date(createdAt).toLocaleString()],
+    ['Last Updated', new Date(updatedAt).toLocaleString()],
     ['Data Volume', dataReady
       ? `${columns.length} column${columns.length !== 1 ? 's' : ''} ${rows.length} row${rows.length !== 1 ? 's' : ''}`
       : '...',
@@ -54,7 +56,7 @@ const WidgetMeta = () => {
         ? dataSourceName || `${dataSourceType} ${dataSourceID}`
         : '...',
     ],
-  ]), [columns.length, dataReady, dataSourceID, dataSourceName, dataSourceType, rows.length])
+  ]), [columns.length, createdAt, dataReady, dataSourceID, dataSourceName, dataSourceType, rows.length, updatedAt])
 
   const classes = useStyles(mode, detailItems.length)
 

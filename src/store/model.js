@@ -44,6 +44,12 @@ const stateDefaults = [
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
+    key: 'meta', defaultValue: {
+      updatedAt: null,
+      createdAt: null,
+    }, resettable: false,
+  },
+  {
     key: 'genericOptions', defaultValue: {
       showWidgetTitle: false,
       groupByValue: false,
@@ -463,8 +469,16 @@ export default {
       id: payload,
     })
     const { sampleConfigs } = getState()
-    requestConfig(payload, sampleConfigs)
-      .then(actions.loadConfig)
+    loadWidget(payload, sampleConfigs)
+      .then(({ config, updated_at, created_at }) => {
+        actions.update({
+          meta: {
+            updatedAt: updated_at,
+            createdAt: created_at,
+          },
+        })
+        actions.loadConfig(config)
+      })
       .catch(err => {
         actions.update({
           ui: {
