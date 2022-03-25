@@ -510,7 +510,8 @@ export default {
     actions.update(config)
     actions.update({ ui: { configLoading: false } })
     const { dataSource: previousDataSource } = getState()
-    if (dataSource?.type !== previousDataSource?.type
+    if (dataSource
+      && dataSource?.type !== previousDataSource?.type
       && dataSource?.id !== previousDataSource?.id) {
       actions.loadData(dataSource)
     }
