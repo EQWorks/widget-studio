@@ -103,6 +103,7 @@ const stateDefaults = [
   { key: 'undoQueue', defaultValue: [], resettable: false },
   { key: 'redoQueue', defaultValue: [], resettable: false },
   { key: 'ignoreUndo', defaultValue: false, resettable: false },
+  { key: 'unsavedChanges', defaultValue: false, resettable: false },
   { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
 ]
 
@@ -539,6 +540,7 @@ export default {
 
   // update the store state in an "undoable" fashion
   userUpdate: thunk((actions, payload) => {
+    actions.update({ unsavedChanges: true })
     actions.recordState()
     actions.update(payload)
     setTimeout(() => actions.setIgnoreUndo(false), 150)
