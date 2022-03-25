@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, cloneElement } from 'react'
 import { storiesOf } from '@storybook/react'
 import { Resizable } from 're-resizable'
 
@@ -10,6 +10,8 @@ import sampleConfigs from './sample-configs'
 import Widget from '../src'
 import CustomToggle from '../src/components/custom-toggle'
 import CustomSelect from '../src/components/custom-select'
+import WlCuSelector from './wl-cu-selector'
+import withQueryClient from '../src/util/with-query-client'
 
 
 const DEFAULT_WL = 4
@@ -18,7 +20,28 @@ const DEFAULT_CU = 9533
 const devProps = {
   sampleData,
   sampleConfigs,
+  wl: DEFAULT_WL,
+  cu: DEFAULT_CU,
 }
+
+const WlCuControlsProvider = withQueryClient(({ children }) => {
+  const [controls, setControls] = useState({ isDevStage: true, showSelector: true })
+  const wlState = useState({ index: -1, value: 'ALL' })
+  const cuState = useState({ index: -1, value: 'ALL' })
+  return (
+    <>
+      {controls.isDevStage && controls.showSelector && <WlCuSelector {...{ wlState, cuState }} />}
+      {
+        cloneElement(children, {
+          devStageControls: { ...controls, update: setControls },
+          wl: wlState[0].index,
+          cu: cuState[0].index,
+        })
+      }
+    </>
+  )
+})
+
 
 Object.values(modes).forEach(mode => {
   // for each non-empty sample config,
