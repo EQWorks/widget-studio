@@ -9014,6 +9014,13 @@ iwanthue@^1.5.1:
   resolved "https://registry.yarnpkg.com/iwanthue/-/iwanthue-1.5.1.tgz#13b86d1ed7c3e5e0588cdaf86609633fb2bec64a"
   integrity sha512-oQFQoeUibqgKL4CxnJdwOJLkGlP9z/N1q5rDgaTXDmJ4RhToUc2kNvnp6LGuomfkK/26i2ZPGgBQedA5OZm2/A==
 
+javascript-time-ago@^2.3.13:
+  version "2.3.13"
+  resolved "https://registry.yarnpkg.com/javascript-time-ago/-/javascript-time-ago-2.3.13.tgz#ccea41f5c07d26483e1b707c28b1ec71442ccdca"
+  integrity sha512-LiNqRLERXpePGLejdqjbxfMkFlwx+2RDz21Jfw/3l2mH20fTa6nAtwOFQmAK5l0SfaV7HvixJgTCxyph9VmG1Q==
+  dependencies:
+    relative-time-format "^1.0.7"
+
 jest-haste-map@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/jest-haste-map/-/jest-haste-map-26.6.2.tgz#dd7e60fe7dc0e9f911a23d79c5ff7fb5c2cafeaa"
@@ -9735,6 +9742,11 @@ memfs@^3.1.2:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.2.1.tgz#8337aa3c4335581839ec01c3d594090cebe8f00e"
   integrity sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==
+
+memoize-one@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-6.0.0.tgz#b2591b871ed82948aee4727dc6abceeeac8c1045"
+  integrity sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==
 
 memoizerific@^1.11.3:
   version "1.11.3"
@@ -11631,7 +11643,7 @@ raf-schd@^4.0.2:
   resolved "https://registry.yarnpkg.com/raf-schd/-/raf-schd-4.0.3.tgz#5d6c34ef46f8b2a0e880a8fcdb743efc5bfdbc1a"
   integrity sha512-tQkJl2GRWh83ui2DiPTJz9wEiMN20syf+5oKfB03yYP7ioZcJwsIK8FjrtLwH1m7C7e+Tt2yYBlrOpdT+dyeIQ==
 
-raf@^3.1.0:
+raf@^3.1.0, raf@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/raf/-/raf-3.4.1.tgz#0742e99a4a6552f445d73e3ee0328af0ff1ede39"
   integrity sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==
@@ -12016,6 +12028,15 @@ react-textarea-autosize@^8.3.0:
     use-composed-ref "^1.0.0"
     use-latest "^1.0.0"
 
+react-time-ago@^7.1.9:
+  version "7.1.9"
+  resolved "https://registry.yarnpkg.com/react-time-ago/-/react-time-ago-7.1.9.tgz#df3999f1184b71ab09aaf1d05dda2a19b76e0bb8"
+  integrity sha512-jN4EsEgqm3a5eLJV0ZrRpom3iG+w4bullS2NHc2htIucGUIr2FbgHXjU0wIkuN9uWM87aFvIfkUDpS/ju7Mazg==
+  dependencies:
+    memoize-one "^6.0.0"
+    prop-types "^15.7.2"
+    raf "^3.4.1"
+
 react-transition-group@^4.4.0:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.2.tgz#8b59a56f09ced7b55cbd53c36768b922890d5470"
@@ -12257,6 +12278,11 @@ relateurl@^0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
+
+relative-time-format@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/relative-time-format/-/relative-time-format-1.0.7.tgz#c88423fa3fd7ee6d0d87e4e74a9260b4f367f201"
+  integrity sha512-BoLPaoL5y94ngPI4iJ9mNHqRS8NA+Hjs6oYHL5UYkbnA7/iTlvJiMoQQt8txhHhc+Y3e6yXWhwTAKvsQhnx2yg==
 
 remark-external-links@^8.0.0:
   version "8.0.0"
