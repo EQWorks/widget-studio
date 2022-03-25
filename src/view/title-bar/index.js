@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { ButtonGroup, Accordion, Icons, Chip, makeStyles, getTailwindConfigColor, Tooltip } from '@eqworks/lumen-labs'
+import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import saveConfig from '../../util/save-config'
@@ -104,7 +104,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const tentativeConfig = useStoreState((state) => state.tentativeConfig)
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
-  // const unsavedChanges = true // mocked for now
+  const unsavedChanges = useStoreState((state) => state.unsavedChanges)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -114,13 +114,14 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const renderTitleAndID = (
     <div className={classes.main}>
       <EditableTitle />
-      {/* {unsavedChanges &&
+      {
+        mode === modes.EDITOR && unsavedChanges &&
         <div className={classes.item}>
           <Chip selectable={false} color='error' >
             unsaved
           </Chip>
         </div>
-      } */}
+      }
       {
         id &&
         <div className={classes.item}>
@@ -207,26 +208,24 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
               reload data
             </CustomButton>
             <div className={classes.saveButton}>
-              <Tooltip description="Coming soon" position="left" width="6rem">
-                <ButtonGroup variant='filled' size='sm'>
-                  <CustomButton
-                    disabled
-                    variant='filled'
-                    size='sm'
-                    onClick={() => loadData(dataSource)}
-                  >
-                    save
-                  </CustomButton>
-                  <CustomButton
-                    disabled
-                    variant='filled'
-                    size='sm'
-                    onClick={() => loadData(dataSource)}
-                  >
-                    <Icons.ArrowDown size='sm' />
-                  </CustomButton>
-                </ButtonGroup>
-              </Tooltip>
+              {/* <ButtonGroup variant='filled' size='sm'> */}
+              <CustomButton
+                disabled={!config || !unsavedChanges}
+                variant='filled'
+                size='sm'
+                // onClick={save}
+              >
+                save
+              </CustomButton>
+              {/* <CustomButton
+                  disabled
+                  variant='filled'
+                  size='sm'
+                  onClick={() => loadData(dataSource)}
+                >
+                  <Icons.ArrowDown size='sm' />
+                </CustomButton>
+              </ButtonGroup> */}
             </div>
           </div>
         </div>
