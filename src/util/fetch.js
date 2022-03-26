@@ -26,6 +26,10 @@ api.interceptors.request.use(config => {
   }
 })
 
+export const getWidget = async id => (
+  api.get(`/widget-studio/widget/${id}`).then(({ data }) => data)
+)
+
 export const createWidget = async ({ config = {}, snapshot, whitelabel, customer }) => (
   api.put('/widget-studio/widget/create', {
     config: JSON.stringify(config),
@@ -167,18 +171,16 @@ export const requestData = async (dataSourceType, dataSourceID, sampleData = nul
   }
 }
 
-// TODO request from db -- this is a placeholder
-export const requestConfig = async (id, sampleConfigs = null) => {
-  if (sampleConfigs) {
-    const sample = sampleConfigs[id]
-    return {
-      id,
-      whitelabel: sample.wl,
-      customer: sample.cu,
-      created_at: Date.now(),
-      updated_at: Date.now(),
-      config: sample,
-    }
+// mocked for local dev
+export const localGetWidget = async (id, sampleConfigs) => {
+  const sample = sampleConfigs[id]
+  return {
+    id,
+    whitelabel: sample.wl,
+    customer: sample.cu,
+    created_at: Date.now(),
+    updated_at: Date.now(),
+    config: sample,
   }
 }
 
