@@ -11,6 +11,7 @@ import Widget from '../src'
 import CustomToggle from '../src/components/custom-toggle'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
+import ListDemo from './list-demo'
 
 
 const DEFAULT_WL = 4
@@ -130,5 +131,15 @@ storiesOf('Blank Widget (data source control)', module)
           mode='editor'
         />
       </div>
+    </Authenticated>
+  ))
+
+// "dashboard" demo to test CRUD
+storiesOf('List', module)
+  .add('List', () => (
+    <Authenticated product='locus'>
+      <WlCuControlsProvider>
+        <ListDemo />
+      </WlCuControlsProvider>
     </Authenticated>
   ))
