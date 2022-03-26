@@ -5,7 +5,7 @@ import types from '../constants/types'
 import typeInfo from '../constants/type-info'
 import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import { cleanUp } from '../util/string-manipulation'
-import { requestConfig, requestData } from '../util/fetch'
+import { createWidget, saveWidget, loadWidget, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
 import {
   MAP_LAYERS,
@@ -460,6 +460,31 @@ export default {
     const { ui: { screenshotRef } } = getState()
     const type = 'image/png'
     return await screenshot(screenshotRef, type)
+  }),
+
+  save: thunk(async (actions, _, { getState }) => {
+    const { config, id, wl, cu } = getState()
+    if (config) {
+      const snapshot = await actions.getScreenshotBase64()
+      const saveFn = id && !`${id}`.startsWith('dev-')
+        ? saveWidget
+        : createWidget
+      saveFn({ config, snapshot, id, whitelabel: wl, customer: cu })
+        .then(({ status }) => {
+          if (`${status}`.startsWith('2')) {
+            actions.update({ unsavedChanges: false })
+            actions.toast({
+              title: 'Widget saved successfully',
+              color: 'success',
+            })
+          } else {
+            actions.toast({
+              title: 'There was en error saving your widget',
+              color: 'error',
+            })
+          }
+        })
+    }
   }),
 
   loadConfigByID: thunk(async (actions, payload, { getState }) => {
