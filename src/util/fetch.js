@@ -26,7 +26,23 @@ api.interceptors.request.use(config => {
   }
 })
 
-// from snoke
+export const createWidget = async ({ config = {}, snapshot, whitelabel, customer }) => (
+  api.put('/widget-studio/widget/create', {
+    config: JSON.stringify(config),
+    snapshot,
+    whitelabel,
+    customer,
+  })
+)
+
+export const saveWidget = async ({ config, snapshot, id }) => (
+  api.post('/widget-studio/widget/save', {
+    config: JSON.stringify(config),
+    snapshot,
+    id,
+  })
+)
+
 export const useWhiteLabels = () => {
   const _key = 'Get Whitelabels'
   const { isError, error, isLoading, data = [] } = useQuery(
