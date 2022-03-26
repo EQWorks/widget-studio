@@ -5,7 +5,7 @@ import types from '../constants/types'
 import typeInfo from '../constants/type-info'
 import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import { cleanUp } from '../util/string-manipulation'
-import { createWidget, saveWidget, loadWidget, requestData } from '../util/fetch'
+import { createWidget, saveWidget, getWidget, localGetWidget, requestData } from '../util/fetch'
 import { geoKeyHasCoordinates } from '../util'
 import {
   MAP_LAYERS,
@@ -494,7 +494,10 @@ export default {
       id: payload,
     })
     const { sampleConfigs } = getState()
-    loadWidget(payload, sampleConfigs)
+    const getFn = sampleConfigs
+      ? localGetWidget
+      : getWidget
+    getFn(payload, sampleConfigs)
       .then(({ config, updated_at, created_at }) => {
         actions.update({
           meta: {
