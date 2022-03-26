@@ -90,6 +90,7 @@ const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
 
 const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const update = useStoreActions((actions) => actions.update)
+  const save = useStoreActions((actions) => actions.save)
   const toast = useStoreActions((actions) => actions.toast)
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const loadData = useStoreActions((actions) => actions.loadData)
@@ -213,7 +214,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
                 disabled={!config || !unsavedChanges}
                 variant='filled'
                 size='sm'
-                // onClick={save}
+                onClick={save}
               >
                 save
               </CustomButton>
