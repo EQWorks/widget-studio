@@ -30,6 +30,10 @@ export const getWidget = async id => (
   api.get(`/widget-studio/widget/${id}`).then(({ data }) => data)
 )
 
+export const deleteWidget = async id => (
+  api.post(`/widget-studio/widget/delete/${id}`)
+)
+
 export const createWidget = async ({ config = {}, snapshot, whitelabel, customer }) => (
   api.put('/widget-studio/widget/create', {
     config: JSON.stringify(config),
@@ -64,7 +68,6 @@ export const useWhiteLabels = () => {
   return [isLoading, data]
 }
 
-// from snoke
 export const useCustomers = (wlID) => {
   const _key = 'Get Customers'
   const { isError, error, isLoading, data = [] } = useQuery(
