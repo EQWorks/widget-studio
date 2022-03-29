@@ -29,18 +29,31 @@ Object.values(modes).forEach(mode => {
           id={id}
         />
       )
+      const renderWidgetAuth = (
+        <Authenticated product='locus'>
+          <div style={{
+            width: '100vw',
+            height: '100vh',
+          }}>
+            <Widget {...devProps}
+              mode={mode}
+              id={id}
+            />
+          </div>
+        </Authenticated>
+      )
       // generate an editor story and QL preview story
       storiesOf(`${mode.toUpperCase()} mode`, module)
         .add(id, () => (
           mode === modes.EDITOR
             ? <div style={{ width: '100vw', height: '100vh', background: 'blue' }}>
-              {renderWidget}
+              {id === 'map-2' ? renderWidgetAuth : renderWidget}
             </div>
             : <Resizable
               style={{ margin: '1rem' }}
               defaultSize={{ width: '50vw', height: '50vh' }}
             >
-              {renderWidget}
+              {id === 'map-2' && mode !== modes.VIEW ? renderWidgetAuth : renderWidget}
             </Resizable >
         ))
     }
@@ -66,7 +79,6 @@ storiesOf('Multiple widgets (dashboard)')
           gridAutoRows: fullscreen ? '100vh' : '60vh',
         }} >
         {
-
           Object.keys(sampleConfigs).map(id =>
             <div key={id} style={{ margin: '2rem' }}>
               <Widget {...devProps}

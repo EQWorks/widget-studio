@@ -8,7 +8,6 @@ import { LocusMap } from '@eqworks/react-maps'
 import { getCursor } from '@eqworks/react-maps/dist/utils'
 import { makeStyles } from '@eqworks/lumen-labs'
 
-import { cleanUp } from '../../../util/string-manipulation'
 import modes from '../../../constants/modes'
 import {
   COORD_KEYS,
@@ -19,6 +18,7 @@ import {
   MAP_VIS_OTHERS,
   LAYER_SCALE,
   GEO_KEY_TYPES,
+  GEO_KEY_TYPE_NAMES,
   PITCH,
   MAP_LEGEND_POSITION,
   MAP_LEGEND_SIZE,
@@ -38,7 +38,7 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
   },
 })
 
-const Map = ({ width, height, mapConfig, ...props }) => {
+const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const toast = useStoreActions(actions => actions.toast)
   const userUpdate = useStoreActions(actions => actions.userUpdate)
   const mode = useStoreState(state => state.ui.mode)
@@ -101,7 +101,8 @@ const Map = ({ width, height, mapConfig, ...props }) => {
       <div id='LocusMap' className={classes.mapWrapper}>
         <LocusMap {
           ...{
-            ...props,
+            dataConfig,
+            layerConfig,
             mapConfig: {
               ...mapConfig,
               setCurrentViewport,
@@ -117,8 +118,9 @@ const Map = ({ width, height, mapConfig, ...props }) => {
 Map.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
+  dataConfig: PropTypes.array.isRequired,
+  layerConfig: PropTypes.array.isRequired,
   mapConfig: PropTypes.object.isRequired,
-  props: PropTypes.object.isRequired,
 }
 
 Map.defaultProps = {
@@ -134,45 +136,34 @@ export default {
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data[0])
-
-    const getTooltipKey = (tooltipKey) =>
-      dataKeys.find(key => MAP_LAYER_GEO_KEYS[mapLayer].map(elem => cleanUp(elem)).includes(key) &&
-        key.toLowerCase().includes(tooltipKey))
-
-    let name = ''
-    let id = ''
+    let finalData = data
     let geometry = {}
     let mapGroupKeyType = ''
+
     if (mapLayer === MAP_LAYERS.scatterplot) {
       const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
       const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
       geometry = { longitude, latitude }
-      name = getTooltipKey('name') || getTooltipKey('poi')
-      if (name) {
-        id = getTooltipKey('id') === name ? '' : getTooltipKey('id')
-      }
     }
     if (mapLayer === MAP_LAYERS.geojson) {
       geometry = { geoKey: mapGroupKeyTitle }
-      name = mapGroupKeyTitle
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
         .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
+      if (!GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)) {
+        finalData = {
+          tileGeom: `${process.env.TEGOLA_SERVER_URL || process.env.STORYBOOK_TEGOLA_SERVER_URL}/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`, // <ignore scan-env>
+          tileData: data,
+        }
+      }
     }
 
-    // TO DO: implement logic for when we want to use geojson layer to display POIs in editor mode
-    const dataSource = mapLayer === MAP_LAYERS.geojson ?
-      {
-        tileGeom: `https://mapsource.locus.place/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`,
-        tileData: data,
-      } :
-      data
+    const { id, type } = config?.dataSource || {}
 
     return ({
-      // create a good id
-      dataConfig: [{ id: 'testWIReport', data: dataSource }],
+      dataConfig: [{ id: `${id}-${type}`, data: finalData }],
       layerConfig: [{
         layer: mapLayer,
-        dataId: 'testWIReport',
+        dataId: `${id}-${type}`,
         dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
         geometry,
         visualizations: Object.fromEntries(
@@ -184,14 +175,14 @@ export default {
             * however, the LocusMap receives an array valueOptions prop for elevation, hence
             * the special case for elevation in this case
             */
-            const visValue = vis === 'elevation' ? 0 : uniqueOptions[vis]?.value
+            const visValue = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
             return [
               vis,
               {
                 value: keyTitle ?
                   { field: keyTitle } :
                   visValue,
-                valueOptions: vis === 'elevation' ?
+                valueOptions: vis === MAP_VALUE_VIS.elevation ?
                   [0, uniqueOptions[vis]?.value] :
                   uniqueOptions[vis]?.valueOptions,
                 //----TO DO - ERIKA - add the LAYER_SCALE to state for editor when implementing constrols for scale
@@ -203,8 +194,7 @@ export default {
         interactions: {
           tooltip: {
             tooltipKeys: {
-              name,
-              id,
+              name: mapGroupKeyTitle,
             },
           },
         },

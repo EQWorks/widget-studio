@@ -8,7 +8,7 @@ import { useStoreState } from '../store'
 const api = axios.create({
   baseURL: [
     process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
-    process.env.API_STAGE || process.env.STORYBOOK_API_STAGE || 'dev',
+    process.env.API_STAGE || process.env.STORYBOOK_API_STAGE || '',
   ].filter(v => v).join('/'),
 })
 
@@ -155,5 +155,16 @@ export const requestData = async (dataSourceType, dataSourceID, sampleData = nul
 export const requestConfig = async (id, sampleConfigs = null) => {
   if (sampleConfigs) {
     return sampleConfigs[id]
+  }
+}
+
+// get geometry for map widget region polygons (provinces, states)
+export const getRegionPolygons = async (regions) => {
+  const url = `/poi/geo-regions?regions=${regions.join(',')}`
+  try {
+    const { data = {} } = await api.get(url, regions)
+    return data
+  } catch (err) {
+    console.error(`Region polygon retrieval error: ${err}`)
   }
 }

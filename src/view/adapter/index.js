@@ -39,7 +39,6 @@ const WidgetAdapter = () => {
     refreshRate: 100,
   })
 
-
   useEffect(() => {
     ref?.current && update({ ui: { screenshotRef: ref.current } })
   }, [ref, update])
@@ -48,7 +47,8 @@ const WidgetAdapter = () => {
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
 
   // pass the processed data to the rendering adapter and memoize the results
-  const adaptedDataAndConfig = useMemo(() => adapt(transformedData ?? [], config), [adapt, config, transformedData])
+  const adaptedDataAndConfig = useMemo(() => adapt(transformedData ?? [], config)
+    , [adapt, config, transformedData])
 
   // render the component
   return (

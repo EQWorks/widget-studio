@@ -1,8 +1,9 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
 
 import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
-import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../constants/map'
+import { getRegionPolygons } from '../util/fetch'
+import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES, GEO_KEY_TYPE_NAMES } from '../constants/map'
 import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
 import { latIsValid, lonIsValid, geoKeyIsValid } from '../util/geo-validation'
@@ -74,7 +75,11 @@ const useTransformedData = () => {
     group
       ? truncatedData.reduce((res, r) => {
         // FSAs are the first 3 letters of a postal code
-        const group = groupFSAByPC ? r[newGroupKey].slice(0, 3) : r[newGroupKey]
+        let group = groupFSAByPC ? r[newGroupKey].trim().slice(0, 3) : r[newGroupKey]
+        // eliminate spaces from polygon geo key values
+        if (MAP_LAYER_GEO_KEYS.geojson.includes(newGroupKey)) {
+          group = group.replace(' ', '')
+        }
         res[group] = res[group] || {}
         Object.entries(r).forEach(([k, v]) => {
           if (k !== newGroupKey) {
@@ -162,7 +167,16 @@ const useTransformedData = () => {
       }, { [formattedDomain]: group })
       return res
     })
-  }, [group, domainIsDate, formattedColumnNames, dateAggregation, filteredGroupedData, renderableValueKeys, finalGroupKey, dataHasVariance])
+  }, [
+    group,
+    domainIsDate,
+    formattedColumnNames,
+    dateAggregation,
+    filteredGroupedData,
+    renderableValueKeys,
+    finalGroupKey,
+    dataHasVariance,
+  ])
 
   const percentageData = useMemo(() => {
     if (!percentageMode) {
@@ -184,7 +198,7 @@ const useTransformedData = () => {
     return res
   }, [aggregatedData, percentageMode, renderableValueKeys])
 
-  const mapEnrichedData = useMemo(() => {
+  const getMapEnrichedData = useCallback(async () => {
     if (type === types.MAP) {
       //---TODO - Erika: complete this to include coordinates for xwi report; this is only for scatterplot layer
       // add coordinates for map widget data
@@ -212,18 +226,74 @@ const useTransformedData = () => {
           }
         }, [])
       }
+      if (GEO_KEY_TYPES.region.includes(mapGroupKey)) {
+        const formattedDomain = formattedColumnNames[mapGroupKey]
+        const regions = Object.keys(filteredGroupedData).reduce((acc, region) =>
+          geoKeyIsValid({ geoKey: GEO_KEY_TYPE_NAMES.region, d: region.toUpperCase().trim() }) ?
+            [...acc, region.toUpperCase().trim()] :
+            acc
+        , [])
+        let regionPolygons
+        try {
+          regionPolygons = await getRegionPolygons(regions)
+          regionPolygons = regionPolygons?.flat().reduce((acc, region) => {
+            acc = {
+              ...acc,
+              [region?.geometry?.name]: region.geometry,
+            }
+            return acc
+          }, {})
+        } catch (err) {
+          console.error(err)
+        }
+        if (regionPolygons && aggregatedData.length) {
+          return aggregatedData.reduce((acc, regionData) => {
+            const regionName = regionData[formattedDomain].toUpperCase().trim()
+            const { type, coordinates } = regionPolygons[regionName] || {}
+            return regionPolygons[regionName] ?
+              [
+                ...acc,
+                {
+                  type: 'Feature',
+                  geometry: {
+                    type,
+                    coordinates,
+                  },
+                  properties: regionData,
+                },
+              ] :
+              acc
+          }, [])
+        }
+        return []
+      }
       if (MAP_LAYER_GEO_KEYS.geojson.includes(mapGroupKey)) {
         const geoKey = Object.keys(GEO_KEY_TYPES)
           .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
         const formattedDomain = formattedColumnNames[mapGroupKey]
-        return aggregatedData.reduce((acc, d) => geoKeyIsValid({ geoKey, d: d[formattedDomain] }) ?
-          [...acc, d] :
-          acc
+        return aggregatedData.reduce((acc, d) =>
+          geoKeyIsValid({ geoKey, d: d[formattedDomain].replace(' ', '').toUpperCase() }) ?
+            [
+              ...acc,
+              {
+                ...d,
+                formattedDomain: d[formattedDomain].replace(' ', '').toUpperCase(),
+              },
+            ] :
+            acc
         , [])
       }
     }
     return null
-  }, [type, aggregatedData, columns, mapGroupKey, groupedData, formattedColumnNames])
+  }, [
+    type,
+    aggregatedData,
+    filteredGroupedData,
+    columns,
+    mapGroupKey,
+    groupedData,
+    formattedColumnNames,
+  ])
 
   // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => {
@@ -243,20 +313,29 @@ const useTransformedData = () => {
     )
   }, [domainIsDate, formattedColumnNames, group, indexKey, truncatedData])
 
-  // memoize the final data processing according to whether grouping is enabled
-  const finalData = useMemo(() => {
-    if (type === types.MAP) {
-      return mapEnrichedData
-    }
-    if (group) {
-      return percentageMode ? percentageData : aggregatedData
-    }
-    return indexedData
-  }, [aggregatedData, group, indexedData, mapEnrichedData, percentageData, percentageMode, type])
-
+  // update transformedData
   useEffect(() => {
-    update({ transformedData: finalData })
-  }, [finalData, update])
+    if (type === types.MAP) {
+      getMapEnrichedData()
+        .then(data => update({ transformedData: data }))
+        .catch(err => console.error(err))
+    } else if (group) {
+      percentageMode ?
+        update({ transformedData: percentageData }) :
+        update({ transformedData: aggregatedData })
+    } else {
+      update({ transformedData: indexedData })
+    }
+  }, [
+    type,
+    getMapEnrichedData,
+    update,
+    group,
+    percentageMode,
+    percentageData,
+    aggregatedData,
+    indexedData,
+  ])
 }
 
 export default useTransformedData
