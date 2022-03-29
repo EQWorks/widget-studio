@@ -27,15 +27,15 @@ api.interceptors.request.use(config => {
 })
 
 export const getWidget = async id => (
-  api.get(`/widget-studio/widget/${id}`).then(({ data }) => data)
+  api.get(`/widget-studio/widgets/${id}`).then(({ data }) => data)
 )
 
 export const deleteWidget = async id => (
-  api.post(`/widget-studio/widget/delete/${id}`)
+  api.post(`/widget-studio/widgets/${id}/delete`)
 )
 
 export const createWidget = async ({ config = {}, snapshot, whitelabel, customer }) => (
-  api.put('/widget-studio/widget/create', {
+  api.put('/widget-studio/widgets', {
     config: JSON.stringify(config),
     snapshot,
     whitelabel,
@@ -44,7 +44,7 @@ export const createWidget = async ({ config = {}, snapshot, whitelabel, customer
 )
 
 export const saveWidget = async ({ config, snapshot, id }) => (
-  api.post('/widget-studio/widget/save', {
+  api.post('/widget-studio/widgets', {
     config: JSON.stringify(config),
     snapshot,
     id,
