@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import { useCustomers, useWhiteLabels } from '../src/util/fetch'
+import { useCustomers, useWhiteLabels } from '../src/util/api'
 import CustomSelect from '../src/components/custom-select'
 
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useCallback } from 'react'
 
 import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
-import { getRegionPolygons } from '../util/fetch'
+import { getRegionPolygons } from '../util/api'
 import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES, GEO_KEY_TYPE_NAMES } from '../constants/map'
 import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
