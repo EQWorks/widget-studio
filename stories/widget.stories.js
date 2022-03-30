@@ -11,8 +11,8 @@ import Widget from '../src'
 import CustomToggle from '../src/components/custom-toggle'
 
 
-const DEFAULT_WL = 4
-const DEFAULT_CU = 9533
+const DEFAULT_WL = 2456
+const DEFAULT_CU = 27848
 
 const devProps = {
   sampleData,
