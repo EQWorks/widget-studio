@@ -201,7 +201,7 @@ const useStyles = ({ widgetPreviewExpanded }) => makeStyles({
     flex: 1,
     fontWeight: 700,
     color: getTailwindConfigColor('secondary-800'),
-    borderBottom: `1px solid ${getTailwindConfigColor('secondary-300')}`,
+    border: `1px solid ${getTailwindConfigColor('secondary-300')}`,
     ':not(:first-child)': {
       marginLeft: '0.2rem',
     },
@@ -418,27 +418,13 @@ const ListDemo = ({ wl, cu }) => {
           </CustomButton>
         </div>
         <div className={classes.content}>
-          <div className={classes.widgetCardGrid}>
-            {
-              loading
-                ? <Loader open backdrop />
-                : <>
-                  {renderWidgets}
-                  <button
-                    className={`${classes.widgetCard} ${classes.addWidgetCard}`}
-                    onClick={() => setNewWidget(true)}>
-                    <Icons.Add size='lg' />
-                  </button>
-                </>
-            }
-          </div>
           <div className={classes.widgetPreviewContainer}>
             <div
               className={classes.widgetPreviewInnerContainer}
             >
               <div className={classes.widgetPreview}>
                 <span className={classes.widgetPreviewTitle}>
-                  Widget Preview:
+                  Widget Preview
                 </span>
                 <CustomButton
                   classes={{
@@ -466,6 +452,20 @@ const ListDemo = ({ wl, cu }) => {
                   </div>
               }
             </div>
+          </div>
+          <div className={classes.widgetCardGrid}>
+            {
+              loading
+                ? <Loader open backdrop />
+                : <>
+                  {renderWidgets}
+                  <button
+                    className={`${classes.widgetCard} ${classes.addWidgetCard}`}
+                    onClick={() => setNewWidget(true)}>
+                    <Icons.Add size='lg' />
+                  </button>
+                </>
+            }
           </div>
         </div>
       </div>
