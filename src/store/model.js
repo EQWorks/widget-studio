@@ -583,7 +583,6 @@ export default {
 
   // update the store state in an "undoable" fashion
   userUpdate: thunk((actions, payload) => {
-    actions.update({ unsavedChanges: true })
     actions.recordState()
     actions.update(payload)
     setTimeout(() => actions.setIgnoreUndo(false), 150)
@@ -629,6 +628,7 @@ export default {
       ? state
       : {
         ...state,
+        unsavedChanges: true,
         undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
         ignoreUndo: true,
       }
