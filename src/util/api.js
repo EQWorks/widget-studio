@@ -36,7 +36,7 @@ export const deleteWidget = async id => (
 
 export const createWidget = async ({ config = {}, snapshot, whitelabel, customer }) => (
   api.put('/widget-studio/widgets', {
-    config: JSON.stringify(config),
+    config,
     snapshot,
     whitelabel,
     customer,
@@ -45,7 +45,7 @@ export const createWidget = async ({ config = {}, snapshot, whitelabel, customer
 
 export const saveWidget = async ({ config, snapshot, id }) => (
   api.post('/widget-studio/widgets', {
-    config: JSON.stringify(config),
+    config,
     snapshot,
     id,
   })
