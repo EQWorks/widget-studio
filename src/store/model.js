@@ -5,7 +5,7 @@ import types from '../constants/types'
 import typeInfo from '../constants/type-info'
 import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import { cleanUp } from '../util/string-manipulation'
-import { createWidget, saveWidget, getWidget, localGetWidget, requestData } from '../util/fetch'
+import { createWidget, saveWidget, getWidget, localGetWidget, requestData } from '../util/api'
 import { geoKeyHasCoordinates } from '../util'
 import {
   MAP_LAYERS,

@@ -12,7 +12,7 @@ import Widget from '../src'
 import withQueryClient from '../src/util/with-query-client'
 import CustomSelect from '../src/components/custom-select'
 import CustomButton from '../src/components/custom-button'
-import { deleteWidget, api, createWidget } from '../src/util/fetch'
+import { deleteWidget, api, createWidget } from '../src/util/api'
 
 
 TimeAgo.setDefaultLocale(en.locale)
