@@ -12,7 +12,8 @@ import Widget from '../src'
 import withQueryClient from '../src/util/with-query-client'
 import CustomSelect from '../src/components/custom-select'
 import CustomButton from '../src/components/custom-button'
-import { deleteWidget, api, createWidget } from '../src/util/api'
+import { deleteWidget, api } from '../src/util/api'
+import CustomModal from '../src/components/custom-modal'
 
 
 TimeAgo.setDefaultLocale(en.locale)
@@ -176,7 +177,7 @@ const useStyles = ({ widgetPreviewExpanded }) => makeStyles({
     alignItems: 'center',
   },
   newWidget: {
-    width: '100%',
+    width: '100% !important',
   },
   content: {
     flex: 1,
@@ -260,6 +261,7 @@ const ListDemo = ({ wl, cu }) => {
   const [widgetPreviewExpanded, setWidgetPreviewExpanded] = useState(false)
   const [sortDescending, setSortDescending] = useState(true)
   const [sortBy, setSortBy] = useState(Object.keys(SORTING)[0])
+  const [newWidget, setNewWidget] = useState()
 
   const classes = useStyles({ widgetPreviewExpanded })
 
@@ -345,6 +347,24 @@ const ListDemo = ({ wl, cu }) => {
   return (
     <>
       <ReactQueryDevtools initialIsOpen={false} />
+      {
+        newWidget && (
+          <CustomModal
+            title='New widget'
+            onClose={() => {
+              refetch()
+              setNewWidget(false)
+            }}
+          >
+            <Widget
+              className={classes.newWidget}
+              mode='editor'
+              wl={wl}
+              cu={cu}
+            />
+          </CustomModal>
+        )
+      }
       <div className={classes.outerContainer}>
         <div className={classes.header}>
           <div className={classes.headerTitle}>
@@ -406,17 +426,7 @@ const ListDemo = ({ wl, cu }) => {
                   {renderWidgets}
                   <button
                     className={`${classes.widgetCard} ${classes.addWidgetCard}`}
-                    onClick={() => (
-                      createWidget({
-                        config: {
-                          title: 'Untitled Widget',
-                          wl,
-                          cu,
-                        },
-                        whitelabel: wl,
-                        customer: cu,
-                      }).then(refetch)
-                    )}>
+                    onClick={() => setNewWidget(true)}>
                     <Icons.Add size='lg' />
                   </button>
                 </>
