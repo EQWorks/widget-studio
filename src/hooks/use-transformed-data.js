@@ -53,15 +53,30 @@ const useTransformedData = () => {
 
   // truncate the data when the filters change
   const truncatedData = useMemo(() => (
-    normalizedData.filter(obj => {
-      for (const { key, filter: [min, max] } of filters.filter(({ filter }) => Boolean(filter))) {
-        if (obj[key] < min || obj[key] > max) {
-          return false
+    filters?.length
+      ? normalizedData.filter(obj => {
+        for (const { key, filter } of filters) {
+          if (!filter) return true
+          switch (columnsAnalysis[key]?.category) {
+            case columnTypes.NUMERIC:
+            case columnTypes.PRICE:
+              if (obj[key] < filter[0] || obj[key] > filter[1]) {
+                return false
+              }
+              break
+            case columnTypes.STRING:
+              if (!filter.includes(obj[key])) {
+                return false
+              }
+              break
+            default:
+              return true
+          }
+          return true
         }
-      }
-      return true
-    })
-  ), [normalizedData, filters])
+      })
+      : normalizedData
+  ), [normalizedData, filters, columnsAnalysis])
 
   const newGroupKey = useMemo(() => (
     groupFSAByPC
