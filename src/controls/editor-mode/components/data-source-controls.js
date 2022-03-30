@@ -2,7 +2,7 @@ import React, { createElement, useMemo } from 'react'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import { useExecutions, useSavedQueries } from '../../../util/fetch'
+import { useExecutions, useSavedQueries } from '../../../util/api'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
 import { renderRow } from '../../shared/util'
