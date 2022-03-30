@@ -27,7 +27,10 @@ api.interceptors.request.use(config => {
 })
 
 export const getWidget = async id => (
-  api.get(`/widget-studio/widgets/${id}`).then(({ data }) => data)
+  api.get(`/widget-studio/widgets/${id}`).then(({ data }) => {
+    data.config = JSON.parse(data.config)
+    return data
+  })
 )
 
 export const deleteWidget = async id => (
