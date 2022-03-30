@@ -463,28 +463,32 @@ export default {
   }),
 
   save: thunk(async (actions, _, { getState }) => {
-    const { config, id, wl, cu } = getState()
-    if (config) {
-      const snapshot = await actions.getScreenshotBase64()
-      const saveFn = id && !`${id}`.startsWith('dev-')
-        ? saveWidget
-        : createWidget
-      saveFn({ config, snapshot, id, whitelabel: wl, customer: cu })
-        .then(({ status }) => {
-          if (`${status}`.startsWith('2')) {
-            actions.update({ unsavedChanges: false })
-            actions.toast({
-              title: 'Widget saved successfully',
-              color: 'success',
-            })
-          } else {
-            actions.toast({
-              title: 'There was en error saving your widget',
-              color: 'error',
-            })
-          }
-        })
+    const { config, tentativeConfig, id, wl, cu } = getState()
+    if (!config) {
+      actions.toast({
+        title: `The widget is not configured yet, but will be ${id ? 'saved' : 'created'} anyway.`,
+        color: 'warning',
+      })
     }
+    const snapshot = await actions.getScreenshotBase64()
+    const saveFn = id && !`${id}`.startsWith('dev-')
+      ? saveWidget
+      : createWidget
+    saveFn({ config: tentativeConfig, snapshot, id, whitelabel: wl, customer: cu })
+      .then(({ status }) => {
+        if (`${status}`.startsWith('2')) {
+          actions.update({ unsavedChanges: false })
+          actions.toast({
+            title: 'Widget saved successfully',
+            color: 'success',
+          })
+        } else {
+          actions.toast({
+            title: 'There was en error saving your widget',
+            color: 'error',
+          })
+        }
+      })
   }),
 
   loadConfigByID: thunk(async (actions, payload, { getState }) => {
