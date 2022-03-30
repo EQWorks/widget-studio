@@ -15,8 +15,8 @@ import withQueryClient from '../src/util/with-query-client'
 import ListDemo from './list-demo'
 
 
-const DEFAULT_WL = 4
-const DEFAULT_CU = 9533
+const DEFAULT_WL = 2456
+const DEFAULT_CU = 27848
 
 const devProps = {
   sampleData,
@@ -27,8 +27,8 @@ const devProps = {
 
 const WlCuControlsProvider = withQueryClient(({ children }) => {
   const [controls, setControls] = useState({ isDevStage: true, showSelector: true })
-  const wlState = useState({ index: -1, value: 'ALL' })
-  const cuState = useState({ index: -1, value: 'ALL' })
+  const wlState = useState({ index: DEFAULT_WL, value: 'Cox (internal)' })
+  const cuState = useState({ index: DEFAULT_CU, value: '27848 - Cox' })
   return (
     <>
       {controls.isDevStage && controls.showSelector && <WlCuSelector {...{ wlState, cuState }} />}
