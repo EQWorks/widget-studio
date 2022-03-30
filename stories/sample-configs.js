@@ -709,4 +709,78 @@ export default {
       '#463F3A',
     ],
   },
+  'filter-test-1': {
+    'title': 'Household income',
+    'type': 'bar',
+    'filters': [],
+    'groupFilter': [],
+    'valueKeys': [
+      {
+        'title': '0-50%',
+        'key': 'hh_income_0_50',
+      },
+      {
+        'title': '50-100%',
+        'key': 'hh_income_50_100',
+      },
+      {
+        'title': '100-150%',
+        'key': 'hh_income_100_150',
+      },
+      {
+        'title': '150-200%',
+        'key': 'hh_income_150_200',
+      },
+      {
+        'key': 'hh_income_200_over',
+        'title': '200%+',
+      },
+    ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
+    'group': true,
+    'groupKey': 'resolution',
+    'mapGroupKey': null,
+    'indexKey': null,
+    'groupKeyTitle': 'Resolution',
+    'uniqueOptions': {
+      'stacked': false,
+      'showTicks': true,
+      'donut': false,
+      'showPercentage': true,
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': true,
+      'showLegend': false,
+      'showTooltip': true,
+      'showAxisTitles': false,
+      'showSubPlotTitles': true,
+      'subPlots': false,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        0,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'legendSize': 'Small',
+      'baseColor': '#366fe4',
+    },
+    'dataSource': {
+      'type': 'Execution',
+      'id': '1825',
+    },
+    'percentageMode': false,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#366fe4',
+    ],
+  },
 }
