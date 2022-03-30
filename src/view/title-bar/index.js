@@ -211,7 +211,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
             <div className={classes.saveButton}>
               {/* <ButtonGroup variant='filled' size='sm'> */}
               <CustomButton
-                disabled={!config || !unsavedChanges}
+                disabled={!unsavedChanges}
                 variant='filled'
                 size='sm'
                 onClick={save}
