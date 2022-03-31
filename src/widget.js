@@ -184,7 +184,7 @@ const Widget = ({
       <div className={classes.innerContainer}>
         {renderViewWithControls()}
       </div>
-      <CustomGlobalToast />
+      {mode !== modes.COMPACT && <CustomGlobalToast />}
     </div>
   )
 
