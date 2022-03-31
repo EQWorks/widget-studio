@@ -4,4 +4,5 @@ export default {
   SCATTER: 'scatter',
   PIE: 'pie',
   MAP: 'map',
+  STAT: 'stat',
 }
