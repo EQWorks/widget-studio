@@ -163,8 +163,9 @@ const requestExecutionResults = async (id) => {
 }
 
 export const requestData = async (dataSourceType, dataSourceID, sampleData = null) => {
-  if (sampleData) {
-    return sampleData[`${dataSourceType}-${dataSourceID}`]
+  const localCopy = sampleData?.[`${dataSourceType}-${dataSourceID}`]
+  if (localCopy) {
+    return localCopy
   }
   if (dataSourceType == dataSourceTypes.SAVED_QUERIES) {
     return await requestQueryResults(dataSourceID)
