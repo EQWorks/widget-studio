@@ -48,6 +48,7 @@ const useStyles = (mode) => makeStyles(
     : {
       title: {
         color: getTailwindConfigColor('primary-500'),
+        fontSize: '1.125rem',
         fontWeight: 700,
       },
       ...commonClasses,
@@ -79,17 +80,13 @@ const EditableTitle = () => {
   )
 
   const renderTitle = (
-    mode === modes.EDITOR
-      ? <div className={classes.title} >
-        {isLoading ? '...' : title}
-        {renderEditButton}
-      </div >
-      : <>
-        <span className='text-lg font-bold text-primary-500'>
-          {isLoading ? '...' : title}
-        </span>
-        {renderEditButton}
-      </>
+    <div className={classes.title} >
+      {isLoading ? '...' : title}
+      {
+        (mode === modes.QL || mode === modes.EDITOR) &&
+        renderEditButton
+      }
+    </div >
   )
 
   const updateTitle = title => userUpdate({ title })
