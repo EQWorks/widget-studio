@@ -8,7 +8,7 @@ import { Authenticated } from '@eqworks/common-login'
 import modes from '../src/constants/modes'
 import sampleData from './sample-data'
 import sampleConfigs from './sample-configs'
-import Widget, { ListDemo } from '../src'
+import Widget, { WidgetManager } from '../src'
 import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
@@ -159,7 +159,7 @@ storiesOf('List', module)
     <Authenticated product='locus'>
       <ReactQueryDevtools initialIsOpen={false} />
       <WlCuControlsProvider>
-        <ListDemo />
+        <WidgetManager />
       </WlCuControlsProvider>
     </Authenticated>
   ))

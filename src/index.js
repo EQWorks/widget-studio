@@ -1,5 +1,4 @@
-// export { default as ListDemo } from '../stories/list-demo'
-export { default as ListDemo } from './list-demo'
+export { default as WidgetManager } from './widget-manager'
 import Widget from './widget'
 
 
