@@ -229,13 +229,16 @@ const WidgetView = () => {
             </div>
           </>
           : <>
-            <LabeledToggle
-              className='flex-0 mt-3 ml-5'
-              labels={['widget', 'table']}
-              icons={[Icons.DashboardLayout, Icons.Table]}
-              value={showTable}
-              update={(val) => update({ ui: { showTable: val } })}
-            />
+            {
+              mode !== modes.COMPACT &&
+              <LabeledToggle
+                className='flex-0 mt-3 ml-5'
+                labels={['widget', 'table']}
+                icons={[Icons.DashboardLayout, Icons.Table]}
+                value={showTable}
+                update={(val) => update({ ui: { showTable: val } })}
+              />
+            }
             <div className='flex-1'>
               <FadeBetween value={showTable}>
                 <ResultsTable results={rows} />
