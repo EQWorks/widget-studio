@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { useQuery } from 'react-query'
 import TimeAgo from 'javascript-time-ago'
@@ -8,12 +7,12 @@ import en from 'javascript-time-ago/locale/en.json'
 import ReactTimeAgo from 'react-time-ago'
 import { Icons, Chip, Loader, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import Widget from '../src'
-import withQueryClient from '../src/util/with-query-client'
-import CustomSelect from '../src/components/custom-select'
-import CustomButton from '../src/components/custom-button'
-import { deleteWidget, api } from '../src/util/api'
-import CustomModal from '../src/components/custom-modal'
+import Widget from './widget'
+import withQueryClient from './util/with-query-client'
+import CustomSelect from './components/custom-select'
+import CustomButton from './components/custom-button'
+import { deleteWidget, api } from './util/api'
+import CustomModal from './components/custom-modal'
 
 
 TimeAgo.setDefaultLocale(en.locale)
@@ -346,7 +345,6 @@ const ListDemo = ({ wl, cu }) => {
 
   return (
     <>
-      <ReactQueryDevtools initialIsOpen={false} />
       {
         newWidget && (
           <CustomModal
