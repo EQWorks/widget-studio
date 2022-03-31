@@ -14,10 +14,12 @@ import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
 import { makeStyles } from '@eqworks/lumen-labs'
 import CustomButton from '../src/components/custom-button'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 
 const DEFAULT_WL = 2456
 const DEFAULT_CU = 27848
+const DEFAULT_DEALER = 1
 
 const devProps = {
   sampleData,
@@ -154,15 +156,22 @@ storiesOf('Blank Widget (data source control)', module)
   ))
 
 // "dashboard" demo to test CRUD
-storiesOf('List', module)
-  .add('List', () => (
-    <Authenticated product='locus'>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <WlCuControlsProvider>
-        <WidgetManager />
-      </WlCuControlsProvider>
+storiesOf('Widget Management', module)
+  .add('Widget Management', () => {
+    const queryClient = new QueryClient()
+    return <Authenticated product='locus'>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <WlCuControlsProvider>
+          <WidgetManager
+            wl={DEFAULT_WL}
+            cu={DEFAULT_CU}
+            dealer={DEFAULT_DEALER}
+          />
+        </WlCuControlsProvider>
+      </QueryClientProvider>
     </Authenticated>
-  ))
+  })
 
 // tmp filter prop demo
 storiesOf('TMP filter prop demo', module)

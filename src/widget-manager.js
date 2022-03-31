@@ -89,7 +89,7 @@ const useStyles = ({ widgetPreviewExpanded }) => makeStyles({
     gridGap: '1rem',
     overflow: 'auto',
   },
-  selectedWidgetCard: {
+  previewedWidgetCard: {
     borderColor: `${getTailwindConfigColor('primary-500')} !important`,
     borderWidth: '2px !important',
   },
@@ -105,6 +105,14 @@ const useStyles = ({ widgetPreviewExpanded }) => makeStyles({
     },
     display: 'flex',
     flexDirection: 'column',
+  },
+  widgetCardSelectMode: {
+    borderColor: `${getTailwindConfigColor('secondary-700')} !important`,
+    borderWidth: '1px',
+  },
+  widgetCardSelected: {
+    borderColor: `${getTailwindConfigColor('secondary-300')} !important`,
+    background: getTailwindConfigColor('secondary-300'),
   },
   addWidgetCard: {
     justifyContent: 'center',
@@ -163,7 +171,7 @@ const useStyles = ({ widgetPreviewExpanded }) => makeStyles({
   widgetPreviewContainer: {
     borderColor: getTailwindConfigColor('secondary-200'),
     borderWidth: '1px',
-    overflow: 'hidden',
+    // overflow: 'hidden',
     width: '100%',
   },
   widgetPreviewPrompt: {
@@ -207,6 +215,7 @@ const useStyles = ({ widgetPreviewExpanded }) => makeStyles({
   },
   widgetPreviewTitle: {
     flex: 1,
+    whiteSpace: 'nowrap',
   },
   widgetPreviewButton: {
     background: `${getTailwindConfigColor('secondary-300')} !important`,
@@ -227,6 +236,27 @@ const useStyles = ({ widgetPreviewExpanded }) => makeStyles({
     display: 'flex !important',
     justifyContent: 'center !important',
     alignItems: 'center !important',
+  },
+  dashboardMembership: {
+    width: '100%',
+    borderTopLeftRadius: '0.5rem',
+    borderTopRightRadius: '0.5rem',
+    // minheight: '10rem',
+    transition: 'all 0.3s',
+    background: getTailwindConfigColor('secondary-50'),
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  dashboardMembershipControls: {
+    flex: 4,
+    padding: '1rem',
+    // height: '100%',
+    width: '100%',
+  },
+  dashboardMembershipControl: {
+    fontSize: '0.8rem',
+    color: getTailwindConfigColor('secondary-600'),
+    maxWidth: '10rem',
   },
 })
 
@@ -251,18 +281,71 @@ const useWidgets = (wlID, cuID) => {
   return [isLoading, data, refetch]
 }
 
+const useReports = (dealer) => {
+  const key = `Get Reports for dealer ${dealer}`
+  const { isError, error, isLoading, data = [] } = useQuery(
+    key,
+    () => api.get('/insights/reports/all', {
+      params: {
+        page: 1,
+        limit: 90,
+        dealer,
+      },
+    }).then(({ data: { items } }) => {
+      // console.dir(items)
+      return items
+    }),
+    { refetchOnWindowFocus: false },
+  )
+  useEffect(() => {
+    if (isError) {
+      console.error(`${key}: ${error.message}`)
+    }
+  }, [isError, error, key])
+  return [isLoading, data]
+}
 
-const WidgetManager = ({ wl, cu, className }) => {
-  const [loading, widgets = [], refetch] = useWidgets(wl, cu)
+const useDashboards = (reportID) => {
+  const key = `Get Dashboards for report ${reportID}`
+  const { isError, error, isLoading, data = [] } = useQuery(
+    key,
+    () => api.get(`/insights/dashboards/${reportID}`).then(({ data }) => data),
+    { refetchOnWindowFocus: false },
+  )
+  useEffect(() => {
+    if (isError) {
+      console.error(`${key}: ${error.message}`)
+    }
+  }, [isError, error, key])
+  return [isLoading, data]
+}
+
+
+const WidgetManager = ({ wl, cu, dealer, className }) => {
+  const [selectedReport, setSelectedReport] = useState(null)
+  const [selectedDashboard, setSelectedDashboard] = useState(null)
+
+  const [widgetsLoading, widgets = [], refetchWidgets] = useWidgets(wl, cu)
+  const [reportsLoading, reports] = useReports(dealer)
+  const [dashboardsLoading, dashboards] = useDashboards(selectedReport?.id)
+
   const [currentlyViewing, setCurrentlyViewing] = useState(null)
   const [editMode, setEditMode] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState(null)
   const [widgetPreviewExpanded, setWidgetPreviewExpanded] = useState(false)
   const [sortDescending, setSortDescending] = useState(true)
+  const [selectMode, setSelectMode] = useState(true)
+  const [selection, setSelection] = useState([])
   const [sortBy, setSortBy] = useState(Object.keys(SORTING)[0])
   const [newWidget, setNewWidget] = useState()
 
   const classes = useStyles({ widgetPreviewExpanded })
+
+  useEffect(() => {
+    if (!selectMode) {
+      setSelection([])
+    }
+  }, [selectMode])
 
   const sortedWidgets = useMemo(() => {
     if (widgets?.length) {
@@ -274,7 +357,7 @@ const WidgetManager = ({ wl, cu, className }) => {
 
   const widgetsDescription = useMemo(() => {
     let res = ''
-    if (!loading) {
+    if (!widgetsLoading) {
       if (!widgets?.length) {
         res += 'No widgets found'
       } else {
@@ -290,17 +373,33 @@ const WidgetManager = ({ wl, cu, className }) => {
       }
     }
     return res
-  }, [cu, loading, widgets.length, wl])
+  }, [cu, widgetsLoading, widgets.length, wl])
 
   const renderWidgets = (
     sortedWidgets.map(w => {
       const { id, created_at, updated_at, config: { title }, snapshot } = w || {}
+      const styles = [classes.widgetCard]
+      const selected = selection.includes(id)
+      if (currentlyViewing === id) {
+        styles.push(classes.previewedWidgetCard)
+      } if (selectMode) {
+        styles.push(classes.widgetCardSelectMode)
+      } if (selected) {
+        styles.push(classes.widgetCardSelected)
+      }
       return id && (
         <button
-          className={`${classes.widgetCard} ${currentlyViewing === id ? classes.selectedWidgetCard : ''}`}
+          className={styles.join(' ')}
           onClick={() => {
-            setCurrentlyViewing(id)
-            setWidgetPreviewExpanded(true)
+            if (selectMode) {
+              setSelection(selected
+                ? selection.filter(s => Number(s) !== Number(id))
+                : selection.concat(id)
+              )
+            } else {
+              setCurrentlyViewing(id)
+              setWidgetPreviewExpanded(true)
+            }
           }}>
           <div className={classes.widgetCardHeader}>
             <h1 className={classes.widgetCardTitle}>{title}</h1>
@@ -312,7 +411,7 @@ const WidgetManager = ({ wl, cu, className }) => {
                 onClick={() => {
                   if (deleteConfirm === id) {
                     setDeleteConfirm(null)
-                    deleteWidget(id).then(refetch)
+                    deleteWidget(id).then(refetchWidgets)
                   } else {
                     setDeleteConfirm(id)
                   }
@@ -350,7 +449,7 @@ const WidgetManager = ({ wl, cu, className }) => {
           <CustomModal
             title='New widget'
             onClose={() => {
-              refetch()
+              refetchWidgets()
               setNewWidget(false)
             }}
           >
@@ -398,15 +497,16 @@ const WidgetManager = ({ wl, cu, className }) => {
           </div>
           <CustomButton
             horizontalMargin
-            disabled={loading}
+            disabled={widgetsLoading}
             variant='outlined'
-            onClick={refetch}
+            onClick={refetchWidgets}
             endIcon={<Icons.Cycle size='sm' />}
           >
             REFRESH
           </CustomButton>
           <CustomButton
-            disabled={!widgets?.length}
+            horizontalMargin
+            disabled={!widgets?.length || selectMode}
             variant='outlined'
             type={editMode ? 'error' : 'primary'}
             onClick={() => setEditMode(!editMode)}
@@ -414,46 +514,102 @@ const WidgetManager = ({ wl, cu, className }) => {
           >
             {editMode ? 'DONE' : 'EDIT'}
           </CustomButton>
+          <CustomButton
+            horizontalMargin
+            disabled={!widgets?.length || editMode}
+            variant={selectMode ? 'outlined' : 'filled'}
+            type={selectMode ? 'error' : 'primary'}
+            onClick={() => setSelectMode(!selectMode)}
+            endIcon={selectMode ? <Icons.Close size='sm' /> : <Icons.AddSquare size='sm' />}
+          >
+            {selectMode ? 'CANCEL' : 'SELECT'}
+          </CustomButton>
         </div>
         <div className={classes.content}>
           <div className={classes.widgetPreviewContainer}>
-            <div
-              className={classes.widgetPreviewInnerContainer}
-            >
-              <div className={classes.widgetPreview}>
-                <span className={classes.widgetPreviewTitle}>
-                  Widget Preview
-                </span>
-                <CustomButton
-                  classes={{
-                    button: classes.widgetPreviewButton,
-                  }}
-                  type='secondary'
-                  onClick={() => setWidgetPreviewExpanded(!widgetPreviewExpanded)}
-                >
-                  {
-                    widgetPreviewExpanded
-                      ? <Icons.Remove size='sm' />
-                      : <Icons.Add size='sm' />
-                  }
-                </CustomButton>
-              </div>
-              {
-                currentlyViewing
-                  ? <Widget
-                    key={currentlyViewing}
-                    id={currentlyViewing}
-                    mode='view_only'
-                  />
-                  : <div className={classes.widgetPreviewPrompt} >
-                    Select a widget to view it.
+            {
+              selectMode
+                ? <div className={classes.dashboardMembership}>
+                  <div className={classes.widgetPreview}>
+                    <span className={classes.widgetPreviewTitle}>
+                      Dashboard membership
+                    </span>
                   </div>
-              }
-            </div>
+                  <div className={classes.dashboardMembershipControls}>
+                    <div className={classes.dashboardMembershipControl}>
+                      Report
+                      <CustomSelect
+                        disabled={reportsLoading}
+                        value={selectedReport?.title}
+                        data={reports.map(({ title }) => title)}
+                        onSelect={v => setSelectedReport(reports.find(r => r.title === v))}
+                      />
+                    </div>
+                    <div className={classes.dashboardMembershipControl}>
+                      Dashboard
+                      <CustomSelect
+                        disabled={dashboardsLoading || !selectedReport}
+                        value={selectedDashboard?.label}
+                        data={dashboards.map(({ label }) => label)}
+                        onSelect={v => setSelectedDashboard(dashboards.find(d => d.label === v))}
+                      />
+                    </div>
+                    {
+                      selection?.length > 0 && selectedDashboard &&
+                      <CustomButton
+                        onClick={() => {
+                          const { id, items, layout } = selectedDashboard
+                          const newItems = selection.filter(id => !items.includes(id))
+                          const newLayout = newItems.map(id => ({ x: 0, y: 0, w: 6, h: 4, i: id }))
+                          api.post(`/insights/dashboards/${id}`, {
+                            items: items.concat(newItems),
+                            layout: layout.concat(newLayout),
+                          })
+                        }}
+                      >
+                        <span> {`Add ${selection?.length} widgets to ${selectedDashboard?.label}`} </span>
+                      </CustomButton>
+                    }
+                  </div>
+                </div>
+                : <div
+                  className={classes.widgetPreviewInnerContainer}
+                >
+                  <div className={classes.widgetPreview}>
+                    <span className={classes.widgetPreviewTitle}>
+                      Widget Preview
+                    </span>
+                    <CustomButton
+                      classes={{
+                        button: classes.widgetPreviewButton,
+                      }}
+                      type='secondary'
+                      onClick={() => setWidgetPreviewExpanded(!widgetPreviewExpanded)}
+                    >
+                      {
+                        widgetPreviewExpanded
+                          ? <Icons.Remove size='sm' />
+                          : <Icons.Add size='sm' />
+                      }
+                    </CustomButton>
+                  </div>
+                  {
+                    currentlyViewing
+                      ? <Widget
+                        key={currentlyViewing}
+                        id={currentlyViewing}
+                        mode='view_only'
+                      />
+                      : <div className={classes.widgetPreviewPrompt} >
+                        Select a widget to view it.
+                      </div>
+                  }
+                </div>
+            }
           </div>
           <div className={classes.widgetCardGrid}>
             {
-              loading
+              widgetsLoading
                 ? <Loader open backdrop />
                 : <>
                   {renderWidgets}
@@ -466,7 +622,7 @@ const WidgetManager = ({ wl, cu, className }) => {
             }
           </div>
         </div>
-      </div>
+      </div >
     </>
   )
 }
@@ -474,11 +630,13 @@ const WidgetManager = ({ wl, cu, className }) => {
 WidgetManager.propTypes = {
   wl: PropTypes.number,
   cu: PropTypes.number,
+  dealer: PropTypes.number,
   className: PropTypes.string,
 }
 WidgetManager.defaultProps = {
   wl: -1,
   cu: -1,
+  dealer: 1,
   className: '',
 }
 
