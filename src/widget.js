@@ -100,6 +100,11 @@ const Widget = ({
 
   const initDone = useMemo(() => Boolean(mode), [mode])
 
+  useEffect(() => {
+    if (filters) {
+      update({ filters })
+    }
+  }, [filters, update])
   // on first load,
   useEffect(() => {
     // validate mode prop
@@ -138,12 +143,12 @@ const Widget = ({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
       })
     } else if (_config) {
-      loadConfig(_config).then(() => update({ filters }))
+      loadConfig(_config)
     }
     // if there is a new widget ID,
     else if (Number(id) !== Number(_id) && _id !== undefined && _id !== null) {
       // fetch/read the config associated with the ID
-      loadConfigByID(_id).then(() => update({ filters }))
+      loadConfigByID(_id)
     } else if (staticData && validatedBaseMode === modes.EDITOR) {
       // error on incorrect component usage
       throw new Error('Incorrect usage: Widgets in editor mode without an ID cannot have data source control disabled (staticData == true).')
