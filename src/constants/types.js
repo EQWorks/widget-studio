@@ -5,4 +5,5 @@ export default {
   PIE: 'pie',
   MAP: 'map',
   STAT: 'stat',
+  TABLE: 'table',
 }

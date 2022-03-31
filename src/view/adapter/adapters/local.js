@@ -1,3 +1,4 @@
+import Table from '../../../components/table'
 import types from '../../../constants/types'
 import Stat from './local-components/stat'
 
@@ -5,13 +6,16 @@ import Stat from './local-components/stat'
 export default {
   [types.STAT]: {
     component: Stat,
-    adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => ({
+    adapt: (data, { valueKeys }) => ({
       data,
-      // x: config.groupKeyTitle,
-      values: config.valueKeys.map(({ title }) => title),
-      ...(genericOptions.showWidgetTitle && { title }),
-      ...uniqueOptions,
-      ...genericOptions,
+      values: valueKeys.map(({ title }) => title),
+    }),
+  },
+  [types.TABLE]: {
+    component: Table,
+    adapt: (data) => ({
+      rows: data,
+      showHeader: false,
     }),
   },
 }
