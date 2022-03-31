@@ -102,7 +102,7 @@ const Widget = ({
 
   useEffect(() => {
     if (filters) {
-      update({ filters })
+      update({ propFilters: filters })
     }
   }, [filters, update])
   // on first load,
