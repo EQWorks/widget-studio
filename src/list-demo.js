@@ -252,7 +252,7 @@ const useWidgets = (wlID, cuID) => {
 }
 
 
-const ListDemo = ({ wl, cu }) => {
+const ListDemo = ({ wl, cu, className }) => {
   const [loading, widgets = [], refetch] = useWidgets(wl, cu)
   const [currentlyViewing, setCurrentlyViewing] = useState(null)
   const [editMode, setEditMode] = useState(false)
@@ -363,7 +363,7 @@ const ListDemo = ({ wl, cu }) => {
           </CustomModal>
         )
       }
-      <div className={classes.outerContainer}>
+      <div className={`${classes.outerContainer} ${className}`}>
         <div className={classes.header}>
           <div className={classes.headerTitle}>
             Available widgets
@@ -474,10 +474,12 @@ const ListDemo = ({ wl, cu }) => {
 ListDemo.propTypes = {
   wl: PropTypes.number,
   cu: PropTypes.number,
+  className: PropTypes.string,
 }
 ListDemo.defaultProps = {
   wl: -1,
   cu: -1,
+  className: '',
 }
 
 
