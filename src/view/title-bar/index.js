@@ -132,6 +132,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const dev = useStoreState((state) => state.dev)
   const unsavedChanges = useStoreState((state) => state.unsavedChanges)
   const title = useStoreState((state) => state.title)
+  const isLoading = useStoreState((state) => state.isLoading)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -210,7 +211,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   if (mode === modes.COMPACT) {
     return (
       <div className={classes.outerContainer}>
-        <span>{title}</span>
+        <span>{isLoading ? '' : title}</span>
         {renderOpenInEditorButton}
       </div>
     )
