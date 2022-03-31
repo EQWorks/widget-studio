@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import Accordion from '@material-ui/core/Accordion'
@@ -7,6 +7,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Parser, transforms } from 'json2csv'
 import { Table as ReactLabsTable } from '@eqworks/react-labs'
+import { makeStyles } from '@eqworks/lumen-labs'
 
 // formerly from util/helpers
 /* based on https://github.com/EQWorks/lumen-table/blob/af9f54cbb6e8c6e7a44e1bf44645f5da631a14e1/src/table-toolbar/download.js#L15-L44 */
@@ -79,13 +80,23 @@ const mapFalsy = {
   '': 'Unknown',
 }
 
-const Table = ({ rows }) => {
-  return (
+
+const classes = makeStyles({
+  container: {
+    '& > .MuiToolbar-root': {
+      display: 'none',
+    },
+  },
+})
+
+const Table = ({ rows, showHeader }) => {
+  const _rows = useMemo(() => rows || [], [rows])
+  const renderTable = (
     <ReactLabsTable
-      data={rows}
+      data={_rows}
       downloadFn={jsonToCsv}
     >
-      {Object.keys(rows[0] || {})?.map((d) => (
+      {Object.keys(_rows[0] || {})?.map((d) => (
         <ReactLabsTable.Column
           key={d}
           Header={d}
@@ -95,13 +106,20 @@ const Table = ({ rows }) => {
       ))}
     </ReactLabsTable>
   )
+  return (
+    showHeader
+      ? renderTable
+      : <div className={classes.container}>{renderTable}</div>
+  )
 }
 
 Table.propTypes = {
   rows: PropTypes.array,
+  showHeader: PropTypes.bool,
 }
 Table.defaultProps = {
   results: [],
+  showHeader: true,
 }
 
 export default Table
