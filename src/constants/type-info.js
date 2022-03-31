@@ -2,6 +2,7 @@ import React from 'react'
 
 import types from './types'
 import { Icons } from '@eqworks/lumen-labs'
+import LocalAdapters from '../view/adapter/adapters/local'
 import PlotlyAdapters from '../view/adapter/adapters/chart-system/plotly'
 import ReactMapsAdapter from '../view/adapter/adapters/react-maps'
 
@@ -166,6 +167,13 @@ export default {
           },
         },
       },
+    },
+  },
+  [types.STAT]: {
+    icon: Icons.Hash,
+    adapter: LocalAdapters[types.STAT],
+    mustGroup: false,
+    uniqueOptions: {
     },
   },
 }
