@@ -73,13 +73,13 @@ Object.values(modes).forEach(mode => {
         .add(id, () => (
           mode === modes.EDITOR
             ? <div style={{ width: '100vw', height: '100vh', background: 'blue' }}>
-              {id === 'map-2' ? renderWidgetAuth : renderWidget}
+              {id === 'dev-map-2' ? renderWidgetAuth : renderWidget}
             </div>
             : <Resizable
               style={{ margin: '1rem' }}
               defaultSize={{ width: '50vw', height: '50vh' }}
             >
-              {id === 'map-2' && mode !== modes.VIEW ? renderWidgetAuth : renderWidget}
+              {id === 'dev-map-2' && mode !== modes.VIEW ? renderWidgetAuth : renderWidget}
             </Resizable >
         ))
     }
