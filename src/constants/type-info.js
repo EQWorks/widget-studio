@@ -176,4 +176,11 @@ export default {
     uniqueOptions: {
     },
   },
+  [types.TABLE]: {
+    icon: Icons.Table,
+    adapter: LocalAdapters[types.TABLE],
+    mustGroup: false,
+    uniqueOptions: {
+    },
+  },
 }
