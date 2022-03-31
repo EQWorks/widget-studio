@@ -252,7 +252,7 @@ const useWidgets = (wlID, cuID) => {
 }
 
 
-const ListDemo = ({ wl, cu, className }) => {
+const WidgetManager = ({ wl, cu, className }) => {
   const [loading, widgets = [], refetch] = useWidgets(wl, cu)
   const [currentlyViewing, setCurrentlyViewing] = useState(null)
   const [editMode, setEditMode] = useState(false)
@@ -471,16 +471,16 @@ const ListDemo = ({ wl, cu, className }) => {
   )
 }
 
-ListDemo.propTypes = {
+WidgetManager.propTypes = {
   wl: PropTypes.number,
   cu: PropTypes.number,
   className: PropTypes.string,
 }
-ListDemo.defaultProps = {
+WidgetManager.defaultProps = {
   wl: -1,
   cu: -1,
   className: '',
 }
 
 
-export default withQueryClient(ListDemo)
+export default withQueryClient(WidgetManager)
