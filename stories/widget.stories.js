@@ -2,16 +2,16 @@ import React, { useState, cloneElement } from 'react'
 import { storiesOf } from '@storybook/react'
 import { Resizable } from 're-resizable'
 
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { Authenticated } from '@eqworks/common-login'
 
 import modes from '../src/constants/modes'
 import sampleData from './sample-data'
 import sampleConfigs from './sample-configs'
-import Widget from '../src'
+import Widget, { ListDemo } from '../src'
 import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
-import ListDemo from './list-demo'
 import { makeStyles } from '@eqworks/lumen-labs'
 import CustomButton from '../src/components/custom-button'
 
@@ -157,6 +157,7 @@ storiesOf('Blank Widget (data source control)', module)
 storiesOf('List', module)
   .add('List', () => (
     <Authenticated product='locus'>
+      <ReactQueryDevtools initialIsOpen={false} />
       <WlCuControlsProvider>
         <ListDemo />
       </WlCuControlsProvider>
