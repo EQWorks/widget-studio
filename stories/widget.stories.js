@@ -8,11 +8,12 @@ import modes from '../src/constants/modes'
 import sampleData from './sample-data'
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
-import CustomToggle from '../src/components/custom-toggle'
 import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
 import ListDemo from './list-demo'
+import { makeStyles } from '@eqworks/lumen-labs'
+import CustomButton from '../src/components/custom-button'
 
 
 const DEFAULT_WL = 2456
@@ -87,35 +88,52 @@ Object.values(modes).forEach(mode => {
 })
 
 storiesOf('Multiple widgets (dashboard)')
-  .add(modes.VIEW, () => {
-    const [fullscreen, setFullscreen] = useState(false)
-    return <>
-      <div className='bg-secondary-300 p-3'>
-        <CustomToggle
-          label='Fullscreen widgets'
-          value={fullscreen}
-          onChange={v => setFullscreen(v)}
-        />
-      </div>
-      <div
-        style={{
+  .add('Multiple widgets (dashboard)', () => {
+    const classes = makeStyles({
+      widget: {
+        aspectRatio: 2,
+        borderRadius: '0.6rem !important',
+      },
+    })
+    const [editMode, setEditMode] = useState(true)
+    return (
+      <>
+        <div style={{
+          display: 'flex',
+          padding: '2rem',
+        }}>
+          <div style={{ flex: 1 }}>
+            Demo
+          </div>
+          <CustomButton
+            size='lg'
+            variant='filled'
+            onClick={() => setEditMode(!editMode)}
+          >
+            EDIT
+          </CustomButton>
+        </div>
+        <div style={{
+          padding: '1rem',
           display: 'grid',
-          gridTemplateColumns: fullscreen ? 'auto' : '1fr 1fr',
-          gridAutoRows: fullscreen ? '100vh' : '60vh',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(20rem, 1fr))',
+          gap: '0.8rem',
         }} >
-        {
-          Object.keys(sampleConfigs).map(id =>
-            <div key={id} style={{ margin: '2rem' }}>
+          {
+            Object.keys(sampleConfigs).map(id =>
               <Widget {...devProps}
-                mode={modes.VIEW}
+                key={id}
+                mode={modes.COMPACT}
                 id={id}
                 staticData
+                className={classes.widget}
+                allowOpenInEditor={editMode}
               />
-            </div>
-          )
-        }
-      </div>
-    </>
+            )
+          }
+        </div>
+      </>
+    )
   })
 
 // add blank widget
