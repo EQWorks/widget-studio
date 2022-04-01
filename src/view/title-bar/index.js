@@ -212,7 +212,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
     return (
       <div className={classes.outerContainer}>
         <span>{isLoading ? '' : title}</span>
-        {renderOpenInEditorButton}
+        {allowOpenInEditor && renderOpenInEditorButton}
       </div>
     )
   }
