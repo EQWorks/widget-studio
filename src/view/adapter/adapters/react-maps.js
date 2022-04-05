@@ -147,7 +147,12 @@ export default {
       geometry = { longitude, latitude }
     }
     if (mapLayer === MAP_LAYERS.geojson) {
-      geometry = { geoKey: mapGroupKeyTitle }
+      geometry = {
+        geoKey: mapGroupKeyTitle,
+        longitude: 'longitude',
+        latitude: 'latitude',
+        geometryAccessor: d => d.properties,
+      }
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
         .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
       if (!GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)) {
@@ -220,8 +225,8 @@ export default {
                 valueKeys: mapValueKeys.map(vis => vis.title),
               },
             },
-            color: {
-              value: genericOptions.baseColor,
+            pixelOffset: {
+              value: mapLayer === MAP_LAYERS.scatterplot ? [0, 0] : [-30, 0],
             },
           },
           formatData: config.formatDataFunctions,
