@@ -140,6 +140,11 @@ export const MAX_ZOOM = {
   geojson: 14,
 }
 
+export const LABEL_OFFSET = {
+  point: 5,
+  polygon: -30,
+}
+
 // 0.5 is an empirical value which controls better when the toast message should be displayed for postal code vis
 export const MAP_TOAST_ZOOM_ADJUSTMENT = 0.5
 
