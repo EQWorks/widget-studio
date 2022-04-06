@@ -57,6 +57,7 @@ const stateDefaults = [
       showTooltip: true,
       showAxisTitles: true,
       showSubPlotTitles: true,
+      showLabels: false,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],
