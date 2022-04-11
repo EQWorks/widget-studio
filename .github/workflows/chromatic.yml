@@ -56,6 +56,8 @@ jobs:
           NODE_ENV: "development"
           STORYBOOK_API_HOST: "https://api.locus.place"
           STORYBOOK_API_STAGE: "dev"
+          STORYBOOK_QL_API_HOST: "https://api.locus.place"
+          STORYBOOK_QL_API_STAGE: "qldev"
           STORYBOOK_KEY_WARDEN_HOST: "https://auth.eqworks.io"
           STORYBOOK_KEY_WARDEN_STAGE: "dev"
           STORYBOOK_MAPBOX_ACCESS_TOKEN: ${{ secrets.STORYBOOK_MAPBOX_ACCESS_TOKEN }}
