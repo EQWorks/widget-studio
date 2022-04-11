@@ -19,7 +19,7 @@ export const columnTypeInfo = {
       const res = !isNaN(v)
       return name === undefined
         ? res
-        : res && !name.endsWith('_id')
+        : res && !name.endsWith('_id') && name !== 'resolution'
     },
   },
   [columnTypes.STRING]: {
