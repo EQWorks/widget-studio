@@ -56,6 +56,7 @@ const useStyles = (mode) => makeStyles(
 
 const EditableTitle = () => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
+  const isLoading = useStoreState((state) => state.isLoading)
   const title = useStoreState((state) => state.title)
   const mode = useStoreState((state) => state.ui.mode)
 
@@ -80,12 +81,12 @@ const EditableTitle = () => {
   const renderTitle = (
     mode === modes.EDITOR
       ? <div className={classes.title} >
-        {title || 'Untitled Widget'}
+        {isLoading ? '...' : title}
         {renderEditButton}
       </div >
       : <>
         <span className='text-lg font-bold text-primary-500'>
-          {title || 'Untitled Widget'}
+          {isLoading ? '...' : title}
         </span>
         {renderEditButton}
       </>

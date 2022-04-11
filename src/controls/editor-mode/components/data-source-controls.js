@@ -2,7 +2,7 @@ import React, { createElement, useMemo } from 'react'
 
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import { useExecutions, useSavedQueries } from '../../../util/fetch'
+import { useExecutions, useSavedQueries } from '../../../util/api'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
 import { renderRow } from '../../shared/util'
@@ -50,7 +50,7 @@ const DataSourceControls = () => {
 
   const executions = useMemo(() => (
     Array.isArray(executionsList)
-      ? executionsList.filter(({ customerID }) => customerID == cu || dev)
+      ? executionsList.filter(({ customerID }) => customerID == cu || cu === -1 || dev)
         .map(({ queryID, executionID, columns, views = [] }) => {
           const { name } = savedQueriesList.find(({ queryID: _id }) => queryID === _id) || {}
           return {

@@ -2,7 +2,10 @@ import html2canvas from 'html2canvas'
 
 
 export const screenshot = (node, type) => (
-  node && html2canvas(node, { logging: false })
+  node && html2canvas(node, {
+    logging: false,
+    scale: 2,
+  })
     .then((canvas) => {
       const croppedCanvas = document.createElement('canvas')
       const croppedCanvasContext = croppedCanvas.getContext('2d')

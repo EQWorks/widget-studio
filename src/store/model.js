@@ -5,7 +5,7 @@ import types from '../constants/types'
 import typeInfo from '../constants/type-info'
 import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import { cleanUp } from '../util/string-manipulation'
-import { requestConfig, requestData } from '../util/fetch'
+import { createWidget, saveWidget, getWidget, localGetWidget, requestData } from '../util/api'
 import { geoKeyHasCoordinates } from '../util'
 import {
   MAP_LAYERS,
@@ -23,6 +23,7 @@ import { columnTypes } from '../constants/columns'
 import { columnInference } from '../util/columns'
 import { mapDataIsValid } from '../util/map_data_validation'
 import { EXPORT_TYPES } from '../constants/export'
+import { screenshot } from '../util/export'
 
 
 const MAX_UNDO_STEPS = 10
@@ -42,6 +43,12 @@ const stateDefaults = [
   { key: 'valueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
+  {
+    key: 'meta', defaultValue: {
+      updatedAt: null,
+      createdAt: null,
+    }, resettable: false,
+  },
   {
     key: 'genericOptions', defaultValue: {
       showWidgetTitle: false,
@@ -81,8 +88,8 @@ const stateDefaults = [
       tableShowsRawData: true,
       showWidgetControls: true,
       showFilterControls: false,
-      showDataSourceControls: false,
       staticData: false,
+      configLoading: false,
       dataSourceLoading: false,
       dataSourceError: null,
       dataSourceName: null,
@@ -93,6 +100,7 @@ const stateDefaults = [
       toastConfig: {},
       exportType: EXPORT_TYPES[0],
       screenshotRef: null,
+      image: null,
     },
     resettable: false,
   },
@@ -101,6 +109,7 @@ const stateDefaults = [
   { key: 'undoQueue', defaultValue: [], resettable: false },
   { key: 'redoQueue', defaultValue: [], resettable: false },
   { key: 'ignoreUndo', defaultValue: false, resettable: false },
+  { key: 'unsavedChanges', defaultValue: false, resettable: false },
   { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
 ]
 
@@ -340,6 +349,19 @@ export default {
     )))
   ),
 
+  isLoading: computed(
+    [
+      (state) => state.ui.configLoading,
+      (state) => state.ui.dataSourceLoading,
+    ],
+    (
+      configLoading,
+      dataSourceLoading
+    ) => (
+      configLoading || dataSourceLoading
+    )
+  ),
+
   /** checks if all initial states have been filled */
   isReady: computed(
     [
@@ -350,6 +372,7 @@ export default {
       (state) => state.domain,
       (state) => state.transformedData,
       (state) => state.mapDataReady,
+      (state) => state.isLoading,
     ],
     (
       rows,
@@ -359,11 +382,11 @@ export default {
       domain,
       transformedData,
       mapDataReady,
-    ) => (
-      Boolean(type && ((type === types.MAP && mapDataReady) || type !== types.MAP) &&
-        columns.length && rows.length && transformedData?.length &&
-        renderableValueKeys.length && domain.value)
-    )),
+      isLoading,
+    ) => {
+      const mapReady = type !== types.MAP || mapDataReady
+      return mapReady && !isLoading && type && columns.length && rows.length && transformedData?.length && renderableValueKeys.length && domain.value
+    }),
 
   /** checks if transformedData is in sync with the map layer, domain, & renderableValueKeys */
   mapDataReady: computed(
@@ -433,18 +456,61 @@ export default {
     setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
   }),
 
+  getScreenshotBase64: thunk(async (actions, payload, { getState }) => {
+    const { ui: { screenshotRef } } = getState()
+    const type = 'image/png'
+    return await screenshot(screenshotRef, type)
+  }),
+
+  save: thunk(async (actions, _, { getState }) => {
+    const { config, tentativeConfig, id, wl, cu } = getState()
+    if (!config) {
+      actions.toast({
+        title: `The widget is not configured yet, but will be ${id ? 'saved' : 'created'} anyway.`,
+        color: 'warning',
+      })
+    }
+    const snapshot = await actions.getScreenshotBase64()
+    const saveFn = id && !`${id}`.startsWith('dev-')
+      ? saveWidget
+      : createWidget
+    saveFn({ config: tentativeConfig, snapshot, id, whitelabel: wl, customer: cu })
+      .then(({ status }) => {
+        if (`${status}`.startsWith('2')) {
+          actions.update({ unsavedChanges: false })
+          actions.toast({
+            title: 'Widget saved successfully',
+            color: 'success',
+          })
+        } else {
+          actions.toast({
+            title: 'There was en error saving your widget',
+            color: 'error',
+          })
+        }
+      })
+  }),
+
   loadConfigByID: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
-      ui: {
-        showDataSourceControls: false,
-        dataSourceLoading: true,
-      },
+      ui: { configLoading: true },
       id: payload,
     })
     const { sampleConfigs } = getState()
-    requestConfig(payload, sampleConfigs)
-      .then(actions.loadConfig)
+    const getFn = sampleConfigs
+      ? localGetWidget
+      : getWidget
+    getFn(payload, sampleConfigs)
+      .then(({ config, updated_at, created_at }) => {
+        actions.update({
+          meta: {
+            updatedAt: updated_at,
+            createdAt: created_at,
+          },
+        })
+        actions.loadConfig(config)
+      })
       .catch(err => {
         actions.update({
           ui: {
@@ -459,9 +525,7 @@ export default {
   loadConfig: thunk(async (actions, payload, { getState }) => {
     actions.update({
       ignoreUndo: true,
-      ui: {
-        showDataSourceControls: false,
-      },
+      ui: { configLoading: true },
     })
     const { dataSource, ...config } = payload
     // populate state with safe default values
@@ -476,8 +540,10 @@ export default {
     })
     // populate state with values from config
     actions.update(config)
+    actions.update({ ui: { configLoading: false } })
     const { dataSource: previousDataSource } = getState()
-    if (dataSource?.type !== previousDataSource?.type
+    if (dataSource
+      && dataSource?.type !== previousDataSource?.type
       && dataSource?.id !== previousDataSource?.id) {
       actions.loadData(dataSource)
     }
@@ -486,10 +552,7 @@ export default {
   loadData: thunk(async (actions, dataSource, { getState }) => {
     actions.update({
       ignoreUndo: true,
-      ui: {
-        showDataSourceControls: false,
-        dataSourceLoading: true,
-      },
+      ui: { dataSourceLoading: true },
       dataSource,
     })
     const { sampleData, dataSource: previousDataSource } = getState()
@@ -569,6 +632,7 @@ export default {
       ? state
       : {
         ...state,
+        unsavedChanges: true,
         undoQueue: [{ ...state }].concat(state.undoQueue).slice(0, MAX_UNDO_STEPS),
         ignoreUndo: true,
       }

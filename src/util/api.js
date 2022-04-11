@@ -5,7 +5,7 @@ import { dataSourceTypes } from '../constants/data-source'
 import { useStoreState } from '../store'
 
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: [
     process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
     process.env.API_STAGE || process.env.STORYBOOK_API_STAGE || '',
@@ -26,7 +26,31 @@ api.interceptors.request.use(config => {
   }
 })
 
-// from snoke
+export const getWidget = async id => (
+  api.get(`/widget-studio/widgets/${id}`).then(({ data }) => data)
+)
+
+export const deleteWidget = async id => (
+  api.post(`/widget-studio/widgets/${id}/delete`)
+)
+
+export const createWidget = async ({ config = {}, snapshot, whitelabel, customer }) => (
+  api.put('/widget-studio/widgets', {
+    config,
+    snapshot,
+    whitelabel,
+    customer,
+  })
+)
+
+export const saveWidget = async ({ config, snapshot, id }) => (
+  api.post('/widget-studio/widgets', {
+    config,
+    snapshot,
+    id,
+  })
+)
+
 export const useWhiteLabels = () => {
   const _key = 'Get Whitelabels'
   const { isError, error, isLoading, data = [] } = useQuery(
@@ -44,7 +68,6 @@ export const useWhiteLabels = () => {
   return [isLoading, data]
 }
 
-// from snoke
 export const useCustomers = (wlID) => {
   const _key = 'Get Customers'
   const { isError, error, isLoading, data = [] } = useQuery(
@@ -140,8 +163,9 @@ const requestExecutionResults = async (id) => {
 }
 
 export const requestData = async (dataSourceType, dataSourceID, sampleData = null) => {
-  if (sampleData) {
-    return sampleData[`${dataSourceType}-${dataSourceID}`]
+  const localCopy = sampleData?.[`${dataSourceType}-${dataSourceID}`]
+  if (localCopy) {
+    return localCopy
   }
   if (dataSourceType == dataSourceTypes.SAVED_QUERIES) {
     return await requestQueryResults(dataSourceID)
@@ -151,10 +175,16 @@ export const requestData = async (dataSourceType, dataSourceID, sampleData = nul
   }
 }
 
-// TODO request from db -- this is a placeholder
-export const requestConfig = async (id, sampleConfigs = null) => {
-  if (sampleConfigs) {
-    return sampleConfigs[id]
+// mocked for local dev
+export const localGetWidget = async (id, sampleConfigs) => {
+  const sample = sampleConfigs[id]
+  return {
+    id,
+    whitelabel: sample.wl,
+    customer: sample.cu,
+    created_at: Date.now(),
+    updated_at: Date.now(),
+    config: sample,
   }
 }
 
