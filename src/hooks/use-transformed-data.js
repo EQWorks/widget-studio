@@ -62,10 +62,7 @@ const useTransformedData = () => {
       return normalizedData
     }
     return normalizedData.filter(obj => {
-      for (const { key, filter } of allFilters) {
-        if (!filter) {
-          continue
-        }
+      for (const { key, filter } of allFilters.filter(({ filter }) => filter)) {
         switch (columnsAnalysis[key]?.category) {
           case columnTypes.NUMERIC:
           case columnTypes.PRICE:
@@ -81,8 +78,8 @@ const useTransformedData = () => {
           default:
             return true
         }
-        return true
       }
+      return true
     })
   }, [filters, propFilters, normalizedData, columnsAnalysis])
 
