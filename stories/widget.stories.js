@@ -9,6 +9,7 @@ import sampleData from './sample-data'
 import sampleConfigs from './sample-configs'
 import Widget from '../src'
 import CustomToggle from '../src/components/custom-toggle'
+import CustomSelect from '../src/components/custom-select'
 
 
 const DEFAULT_WL = 4
@@ -109,3 +110,46 @@ storiesOf('Blank Widget (data source control)', module)
       </div>
     </Authenticated>
   ))
+
+// tmp filter prop demo
+storiesOf('TMP filter prop demo', module)
+  .add('TMP filter prop demo', () => {
+    const RADII = {
+      '500m': 500,
+      '1km': 1000,
+      '5km': 5000,
+      '10km': 10000,
+      '20km': 20000,
+    }
+    const [radius, setRadius] = useState(Object.keys(RADII)[0])
+    return (
+      <Authenticated product='locus'>
+        <div style={{
+          width: '100px',
+          margin: '1rem',
+        }}>
+          Radius
+          <CustomSelect
+            data={Object.keys(RADII)}
+            value={radius}
+            onSelect={setRadius}
+          />
+        </div>
+        <div style={{
+          width: '600px',
+          height: '500px',
+        }}>
+          <Widget
+            config={sampleConfigs['filter-test-1']}
+            mode='view_only'
+            filters={[
+              {
+                key: 'resolution',
+                filter: [RADII[radius]],
+              },
+            ]}
+          />
+        </div>
+      </Authenticated>
+    )
+  })

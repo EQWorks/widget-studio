@@ -73,6 +73,7 @@ const Widget = ({
   allowOpenInEditor,
   onOpenInEditor,
   // temporary:
+  filters,
   executionID,
   config: _config,
   sampleData,
@@ -137,12 +138,12 @@ const Widget = ({
         dataSource: { type: dataSourceTypes.EXECUTIONS, id: executionID },
       })
     } else if (_config) {
-      loadConfig(_config)
+      loadConfig(_config).then(() => update({ filters }))
     }
     // if there is a new widget ID,
     else if (Number(id) !== Number(_id) && _id !== undefined && _id !== null) {
       // fetch/read the config associated with the ID
-      loadConfigByID(_id)
+      loadConfigByID(_id).then(() => update({ filters }))
     } else if (staticData && validatedBaseMode === modes.EDITOR) {
       // error on incorrect component usage
       throw new Error('Incorrect usage: Widgets in editor mode without an ID cannot have data source control disabled (staticData == true).')
@@ -150,7 +151,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [_columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl])
+  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl])
 
   // load data if source changes
   useEffect(() => {
@@ -214,6 +215,7 @@ Widget.propTypes = {
   onOpenInEditor: PropTypes.func,
   rows: PropTypes.array,
   columns: PropTypes.array,
+  filters: PropTypes.arrayOf(PropTypes.object),
 }
 Widget.defaultProps = {
   className: '',
@@ -230,6 +232,7 @@ Widget.defaultProps = {
   onOpenInEditor: null,
   rows: null,
   columns: null,
+  filters: [],
 }
 
 export default withQueryClient(withStore(Widget))
