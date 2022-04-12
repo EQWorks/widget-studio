@@ -217,7 +217,7 @@ export default {
     const radiusValue = uniqueOptions?.radius?.value
     const { showLabels } = genericOptions || {}
 
-    layerConfig = showLabels ?
+    layerConfig = showLabels && !JSON.stringify(mapValueKeys)?.includes(MAP_VALUE_VIS.elevation) ?
       [
         ...layerConfig,
         {
