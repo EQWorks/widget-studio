@@ -16,7 +16,7 @@ import MapLayerDisplay from './map-layer-display'
 import Filters from './components/filters'
 import CustomDropdown from './components/custom-dropdown'
 import MutedBarrier from '../shared/muted-barrier'
-import { MAP_LEGEND_SIZE } from '../../constants/map'
+import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 import ExportControls from './components/export-controls'
 
 
@@ -104,7 +104,7 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showTooltip: v } }),
               )
             }
-            {type === types.MAP &&
+            {type === types.MAP && !JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation) &&
               renderToggle(
                 'Labels',
                 showLabels,
