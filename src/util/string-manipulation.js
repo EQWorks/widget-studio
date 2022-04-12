@@ -1,109 +1,47 @@
 const STRING_REPLACE_DICT = {
-  'pop_male': 'Male',
-  'pop_female': 'Female',
-  'hh_income_0_50k': '0-50k',
-  'hh_income_50_100k': '50-100k',
-  'hh_income_100_150k': '100-150k',
-  'hh_income_150_200k': '150-200k',
-  'hh_income_200k+': '200k+',
   'income_sources_market_income_recipients': 'Market income',
   'income_sources_government_transfer_recipients': 'Government transfer income',
   'income_sources_employment_income_recipients': 'Employment income',
   'income_sources_market_income_avg': 'Market income',
   'income_sources_government_transfer_avg': 'Government transfer income',
   'income_sources_employment_income_avg': 'Employment income',
-  'highest_education_no_education': 'No education',
-  'highest_education_secondary_education': 'Secondary education',
-  'highest_education_apprenticeship_trades': 'Apprenticeship trades',
-  'highest_education_college_uni_below_bachelor': 'College uni below bachelor',
-  'highest_education_uni_bachelor': 'Uni bachelor',
-  'highest_education_uni_advanced': 'Uni advanced',
-  'census_fam_lone_parent': 'Lone parent',
   'census_fam_couple_with_no_children': 'Couple - no children',
   'census_fam_couple_with_children': 'Couple - children',
   'census_fam_person_not_in_census_family': 'Not in census family',
-  'hh_tenure_owner': 'Owner',
-  'hh_tenure_renter': 'Renter',
-  'hh_tenure_band_housing': 'Band housing',
-  'commute_time_0-15min': '0-15 min',
-  'commute_time_15-30min': '15-30 min',
-  'commute_time_30-45min': '30-45 min',
-  'commute_time_45-60min': '45-60 min',
   'commute_time_60+min': '> 60 min',
-  'commute_mode_car': 'Car',
-  'commute_mode_transit': 'Transit',
-  'commute_mode_walk': 'Walk',
-  'commute_mode_bike': 'Bike',
-  'commute_mode_other': 'Other',
-  'visits_hod_0': '0h',
-  'visits_hod_1': '1h',
-  'visits_hod_2': '2h',
-  'visits_hod_3': '3h',
-  'visits_hod_4': '4h',
-  'visits_hod_5': '5h',
-  'visits_hod_6': '6h',
-  'visits_hod_7': '7h',
-  'visits_hod_8': '8h',
-  'visits_hod_9': '9h',
-  'visits_hod_10': '10h',
-  'visits_hod_11': '11h',
-  'visits_hod_12': '12h',
-  'visits_hod_13': '13h',
-  'visits_hod_14': '14h',
-  'visits_hod_15': '15h',
-  'visits_hod_16': '16h',
-  'visits_hod_17': '17h',
-  'visits_hod_18': '18h',
-  'visits_hod_19': '19h',
-  'visits_hod_20': '20h',
-  'visits_hod_21': '21h',
-  'visits_hod_22': '22h',
-  'visits_hod_23': '23h',
-  'visits_hod_24': '24h',
-  'visits_dow_mon': 'Mon',
-  'visits_dow_tue': 'Tue',
-  'visits_dow_wed': 'Wed',
-  'visits_dow_thu': 'Thu',
-  'visits_dow_fri': 'Fri',
-  'visits_dow_sat': 'Sat',
-  'visits_dow_sun': 'Sun',
-  'unique_visitors_hod_0': '0h',
-  'unique_visitors_hod_1': '1h',
-  'unique_visitors_hod_2': '2h',
-  'unique_visitors_hod_3': '3h',
-  'unique_visitors_hod_4': '4h',
-  'unique_visitors_hod_5': '5h',
-  'unique_visitors_hod_6': '6h',
-  'unique_visitors_hod_7': '7h',
-  'unique_visitors_hod_8': '8h',
-  'unique_visitors_hod_9': '9h',
-  'unique_visitors_hod_10': '10h',
-  'unique_visitors_hod_11': '11h',
-  'unique_visitors_hod_12': '12h',
-  'unique_visitors_hod_13': '13h',
-  'unique_visitors_hod_14': '14h',
-  'unique_visitors_hod_15': '15h',
-  'unique_visitors_hod_16': '16h',
-  'unique_visitors_hod_17': '17h',
-  'unique_visitors_hod_18': '18h',
-  'unique_visitors_hod_19': '19h',
-  'unique_visitors_hod_20': '20h',
-  'unique_visitors_hod_21': '21h',
-  'unique_visitors_hod_22': '22h',
-  'unique_visitors_hod_23': '23h',
-  'unique_visitors_hod_24': '24h',
-  'unique_visitors_dow_mon': 'Mon',
-  'unique_visitors_dow_tue': 'Tue',
-  'unique_visitors_dow_wed': 'Wed',
-  'unique_visitors_dow_thu': 'Thu',
-  'unique_visitors_dow_fri': 'Fri',
-  'unique_visitors_dow_sat': 'Sat',
-  'unique_visitors_dow_sun': 'Sun',
 }
+
+const HEADER_START = [
+  'pop_',
+  'hh_income_',
+  'highest_education_',
+  'census_fam_',
+  'hh_tenure_',
+  'commute_time_',
+  'commute_mode_',
+  'visits_hod_',
+  'visits_dow_',
+  'unique_visitors_hod_',
+  'unique_visitors_dow_',
+]
+
+const customCleanUp = s => {
+  const header = HEADER_START.find(h => s.startsWith(h))
+  if (header && !STRING_REPLACE_DICT[s]) {
+    const label = s.replace(header, '').replace(/./, v => v.toUpperCase())
+    if (header.includes('hh_income')) {
+      return label.replace('_', '-')
+    }
+    if (header.includes('hod')) {
+      return label + 'h'
+    }
+    return label.replaceAll('_', ' ')
+  }
+  return STRING_REPLACE_DICT[s]
+}
+
 export const cleanUp = s => (
-  s in STRING_REPLACE_DICT
-    ? STRING_REPLACE_DICT[s]
-    : s.replace(/_/g, ' ').replace(/./, v => v.toUpperCase())
+  customCleanUp(s) || s.replace(/_/g, ' ').replace(/./, v => v.toUpperCase())
 )
 export const getLongestString = arr => arr.reduce((a, b) => (a.length > b.length ? a : b))
 export const isString = v => typeof v === 'string' || v instanceof String
