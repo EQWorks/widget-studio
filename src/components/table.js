@@ -9,7 +9,7 @@ import { Parser, transforms } from 'json2csv'
 import { Table as ReactLabsTable } from '@eqworks/react-labs'
 import { makeStyles } from '@eqworks/lumen-labs'
 
-// formerly from util/helpers
+
 /* based on https://github.com/EQWorks/lumen-table/blob/af9f54cbb6e8c6e7a44e1bf44645f5da631a14e1/src/table-toolbar/download.js#L15-L44 */
 const jsonToCsv = ({ data, rows, visibleColumns, visCols = false, filteredRows = false }) => {
   /* if row value is of type json and any columns are filtered or
@@ -79,7 +79,6 @@ const mapFalsy = {
   null: 'NULL',
   '': 'Unknown',
 }
-
 
 const classes = makeStyles({
   container: {

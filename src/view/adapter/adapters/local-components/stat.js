@@ -39,11 +39,11 @@ const Stat = ({ data, values }) => {
       {
         values?.map((k, i) => (
           <>
-            <div key={i} className={classes.item}>
-              <div className={classes.value} key={i}>
+            <div key={k} className={classes.item}>
+              <div className={classes.value}>
                 {data[0][k]}
               </div>
-              <div className={classes.label} key={i}>
+              <div className={classes.label}>
                 {k}
               </div>
             </div>
