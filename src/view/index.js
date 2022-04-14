@@ -4,7 +4,7 @@ import { Icons, getTailwindConfigColor, Loader, makeStyles } from '@eqworks/lume
 
 import LabeledToggle from '../components/labeled-toggle'
 import FadeBetween from '../components/fade-between'
-import ResultsTable from './table'
+import WidgetDataTable from './data-table'
 import { useStoreState, useStoreActions } from '../store'
 import WidgetAdapter from './adapter'
 import modes from '../constants/modes'
@@ -225,20 +225,23 @@ const WidgetView = () => {
                   <Icons.Expand size='sm' />
                 </CustomButton>
               </div>
-              <ResultsTable />
+              <WidgetDataTable />
             </div>
           </>
           : <>
-            <LabeledToggle
-              className='flex-0 mt-3 ml-5'
-              labels={['widget', 'table']}
-              icons={[Icons.DashboardLayout, Icons.Table]}
-              value={showTable}
-              update={(val) => update({ ui: { showTable: val } })}
-            />
+            {
+              mode !== modes.COMPACT &&
+              <LabeledToggle
+                className='flex-0 mt-3 ml-5'
+                labels={['widget', 'table']}
+                icons={[Icons.DashboardLayout, Icons.Table]}
+                value={showTable}
+                update={(val) => update({ ui: { showTable: val } })}
+              />
+            }
             <div className='flex-1'>
               <FadeBetween value={showTable}>
-                <ResultsTable results={rows} />
+                <WidgetDataTable />
                 {renderVisualization}
               </FadeBetween>
             </div>

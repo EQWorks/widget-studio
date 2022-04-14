@@ -35,6 +35,7 @@ const useTransformedData = () => {
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
   const dateAggregation = useStoreState((state) => state.dateAggregation)
+  const propFilters = useStoreState((state) => state.propFilters)
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
@@ -52,31 +53,35 @@ const useTransformedData = () => {
   }, [columnsAnalysis, rows])
 
   // truncate the data when the filters change
-  const truncatedData = useMemo(() => (
-    filters?.length
-      ? normalizedData.filter(obj => {
-        for (const { key, filter } of filters) {
-          if (!filter) return true
-          switch (columnsAnalysis[key]?.category) {
-            case columnTypes.NUMERIC:
-            case columnTypes.PRICE:
-              if (obj[key] < filter[0] || obj[key] > filter[1]) {
-                return false
-              }
-              break
-            case columnTypes.STRING:
-              if (!filter.includes(obj[key])) {
-                return false
-              }
-              break
-            default:
-              return true
-          }
-          return true
+  const truncatedData = useMemo(() => {
+    const allFilters = [
+      ...(filters?.length ? filters : []),
+      ...(propFilters?.length ? propFilters : []),
+    ]
+    if (!allFilters.length) {
+      return normalizedData
+    }
+    return normalizedData.filter(obj => {
+      for (const { key, filter } of allFilters.filter(({ filter }) => filter)) {
+        switch (columnsAnalysis[key]?.category) {
+          case columnTypes.NUMERIC:
+          case columnTypes.PRICE:
+            if (obj[key] < filter[0] || obj[key] > filter[1]) {
+              return false
+            }
+            break
+          case columnTypes.STRING:
+            if (!filter.includes(obj[key])) {
+              return false
+            }
+            break
+          default:
+            return true
         }
-      })
-      : normalizedData
-  ), [normalizedData, filters, columnsAnalysis])
+      }
+      return true
+    })
+  }, [filters, propFilters, normalizedData, columnsAnalysis])
 
   const newGroupKey = useMemo(() => (
     groupFSAByPC

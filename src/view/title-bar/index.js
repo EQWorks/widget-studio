@@ -61,22 +61,21 @@ const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
       },
       ...commonClasses,
     }
-    : {
+    : mode === modes.COMPACT ? {
       outerContainer: {
-        background: getTailwindConfigColor('secondary-50'),
+        fontSize: '0.9rem',
+        color: getTailwindConfigColor('secondary-800'),
+        fontWeight: 600,
+        borderBottom: `solid 1px ${getTailwindConfigColor('neutral-100')}`,
+        padding: '0.4rem 0.8rem',
         display: 'flex',
         alignItems: 'center',
-        width: '100%',
-        height: '3rem',
-        padding: '1rem',
-      },
-      main: {
-        flex: 1,
-        display: 'flex',
-      },
-      metaContainer: {
-        background: 'transparent',
-        padding: '0.75rem',
+        '&> :first-child': {
+          flex: 1,
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+        },
       },
       editButton: {
         marginLeft: '0.357rem',
@@ -86,7 +85,33 @@ const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
         ...(!allowOpenInEditor && { visibility: 'hidden' }),
       },
       ...commonClasses,
-    })
+    }
+      : {
+        outerContainer: {
+          background: getTailwindConfigColor('secondary-50'),
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          height: '3rem',
+          padding: '1rem',
+        },
+        main: {
+          flex: 1,
+          display: 'flex',
+        },
+        metaContainer: {
+          background: 'transparent',
+          padding: '0.75rem',
+        },
+        editButton: {
+          marginLeft: '0.357rem',
+          transition: 'opacity 0.3s, visibility 0.3s',
+          transitionDelay: 'visibility 0.4s',
+          opacity: + allowOpenInEditor,
+          ...(!allowOpenInEditor && { visibility: 'hidden' }),
+        },
+        ...commonClasses,
+      })
 
 const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const update = useStoreActions((actions) => actions.update)
@@ -106,6 +131,8 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const config = useStoreState((state) => state.config)
   const dev = useStoreState((state) => state.dev)
   const unsavedChanges = useStoreState((state) => state.unsavedChanges)
+  const title = useStoreState((state) => state.title)
+  const isLoading = useStoreState((state) => state.isLoading)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -124,7 +151,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
         </div>
       }
       {
-        id &&
+        id && mode !== modes.COMPACT &&
         <div className={classes.item}>
           <Chip
             selectable={false}
@@ -160,6 +187,35 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
       <Icons.DownloadBold size='md' />
     </CustomButton>
   )
+
+  const renderOpenInEditorButton = (
+    <CustomButton
+      classes={{ button: classes.editButton }}
+      horizontalMargin
+      variant={mode === modes.COMPACT ? 'borderless' : 'filled'}
+      onClick={() => {
+        onOpenInEditor
+          ? onOpenInEditor(tentativeConfig)
+          : update({ ui: { mode: modes.EDITOR } })
+      }}
+      {...(mode !== modes.COMPACT && { endIcon: <Icons.ShareExternalLink size='md' /> })}
+    >
+      {
+        mode === modes.COMPACT
+          ? <Icons.Gear size='md' />
+          : 'OPEN IN EDITOR'
+      }
+    </CustomButton >
+  )
+
+  if (mode === modes.COMPACT) {
+    return (
+      <div className={classes.outerContainer}>
+        <span>{isLoading ? '' : title}</span>
+        {allowOpenInEditor && renderOpenInEditorButton}
+      </div>
+    )
+  }
 
   return (
     mode === modes.EDITOR
@@ -250,21 +306,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
                   >
                     EXPORT
                   </CustomButton> */}
-                  <CustomButton
-                    classes={{
-                      button: classes.editButton,
-                    }}
-                    horizontalMargin
-                    variant='filled'
-                    onClick={() => {
-                      onOpenInEditor
-                        ? onOpenInEditor(tentativeConfig)
-                        : update({ ui: { mode: modes.EDITOR } })
-                    }}
-                    endIcon={<Icons.ShareExternalLink size='md' />}
-                  >
-                    OPEN IN EDITOR
-                  </CustomButton>
+                  {renderOpenInEditorButton}
                   {renderDownloadConfigButton}
                 </div>
               </div>

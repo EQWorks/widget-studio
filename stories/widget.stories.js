@@ -2,21 +2,24 @@ import React, { useState, cloneElement } from 'react'
 import { storiesOf } from '@storybook/react'
 import { Resizable } from 're-resizable'
 
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { Authenticated } from '@eqworks/common-login'
 
 import modes from '../src/constants/modes'
 import sampleData from './sample-data'
 import sampleConfigs from './sample-configs'
-import Widget from '../src'
-import CustomToggle from '../src/components/custom-toggle'
+import Widget, { WidgetManager } from '../src'
 import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
-import ListDemo from './list-demo'
+import { makeStyles } from '@eqworks/lumen-labs'
+import CustomButton from '../src/components/custom-button'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 
 const DEFAULT_WL = 2456
 const DEFAULT_CU = 27848
+const DEFAULT_DEALER = 1
 
 const devProps = {
   sampleData,
@@ -72,13 +75,13 @@ Object.values(modes).forEach(mode => {
         .add(id, () => (
           mode === modes.EDITOR
             ? <div style={{ width: '100vw', height: '100vh', background: 'blue' }}>
-              {id === 'map-2' ? renderWidgetAuth : renderWidget}
+              {id === 'dev-map-2' ? renderWidgetAuth : renderWidget}
             </div>
             : <Resizable
               style={{ margin: '1rem' }}
               defaultSize={{ width: '50vw', height: '50vh' }}
             >
-              {id === 'map-2' && mode !== modes.VIEW ? renderWidgetAuth : renderWidget}
+              {id === 'dev-map-2' && mode !== modes.VIEW ? renderWidgetAuth : renderWidget}
             </Resizable >
         ))
     }
@@ -87,35 +90,52 @@ Object.values(modes).forEach(mode => {
 })
 
 storiesOf('Multiple widgets (dashboard)')
-  .add(modes.VIEW, () => {
-    const [fullscreen, setFullscreen] = useState(false)
-    return <>
-      <div className='bg-secondary-300 p-3'>
-        <CustomToggle
-          label='Fullscreen widgets'
-          value={fullscreen}
-          onChange={v => setFullscreen(v)}
-        />
-      </div>
-      <div
-        style={{
+  .add('Multiple widgets (dashboard)', () => {
+    const classes = makeStyles({
+      widget: {
+        aspectRatio: 2,
+        borderRadius: '0.6rem !important',
+      },
+    })
+    const [editMode, setEditMode] = useState(true)
+    return (
+      <>
+        <div style={{
+          display: 'flex',
+          padding: '2rem',
+        }}>
+          <div style={{ flex: 1 }}>
+            Demo
+          </div>
+          <CustomButton
+            size='lg'
+            variant='filled'
+            onClick={() => setEditMode(!editMode)}
+          >
+            EDIT
+          </CustomButton>
+        </div>
+        <div style={{
+          padding: '1rem',
           display: 'grid',
-          gridTemplateColumns: fullscreen ? 'auto' : '1fr 1fr',
-          gridAutoRows: fullscreen ? '100vh' : '60vh',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(20rem, 1fr))',
+          gap: '0.8rem',
         }} >
-        {
-          Object.keys(sampleConfigs).map(id =>
-            <div key={id} style={{ margin: '2rem' }}>
+          {
+            Object.keys(sampleConfigs).map(id =>
               <Widget {...devProps}
-                mode={modes.VIEW}
+                key={id}
+                mode={modes.COMPACT}
                 id={id}
                 staticData
+                className={classes.widget}
+                allowOpenInEditor={editMode}
               />
-            </div>
-          )
-        }
-      </div>
-    </>
+            )
+          }
+        </div>
+      </>
+    )
   })
 
 // add blank widget
@@ -136,14 +156,22 @@ storiesOf('Blank Widget (data source control)', module)
   ))
 
 // "dashboard" demo to test CRUD
-storiesOf('List', module)
-  .add('List', () => (
-    <Authenticated product='locus'>
-      <WlCuControlsProvider>
-        <ListDemo />
-      </WlCuControlsProvider>
+storiesOf('Widget Management', module)
+  .add('Widget Management', () => {
+    const queryClient = new QueryClient()
+    return <Authenticated product='locus'>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <WlCuControlsProvider>
+          <WidgetManager
+            wl={DEFAULT_WL}
+            cu={DEFAULT_CU}
+            dealer={DEFAULT_DEALER}
+          />
+        </WlCuControlsProvider>
+      </QueryClientProvider>
     </Authenticated>
-  ))
+  })
 
 // tmp filter prop demo
 storiesOf('TMP filter prop demo', module)
