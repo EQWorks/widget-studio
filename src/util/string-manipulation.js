@@ -1,44 +1,47 @@
 const STRING_REPLACE_DICT = {
-  'pop_male': 'Male',
-  'pop_female': 'Female',
-  'hh_income_0_50': '0-50k',
-  'hh_income_50_100': '50-100k',
-  'hh_income_100_150': '100-150k',
-  'hh_income_150_200': '150-200k',
-  'hh_income_200_over': '200k+',
-  'income_sources_market_num': 'Market income',
-  'income_sources_gov_transfer_num': 'Gov transfer income',
-  'income_sources_employment_num': 'Employment income',
-  'income_sources_market_avg': 'Market income',
-  'income_sources_gov_transfer_avg': 'Gov transfer income',
-  'income_sources_employment_avg': 'Employment income',
-  'highest_education_none': 'No education',
-  'highest_education_secondary': 'Secondary education',
-  'highest_education_apprenticeship_trades': 'Apprenticeship trades',
-  'highest_education_college_uni_below_bachelor': 'College uni below bachelor',
-  'highest_education_uni_bachelor': 'Uni bachelor',
-  'highest_education_uni_advanced': 'Uni advanced',
-  'census_fam_lone_parent': 'Lone parent',
-  'census_fam_couple_no_children': 'Couple - no children',
-  'census_fam_couple_children': 'Couple - children',
-  'census_fam_person_not_in_fam': 'Not in fam',
-  'hh_tenure_owner': 'Owner',
-  'hh_tenure_renter': 'Renter',
-  'commute_time_0_15': '0-15 min',
-  'commute_time_15_30': '15-30 min',
-  'commute_time_30_45': '30-45 min',
-  'commute_time_45_60': '45-60 min',
-  'commute_time_60_over': '> 60 min',
-  'commute_mode_car': 'Car',
-  'commute_mode_transit': 'Transit',
-  'commute_mode_walk': 'Walk',
-  'commute_mode_bike': 'Bike',
-  'commute_mode_other': 'Other',
+  'income_sources_market_income_recipients': 'Market income',
+  'income_sources_government_transfer_recipients': 'Government transfer income',
+  'income_sources_employment_income_recipients': 'Employment income',
+  'income_sources_market_income_avg': 'Market income',
+  'income_sources_government_transfer_avg': 'Government transfer income',
+  'income_sources_employment_income_avg': 'Employment income',
+  'census_fam_couple_with_no_children': 'Couple - no children',
+  'census_fam_couple_with_children': 'Couple - children',
+  'census_fam_person_not_in_census_family': 'Not in census family',
+  'commute_time_60+min': '> 60 min',
 }
+
+const HEADER_START = [
+  'pop_',
+  'hh_income_',
+  'highest_education_',
+  'census_fam_',
+  'hh_tenure_',
+  'commute_time_',
+  'commute_mode_',
+  'visits_hod_',
+  'visits_dow_',
+  'unique_visitors_hod_',
+  'unique_visitors_dow_',
+]
+
+const customCleanUp = s => {
+  const header = HEADER_START.find(h => s.startsWith(h))
+  if (header && !STRING_REPLACE_DICT[s]) {
+    const label = s.replace(header, '').replace(/./, v => v.toUpperCase())
+    if (header.includes('hh_income')) {
+      return label.replace('_', '-')
+    }
+    if (header.includes('hod')) {
+      return label + 'h'
+    }
+    return label.replaceAll('_', ' ')
+  }
+  return STRING_REPLACE_DICT[s]
+}
+
 export const cleanUp = s => (
-  s in STRING_REPLACE_DICT
-    ? STRING_REPLACE_DICT[s]
-    : s.replace(/_/g, ' ').replace(/./, v => v.toUpperCase())
+  customCleanUp(s) || s.replace(/_/g, ' ').replace(/./, v => v.toUpperCase())
 )
 export const getLongestString = arr => arr.reduce((a, b) => (a.length > b.length ? a : b))
 export const isString = v => typeof v === 'string' || v instanceof String

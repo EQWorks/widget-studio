@@ -25,7 +25,13 @@ export const MAP_LAYER_VALUE_VIS = {
 
 export const GEO_KEY_TYPES = {
   fsa: ['geo_ca_fsa', 'geo_cohort_fsa', 'household_fsa'],
-  postalcode: ['geo_ca_postalcode', 'geo_cohort_postalcode', 'household_postalcode', 'address_postalcode'],
+  postalcode: [
+    'geo_ca_postalcode',
+    'geo_cohort_postalcode',
+    'household_postalcode',
+    'hh_postalcode',
+    'address_postalcode',
+  ],
   da: ['geo_ca_da'],
   ct: ['geo_ca_ct'],
   region: ['geo_ca_region', 'address_region'],

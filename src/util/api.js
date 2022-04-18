@@ -12,8 +12,9 @@ export const api = axios.create({
   ].filter(v => v).join('/'),
 })
 
+const token = window.localStorage.getItem('auth_jwt')
+
 api.interceptors.request.use(config => {
-  const token = window.localStorage.getItem('auth_jwt')
   if (!token) {
     throw new Error('This application is not authorized to make this request.')
   }
@@ -24,6 +25,14 @@ api.interceptors.request.use(config => {
       'eq-api-jwt': token,
     },
   }
+})
+
+export const qlApi = axios.create({
+  baseURL: [
+    process.env.QL_API_HOST || process.env.STORYBOOK_QL_API_HOST || '',
+    process.env.QL_API_STAGE || process.env.STORYBOOK_QL_API_STAGE || '',
+  ].filter(v => v).join('/'),
+  headers: { 'eq-api-jwt': token },
 })
 
 export const getWidget = async id => (
@@ -89,12 +98,8 @@ export const useSavedQueries = () => {
   const _key = 'Get Queries'
   const { isError, error, isLoading, data = [] } = useQuery(
     _key,
-    () => api.get('/ql/queries', {
-      params: {
-        _wl: '',
-        _customer: '',
-      },
-    }).then(({ data = [] }) => data),
+    () => qlApi.get('/ql/queries')
+      .then(({ data = [] }) => data),
     { refetchOnWindowFocus: false }
   )
 
@@ -115,7 +120,7 @@ export const useExecutions = () => {
     _key,
     () => sampleData
       ? {}
-      : api.get('/ql/executions').then(({ data = [] }) => data) ,
+      : qlApi.get('/ql/executions').then(({ data = [] }) => data) ,
     { refetchOnWindowFocus: false }
   )
   useEffect(() => {
@@ -131,7 +136,7 @@ export const useExecutions = () => {
 
 // eslint-disable-next-line no-unused-vars
 const requestQueryResults = async (id) => {
-  return api.get(`/ql/queries/${id}`)
+  return qlApi.get(`/ql/queries/${id}`)
     .then(async ({ data: { executions } }) => {
       if (!executions.length) {
         throw new Error('This query has not been executed.')
@@ -141,7 +146,7 @@ const requestQueryResults = async (id) => {
 }
 
 const requestExecutionResults = async (id) => {
-  const data = await api.get(`/ql/executions/${id}`, { params: { results: 1 } })
+  const data = await qlApi.get(`/ql/executions/${id}`, { params: { results: 1 } })
     .then(res => {
       if (res.data.status == 'SUCCEEDED') {
         return res.data
@@ -152,7 +157,7 @@ const requestExecutionResults = async (id) => {
   const { executionID, queryID, views = [] } = data
   let name = `Execution ${executionID}`
   if (queryID) {
-    name += await api.get(`/ql/queries/${queryID}`)
+    name += await qlApi.get(`/ql/queries/${queryID}`)
       .then(async ({ data: { name: queryName } }) => (
         ` - ${queryName}`
       ))
