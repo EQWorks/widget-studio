@@ -560,7 +560,7 @@ const WidgetManager = ({ wl, cu, dealer, className }) => {
                         onClick={() => {
                           const { id, items, layout } = selectedDashboard
                           const newItems = selection.filter(id => !items.includes(id))
-                          const newLayout = newItems.map(id => ({ x: 0, y: 0, w: 6, h: 4, i: id }))
+                          const newLayout = newItems.map(id => ({ x: 0, y: 0, w: 6, h: 4, i: parseInt(id) }))
                           api.post(`/insights/dashboards/${id}`, {
                             items: items.concat(newItems),
                             layout: layout.concat(newLayout),
