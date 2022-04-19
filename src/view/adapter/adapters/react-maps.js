@@ -25,6 +25,7 @@ import {
   MIN_ZOOM,
   MAX_ZOOM,
   MAP_TOAST_ZOOM_ADJUSTMENT,
+  LABEL_OFFSET,
 } from '../../../constants/map'
 
 
@@ -147,7 +148,12 @@ export default {
       geometry = { longitude, latitude }
     }
     if (mapLayer === MAP_LAYERS.geojson) {
-      geometry = { geoKey: mapGroupKeyTitle }
+      geometry = {
+        geoKey: mapGroupKeyTitle,
+        longitude: 'longitude',
+        latitude: 'latitude',
+        geometryAccessor: d => d.properties,
+      }
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
         .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
       if (!GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)) {
@@ -160,9 +166,8 @@ export default {
 
     const { id, type } = config?.dataSource || {}
 
-    return ({
-      dataConfig: [{ id: `${id}-${type}`, data: finalData }],
-      layerConfig: [{
+    let layerConfig = [
+      {
         layer: mapLayer,
         dataId: `${id}-${type}`,
         dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
@@ -206,7 +211,42 @@ export default {
           MIN_ZOOM.postalCode :
           MIN_ZOOM.defaultValue,
         maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
-      }],
+      },
+    ]
+
+    const radiusValue = uniqueOptions?.radius?.value
+    const { showLabels } = genericOptions || {}
+
+    layerConfig = showLabels && !JSON.stringify(mapValueKeys)?.includes(MAP_VALUE_VIS.elevation) ?
+      [
+        ...layerConfig,
+        {
+          layer: 'text',
+          dataId: `${id}-${type}`,
+          dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
+          geometry,
+          visualizations: {
+            text: {
+              value: {
+                title: mapGroupKeyTitle,
+                valueKeys: mapValueKeys.map(vis => vis.title),
+              },
+            },
+            pixelOffset: {
+              value: mapLayer === MAP_LAYERS.scatterplot ?
+                [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point] :
+                [LABEL_OFFSET.polygon, 0],
+            },
+          },
+          formatData: config.formatDataFunctions,
+          interactions: {},
+        },
+      ] :
+      layerConfig
+
+    return ({
+      dataConfig: [{ id: `${id}-${type}`, data: finalData }],
+      layerConfig,
       mapConfig: {
         cursor: (layers) => getCursor({ layers }),
         legendPosition: MAP_LEGEND_POSITION[JSON.stringify(genericOptions.legendPosition)],

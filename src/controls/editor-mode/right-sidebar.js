@@ -16,7 +16,7 @@ import MapLayerDisplay from './map-layer-display'
 import Filters from './components/filters'
 import CustomDropdown from './components/custom-dropdown'
 import MutedBarrier from '../shared/muted-barrier'
-import { MAP_LEGEND_SIZE } from '../../constants/map'
+import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 import ExportControls from './components/export-controls'
 
 
@@ -48,6 +48,7 @@ const EditorRightSidebar = () => {
   const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
   const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
+  const showLabels = useStoreState((state) => state.genericOptions.showLabels)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
@@ -96,22 +97,27 @@ const EditorRightSidebar = () => {
               showLegend,
               v => userUpdate({ genericOptions: { showLegend: v } }),
             )}
-            {type === types.MAP
-              ? renderToggle(
+            {type === types.MAP &&
+              renderToggle(
                 'Tooltip',
                 showTooltip,
                 v => userUpdate({ genericOptions: { showTooltip: v } }),
               )
-              : <>
-                {type !== types.PIE &&
-                  renderToggle(
-                    'Subplots',
-                    subPlots,
-                    v => userUpdate({ genericOptions: { subPlots: v } }),
-                    renderableValueKeys?.length <= 1
-                  )
-                }
-              </>
+            }
+            {type === types.MAP && !JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation) &&
+              renderToggle(
+                'Labels',
+                showLabels,
+                v => userUpdate({ genericOptions: { showLabels: v } }),
+              )
+            }
+            {![types.PIE, types.MAP].includes(type) &&
+              renderToggle(
+                'Subplots',
+                subPlots,
+                v => userUpdate({ genericOptions: { subPlots: v } }),
+                renderableValueKeys?.length <= 1
+              )
             }
           </>
         )

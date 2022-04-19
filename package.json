@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/widget-studio",
-  "version": "0.1.1-alpha.23",
+  "version": "0.1.1-alpha.24",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -31,7 +31,7 @@
   "peerDependencies": {
     "@eqworks/lumen-labs": "^0.1.0-alpha.41",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
-    "@eqworks/react-maps": "^0.8.5",
+    "@eqworks/react-maps": "^0.9.0",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
@@ -52,7 +52,7 @@
     "@eqworks/common-login": "^0.9.0-alpha.13",
     "@eqworks/lumen-labs": "^0.1.0-alpha.41",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
-    "@eqworks/react-maps": "^0.8.5",
+    "@eqworks/react-maps": "^0.9.0",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
@@ -99,9 +99,9 @@
     "prop-types": "^15.7.2",
     "react-colorful": "^5.5.1",
     "react-date-range": "^1.4.0",
-    "react-time-ago": "^7.1.9",
     "react-query": "^3.19.0",
     "react-resize-detector": "^6.7.6",
+    "react-time-ago": "^7.1.9",
     "use-debounce": "^7.0.1"
   },
   "size-limit": [
