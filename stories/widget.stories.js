@@ -3,7 +3,9 @@ import { storiesOf } from '@storybook/react'
 import { Resizable } from 're-resizable'
 
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { Authenticated } from '@eqworks/common-login'
+import { makeStyles } from '@eqworks/lumen-labs'
 
 import modes from '../src/constants/modes'
 import sampleData from './sample-data'
@@ -12,9 +14,8 @@ import Widget, { WidgetManager } from '../src'
 import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
-import { makeStyles } from '@eqworks/lumen-labs'
 import CustomButton from '../src/components/custom-button'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import InsightsDataProvider from '../src/insights-data-provider'
 
 
 const DEFAULT_WL = 2456
@@ -30,6 +31,19 @@ const devProps = {
   wl: DEFAULT_WL,
   cu: DEFAULT_CU,
 }
+
+const classes = makeStyles({
+  dashboardGrid: {
+    padding: '1rem',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(20rem, 1fr))',
+    gap: '0.8rem',
+  },
+  dashboardWidget: {
+    aspectRatio: 2,
+    borderRadius: '0.6rem !important',
+  },
+})
 
 const WlCuControlsProvider = withQueryClient(({ children }) => {
   const [controls, setControls] = useState({ isDevStage: true, showSelector: true })
@@ -94,12 +108,6 @@ Object.values(modes).forEach(mode => {
 
 storiesOf('Multiple widgets (dashboard)')
   .add('Multiple widgets (dashboard)', () => {
-    const classes = makeStyles({
-      widget: {
-        aspectRatio: 2,
-        borderRadius: '0.6rem !important',
-      },
-    })
     const [editMode, setEditMode] = useState(true)
     return (
       <>
@@ -118,12 +126,7 @@ storiesOf('Multiple widgets (dashboard)')
             EDIT
           </CustomButton>
         </div>
-        <div style={{
-          padding: '1rem',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(20rem, 1fr))',
-          gap: '0.8rem',
-        }} >
+        <div className={classes.dashboardGrid} >
           {
             Object.keys(sampleConfigs).map(id =>
               <Widget {...devProps}
@@ -131,7 +134,7 @@ storiesOf('Multiple widgets (dashboard)')
                 mode={modes.COMPACT}
                 id={id}
                 staticData
-                className={classes.widget}
+                className={classes.dashboardWidget}
                 allowOpenInEditor={editMode}
               />
             )
@@ -216,5 +219,29 @@ storiesOf('TMP filter prop demo', module)
           />
         </div>
       </Authenticated>
+    )
+  })
+
+//
+storiesOf('InsightsDataProvider', module)
+  .add('InsightsDataProvider', () => {
+    const ids = [100056, 100057, 100058, 100084]
+    return (
+      <Authenticated product='locus'>
+        <div className={classes.dashboardGrid}>
+          <InsightsDataProvider reportPeriod='Jan 2022'>
+            {ids.map(id => (
+              <div className={classes.dashboardWidget} key={id}>
+                <Widget
+                  id={id}
+                  mode='compact_view_only'
+                  filters={[{ key: 'resolution', filter: [5000] }]} // just for demonstration
+                />
+              </div>
+            ))
+            }
+          </InsightsDataProvider>
+        </div>
+      </Authenticated >
     )
   })
