@@ -186,6 +186,12 @@ const requestExecutionResults = async (id, finalQLApi) => {
   return { data, name }
 }
 
+export const fetchInsightsData = async (name, reportPeriod) => (
+  api.get(`/cox/reports/${name}/results`, { params: { reportPeriod } })
+    .then(({ data }) => requestExecutionResults(data.executionID))
+    .then(({ data }) => data)
+)
+
 export const requestData = async (dataSourceType, dataSourceID, sampleData = null, cu) => {
   const finalQLApi = cu === COX_CU ? qlApi : api
   const localCopy = sampleData?.[`${dataSourceType}-${dataSourceID}`]
