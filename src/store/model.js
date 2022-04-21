@@ -24,6 +24,7 @@ import { columnInference } from '../util/columns'
 import { mapDataIsValid } from '../util/map_data_validation'
 import { EXPORT_TYPES } from '../constants/export'
 import { screenshot } from '../util/export'
+import { dataSourceTypes } from '../constants/data-source'
 
 
 const MAX_UNDO_STEPS = 10
@@ -542,10 +543,18 @@ export default {
     // populate state with values from config
     actions.update(config)
     actions.update({ ui: { configLoading: false } })
+    // move on to the data loading step:
     const { dataSource: previousDataSource } = getState()
-    if (dataSource
+    if (dataSource?.type === dataSourceTypes.INSIGHTS_DATA) {
+      // if this widget wants insights data, it will receive that via props, via InsightsDataProvider
+      actions.update({
+        dataSource,
+        ui: { dataSourceLoading: true },
+      })
+    } else if (dataSource
       && dataSource?.type !== previousDataSource?.type
-      && dataSource?.id !== previousDataSource?.id) {
+      && dataSource?.id !== previousDataSource?.id
+    ) {
       actions.loadData(dataSource)
     }
   }),

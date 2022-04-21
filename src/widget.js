@@ -72,6 +72,7 @@ const Widget = ({
   className,
   allowOpenInEditor,
   onOpenInEditor,
+  onInsightsDataRequired,
   // temporary:
   filters,
   executionID,
@@ -132,9 +133,13 @@ const Widget = ({
       update({
         rows: _rows,
         columns: _columns,
-        dataSource: {
-          type: dataSourceTypes.MANUAL,
-        },
+        ui: { dataSourceLoading: false },
+        ...(dataSourceType !== dataSourceTypes.INSIGHTS_DATA && {
+          dataSource: {
+            type: dataSourceTypes.MANUAL,
+          },
+        }
+        ),
       })
     }
     // use executionID passed from QL if available
@@ -156,14 +161,18 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl])
+  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType])
 
   // load data if source changes
   useEffect(() => {
     if (!staticData && dataSourceType && dataSourceID) {
-      loadData({ type: dataSourceType, id: dataSourceID })
+      if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
+        onInsightsDataRequired(id, dataSourceID)
+      } else if (dataSourceType !== dataSourceTypes.MANUAL) {
+        loadData({ type: dataSourceType, id: dataSourceID })
+      }
     }
-  }, [staticData, loadData, dataSourceType, dataSourceID])
+  }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-hidden flex-1 min-w-0 flex items-stretch', {
@@ -221,6 +230,7 @@ Widget.propTypes = {
   rows: PropTypes.array,
   columns: PropTypes.array,
   filters: PropTypes.arrayOf(PropTypes.object),
+  onInsightsDataRequired: PropTypes.func,
 }
 Widget.defaultProps = {
   className: '',
@@ -238,6 +248,7 @@ Widget.defaultProps = {
   rows: null,
   columns: null,
   filters: [],
+  onInsightsDataRequired: () => { },
 }
 
 export default withQueryClient(withStore(Widget))
