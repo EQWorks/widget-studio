@@ -222,20 +222,22 @@ storiesOf('TMP filter prop demo', module)
     )
   })
 
-//
+// InsightsDataProvider demonstration
 storiesOf('InsightsDataProvider', module)
   .add('InsightsDataProvider', () => {
-    const ids = [100056, 100057, 100058, 100084]
+    const YEAR = 2022
+    const MONTH = 1
+    const WIDGET_IDS = [100056, 100057, 100058, 100084]
     return (
       <Authenticated product='locus'>
         <div className={classes.dashboardGrid}>
-          <InsightsDataProvider reportPeriod='Jan 2022'>
-            {ids.map(id => (
+          <InsightsDataProvider year={YEAR} month={MONTH}>
+            {WIDGET_IDS.map(id => (
               <div className={classes.dashboardWidget} key={id}>
                 <Widget
                   id={id}
                   mode='compact_view_only'
-                  filters={[{ key: 'resolution', filter: [5000] }]} // just for demonstration
+                  filters={[{ key: 'resolution', filter: [5000] }]} // just for demonstration, some of these widgets require a resolution filter
                 />
               </div>
             ))

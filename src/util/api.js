@@ -186,8 +186,8 @@ const requestExecutionResults = async (id, finalQLApi) => {
   return { data, name }
 }
 
-export const fetchInsightsData = async (name, reportPeriod) => (
-  api.get(`/cox/reports/${name}/results`, { params: { reportPeriod } })
+export const fetchInsightsData = async (name, year, month) => (
+  api.get(`/cox/reports/${name}/results`, { params: { year, month } })
     .then(({ data }) => requestExecutionResults(data.executionID))
     .then(({ data }) => data)
 )

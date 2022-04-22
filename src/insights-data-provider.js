@@ -8,15 +8,15 @@ import Widget from './widget'
 import withQueryClient from './util/with-query-client'
 
 
-const InsightsDataProvider = ({ children, reportPeriod }) => {
+const InsightsDataProvider = ({ children, year, month }) => {
   // keep track of which widgets need which data
   const [widgetDataDict, setWidgetDataDict] = useState({})
   const dataNeeded = useMemo(() => Object.values(widgetDataDict), [widgetDataDict])
   // dynamic parallel queries for insights data
   const fetchedData = useQueries(
     dataNeeded.map(name => ({
-      queryKey: [name, reportPeriod],
-      queryFn: () => fetchInsightsData(name, reportPeriod),
+      queryKey: [name, year, month],
+      queryFn: () => fetchInsightsData(name, year, month),
       refetchOnWindowFocus: false,
     }))
   )
@@ -47,8 +47,12 @@ const InsightsDataProvider = ({ children, reportPeriod }) => {
   )
 }
 InsightsDataProvider.propTypes = {
-  children: PropTypes.node.required,
-  reportPeriod: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  month: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+}
+InsightsDataProvider.defaultProps = {
+  month: null,
 }
 
 export default withQueryClient(InsightsDataProvider)
