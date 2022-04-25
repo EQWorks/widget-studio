@@ -3,7 +3,14 @@ import { useEffect, useMemo, useCallback } from 'react'
 import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
 import { getRegionPolygons } from '../util/api'
-import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES, GEO_KEY_TYPE_NAMES } from '../constants/map'
+import {
+  COORD_KEYS,
+  MAP_LAYER_GEO_KEYS,
+  MAP_GEO_KEYS,
+  GEO_KEY_TYPES,
+  GEO_KEY_TYPE_NAMES,
+  XWI_REPORT,
+} from '../constants/map'
 import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
 import { latIsValid, lonIsValid, geoKeyIsValid } from '../util/geo-validation'
@@ -38,6 +45,18 @@ const useTransformedData = () => {
   const propFilters = useStoreState((state) => state.propFilters)
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
+
+  const dataKeys = useMemo(() => Object.keys(columnsAnalysis) || [], [columnsAnalysis])
+
+  // special case for pre-aggregating data for xwi reports visualization on map
+  const isxwiReportMap = useMemo(() => {
+    const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
+    const sourceLon = findCoord(COORD_KEYS.longitude)
+    const sourceLat = findCoord(COORD_KEYS.latitude)
+    const targetLon = findCoord(COORD_KEYS.targetLon)
+    const targetLat = findCoord(COORD_KEYS.targetLat)
+    return Boolean(type === types.MAP && sourceLon && sourceLat && targetLon && targetLat)
+  }, [dataKeys, type])
 
   // normalize data using columnsAnalysis (ex. price to numeric)
   const normalizedData = useMemo(() => {
@@ -156,7 +175,7 @@ const useTransformedData = () => {
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => {
-    if (!group) return null
+    if (!group || isxwiReportMap) return null
     const formattedDomain = formattedColumnNames[finalGroupKey]
     if (domainIsDate && dateAggregations[dateAggregation]) {
       // extra grouping required if Domain is date
@@ -189,6 +208,7 @@ const useTransformedData = () => {
     })
   }, [
     group,
+    isxwiReportMap,
     domainIsDate,
     formattedColumnNames,
     dateAggregation,
@@ -218,9 +238,37 @@ const useTransformedData = () => {
     return res
   }, [aggregatedData, percentageMode, renderableValueKeys])
 
+  // enrich data with coords for scatterplot & geojson data; special aggregation for xwi-reports
   const getMapEnrichedData = useCallback(async () => {
     if (type === types.MAP) {
-      //---TODO - Erika: complete this to include coordinates for xwi report; this is only for scatterplot layer
+      if (isxwiReportMap) {
+        const sourcePOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
+        const targetPOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.xwi.includes(key))
+        const xwiMapReportdata =  sourcePOIid && targetPOIid ?
+          truncatedData.reduce((res, r) => {
+            let group = `${r[sourcePOIid]}-${r[targetPOIid]}`
+            res[group] = res[group] || {}
+            Object.entries(r).forEach(([k, v]) => {
+              const uniqueKey = Boolean(k === sourcePOIid || k === targetPOIid ||
+                MAP_GEO_KEYS.includes(k) || Object.values(COORD_KEYS).flat().includes(k) ||
+                k.includes(XWI_REPORT.target))
+              if (res[group][k]) {
+                if (columnsAnalysis[k]?.isNumeric && !uniqueKey) {
+                  res[group][k] += v
+                } else if (!uniqueKey) {
+                  res[group][k].push(v)
+                }
+              } else if (columnsAnalysis[k]?.isNumeric || uniqueKey) {
+                res[group][k] = v
+              } else {
+                res[group][k] = [v]
+              }
+            })
+            return res
+          }, {}) :
+          {}
+        return Object.values(xwiMapReportdata)
+      }
       // add coordinates for map widget data
       if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
         const lat = columns.find(({ name, category }) =>
@@ -228,7 +276,7 @@ const useTransformedData = () => {
         const lon = columns.find(({ name, category }) =>
           COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
         return aggregatedData.reduce((acc, d) => {
-          if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+          if (lat && lon) {
             if (latIsValid(d[lat]) && lonIsValid(d[lon])) {
               return [...acc, d]
             }
@@ -307,6 +355,10 @@ const useTransformedData = () => {
     return null
   }, [
     type,
+    isxwiReportMap,
+    truncatedData,
+    columnsAnalysis,
+    dataKeys,
     aggregatedData,
     filteredGroupedData,
     columns,
