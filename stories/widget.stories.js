@@ -21,6 +21,9 @@ const DEFAULT_WL = 2456
 const DEFAULT_CU = 27848
 const DEFAULT_DEALER = 1
 
+const BLANK_WIDGET_WL = 101
+const BLANK_WIDGET_CU = 13147
+
 const devProps = {
   sampleData,
   sampleConfigs,
@@ -147,8 +150,8 @@ storiesOf('Blank Widget (data source control)', module)
         height: '100vh',
       }}>
         <Widget
-          wl={DEFAULT_WL}
-          cu={DEFAULT_CU}
+          wl={BLANK_WIDGET_WL}
+          cu={BLANK_WIDGET_CU}
           mode='editor'
         />
       </div>
