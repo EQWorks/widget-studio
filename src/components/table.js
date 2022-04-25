@@ -6,6 +6,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Parser, transforms } from 'json2csv'
+import { Table as LumenTable} from '@eqworks/lumen-table'
 import { Table as ReactLabsTable } from '@eqworks/react-labs'
 import { makeStyles } from '@eqworks/lumen-labs'
 
@@ -81,34 +82,38 @@ const mapFalsy = {
 }
 
 const classes = makeStyles({
-  container: {
-    '& > .MuiToolbar-root': {
-      display: 'none',
-    },
-  },
+  tableContainer: {
+    height: '100%',
+    overflow: 'auto',
+
+    '& .table-root-container': {
+      display: 'initial'
+    }
+  }
 })
 
 const Table = ({ rows, showHeader }) => {
   const _rows = useMemo(() => rows || [], [rows])
   const renderTable = (
-    <ReactLabsTable
+    <LumenTable
       data={_rows}
       downloadFn={jsonToCsv}
+      toolbar={showHeader}
     >
       {Object.keys(_rows[0] || {})?.map((d) => (
-        <ReactLabsTable.Column
+        <LumenTable.Column
           key={d}
           Header={d}
           accessor={d}
           Cell={formatCell}
         />
       ))}
-    </ReactLabsTable>
+    </LumenTable>
   )
   return (
-    showHeader
-      ? renderTable
-      : <div className={classes.container}>{renderTable}</div>
+    <div className={`table-container ${classes.tableContainer}`}>
+      {renderTable}
+    </div>
   )
 }
 
