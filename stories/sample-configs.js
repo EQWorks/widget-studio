@@ -737,7 +737,6 @@ export default {
         'agg': 'sum',
       },
       {
-        'title': 'Unique visitors (sum)',
         'title:': 'Unique visitors (sum)',
         'mapVis': 'fill',
         'key': 'unique_visitors',
@@ -831,6 +830,132 @@ export default {
     'dataSource': {
       'type': 'Execution',
       'id': '913',
+    },
+    'percentageMode': false,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#463F3A',
+    ],
+  },
+  'dev-map-3': {
+    'title': 'My example map widget - xwi report',
+    'type': 'map',
+    'filters': [
+      // {
+      //   'key': 'visits',
+      //   'filter': [
+      //     0,
+      //     100,
+      //   ],
+      // },
+    ],
+    'groupFilter': [],
+    'valueKeys': [],
+    'mapValueKeys': [
+      // {
+      //   'mapVis': 'radius',
+      //   'key': 'visits',
+      //   'title': 'Visits (sum)',
+      //   'agg': 'sum',
+      // },
+      // {
+      //   'title:': 'Unique visitors (sum)',
+      //   'mapVis': 'fill',
+      //   'key': 'unique_visitors',
+      //   'agg': 'sum',
+      // },
+    ],
+    'formatDataFunctions': {},
+    'group': true,
+    'groupKey': null,
+    // 'mapGroupKey': 'poi_id',
+    'indexKey': null,
+    // 'mapGroupKeyTitle': 'Poi id',
+    'uniqueOptions': {
+      // 'radius': {
+      //   'value': 10,
+      //   'valueOptions': [
+      //     5,
+      //     15,
+      //   ],
+      // },
+      // 'fill': {
+      //   'value': [
+      //     39,
+      //     85,
+      //     196,
+      //   ],
+      //   'valueOptions': [
+      //     [
+      //       214,
+      //       232,
+      //       253,
+      //     ],
+      //     [
+      //       39,
+      //       85,
+      //       196,
+      //     ],
+      //   ],
+      // },
+      // 'elevation': {
+      //   'value': 1000,
+      // },
+      'lineWidth': {
+        'value': 1,
+      },
+      'opacity': {
+        'value': 20,
+      },
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLegend': true,
+      'showTooltip': true,
+      'showAxisTitles': true,
+      'showSubPlotTitles': true,
+      'subPlots': false,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        0,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'legendSize': 'Small',
+      'baseColor': '#366fe4',
+    },
+    'mapViewState': {
+      'value': {
+        'latitude': 49.04458924229672,
+        'longitude': -87.95359000000006,
+        'zoom': 2.9427361735841195,
+        'width': 917,
+        'height': 742,
+        'bearing': 0,
+        'pitch': 0,
+        'altitude': 1.5,
+        'maxZoom': 20,
+        'minZoom': 0,
+        'maxPitch': 60,
+        'minPitch': 0,
+      },
+      'postalCode': {
+        'latitude': 43.75,
+        'longitude': -79.4,
+        'zoom': 10,
+      },
+    },
+    'dataSource': {
+      'type': 'Execution',
+      'id': '2123',
     },
     'percentageMode': false,
     'presetColors': [
