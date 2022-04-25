@@ -5,6 +5,8 @@ import { dataSourceTypes } from '../constants/data-source'
 import { useStoreState } from '../store'
 
 
+const COX_CU = 27848
+
 export const api = axios.create({
   baseURL: [
     process.env.API_HOST || process.env.STORYBOOK_API_HOST || 'http://localhost:3000',
@@ -27,6 +29,7 @@ api.interceptors.request.use(config => {
   }
 })
 
+// TO DELETE: this is just temporary. REMOVE once not using qldev for Cox
 export const qlApi = axios.create({
   baseURL: [
     process.env.QL_API_HOST || process.env.STORYBOOK_QL_API_HOST || '',
@@ -95,10 +98,17 @@ export const useCustomers = (wlID) => {
 }
 
 export const useSavedQueries = () => {
+  const cu = useStoreState((state) => state.cu)
   const _key = 'Get Queries'
+  const finalQLApi = cu === COX_CU ? qlApi : api
   const { isError, error, isLoading, data = [] } = useQuery(
     _key,
-    () => qlApi.get('/ql/queries')
+    () => finalQLApi.get('/ql/queries', {
+      params: {
+        _wl: '',
+        _customer: '',
+      },
+    })
       .then(({ data = [] }) => data),
     { refetchOnWindowFocus: false }
   )
@@ -115,12 +125,19 @@ export const useSavedQueries = () => {
 export const useExecutions = () => {
   const dev = useStoreState((state) => state.dev)
   const sampleData = useStoreState((state) => state.sampleData)
+  const cu = useStoreState((state) => state.cu)
   const _key = 'Get Query Executions'
+  const finalQLApi = cu === COX_CU ? qlApi : api
   const { isError, error, isLoading, data = [] } = useQuery(
     _key,
     () => sampleData
       ? {}
-      : qlApi.get('/ql/executions').then(({ data = [] }) => data) ,
+      : finalQLApi.get('/ql/executions', {
+        params: {
+          _wl: '',
+          _customer: '',
+        },
+      }).then(({ data = [] }) => data) ,
     { refetchOnWindowFocus: false }
   )
   useEffect(() => {
@@ -135,8 +152,8 @@ export const useExecutions = () => {
 }
 
 // eslint-disable-next-line no-unused-vars
-const requestQueryResults = async (id) => {
-  return qlApi.get(`/ql/queries/${id}`)
+const requestQueryResults = async (id, finalQLApi) => {
+  return finalQLApi.get(`/ql/queries/${id}`)
     .then(async ({ data: { executions } }) => {
       if (!executions.length) {
         throw new Error('This query has not been executed.')
@@ -145,8 +162,8 @@ const requestQueryResults = async (id) => {
     })
 }
 
-const requestExecutionResults = async (id) => {
-  const data = await qlApi.get(`/ql/executions/${id}`, { params: { results: 1 } })
+const requestExecutionResults = async (id, finalQLApi) => {
+  const data = await finalQLApi.get(`/ql/executions/${id}`, { params: { results: 1 } })
     .then(res => {
       if (res.data.status == 'SUCCEEDED') {
         return res.data
@@ -157,7 +174,7 @@ const requestExecutionResults = async (id) => {
   const { executionID, queryID, views = [] } = data
   let name = `Execution ${executionID}`
   if (queryID) {
-    name += await qlApi.get(`/ql/queries/${queryID}`)
+    name += await finalQLApi.get(`/ql/queries/${queryID}`)
       .then(async ({ data: { name: queryName } }) => (
         ` - ${queryName}`
       ))
@@ -167,16 +184,17 @@ const requestExecutionResults = async (id) => {
   return { data, name }
 }
 
-export const requestData = async (dataSourceType, dataSourceID, sampleData = null) => {
+export const requestData = async (dataSourceType, dataSourceID, sampleData = null, cu) => {
+  const finalQLApi = cu === COX_CU ? qlApi : api
   const localCopy = sampleData?.[`${dataSourceType}-${dataSourceID}`]
   if (localCopy) {
     return localCopy
   }
   if (dataSourceType == dataSourceTypes.SAVED_QUERIES) {
-    return await requestQueryResults(dataSourceID)
+    return await requestQueryResults(dataSourceID, finalQLApi)
   }
   if (dataSourceType == dataSourceTypes.EXECUTIONS) {
-    return await requestExecutionResults(dataSourceID)
+    return await requestExecutionResults(dataSourceID, finalQLApi)
   }
 }
 
