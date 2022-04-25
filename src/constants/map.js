@@ -2,6 +2,7 @@ export const MAP_LAYERS = {
   scatterplot: 'scatterplot',
   // MVT: 'MVT',
   geojson: 'geojson',
+  arc: 'arc',
 }
 
 // visualizations used in Value Configuration
@@ -48,15 +49,8 @@ export const MAP_LAYER_GEO_KEYS = {
     'poi_id',
     'locus_poi_id',
   ],
-  // geojson: Object.values(GEO_KEY_TYPES).flat(),
-  // just remove for the moment postal codes, da & ct
-  geojson: [
-    ...GEO_KEY_TYPES.fsa,
-    ...GEO_KEY_TYPES.postalcode,
-    ...GEO_KEY_TYPES.ct,
-    ...GEO_KEY_TYPES.da,
-    ...GEO_KEY_TYPES.region,
-  ],
+  xwi: ['target_poi_id'],
+  geojson: Object.values(GEO_KEY_TYPES).flat(),
 }
 
 export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
@@ -89,6 +83,8 @@ export const COORD_KEYS = {
     'poi_lat',
     'poi_latitude',
     'locus_poi_lat',
+    'source_lat',
+    'source_latitude',
   ],
   longitude: [
     'lon',
@@ -97,18 +93,29 @@ export const COORD_KEYS = {
     'poi_lon',
     'poi_longitude',
     'locus_poi_lon',
-  ],
-  other: [
-    // TO DO: enable for xwi reports
-    'source_lat',
-    'source_latitude',
-    'source_lat',
-    'source_latitude',
     'source_lon',
+    'source_lng',
     'source_longitude',
-    'target_lon',
-    'target_longitude',
   ],
+  // targetPOI coords need to be separated because they are the markers for xwi-reports
+  targetLon: [
+    'target_lon',
+    'target_lg',
+    'target_longitude',
+    'target_poi_lon',
+    'target_poi_lg',
+    'target_poi_longitude',
+  ],
+  targetLat: [
+    'target_lat',
+    'target_latitude',
+    'target_poi_lat',
+    'target_poi_latitude',
+  ],
+}
+
+export const XWI_REPORT = {
+  target: 'target',
 }
 
 export const LAYER_SCALE = 'linear'
