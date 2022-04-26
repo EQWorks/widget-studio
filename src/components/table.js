@@ -6,8 +6,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Parser, transforms } from 'json2csv'
-import { Table as LumenTable} from '@eqworks/lumen-table'
-import { Table as ReactLabsTable } from '@eqworks/react-labs'
+import { Table as LumenTable } from '@eqworks/lumen-table'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 
@@ -81,19 +80,27 @@ const mapFalsy = {
   '': 'Unknown',
 }
 
-const classes = makeStyles({
-  tableContainer: {
-    height: '100%',
-    overflow: 'auto',
+const classes = (showHeader) => {
+  const tableContainerStyle = showHeader ?
+    { height: '100%', overflow: 'auto' } : { marginTop: '1rem' }
 
-    '& .table-root-container': {
-      display: 'initial'
-    }
-  }
-})
+  return (
+    makeStyles({
+      tableContainer: {
+        ...tableContainerStyle,
+
+        '& .table-root-container': {
+          display: 'initial',
+        },
+      },
+    })
+  )
+}
 
 const Table = ({ rows, showHeader }) => {
   const _rows = useMemo(() => rows || [], [rows])
+  const styles = classes(showHeader)
+
   const renderTable = (
     <LumenTable
       data={_rows}
@@ -111,7 +118,7 @@ const Table = ({ rows, showHeader }) => {
     </LumenTable>
   )
   return (
-    <div className={`table-container ${classes.tableContainer}`}>
+    <div className={`table-container ${styles.tableContainer}`}>
       {renderTable}
     </div>
   )

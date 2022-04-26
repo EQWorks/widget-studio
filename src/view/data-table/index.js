@@ -93,7 +93,7 @@ const WidgetDataTable = () => {
     }
   }, [noTransformedData, update])
 
-  const renderTable = <Table rows={_results} />
+  const renderTable = <Table rows={_results} showHeader={showHeader}/>
 
   const renderTableWithHeader = (
     showHeader
