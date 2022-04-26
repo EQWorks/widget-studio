@@ -556,9 +556,10 @@ export default {
       ui: { dataSourceLoading: true },
       dataSource,
     })
-    const { sampleData, dataSource: previousDataSource } = getState()
+    const { sampleData, dataSource: previousDataSource, cu } = getState()
     const init = !previousDataSource?.id || !previousDataSource?.type
-    requestData(dataSource.type, dataSource.id, sampleData)
+    // TO DELETE: once Cox executions are not pulled from qldev stage
+    requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
         const { results: rows, columns, whitelabelID, customerID } = data
         actions.update({
