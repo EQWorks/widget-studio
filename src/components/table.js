@@ -82,7 +82,7 @@ const mapFalsy = {
 
 const classes = (showHeader) => {
   const tableContainerStyle = showHeader ?
-    { height: '100%', overflow: 'auto' } : { marginTop: '1rem' }
+    { height: '100%' } : { marginTop: '1rem' }
 
   return (
     makeStyles({
@@ -90,7 +90,12 @@ const classes = (showHeader) => {
         ...tableContainerStyle,
 
         '& .table-root-container': {
-          display: 'initial',
+          display: 'flex',
+          height: '100%',
+
+          '& .table-container': {
+            overflow: showHeader ? 'auto' : 'initial',
+          },
         },
       },
     })
