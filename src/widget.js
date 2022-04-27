@@ -166,7 +166,7 @@ const Widget = ({
   }, [staticData, loadData, dataSourceType, dataSourceID])
 
   const renderView = (
-    <div className={clsx('min-h-0 overflow-auto flex-1 min-w-0 flex items-stretch', {
+    <div className={clsx('min-h-0 overflow-hidden flex-1 min-w-0 flex items-stretch', {
       'h-full': mode === modes.VIEW,
     })}>
       <WidgetView />
