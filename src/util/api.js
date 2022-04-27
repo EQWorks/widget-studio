@@ -98,6 +98,7 @@ export const useCustomers = (wlID) => {
 }
 
 export const useSavedQueries = () => {
+  const wl = useStoreState((state) => state.wl)
   const cu = useStoreState((state) => state.cu)
   const _key = 'Get Queries'
   const finalQLApi = cu === COX_CU ? qlApi : api
@@ -105,8 +106,8 @@ export const useSavedQueries = () => {
     _key,
     () => finalQLApi.get('/ql/queries', {
       params: {
-        _wl: '',
-        _customer: '',
+        _wl: wl,
+        _customer: cu,
       },
     })
       .then(({ data = [] }) => data),
@@ -125,6 +126,7 @@ export const useSavedQueries = () => {
 export const useExecutions = () => {
   const dev = useStoreState((state) => state.dev)
   const sampleData = useStoreState((state) => state.sampleData)
+  const wl = useStoreState((state) => state.wl)
   const cu = useStoreState((state) => state.cu)
   const _key = 'Get Query Executions'
   const finalQLApi = cu === COX_CU ? qlApi : api
@@ -134,8 +136,8 @@ export const useExecutions = () => {
       ? {}
       : finalQLApi.get('/ql/executions', {
         params: {
-          _wl: '',
-          _customer: '',
+          _wl: wl,
+          _customer: cu,
         },
       }).then(({ data = [] }) => data) ,
     { refetchOnWindowFocus: false }
