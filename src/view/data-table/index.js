@@ -19,10 +19,11 @@ const classes = makeStyles({
     justifyContent: 'flex-end',
   },
   tableContentContainer: {
-    overflow: 'auto',
+    height: '75%',
     padding: '1rem',
   },
   table: {
+    height: '100%',
     border: `2px solid ${getTailwindConfigColor('secondary-300')}`,
     borderRadius: '0.425rem',
     fontSize: '0.78rem',
@@ -92,7 +93,7 @@ const WidgetDataTable = () => {
     }
   }, [noTransformedData, update])
 
-  const renderTable = <Table rows={_results} />
+  const renderTable = <Table rows={_results} showHeader={showHeader}/>
 
   const renderTableWithHeader = (
     showHeader
@@ -129,7 +130,7 @@ const WidgetDataTable = () => {
     )
   }
   return (
-    <div>
+    <>
       {
         showMaximizeButton &&
         <div className={classes.maximizeButtonContainer}>
@@ -142,7 +143,7 @@ const WidgetDataTable = () => {
         </div>
       }
       {renderTableWithHeader}
-    </div>
+    </>
   )
 }
 
