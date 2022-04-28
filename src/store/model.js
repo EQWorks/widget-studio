@@ -389,8 +389,27 @@ export default {
       mapDataReady,
       isLoading,
     ) => {
-      const mapReady = type !== types.MAP || mapDataReady
-      return mapReady && !isLoading && type && columns.length && rows.length && transformedData?.length && renderableValueKeys.length && domain.value
+      const mapChartReady = type !== types.MAP || mapDataReady
+      return mapChartReady && !isLoading && type && columns.length && rows.length &&
+        transformedData?.length && renderableValueKeys.length && domain.value
+    }),
+
+  dataIsXWIReport: computed(
+    [
+      (state) => state.type,
+      (state) => state.columnsAnalysis,
+    ],
+    (
+      type,
+      columnsAnalysis,
+    ) => {
+      const dataKeys = Object.keys(columnsAnalysis) || []
+      const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
+      const sourceLon = findCoord(COORD_KEYS.longitude)
+      const sourceLat = findCoord(COORD_KEYS.latitude)
+      const targetLon = findCoord(COORD_KEYS.targetLon)
+      const targetLat = findCoord(COORD_KEYS.targetLat)
+      return Boolean(type === types.MAP && sourceLon && sourceLat && targetLon && targetLat)
     }),
 
   /** checks if transformedData is in sync with the map layer, domain, & renderableValueKeys */
