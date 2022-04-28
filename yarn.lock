@@ -1397,21 +1397,7 @@
     react-iframe "^1.8.0"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.41":
-  version "0.1.0-alpha.41"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.41/06d1bfbfa5551f0459af60d9874166704d225b7ee6a830586e6fb278903396e6#77313040a8775ee86f7209163104f05aceb1b885"
-  integrity sha512-R2udHDgiM6fb8tC+PnVT8XKfeMah+mPH+XsgC20LXq/0eoZ1eULEWC/CsLeEFVZmHDHlsUPrqT2eDTLfbSHP1Q==
-  dependencies:
-    "@headlessui/react" "^1.4.0"
-    clsx "^1.1.1"
-    goober "^2.0.39"
-    prop-types "^15.7.2"
-    react-resize-detector "^6.7.6"
-    react-virtualized-auto-sizer "^1.0.5"
-    react-window "^1.8.6"
-    use-debounce "^7.0.1"
-
-"@eqworks/lumen-labs@^0.1.0-alpha.47":
+"@eqworks/lumen-labs@^0.1.0-alpha.47", "@eqworks/lumen-labs@^0.1.0-alpha.50":
   version "0.1.0-alpha.50"
   resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.50/aeae4bac0c02ef58df27fd077e7295e6bff1b9c066f851d6fef86043282f3912#7e53764ca438351e0207f310da07d9f2045c4cb0"
   integrity sha512-L/SRIGmPZT3oePQO5PX7BNce3kJxfLwZF+qH7LrmEFOBcwmPCa/W7mpyrtAyDNqVDG852kiO3ibJ6dnItva1sQ==
