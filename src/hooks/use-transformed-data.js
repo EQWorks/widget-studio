@@ -43,20 +43,14 @@ const useTransformedData = () => {
   const domainIsDate = useStoreState((state) => state.domainIsDate)
   const dateAggregation = useStoreState((state) => state.dateAggregation)
   const propFilters = useStoreState((state) => state.propFilters)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
   const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
 
   const dataKeys = useMemo(() => Object.keys(columnsAnalysis) || [], [columnsAnalysis])
 
   // special case for pre-aggregating data for xwi reports visualization on map
-  const isxwiReportMap = useMemo(() => {
-    const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
-    const sourceLon = findCoord(COORD_KEYS.longitude)
-    const sourceLat = findCoord(COORD_KEYS.latitude)
-    const targetLon = findCoord(COORD_KEYS.targetLon)
-    const targetLat = findCoord(COORD_KEYS.targetLat)
-    return Boolean(type === types.MAP && sourceLon && sourceLat && targetLon && targetLat)
-  }, [dataKeys, type])
+
 
   // normalize data using columnsAnalysis (ex. price to numeric)
   const normalizedData = useMemo(() => {
@@ -175,7 +169,7 @@ const useTransformedData = () => {
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => {
-    if (!group || isxwiReportMap) return null
+    if (!group || dataIsXWIReport) return null
     const formattedDomain = formattedColumnNames[finalGroupKey]
     if (domainIsDate && dateAggregations[dateAggregation]) {
       // extra grouping required if Domain is date
@@ -208,7 +202,7 @@ const useTransformedData = () => {
     })
   }, [
     group,
-    isxwiReportMap,
+    dataIsXWIReport,
     domainIsDate,
     formattedColumnNames,
     dateAggregation,
@@ -241,7 +235,7 @@ const useTransformedData = () => {
   // enrich data with coords for scatterplot & geojson data; special aggregation for xwi-reports
   const getMapEnrichedData = useCallback(async () => {
     if (type === types.MAP) {
-      if (isxwiReportMap) {
+      if (dataIsXWIReport) {
         const sourcePOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
         const targetPOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.xwi.includes(key))
         const xwiMapReportdata =  sourcePOIid && targetPOIid ?
@@ -355,7 +349,7 @@ const useTransformedData = () => {
     return null
   }, [
     type,
-    isxwiReportMap,
+    dataIsXWIReport,
     truncatedData,
     columnsAnalysis,
     dataKeys,
