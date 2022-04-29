@@ -134,10 +134,21 @@ export default {
   component: Map,
   adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
     const { mapGroupKey, mapGroupKeyTitle, mapValueKeys } = config
+
     const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
-    const dataKeys = Object.keys(data[0])
+    const dataKeys = Object.keys(data[0]) || []
+
+    const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
+
+    const sourceLon = findCoord(COORD_KEYS.longitude)
+    const sourceLat = findCoord(COORD_KEYS.latitude)
+    const targetLon = findCoord(COORD_KEYS.targetLon)
+    const targetLat = findCoord(COORD_KEYS.targetLat)
+
+    const isXWIReportMap = Boolean(sourceLon && sourceLat && targetLon && targetLat)
+
     let finalData = data
     let geometry = {}
     let mapGroupKeyType = ''
@@ -166,53 +177,113 @@ export default {
 
     const { id, type } = config?.dataSource || {}
 
-    let layerConfig = [
-      {
-        layer: mapLayer,
-        dataId: `${id}-${type}`,
-        dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
-        geometry,
-        visualizations: Object.fromEntries(
-          MAP_LAYER_VALUE_VIS[mapLayer].concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
-            const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
-            /*
-            * we only allow to set the max elevation value, keeping the min=0, therefore,
-            * in Widget Studio in uniqueOptions, we work with one value to use in slider updates;
-            * however, the LocusMap receives an array valueOptions prop for elevation, hence
-            * the special case for elevation in this case
-            */
-            const visValue = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
-            return [
-              vis,
-              {
-                value: keyTitle ?
-                  { field: keyTitle } :
-                  visValue,
-                valueOptions: vis === MAP_VALUE_VIS.elevation ?
-                  [0, uniqueOptions[vis]?.value] :
-                  uniqueOptions[vis]?.valueOptions,
-                //----TO DO - ERIKA - add the LAYER_SCALE to state for editor when implementing constrols for scale
-                dataScale: LAYER_SCALE,
-              },
-            ]
-          })),
-        formatData: config.formatDataFunctions,
-        interactions: {
-          tooltip: {
-            tooltipKeys: {
-              name: mapGroupKeyTitle,
-            },
+    let layerConfig = isXWIReportMap ?
+      [
+        {
+          layer: MAP_LAYERS.arc,
+          dataId: `${id}-${type}`,
+          geometry: {
+            source: { longitude: sourceLon, latitude: sourceLat },
+            target: { longitude: targetLon, latitude: targetLat },
+          },
+          visualizations: {
+            // sourceArcColor: { value: [182, 38, 40] },
+            // targetArcColor: { value: [255 - 182, 255 - 38, 255 - 40] },
+            // arcWidth: { value: 2 },
           },
         },
-        legend: { showLegend: true },
-        schemeColor: genericOptions.baseColor,
-        opacity: uniqueOptions.opacity.value / 100,
-        minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
-          MIN_ZOOM.postalCode :
-          MIN_ZOOM.defaultValue,
-        maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
-      },
-    ]
+        {
+          layer: MAP_LAYERS.scatterplot,
+          dataId: `${id}-${type}`,
+          geometry: { longitude: sourceLon, latitude: sourceLat },
+          visualizations: Object.fromEntries(
+            MAP_LAYER_VALUE_VIS.scatterplot.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+              const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+              const visValue = uniqueOptions[vis]?.value
+              return [
+                vis,
+                {
+                  value: keyTitle ?
+                    { field: keyTitle } :
+                    visValue,
+                  valueOptions: uniqueOptions[vis]?.valueOptions,
+                  dataScale: LAYER_SCALE,
+                },
+              ]
+            })),
+          isSourceLayer: true,
+          opacity: uniqueOptions.opacity.value / 100,
+        },
+        {
+          layer: MAP_LAYERS.scatterplot,
+          dataId: `${id}-${type}`,
+          geometry: { longitude: targetLon, latitude: targetLat },
+          visualizations: Object.fromEntries(
+            MAP_LAYER_VALUE_VIS.scatterplot.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+              const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+              const visValue = uniqueOptions[vis]?.value
+              return [
+                vis,
+                {
+                  value: keyTitle ?
+                    { field: keyTitle } :
+                    visValue,
+                  valueOptions: uniqueOptions[vis]?.valueOptions,
+                  dataScale: LAYER_SCALE,
+                },
+              ]
+            })),
+          isTargetLayer: true,
+          opacity: uniqueOptions.opacity.value / 100,
+        },
+      ] :
+      [
+        {
+          layer: mapLayer,
+          dataId: `${id}-${type}`,
+          dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
+          geometry,
+          visualizations: Object.fromEntries(
+            MAP_LAYER_VALUE_VIS[mapLayer].concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+              const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+              /*
+              * we only allow to set the max elevation value, keeping the min=0, therefore,
+              * in Widget Studio in uniqueOptions, we work with one value to use in slider updates;
+              * however, the LocusMap receives an array valueOptions prop for elevation, hence
+              * the special case for elevation in this case
+              */
+              const visValue = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
+              return [
+                vis,
+                {
+                  value: keyTitle ?
+                    { field: keyTitle } :
+                    visValue,
+                  valueOptions: vis === MAP_VALUE_VIS.elevation ?
+                    [0, uniqueOptions[vis]?.value] :
+                    uniqueOptions[vis]?.valueOptions,
+                  //----TO DO - ERIKA - add the LAYER_SCALE to state for editor when implementing constrols for scale
+                  dataScale: LAYER_SCALE,
+                },
+              ]
+            })),
+          formatData: config.formatDataFunctions,
+          interactions: {
+            tooltip: {
+              tooltipKeys: {
+                name: mapGroupKeyTitle,
+              },
+            },
+          },
+          legend: { showLegend: true },
+          schemeColor: genericOptions.baseColor,
+          opacity: uniqueOptions.opacity.value / 100,
+          minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+            MIN_ZOOM.postalCode :
+            MIN_ZOOM.defaultValue,
+          maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
+        },
+      ]
 
     const radiusValue = uniqueOptions?.radius?.value
     const { showLabels } = genericOptions || {}
@@ -258,7 +329,7 @@ export default {
         initViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
           uniqueOptions.mapViewState.postalCode :
           uniqueOptions.mapViewState.value,
-        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ?
+        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) || isXWIReportMap?
           PITCH.elevation :
           PITCH.default,
       },
