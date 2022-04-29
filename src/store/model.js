@@ -377,6 +377,7 @@ export default {
       (state) => state.domain,
       (state) => state.transformedData,
       (state) => state.mapDataReady,
+      (state) => state.dataIsXWIReport,
       (state) => state.isLoading,
     ],
     (
@@ -387,11 +388,15 @@ export default {
       domain,
       transformedData,
       mapDataReady,
+      dataIsXWIReport,
       isLoading,
     ) => {
+      const isXWIReportMap = Boolean(type && type == types.MAP && !isLoading && dataIsXWIReport &&
+        columns.length && rows.length && transformedData?.length)
       const mapChartReady = type !== types.MAP || mapDataReady
-      return mapChartReady && !isLoading && type && columns.length && rows.length &&
-        transformedData?.length && renderableValueKeys.length && domain.value
+      return isXWIReportMap ||
+        Boolean(mapChartReady && !isLoading && type && columns.length && rows.length &&
+          transformedData?.length && renderableValueKeys.length && domain.value)
     }),
 
   dataIsXWIReport: computed(
@@ -433,7 +438,7 @@ export default {
       if (type === types.MAP && transformedData?.length) {
         const dataSample = transformedData[0] || {}
         const dataKeys = Object.keys(dataSample)
-        const mapGroupKeyTitle = formattedColumnNames[domain.value]
+        const mapGroupKeyTitle = formattedColumnNames[domain?.value] || null
         const dataIsValid = mapDataIsValid({ dataSample, mapGroupKeyTitle, renderableValueKeys })
         if (mapLayer === MAP_LAYERS.scatterplot) {
           const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
@@ -441,7 +446,7 @@ export default {
           return Boolean(latitude && longitude && dataIsValid)
         }
         if (mapLayer === MAP_LAYERS.geojson) {
-          return GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(domain.value) ?
+          return GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(domain?.value) ?
             mapDataIsValid({ dataSample: dataSample.properties, mapGroupKeyTitle, renderableValueKeys }) :
             dataIsValid
         }
