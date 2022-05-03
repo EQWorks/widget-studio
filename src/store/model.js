@@ -230,6 +230,7 @@ export default {
       (state) => state.mapGroupKey,
       (state) => state.indexKey,
       (state) => state.groupKey,
+      (state) => state.dataIsXWIReport,
     ],
     (
       group,
@@ -237,9 +238,10 @@ export default {
       mapGroupKey,
       indexKey,
       groupKey,
+      dataIsXWIReport,
     ) => {
       let res = {}
-      if (type === types.MAP) {
+      if (type === types.MAP && !dataIsXWIReport) {
         res = { mapGroupKey }
       } else if (!group) {
         res = { indexKey }
@@ -391,21 +393,19 @@ export default {
       dataIsXWIReport,
       isLoading,
     ) => {
-      const isXWIReportMap = Boolean(type && type == types.MAP && !isLoading && dataIsXWIReport &&
-        columns.length && rows.length && transformedData?.length)
-      const mapChartReady = type !== types.MAP || mapDataReady
+      const isXWIReportMap = Boolean(type && type === types.MAP && dataIsXWIReport &&
+        columns.length && rows.length && transformedData?.arcData?.length)
+      const mapChartReady = type && (type !== types.MAP || mapDataReady)
       return isXWIReportMap ||
-        Boolean(mapChartReady && !isLoading && type && columns.length && rows.length &&
+        Boolean(mapChartReady && !isLoading && columns.length && rows.length &&
           transformedData?.length && renderableValueKeys.length && domain.value)
     }),
 
   dataIsXWIReport: computed(
     [
-      (state) => state.type,
       (state) => state.columnsAnalysis,
     ],
     (
-      type,
       columnsAnalysis,
     ) => {
       const dataKeys = Object.keys(columnsAnalysis) || []
@@ -414,7 +414,10 @@ export default {
       const sourceLat = findCoord(COORD_KEYS.latitude)
       const targetLon = findCoord(COORD_KEYS.targetLon)
       const targetLat = findCoord(COORD_KEYS.targetLat)
-      return Boolean(type === types.MAP && sourceLon && sourceLat && targetLon && targetLat)
+      const sourcePOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
+      const targetPOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.arc.includes(key))
+      return Boolean(sourceLon && sourceLat && targetLon && targetLat &&
+        sourcePOIid && targetPOIid)
     }),
 
   /** checks if transformedData is in sync with the map layer, domain, & renderableValueKeys */
@@ -426,6 +429,7 @@ export default {
       (state) => state.transformedData,
       (state) => state.formattedColumnNames,
       (state) => state.mapLayer,
+      (state) => state.dataIsXWIReport,
     ],
     (
       type,
@@ -434,8 +438,9 @@ export default {
       transformedData,
       formattedColumnNames,
       mapLayer,
+      dataIsXWIReport,
     ) => {
-      if (type === types.MAP && transformedData?.length) {
+      if (type === types.MAP && !dataIsXWIReport && transformedData?.length) {
         const dataSample = transformedData[0] || {}
         const dataKeys = Object.keys(dataSample)
         const mapGroupKeyTitle = formattedColumnNames[domain?.value] || null
@@ -609,7 +614,7 @@ export default {
     })
     const { sampleData, dataSource: previousDataSource, cu } = getState()
     const init = !previousDataSource?.id || !previousDataSource?.type
-    // TO DELETE: once Cox executions are not pulled from qldev stage
+    // TO DELETE: once Cox executions are not pulled from qldev stage, delete cu
     requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
         const { results: rows, columns, whitelabelID, customerID, clientToken } = data
