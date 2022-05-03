@@ -138,7 +138,7 @@ export default {
     const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
-    const dataKeys = Object.keys(data[0]) || []
+    const dataKeys = Object.keys(data.arcData ? data.arcData[0] : data[0] || {})
 
     const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
 
@@ -147,7 +147,7 @@ export default {
     const targetLon = findCoord(COORD_KEYS.targetLon)
     const targetLat = findCoord(COORD_KEYS.targetLat)
 
-    const isXWIReportMap = Boolean(sourceLon && sourceLat && targetLon && targetLat)
+    const isXWIReportMap = Boolean(data.arcData)
 
     let finalData = data
     let geometry = {}
@@ -181,7 +181,7 @@ export default {
       [
         {
           layer: MAP_LAYERS.arc,
-          dataId: `${id}-${type}`,
+          dataId: `${id}-${type}-arc`,
           geometry: {
             source: { longitude: sourceLon, latitude: sourceLat },
             target: { longitude: targetLon, latitude: targetLat },
@@ -192,10 +192,14 @@ export default {
             // arcWidth: { value: 2 },
           },
         },
-        {
+      ].concat(
+        [
+          { dataId: `${id}-${type}-source`, longitude: sourceLon, latitude: sourceLat },
+          { dataId: `${id}-${type}-target`, longitude: targetLon, latitude: targetLat },
+        ].map(({ dataId, longitude, latitude }) => ({
           layer: MAP_LAYERS.scatterplot,
-          dataId: `${id}-${type}`,
-          geometry: { longitude: sourceLon, latitude: sourceLat },
+          dataId,
+          geometry: { longitude, latitude },
           visualizations: Object.fromEntries(
             MAP_LAYER_VALUE_VIS.scatterplot.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
               const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
@@ -211,32 +215,9 @@ export default {
                 },
               ]
             })),
-          isSourceLayer: true,
           opacity: uniqueOptions.opacity.value / 100,
-        },
-        {
-          layer: MAP_LAYERS.scatterplot,
-          dataId: `${id}-${type}`,
-          geometry: { longitude: targetLon, latitude: targetLat },
-          visualizations: Object.fromEntries(
-            MAP_LAYER_VALUE_VIS.scatterplot.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
-              const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
-              const visValue = uniqueOptions[vis]?.value
-              return [
-                vis,
-                {
-                  value: keyTitle ?
-                    { field: keyTitle } :
-                    visValue,
-                  valueOptions: uniqueOptions[vis]?.valueOptions,
-                  dataScale: LAYER_SCALE,
-                },
-              ]
-            })),
-          isTargetLayer: true,
-          opacity: uniqueOptions.opacity.value / 100,
-        },
-      ] :
+        }))
+      ) :
       [
         {
           layer: mapLayer,
@@ -244,7 +225,7 @@ export default {
           dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
           geometry,
           visualizations: Object.fromEntries(
-            MAP_LAYER_VALUE_VIS[mapLayer].concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+            MAP_LAYER_VALUE_VIS[mapLayer]?.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
               const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
               /*
               * we only allow to set the max elevation value, keeping the min=0, therefore,
@@ -316,7 +297,15 @@ export default {
       layerConfig
 
     return ({
-      dataConfig: [{ id: `${id}-${type}`, data: finalData }],
+      dataConfig: isXWIReportMap ?
+        [
+          { id: `${id}-${type}-arc`, data: finalData.arcData },
+          { id: `${id}-${type}-source`, data: finalData.sourceData },
+          { id: `${id}-${type}-target`, data: finalData.targetData },
+        ] :
+        [
+          { id: `${id}-${type}`, data: finalData },
+        ],
       layerConfig,
       mapConfig: {
         cursor: (layers) => getCursor({ layers }),
