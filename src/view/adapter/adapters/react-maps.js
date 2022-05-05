@@ -187,10 +187,9 @@ export default {
             target: { longitude: targetLon, latitude: targetLat },
           },
           visualizations: {
-            // sourceArcColor: { value: [182, 38, 40] },
-            // targetArcColor: { value: [255 - 182, 255 - 38, 255 - 40] },
-            // arcWidth: { value: 2 },
+            arcWidth: { value: 2 },
           },
+          schemeColor: genericOptions.baseColor,
         },
       ].concat(
         [
@@ -216,6 +215,8 @@ export default {
               ]
             })),
           opacity: uniqueOptions.opacity.value / 100,
+          isTargetLayer: longitude === targetLon,
+          schemeColor: genericOptions.baseColor,
         }))
       ) :
       [
