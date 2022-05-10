@@ -22,6 +22,7 @@ const commonClasses = {
     lineHeight: '1rem',
     fontStyle: 'italic',
     letterSpacing: '0.025em',
+    marginBottom: '1rem',
   },
 }
 
