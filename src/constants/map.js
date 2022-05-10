@@ -10,6 +10,7 @@ export const MAP_VALUE_VIS = {
   radius: 'radius',
   elevation: 'elevation',
   fill: 'fill',
+  arcWidth: 'arcWidth',
 }
 
 // other visualizations
@@ -22,6 +23,7 @@ export const MAP_LAYER_VALUE_VIS = {
   scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
   // MVT: [MAP_VALUE_VIS.fill],
   geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
+  arc: [MAP_VALUE_VIS.arcWidth],
 }
 
 export const GEO_KEY_TYPES = {
@@ -49,7 +51,7 @@ export const MAP_LAYER_GEO_KEYS = {
     'poi_id',
     'locus_poi_id',
   ],
-  xwi: ['target_poi_id'],
+  arc: ['target_poi_id'],
   geojson: Object.values(GEO_KEY_TYPES).flat(),
 }
 
