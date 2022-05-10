@@ -106,12 +106,20 @@ export default {
           value: 10,
           valueOptions: [5, 15],
         },
-        info: (
-          <div>
-            <p>Calculate radius based on the </p>
-            <p>selected column and operation.</p>
-          </div>
-        ),
+        info: {
+          standard: (
+            <div>
+              <p>Calculate radius based on the </p>
+              <p>selected column and operation.</p>
+            </div>
+          ),
+          xwiReport: (
+            <div>
+              <p>Calculate radius based</p>
+              <p>on the selected column.</p>
+            </div>
+          ),
+        },
         min: 0,
         max: 100,
         step: 1,
@@ -124,12 +132,75 @@ export default {
           value: [39, 85, 196],
           valueOptions: [[214, 232, 253], [39, 85, 196]],
         },
-        info: (
-          <div>
-            <p>Calculate fill color based on the </p>
-            <p>selected column and operation.</p>
-          </div>
-        ),
+        info: {
+          standard: (
+            <div>
+              <p>Calculate fill color based on the</p>
+              <p>selected column and operation.</p>
+            </div>
+          ),
+          // xwiReport: (
+          //   <div>
+          //     <p>Calculate fill color based</p>
+          //     <p>on the selected column.</p>
+          //   </div>
+          // ),
+          xwiReport: 'Calculate fill color based on the selected column',
+        },
+      },
+      targetRadius: {
+        name: 'Radius (px)',
+        valueConfigName: 'Radius',
+        type: Object,
+        defaultValue: {
+          value: 10,
+          valueOptions: [5, 15],
+        },
+        info: {
+          xwiReport: (
+            <div>
+              <p>Calculate radius based</p>
+              <p>on the selected column.</p>
+            </div>
+          ),
+        },
+        min: 0,
+        max: 100,
+        step: 1,
+      },
+      targetFill: {
+        name: 'Color Fill',
+        valueConfigName: 'Color Fill',
+        type: Object,
+        defaultValue: {
+          value: [39, 85, 196],
+          valueOptions: [[214, 232, 253], [39, 85, 196]],
+        },
+        info: {
+          xwiReport: (
+            <div>
+              <p>Calculate fill color based</p>
+              <p>on the selected column</p>
+            </div>
+          ),
+        },
+      },
+      arcWidth: {
+        name: 'Arc Width',
+        valueConfigName: 'Arc Width',
+        type: Object,
+        defaultValue: {
+          value: 1,
+          valueOptions: [1, 20],
+        },
+        info: {
+          xwiReport: (
+            <div>
+              <p>Calculate arc width based</p>
+              <p>on the selected colum.</p>
+            </div>
+          ),
+        },
       },
       elevation: {
         name: 'Elevation Height',
@@ -141,12 +212,15 @@ export default {
         min: 0,
         max: 500000,
         step: 1,
-        info: (
-          <div>
-            <p>Calculate elevation height based on</p>
-            <p>the selected column and operation.</p>
-          </div>
-        ),
+        info: {
+          standard: (
+            <div>
+              <p>Calculate elevation height based</p>
+              <p>on the selected column and </p>
+              <p>operation.</p>
+            </div>
+          ),
+        },
       },
       lineWidth: {
         name: 'Outline Width',
