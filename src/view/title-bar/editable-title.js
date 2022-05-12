@@ -29,31 +29,21 @@ const commonClasses = {
   },
 }
 
-const useStyles = (mode) => makeStyles(
-  mode === modes.EDITOR
-    ? {
-      title: {
-        display: 'flex',
-        alignItems: 'center',
-        color: getTailwindConfigColor('secondary-600'),
-        fontWeight: 700,
-        background: getTailwindConfigColor('secondary-100'),
-        fontSize: '0.875rem',
-        padding: '0.2rem 0.4rem',
-        paddingLeft: '0.6rem',
-        cursor: 'default',
-      },
-      ...commonClasses,
-    }
-    : {
-      title: {
-        color: getTailwindConfigColor('primary-500'),
-        fontSize: '1.125rem',
-        fontWeight: 700,
-      },
-      ...commonClasses,
-    }
+const useStyles = () => makeStyles(
+  {
+    title: {
+      color: getTailwindConfigColor('primary-500'),
+      fontSize: '1.125rem',
+      fontWeight: 700,
+    },
+    ...commonClasses,
+  },
 )
+
+const textFieldClasses = Object.freeze({
+  container: 'bg-secondary-100',
+  input: 'mb-0 text-sm text-secondary-600'
+})
 
 const EditableTitle = () => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
@@ -61,31 +51,19 @@ const EditableTitle = () => {
   const title = useStoreState((state) => state.title)
   const mode = useStoreState((state) => state.ui.mode)
 
-  const classes = useStyles(mode)
+  const classes = useStyles()
 
   const [editing, setEditing] = useState(false)
   const [tentativeTitle, setTentativeTitle] = useState(title)
+
   useEffect(() => {
     setTentativeTitle(title)
   }, [title])
 
-  const renderEditButton = (
-    <CustomButton
-      horizontalMargin
-      className={classes.button}
-      type='secondary'
-      onClick={() => setEditing(true)}
-      endIcon={<Icons.Edit size="md" />}
-    />
-  )
 
   const renderTitle = (
-    <div className={classes.title} >
+    <div className={`edit-title-class ${classes.title}`} >
       {isLoading ? '...' : title}
-      {
-        (mode === modes.QL || mode === modes.EDITOR) &&
-        renderEditButton
-      }
     </div >
   )
 
@@ -94,7 +72,7 @@ const EditableTitle = () => {
   return (
     <div className={classes.outerContainer}>
       {
-        editing
+        mode === modes.EDITOR
           ? <form
             action='.'
             onSubmit={(e) => {
@@ -106,7 +84,7 @@ const EditableTitle = () => {
               setEditing(false)
             }}
           >
-            <TextField
+            {/* <TextField
               autoFocus
               size='lg'
               value={tentativeTitle}
@@ -120,9 +98,30 @@ const EditableTitle = () => {
                 setTentativeTitle(title)
                 setEditing(false)
               }}
+            /> */}
+            <TextField
+              variant='borderless'
+              autoFocus
+              classes={textFieldClasses}
+              value={tentativeTitle}
+              onChange={(v) => setTentativeTitle(v)}
+              onFocus={(e) => {
+                e.nativeEvent.preventDefault()
+                e.nativeEvent.stopPropagation()
+                setEditing(true)
+              }}
+              onBlur={(e) => {
+                e.nativeEvent.preventDefault()
+                e.nativeEvent.stopPropagation()
+                updateTitle(e.target.value)
+                setTentativeTitle(title)
+                setEditing(false)
+              }}
+              deleteButton={editing}
             />
           </form>
-          : <>
+          : 
+          <>
             {renderTitle}
           </>
       }
