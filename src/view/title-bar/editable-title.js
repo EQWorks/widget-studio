@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
-import { Icons, TextField, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { TextField, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
-import CustomButton from '../../components/custom-button'
+
 import modes from '../../constants/modes'
 
 
@@ -42,7 +42,7 @@ const useStyles = () => makeStyles(
 
 const textFieldClasses = Object.freeze({
   container: 'bg-secondary-100',
-  input: 'mb-0 text-sm text-secondary-600'
+  input: 'mb-0 text-sm text-secondary-600',
 })
 
 const EditableTitle = () => {
@@ -56,10 +56,11 @@ const EditableTitle = () => {
   const [editing, setEditing] = useState(false)
   const [tentativeTitle, setTentativeTitle] = useState(title)
 
+  const textfieldRef = useRef(null)
+
   useEffect(() => {
     setTentativeTitle(title)
   }, [title])
-
 
   const renderTitle = (
     <div className={`edit-title-class ${classes.title}`} >
@@ -67,60 +68,52 @@ const EditableTitle = () => {
     </div >
   )
 
+  const renderTextfield = () => {
+    if (textfieldRef.current) {
+      let el = textfieldRef.current.childNodes[0][0]
+      el.style.width = `${(el.value.length + 1) * 8}px`
+    }
+
+    return (
+      <TextField
+        variant='borderless'
+        classes={textFieldClasses}
+        value={tentativeTitle}
+        onChange={(v) => setTentativeTitle(v)}
+        onFocus={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          e.nativeEvent.preventDefault()
+          e.nativeEvent.stopPropagation()
+          setEditing(true)
+        }}
+        onBlur={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          e.nativeEvent.preventDefault()
+          e.nativeEvent.stopPropagation()
+          updateTitle(e.target.value)
+          setEditing(false)
+        }}
+        deleteButton={editing}
+      />
+    )
+  }
+
   const updateTitle = title => userUpdate({ title })
 
   return (
-    <div className={classes.outerContainer}>
+    <div
+      ref={textfieldRef}
+      className={classes.outerContainer}
+    >
       {
         mode === modes.EDITOR
-          ? <form
-            action='.'
-            onSubmit={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              e.nativeEvent.preventDefault()
-              e.nativeEvent.stopPropagation()
-              updateTitle(e.target.children[0].children[0].value)
-              setEditing(false)
-            }}
-          >
-            {/* <TextField
-              autoFocus
-              size='lg'
-              value={tentativeTitle}
-              onChange={(v) => setTentativeTitle(v)}
-              onSubmit={(e) => {
-                e.nativeEvent.preventDefault()
-                e.nativeEvent.stopPropagation()
-              }}
-              onBlur={(e) => {
-                updateTitle(e.target.value)
-                setTentativeTitle(title)
-                setEditing(false)
-              }}
-            /> */}
-            <TextField
-              variant='borderless'
-              autoFocus
-              classes={textFieldClasses}
-              value={tentativeTitle}
-              onChange={(v) => setTentativeTitle(v)}
-              onFocus={(e) => {
-                e.nativeEvent.preventDefault()
-                e.nativeEvent.stopPropagation()
-                setEditing(true)
-              }}
-              onBlur={(e) => {
-                e.nativeEvent.preventDefault()
-                e.nativeEvent.stopPropagation()
-                updateTitle(e.target.value)
-                setTentativeTitle(title)
-                setEditing(false)
-              }}
-              deleteButton={editing}
-            />
-          </form>
-          : 
+          ?
+          <>
+            {renderTextfield()}
+          </>
+          :
           <>
             {renderTitle}
           </>
