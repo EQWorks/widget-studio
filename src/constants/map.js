@@ -1,5 +1,6 @@
 export const MAP_LAYERS = {
   scatterplot: 'scatterplot',
+  targetScatterplot: 'targetScatterplot',
   // MVT: 'MVT',
   geojson: 'geojson',
   arc: 'arc',
@@ -10,6 +11,8 @@ export const MAP_VALUE_VIS = {
   radius: 'radius',
   elevation: 'elevation',
   fill: 'fill',
+  targetRadius: 'targetRadius',
+  targetFill: 'targetFill',
   arcWidth: 'arcWidth',
 }
 
@@ -21,6 +24,7 @@ export const MAP_VIS_OTHERS = {
 
 export const MAP_LAYER_VALUE_VIS = {
   scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
+  targetScatterplot: [MAP_VALUE_VIS.targetFill, MAP_VALUE_VIS.targetRadius],
   // MVT: [MAP_VALUE_VIS.fill],
   geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
   arc: [MAP_VALUE_VIS.arcWidth],
@@ -51,7 +55,9 @@ export const MAP_LAYER_GEO_KEYS = {
     'poi_id',
     'locus_poi_id',
   ],
-  arc: ['target_poi_id'],
+  targetScatterplot: ['target_poi_id'],
+  // arc layer has no specific & unique geo keys to be identified with
+  arc: [],
   geojson: Object.values(GEO_KEY_TYPES).flat(),
 }
 
@@ -164,3 +170,5 @@ export const CENSUS_REGEX = {
   da: /^[0-9]{8}/g,
   region: /^(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)/g,
 }
+
+export const EXCLUDE_NUMERIC = ['name', 'date_type']
