@@ -11,7 +11,6 @@ import {
   MAP_LAYERS,
   MAP_GEO_KEYS,
   GEO_KEY_TYPES,
-  MAP_LAYER_VALUE_VIS,
   MAP_LAYER_GEO_KEYS,
   COORD_KEYS,
   GEO_KEY_TYPE_NAMES,
@@ -284,7 +283,7 @@ export default {
       (state) => state.mapGroupKey,
     ],
     (mapGroupKey) =>
-      Object.keys(MAP_LAYER_VALUE_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+      Object.keys(MAP_LAYERS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
   ),
 
   // determines to use postal code geo key to aggregate by FSA
@@ -415,7 +414,7 @@ export default {
       const targetLon = findCoord(COORD_KEYS.targetLon)
       const targetLat = findCoord(COORD_KEYS.targetLat)
       const sourcePOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
-      const targetPOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.arc.includes(key))
+      const targetPOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
       return Boolean(sourceLon && sourceLat && targetLon && targetLat &&
         sourcePOIid && targetPOIid)
     }),
