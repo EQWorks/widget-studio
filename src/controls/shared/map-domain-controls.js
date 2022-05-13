@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderRow } from './util'
-import { MAP_LAYER_VALUE_VIS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
+import { MAP_LAYERS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
 import { Icons } from '@eqworks/lumen-labs'
 
 
@@ -14,14 +14,9 @@ const MapDomainControls = () => {
   const userUpdate = useStoreActions(actions => actions.userUpdate)
 
   // common state
-  const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const domain = useStoreState((state) => state.domain)
-
-  const mapLayer = useMemo(() => (
-    Object.keys(MAP_LAYER_VALUE_VIS)
-      .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
-  ), [mapGroupKey])
+  const mapLayer = useStoreState((state) => state.mapLayer)
 
   const renderControls = (
     <CustomSelect
@@ -32,7 +27,7 @@ const MapDomainControls = () => {
       onSelect={val => {
         // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
         userUpdate({ mapGroupKey: val, groupKey: val })
-        const newLayer = Object.keys(MAP_LAYER_VALUE_VIS)
+        const newLayer = Object.keys(MAP_LAYERS)
           .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
         /*
          * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
