@@ -229,7 +229,7 @@ const useTransformedData = () => {
   // special aggregation case for xwi report data to be used in map widget
   const formatXWIReportData = useMemo(() => {
     const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
-    const targetPOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.arc.includes(key))
+    const targetPOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
     if (type && type === types.MAP && dataIsXWIReport && truncatedData.length) {
       const [arcData, sourceData, targetData] =
         [[sourcePOIId, targetPOIId], sourcePOIId, targetPOIId].map((groupKey) =>
