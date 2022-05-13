@@ -6,7 +6,8 @@ import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lum
 import CustomSelect from '../../../components/custom-select'
 import PluralLinkedSelect from '../../../components/plural-linked-select'
 import types from '../../../constants/type-info'
-import { useStoreState } from '../../../store'
+import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
+import { useStoreState, useStoreActions } from '../../../store'
 
 
 const classes = makeStyles({
@@ -33,22 +34,35 @@ const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
 
 const MapValueSelect = ({
   categories,
-  values,
   titles,
   data,
   subData,
   disableSubs,
   disableSubMessage,
   callback,
-  isTargetLayer,
 }) => {
+  // common actions
+  const userUpdate = useStoreActions((actions) => actions.userUpdate)
+
+  // common state
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const mapLayer = useStoreState((state) => state.mapLayer)
+
   return (
     categories.map((mapVis, i) => {
-      const match = values.findIndex(v => v.mapVis === mapVis)
-      const _data = data.filter(d => values[match]?.key === d || !(values.map(v => v.key).includes(d)))
+      const match = mapValueKeys.findIndex(v => v.mapVis === mapVis)
+      let currentLayer = mapLayer
+      if (dataIsXWIReport) {
+        currentLayer = Object.keys(MAP_LAYER_VALUE_VIS).find(layer => MAP_LAYER_VALUE_VIS[layer].includes(mapVis))
+      }
+      const _data = data.filter(d => mapValueKeys[match]?.[PRIMARY_KEY] === d ||
+        !(dataIsXWIReport && mapValueKeys.filter(v => MAP_LAYER_VALUE_VIS[currentLayer]
+          .includes(v.mapVis)).map(v => v.key).includes(d)) ||
+        !(mapValueKeys.map(v => v.key).includes(d)))
       const icons = _data.map(c => columnsAnalysis[c]?.Icon)
+
       return (
         <div key={i} className={classes.linkedSelect} >
           <div className={classes.visTitleWrapper}>
@@ -76,29 +90,21 @@ const MapValueSelect = ({
             (
               <CustomSelect
                 fullWidth
-                // multiSelect
                 data={_data}
                 icons={icons}
-                value={values[match] ? values[match].key : ''}
-                // onSelect={val => {
-                //   // update groupKey with mapGroupKey value to have it available if we switch to a chart widget type
-                //   userUpdate({ mapGroupKey: val, groupKey: val })
-                //   const newLayer = Object.keys(MAP_LAYER_VALUE_VIS)
-                //     .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
-                //   /*
-                //   * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
-                //   * as different layer requires different visualization types
-                //   */
-                //   if (newLayer !== mapLayer) {
-                //     update({ mapValueKeys: [] })
-                //   }
-                // }}
-                // onClear={() => userUpdate({
-                //   groupKey: null,
-                //   indexKey: null,
-                //   mapGroupKey: null,
-                //   mapValueKeys: [],
-                // })}
+                value={mapValueKeys[match] ? mapValueKeys[match]?.[PRIMARY_KEY] : ''}
+                onSelect={val => callback(
+                  match,
+                  {
+                    mapVis,
+                    [PRIMARY_KEY]: val,
+                  }
+                )}
+                onClear={() => {
+                  const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
+                  valueKeysCopy.splice(match, 1)
+                  userUpdate({ mapValueKeys: valueKeysCopy })
+                }}
                 placeholder={'Column'}
               />
             ) :
@@ -110,7 +116,7 @@ const MapValueSelect = ({
                   Icons.Sum,
                 ]}
                 titles={titles}
-                values={values[match] ? [values[match]] : []}
+                values={mapValueKeys[match] ? [mapValueKeys[match]] : []}
                 valueIcons={icons}
                 callback={(_, v) => callback(
                   match,
@@ -146,12 +152,10 @@ MapValueSelect.propTypes = {
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
   disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
-  isTargetLayer: PropTypes.bool,
 }
 
 MapValueSelect.defaultProps = {
   titles: [],
   disableSubs: false,
   disableSubMessage: '',
-  isTargetLayer: false,
 }
