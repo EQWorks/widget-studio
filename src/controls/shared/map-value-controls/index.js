@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import aggFunctions from '../../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../../store'
@@ -7,7 +7,7 @@ import XWIReportValueControls from './xwi-report-value-controls'
 import WidgetControlCard from '../components/widget-control-card'
 
 import modes from '../../../constants/modes'
-import { MAP_LAYER_VALUE_VIS, MAP_LAYER_GEO_KEYS, COORD_KEYS, ID_KEYS } from '../../../constants/map'
+import { MAP_LAYER_VALUE_VIS, COORD_KEYS, ID_KEYS, EXCLUDE_NUMERIC } from '../../../constants/map'
 
 
 const MapValueControls = () => {
@@ -21,23 +21,19 @@ const MapValueControls = () => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
-
-  const mapLayer = useMemo(() => Object.keys(MAP_LAYER_VALUE_VIS)
-    .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
-  , [mapGroupKey])
-
-  const mapNumericColumns = useMemo(() => (
-    numericColumns.filter(col =>
-      !Object.values(COORD_KEYS).flat().includes(col) &&
-      !ID_KEYS.includes(col))
-  ), [numericColumns])
+  const mapLayer = useStoreState((state) => state.mapLayer)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
+  const mapNumericColumns = useMemo(() => (
+    numericColumns.filter(col => !Object.values(COORD_KEYS).flat().includes(col) &&
+      !ID_KEYS.includes(col) && EXCLUDE_NUMERIC.every(key => !col.includes(key)))
+  ), [numericColumns])
+
   const widgetControlCardDescription = useMemo(() => {
     if (!mapGroupKey && !dataIsXWIReport) {
-      return 'Please select a column to group by above to enable value configurations.'
+      return 'Select a column to group by above to enable value configurations.'
     }
     if (mode === modes.QL && !dataIsXWIReport) {
       return 'Select key values, open in editor for more options.'
@@ -46,14 +42,24 @@ const MapValueControls = () => {
       return mode === modes.QL ?
         (
           <>
-            <p>Please expand any layer sections below and select</p>
-            <p>data columns for your choice of data visualization.</p>
+            <p>Select data columns for your choice of data</p>
+            <p>visualization.</p>
           </>
         ) :
-        'Please expand any layer sections below and select data columns for your choice of data visualization.'
+        'Select data columns for your choice of data visualization.'
     }
     return ''
   }, [mapGroupKey, dataIsXWIReport, mode])
+
+  const callback = useCallback((i, val) => {
+    if (i === -1) {
+      const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
+      valueKeysCopy.push(val)
+      userUpdate({ mapValueKeys: valueKeysCopy })
+    } else { // modify a key
+      userUpdate({ mapValueKeys: mapValueKeys.map((v, _i) => i === _i ? val : v) })
+    }
+  }, [mapValueKeys, userUpdate])
 
   return (
     <WidgetControlCard
@@ -64,26 +70,20 @@ const MapValueControls = () => {
     >
       {dataIsXWIReport ?
         (
-          <XWIReportValueControls />
+          <XWIReportValueControls
+            data={mapNumericColumns}
+            callback={callback}
+          />
         ) :
         (mapLayer &&
           <MapValueSelect
             categories={MAP_LAYER_VALUE_VIS[mapLayer]}
             titles={['Column', 'Operation']}
-            values={mapValueKeys}
             data={mapNumericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
             disableSubs={!dataHasVariance}
             disableSubMessage="doesn't require aggregation."
-            callback={(i, val) => {
-              if (i === -1) {
-                const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
-                valueKeysCopy.push(val)
-                userUpdate({ mapValueKeys: valueKeysCopy })
-              } else { // modify a key
-                userUpdate({ mapValueKeys: mapValueKeys.map((v, _i) => i === _i ? val : v) })
-              }
-            }}
+            callback={callback}
           />
         )
       }
