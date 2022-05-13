@@ -63,9 +63,7 @@ const CustomSelect = ({
     multiSelect={multiSelect}
     data={transformedData}
     value={transformedValue}
-    onSelect={(_, v) => {
-      onSelect(getTransformedTarget(v))
-    }}
+    onSelect={(_, v) => onSelect(getTransformedTarget(v))}
     {...props}
   />
 }
