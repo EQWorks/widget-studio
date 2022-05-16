@@ -25,9 +25,17 @@ export const isUniqueKey = ({ k, sourcePOIId, targetPOIId }) =>
  * @param { string } param.sourcePOIId - string source POI id key
  * @param { string } param.targetPOIId - string target POI id key
  * @param { object } param.columnsAnalysis - object of pairs { column, value } that classifies data column
+ * @param { object } formattedColumnNames - object of pairs { column, value } with formatted data keys
  * @returns { array } - array of aggregated data objects
  */
-export const xwiAggData = ({ data, groupKey, sourcePOIId, targetPOIId, columnsAnalysis }) =>
+export const xwiAggData = ({
+  data,
+  groupKey,
+  sourcePOIId,
+  targetPOIId,
+  columnsAnalysis,
+  formattedColumnNames,
+}) =>
   Object.values(data.reduce((res, r) => {
     let group = r[groupKey]
     if (typeof groupKey !== 'string' && groupKey?.length) {
@@ -36,16 +44,24 @@ export const xwiAggData = ({ data, groupKey, sourcePOIId, targetPOIId, columnsAn
     res[group] = res[group] || {}
     Object.entries(r).forEach(([k, v]) => {
       const uniqueKey = isUniqueKey({ k, sourcePOIId, targetPOIId })
-      if (res[group][k]) {
+      const finalKey = uniqueKey ? formattedColumnNames[k] : formattedColumnNames[k] + ' (sum)'
+      if (res[group][finalKey]) {
         if (columnsAnalysis[k]?.isNumeric && !uniqueKey) {
-          res[group][k] += v
+          res[group][finalKey] += v
         } else if (!uniqueKey) {
-          res[group][k].push(v)
+          res[group][finalKey].push(v)
         }
-      } else if (columnsAnalysis[k]?.isNumeric || uniqueKey) {
-        res[group][k] = v
+      } else if (columnsAnalysis[k]?.isNumeric) {
+        if (uniqueKey) {
+          // don't format coordinate keys
+          res[group][k] = v
+        } else {
+          res[group][finalKey] = v
+        }
+      } else if (uniqueKey) {
+        res[group][finalKey] = v
       } else {
-        res[group][k] = [v]
+        res[group][finalKey] = [v]
       }
     })
     return res
