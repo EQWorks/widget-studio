@@ -135,7 +135,7 @@ export default {
   adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
     const { mapGroupKey, mapGroupKeyTitle, mapValueKeys } = config
 
-    const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS)
+    const mapLayer = Object.keys(MAP_LAYERS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data.arcData ? data.arcData[0] : data[0] || {})
@@ -186,21 +186,8 @@ export default {
             source: { longitude: sourceLon, latitude: sourceLat },
             target: { longitude: targetLon, latitude: targetLat },
           },
-          visualizations: {
-            arcWidth: { value: 2 },
-          },
-          schemeColor: genericOptions.baseColor,
-        },
-      ].concat(
-        [
-          { dataId: `${id}-${type}-source`, longitude: sourceLon, latitude: sourceLat },
-          { dataId: `${id}-${type}-target`, longitude: targetLon, latitude: targetLat },
-        ].map(({ dataId, longitude, latitude }) => ({
-          layer: MAP_LAYERS.scatterplot,
-          dataId,
-          geometry: { longitude, latitude },
           visualizations: Object.fromEntries(
-            MAP_LAYER_VALUE_VIS.scatterplot.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+            MAP_LAYER_VALUE_VIS.arc.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
               const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
               const visValue = uniqueOptions[vis]?.value
               return [
@@ -210,6 +197,42 @@ export default {
                     { field: keyTitle } :
                     visValue,
                   valueOptions: uniqueOptions[vis]?.valueOptions,
+                  dataScale: LAYER_SCALE,
+                },
+              ]
+            })),
+          schemeColor: genericOptions.baseColor,
+        },
+      ].concat(
+        [
+          { dataId: `${id}-${type}-source`, longitude: sourceLon, latitude: sourceLat },
+          { dataId: `${id}-${type}-target`, longitude: targetLon, latitude: targetLat },
+        ].map(({ dataId, longitude, latitude }, i) => ({
+          layer: MAP_LAYERS.scatterplot,
+          dataId,
+          geometry: { longitude, latitude },
+          visualizations: Object.fromEntries(
+            MAP_LAYER_VALUE_VIS.scatterplot.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+              const keyTitle = mapValueKeys.find(({ mapVis }) =>
+                (i === 1 && vis === MAP_VALUE_VIS.fill && mapVis === MAP_VALUE_VIS.targetFill) ||
+                (i === 1 && vis === MAP_VALUE_VIS.radius && mapVis === MAP_VALUE_VIS.targetRadius) ||
+                (mapVis === vis && !(i === 1 && (mapVis === MAP_VALUE_VIS.fill || mapVis === MAP_VALUE_VIS.radius))))
+                ?.title
+              let finalVis = vis
+              if (i === 1 && vis === MAP_VALUE_VIS.fill) {
+                finalVis = MAP_VALUE_VIS.targetFill
+              }
+              if (i === 1 && vis === MAP_VALUE_VIS.radius) {
+                finalVis = MAP_VALUE_VIS.targetRadius
+              }
+              const visValue = uniqueOptions[finalVis]?.value
+              return [
+                vis,
+                {
+                  value: keyTitle ?
+                    { field: keyTitle } :
+                    visValue,
+                  valueOptions: uniqueOptions[finalVis]?.valueOptions,
                   dataScale: LAYER_SCALE,
                 },
               ]
