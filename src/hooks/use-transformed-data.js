@@ -163,7 +163,7 @@ const useTransformedData = () => {
 
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => {
-    if (!group || dataIsXWIReport) return null
+    if (!group || (type === types.MAP && dataIsXWIReport)) return null
     const formattedDomain = formattedColumnNames[finalGroupKey]
     if (domainIsDate && dateAggregations[dateAggregation]) {
       // extra grouping required if Domain is date
@@ -196,6 +196,7 @@ const useTransformedData = () => {
     })
   }, [
     group,
+    type,
     dataIsXWIReport,
     domainIsDate,
     formattedColumnNames,
@@ -228,13 +229,20 @@ const useTransformedData = () => {
 
   // special aggregation case for xwi report data to be used in map widget
   const formatXWIReportData = useMemo(() => {
-    const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
-    const targetPOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
-    if (type && type === types.MAP && dataIsXWIReport && truncatedData.length) {
+    if (type && type === types.MAP && dataIsXWIReport && truncatedData?.length) {
+      const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
+      const targetPOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
       const [arcData, sourceData, targetData] =
         [[sourcePOIId, targetPOIId], sourcePOIId, targetPOIId].map((groupKey) =>
-          xwiAggData({ data: truncatedData, groupKey, sourcePOIId, targetPOIId, columnsAnalysis }))
-      return { arcData,  sourceData, targetData }
+          xwiAggData({
+            data: truncatedData,
+            groupKey,
+            sourcePOIId,
+            targetPOIId,
+            columnsAnalysis,
+            formattedColumnNames,
+          }))
+      return { arcData, sourceData, targetData }
     }
     return {}
   }, [
@@ -243,6 +251,7 @@ const useTransformedData = () => {
     truncatedData,
     columnsAnalysis,
     dataKeys,
+    formattedColumnNames,
   ])
 
   // enrich data with coords for scatterplot & geojson data; special aggregation for xwi-reports
