@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { useDebounce } from 'use-debounce'
-import { useStoreState, useStoreActions } from '../../../store'
-
 import { LocusMap } from '@eqworks/react-maps'
-import { getCursor } from '@eqworks/react-maps/dist/utils'
 import { makeStyles } from '@eqworks/lumen-labs'
 
+import { useStoreState, useStoreActions } from '../../../store'
 import modes from '../../../constants/modes'
+import { getLayerValueKeys } from '../../../util/map-layer-value-functions'
 import {
   COORD_KEYS,
   MAP_LAYERS,
@@ -133,19 +132,27 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
-    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys } = config
+    const {
+      mapGroupKey,
+      mapGroupKeyTitle,
+      mapValueKeys,
+      formatPropertyLabel,
+      formatDataFunctions,
+    } = config
 
     const mapLayer = Object.keys(MAP_LAYERS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data.arcData ? data.arcData[0] : data[0] || {})
 
-    const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
+    const findKey = keyArray => dataKeys?.find(key => keyArray.includes(key))
 
-    const sourceLon = findCoord(COORD_KEYS.longitude)
-    const sourceLat = findCoord(COORD_KEYS.latitude)
-    const targetLon = findCoord(COORD_KEYS.targetLon)
-    const targetLat = findCoord(COORD_KEYS.targetLat)
+    const sourcePOIId = findKey(MAP_LAYER_GEO_KEYS.scatterplot)
+    const targetPOIId = findKey(MAP_LAYER_GEO_KEYS.targetScatterplot)
+    const sourceLon = findKey(COORD_KEYS.longitude)
+    const sourceLat = findKey(COORD_KEYS.latitude)
+    const targetLon = findKey(COORD_KEYS.targetLon)
+    const targetLat = findKey(COORD_KEYS.targetLat)
 
     const isXWIReportMap = Boolean(data.arcData)
 
@@ -177,6 +184,13 @@ export default {
 
     const { id, type } = config?.dataSource || {}
 
+    const arcLayerValueKeys =
+      getLayerValueKeys({ mapValueKeys, dataKeys, data: data?.arcData, layer: MAP_LAYERS.arc })
+    const sourceLayerValueKeys =
+      getLayerValueKeys({ mapValueKeys, dataKeys, data: data?.sourceData, layer: MAP_LAYERS.scatterplot })
+    const targetLayerValueKeys =
+      getLayerValueKeys({ mapValueKeys, dataKeys, data: data?.targetData, layer: MAP_LAYERS.targetScatterplot })
+
     let layerConfig = isXWIReportMap ?
       [
         {
@@ -201,6 +215,17 @@ export default {
                 },
               ]
             })),
+          interactions: {
+            tooltip: {
+              tooltipKeys: {
+                name: sourcePOIId,
+                id: targetPOIId,
+                metricKeys: arcLayerValueKeys,
+              },
+            },
+          },
+          formatPropertyLabel,
+          formatData: formatDataFunctions,
           schemeColor: genericOptions.baseColor,
         },
       ].concat(
@@ -218,25 +243,30 @@ export default {
                 (i === 1 && vis === MAP_VALUE_VIS.radius && mapVis === MAP_VALUE_VIS.targetRadius) ||
                 (mapVis === vis && !(i === 1 && (mapVis === MAP_VALUE_VIS.fill || mapVis === MAP_VALUE_VIS.radius))))
                 ?.title
-              let finalVis = vis
-              if (i === 1 && vis === MAP_VALUE_VIS.fill) {
-                finalVis = MAP_VALUE_VIS.targetFill
-              }
-              if (i === 1 && vis === MAP_VALUE_VIS.radius) {
-                finalVis = MAP_VALUE_VIS.targetRadius
-              }
-              const visValue = uniqueOptions[finalVis]?.value
+              const visValue = uniqueOptions[vis]?.value
+
               return [
                 vis,
                 {
                   value: keyTitle ?
                     { field: keyTitle } :
                     visValue,
-                  valueOptions: uniqueOptions[finalVis]?.valueOptions,
+                  valueOptions: uniqueOptions[vis]?.valueOptions,
                   dataScale: LAYER_SCALE,
                 },
               ]
-            })),
+            })
+          ),
+          interactions: {
+            tooltip: {
+              tooltipKeys: {
+                name: longitude === targetLon ? targetPOIId : sourcePOIId,
+                metricKeys: longitude === targetLon ? targetLayerValueKeys : sourceLayerValueKeys,
+              },
+            },
+          },
+          formatPropertyLabel,
+          formatData: formatDataFunctions,
           opacity: uniqueOptions.opacity.value / 100,
           isTargetLayer: longitude === targetLon,
           schemeColor: genericOptions.baseColor,
@@ -272,7 +302,8 @@ export default {
                 },
               ]
             })),
-          formatData: config.formatDataFunctions,
+          formatPropertyLabel,
+          formatData: formatDataFunctions,
           interactions: {
             tooltip: {
               tooltipKeys: {
@@ -314,7 +345,8 @@ export default {
                 [LABEL_OFFSET.polygon, 0],
             },
           },
-          formatData: config.formatDataFunctions,
+          formatPropertyLabel,
+          formatData: formatDataFunctions,
           interactions: {},
         },
       ] :
@@ -332,7 +364,6 @@ export default {
         ],
       layerConfig,
       mapConfig: {
-        cursor: (layers) => getCursor({ layers }),
         legendPosition: MAP_LEGEND_POSITION[JSON.stringify(genericOptions.legendPosition)],
         legendSize: MAP_LEGEND_SIZE[genericOptions.legendSize],
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN ||
