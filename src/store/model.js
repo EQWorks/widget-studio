@@ -4,7 +4,7 @@ import { computed, action, thunk, thunkOn } from 'easy-peasy'
 import types from '../constants/types'
 import typeInfo from '../constants/type-info'
 import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
-import { cleanUp } from '../util/string-manipulation'
+import { cleanUp, truncateString } from '../util/string-manipulation'
 import { createWidget, saveWidget, getWidget, localGetWidget, requestData } from '../util/api'
 import { geoKeyHasCoordinates } from '../util'
 import {
@@ -115,6 +115,7 @@ const stateDefaults = [
   { key: 'ignoreUndo', defaultValue: false, resettable: false },
   { key: 'unsavedChanges', defaultValue: false, resettable: false },
   { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
+  { key: 'formatPropertyLabel', defaultValue: (label) => truncateString(label, 30), resettable: false },
 ]
 
 export default {
@@ -135,6 +136,7 @@ export default {
       (state) => state.mapGroupKey,
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
+      (state) => state.formatPropertyLabel,
       (state) => state.formatDataFunctions,
       (state) => state.genericOptions,
       (state) => state.uniqueOptions,
@@ -155,6 +157,7 @@ export default {
       mapGroupKey,
       indexKey,
       renderableValueKeys,
+      formatPropertyLabel,
       formatDataFunctions,
       genericOptions,
       uniqueOptions,
@@ -171,6 +174,7 @@ export default {
       groupFilter,
       valueKeys: type !== types.MAP ? renderableValueKeys : [],
       mapValueKeys: type === types.MAP ? renderableValueKeys : [],
+      formatPropertyLabel,
       formatDataFunctions,
       group,
       groupKey,
