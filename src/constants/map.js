@@ -52,10 +52,13 @@ export const GEO_KEY_TYPE_NAMES = Object.keys(GEO_KEY_TYPES).reduce((acc, curr) 
 export const MAP_LAYER_GEO_KEYS = {
   scatterplot: [
     'poi',
+    'Poi',
     'poi_id',
+    'Poi id',
     'locus_poi_id',
+    'Locus poi id',
   ],
-  targetScatterplot: ['target_poi_id'],
+  targetScatterplot: ['target_poi_id', 'Target poi id'],
   // arc layer has no specific & unique geo keys to be identified with
   arc: [],
   geojson: Object.values(GEO_KEY_TYPES).flat(),
@@ -171,4 +174,5 @@ export const CENSUS_REGEX = {
   region: /^(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)/g,
 }
 
-export const EXCLUDE_NUMERIC = ['name', 'date_type']
+// a temporary list of keys to filter out from numeric columns for map widget
+export const EXCLUDE_NUMERIC = ['name', 'date_type', 'Name', 'id', 'date', 'Date', 'lon', 'lat']
