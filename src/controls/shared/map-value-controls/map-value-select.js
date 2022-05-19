@@ -11,8 +11,9 @@ import { useStoreState, useStoreActions } from '../../../store'
 
 
 const classes = makeStyles({
-  linkedSelect:{
+  select:{
     marginBottom: '0.125rem',
+    whiteSpace: 'initial',
   },
   visTitleWrapper: {
     display: 'flex',
@@ -64,7 +65,7 @@ const MapValueSelect = ({
       const icons = _data.map(c => columnsAnalysis[c]?.Icon)
 
       return (
-        <div key={i} className={classes.linkedSelect} >
+        <div key={i} className={classes.select} >
           <div className={classes.visTitleWrapper}>
             <div className={classes.visTitle}>
               {`${types.map.uniqueOptions[mapVis].valueConfigName}:`}
@@ -98,6 +99,7 @@ const MapValueSelect = ({
                   {
                     mapVis,
                     [PRIMARY_KEY]: val,
+                    [SECONDARY_KEY]: 'sum',
                   }
                 )}
                 onClear={() => {
@@ -147,15 +149,15 @@ MapValueSelect.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.string).isRequired,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
   titles: PropTypes.arrayOf(PropTypes.string),
-  subData: PropTypes.arrayOf(PropTypes.string).isRequired,
+  subData: PropTypes.arrayOf(PropTypes.string),
   callback: PropTypes.func.isRequired,
-  values: PropTypes.arrayOf(PropTypes.object).isRequired,
   disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
 }
 
 MapValueSelect.defaultProps = {
   titles: [],
+  subData: [],
   disableSubs: false,
   disableSubMessage: '',
 }
