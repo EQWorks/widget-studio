@@ -5,6 +5,7 @@ import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderRow } from './util'
 import { MAP_LAYERS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
+import { setMapValueKeys } from '../../util/map-layer-value-functions'
 import { Icons } from '@eqworks/lumen-labs'
 
 
@@ -17,6 +18,7 @@ const MapDomainControls = () => {
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const domain = useStoreState((state) => state.domain)
   const mapLayer = useStoreState((state) => state.mapLayer)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
   const renderControls = (
     <CustomSelect
@@ -34,14 +36,14 @@ const MapDomainControls = () => {
          * as different layer requires different visualization types
          */
         if (newLayer !== mapLayer) {
-          update({ mapValueKeys: [] })
+          update({ mapValueKeys: setMapValueKeys({ mapLayer, dataIsXWIReport }) || [] })
         }
       }}
       onClear={() => userUpdate({
         groupKey: null,
         indexKey: null,
         mapGroupKey: null,
-        mapValueKeys: [],
+        mapValueKeys: setMapValueKeys({ mapLayer, dataIsXWIReport }) || [],
       })}
       placeholder={'Select a column to group by'}
     />
