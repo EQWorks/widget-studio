@@ -1,5 +1,6 @@
 // specific value control component for xwi report data
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import { makeStyles } from '@eqworks/lumen-labs'
 
@@ -39,12 +40,16 @@ const XWIReportValueControls = ({ data, callback }) => {
         <MapValueSelect
           categories={categories}
           values={mapValueKeys}
-          data={data}
-          callback={callback}
+          {...{ data, callback }}
         />
       </div>
     ))
   )
+}
+
+XWIReportValueControls.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.string).isRequired,
+  callback: PropTypes.func.isRequired,
 }
 
 export default XWIReportValueControls
