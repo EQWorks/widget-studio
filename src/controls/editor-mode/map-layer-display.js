@@ -7,7 +7,7 @@ import ColorSchemeControls from './components/color-scheme-controls'
 import SliderControl from './components/slider-control'
 import { renderItem, renderSection, renderRow } from '../shared/util'
 import typeInfo from '../../constants/type-info'
-import { MAP_VALUE_VIS } from '../../constants/map'
+import { MAP_LAYERS, MAP_VALUE_VIS } from '../../constants/map'
 
 
 const classes = makeStyles({
@@ -29,7 +29,6 @@ const LAYER_OPTIONS = Object.keys(typeInfo.map.uniqueOptions).reduce((acc, curr)
   return acc
 }, {})
 
-
 const textFieldInput = 'text-interactive-600'
 
 const MapLayerDisplay = () => {
@@ -37,17 +36,29 @@ const MapLayerDisplay = () => {
   const uniqueOptions = useStoreState((state) => state.uniqueOptions)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const mapLayer = useStoreState((state) => state.mapLayer)
   const type = useStoreState((state) => state.type)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
-  const [rangeRadius, simpleRadius, elevation] = useMemo(() => {
-    const key = Boolean(renderableValueKeys.find(vis =>
-      (vis.mapVis === MAP_VALUE_VIS.radius && vis.key)))
+  const [simpleRadius, rangeRadius, elevation, simpleArcWidth, rangeArcWidth] = useMemo(() => {
     return [
-      key,
-      JSON.stringify(mapValueKeys).includes(MAP_VALUE_VIS.radius) && !key,
+      mapLayer === MAP_LAYERS.scatterplot ||
+        (dataIsXWIReport && !mapValueKeys.length) ||
+        (dataIsXWIReport &&
+          [MAP_VALUE_VIS.radius, MAP_VALUE_VIS.targetRadius]
+            .some(vis => !JSON.stringify(renderableValueKeys).includes(vis))) ||
+        Boolean(mapValueKeys.find(vis =>
+          ((vis.mapVis === MAP_VALUE_VIS.radius || vis.mapVis === MAP_VALUE_VIS.targetRadius) &&
+          !vis.key))
+        ),
+      Boolean(renderableValueKeys.find(vis =>
+        ((vis.mapVis === MAP_VALUE_VIS.radius || vis.mapVis === MAP_VALUE_VIS.targetRadius) && vis.key))),
       JSON.stringify(renderableValueKeys).includes(MAP_VALUE_VIS.elevation),
+      dataIsXWIReport && !JSON.stringify(renderableValueKeys).includes(MAP_VALUE_VIS.arcWidth),
+      Boolean(renderableValueKeys.find(vis =>
+        (vis.mapVis === MAP_VALUE_VIS.arcWidth && vis.key))),
     ]
-  }, [renderableValueKeys, mapValueKeys])
+  }, [mapLayer, mapValueKeys, dataIsXWIReport, renderableValueKeys])
 
   const getUniqueOptionsProps = useCallback(({ option, range, textField }) => {
     const {
@@ -89,6 +100,49 @@ const MapLayerDisplay = () => {
     return value >= max ? max : value
   }, [type])
 
+  const renderRadiusControl = ({ range }) =>
+    renderItem(range ? 'Radius Range (px)' : 'Radius Size (px)',
+      <SliderControl
+        {...getUniqueOptionsProps(
+          {
+            option: LAYER_OPTIONS.radius,
+            range,
+            textField: false,
+          }
+        )}
+        update={val => userUpdate({
+          uniqueOptions: {
+            radius: {
+              ...(range
+                ? { valueOptions: [Number(val[0]), Number(val[1])] }
+                : { value: Number(val) }),
+            },
+          },
+        })}
+      />
+    )
+
+  const arcWidthControl = renderItem('Arc Width (px)',
+    <SliderControl
+      {...getUniqueOptionsProps(
+        {
+          option: LAYER_OPTIONS.arcWidth,
+          range: rangeArcWidth,
+          textField: false,
+        }
+      )}
+      update={val => userUpdate({
+        uniqueOptions: {
+          arcWidth: {
+            ...(rangeArcWidth
+              ? { valueOptions: [Number(val[0]), Number(val[1])] }
+              : { value: Number(val) }),
+          },
+        },
+      })}
+    />
+  )
+
   return (
     <div className={classes.displayOptions}>
       {renderSection('Layer Display',
@@ -121,26 +175,12 @@ const MapLayerDisplay = () => {
           {renderRow(null,
             <div className={classes.sliderOutline}>
               {(simpleRadius || rangeRadius) &&
-                renderItem('Radius Size (px)',
-                  <SliderControl
-                    {...getUniqueOptionsProps(
-                      {
-                        option: LAYER_OPTIONS.radius,
-                        range: rangeRadius,
-                        textField: false,
-                      }
-                    )}
-                    update={val => userUpdate({
-                      uniqueOptions: {
-                        radius: {
-                          ...(rangeRadius
-                            ? { valueOptions: [Number(val[0]), Number(val[1])] }
-                            : { value: Number(val) }),
-                        },
-                      },
-                    })}
-                  />
-                )
+                !dataIsXWIReport &&
+                renderRadiusControl({ range : rangeRadius })
+              }
+              {(simpleArcWidth || rangeArcWidth) &&
+                dataIsXWIReport &&
+                arcWidthControl
               }
               {elevation &&
                 renderItem('Elevation Height (m)',
@@ -168,8 +208,9 @@ const MapLayerDisplay = () => {
                     type='number'
                     deleteButton={false}
                     placeholder={'Value'}
-                    // TO DO - ask Catherine if we should still use this, as the Slider cannot accomodate yet a sufix and it won't
-                    // match with the simple TextField buttons for the rest of the unique controls for map
+                    // TO DO - ask design if we should still use this when reviewing WS, as the Slider
+                    // cannot accomodate yet a sufix and it won't match with the simple TextField buttons
+                    // for the rest of the unique controls for map
                     // inputProps={{ suffix: 'px' }}
                     {...getUniqueOptionsProps(
                       {
@@ -190,6 +231,18 @@ const MapLayerDisplay = () => {
                     classes={{ container: classes.textFieldContainer, input: textFieldInput }}
                   />
                 )}
+            </div>
+          )}
+          {renderRow(null,
+            <div className={classes.sliderOutline}>
+              {simpleRadius &&
+                dataIsXWIReport &&
+                renderRadiusControl({ range: false })
+              }
+              {rangeRadius &&
+                dataIsXWIReport &&
+                renderRadiusControl({ range: rangeRadius })
+              }
             </div>
           )}
         </>
