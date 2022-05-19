@@ -10,6 +10,8 @@ import modes from '../../../constants/modes'
 import { MAP_LAYER_VALUE_VIS, COORD_KEYS, ID_KEYS, EXCLUDE_NUMERIC } from '../../../constants/map'
 
 
+const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
+
 const MapValueControls = () => {
   // common actions
   const userUpdate = useStoreActions(actions => actions.userUpdate)
@@ -52,11 +54,12 @@ const MapValueControls = () => {
   }, [mapGroupKey, dataIsXWIReport, mode])
 
   const callback = useCallback((i, val) => {
-    if (i === -1) {
+    // TO DO: find the source of this - prevents updating mapValueKeys from bubbled onClick events
+    if (i === -1 && (val[PRIMARY_KEY] || val[SECONDARY_KEY])) {
       const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
       valueKeysCopy.push(val)
       userUpdate({ mapValueKeys: valueKeysCopy })
-    } else { // modify a key
+    } else if (i !== -1 ) { // modify a key
       userUpdate({ mapValueKeys: mapValueKeys.map((v, _i) => i === _i ? val : v) })
     }
   }, [mapValueKeys, userUpdate])
