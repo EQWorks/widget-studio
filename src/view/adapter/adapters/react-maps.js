@@ -140,6 +140,17 @@ export default {
       formatDataFunctions,
     } = config
 
+    const {
+      baseColor,
+      legendPosition,
+      legendSize,
+      showLegend,
+      showTooltip,
+      mapHideSourceLayer,
+      mapHideTargetLayer,
+      mapHideArcLayer,
+    } = genericOptions
+
     const mapLayer = Object.keys(MAP_LAYERS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
@@ -226,7 +237,8 @@ export default {
           },
           formatPropertyLabel,
           formatData: formatDataFunctions,
-          schemeColor: genericOptions.baseColor,
+          schemeColor: baseColor,
+          visible: !mapHideArcLayer,
         },
       ].concat(
         [
@@ -268,8 +280,9 @@ export default {
           formatPropertyLabel,
           formatData: formatDataFunctions,
           opacity: uniqueOptions.opacity.value / 100,
-          isTargetLayer: longitude === targetLon,
-          schemeColor: genericOptions.baseColor,
+          isTargetLayer: i === 1,
+          schemeColor: baseColor,
+          visible: i === 1 ? !mapHideTargetLayer : !mapHideSourceLayer,
         }))
       ) :
       [
@@ -312,7 +325,7 @@ export default {
             },
           },
           legend: { showLegend: true },
-          schemeColor: genericOptions.baseColor,
+          schemeColor: baseColor,
           opacity: uniqueOptions.opacity.value / 100,
           minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
             MIN_ZOOM.postalCode :
@@ -364,12 +377,12 @@ export default {
         ],
       layerConfig,
       mapConfig: {
-        legendPosition: MAP_LEGEND_POSITION[JSON.stringify(genericOptions.legendPosition)],
-        legendSize: MAP_LEGEND_SIZE[genericOptions.legendSize],
+        legendPosition: MAP_LEGEND_POSITION[JSON.stringify(legendPosition)],
+        legendSize: MAP_LEGEND_SIZE[legendSize],
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN ||
           process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
-        showMapLegend: genericOptions.showLegend,
-        showMapTooltip: genericOptions.showTooltip,
+        showMapLegend: showLegend,
+        showMapTooltip: showTooltip,
         initViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
           uniqueOptions.mapViewState.postalCode :
           uniqueOptions.mapViewState.value,
