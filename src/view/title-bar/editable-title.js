@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { TextField, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
-
 import modes from '../../constants/modes'
 
 
@@ -71,7 +70,7 @@ const EditableTitle = () => {
   const renderTextfield = () => {
     if (textfieldRef.current) {
       let el = textfieldRef.current.childNodes[0][0]
-      el.style.width = `${(el.value.length + 1) * 8}px`
+      el.style.width = `${(el.value.length + 2) * 8}px`
     }
 
     return (
@@ -79,7 +78,16 @@ const EditableTitle = () => {
         variant='borderless'
         classes={textFieldClasses}
         value={tentativeTitle}
-        onChange={(v) => setTentativeTitle(v)}
+        onChange={(v) => {
+          setTentativeTitle(v)
+        }}
+        onBlur={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          e.nativeEvent.preventDefault()
+          e.nativeEvent.stopPropagation()
+          setEditing(false)
+        }}
         onFocus={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -87,15 +95,14 @@ const EditableTitle = () => {
           e.nativeEvent.stopPropagation()
           setEditing(true)
         }}
-        onBlur={(e) => {
+        deleteButton={editing}
+        onDelete={(e) => {
           e.preventDefault()
           e.stopPropagation()
           e.nativeEvent.preventDefault()
           e.nativeEvent.stopPropagation()
-          updateTitle(e.target.value)
-          setEditing(false)
+          updateTitle('')
         }}
-        deleteButton={editing}
       />
     )
   }
