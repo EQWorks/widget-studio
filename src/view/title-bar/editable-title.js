@@ -12,6 +12,10 @@ const commonClasses = {
     alignItems: 'center',
     margin: '0 0.6rem',
     display: 'flex',
+
+    '& .textfield-container': {
+      backgroundColor: getTailwindConfigColor('secondary-100'),
+    },
   },
   button: {
     marginLeft: '0.4rem',
@@ -40,8 +44,9 @@ const useStyles = () => makeStyles(
 )
 
 const textFieldClasses = Object.freeze({
-  container: 'bg-secondary-100',
-  input: 'mb-0 text-sm text-secondary-600',
+  container: 'textfield-container',
+  root: 'focus-within:border-primary-500',
+  input: 'mb-0 text-sm focus:text-secondary-900',
 })
 
 const EditableTitle = () => {
