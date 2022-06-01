@@ -4,6 +4,7 @@ export const MAP_LAYERS = {
   // MVT: 'MVT',
   geojson: 'geojson',
   arc: 'arc',
+  icon: 'icon',
 }
 
 // visualizations used in Value Configuration
@@ -20,6 +21,7 @@ export const MAP_VALUE_VIS = {
 export const MAP_VIS_OTHERS = {
   lineWidth: 'lineWidth',
   lineColor: 'lineColor',
+  size: 'size',
 }
 
 export const MAP_LAYER_VALUE_VIS = {
@@ -28,6 +30,7 @@ export const MAP_LAYER_VALUE_VIS = {
   // MVT: [MAP_VALUE_VIS.fill],
   geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
   arc: [MAP_VALUE_VIS.arcWidth],
+  icon: [],
 }
 
 export const GEO_KEY_TYPES = {
@@ -62,6 +65,7 @@ export const MAP_LAYER_GEO_KEYS = {
   // arc layer has no specific & unique geo keys to be identified with
   arc: [],
   geojson: Object.values(GEO_KEY_TYPES).flat(),
+  icon: [],
 }
 
 export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
