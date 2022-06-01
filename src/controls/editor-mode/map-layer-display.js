@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react'
 
-import { TextField, makeStyles } from '@eqworks/lumen-labs'
+import { TextField, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import ColorSchemeControls from './components/color-scheme-controls'
@@ -15,12 +15,22 @@ const classes = makeStyles({
   opacityRow: {
     marginTop: '-0.625rem',
   },
-  sliderOutline: {
+  layerControl: {
     width: '100%',
     display: 'flex',
   },
+  layerName: {
+    fontSize: '0.75rem',
+    fontWeight: 700,
+    color: getTailwindConfigColor('secondary-700'),
+  },
   textFieldContainer: {
     width: '6.918rem',
+  },
+  radius: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginRight: '0.4rem',
   },
 })
 
@@ -40,7 +50,16 @@ const MapLayerDisplay = () => {
   const type = useStoreState((state) => state.type)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
-  const [simpleRadius, rangeRadius, elevation, simpleArcWidth, rangeArcWidth] = useMemo(() => {
+  // checks to find what type of controls we need for Layer Display panel
+  const [
+    simpleRadius,
+    rangeRadius,
+    rangeRadiusSource,
+    rangeRadiusTarget,
+    elevation,
+    simpleArcWidth,
+    rangeArcWidth,
+  ] = useMemo(() => {
     return [
       mapLayer === MAP_LAYERS.scatterplot ||
         (dataIsXWIReport && !mapValueKeys.length) ||
@@ -53,6 +72,8 @@ const MapLayerDisplay = () => {
         ),
       Boolean(renderableValueKeys.find(vis =>
         ((vis.mapVis === MAP_VALUE_VIS.radius || vis.mapVis === MAP_VALUE_VIS.targetRadius) && vis.key))),
+      Boolean(renderableValueKeys.find(vis => (vis.mapVis === MAP_VALUE_VIS.radius && vis.key))),
+      Boolean(renderableValueKeys.find(vis => (vis.mapVis === MAP_VALUE_VIS.targetRadius && vis.key))),
       JSON.stringify(renderableValueKeys).includes(MAP_VALUE_VIS.elevation),
       dataIsXWIReport && !JSON.stringify(renderableValueKeys).includes(MAP_VALUE_VIS.arcWidth),
       Boolean(renderableValueKeys.find(vis =>
@@ -173,7 +194,7 @@ const MapLayerDisplay = () => {
             </div>
           )}
           {renderRow(null,
-            <div className={classes.sliderOutline}>
+            <div className={classes.layerControl}>
               {(simpleRadius || rangeRadius) &&
                 !dataIsXWIReport &&
                 renderRadiusControl({ range : rangeRadius })
@@ -234,14 +255,29 @@ const MapLayerDisplay = () => {
             </div>
           )}
           {renderRow(null,
-            <div className={classes.sliderOutline}>
+            <div className={classes.layerControl}>
               {simpleRadius &&
                 dataIsXWIReport &&
-                renderRadiusControl({ range: false })
+                <div className={classes.radius}>
+                  {rangeRadiusSource !== rangeRadiusTarget && (
+                    <div className={classes.layerName}>
+                      {rangeRadiusSource ? 'Target Layer' : 'Source Layer'}
+                    </div>
+                  )}
+                  {renderRadiusControl({ range: false })}
+                </div>
               }
               {rangeRadius &&
                 dataIsXWIReport &&
-                renderRadiusControl({ range: rangeRadius })
+                (rangeRadiusSource || rangeRadiusTarget) &&
+                <div className={classes.radius}>
+                  {rangeRadiusSource !== rangeRadiusTarget && (
+                    <div className={classes.layerName}>
+                      {rangeRadiusSource ? 'Source Layer' : 'Target Layer'}
+                    </div>
+                  )}
+                  {renderRadiusControl({ range: rangeRadius })}
+                </div>
               }
             </div>
           )}
