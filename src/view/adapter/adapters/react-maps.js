@@ -139,7 +139,6 @@ export default {
       formatPropertyLabel,
       formatDataFunctions,
     } = config
-
     const {
       baseColor,
       legendPosition,
@@ -229,11 +228,15 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                name: sourcePOIId,
-                id: targetPOIId,
+                sourcePOIId: sourcePOIId,
+                targetPOIId: targetPOIId,
                 metricKeys: arcLayerValueKeys,
               },
             },
+          },
+          legend: {
+            showLegend: true,
+            layerTitle: 'Arc Layer',
           },
           formatPropertyLabel,
           formatData: formatDataFunctions,
@@ -245,7 +248,10 @@ export default {
           { dataId: `${id}-${type}-source`, longitude: sourceLon, latitude: sourceLat },
           { dataId: `${id}-${type}-target`, longitude: targetLon, latitude: targetLat },
         ].map(({ dataId, longitude, latitude }, i) => ({
-          layer: MAP_LAYERS.scatterplot,
+          layer: MAP_LAYER_VALUE_VIS[i === 0 ? 'scatterplot' : 'targetScatterplot']
+            .some(vis => JSON.stringify(mapValueKeys)?.includes(vis)) ?
+            MAP_LAYERS.scatterplot :
+            MAP_LAYERS.icon,
           dataId,
           geometry: { longitude, latitude },
           visualizations: Object.fromEntries(
@@ -272,10 +278,15 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                name: longitude === targetLon ? targetPOIId : sourcePOIId,
+                sourcePOIId: i === 0 ? sourcePOIId : '',
+                targetPOIId: i === 1 ? targetPOIId : '',
                 metricKeys: longitude === targetLon ? targetLayerValueKeys : sourceLayerValueKeys,
               },
             },
+          },
+          legend: {
+            showLegend: true,
+            layerTitle: i === 0 ? 'Source Layer' : 'Target Layer',
           },
           formatPropertyLabel,
           formatData: formatDataFunctions,
@@ -352,6 +363,7 @@ export default {
                 valueKeys: mapValueKeys.map(vis => vis.title),
               },
             },
+            // add this to controls in advanced editor
             pixelOffset: {
               value: mapLayer === MAP_LAYERS.scatterplot ?
                 [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point] :
