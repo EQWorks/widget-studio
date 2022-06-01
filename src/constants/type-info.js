@@ -201,6 +201,13 @@ export default {
         max: 100,
         step: 1,
       },
+      size: {
+        name: 'Size',
+        type: Number,
+        defaultValue: {
+          value: 4,
+        },
+      },
       mapViewState: {
         name: 'View State',
         type: Object,
@@ -223,14 +230,12 @@ export default {
     icon: Icons.Hash,
     adapter: LocalAdapters[types.STAT],
     mustGroup: false,
-    uniqueOptions: {
-    },
+    uniqueOptions: {},
   },
   [types.TABLE]: {
     icon: Icons.Table,
     adapter: LocalAdapters[types.TABLE],
     mustGroup: false,
-    uniqueOptions: {
-    },
+    uniqueOptions: {},
   },
 }
