@@ -111,6 +111,7 @@ const WidgetView = () => {
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
   const dataReady = useStoreState((state) => state.dataReady)
+  const isLoading = useStoreState((state) => state.isLoading)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -173,7 +174,7 @@ const WidgetView = () => {
   const renderWidgetWarning = (
     <div className='h-full flex-1 flex flex-col justify-center items-center'>
       {
-        dataSourceLoading
+        isLoading
           ? <div className='m-3'>
             <Loader open classes={{ icon: 'text-primary-700' }} />
           </div>
