@@ -8,15 +8,27 @@ import Widget from './widget'
 import withQueryClient from './util/with-query-client'
 
 
-const InsightsDataProvider = ({ children, year, month }) => {
+const COX_WL = 2456
+const COX_CU = 27848
+const COX_SOURCE = 'cox'
+
+const InsightsDataProvider = ({
+  children,
+  source = COX_SOURCE,
+  year,
+  month,
+  _wl = COX_WL,
+  _customer = COX_CU,
+}) => {
   // keep track of which widgets need which data
   const [widgetDataDict, setWidgetDataDict] = useState({})
   const dataNeeded = useMemo(() => Object.values(widgetDataDict), [widgetDataDict])
+
   // dynamic parallel queries for insights data
   const fetchedData = useQueries(
     dataNeeded.map(name => ({
       queryKey: [name, year, month],
-      queryFn: () => fetchInsightsData(name, year, month),
+      queryFn: () => fetchInsightsData({ name, year, month, _wl, _customer })[source],
       refetchOnWindowFocus: false,
     }))
   )
@@ -37,6 +49,8 @@ const InsightsDataProvider = ({ children, year, month }) => {
       const { data } = target || {}
       const { results, columns } = data || {}
       return cloneElement(child, {
+        wl: _wl,
+        cu: _customer,
         // provide a callback for the widget to ask for data
         onInsightsDataRequired: widgetCallback,
         // pass the fetched data if available
@@ -46,11 +60,13 @@ const InsightsDataProvider = ({ children, year, month }) => {
     )
   )
 }
+
 InsightsDataProvider.propTypes = {
   children: PropTypes.node.isRequired,
   year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   month: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
+
 InsightsDataProvider.defaultProps = {
   month: null,
 }
