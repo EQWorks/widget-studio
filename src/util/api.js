@@ -186,11 +186,15 @@ const requestExecutionResults = async (id, finalQLApi) => {
   return { data, name }
 }
 
-export const fetchInsightsData = async (name, year, month) => (
-  api.get(`/cox/reports/${name}/results`, { params: { year, month } })
-    .then(({ data }) => requestExecutionResults(data.executionID))
-    .then(({ data }) => data)
-)
+export const fetchInsightsData = ({ name, ...params }) => {
+  const finalQLApi = params._customer === COX_CU ? qlApi : api
+  return ({
+    cox: (api.get(`/cox/reports/${name}/results`, { params } )
+      .then(({ data }) => requestExecutionResults(data.executionID, finalQLApi))
+      .then(({ data }) => data)),
+  })
+}
+
 
 export const requestData = async (dataSourceType, dataSourceID, sampleData = null, cu) => {
   const finalQLApi = cu === COX_CU ? qlApi : api
