@@ -50,6 +50,7 @@ const EditorRightSidebar = () => {
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
   const showLabels = useStoreState((state) => state.genericOptions.showLabels)
   const isReady = useStoreState((state) => state.isReady)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
@@ -192,7 +193,10 @@ const EditorRightSidebar = () => {
 
   return (
     <EditorSidebarBase>
-      <MutedBarrier mute={!type || !domain?.value || !(renderableValueKeys?.length)} >
+      <MutedBarrier mute={!type ||
+        ((type !== types.MAP || (type === types.MAP && !dataIsXWIReport)) &&
+          (!domain?.value || !(renderableValueKeys?.length)))
+      } >
         <Filters />
       </MutedBarrier>
       {/* TO CHANGE: temporary enable Map Settings controls for xwi report data */}
