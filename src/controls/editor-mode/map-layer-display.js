@@ -19,6 +19,11 @@ const classes = makeStyles({
     width: '100%',
     display: 'flex',
   },
+  layerControlNoOpacity : {
+    width: '100%',
+    display: 'flex',
+    marginTop: '-1.25rem',
+  },
   layerName: {
     fontSize: '0.75rem',
     fontWeight: 700,
@@ -59,14 +64,11 @@ const MapLayerDisplay = () => {
     elevation,
     simpleArcWidth,
     rangeArcWidth,
+    colorFill,
   ] = useMemo(() => {
     return [
       mapLayer === MAP_LAYERS.scatterplot ||
-        (dataIsXWIReport && !mapValueKeys.length) ||
-        (dataIsXWIReport &&
-          [MAP_VALUE_VIS.radius, MAP_VALUE_VIS.targetRadius]
-            .some(vis => !JSON.stringify(renderableValueKeys).includes(vis))) ||
-        Boolean(mapValueKeys.find(vis =>
+        Boolean(!dataIsXWIReport && mapValueKeys.find(vis =>
           ((vis.mapVis === MAP_VALUE_VIS.radius || vis.mapVis === MAP_VALUE_VIS.targetRadius) &&
           !vis.key))
         ),
@@ -78,6 +80,8 @@ const MapLayerDisplay = () => {
       dataIsXWIReport && !JSON.stringify(renderableValueKeys).includes(MAP_VALUE_VIS.arcWidth),
       Boolean(renderableValueKeys.find(vis =>
         (vis.mapVis === MAP_VALUE_VIS.arcWidth && vis.key))),
+      Boolean(renderableValueKeys.find(vis =>
+        ((vis.mapVis === MAP_VALUE_VIS.fill || vis.mapVis === MAP_VALUE_VIS.targetFill) && vis.key))),
     ]
   }, [mapLayer, mapValueKeys, dataIsXWIReport, renderableValueKeys])
 
@@ -122,7 +126,7 @@ const MapLayerDisplay = () => {
   }, [type])
 
   const renderRadiusControl = ({ range }) =>
-    renderItem(range ? 'Radius Range (px)' : 'Radius Size (px)',
+    renderItem('Radius Size (px)',
       <SliderControl
         {...getUniqueOptionsProps(
           {
@@ -173,34 +177,40 @@ const MapLayerDisplay = () => {
           )}
           {renderRow(null,
             <div className={classes.opacityRow}>
-              {renderItem('Opacity (%)',
-                <SliderControl
-                  {...getUniqueOptionsProps(
-                    {
-                      option: LAYER_OPTIONS.opacity,
-                      range: false,
-                      textField: false,
-                    }
-                  )}
-                  update={val => userUpdate({
-                    uniqueOptions: {
-                      opacity: {
-                        value: Number(val),
+              {(simpleRadius || rangeRadius || rangeRadiusSource ||
+                rangeRadiusTarget || elevation || colorFill) &&
+                renderItem('Opacity (%)',
+                  <SliderControl
+                    {...getUniqueOptionsProps(
+                      {
+                        option: LAYER_OPTIONS.opacity,
+                        range: false,
+                        textField: false,
+                      }
+                    )}
+                    update={val => userUpdate({
+                      uniqueOptions: {
+                        opacity: {
+                          value: Number(val),
+                        },
                       },
-                    },
-                  })}
-                />
-              )}
+                    })}
+                  />
+                )}
             </div>
           )}
           {renderRow(null,
-            <div className={classes.layerControl}>
-              {(simpleRadius || rangeRadius) &&
-                !dataIsXWIReport &&
+            <div className={(simpleRadius || rangeRadius || rangeRadiusSource ||
+                rangeRadiusTarget || elevation || colorFill) ?
+              classes.layerControl :
+              classes.layerControlNoOpacity}
+            >
+              {!dataIsXWIReport &&
+                (simpleRadius || rangeRadius) &&
                 renderRadiusControl({ range : rangeRadius })
               }
-              {(simpleArcWidth || rangeArcWidth) &&
-                dataIsXWIReport &&
+              {dataIsXWIReport &&
+                (simpleArcWidth || rangeArcWidth) &&
                 arcWidthControl
               }
               {elevation &&
@@ -256,19 +266,8 @@ const MapLayerDisplay = () => {
           )}
           {renderRow(null,
             <div className={classes.layerControl}>
-              {simpleRadius &&
-                dataIsXWIReport &&
-                <div className={classes.radius}>
-                  {rangeRadiusSource !== rangeRadiusTarget && (
-                    <div className={classes.layerName}>
-                      {rangeRadiusSource ? 'Target Layer' : 'Source Layer'}
-                    </div>
-                  )}
-                  {renderRadiusControl({ range: false })}
-                </div>
-              }
-              {rangeRadius &&
-                dataIsXWIReport &&
+              {dataIsXWIReport &&
+                rangeRadius &&
                 (rangeRadiusSource || rangeRadiusTarget) &&
                 <div className={classes.radius}>
                   {rangeRadiusSource !== rangeRadiusTarget && (
