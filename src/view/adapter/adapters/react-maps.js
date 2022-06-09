@@ -25,6 +25,7 @@ import {
   MAX_ZOOM,
   MAP_TOAST_ZOOM_ADJUSTMENT,
   LABEL_OFFSET,
+  XWI_KEY_ALIASES,
 } from '../../../constants/map'
 
 
@@ -136,7 +137,7 @@ export default {
       mapGroupKey,
       mapGroupKeyTitle,
       mapValueKeys,
-      formatPropertyLabel,
+      formatDataKey,
       formatDataFunctions,
     } = config
     const {
@@ -228,8 +229,8 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                sourcePOIId: sourcePOIId,
-                targetPOIId: targetPOIId,
+                tooltipTitle1: sourcePOIId,
+                tooltipTitle2: targetPOIId,
                 metricKeys: arcLayerValueKeys,
               },
             },
@@ -238,8 +239,9 @@ export default {
             showLegend: true,
             layerTitle: 'Arc Layer',
           },
-          formatPropertyLabel,
-          formatData: formatDataFunctions,
+          keyAliases: XWI_KEY_ALIASES,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
           schemeColor: baseColor,
           visible: !mapHideArcLayer,
         },
@@ -278,8 +280,7 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                sourcePOIId: i === 0 ? sourcePOIId : '',
-                targetPOIId: i === 1 ? targetPOIId : '',
+                tooltipTitle1: i === 0 ? sourcePOIId : targetPOIId,
                 metricKeys: longitude === targetLon ? targetLayerValueKeys : sourceLayerValueKeys,
               },
             },
@@ -288,9 +289,14 @@ export default {
             showLegend: true,
             layerTitle: i === 0 ? 'Source Layer' : 'Target Layer',
           },
-          formatPropertyLabel,
-          formatData: formatDataFunctions,
-          opacity: uniqueOptions.opacity.value / 100,
+          keyAliases: XWI_KEY_ALIASES,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
+          // we don't apply opacity to icon layer for POI locations
+          opacity:  MAP_LAYER_VALUE_VIS[i === 0 ? 'scatterplot' : 'targetScatterplot']
+            .some(vis => JSON.stringify(mapValueKeys)?.includes(vis)) ?
+            uniqueOptions.opacity.value / 100 :
+            1,
           isTargetLayer: i === 1,
           schemeColor: baseColor,
           visible: i === 1 ? !mapHideTargetLayer : !mapHideSourceLayer,
@@ -326,8 +332,8 @@ export default {
                 },
               ]
             })),
-          formatPropertyLabel,
-          formatData: formatDataFunctions,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
           interactions: {
             tooltip: {
               tooltipKeys: {
@@ -370,8 +376,8 @@ export default {
                 [LABEL_OFFSET.polygon, 0],
             },
           },
-          formatPropertyLabel,
-          formatData: formatDataFunctions,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
           interactions: {},
         },
       ] :
@@ -398,7 +404,11 @@ export default {
         initViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
           uniqueOptions.mapViewState.postalCode :
           uniqueOptions.mapViewState.value,
-        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) || isXWIReportMap?
+        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ||
+          (isXWIReportMap &&
+          (!mapHideArcLayer ||
+            ![...MAP_LAYER_VALUE_VIS.scatterplot, ...MAP_LAYER_VALUE_VIS.targetScatterplot]
+              .some(vis => JSON.stringify(mapValueKeys)?.includes(vis)))) ?
           PITCH.elevation :
           PITCH.default,
       },
