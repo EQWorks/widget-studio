@@ -118,7 +118,7 @@ const stateDefaults = [
   { key: 'ignoreUndo', defaultValue: false, resettable: false },
   { key: 'unsavedChanges', defaultValue: false, resettable: false },
   { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
-  { key: 'formatPropertyLabel', defaultValue: (label) => truncateString(label, 30), resettable: false },
+  { key: 'formatDataKey', defaultValue: (label) => truncateString(label, 30), resettable: false },
 ]
 
 export default {
@@ -139,7 +139,7 @@ export default {
       (state) => state.mapGroupKey,
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
-      (state) => state.formatPropertyLabel,
+      (state) => state.formatDataKey,
       (state) => state.formatDataFunctions,
       (state) => state.genericOptions,
       (state) => state.uniqueOptions,
@@ -160,7 +160,7 @@ export default {
       mapGroupKey,
       indexKey,
       renderableValueKeys,
-      formatPropertyLabel,
+      formatDataKey,
       formatDataFunctions,
       genericOptions,
       uniqueOptions,
@@ -177,7 +177,7 @@ export default {
       groupFilter,
       valueKeys: type !== types.MAP ? renderableValueKeys : [],
       mapValueKeys: type === types.MAP ? renderableValueKeys : [],
-      formatPropertyLabel,
+      formatDataKey,
       formatDataFunctions,
       group,
       groupKey,
