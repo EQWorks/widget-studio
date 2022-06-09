@@ -56,8 +56,8 @@ export const isString = v => typeof v === 'string' || v instanceof String
  * @param { string } separator - string to separate formatted string
  * @returns { string } - formatted string
  */
-export function truncateString(fullStr, strLen, separator = ' ... ') {
-  if (fullStr.length <= strLen) {
+export const truncateString = (fullStr, strLen, separator = ' ... ') => {
+  if (fullStr?.length <= strLen) {
     return fullStr
   }
   const sepLen = separator.length
@@ -65,5 +65,7 @@ export function truncateString(fullStr, strLen, separator = ' ... ') {
   const frontChars = Math.floor(charsToShow / 2)
   const endChars = Math.ceil(charsToShow / 2)
 
-  return fullStr.substring(0, frontChars) + separator + fullStr.substring(fullStr.length + 1 - endChars)
+  return fullStr?.toString()?.substring(0, frontChars) +
+         separator +
+         fullStr?.toString()?.substring(fullStr.length + 1 - endChars)
 }
