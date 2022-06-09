@@ -180,3 +180,8 @@ export const CENSUS_REGEX = {
 
 // a temporary list of keys to filter out from numeric columns for map widget
 export const EXCLUDE_NUMERIC = ['name', 'date_type', 'Name', 'id', 'date', 'Date', 'lon', 'lat']
+
+export const XWI_KEY_ALIASES = {
+  'Poi id': 'Source POI ID',
+  'Target poi id': 'Target POI ID',
+}
