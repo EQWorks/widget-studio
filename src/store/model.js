@@ -231,6 +231,7 @@ export default {
 
   domain: computed(
     [
+      (state) => state.columnsAnalysis,
       (state) => state.group,
       (state) => state.type,
       (state) => state.mapGroupKey,
@@ -239,6 +240,7 @@ export default {
       (state) => state.dataIsXWIReport,
     ],
     (
+      columnsAnalysis,
       group,
       type,
       mapGroupKey,
@@ -247,8 +249,16 @@ export default {
       dataIsXWIReport,
     ) => {
       let res = {}
-      if (type === types.MAP && !dataIsXWIReport) {
-        res = { mapGroupKey }
+      const dataKeys = Object.keys(columnsAnalysis) || []
+      const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
+      if (type === types.MAP) {
+        if (!dataIsXWIReport) {
+          res = { mapGroupKey }
+        }
+        // TO CHANGE in the future: workaround to add a group key for xwi report data case for map widget
+        if (dataIsXWIReport) {
+          res = { mapGroupKey : sourcePOIId }
+        }
       } else if (!group) {
         res = { indexKey }
       } else {
