@@ -131,6 +131,7 @@ export const COORD_KEYS = {
 
 export const XWI_REPORT = {
   target: 'target',
+  source: 'poi',
 }
 
 export const LAYER_SCALE = 'linear'
@@ -177,9 +178,6 @@ export const CENSUS_REGEX = {
   da: /^[0-9]{8}/g,
   region: /^(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)/g,
 }
-
-// a temporary list of keys to filter out from numeric columns for map widget
-export const EXCLUDE_NUMERIC = ['name', 'date_type', 'Name', 'id', 'date', 'Date', 'lon', 'lat']
 
 export const XWI_KEY_ALIASES = {
   'Poi id': 'Source POI ID',

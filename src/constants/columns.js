@@ -1,7 +1,17 @@
 import { Icons } from '@eqworks/lumen-labs'
 import { priceStringToNumeric } from '../util/numeric'
 import { isString } from '../util/string-manipulation'
+import { MAP_GEO_KEYS, ID_KEYS, COORD_KEYS } from './map'
 
+
+export const EXCLUDE_NUMERIC = [
+  ...['whitelabel', 'customer', 'resolution'],
+  ...MAP_GEO_KEYS,
+  ...ID_KEYS,
+  ...Object.values(COORD_KEYS).flat(),
+]
+
+export const EXCLUDE_NUMERIC_ENDINGS = ['name', 'type', 'id']
 
 export const columnTypes = {
   NUMERIC: 'Numeric',
@@ -19,7 +29,8 @@ export const columnTypeInfo = {
       const res = !isNaN(v)
       return name === undefined
         ? res
-        : res && !name.endsWith('_id') && name !== 'resolution'
+        : res && !EXCLUDE_NUMERIC_ENDINGS.some(key => name.endsWith('_' + key)) &&
+         !EXCLUDE_NUMERIC.includes(name)
     },
   },
   [columnTypes.STRING]: {
