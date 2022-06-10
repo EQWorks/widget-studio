@@ -44,9 +44,19 @@ const useTransformedData = () => {
   const propFilters = useStoreState((state) => state.propFilters)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
-  const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
-
   const dataKeys = useMemo(() => Object.keys(columnsAnalysis || {}), [columnsAnalysis])
+
+  const finalGroupKey = useMemo(() => {
+    const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
+    if (type === types.MAP) {
+      // TO CHANGE: temporary workaround to enable one domain filter for xwi report
+      if (dataIsXWIReport) {
+        return sourcePOIId
+      }
+      return mapGroupKey
+    }
+    return groupKey
+  }, [dataKeys, type, dataIsXWIReport, mapGroupKey, groupKey])
 
   // normalize data using columnsAnalysis (ex. price to numeric)
   const normalizedData = useMemo(() => {
@@ -132,11 +142,11 @@ const useTransformedData = () => {
       // whether the configured group key has produced data with any variance
       const data = Object.values(groupedData)
       if (data[0]) {
-        const testKey = Object.keys(data[0])[0]
+        const testKey = Object.keys(data[0]).find(key => columnsAnalysis[key].isNumeric)
         update({ dataHasVariance: data.some(g => g[testKey]?.length > 1) })
       }
     }
-  }, [update, groupedData])
+  }, [dataKeys, update, groupedData, columnsAnalysis])
 
   // if a filter on the finalGroupKey exists, retain only the desired groups
   const filteredGroupedData = useMemo(() => {
@@ -241,6 +251,7 @@ const useTransformedData = () => {
             targetPOIId,
             columnsAnalysis,
             formattedColumnNames,
+            groupFilter,
           }))
       return { arcData, sourceData, targetData }
     }
@@ -252,6 +263,7 @@ const useTransformedData = () => {
     columnsAnalysis,
     dataKeys,
     formattedColumnNames,
+    groupFilter,
   ])
 
   // enrich data with coords for scatterplot & geojson data; special aggregation for xwi-reports
