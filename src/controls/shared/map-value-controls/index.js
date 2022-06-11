@@ -7,7 +7,7 @@ import XWIReportValueControls from './xwi-report-value-controls'
 import WidgetControlCard from '../components/widget-control-card'
 
 import modes from '../../../constants/modes'
-import { MAP_LAYER_VALUE_VIS, COORD_KEYS, ID_KEYS, EXCLUDE_NUMERIC } from '../../../constants/map'
+import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
 
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -27,11 +27,6 @@ const MapValueControls = () => {
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
-
-  const mapNumericColumns = useMemo(() => (
-    numericColumns.filter(col => !Object.values(COORD_KEYS).flat().includes(col) &&
-      !ID_KEYS.includes(col) && EXCLUDE_NUMERIC.every(key => !col.includes(key)))
-  ), [numericColumns])
 
   const widgetControlCardDescription = useMemo(() => {
     if (!mapGroupKey && !dataIsXWIReport) {
@@ -74,7 +69,7 @@ const MapValueControls = () => {
       {dataIsXWIReport ?
         (
           <XWIReportValueControls
-            data={mapNumericColumns}
+            data={numericColumns}
             callback={callback}
           />
         ) :
@@ -82,7 +77,7 @@ const MapValueControls = () => {
           <MapValueSelect
             categories={MAP_LAYER_VALUE_VIS[mapLayer]}
             titles={['Column', 'Operation']}
-            data={mapNumericColumns}
+            data={numericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
             disableSubs={!dataHasVariance}
             disableSubMessage="doesn't require aggregation."
