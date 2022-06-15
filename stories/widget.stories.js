@@ -227,7 +227,7 @@ storiesOf('InsightsDataProvider', module)
   .add('InsightsDataProvider', () => {
     const YEAR = 2022
     const MONTH = 1
-    const WIDGET_IDS = [100056, 100057, 100058, 100084]
+    const WIDGET_IDS = ['100056', '100057', '100058', '100084']
     return (
       <Authenticated product='locus'>
         <div className={classes.dashboardGrid}>
