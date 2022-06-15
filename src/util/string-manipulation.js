@@ -1,4 +1,4 @@
-const STRING_REPLACE_DICT = {
+export const STRING_REPLACE_DICT = {
   'income_sources_market_income_recipients': 'Market income',
   'income_sources_government_transfer_recipients': 'Government transfer income',
   'income_sources_employment_income_recipients': 'Employment income',
@@ -9,6 +9,9 @@ const STRING_REPLACE_DICT = {
   'census_fam_couple_with_children': 'Couple - children',
   'census_fam_person_not_in_census_family': 'Not in census family',
   'commute_time_60+min': '> 60 min',
+  'dta': 'DTA',
+  'aoi': 'AOI',
+  'da': 'DA',
 }
 
 const HEADER_START = [
