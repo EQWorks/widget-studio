@@ -38,8 +38,8 @@ const Stat = ({ data, values }) => {
     <div className={classes.outerContainer}>
       {
         values?.map((k, i) => (
-          <>
-            <div key={k} className={classes.item}>
+          <div key={k}>
+            <div className={classes.item}>
               <div className={classes.value}>
                 {data[0][k]}
               </div>
@@ -51,7 +51,7 @@ const Stat = ({ data, values }) => {
               i < (values.length - 1) &&
               <div className={classes.divider} />
             }
-          </>
+          </div>
         ))
       }
     </div>
