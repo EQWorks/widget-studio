@@ -72,7 +72,7 @@ const DataSourceControls = () => {
             queryID,
             reportType,
             label: `${dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
-              `[${executionID}]` : ''} ${name || `unsaved: ${views.map(({ id }) => id).join(', ')}`}`,
+              '' : `[${executionID}]`} ${name || `unsaved: ${views.map(({ id }) => id).join(', ')}`}`,
             description: (
               <span key={executionID} className={classes.dropdownDescriptionContainer}>
                 <span className={classes.dropdownDescriptionText}>
