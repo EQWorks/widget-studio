@@ -222,11 +222,12 @@ storiesOf('TMP filter prop demo', module)
     )
   })
 
+const YEAR = 2022
+const MONTH = 1
+
 // InsightsDataProvider demonstration
 storiesOf('InsightsDataProvider', module)
   .add('InsightsDataProvider', () => {
-    const YEAR = 2022
-    const MONTH = 1
     const WIDGET_IDS = ['100056', '100057', '100058', '100084']
     return (
       <Authenticated product='locus'>
@@ -246,4 +247,26 @@ storiesOf('InsightsDataProvider', module)
         </div>
       </Authenticated >
     )
+  })
+
+// Temporary solution for dashboar widget management for Cox
+storiesOf('Widget Management with Insights Data saved configuration', module)
+  .add('Widget Management with Insights Data saved configuration', () => {
+    const queryClient = new QueryClient()
+    return <Authenticated product='locus'>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <WlCuControlsProvider>
+          <WidgetManager
+            wl={DEFAULT_WL}
+            cu={DEFAULT_CU}
+            dealer={DEFAULT_DEALER}
+            saveWithInsightsData
+            filters={[{ key: 'resolution', filter: [5000] }]}
+            year={YEAR}
+            month={MONTH}
+          />
+        </WlCuControlsProvider>
+      </QueryClientProvider>
+    </Authenticated>
   })
