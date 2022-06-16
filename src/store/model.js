@@ -78,6 +78,9 @@ const stateDefaults = [
   { key: 'columns', defaultValue: [], resettable: false },
   { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
+  // TO DELETE or change in the future when we implement data tree selection
+  { key: 'saveWithInsightsData', defaultValue: false, resettable: false },
+  { key: 'reportType', defaultValue: null, resettable: true },
   { key: 'percentageMode', defaultValue: false, resettable: true },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
   {
@@ -465,7 +468,7 @@ export default {
   }),
 
   save: thunk(async (actions, _, { getState }) => {
-    const { config, tentativeConfig, id, wl, cu } = getState()
+    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType } = getState()
     if (!config) {
       actions.toast({
         title: `The widget is not configured yet, but will be ${id ? 'saved' : 'created'} anyway.`,
@@ -476,7 +479,22 @@ export default {
     const saveFn = id && !`${id}`.startsWith('dev-')
       ? saveWidget
       : createWidget
-    saveFn({ config: tentativeConfig, snapshot, id, whitelabel: wl, customer: cu })
+    saveFn({
+      // TO DELETE: workaround until we implemet data source tree selection
+      config: saveWithInsightsData ?
+        {
+          ...tentativeConfig,
+          dataSource: {
+            type: dataSourceTypes.INSIGHTS_DATA,
+            id: reportType,
+          },
+        } :
+        tentativeConfig,
+      snapshot,
+      id,
+      whitelabel: wl,
+      customer: cu,
+    })
       .then(({ status }) => {
         if (`${status}`.startsWith('2')) {
           actions.update({ unsavedChanges: false })
@@ -570,7 +588,9 @@ export default {
     // TO DELETE: once Cox executions are not pulled from qldev stage
     requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
-        const { results: rows, columns, whitelabelID, customerID } = data
+        const { results: rows, columns, whitelabelID, customerID, clientToken } = data
+        const yearMonthClient = clientToken?.match(/[_][0-6]{6}[_][0-9].*/g)?.[0]
+        const reportType = clientToken?.replace(yearMonthClient, '')
         actions.update({
           rows,
           columns,
@@ -581,6 +601,7 @@ export default {
             dataSourceName: name,
             dataSourceError: null,
           },
+          reportType,
         })
         if (!init) {
           actions.toast({
