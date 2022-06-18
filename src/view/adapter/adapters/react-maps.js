@@ -299,7 +299,7 @@ export default {
             1,
           isTargetLayer: i === 1,
           schemeColor: baseColor,
-          visible: i === 1 ? !mapHideTargetLayer : !mapHideSourceLayer,
+          visible: i === 0 ? !mapHideSourceLayer : !mapHideTargetLayer,
         }))
       ) :
       [
@@ -354,8 +354,44 @@ export default {
     const radiusValue = uniqueOptions?.radius?.value
     const { showLabels } = genericOptions || {}
 
-    layerConfig = showLabels && !JSON.stringify(mapValueKeys)?.includes(MAP_VALUE_VIS.elevation) ?
-      [
+    if (showLabels && isXWIReportMap) {
+      layerConfig = layerConfig.concat(
+        [
+          { dataId: `${id}-${type}-source`, longitude: sourceLon, latitude: sourceLat },
+          { dataId: `${id}-${type}-target`, longitude: targetLon, latitude: targetLat },
+        ].map(({ dataId, longitude, latitude }, i) => ({
+          layer: 'text',
+          dataId,
+          geometry: { longitude, latitude },
+          visualizations: {
+            text: {
+              value: {
+                title: i === 0 ? 'Poi id' : 'Target poi id',
+                valueKeys: mapValueKeys.filter(({ mapVis }) => (i === 0 ?
+                  // filter the visualisations for source layer
+                  MAP_LAYER_VALUE_VIS.scatterplot :
+                  // filter the visualisations for target layer
+                  MAP_LAYER_VALUE_VIS.targetScatterplot)
+                  .includes(mapVis))
+                  .map(vis => vis.title),
+              },
+            },
+            size: { value: 12 },
+            pixelOffset: {
+              value:  [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point],
+            },
+          },
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
+          interactions: {},
+          visible: i === 0 ? !mapHideSourceLayer : !mapHideTargetLayer,
+        }))
+      )
+    }
+
+    if (showLabels && !isXWIReportMap &&
+        !JSON.stringify(mapValueKeys)?.includes(MAP_VALUE_VIS.elevation)) {
+      layerConfig = [
         ...layerConfig,
         {
           layer: 'text',
@@ -380,8 +416,8 @@ export default {
           formatDataValue: formatDataFunctions,
           interactions: {},
         },
-      ] :
-      layerConfig
+      ]
+    }
 
     return ({
       dataConfig: isXWIReportMap ?
