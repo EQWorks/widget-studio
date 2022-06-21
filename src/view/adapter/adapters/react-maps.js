@@ -8,6 +8,7 @@ import { makeStyles } from '@eqworks/lumen-labs'
 import { useStoreState, useStoreActions } from '../../../store'
 import modes from '../../../constants/modes'
 import { getLayerValueKeys } from '../../../util/map-layer-value-functions'
+import { pixelOffset } from '../../../util/map-text-layer-offset'
 import {
   COORD_KEYS,
   MAP_LAYERS,
@@ -25,6 +26,7 @@ import {
   MAX_ZOOM,
   MAP_TOAST_ZOOM_ADJUSTMENT,
   LABEL_OFFSET,
+  KEY_ALIASES,
   XWI_KEY_ALIASES,
 } from '../../../constants/map'
 
@@ -332,12 +334,13 @@ export default {
                 },
               ]
             })),
+          keyAliases: KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {
             tooltip: {
               tooltipKeys: {
-                name: mapGroupKeyTitle,
+                tooltipTitle1: mapGroupKeyTitle,
               },
             },
           },
@@ -381,6 +384,7 @@ export default {
               value:  [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point],
             },
           },
+          keyAliases: XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {},
@@ -405,13 +409,11 @@ export default {
                 valueKeys: mapValueKeys.map(vis => vis.title),
               },
             },
-            // add this to controls in advanced editor
             pixelOffset: {
-              value: mapLayer === MAP_LAYERS.scatterplot ?
-                [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point] :
-                [LABEL_OFFSET.polygon, 0],
+              value: pixelOffset({ mapLayer, radiusValue }),
             },
           },
+          keyAliases: KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {},
