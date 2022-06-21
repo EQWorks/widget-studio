@@ -179,6 +179,18 @@ export const CENSUS_REGEX = {
   region: /^(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)/g,
 }
 
+export const KEY_ALIASES = {
+  'Poi id': 'POI ID',
+  'Locus poi id': 'POI ID',
+  'Address region': 'Region',
+  'Geo ca region': 'Region',
+  'Geo ca postal code': 'Postal code',
+  'Address postalcode': 'Postal code',
+  'Geo ca fsa': 'FSA',
+  'Geo ca da': 'DA',
+  'Geo can ct': 'CT',
+}
+
 export const XWI_KEY_ALIASES = {
   'Poi id': 'Source POI ID',
   'Target poi id': 'Target POI ID',
