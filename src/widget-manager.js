@@ -8,6 +8,7 @@ import ReactTimeAgo from 'react-time-ago'
 import { Icons, Chip, Loader, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import Widget from './widget'
+import InsightsDataProvider from './insights-data-provider'
 import withQueryClient from './util/with-query-client'
 import CustomSelect from './components/custom-select'
 import CustomButton from './components/custom-button'
@@ -320,8 +321,7 @@ const useDashboards = (reportID) => {
   return [isLoading, data]
 }
 
-
-const WidgetManager = ({ wl, cu, dealer, className }) => {
+const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, month, filters }) => {
   const [selectedReport, setSelectedReport] = useState(null)
   const [selectedDashboard, setSelectedDashboard] = useState(null)
 
@@ -456,8 +456,7 @@ const WidgetManager = ({ wl, cu, dealer, className }) => {
             <Widget
               className={classes.newWidget}
               mode='editor'
-              wl={wl}
-              cu={cu}
+              {...{ wl, cu, saveWithInsightsData }}
             />
           </CustomModal>
         )
@@ -593,16 +592,28 @@ const WidgetManager = ({ wl, cu, dealer, className }) => {
                       }
                     </CustomButton>
                   </div>
-                  {
-                    currentlyViewing
-                      ? <Widget
+                  {currentlyViewing && saveWithInsightsData &&
+                    <InsightsDataProvider {...{ year, month }}>
+                      <Widget
                         key={currentlyViewing}
                         id={currentlyViewing}
                         mode='view_only'
+                        filters={filters}
                       />
-                      : <div className={classes.widgetPreviewPrompt} >
-                        Select a widget to view it.
-                      </div>
+                    </InsightsDataProvider>
+                  }
+                  {currentlyViewing && !saveWithInsightsData &&
+                      <Widget
+                        key={currentlyViewing}
+                        id={currentlyViewing}
+                        mode='view_only'
+                        filters={filters}
+                      />
+                  }
+                  {!currentlyViewing &&
+                    <div className={classes.widgetPreviewPrompt} >
+                      Select a widget to view it.
+                    </div>
                   }
                 </div>
             }
@@ -632,12 +643,20 @@ WidgetManager.propTypes = {
   cu: PropTypes.number,
   dealer: PropTypes.number,
   className: PropTypes.string,
+  saveWithInsightsData: PropTypes.bool,
+  year: PropTypes.number,
+  month: PropTypes.number,
+  filters: PropTypes.object,
 }
 WidgetManager.defaultProps = {
   wl: -1,
   cu: -1,
   dealer: 1,
   className: '',
+  saveWithInsightsData: false,
+  year: 2022,
+  month: 1,
+  filters: undefined,
 }
 
 

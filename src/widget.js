@@ -73,6 +73,7 @@ const Widget = ({
   allowOpenInEditor,
   onOpenInEditor,
   onInsightsDataRequired,
+  saveWithInsightsData,
   // temporary:
   filters,
   executionID,
@@ -127,6 +128,7 @@ const Widget = ({
         baseMode: validatedBaseMode,
         staticData,
       },
+      saveWithInsightsData,
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -161,7 +163,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType])
+  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType, onInsightsDataRequired, saveWithInsightsData])
 
   // load data if source changes
   useEffect(() => {
@@ -231,6 +233,7 @@ Widget.propTypes = {
   columns: PropTypes.array,
   filters: PropTypes.arrayOf(PropTypes.object),
   onInsightsDataRequired: PropTypes.func,
+  saveWithInsightsData: PropTypes.bool,
 }
 Widget.defaultProps = {
   className: '',
@@ -248,7 +251,8 @@ Widget.defaultProps = {
   rows: null,
   columns: null,
   filters: [],
-  onInsightsDataRequired: () => { },
+  onInsightsDataRequired: () => {},
+  saveWithInsightsData: false,
 }
 
 export default withQueryClient(withStore(Widget))

@@ -8,6 +8,7 @@ import CustomSelect from '../../../components/custom-select'
 import { renderRow } from '../../shared/util'
 import WidgetControlCard from '../../shared/components/widget-control-card'
 import { columnTypeInfo, columnTypes } from '../../../constants/columns'
+import { STRING_REPLACE_DICT } from '../../../util/string-manipulation'
 import { dataSourceTypes } from '../../../constants/data-source'
 
 
@@ -48,15 +49,30 @@ const DataSourceControls = () => {
   const [executionsLoading, executionsList] = useExecutions()
   const [, savedQueriesList] = useSavedQueries()
 
-  const executions = useMemo(() => (
+  const dataSourceList = useMemo(() => (
     Array.isArray(executionsList)
-      ? executionsList.filter(({ customerID }) => customerID == cu || cu === -1 || dev)
-        .map(({ queryID, executionID, columns, views = [] }) => {
-          const { name } = savedQueriesList.find(({ queryID: _id }) => queryID === _id) || {}
+      ? executionsList.filter(({ customerID, clientToken }) => (customerID == cu || cu === -1 || dev) &&
+          ((dataSourceType === dataSourceTypes.INSIGHTS_DATA && clientToken) ||
+            dataSourceType !== dataSourceTypes.INSIGHTS_DATA))
+        .map(({ queryID, executionID, columns, views = [], clientToken }) => {
+          const yearMonthClient = clientToken?.match(/[_][0-6]{6}[_][0-9].*/g)?.[0]
+          const reportType = clientToken?.replace(yearMonthClient, '')
+          let name
+          if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
+            name = reportType?.split('_')?.map((word) =>
+              STRING_REPLACE_DICT[word] ?
+                STRING_REPLACE_DICT[word] :
+                word.replace(/./, v => v.toUpperCase())
+            ).join(' ')
+          } else {
+            name = (savedQueriesList.find(({ queryID: _id }) => queryID === _id) || {}).name
+          }
           return {
             id: executionID,
             queryID,
-            label: `[${executionID}] ${name || `unsaved: ${views.map(({ id }) => id).join(', ')}`}`,
+            reportType,
+            label: `${dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
+              '' : `[${executionID}]`} ${name || `unsaved: ${views.map(({ id }) => id).join(', ')}`}`,
             description: (
               <span key={executionID} className={classes.dropdownDescriptionContainer}>
                 <span className={classes.dropdownDescriptionText}>
@@ -72,35 +88,52 @@ const DataSourceControls = () => {
           }
         })
       : []
-  ), [cu, dev, executionsList, savedQueriesList])
+  ), [dataSourceType, cu, dev, executionsList, savedQueriesList])
 
-  const selected = useMemo(() => (
-    executions.find(
-      dataSourceType === dataSourceTypes.SAVED_QUERIES
-        ? ({ queryID }) => Number(queryID) === Number(dataSourceID)
-        : ({ id }) => Number(id) === Number(dataSourceID)
-    )
-  ), [dataSourceID, dataSourceType, executions])
+  const selected = useMemo(() => {
+    if (dataSourceType === dataSourceTypes.EXECUTIONS) {
+      if (dataSourceType === dataSourceTypes.SAVED_QUERIES) {
+        return dataSourceList?.find(({ queryID }) => Number(queryID) === Number(dataSourceID))
+      }
+      return dataSourceList?.find(({ id }) => Number(id) === Number(dataSourceID))
+    }
+    return dataSourceList?.find(({ reportType }) => reportType === dataSourceID)
+  } , [dataSourceID, dataSourceType, dataSourceList])
+
+  const placeholder = useMemo(() => {
+    if (executionsLoading) {
+      return 'Loading...'
+    } else if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
+      return 'Select Insights Data'
+    } else {
+      return 'Select Execution'
+    }
+  }, [executionsLoading, dataSourceType])
 
   return (
     <WidgetControlCard title='Data Source' >
       {
         renderRow(
-          'Query Execution',
+          dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
+            'Insights data' : 'Query Execution',
           <CustomSelect
             allowClear={false}
             disabled={executionsLoading || executionsList === []}
-            placeholder={executionsLoading ? 'Loading...' : 'Select Execution'}
+            placeholder={placeholder}
             fullWidth
             value={selected?.label}
-            descriptions={executions.map(({ description }) => description)}
-            data={executions?.map(({ label }) => label)}
+            descriptions={dataSourceList?.map(({ description }) => description)}
+            data={dataSourceList?.map(({ label }) => label)}
             onSelect={v => {
               resetWidget()
               userUpdate({
                 dataSource: {
-                  type: dataSourceTypes.EXECUTIONS,
-                  id: v.split('[')[1].split(']')[0], // TODO something that is not this
+                  type: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
+                    dataSourceTypes.INSIGHTS_DATA :
+                    dataSourceTypes.EXECUTIONS,
+                  id: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
+                    dataSourceList.find(({ label }) => v === label).reportType :
+                    v.split('[')[1].split(']')[0], // TODO something that is not this
                 },
               })
             }
