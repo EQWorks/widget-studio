@@ -2,11 +2,11 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import MutedBarrier from '../muted-barrier'
 import MapValueSelect from './map-value-select'
-import CustomToggle from '../../../components/custom-toggle'
+import CustomButton from '../../../components/custom-button'
 import { useStoreActions, useStoreState } from '../../../store'
 import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
 
@@ -39,51 +39,52 @@ const XWIReportValueControls = ({ data, callback }) => {
       {
         categories: MAP_LAYER_VALUE_VIS.scatterplot,
         header: 'Source Layer',
-        switchLabel: 'mapHideSourceLayer',
-        switchState: genericOptions.mapHideSourceLayer,
+        buttonLabel: 'mapHideSourceLayer',
+        buttonState: genericOptions.mapHideSourceLayer,
       },
       {
         categories: MAP_LAYER_VALUE_VIS.targetScatterplot,
         header: 'Target Layer',
-        switchLabel: 'mapHideTargetLayer',
-        switchState: genericOptions.mapHideTargetLayer,
+        buttonLabel: 'mapHideTargetLayer',
+        buttonState: genericOptions.mapHideTargetLayer,
       },
       {
         categories: MAP_LAYER_VALUE_VIS.arc,
         header: 'Arc Layer',
-        switchLabel: 'mapHideArcLayer',
-        switchState: genericOptions.mapHideArcLayer,
+        buttonLabel: 'mapHideArcLayer',
+        buttonState: genericOptions.mapHideArcLayer,
       },
     ]
   ),[genericOptions.mapHideSourceLayer, genericOptions.mapHideTargetLayer, genericOptions.mapHideArcLayer])
 
   return (
-    XWI_MAP_LAYERS.map(({ categories, header, switchLabel, switchState }, i) => (
-      <div key={i} className={classes.layerValueControls}>
-        <div className={classes.layer}>
-          <div className={classes.layerHeader}>
-            {header}
+    XWI_MAP_LAYERS.map(({ categories, header, buttonState, buttonLabel }, i) => {
+      return (
+        <div key={i} className={classes.layerValueControls}>
+          <div className={classes.layer}>
+            <div className={classes.layerHeader}>
+              {header}
+            </div>
+            <CustomButton
+              onClick={() => {
+                userUpdate({ genericOptions: { [buttonLabel]: !buttonState } })
+              }}>
+              {!buttonState && <Icons.EyeOpen size='md' />}
+              {buttonState && <Icons.EyeClosed size='md' />}
+            </CustomButton>
           </div>
-          <CustomToggle
-            disabled={false}
-            value={switchState}
-            label='Hide'
-            onChange={() => {
-              userUpdate({ genericOptions: { [switchLabel]: !switchState } })
-            }}
-          />
+          <MutedBarrier
+            mute={buttonState}
+          >
+            <MapValueSelect
+              categories={categories}
+              values={mapValueKeys}
+              {...{ data, callback }}
+            />
+          </MutedBarrier>
         </div>
-        <MutedBarrier
-          mute={switchState}
-        >
-          <MapValueSelect
-            categories={categories}
-            values={mapValueKeys}
-            {...{ data, callback }}
-          />
-        </MutedBarrier>
-      </div>
-    ))
+      )
+    })
   )
 }
 
