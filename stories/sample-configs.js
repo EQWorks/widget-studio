@@ -966,6 +966,9 @@ export default {
       '#dd1c1a',
       '#463F3A',
     ],
+    'mapTooltipLabelTitles': {
+      'sourceTitle': 'Poi name',
+    },
   },
   'filter-test-1': {
     'title': 'Household income',
