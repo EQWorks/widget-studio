@@ -181,6 +181,7 @@ export const CENSUS_REGEX = {
 
 export const KEY_ALIASES = {
   'Poi id': 'POI ID',
+  'Poi name': 'POI name',
   'Locus poi id': 'POI ID',
   'Address region': 'Region',
   'Geo ca region': 'Region',
@@ -194,4 +195,6 @@ export const KEY_ALIASES = {
 export const XWI_KEY_ALIASES = {
   'Poi id': 'Source POI ID',
   'Target poi id': 'Target POI ID',
+  'Poi name': 'Source POI name',
+  'Target poi name': 'Target POI name',
 }
