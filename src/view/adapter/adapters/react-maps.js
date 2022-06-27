@@ -141,6 +141,7 @@ export default {
       mapValueKeys,
       formatDataKey,
       formatDataFunctions,
+      mapTooltipLabelTitles,
     } = config
     const {
       baseColor,
@@ -231,8 +232,8 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                tooltipTitle1: sourcePOIId,
-                tooltipTitle2: targetPOIId,
+                tooltipTitle1: mapTooltipLabelTitles?.soureTitle || sourcePOIId,
+                tooltipTitle2: mapTooltipLabelTitles?.targetTitle || targetPOIId,
                 metricKeys: arcLayerValueKeys,
               },
             },
@@ -282,7 +283,9 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                tooltipTitle1: i === 0 ? sourcePOIId : targetPOIId,
+                tooltipTitle1: i === 0 ?
+                  mapTooltipLabelTitles?.sourceTitle || sourcePOIId :
+                  mapTooltipLabelTitles?.targetTitle || targetPOIId,
                 metricKeys: longitude === targetLon ? targetLayerValueKeys : sourceLayerValueKeys,
               },
             },
@@ -340,7 +343,9 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                tooltipTitle1: mapGroupKeyTitle,
+                tooltipTitle1: mapLayer === MAP_LAYERS.scatterplot ?
+                  mapTooltipLabelTitles?.title || mapGroupKeyTitle :
+                  mapGroupKeyTitle,
               },
             },
           },
@@ -369,7 +374,9 @@ export default {
           visualizations: {
             text: {
               value: {
-                title: i === 0 ? 'Poi id' : 'Target poi id',
+                title: i === 0 ?
+                  mapTooltipLabelTitles?.sourceTitle || 'Poi id' :
+                  mapTooltipLabelTitles?.targetTitle || 'Target poi id',
                 valueKeys: mapValueKeys.filter(({ mapVis }) => (i === 0 ?
                   // filter the visualisations for source layer
                   MAP_LAYER_VALUE_VIS.scatterplot :
@@ -405,7 +412,9 @@ export default {
           visualizations: {
             text: {
               value: {
-                title: mapGroupKeyTitle,
+                title: mapLayer === mapLayer === MAP_LAYERS.scatterplot ?
+                  mapTooltipLabelTitles?.title || mapGroupKeyTitle :
+                  mapGroupKeyTitle,
                 valueKeys: mapValueKeys.map(vis => vis.title),
               },
             },
