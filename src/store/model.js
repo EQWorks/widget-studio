@@ -119,6 +119,7 @@ const stateDefaults = [
   { key: 'unsavedChanges', defaultValue: false, resettable: false },
   { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
   { key: 'formatDataKey', defaultValue: (label) => truncateString(label, 30), resettable: false },
+  { key: 'mapTooltipLabelTitles', defaultValue: null, resettable: false },
 ]
 
 export default {
@@ -149,6 +150,7 @@ export default {
       (state) => state.percentageMode,
       (state) => state.presetColors,
       (state) => state.dateAggregation,
+      (state) => state.mapTooltipLabelTitles,
     ],
     (
       title,
@@ -170,6 +172,7 @@ export default {
       percentageMode,
       presetColors,
       dateAggregation,
+      mapTooltipLabelTitles,
     ) => ({
       title,
       type,
@@ -192,6 +195,7 @@ export default {
       percentageMode,
       presetColors,
       dateAggregation,
+      mapTooltipLabelTitles,
     })),
 
   config: computed(
