@@ -80,6 +80,7 @@ const Widget = ({
   config: _config,
   sampleData,
   sampleConfigs,
+  mapTooltipLabelTitles,
 }) => {
   const classes = useStyles(_mode)
 
@@ -129,6 +130,7 @@ const Widget = ({
         staticData,
       },
       saveWithInsightsData,
+      mapTooltipLabelTitles,
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -163,7 +165,7 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType, onInsightsDataRequired, saveWithInsightsData])
+  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType, onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles])
 
   // load data if source changes
   useEffect(() => {
@@ -234,6 +236,7 @@ Widget.propTypes = {
   filters: PropTypes.arrayOf(PropTypes.object),
   onInsightsDataRequired: PropTypes.func,
   saveWithInsightsData: PropTypes.bool,
+  mapTooltipLabelTitles: PropTypes.object,
 }
 Widget.defaultProps = {
   className: '',
@@ -253,6 +256,7 @@ Widget.defaultProps = {
   filters: [],
   onInsightsDataRequired: () => {},
   saveWithInsightsData: false,
+  mapTooltipLabelTitles: null,
 }
 
 export default withQueryClient(withStore(Widget))
