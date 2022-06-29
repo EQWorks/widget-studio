@@ -6,13 +6,19 @@ import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreActions, useStoreState } from '../../store'
 import typeInfo from '../../constants/type-info'
+import UserValueControls from '../../user-controls/user-value-controls'
 
 
-const classes = makeStyles({
+const useStyles = (renderUserControlValues) => makeStyles({
   container: {
     position: 'relative',
     width: '100%',
     height: '100%',
+  },
+  widget: {
+    // 64px is the height of the WidgetValueControls container
+    height: renderUserControlValues ? 'calc(100% - 64px)' : '100%',
+    padding: renderUserControlValues ? '1rem' : 0,
   },
 })
 
@@ -34,6 +40,9 @@ const WidgetAdapter = () => {
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const transformedData = useStoreState((state) => state.transformedData)
+  const addBenchmark = useStoreState((state) => state.addBenchmark)
+  const benchmarkHeadline = useStoreState((state) => state.benchmarkHeadline)
+  const benchmarkKeyValues = useStoreState((state) => state.benchmarkKeyValues)
   const { ref, width, height } = useResizeDetector({
     refreshMode: 'debounce',
     refreshRate: 100,
@@ -42,6 +51,12 @@ const WidgetAdapter = () => {
   useEffect(() => {
     ref?.current && update({ ui: { screenshotRef: ref.current } })
   }, [ref, update])
+
+  const renderUserControlValues = useMemo(() => Boolean(addBenchmark &&
+    (benchmarkHeadline || benchmarkKeyValues.length > 0))
+  , [addBenchmark, benchmarkHeadline, benchmarkKeyValues])
+
+  const classes = useStyles(renderUserControlValues)
 
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
@@ -53,8 +68,15 @@ const WidgetAdapter = () => {
   // render the component
   return (
     <div ref={ref} className={classes.container} >
-      {createElement(component, { width, height, ...adaptedDataAndConfig }
-      )}
+      {addBenchmark && (benchmarkHeadline || benchmarkKeyValues.length > 0) &&
+        <UserValueControls/>
+      }
+      <div className={classes.widget}>
+        {/* 64 is the height of the WidgetValueControls container */}
+        {createElement(component,
+          { width, height: renderUserControlValues ? height - 64 : height, ...adaptedDataAndConfig }
+        )}
+      </div>
     </div>
   )
 }
