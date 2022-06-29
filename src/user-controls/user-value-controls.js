@@ -62,7 +62,16 @@ const UserValueControls = () => {
               valueKeys.pop()
             }
             const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
-            valueKeysCopy.push({ key: dataKey, title: formattedColumnNames[dataKey], agg: 'unique' })
+            // test if we use any type of aggregations for the valueKeys data
+            const useAgg = JSON.stringify(valueKeys[0]).includes('agg')
+            valueKeysCopy.push(
+              {
+                key: dataKey,
+                title: formattedColumnNames[dataKey],
+                // only add 'agg' key if we have aggregation operation attached to the value key in the valueKeys array
+                ...(useAgg && { ['agg']: 'unique' }),
+              }
+            )
             userUpdate({ valueKeys: valueKeysCopy })
           }}
         >
