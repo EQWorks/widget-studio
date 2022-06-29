@@ -238,6 +238,7 @@ Widget.propTypes = {
   saveWithInsightsData: PropTypes.bool,
   mapTooltipLabelTitles: PropTypes.object,
 }
+
 Widget.defaultProps = {
   className: '',
   allowOpenInEditor: true,
