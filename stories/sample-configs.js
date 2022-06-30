@@ -916,4 +916,62 @@ export default {
       '#366fe4',
     ],
   },
+  'dev-pyramid-1': {
+    'title': 'My example pyramid widget',
+    'type': 'pyramid',
+    'filters': [
+      {
+        'key': 'city_clicks',
+        'filter': [
+          30,
+          138,
+        ],
+      },
+    ],
+    'groupFilter': [],
+    'valueKeys': [
+      {
+        'key': 'converted_users',
+        'title': 'Converted users (mean)',
+        'agg': 'mean',
+      },
+      {
+        'key': 'city_clicks',
+        'title': 'City clicks (sum)',
+        'agg': 'sum',
+      },
+    ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
+    'group': true,
+    'groupKey': 'geo_ca_city',
+    'mapGroupKey': null,
+    'indexKey': null,
+    'groupKeyTitle': 'Geo ca city',
+    'uniqueOptions': {
+      'showPercentage': false,
+      'showTicks': true,
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLegend': true,
+      'subPlots': false,
+      'size': 0.6,
+      'titlePosition': [
+        0,
+        1,
+      ],
+      'legendPosition': [
+        1,
+        1,
+      ],
+      'baseColor': '#366fe4',
+      'xAxisLabelLength': 5
+    },
+    'dataSource': {
+      'type': 'Saved query',
+      'id': '187',
+    },
+  },
 }
