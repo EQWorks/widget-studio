@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
@@ -33,18 +33,21 @@ const classes = makeStyles({
       color: getTailwindConfigColor('primary-500'),
       borderBottom: `0.125rem solid ${getTailwindConfigColor('primary-500')}`,
     },
-    '&:hover': {
-      outline: 'none',
-    },
+  },
+  selectedKey: {
+    color: getTailwindConfigColor('primary-500'),
+    borderBottom: `0.125rem solid ${getTailwindConfigColor('primary-500')}`,
   },
 })
 
 const UserValueControls = () => {
-  const userUpdate = useStoreActions(actions => actions.userUpdate)
+  const update = useStoreActions(actions => actions.userUpdate)
   const benchmarkHeadline = useStoreState((state) => state.benchmarkHeadline)
   const benchmarkKeyValues = useStoreState((state) => state.benchmarkKeyValues)
   const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const valueKeys = useStoreState((state) => state.valueKeys)
+
+  const [selectedIndex, setSelectedIndex] = useState()
 
   return (
     <div className={classes.benchmarkContainer}>
@@ -56,8 +59,12 @@ const UserValueControls = () => {
       {benchmarkKeyValues.map((dataKey, i) => (
         <button
           key={i}
-          className={classes.benchmarkItems}
+          className={selectedIndex === i ?
+            `${classes.benchmarkItems} ${classes.selectedKey}` :
+            `${classes.benchmarkItems}`
+          }
           onClick={() => {
+            setSelectedIndex(i)
             if (valueKeys.length > 1) {
               valueKeys.pop()
             }
@@ -72,7 +79,7 @@ const UserValueControls = () => {
                 ...(useAgg && { ['agg']: 'unique' }),
               }
             )
-            userUpdate({ valueKeys: valueKeysCopy })
+            update({ valueKeys: valueKeysCopy })
           }}
         >
           {formattedColumnNames[dataKey]}
