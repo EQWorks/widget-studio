@@ -29,7 +29,7 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
-        padding: '1.071rem 1.429rem',
+        padding: '0.938rem 1.25rem',
         borderBottom: `1px solid ${getTailwindConfigColor('secondary-300')}`,
       },
       titleContainer: {
@@ -42,7 +42,6 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         height: '1.429rem',
       },
       content: {
-        padding: '0 0.143rem',
         paddingTop: '0 !important',
         '&:first-child': {
           marginTop: '0 !important',

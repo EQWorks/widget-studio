@@ -17,7 +17,7 @@ const useStyles = ({ isLeft, dataSourceLoading }) => makeStyles({
       : { borderLeft: `1px solid ${getTailwindConfigColor('secondary-300')}` }
     ),
     position: 'relative',
-    width: '17.857rem !important',
+    width: '21.875rem !important',
     display: 'flex',
     flexDirection: 'column',
   },
