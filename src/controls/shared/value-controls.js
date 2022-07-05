@@ -10,6 +10,7 @@ import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderRow } from './util'
 import MutedBarrier from './muted-barrier'
 import CustomSelect from '../../components/custom-select'
+import types from '../../constants/types'
 
 
 const ValueControls = () => {
@@ -45,6 +46,7 @@ const ValueControls = () => {
             Icons.Sum,
           ],
         })}
+      staticQuantity={type === types.PYRAMID ? 2 : null}
       titles={['Column', 'Operation']}
       values={valueKeys}
       valueIcons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
