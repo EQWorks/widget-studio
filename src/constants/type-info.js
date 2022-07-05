@@ -77,7 +77,7 @@ export default {
     },
   },
   [types.PYRAMID]: {
-    icon: Icons.BarChart,
+    icon: Icons.PyramidChart,
     adapter: PlotlyAdapters[types.PYRAMID],
     mustGroup: true,
     uniqueOptions: {
