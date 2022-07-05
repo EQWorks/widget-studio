@@ -13,12 +13,12 @@ export const EXCLUDE_NUMERIC = [
 
 export const EXCLUDE_NUMERIC_ENDINGS = ['name', 'type', 'id']
 
-export const columnTypes = {
-  NUMERIC: 'Numeric',
-  DATE: 'Date',
-  STRING: 'String',
-  PRICE: 'Price',
-}
+export const columnTypes = [
+  'Numeric',
+  'Date',
+  'String',
+  'Price',
+].reduce((a, v) => ({ ...a, [v.toUpperCase()]: v }), {})
 
 export const columnTypeInfo = {
   // 'primitives':

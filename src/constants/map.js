@@ -1,28 +1,28 @@
-export const MAP_LAYERS = {
-  scatterplot: 'scatterplot',
-  targetScatterplot: 'targetScatterplot',
-  // MVT: 'MVT',
-  geojson: 'geojson',
-  arc: 'arc',
-  icon: 'icon',
-}
+
+export const MAP_LAYERS = [
+  'scatterplot',
+  'targetScatterplot',
+  'geojson',
+  'arc',
+  'icon',
+].reduce((a, v) => ({ ...a, [v]: v }), {})
 
 // visualizations used in Value Configuration
-export const MAP_VALUE_VIS = {
-  radius: 'radius',
-  elevation: 'elevation',
-  fill: 'fill',
-  targetRadius: 'targetRadius',
-  targetFill: 'targetFill',
-  arcWidth: 'arcWidth',
-}
+export const MAP_VALUE_VIS = [
+  'radius',
+  'elevation',
+  'fill',
+  'targetRadius',
+  'targetFill',
+  'arcWidth',
+].reduce((a, v) => ({ ...a, [v]: v }), {})
 
 // other visualizations
-export const MAP_VIS_OTHERS = {
-  lineWidth: 'lineWidth',
-  lineColor: 'lineColor',
-  size: 'size',
-}
+export const MAP_VIS_OTHERS = [
+  'lineWidth',
+  'lineColor',
+  'size',
+].reduce((a, v) => ({ ...a, [v]: v }), {})
 
 export const MAP_LAYER_VALUE_VIS = {
   scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
