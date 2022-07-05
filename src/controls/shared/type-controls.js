@@ -113,7 +113,7 @@ const useStyles = ({ mode = modes.EDITOR }) => makeStyles(
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
         columnGap: '2.688rem',
-        rowGap: '1.25rem'
+        rowGap: '1.25rem',
       },
       icon: {
         ...baseIconStyle,

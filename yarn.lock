@@ -1355,10 +1355,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/chart-system@^0.6.3-alpha.12":
-  version "0.6.3-alpha.12"
-  resolved "https://npm.pkg.github.com/download/@eqworks/chart-system/0.6.3-alpha.12/e2a06e70f148d4815a392373b98ea5ffc6b29e8937fba6ff701bc69f6a84d7e6#95eb897548ef32d9ca4aaaa5b3f2bf4553c84b55"
-  integrity sha512-iDRvYP5sh+w7tOfOjafKQpeTt8b+jahiSEkyBPVq/+h6DvgEgjZqepVS86airW2o7Ez/128QnHHz0UuRck7TNQ==
+"@eqworks/chart-system@^0.7.0":
+  version "0.7.0"
+  resolved "https://npm.pkg.github.com/download/@eqworks/chart-system/0.7.0/19688512603597c2f31c9ec953eada2c3c6bbfa46e55349701c1c0cce4fbdd1f#02a0ad10cca7b1f8513a2ceb9e90ec6a349cfa3b"
+  integrity sha512-yTbSrAmtoWIMpx+rB7VHUy4rzRYLybXyvGgV/cOe4cqWYKt3HJLUQMCZvuYrxlMjKSgJ9tLO0Wv4xN8gYa+rUg==
   dependencies:
     "@nivo/bar" "^0.62.0"
     "@nivo/core" "^0.62.0"
@@ -1397,10 +1397,25 @@
     react-iframe "^1.8.0"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.47", "@eqworks/lumen-labs@^0.1.0-alpha.50":
+"@eqworks/lumen-labs@^0.1.0-alpha.47":
   version "0.1.0-alpha.50"
   resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.50/aeae4bac0c02ef58df27fd077e7295e6bff1b9c066f851d6fef86043282f3912#7e53764ca438351e0207f310da07d9f2045c4cb0"
   integrity sha512-L/SRIGmPZT3oePQO5PX7BNce3kJxfLwZF+qH7LrmEFOBcwmPCa/W7mpyrtAyDNqVDG852kiO3ibJ6dnItva1sQ==
+  dependencies:
+    "@headlessui/react" "^1.4.0"
+    clsx "^1.1.1"
+    goober "^2.0.39"
+    moment "^2.29.1"
+    prop-types "^15.7.2"
+    react-resize-detector "^6.7.6"
+    react-virtualized-auto-sizer "^1.0.5"
+    react-window "^1.8.6"
+    use-debounce "^7.0.1"
+
+"@eqworks/lumen-labs@^0.1.0-alpha.54":
+  version "0.1.0-alpha.54"
+  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.54/f77c47460d1545584b8ffe6b1a3580146ed0ba3a85829d7fb033ddce20a68e82#4cfcb17823cb6b8fe87cf7c5e155531465d3cdbe"
+  integrity sha512-uKzVhFZfXS5X9fGjT3rJy1SUBTk1saPuiWGK9rBO/N0hyQ20DGVdnxirBJnQ67qNGwcM3Rsu7VPoLfeEJOlQ0g==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"

@@ -58,7 +58,7 @@ export default {
     adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => {
       const { xAxisLabelLength, showWidgetTitle } = genericOptions
       let max = 0
-      
+
       data.forEach((val) => {
         config.valueKeys.forEach(({ title }) => {
           if (val[title] > max) {
@@ -68,9 +68,9 @@ export default {
       })
 
       const determineGraphVal = max > 10 ? getRoundToNumberDigit(max) : 10
-      let graphVals = determineGraphVal
+
       const xAxisValues = [...Array(xAxisLabelLength).keys()].map((val) => (
-        graphVals = (determineGraphVal / xAxisLabelLength) * (xAxisLabelLength - val)
+        (determineGraphVal / xAxisLabelLength) * (xAxisLabelLength - val)
       ))
 
       return ({
@@ -81,6 +81,6 @@ export default {
         ...uniqueOptions,
         ...genericOptions,
       })
-    }
+    },
   },
 }

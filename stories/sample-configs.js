@@ -967,7 +967,7 @@ export default {
         1,
       ],
       'baseColor': '#366fe4',
-      'xAxisLabelLength': 5
+      'xAxisLabelLength': 5,
     },
     'dataSource': {
       'type': 'Saved query',

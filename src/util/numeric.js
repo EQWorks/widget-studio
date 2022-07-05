@@ -21,5 +21,5 @@ export const getRoundToNumberDigit = (num) => {
     return Math.round((Number((num / roundTo).toFixed(1)) + .1) * roundTo)
   }
 
-  return Math.ceil(num / roundTo) * roundTo 
+  return Math.ceil(num / roundTo) * roundTo
 }
