@@ -394,9 +394,11 @@ const useTransformedData = () => {
             .catch(err => console.error(err))
         }
       } else if (group) {
-        percentageMode ?
-          update({ transformedData: percentageData }) :
+        if(percentageMode) {
+          update({ transformedData: percentageData })
+        } else {
           update({ transformedData: aggregatedData })
+        }
       } else {
         update({ transformedData: indexedData })
       }
