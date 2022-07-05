@@ -27,7 +27,7 @@ const EditorLeftSidebar = () => {
           : <>
             <DomainControls />
             <ValueControls />
-            <DataTransformationControls />
+            {type !== types.PYRAMID && <DataTransformationControls />}
           </>
       }
     </EditorSidebarBase>
