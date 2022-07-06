@@ -106,6 +106,7 @@ const WidgetView = () => {
   const transformedData = useStoreState((state) => state.transformedData)
   const domain = useStoreState((state) => state.domain)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -155,7 +156,7 @@ const WidgetView = () => {
       primary = 'Sorry, this data is empty.'
     } else if (!type) {
       primary = 'Select a widget type.'
-    } else if (!domain?.value || !renderableValueKeys?.length) {
+    } else if ((!domain?.value || !renderableValueKeys?.length) && !dataIsXWIReport) {
       primary = 'Select columns and configure your widget.'
     } else if (!transformedData?.length) {
       primary = 'This configuration resulted in an empty dataset.'
@@ -169,7 +170,19 @@ const WidgetView = () => {
       secondary = null
     }
     return { primary, secondary }
-  }, [columns?.length, dataSourceError, dataSourceID, dataSourceType, domain?.value, mode, renderableValueKeys?.length, rows.length, transformedData?.length, type])
+  }, [
+    columns?.length,
+    dataSourceError,
+    dataSourceID,
+    dataSourceType,
+    domain?.value,
+    mode,
+    renderableValueKeys?.length,
+    rows.length,
+    transformedData?.length,
+    dataIsXWIReport,
+    type,
+  ])
 
   const renderWidgetWarning = (
     <div className='h-full flex-1 flex flex-col justify-center items-center'>

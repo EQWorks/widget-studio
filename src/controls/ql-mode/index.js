@@ -22,6 +22,7 @@ const QLModeControls = ({ children }) => {
   const rows = useStoreState((state) => state.rows)
   const columns = useStoreState((state) => state.columns)
   const dataReady = useStoreState((state) => state.dataReady)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
   // UI state
   const showWidgetControls = useStoreState((state) => state.ui.showWidgetControls)
@@ -59,7 +60,7 @@ const QLModeControls = ({ children }) => {
           {
             type === types.MAP
               ? <>
-                <MapDomainControls />
+                {!dataIsXWIReport && <MapDomainControls />}
                 <MapValueControls />
               </>
               : <>

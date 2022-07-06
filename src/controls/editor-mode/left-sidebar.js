@@ -14,6 +14,8 @@ import DataSourceControls from './components/data-source-controls'
 
 const EditorLeftSidebar = () => {
   const type = useStoreState((state) => state.type)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+
   return (
     <EditorSidebarBase isLeft>
       <DataSourceControls />
@@ -21,7 +23,7 @@ const EditorLeftSidebar = () => {
       {
         type && type === types.MAP
           ? <>
-            <MapDomainControls />
+            {!dataIsXWIReport && <MapDomainControls />}
             <MapValueControls />
           </>
           : <>

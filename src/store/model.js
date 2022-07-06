@@ -4,14 +4,13 @@ import { computed, action, thunk, thunkOn } from 'easy-peasy'
 import types from '../constants/types'
 import typeInfo from '../constants/type-info'
 import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
-import { cleanUp } from '../util/string-manipulation'
+import { cleanUp, truncateString } from '../util/string-manipulation'
 import { createWidget, saveWidget, getWidget, localGetWidget, requestData } from '../util/api'
 import { geoKeyHasCoordinates } from '../util'
 import {
   MAP_LAYERS,
   MAP_GEO_KEYS,
   GEO_KEY_TYPES,
-  MAP_LAYER_VALUE_VIS,
   MAP_LAYER_GEO_KEYS,
   COORD_KEYS,
   GEO_KEY_TYPE_NAMES,
@@ -59,6 +58,9 @@ const stateDefaults = [
       showAxisTitles: true,
       showSubPlotTitles: true,
       showLabels: false,
+      mapHideSourceLayer: false,
+      mapHideTargetLayer: false,
+      mapHideArcLayer: false,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],
@@ -116,6 +118,8 @@ const stateDefaults = [
   { key: 'ignoreUndo', defaultValue: false, resettable: false },
   { key: 'unsavedChanges', defaultValue: false, resettable: false },
   { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
+  { key: 'formatDataKey', defaultValue: (label) => truncateString(label, 30), resettable: false },
+  { key: 'mapTooltipLabelTitles', defaultValue: null, resettable: false },
 ]
 
 export default {
@@ -136,6 +140,7 @@ export default {
       (state) => state.mapGroupKey,
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
+      (state) => state.formatDataKey,
       (state) => state.formatDataFunctions,
       (state) => state.genericOptions,
       (state) => state.uniqueOptions,
@@ -145,6 +150,7 @@ export default {
       (state) => state.percentageMode,
       (state) => state.presetColors,
       (state) => state.dateAggregation,
+      (state) => state.mapTooltipLabelTitles,
     ],
     (
       title,
@@ -156,6 +162,7 @@ export default {
       mapGroupKey,
       indexKey,
       renderableValueKeys,
+      formatDataKey,
       formatDataFunctions,
       genericOptions,
       uniqueOptions,
@@ -165,6 +172,7 @@ export default {
       percentageMode,
       presetColors,
       dateAggregation,
+      mapTooltipLabelTitles,
     ) => ({
       title,
       type,
@@ -172,6 +180,7 @@ export default {
       groupFilter,
       valueKeys: type !== types.MAP ? renderableValueKeys : [],
       mapValueKeys: type === types.MAP ? renderableValueKeys : [],
+      formatDataKey,
       formatDataFunctions,
       group,
       groupKey,
@@ -186,6 +195,7 @@ export default {
       percentageMode,
       presetColors,
       dateAggregation,
+      mapTooltipLabelTitles,
     })),
 
   config: computed(
@@ -225,22 +235,34 @@ export default {
 
   domain: computed(
     [
+      (state) => state.columnsAnalysis,
       (state) => state.group,
       (state) => state.type,
       (state) => state.mapGroupKey,
       (state) => state.indexKey,
       (state) => state.groupKey,
+      (state) => state.dataIsXWIReport,
     ],
     (
+      columnsAnalysis,
       group,
       type,
       mapGroupKey,
       indexKey,
       groupKey,
+      dataIsXWIReport,
     ) => {
       let res = {}
+      const dataKeys = Object.keys(columnsAnalysis) || []
+      const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
       if (type === types.MAP) {
-        res = { mapGroupKey }
+        if (!dataIsXWIReport) {
+          res = { mapGroupKey }
+        }
+        // TO CHANGE in the future: workaround to add a group key for xwi report data case for map widget
+        if (dataIsXWIReport) {
+          res = { mapGroupKey : sourcePOIId }
+        }
       } else if (!group) {
         res = { indexKey }
       } else {
@@ -282,7 +304,7 @@ export default {
       (state) => state.mapGroupKey,
     ],
     (mapGroupKey) =>
-      Object.keys(MAP_LAYER_VALUE_VIS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+      Object.keys(MAP_LAYERS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
   ),
 
   // determines to use postal code geo key to aggregate by FSA
@@ -377,6 +399,7 @@ export default {
       (state) => state.domain,
       (state) => state.transformedData,
       (state) => state.mapDataReady,
+      (state) => state.dataIsXWIReport,
       (state) => state.isLoading,
     ],
     (
@@ -387,10 +410,34 @@ export default {
       domain,
       transformedData,
       mapDataReady,
+      dataIsXWIReport,
       isLoading,
     ) => {
-      const mapReady = type !== types.MAP || mapDataReady
-      return mapReady && !isLoading && type && columns.length && rows.length && transformedData?.length && renderableValueKeys.length && domain.value
+      const isXWIReportMap = Boolean(type && type === types.MAP && dataIsXWIReport &&
+        columns.length && rows.length && transformedData?.arcData?.length)
+      const mapChartReady = type && (type !== types.MAP || mapDataReady)
+      return isXWIReportMap ||
+        Boolean(mapChartReady && !isLoading && columns.length && rows.length &&
+          transformedData?.length && renderableValueKeys.length && domain.value)
+    }),
+
+  dataIsXWIReport: computed(
+    [
+      (state) => state.columnsAnalysis,
+    ],
+    (
+      columnsAnalysis,
+    ) => {
+      const dataKeys = Object.keys(columnsAnalysis) || []
+      const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
+      const sourceLon = findCoord(COORD_KEYS.longitude)
+      const sourceLat = findCoord(COORD_KEYS.latitude)
+      const targetLon = findCoord(COORD_KEYS.targetLon)
+      const targetLat = findCoord(COORD_KEYS.targetLat)
+      const sourcePOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
+      const targetPOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
+      return Boolean(sourceLon && sourceLat && targetLon && targetLat &&
+        sourcePOIid && targetPOIid)
     }),
 
   /** checks if transformedData is in sync with the map layer, domain, & renderableValueKeys */
@@ -402,6 +449,7 @@ export default {
       (state) => state.transformedData,
       (state) => state.formattedColumnNames,
       (state) => state.mapLayer,
+      (state) => state.dataIsXWIReport,
     ],
     (
       type,
@@ -410,11 +458,12 @@ export default {
       transformedData,
       formattedColumnNames,
       mapLayer,
+      dataIsXWIReport,
     ) => {
-      if (type === types.MAP && transformedData?.length) {
+      if (type === types.MAP && !dataIsXWIReport && transformedData?.length) {
         const dataSample = transformedData[0] || {}
         const dataKeys = Object.keys(dataSample)
-        const mapGroupKeyTitle = formattedColumnNames[domain.value]
+        const mapGroupKeyTitle = formattedColumnNames[domain?.value] || null
         const dataIsValid = mapDataIsValid({ dataSample, mapGroupKeyTitle, renderableValueKeys })
         if (mapLayer === MAP_LAYERS.scatterplot) {
           const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
@@ -422,7 +471,7 @@ export default {
           return Boolean(latitude && longitude && dataIsValid)
         }
         if (mapLayer === MAP_LAYERS.geojson) {
-          return GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(domain.value) ?
+          return GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(domain?.value) ?
             mapDataIsValid({ dataSample: dataSample.properties, mapGroupKeyTitle, renderableValueKeys }) :
             dataIsValid
         }
@@ -585,7 +634,7 @@ export default {
     })
     const { sampleData, dataSource: previousDataSource, cu } = getState()
     const init = !previousDataSource?.id || !previousDataSource?.type
-    // TO DELETE: once Cox executions are not pulled from qldev stage
+    // TO DELETE: once Cox executions are not pulled from qldev stage, delete cu
     requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
         const { results: rows, columns, whitelabelID, customerID, clientToken } = data

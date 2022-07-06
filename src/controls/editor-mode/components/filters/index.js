@@ -24,6 +24,8 @@ const Filters = () => {
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const domain = useStoreState((state) => state.domain)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+
 
   const filterData = useMemo(() => (
     Object.fromEntries(Object.entries(columnsAnalysis)
@@ -104,7 +106,7 @@ const Filters = () => {
         renderSection(
           null,
           <>
-            {renderRow('Group Filter', renderGroupFilter)}
+            {renderRow(dataIsXWIReport ? 'Source Layer Group Filter' : 'Group Filter', renderGroupFilter)}
             {renderRow('Range Filters', renderRangeFilters)}
           </>
         )

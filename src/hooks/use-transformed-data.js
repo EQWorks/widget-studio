@@ -3,9 +3,15 @@ import { useEffect, useMemo, useCallback } from 'react'
 import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
 import { getRegionPolygons } from '../util/api'
-import { COORD_KEYS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES, GEO_KEY_TYPE_NAMES } from '../constants/map'
+import {
+  COORD_KEYS,
+  MAP_LAYER_GEO_KEYS,
+  GEO_KEY_TYPES,
+  GEO_KEY_TYPE_NAMES,
+} from '../constants/map'
 import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
+import { xwiAggData } from '../util/agg-map-xwi'
 import { latIsValid, lonIsValid, geoKeyIsValid } from '../util/geo-validation'
 import { dateAggregations, dateSort } from '../constants/time'
 import { columnTypes } from '../constants/columns'
@@ -36,8 +42,21 @@ const useTransformedData = () => {
   const domainIsDate = useStoreState((state) => state.domainIsDate)
   const dateAggregation = useStoreState((state) => state.dateAggregation)
   const propFilters = useStoreState((state) => state.propFilters)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
-  const finalGroupKey = useMemo(() => type === types.MAP ? mapGroupKey : groupKey, [type, mapGroupKey, groupKey])
+  const dataKeys = useMemo(() => Object.keys(columnsAnalysis || {}), [columnsAnalysis])
+
+  const finalGroupKey = useMemo(() => {
+    const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
+    if (type === types.MAP) {
+      // TO CHANGE: temporary workaround to enable one domain filter for xwi report
+      if (dataIsXWIReport) {
+        return sourcePOIId
+      }
+      return mapGroupKey
+    }
+    return groupKey
+  }, [dataKeys, type, dataIsXWIReport, mapGroupKey, groupKey])
 
   // normalize data using columnsAnalysis (ex. price to numeric)
   const normalizedData = useMemo(() => {
@@ -115,7 +134,6 @@ const useTransformedData = () => {
       : null
   ), [group, truncatedData, groupFSAByPC, newGroupKey])
 
-
   // relay some information about the grouped data to global store
   useEffect(() => {
     if (groupedData) {
@@ -124,11 +142,11 @@ const useTransformedData = () => {
       // whether the configured group key has produced data with any variance
       const data = Object.values(groupedData)
       if (data[0]) {
-        const testKey = Object.keys(data[0])[0]
+        const testKey = Object.keys(data[0]).find(key => columnsAnalysis[key].isNumeric)
         update({ dataHasVariance: data.some(g => g[testKey]?.length > 1) })
       }
     }
-  }, [update, groupedData])
+  }, [dataKeys, update, groupedData, columnsAnalysis])
 
   // if a filter on the finalGroupKey exists, retain only the desired groups
   const filteredGroupedData = useMemo(() => {
@@ -153,10 +171,9 @@ const useTransformedData = () => {
     return Object.fromEntries(Object.entries(groupedData).filter(([k]) => groupFilter?.includes(k)))
   }, [domainIsDate, group, groupFilter, groupedData])
 
-
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => {
-    if (!group) return null
+    if (!group || (type === types.MAP && dataIsXWIReport)) return null
     const formattedDomain = formattedColumnNames[finalGroupKey]
     if (domainIsDate && dateAggregations[dateAggregation]) {
       // extra grouping required if Domain is date
@@ -189,6 +206,8 @@ const useTransformedData = () => {
     })
   }, [
     group,
+    type,
+    dataIsXWIReport,
     domainIsDate,
     formattedColumnNames,
     dateAggregation,
@@ -218,9 +237,38 @@ const useTransformedData = () => {
     return res
   }, [aggregatedData, percentageMode, renderableValueKeys])
 
+  // special aggregation case for xwi report data to be used in map widget
+  const formatXWIReportData = useMemo(() => {
+    if (type && type === types.MAP && dataIsXWIReport && truncatedData?.length) {
+      const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
+      const targetPOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
+      const [arcData, sourceData, targetData] =
+        [[sourcePOIId, targetPOIId], sourcePOIId, targetPOIId].map((groupKey) =>
+          xwiAggData({
+            data: truncatedData,
+            groupKey,
+            sourcePOIId,
+            targetPOIId,
+            columnsAnalysis,
+            formattedColumnNames,
+            groupFilter,
+          }))
+      return { arcData, sourceData, targetData }
+    }
+    return {}
+  }, [
+    type,
+    dataIsXWIReport,
+    truncatedData,
+    columnsAnalysis,
+    dataKeys,
+    formattedColumnNames,
+    groupFilter,
+  ])
+
+  // enrich data with coords for scatterplot & geojson data; special aggregation for xwi-reports
   const getMapEnrichedData = useCallback(async () => {
-    if (type === types.MAP) {
-      //---TODO - Erika: complete this to include coordinates for xwi report; this is only for scatterplot layer
+    if ( type && type === types.MAP && !dataIsXWIReport) {
       // add coordinates for map widget data
       if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
         const lat = columns.find(({ name, category }) =>
@@ -228,7 +276,7 @@ const useTransformedData = () => {
         const lon = columns.find(({ name, category }) =>
           COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
         return aggregatedData.reduce((acc, d) => {
-          if (lat && lon && MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+          if (lat && lon) {
             if (latIsValid(d[lat]) && lonIsValid(d[lon])) {
               return [...acc, d]
             }
@@ -307,6 +355,7 @@ const useTransformedData = () => {
     return null
   }, [
     type,
+    dataIsXWIReport,
     aggregatedData,
     filteredGroupedData,
     columns,
@@ -317,7 +366,7 @@ const useTransformedData = () => {
 
   // simply format and sort data if grouping is not enabled
   const indexedData = useMemo(() => {
-    if (group) return null
+    if (group || dataIsXWIReport) return null
     const sortFn = domainIsDate
       ? (a, b) => dateSort(a[formattedColumnNames[indexKey]], b[formattedColumnNames[indexKey]])
       : (a, b) => (a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
@@ -331,23 +380,34 @@ const useTransformedData = () => {
         ))
         .sort(sortFn)
     )
-  }, [domainIsDate, formattedColumnNames, group, indexKey, truncatedData])
+  }, [domainIsDate, formattedColumnNames, group, indexKey, truncatedData, dataIsXWIReport])
 
   // update transformedData
   useEffect(() => {
-    if (type === types.MAP) {
-      getMapEnrichedData()
-        .then(data => update({ transformedData: data }))
-        .catch(err => console.error(err))
-    } else if (group) {
-      percentageMode ?
-        update({ transformedData: percentageData }) :
-        update({ transformedData: aggregatedData })
-    } else {
-      update({ transformedData: indexedData })
+    if (type && rows.length) {
+      if (type === types.MAP) {
+        if (dataIsXWIReport) {
+          update({ transformedData: formatXWIReportData })
+        } else {
+          getMapEnrichedData()
+            .then(data => update({ transformedData: data }))
+            .catch(err => console.error(err))
+        }
+      } else if (group) {
+        if(percentageMode) {
+          update({ transformedData: percentageData })
+        } else {
+          update({ transformedData: aggregatedData })
+        }
+      } else {
+        update({ transformedData: indexedData })
+      }
     }
   }, [
     type,
+    rows,
+    dataIsXWIReport,
+    formatXWIReportData,
     getMapEnrichedData,
     update,
     group,

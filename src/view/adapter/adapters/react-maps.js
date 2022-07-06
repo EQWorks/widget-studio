@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { useDebounce } from 'use-debounce'
-import { useStoreState, useStoreActions } from '../../../store'
-
 import { LocusMap } from '@eqworks/react-maps'
-import { getCursor } from '@eqworks/react-maps/dist/utils'
 import { makeStyles } from '@eqworks/lumen-labs'
 
+import { useStoreState, useStoreActions } from '../../../store'
 import modes from '../../../constants/modes'
+import { getLayerValueKeys } from '../../../util/map-layer-value-functions'
+import { pixelOffset } from '../../../util/map-text-layer-offset'
 import {
   COORD_KEYS,
   MAP_LAYERS,
@@ -26,6 +26,8 @@ import {
   MAX_ZOOM,
   MAP_TOAST_ZOOM_ADJUSTMENT,
   LABEL_OFFSET,
+  KEY_ALIASES,
+  XWI_KEY_ALIASES,
 } from '../../../constants/map'
 
 
@@ -133,11 +135,41 @@ Map.defaultProps = {
 export default {
   component: Map,
   adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
-    const { mapGroupKey, mapGroupKeyTitle, mapValueKeys } = config
-    const mapLayer = Object.keys(MAP_LAYER_VALUE_VIS)
+    const {
+      mapGroupKey,
+      mapGroupKeyTitle,
+      mapValueKeys,
+      formatDataKey,
+      formatDataFunctions,
+      mapTooltipLabelTitles,
+    } = config
+    const {
+      baseColor,
+      legendPosition,
+      legendSize,
+      showLegend,
+      showTooltip,
+      mapHideSourceLayer,
+      mapHideTargetLayer,
+      mapHideArcLayer,
+    } = genericOptions
+
+    const mapLayer = Object.keys(MAP_LAYERS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
-    const dataKeys = Object.keys(data[0])
+    const dataKeys = Object.keys(data.arcData ? data.arcData[0] : data[0] || {})
+
+    const findKey = keyArray => dataKeys?.find(key => keyArray.includes(key))
+
+    const sourcePOIId = findKey(MAP_LAYER_GEO_KEYS.scatterplot)
+    const targetPOIId = findKey(MAP_LAYER_GEO_KEYS.targetScatterplot)
+    const sourceLon = findKey(COORD_KEYS.longitude)
+    const sourceLat = findKey(COORD_KEYS.latitude)
+    const targetLon = findKey(COORD_KEYS.targetLon)
+    const targetLat = findKey(COORD_KEYS.targetLat)
+
+    const isXWIReportMap = Boolean(data.arcData)
+
     let finalData = data
     let geometry = {}
     let mapGroupKeyType = ''
@@ -166,59 +198,211 @@ export default {
 
     const { id, type } = config?.dataSource || {}
 
-    let layerConfig = [
-      {
-        layer: mapLayer,
-        dataId: `${id}-${type}`,
-        dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
-        geometry,
-        visualizations: Object.fromEntries(
-          MAP_LAYER_VALUE_VIS[mapLayer].concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
-            const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
-            /*
-            * we only allow to set the max elevation value, keeping the min=0, therefore,
-            * in Widget Studio in uniqueOptions, we work with one value to use in slider updates;
-            * however, the LocusMap receives an array valueOptions prop for elevation, hence
-            * the special case for elevation in this case
-            */
-            const visValue = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
-            return [
-              vis,
-              {
-                value: keyTitle ?
-                  { field: keyTitle } :
-                  visValue,
-                valueOptions: vis === MAP_VALUE_VIS.elevation ?
-                  [0, uniqueOptions[vis]?.value] :
-                  uniqueOptions[vis]?.valueOptions,
-                //----TO DO - ERIKA - add the LAYER_SCALE to state for editor when implementing constrols for scale
-                dataScale: LAYER_SCALE,
+    const arcLayerValueKeys =
+      getLayerValueKeys({ mapValueKeys, dataKeys, data: data?.arcData, layer: MAP_LAYERS.arc })
+    const sourceLayerValueKeys =
+      getLayerValueKeys({ mapValueKeys, dataKeys, data: data?.sourceData, layer: MAP_LAYERS.scatterplot })
+    const targetLayerValueKeys =
+      getLayerValueKeys({ mapValueKeys, dataKeys, data: data?.targetData, layer: MAP_LAYERS.targetScatterplot })
+
+    let layerConfig = isXWIReportMap ?
+      [
+        {
+          layer: MAP_LAYERS.arc,
+          dataId: `${id}-${type}-arc`,
+          geometry: {
+            source: { longitude: sourceLon, latitude: sourceLat },
+            target: { longitude: targetLon, latitude: targetLat },
+          },
+          visualizations: Object.fromEntries(
+            MAP_LAYER_VALUE_VIS.arc.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+              const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+              const visValue = uniqueOptions[vis]?.value
+              return [
+                vis,
+                {
+                  value: keyTitle ?
+                    { field: keyTitle } :
+                    visValue,
+                  valueOptions: uniqueOptions[vis]?.valueOptions,
+                  dataScale: LAYER_SCALE,
+                },
+              ]
+            })),
+          interactions: {
+            tooltip: {
+              tooltipKeys: {
+                tooltipTitle1: mapTooltipLabelTitles?.soureTitle || sourcePOIId,
+                tooltipTitle2: mapTooltipLabelTitles?.targetTitle || targetPOIId,
+                metricKeys: arcLayerValueKeys,
               },
-            ]
-          })),
-        formatData: config.formatDataFunctions,
-        interactions: {
-          tooltip: {
-            tooltipKeys: {
-              name: mapGroupKeyTitle,
             },
           },
+          legend: {
+            showLegend: true,
+            layerTitle: 'Arc Layer',
+          },
+          keyAliases: XWI_KEY_ALIASES,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
+          schemeColor: baseColor,
+          visible: !mapHideArcLayer,
         },
-        legend: { showLegend: true },
-        schemeColor: genericOptions.baseColor,
-        opacity: uniqueOptions.opacity.value / 100,
-        minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
-          MIN_ZOOM.postalCode :
-          MIN_ZOOM.defaultValue,
-        maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
-      },
-    ]
+      ].concat(
+        [
+          { dataId: `${id}-${type}-source`, longitude: sourceLon, latitude: sourceLat },
+          { dataId: `${id}-${type}-target`, longitude: targetLon, latitude: targetLat },
+        ].map(({ dataId, longitude, latitude }, i) => ({
+          layer: MAP_LAYER_VALUE_VIS[i === 0 ? 'scatterplot' : 'targetScatterplot']
+            .some(vis => JSON.stringify(mapValueKeys)?.includes(vis)) ?
+            MAP_LAYERS.scatterplot :
+            MAP_LAYERS.icon,
+          dataId,
+          geometry: { longitude, latitude },
+          visualizations: Object.fromEntries(
+            MAP_LAYER_VALUE_VIS.scatterplot.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+              const keyTitle = mapValueKeys.find(({ mapVis }) =>
+                (i === 1 && vis === MAP_VALUE_VIS.fill && mapVis === MAP_VALUE_VIS.targetFill) ||
+                (i === 1 && vis === MAP_VALUE_VIS.radius && mapVis === MAP_VALUE_VIS.targetRadius) ||
+                (mapVis === vis && !(i === 1 && (mapVis === MAP_VALUE_VIS.fill || mapVis === MAP_VALUE_VIS.radius))))
+                ?.title
+              const visValue = uniqueOptions[vis]?.value
+
+              return [
+                vis,
+                {
+                  value: keyTitle ?
+                    { field: keyTitle } :
+                    visValue,
+                  valueOptions: uniqueOptions[vis]?.valueOptions,
+                  dataScale: LAYER_SCALE,
+                },
+              ]
+            })
+          ),
+          interactions: {
+            tooltip: {
+              tooltipKeys: {
+                tooltipTitle1: i === 0 ?
+                  mapTooltipLabelTitles?.sourceTitle || sourcePOIId :
+                  mapTooltipLabelTitles?.targetTitle || targetPOIId,
+                metricKeys: longitude === targetLon ? targetLayerValueKeys : sourceLayerValueKeys,
+              },
+            },
+          },
+          legend: {
+            showLegend: true,
+            layerTitle: i === 0 ? 'Source Layer' : 'Target Layer',
+          },
+          keyAliases: XWI_KEY_ALIASES,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
+          // we don't apply opacity to icon layer for POI locations
+          opacity:  MAP_LAYER_VALUE_VIS[i === 0 ? 'scatterplot' : 'targetScatterplot']
+            .some(vis => JSON.stringify(mapValueKeys)?.includes(vis)) ?
+            uniqueOptions.opacity.value / 100 :
+            1,
+          isTargetLayer: i === 1,
+          schemeColor: baseColor,
+          visible: i === 0 ? !mapHideSourceLayer : !mapHideTargetLayer,
+        }))
+      ) :
+      [
+        {
+          layer: mapLayer,
+          dataId: `${id}-${type}`,
+          dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
+          geometry,
+          visualizations: Object.fromEntries(
+            MAP_LAYER_VALUE_VIS[mapLayer]?.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
+              const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+              /*
+              * we only allow to set the max elevation value, keeping the min=0, therefore,
+              * in Widget Studio in uniqueOptions, we work with one value to use in slider updates;
+              * however, the LocusMap receives an array valueOptions prop for elevation, hence
+              * the special case for elevation in this case
+              */
+              const visValue = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
+              return [
+                vis,
+                {
+                  value: keyTitle ?
+                    { field: keyTitle } :
+                    visValue,
+                  valueOptions: vis === MAP_VALUE_VIS.elevation ?
+                    [0, uniqueOptions[vis]?.value] :
+                    uniqueOptions[vis]?.valueOptions,
+                  //----TO DO - ERIKA - add the LAYER_SCALE to state for editor when implementing constrols for scale
+                  dataScale: LAYER_SCALE,
+                },
+              ]
+            })),
+          keyAliases: KEY_ALIASES,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
+          interactions: {
+            tooltip: {
+              tooltipKeys: {
+                tooltipTitle1: mapLayer === MAP_LAYERS.scatterplot ?
+                  mapTooltipLabelTitles?.title || mapGroupKeyTitle :
+                  mapGroupKeyTitle,
+              },
+            },
+          },
+          legend: { showLegend: true },
+          schemeColor: baseColor,
+          opacity: uniqueOptions.opacity.value / 100,
+          minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+            MIN_ZOOM.postalCode :
+            MIN_ZOOM.defaultValue,
+          maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
+        },
+      ]
 
     const radiusValue = uniqueOptions?.radius?.value
     const { showLabels } = genericOptions || {}
 
-    layerConfig = showLabels && !JSON.stringify(mapValueKeys)?.includes(MAP_VALUE_VIS.elevation) ?
-      [
+    if (showLabels && isXWIReportMap) {
+      layerConfig = layerConfig.concat(
+        [
+          { dataId: `${id}-${type}-source`, longitude: sourceLon, latitude: sourceLat },
+          { dataId: `${id}-${type}-target`, longitude: targetLon, latitude: targetLat },
+        ].map(({ dataId, longitude, latitude }, i) => ({
+          layer: 'text',
+          dataId,
+          geometry: { longitude, latitude },
+          visualizations: {
+            text: {
+              value: {
+                title: i === 0 ?
+                  mapTooltipLabelTitles?.sourceTitle || 'Poi id' :
+                  mapTooltipLabelTitles?.targetTitle || 'Target poi id',
+                valueKeys: mapValueKeys.filter(({ mapVis }) => (i === 0 ?
+                  // filter the visualisations for source layer
+                  MAP_LAYER_VALUE_VIS.scatterplot :
+                  // filter the visualisations for target layer
+                  MAP_LAYER_VALUE_VIS.targetScatterplot)
+                  .includes(mapVis))
+                  .map(vis => vis.title),
+              },
+            },
+            size: { value: 12 },
+            pixelOffset: {
+              value:  [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point],
+            },
+          },
+          keyAliases: XWI_KEY_ALIASES,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
+          interactions: {},
+          visible: i === 0 ? !mapHideSourceLayer : !mapHideTargetLayer,
+        }))
+      )
+    }
+
+    if (showLabels && !isXWIReportMap &&
+        !JSON.stringify(mapValueKeys)?.includes(MAP_VALUE_VIS.elevation)) {
+      layerConfig = [
         ...layerConfig,
         {
           layer: 'text',
@@ -228,37 +412,50 @@ export default {
           visualizations: {
             text: {
               value: {
-                title: mapGroupKeyTitle,
+                title: mapLayer === mapLayer === MAP_LAYERS.scatterplot ?
+                  mapTooltipLabelTitles?.title || mapGroupKeyTitle :
+                  mapGroupKeyTitle,
                 valueKeys: mapValueKeys.map(vis => vis.title),
               },
             },
             pixelOffset: {
-              value: mapLayer === MAP_LAYERS.scatterplot ?
-                [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point] :
-                [LABEL_OFFSET.polygon, 0],
+              value: pixelOffset({ mapLayer, radiusValue }),
             },
           },
-          formatData: config.formatDataFunctions,
+          keyAliases: KEY_ALIASES,
+          formatDataKey,
+          formatDataValue: formatDataFunctions,
           interactions: {},
         },
-      ] :
-      layerConfig
+      ]
+    }
 
     return ({
-      dataConfig: [{ id: `${id}-${type}`, data: finalData }],
+      dataConfig: isXWIReportMap ?
+        [
+          { id: `${id}-${type}-arc`, data: finalData.arcData },
+          { id: `${id}-${type}-source`, data: finalData.sourceData },
+          { id: `${id}-${type}-target`, data: finalData.targetData },
+        ] :
+        [
+          { id: `${id}-${type}`, data: finalData },
+        ],
       layerConfig,
       mapConfig: {
-        cursor: (layers) => getCursor({ layers }),
-        legendPosition: MAP_LEGEND_POSITION[JSON.stringify(genericOptions.legendPosition)],
-        legendSize: MAP_LEGEND_SIZE[genericOptions.legendSize],
+        legendPosition: MAP_LEGEND_POSITION[JSON.stringify(legendPosition)],
+        legendSize: MAP_LEGEND_SIZE[legendSize],
         mapboxApiAccessToken: process.env.MAPBOX_ACCESS_TOKEN ||
           process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
-        showMapLegend: genericOptions.showLegend,
-        showMapTooltip: genericOptions.showTooltip,
+        showMapLegend: showLegend,
+        showMapTooltip: showTooltip,
         initViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
           uniqueOptions.mapViewState.postalCode :
           uniqueOptions.mapViewState.value,
-        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ?
+        pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ||
+          (isXWIReportMap &&
+          (!mapHideArcLayer ||
+            ![...MAP_LAYER_VALUE_VIS.scatterplot, ...MAP_LAYER_VALUE_VIS.targetScatterplot]
+              .some(vis => JSON.stringify(mapValueKeys)?.includes(vis)))) ?
           PITCH.elevation :
           PITCH.default,
       },

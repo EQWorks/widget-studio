@@ -48,3 +48,24 @@ export const cleanUp = s => (
 )
 export const getLongestString = arr => arr.reduce((a, b) => (a.length > b.length ? a : b))
 export const isString = v => typeof v === 'string' || v instanceof String
+
+/**
+ * truncateString - returns formatted string, by truncating to a certain nr of characters
+ * @param { string } fullStr - string to format
+ * @param { number } strLen - length of formatted string
+ * @param { string } separator - string to separate formatted string
+ * @returns { string } - formatted string
+ */
+export const truncateString = (fullStr, strLen, separator = ' ... ') => {
+  if (fullStr?.length <= strLen) {
+    return fullStr
+  }
+  const sepLen = separator.length
+  const charsToShow = strLen - sepLen
+  const frontChars = Math.floor(charsToShow / 2)
+  const endChars = Math.ceil(charsToShow / 2)
+
+  return fullStr?.toString()?.substring(0, frontChars) +
+         separator +
+         fullStr?.toString()?.substring(fullStr.length + 1 - endChars)
+}

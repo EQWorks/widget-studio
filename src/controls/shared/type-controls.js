@@ -163,6 +163,7 @@ const WidgetTypeControls = () => {
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const mode = useStoreState((state) => state.ui.mode)
   const dataReady = useStoreState((state) => state.dataReady)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
 
   const classes = useStyles({ mode })
 
@@ -172,7 +173,7 @@ const WidgetTypeControls = () => {
         <div className={classes.outerContainer}>
           {
             Object.entries(typeInfo).map(([type, { mustGroup, icon: Icon, uniqueOptions }], i) => {
-              const disabled = type === types.MAP && !(validMapGroupKeys?.length)
+              const disabled = type === types.MAP && !(validMapGroupKeys?.length || dataIsXWIReport)
               let styles = [classes.icon]
               disabled && styles.unshift(classes.disabledIcon)
               type === selectedType && styles.unshift(classes.selectedIcon)

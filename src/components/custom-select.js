@@ -63,9 +63,7 @@ const CustomSelect = ({
     multiSelect={multiSelect}
     data={transformedData}
     value={transformedValue}
-    onSelect={(_, v) => {
-      onSelect(getTransformedTarget(v))
-    }}
+    onSelect={(_, v) => onSelect(getTransformedTarget(v))}
     {...props}
   />
 }
@@ -80,7 +78,7 @@ CustomSelect.propTypes = {
   onClear: PropTypes.func,
   fullWidth: PropTypes.bool,
   icons: PropTypes.arrayOf(PropTypes.elementType),
-  descriptions: PropTypes.arrayOf(PropTypes.string),
+  descriptions: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.node])),
 }
 CustomSelect.defaultProps = {
   classes: {},

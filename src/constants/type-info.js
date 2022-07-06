@@ -1,5 +1,3 @@
-import React from 'react'
-
 import types from './types'
 import { Icons } from '@eqworks/lumen-labs'
 import LocalAdapters from '../view/adapter/adapters/local'
@@ -106,12 +104,10 @@ export default {
           value: 10,
           valueOptions: [5, 15],
         },
-        info: (
-          <div>
-            <p>Calculate radius based on the </p>
-            <p>selected column and operation.</p>
-          </div>
-        ),
+        info: {
+          standard: 'Calculate radius based on the selected column and operation.',
+          xwiReport: 'Calculate radius based on the selected column.',
+        },
         min: 0,
         max: 100,
         step: 1,
@@ -124,12 +120,52 @@ export default {
           value: [39, 85, 196],
           valueOptions: [[214, 232, 253], [39, 85, 196]],
         },
-        info: (
-          <div>
-            <p>Calculate fill color based on the </p>
-            <p>selected column and operation.</p>
-          </div>
-        ),
+        info: {
+          standard: 'Calculate fill color based on the selected column and operation.',
+          xwiReport: 'Calculate fill color based on the selected column.',
+        },
+      },
+      targetRadius: {
+        name: 'Radius (px)',
+        valueConfigName: 'Radius',
+        type: Object,
+        defaultValue: {
+          value: 10,
+          valueOptions: [5, 15],
+        },
+        info: {
+          xwiReport: 'Calculate radius based on the selected column.',
+        },
+        min: 0,
+        max: 100,
+        step: 1,
+      },
+      targetFill: {
+        name: 'Color Fill',
+        valueConfigName: 'Color Fill',
+        type: Object,
+        defaultValue: {
+          value: [39, 85, 196],
+          valueOptions: [[214, 232, 253], [39, 85, 196]],
+        },
+        info: {
+          xwiReport: 'Calculate fill color based on the selected column.',
+        },
+      },
+      arcWidth: {
+        name: 'Arc Width',
+        valueConfigName: 'Arc Width',
+        type: Object,
+        defaultValue: {
+          value: 1,
+          valueOptions: [1, 20],
+        },
+        info: {
+          xwiReport: 'Calculate arc width based on the selected colum.',
+        },
+        min: 0,
+        max: 20,
+        step: 1,
       },
       elevation: {
         name: 'Elevation Height',
@@ -141,12 +177,9 @@ export default {
         min: 0,
         max: 500000,
         step: 1,
-        info: (
-          <div>
-            <p>Calculate elevation height based on</p>
-            <p>the selected column and operation.</p>
-          </div>
-        ),
+        info: {
+          standard: 'Calculate elevation height based on the selected column and operation.',
+        },
       },
       lineWidth: {
         name: 'Outline Width',
@@ -167,6 +200,13 @@ export default {
         min: 0,
         max: 100,
         step: 1,
+      },
+      size: {
+        name: 'Size',
+        type: Number,
+        defaultValue: {
+          value: 4,
+        },
       },
       mapViewState: {
         name: 'View State',
@@ -190,14 +230,12 @@ export default {
     icon: Icons.Hash,
     adapter: LocalAdapters[types.STAT],
     mustGroup: false,
-    uniqueOptions: {
-    },
+    uniqueOptions: {},
   },
   [types.TABLE]: {
     icon: Icons.Table,
     adapter: LocalAdapters[types.TABLE],
     mustGroup: false,
-    uniqueOptions: {
-    },
+    uniqueOptions: {},
   },
 }

@@ -1,13 +1,13 @@
 import { convert12to24 } from '../util/time'
 
 
-export const DATE_RESOLUTIONS = {
-  NONE: 'None',
-  HOUR: 'Hour',
-  DAY: 'Day',
-  MONTH: 'Month',
-  YEAR: 'Year',
-}
+export const DATE_RESOLUTIONS = [
+  'None',
+  'Hour',
+  'Day',
+  'Month',
+  'Year',
+].reduce((a, v) => ({ ...a, [v.toUpperCase()]: v }), {})
 var MONTHS_ORDER = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 var DAYS_ORDER = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 

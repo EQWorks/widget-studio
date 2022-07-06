@@ -1,26 +1,36 @@
-export const MAP_LAYERS = {
-  scatterplot: 'scatterplot',
-  // MVT: 'MVT',
-  geojson: 'geojson',
-}
+
+export const MAP_LAYERS = [
+  'scatterplot',
+  'targetScatterplot',
+  'geojson',
+  'arc',
+  'icon',
+].reduce((a, v) => ({ ...a, [v]: v }), {})
 
 // visualizations used in Value Configuration
-export const MAP_VALUE_VIS = {
-  radius: 'radius',
-  elevation: 'elevation',
-  fill: 'fill',
-}
+export const MAP_VALUE_VIS = [
+  'radius',
+  'elevation',
+  'fill',
+  'targetRadius',
+  'targetFill',
+  'arcWidth',
+].reduce((a, v) => ({ ...a, [v]: v }), {})
 
 // other visualizations
-export const MAP_VIS_OTHERS = {
-  lineWidth: 'lineWidth',
-  lineColor: 'lineColor',
-}
+export const MAP_VIS_OTHERS = [
+  'lineWidth',
+  'lineColor',
+  'size',
+].reduce((a, v) => ({ ...a, [v]: v }), {})
 
 export const MAP_LAYER_VALUE_VIS = {
   scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
+  targetScatterplot: [MAP_VALUE_VIS.targetFill, MAP_VALUE_VIS.targetRadius],
   // MVT: [MAP_VALUE_VIS.fill],
   geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
+  arc: [MAP_VALUE_VIS.arcWidth],
+  icon: [],
 }
 
 export const GEO_KEY_TYPES = {
@@ -45,18 +55,17 @@ export const GEO_KEY_TYPE_NAMES = Object.keys(GEO_KEY_TYPES).reduce((acc, curr) 
 export const MAP_LAYER_GEO_KEYS = {
   scatterplot: [
     'poi',
+    'Poi',
     'poi_id',
+    'Poi id',
     'locus_poi_id',
+    'Locus poi id',
   ],
-  // geojson: Object.values(GEO_KEY_TYPES).flat(),
-  // just remove for the moment postal codes, da & ct
-  geojson: [
-    ...GEO_KEY_TYPES.fsa,
-    ...GEO_KEY_TYPES.postalcode,
-    ...GEO_KEY_TYPES.ct,
-    ...GEO_KEY_TYPES.da,
-    ...GEO_KEY_TYPES.region,
-  ],
+  targetScatterplot: ['target_poi_id', 'Target poi id'],
+  // arc layer has no specific & unique geo keys to be identified with
+  arc: [],
+  geojson: Object.values(GEO_KEY_TYPES).flat(),
+  icon: [],
 }
 
 export const MAP_GEO_KEYS = Object.values(MAP_LAYER_GEO_KEYS).flat()
@@ -89,6 +98,8 @@ export const COORD_KEYS = {
     'poi_lat',
     'poi_latitude',
     'locus_poi_lat',
+    'source_lat',
+    'source_latitude',
   ],
   longitude: [
     'lon',
@@ -97,18 +108,30 @@ export const COORD_KEYS = {
     'poi_lon',
     'poi_longitude',
     'locus_poi_lon',
-  ],
-  other: [
-    // TO DO: enable for xwi reports
-    'source_lat',
-    'source_latitude',
-    'source_lat',
-    'source_latitude',
     'source_lon',
+    'source_lng',
     'source_longitude',
-    'target_lon',
-    'target_longitude',
   ],
+  // targetPOI coords need to be separated because they are the markers for xwi-reports
+  targetLon: [
+    'target_lon',
+    'target_lg',
+    'target_longitude',
+    'target_poi_lon',
+    'target_poi_lg',
+    'target_poi_longitude',
+  ],
+  targetLat: [
+    'target_lat',
+    'target_latitude',
+    'target_poi_lat',
+    'target_poi_latitude',
+  ],
+}
+
+export const XWI_REPORT = {
+  target: 'target',
+  source: 'poi',
 }
 
 export const LAYER_SCALE = 'linear'
@@ -154,4 +177,24 @@ export const CENSUS_REGEX = {
   ct: /^[0-9]{7}[.][0-9]{2}/g,
   da: /^[0-9]{8}/g,
   region: /^(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)/g,
+}
+
+export const KEY_ALIASES = {
+  'Poi id': 'POI ID',
+  'Poi name': 'POI name',
+  'Locus poi id': 'POI ID',
+  'Address region': 'Region',
+  'Geo ca region': 'Region',
+  'Geo ca postal code': 'Postal code',
+  'Address postalcode': 'Postal code',
+  'Geo ca fsa': 'FSA',
+  'Geo ca da': 'DA',
+  'Geo can ct': 'CT',
+}
+
+export const XWI_KEY_ALIASES = {
+  'Poi id': 'Source POI ID',
+  'Target poi id': 'Target POI ID',
+  'Poi name': 'Source POI name',
+  'Target poi name': 'Target POI name',
 }
