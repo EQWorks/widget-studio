@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
@@ -46,8 +46,16 @@ const UserValueControls = () => {
   const benchmarkKeyValues = useStoreState((state) => state.benchmarkKeyValues)
   const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const valueKeys = useStoreState((state) => state.valueKeys)
+  const renderableValueKeys = useStoreState((state) => state. renderableValueKeys)
 
   const [selectedIndex, setSelectedIndex] = useState()
+
+  // set selected benchmark key index
+  useEffect(() => {
+    if (selectedIndex === undefined && renderableValueKeys.length > 1) {
+      setSelectedIndex(benchmarkKeyValues.indexOf(renderableValueKeys[1].key))
+    }
+  }, [selectedIndex, renderableValueKeys, benchmarkKeyValues])
 
   return (
     <div className={classes.benchmarkContainer}>
