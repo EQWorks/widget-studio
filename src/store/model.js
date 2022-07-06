@@ -85,7 +85,7 @@ const stateDefaults = [
   { key: 'reportType', defaultValue: null, resettable: true },
   { key: 'percentageMode', defaultValue: false, resettable: true },
   { key: 'addBenchmark', defaultValue: false, resettable: true },
-  { key: 'benchmarkHeadline', defaultValue: '', resettable: true },
+  { key: 'benchmarkHeadline', defaultValue: 'Benchmark By', resettable: true },
   { key: 'benchmarkKeyValues', defaultValue: [], resettable: true },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
   {
