@@ -76,6 +76,23 @@ export default {
       },
     },
   },
+  [types.PYRAMID]: {
+    icon: Icons.PyramidChart,
+    adapter: PlotlyAdapters[types.PYRAMID],
+    mustGroup: true,
+    uniqueOptions: {
+      showTicks: {
+        name: 'Ticks',
+        type: Boolean,
+        defaultValue: true,
+      },
+      showPercentage: {
+        name: 'Percentage',
+        type: Boolean,
+        defaultValue: false,
+      },
+    },
+  },
   [types.MAP]: {
     icon: Icons.MapChart,
     adapter: ReactMapsAdapter,

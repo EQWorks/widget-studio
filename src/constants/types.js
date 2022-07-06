@@ -6,4 +6,5 @@ export default {
   MAP: 'map',
   STAT: 'stat',
   TABLE: 'table',
+  PYRAMID: 'pyramid',
 }

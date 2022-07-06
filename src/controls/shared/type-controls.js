@@ -77,7 +77,7 @@ const baseIconStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '1.857rem',
+  width: '2.813rem',
   '&> p': {
     transition: 'color 0.3s, background 0.3s',
     color: getTailwindConfigColor('secondary-600'),
@@ -110,8 +110,10 @@ const useStyles = ({ mode = modes.EDITOR }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
-        display: 'flex',
-        justifyContent: 'space-between',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        columnGap: '2.688rem',
+        rowGap: '1.25rem',
       },
       icon: {
         ...baseIconStyle,

@@ -18,7 +18,7 @@ const DataTransformationControls = () => {
   const groupByValue = useStoreState((state) => state.genericOptions.groupByValue)
 
   useEffect(() => {
-    if (!group || type === types.PIE) {
+    if (!group || [types.PIE, types.PYRAMID].includes(type)) {
       update({ percentageMode: false })
     }
   }, [group, type, update])
@@ -35,7 +35,7 @@ const DataTransformationControls = () => {
                   'Invert Domain',
                   groupByValue,
                   () => userUpdate({ genericOptions: { groupByValue: !groupByValue } }),
-                  type === types.MAP
+                  [types.MAP, types.PYRAMID].includes(type)
                 )
               }
               {
@@ -43,7 +43,7 @@ const DataTransformationControls = () => {
                   'Percentage Mode',
                   percentageMode,
                   () => userUpdate({ percentageMode: !percentageMode }),
-                  type === types.MAP || (!group || type === types.PIE)
+                  type === types.MAP || (!group || [types.PIE, types.PYRAMID].includes(type))
                 )
               }
             </>
