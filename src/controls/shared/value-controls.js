@@ -25,6 +25,7 @@ const ValueControls = () => {
   const valueKeys = useStoreState((state) => state.valueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const addBenchmark = useStoreState((state) => state.addBenchmark)
 
   const eligibleColumns = useMemo(() =>
     Object.fromEntries(
@@ -32,13 +33,20 @@ const ValueControls = () => {
         .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric)
     ), [columnsAnalysis, domain.value])
 
+  const staticQuantity = useMemo(() => {
+    if (addBenchmark) {
+      return 2
+    }
+    return 3
+  }, [addBenchmark])
+
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
-      {...(mode === modes.QL ? {
-        staticQuantity: 3,
+      {...(mode === modes.QL || addBenchmark ? {
+        staticQuantity,
       }
         : {
           headerIcons: [
