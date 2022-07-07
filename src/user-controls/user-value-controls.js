@@ -42,8 +42,8 @@ const classes = makeStyles({
 
 const UserValueControls = () => {
   const update = useStoreActions(actions => actions.userUpdate)
-  const benchmarkHeadline = useStoreState((state) => state.benchmarkHeadline)
-  const benchmarkKeyValues = useStoreState((state) => state.benchmarkKeyValues)
+  const userControlHeadline = useStoreState((state) => state.userControlHeadline)
+  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
   const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const renderableValueKeys = useStoreState((state) => state. renderableValueKeys)
@@ -53,18 +53,18 @@ const UserValueControls = () => {
   // set selected benchmark key index
   useEffect(() => {
     if (selectedIndex === undefined && renderableValueKeys.length > 1) {
-      setSelectedIndex(benchmarkKeyValues.indexOf(renderableValueKeys[1].key))
+      setSelectedIndex(userControlKeyValues.indexOf(renderableValueKeys[1].key))
     }
-  }, [selectedIndex, renderableValueKeys, benchmarkKeyValues])
+  }, [selectedIndex, renderableValueKeys, userControlKeyValues])
 
   return (
     <div className={classes.benchmarkContainer}>
-      {benchmarkHeadline &&
+      {userControlHeadline &&
         <div className={classes.benchmarkItems}>
-          {benchmarkHeadline}:
+          {userControlHeadline}:
         </div>
       }
-      {benchmarkKeyValues.map((dataKey, i) => (
+      {userControlKeyValues.map((dataKey, i) => (
         <button
           key={i}
           className={selectedIndex === i ?
