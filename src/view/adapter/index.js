@@ -40,9 +40,9 @@ const WidgetAdapter = () => {
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const transformedData = useStoreState((state) => state.transformedData)
-  const addBenchmark = useStoreState((state) => state.addBenchmark)
-  const benchmarkHeadline = useStoreState((state) => state.benchmarkHeadline)
-  const benchmarkKeyValues = useStoreState((state) => state.benchmarkKeyValues)
+  const addUserControls = useStoreState((state) => state.addUserControls)
+  const userControlHeadline = useStoreState((state) => state.userControlHeadline)
+  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
   const { ref, width, height } = useResizeDetector({
     refreshMode: 'debounce',
     refreshRate: 100,
@@ -52,9 +52,9 @@ const WidgetAdapter = () => {
     ref?.current && update({ ui: { screenshotRef: ref.current } })
   }, [ref, update])
 
-  const renderUserControlValues = useMemo(() => Boolean(addBenchmark &&
-    (benchmarkHeadline || benchmarkKeyValues.length > 0))
-  , [addBenchmark, benchmarkHeadline, benchmarkKeyValues])
+  const renderUserControlValues = useMemo(() => Boolean(addUserControls &&
+    (userControlHeadline || userControlKeyValues.length > 0))
+  , [addUserControls, userControlHeadline, userControlKeyValues])
 
   const classes = useStyles(renderUserControlValues)
 
@@ -68,7 +68,7 @@ const WidgetAdapter = () => {
   // render the component
   return (
     <div ref={ref} className={classes.container} >
-      {addBenchmark && (benchmarkHeadline || benchmarkKeyValues.length > 0) &&
+      {addUserControls && (userControlHeadline || userControlKeyValues.length > 0) &&
         <UserValueControls/>
       }
       <div className={classes.widget}>

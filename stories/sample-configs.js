@@ -482,9 +482,9 @@ export default {
       'id': '2000',
     },
     'percentageMode': false,
-    'addBenchmark': true,
-    'benchmarkHeadline': 'Benchmark by',
-    'benchmarkKeyValues': [
+    'addUserControls': true,
+    'userControlHeadline': 'Benchmark by',
+    'userControlKeyValues': [
       'city',
       'provincial',
       'national',
