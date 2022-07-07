@@ -28,15 +28,15 @@ const classes = makeStyles({
   },
 })
 
-const BenchmarkControls = () => {
+const UserValueConfigurationControls = () => {
   const userUpdate = useStoreActions(actions => actions.userUpdate)
   const resetValue = useStoreActions(actions => actions.resetValue)
 
   const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
-  const addBenchmark = useStoreState((state) => state.addBenchmark)
-  const benchmarkHeadline = useStoreState((state) => state.benchmarkHeadline)
-  const benchmarkKeyValues = useStoreState((state) => state.benchmarkKeyValues)
+  const addUserControls = useStoreState((state) => state.addUserControls)
+  const userControlHeadline = useStoreState((state) => state.userControlHeadline)
+  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
@@ -53,8 +53,8 @@ const BenchmarkControls = () => {
         {
           renderToggle(
             'Add Benchmark Controls',
-            addBenchmark,
-            () => userUpdate({ addBenchmark: !addBenchmark }),
+            addUserControls,
+            () => userUpdate({ addUserControls: !addUserControls }),
             false,
             <Tooltip
               description={'Benchmark values are unique values used to compare data with.'}
@@ -74,22 +74,22 @@ const BenchmarkControls = () => {
           )
         }
       </div>
-      <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !addBenchmark}>
+      <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !addUserControls}>
         <WidgetControlCard
           title='Benchmark Config'
-          clear={() => resetValue({ benchmarkKeyValues, benchmarkHeadline })}
+          clear={() => resetValue({ userControlKeyValues, userControlHeadline })}
         >
           <div className={classes.row}>
             { renderRow('Columns',
               <CustomSelect
                 multiSelect
-                value={benchmarkKeyValues}
+                value={userControlKeyValues}
                 data={numericColumns}
                 onSelect={(val) => {
-                  userUpdate({ benchmarkKeyValues: val })}
+                  userUpdate({ userControlKeyValues: val })}
                 }
                 icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
-                disabled={!addBenchmark}
+                disabled={!addUserControls}
                 classes={{
                   root: '',
                   menu: 'w-56',
@@ -103,11 +103,11 @@ const BenchmarkControls = () => {
               null,
               renderItem('Headline',
                 <TextField
-                  value={benchmarkHeadline}
+                  value={userControlHeadline}
                   classes={{ root: 'w-56' }}
                   inputProps={{ placeholder: 'Add benchmark headline' }}
-                  onChange={v => userUpdate({ benchmarkHeadline: v })}
-                  disabled={!addBenchmark}
+                  onChange={v => userUpdate({ userControlHeadline: v })}
+                  disabled={!addUserControls}
                 />
               )
             )
@@ -118,4 +118,4 @@ const BenchmarkControls = () => {
   )
 }
 
-export default BenchmarkControls
+export default UserValueConfigurationControls
