@@ -6,10 +6,11 @@ import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreActions, useStoreState } from '../../store'
 import typeInfo from '../../constants/type-info'
+import types from '../../constants/types'
 import UserValueControls from '../../user-controls/user-value-controls'
 
 
-const useStyles = (renderUserControlValues) => makeStyles({
+const useStyles = ({ type, renderUserControlValues }) => makeStyles({
   container: {
     position: 'relative',
     width: '100%',
@@ -18,7 +19,7 @@ const useStyles = (renderUserControlValues) => makeStyles({
   widget: {
     // 64px is the height of the WidgetValueControls container
     height: renderUserControlValues ? 'calc(100% - 64px)' : '100%',
-    padding: renderUserControlValues ? '1rem' : 0,
+    padding: renderUserControlValues && type !== types.MAP ? '1rem' : 0,
   },
 })
 
@@ -40,8 +41,8 @@ const WidgetAdapter = () => {
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const transformedData = useStoreState((state) => state.transformedData)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const addUserControls = useStoreState((state) => state.addUserControls)
-  const userControlHeadline = useStoreState((state) => state.userControlHeadline)
   const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
   const { ref, width, height } = useResizeDetector({
     refreshMode: 'debounce',
@@ -53,10 +54,10 @@ const WidgetAdapter = () => {
   }, [ref, update])
 
   const renderUserControlValues = useMemo(() => Boolean(addUserControls &&
-    (userControlHeadline || userControlKeyValues.length > 0))
-  , [addUserControls, userControlHeadline, userControlKeyValues])
+    (userControlKeyValues.length > 0))
+  , [addUserControls, userControlKeyValues])
 
-  const classes = useStyles(renderUserControlValues)
+  const classes = useStyles({ type, renderUserControlValues })
 
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
@@ -68,7 +69,8 @@ const WidgetAdapter = () => {
   // render the component
   return (
     <div ref={ref} className={classes.container} >
-      {addUserControls && (userControlHeadline || userControlKeyValues.length > 0) &&
+      {addUserControls && userControlKeyValues.length > 0 && (type === types.BAR ||
+        (type === types.MAP && renderableValueKeys.length === 1)) &&
         <UserValueControls/>
       }
       <div className={classes.widget}>
