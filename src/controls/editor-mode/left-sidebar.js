@@ -36,11 +36,12 @@ const EditorLeftSidebar = () => {
             <ValueControls />
             {type !== types.PYRAMID && <DataTransformationControls />}
             {/* restrict to dev only for now */}
-            { hasDevAccess() && type === types.BAR && numericColumns.length > 1 &&
-              ((renderableValueKeys.length <= 1 && !addUserControls) || addUserControls) &&
-              <UserValueConfigurationControls />
-            }
           </>
+      }
+      {hasDevAccess() && ((type == types.BAR && numericColumns.length > 1 &&
+        ((renderableValueKeys.length <= 1 && !addUserControls) || addUserControls)) ||
+        (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1)) &&
+        <UserValueConfigurationControls />
       }
     </EditorSidebarBase>
   )
