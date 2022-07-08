@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { getTailwindConfigColor, makeStyles, Checkbox } from '@eqworks/lumen-labs'
+
 import CustomToggle from '../../components/custom-toggle'
 
 
@@ -82,6 +84,12 @@ const classes = makeStyles({
     display: 'flex',
     alignItems: 'center',
   },
+  toggleTitle: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: '0.406rem',
+  },
   flex1: {
     flex: 1,
   },
@@ -149,9 +157,12 @@ export const renderCheckbox = (title, value, update, disabled = false, key) => (
   </div>
 )
 
-export const renderToggle = (title, value, update, disabled = false) => (
+export const renderToggle = (title, value, update, disabled = false, tooltip) => (
   <div className={classes.itemContainer}>
-    <div className={classes.title} > {title && `${title}:`} </div>
+    <div className={classes.toggleTitle}>
+      <div className={classes.title} > {title && `${title}:`} </div>
+      {tooltip}
+    </div>
     <CustomToggle
       value={value}
       onChange={update}
