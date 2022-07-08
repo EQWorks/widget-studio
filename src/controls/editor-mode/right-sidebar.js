@@ -18,6 +18,7 @@ import CustomDropdown from './components/custom-dropdown'
 import MutedBarrier from '../shared/muted-barrier'
 import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 import ExportControls from './components/export-controls'
+import SliderControl from './components/slider-control'
 
 
 const classes = makeStyles({
@@ -51,6 +52,7 @@ const EditorRightSidebar = () => {
   const showLabels = useStoreState((state) => state.genericOptions.showLabels)
   const isReady = useStoreState((state) => state.isReady)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
@@ -94,6 +96,18 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
+            {type === types.PYRAMID && renderItem('xAxis Labels',
+              <SliderControl
+                style={'map'}
+                range={false}
+                min={1}
+                max={10}
+                value={xAxisLabelLength}
+                update={v => userUpdate({
+                  genericOptions: { xAxisLabelLength: v },
+                })}
+              />
+            )}
             {renderToggle(
               'Legend',
               showLegend,
@@ -113,7 +127,7 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showLabels: v } }),
               )
             }
-            {![types.PIE, types.MAP].includes(type) &&
+            {![types.PIE, types.MAP, types.PYRAMID].includes(type) &&
               renderToggle(
                 'Subplots',
                 subPlots,
