@@ -7,6 +7,7 @@ import WidgetControlCard from '../../shared/components/widget-control-card'
 import { renderRow, renderToggle, renderItem } from '../../shared/util'
 import MutedBarrier from '../../shared/muted-barrier'
 import CustomSelect from '../../../components/custom-select'
+import types from '../../../constants/types'
 
 
 const classes = makeStyles({
@@ -52,13 +53,16 @@ const UserValueConfigurationControls = () => {
       <div className={classes.toggle}>
         {
           renderToggle(
-            'Add Benchmark Controls',
+            type === types.MAP ? 'Add Value Controls' : 'Add Benchmark',
             addUserControls,
             () => userUpdate({ addUserControls: !addUserControls }),
             false,
             <Tooltip
-              description={'Benchmark values are unique values used to compare data with.'}
-              width='8.5rem'
+              description={type === types.MAP ?
+                'Add data value controls on the widget' :
+                'Benchmark values are unique values used to compare data with.'
+              }
+              width='9rem'
               arrow={false}
               position='right'
               classes={{
@@ -76,7 +80,7 @@ const UserValueConfigurationControls = () => {
       </div>
       <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !addUserControls}>
         <WidgetControlCard
-          title='Benchmark Config'
+          title={type === types.MAP ? 'User Control Configuration' : 'Benchmark Configuration'}
           clear={() => resetValue({ userControlKeyValues, userControlHeadline })}
         >
           <div className={classes.row}>
@@ -98,7 +102,7 @@ const UserValueConfigurationControls = () => {
               />
             )}
           </div>
-          {
+          {type === types.BAR &&
             renderRow(
               null,
               renderItem('Headline',
