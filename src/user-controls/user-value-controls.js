@@ -1,9 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 
 import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../store'
 import types from '../constants/types'
+import { cleanUp } from '../util/string-manipulation'
+import {
+  DATA_CATEGORIES,
+  DATA_CATEGORIES_KEYS,
+  DATA_CATEGORIES_VALUES,
+} from '../constants/insights-data-categories'
 
 
 const classes = makeStyles({
@@ -53,19 +59,35 @@ const UserValueControls = () => {
 
   const [selectedIndex, setSelectedIndex] = useState()
 
-  // set selected benchmark key index
+
+  const finalUserControlKeyValues = useMemo(() => {
+    if (type === types.MAP) {
+      return userControlKeyValues.reduce((acc, key) => {
+        const category = DATA_CATEGORIES_VALUES.includes(key) ?
+          DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
+          key
+        acc = category && acc.includes(category) ? acc : [...acc, category]
+        return acc
+      }, [])
+    }
+    return userControlKeyValues
+  }, [type, userControlKeyValues])
+
+  // set selected data key / category index
   useEffect(() => {
     if ([undefined, -1].includes(selectedIndex)) {
-      if (type === types.BAR && renderableValueKeys.length > 1 && userControlKeyValues.includes(renderableValueKeys[1].key)) {
-        setSelectedIndex(userControlKeyValues.indexOf(renderableValueKeys[1].key))
+      if (type === types.BAR && renderableValueKeys.length > 1 &&
+        finalUserControlKeyValues.includes(renderableValueKeys[1].key)) {
+        setSelectedIndex(finalUserControlKeyValues.indexOf(renderableValueKeys[1].key))
       }
-      if (type === types.MAP && renderableValueKeys.length > 0 && userControlKeyValues.includes(renderableValueKeys[0].key)) {
-        setSelectedIndex(userControlKeyValues.indexOf(renderableValueKeys[0].key))
+      if (type === types.MAP && renderableValueKeys.length > 0 &&
+        userControlKeyValues.includes(renderableValueKeys[0].key)) {
+        setSelectedIndex(finalUserControlKeyValues.indexOf(renderableValueKeys[0].key))
       }
     }
-  }, [type, selectedIndex, renderableValueKeys, userControlKeyValues])
+  }, [type, selectedIndex, renderableValueKeys, userControlKeyValues, finalUserControlKeyValues])
 
-  const onClickHandle = useCallback((dataKey) => {
+  const onClickHandle = useCallback((key) => {
     if (type === types.BAR) {
       if (valueKeys.length > 1) {
         valueKeys.pop()
@@ -75,8 +97,8 @@ const UserValueControls = () => {
       const useAgg = JSON.stringify(valueKeys[0]).includes('agg')
       valueKeysCopy.push(
         {
-          key: dataKey,
-          title: formattedColumnNames[dataKey],
+          key,
+          title: formattedColumnNames[key],
           // only add 'agg' key if we have aggregation operation attached to the value key in the valueKeys array
           ...(useAgg && { ['agg']: 'unique' }),
         }
@@ -85,9 +107,9 @@ const UserValueControls = () => {
     }
     if (type === types.MAP) {
       const { agg, mapVis } = renderableValueKeys[0]
-      const title = `${formattedColumnNames[dataKey]}${agg ? ` (${agg})` : ''}`
+      const title = `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`
       const val = {
-        key: dataKey,
+        key,
         title,
         ...(agg && { agg }),
         mapVis,
@@ -104,7 +126,7 @@ const UserValueControls = () => {
           {userControlHeadline}:
         </div>
       }
-      {userControlKeyValues.map((dataKey, i) => (
+      {finalUserControlKeyValues?.map((key, i) => (
         <button
           key={i}
           className={selectedIndex === i ?
@@ -113,10 +135,10 @@ const UserValueControls = () => {
           }
           onClick={() => {
             setSelectedIndex(i)
-            onClickHandle(dataKey)
+            onClickHandle(key)
           }}
         >
-          {formattedColumnNames[dataKey]}
+          {formattedColumnNames[key] ? formattedColumnNames[key] : cleanUp(key)}
         </button>
       ))}
     </div>
