@@ -17,15 +17,11 @@ const classes = makeStyles({
   row: {
     marginBottom: '.625rem',
   },
-  benchmark: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '0.25rem',
-    marginTop: '0.625rem',
-    gap: '0.406rem',
-  },
   tooltip: {
     marginBottom: '0.2rem',
+  },
+  select: {
+    width: '19.18rem',
   },
 })
 
@@ -96,8 +92,8 @@ const UserValueConfigurationControls = () => {
                 disabled={!addUserControls}
                 classes={{
                   root: '',
-                  menu: 'w-56',
-                  button: 'w-56',
+                  menu: classes.select,
+                  button: classes.select,
                 }}
               />
             )}
@@ -108,7 +104,7 @@ const UserValueConfigurationControls = () => {
               renderItem('Headline',
                 <TextField
                   value={userControlHeadline}
-                  classes={{ root: 'w-56' }}
+                  classes={{ root: classes.select }}
                   inputProps={{ placeholder: 'Add benchmark headline' }}
                   onChange={v => userUpdate({ userControlHeadline: v })}
                   disabled={!addUserControls}
