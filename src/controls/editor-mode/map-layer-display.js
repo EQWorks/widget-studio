@@ -18,11 +18,13 @@ const classes = makeStyles({
   layerControl: {
     width: '100%',
     display: 'flex',
+    gap: '0.625rem',
   },
   layerControlNoOpacity : {
     width: '100%',
     display: 'flex',
     marginTop: '-1.25rem',
+    gap: '0.625rem',
   },
   layerName: {
     fontSize: '0.75rem',
@@ -30,7 +32,7 @@ const classes = makeStyles({
     color: getTailwindConfigColor('secondary-700'),
   },
   textFieldContainer: {
-    width: '6.918rem',
+    width: '9.5315rem',
   },
   radius: {
     display: 'flex',
