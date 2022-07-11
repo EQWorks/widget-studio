@@ -36,6 +36,7 @@ const classes = makeStyles({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: '0.625rem',
   },
   tightRow: {
     width: '100%',
