@@ -13,6 +13,7 @@ import { MAP_LAYERS, MAP_VALUE_VIS } from '../../constants/map'
 const classes = makeStyles({
   // TO DO - readjust when we revise all styling
   opacityRow: {
+    width: '100%',
     marginTop: '-0.625rem',
   },
   layerControl: {
