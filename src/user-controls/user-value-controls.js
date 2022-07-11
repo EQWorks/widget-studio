@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
+import React, { useEffect, useCallback } from 'react'
 
-import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { DropdownSelect, Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../store'
-import types from '../constants/types'
 import { cleanUp } from '../util/string-manipulation'
-import {
-  DATA_CATEGORIES,
-  DATA_CATEGORIES_KEYS,
-  DATA_CATEGORIES_VALUES,
-} from '../constants/insights-data-categories'
+import types from '../constants/types'
+import { DATA_CATEGORIES, DATA_CATEGORIES_KEYS } from '../constants/insights-data-categories'
 
 
 const classes = makeStyles({
@@ -21,8 +17,6 @@ const classes = makeStyles({
     gap: '3rem',
     height: '4rem',
     background: getTailwindConfigColor('secondary-50'),
-    // boxShadow: `0 0 0.2rem ${getTailwindConfigColor('shadow-blue-20')}`,
-    // HOW to add opacity with hex color from getTailwindConfigColor???
     boxShadow: '0px 0.125rem 0.5rem rgba(54, 111, 228, 0.1)',
   },
   benchmarkItems: {
@@ -31,7 +25,6 @@ const classes = makeStyles({
     fontWeight: '700',
     fontSize: '1.123rem',
     lineHeight: '1.875rem',
-    // letterSpacing: '0.015625rem',
     textTransform: 'capitalize',
     color: getTailwindConfigColor('secondary-900'),
     outline: 'none',
@@ -45,47 +38,36 @@ const classes = makeStyles({
     color: getTailwindConfigColor('primary-500'),
     borderBottom: `0.125rem solid ${getTailwindConfigColor('primary-500')}`,
   },
+  selectRoot: {
+    width: '15.625rem',
+    border: `0.0625rem solid ${getTailwindConfigColor('interactive-500')}`,
+    borderRadius: '0.25rem',
+    boxShadow: '0px 0px 0px 2px rgba(49, 116, 213, 0.25)',
+  },
+  selectButton: {
+    border: '0rem',
+    backgroundColor: getTailwindConfigColor('secondary-50'),
+  },
+  selectMenu: {
+    width: '15.625rem',
+  },
 })
 
 const UserValueControls = () => {
   const update = useStoreActions(actions => actions.userUpdate)
-  const userControlHeadline = useStoreState((state) => state.userControlHeadline)
-  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
+
   const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const valueKeys = useStoreState((state) => state.valueKeys)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const renderableValueKeys = useStoreState((state) => state. renderableValueKeys)
   const type = useStoreState((state) => state.type)
-
-  const [selectedIndex, setSelectedIndex] = useState()
-
-
-  const finalUserControlKeyValues = useMemo(() => {
-    if (type === types.MAP) {
-      return userControlKeyValues.reduce((acc, key) => {
-        const category = DATA_CATEGORIES_VALUES.includes(key) ?
-          DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
-          key
-        acc = category && acc.includes(category) ? acc : [...acc, category]
-        return acc
-      }, [])
-    }
-    return userControlKeyValues
-  }, [type, userControlKeyValues])
-
-  // set selected data key / category index
-  useEffect(() => {
-    if ([undefined, -1].includes(selectedIndex)) {
-      if (type === types.BAR && renderableValueKeys.length > 1 &&
-        finalUserControlKeyValues.includes(renderableValueKeys[1].key)) {
-        setSelectedIndex(finalUserControlKeyValues.indexOf(renderableValueKeys[1].key))
-      }
-      if (type === types.MAP && renderableValueKeys.length > 0 &&
-        userControlKeyValues.includes(renderableValueKeys[0].key)) {
-        setSelectedIndex(finalUserControlKeyValues.indexOf(renderableValueKeys[0].key))
-      }
-    }
-  }, [type, selectedIndex, renderableValueKeys, userControlKeyValues, finalUserControlKeyValues])
+  const userControlHeadline = useStoreState((state) => state.userControlHeadline)
+  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
+  const finalUserControlKeyValues = useStoreState((state) => state.finalUserControlKeyValues)
+  const selectedUserDataControlIndex = useStoreState((state) => state.selectedUserDataControlIndex)
+  const renderCategoryKeyValueSelect = useStoreState((state) => state.renderCategoryKeyValueSelect)
+  const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
+  const selectedCategValue = useStoreState((state) => state.selectedCategValue)
 
   const onClickHandle = useCallback((key) => {
     if (type === types.BAR) {
@@ -107,17 +89,76 @@ const UserValueControls = () => {
     }
     if (type === types.MAP) {
       const { agg, mapVis } = renderableValueKeys[0]
-      const title = `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`
-      const val = {
-        key,
-        title,
-        ...(agg && { agg }),
-        mapVis,
+      if (DATA_CATEGORIES_KEYS.includes(key)) {
+        update({ dataCategoryKey: key })
+        update({ renderCategoryKeyValueSelect: true })
+        update({ categoryKeyValues: DATA_CATEGORIES[key].filter(e => userControlKeyValues.includes(e)) })
+      } else {
+        const title = `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`
+        const val = {
+          key,
+          title,
+          ...(agg && { agg }),
+          mapVis,
+        }
+        const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
+        update({ mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v) })
+        update({ renderCategoryKeyValueSelect: false })
+        update({ selectedCategValue: null })
       }
-      const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
-      update({ mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v) })
     }
-  }, [type, valueKeys, mapValueKeys, renderableValueKeys, formattedColumnNames, update])
+  },
+  [
+    type,
+    valueKeys,
+    mapValueKeys,
+    renderableValueKeys,
+    userControlKeyValues,
+    formattedColumnNames,
+    update,
+  ])
+
+  useEffect(() => {
+    if (renderCategoryKeyValueSelect && categoryKeyValues?.length) {
+      update({ userValueDropdownSelect: (
+        <DropdownSelect
+          simple
+          allowClear={false}
+          classes={{
+            root: classes.selectRoot,
+            button: classes.selectButton,
+            menu: classes.selectMenu,
+          }}
+          overflow='vertical'
+          endIcon={<Icons.ArrowDown size='md' />}
+          data={categoryKeyValues}
+          value={selectedCategValue}
+          onSelect={(_, v) => {
+            const { agg, mapVis } = renderableValueKeys[0]
+            const title = `${formattedColumnNames[v]}${agg ? ` (${agg})` : ''}`
+            const val = {
+              key: v,
+              title,
+              ...(agg && { agg }),
+              mapVis,
+            }
+            const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
+            update({ selectedCategValue: v })
+            update({ mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v) })
+          }}
+          placeholder='Select data column'
+        />
+      ) })
+    }
+  }, [
+    renderCategoryKeyValueSelect,
+    categoryKeyValues,
+    selectedCategValue,
+    renderableValueKeys,
+    formattedColumnNames,
+    mapValueKeys,
+    update,
+  ])
 
   return (
     <div className={classes.benchmarkContainer}>
@@ -129,12 +170,12 @@ const UserValueControls = () => {
       {finalUserControlKeyValues?.map((key, i) => (
         <button
           key={i}
-          className={selectedIndex === i ?
+          className={selectedUserDataControlIndex === i ?
             `${classes.benchmarkItems} ${classes.selectedKey}` :
             `${classes.benchmarkItems}`
           }
           onClick={() => {
-            setSelectedIndex(i)
+            update({ selectedUserDataControlIndex: i })
             onClickHandle(key)
           }}
         >
