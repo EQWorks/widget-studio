@@ -11,7 +11,7 @@ import { quickNumericFormat } from '../../../util/numeric'
 const classes = makeStyles({
 // TO DO : bring together the two stylings for dropdown when we do the final styling revision
   dropdownMenuChart: {
-    width: '14.882rem !important',
+    width: '14.882rem',
     overflow: 'visible !important',
   },
   dropdownRootChart: {
@@ -20,12 +20,12 @@ const classes = makeStyles({
     borderRight: 'none !important',
   },
   dropdownMenuMap: {
-    width: '14.5rem !important',
+    maxWidth: '9.5315rem',
     overflow: 'visible !important',
   },
   dropdownButtonMap: {
-    width: '6.918rem !important',
-    height: '1.75rem !important',
+    maxWidth: '9.5315rem',
+    height: '1.75rem',
     color: getTailwindConfigColor('interactive-600'),
   },
   dropdownMenuRight: {
