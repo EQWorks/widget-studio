@@ -1,12 +1,17 @@
 import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
-import types from '../constants/types'
-import typeInfo from '../constants/type-info'
-import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
+import { deepMerge } from './util'
 import { cleanUp, truncateString } from '../util/string-manipulation'
 import { createWidget, saveWidget, getWidget, localGetWidget, requestData } from '../util/api'
 import { geoKeyHasCoordinates } from '../util'
+import { getKeyFormatFunction } from '../util/data-format-functions'
+import { columnInference } from '../util/columns'
+import { mapDataIsValid } from '../util/map_data_validation'
+import { screenshot } from '../util/export'
+import types from '../constants/types'
+import typeInfo from '../constants/type-info'
+import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import {
   MAP_LAYERS,
   MAP_GEO_KEYS,
@@ -15,19 +20,18 @@ import {
   COORD_KEYS,
   GEO_KEY_TYPE_NAMES,
 } from '../constants/map'
-import { getKeyFormatFunction } from '../util/data-format-functions'
-import { deepMerge } from './util'
+import {
+  DATA_CATEGORIES,
+  DATA_CATEGORIES_KEYS,
+  DATA_CATEGORIES_VALUES,
+} from '../constants/insights-data-categories'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
-import { columnInference } from '../util/columns'
-import { mapDataIsValid } from '../util/map_data_validation'
 import { EXPORT_TYPES } from '../constants/export'
-import { screenshot } from '../util/export'
 import { dataSourceTypes } from '../constants/data-source'
 
 
 const MAX_UNDO_STEPS = 10
-
 
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
@@ -88,6 +92,7 @@ const stateDefaults = [
   { key: 'addUserControls', defaultValue: false, resettable: true },
   { key: 'userControlHeadline', defaultValue: 'Benchmark By', resettable: true },
   { key: 'userControlKeyValues', defaultValue: [], resettable: true },
+  { key: 'dataCategoryKey', defaultValue: null, resettable: true },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
   {
     key: 'ui',
@@ -510,6 +515,67 @@ export default {
 
   undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
   redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
+
+  finalUserControlKeyValues: computed(
+    [
+      (state) => state.type,
+      (state) => state.userControlKeyValues,
+    ],
+    (
+      type,
+      userControlKeyValues,
+    ) => {
+      // for map widget the finalUserControlKeyValues is a mix of column keys & data categories
+      if (type === types.MAP) {
+        return userControlKeyValues.reduce((acc, key) => {
+          const category = DATA_CATEGORIES_VALUES.includes(key) ?
+            DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
+            key
+          acc = category && acc.includes(category) ? acc : [...acc, category]
+          return acc
+        }, [])
+      }
+      return userControlKeyValues
+    }
+  ),
+
+  selectedUserDataControlIndex: computed(
+    [
+      (state) => state.addUserControls,
+      (state) => state.type,
+      (state) => state.renderableValueKeys,
+      (state) => state.userControlKeyValues,
+      (state) => state.finalUserControlKeyValues,
+      (state) => state.renderCategoryKeyValueSelect,
+      (state) => state.dataCategoryKey,
+    ],
+    (
+      addUserControls,
+      type,
+      renderableValueKeys,
+      userControlKeyValues,
+      finalUserControlKeyValues,
+      renderCategoryKeyValueSelect,
+      dataCategoryKey,
+    ) => {
+      if (addUserControls) {
+        if (type === types.BAR && renderableValueKeys.length > 1 &&
+          finalUserControlKeyValues.includes(renderableValueKeys[1].key)) {
+          return finalUserControlKeyValues.indexOf(renderableValueKeys[1].key)
+        }
+        if (type === types.MAP && renderableValueKeys.length > 0) {
+          const categKey = DATA_CATEGORIES_KEYS.find(e =>
+            DATA_CATEGORIES[e].includes(renderableValueKeys[0].key))
+          if (!renderCategoryKeyValueSelect &&
+            finalUserControlKeyValues.includes(renderableValueKeys[0].key)){
+            return finalUserControlKeyValues.indexOf(renderableValueKeys[0].key)
+          } else if (renderCategoryKeyValueSelect) {
+            return finalUserControlKeyValues.indexOf(dataCategoryKey || categKey)
+          }
+        }
+      }
+    }
+  ),
 
   /** ACTIONS ------------------------------------------------------------------ */
 
