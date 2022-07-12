@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback } from 'react'
 
-import { DropdownSelect, Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
+import CustomSelect from '../components/custom-select'
 import { useStoreState, useStoreActions } from '../store'
 import { cleanUp } from '../util/string-manipulation'
 import types from '../constants/types'
@@ -50,6 +51,10 @@ const classes = makeStyles({
   },
   selectMenu: {
     width: '15.625rem',
+    backgroundColor: getTailwindConfigColor('secondary-50'),
+  },
+  selectedOptionTitle: {
+    color: getTailwindConfigColor('secondary-700'),
   },
 })
 
@@ -121,30 +126,33 @@ const UserValueControls = () => {
   useEffect(() => {
     if (renderCategoryKeyValueSelect && categoryKeyValues?.length) {
       update({ userValueDropdownSelect: (
-        <DropdownSelect
-          simple
+        <CustomSelect
+          userSelect
           allowClear={false}
           classes={{
             root: classes.selectRoot,
             button: classes.selectButton,
             menu: classes.selectMenu,
+            selectedOptionTitle: classes.selectedOptionTitle,
           }}
           overflow='vertical'
           endIcon={<Icons.ArrowDown size='md' />}
           data={categoryKeyValues}
           value={selectedCategValue}
-          onSelect={(_, v) => {
-            const { agg, mapVis } = renderableValueKeys[0]
-            const title = `${formattedColumnNames[v]}${agg ? ` (${agg})` : ''}`
-            const val = {
-              key: v,
-              title,
-              ...(agg && { agg }),
-              mapVis,
+          onSelect={v => {
+            if (v) {
+              const { agg, mapVis } = renderableValueKeys[0]
+              const title = `${formattedColumnNames[v]}${agg ? ` (${agg})` : ''}`
+              const val = {
+                key: v,
+                title,
+                ...(agg && { agg }),
+                mapVis,
+              }
+              const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
+              update({ selectedCategValue: v })
+              update({ mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v) })
             }
-            const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
-            update({ selectedCategValue: v })
-            update({ mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v) })
           }}
           placeholder='Select data column'
         />
