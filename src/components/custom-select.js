@@ -2,6 +2,8 @@ import React, { createElement, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { DropdownSelect, Icons } from '@eqworks/lumen-labs'
 
+import { useStoreState } from '../store'
+
 
 export const DROPDOWN_SELECT_CLASSES = {
   root: 'shadow-light-10 border-2 border-secondary-200 rounded-md',
@@ -12,10 +14,12 @@ export const DROPDOWN_SELECT_CLASSES = {
   listContainer: 'normal-case',
   innerButton: 'truncate',
 }
+
 const { root, ...baseClasses } = DROPDOWN_SELECT_CLASSES
 
 const CustomSelect = ({
   multiSelect,
+  userSelect,
   data,
   value,
   onSelect,
@@ -26,30 +30,39 @@ const CustomSelect = ({
   descriptions,
   ...props
 }) => {
-  const simple = useMemo(() => !(icons || descriptions), [descriptions, icons])
-  const transformedData = useMemo(() => (
-    simple
-      ? data
-      : [{
-        items: data.map((d, i) => ({
-          title: d,
-          ...(icons && { startIcon: createElement(icons[i], { size: 'sm' }) }),
-          ...(descriptions && { description: descriptions[i] }),
-        })),
-      }]
-  ), [data, descriptions, icons, simple])
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
+
+  const simple = useMemo(() => !(icons || descriptions || userSelect),
+    [descriptions, icons, userSelect])
+
+  const transformedData = useMemo(() => {
+    if (simple) {
+      return data
+    }
+    return [{
+      items: data.map((d, i) => ({
+        title: userSelect ? formattedColumnNames[d]: d,
+        ...(icons && { startIcon: createElement(icons[i], { size: 'sm' }) }),
+        ...(descriptions && { description: descriptions[i] }),
+        value: d,
+      })),
+    }]
+  }, [data, descriptions, icons, simple, userSelect, formattedColumnNames])
+
   const transformedValue = useMemo(() => {
     if (simple) return value
     return multiSelect
       ? (value || []).map(title => ({ title })) || []
-      : { title: value }
-  }, [multiSelect, simple, value])
+      : { title: userSelect ? formattedColumnNames[value]: value }
+  }, [multiSelect, simple, value, userSelect, formattedColumnNames])
+
   const getTransformedTarget = useCallback(v => {
     if (simple) return v
     return multiSelect
       ? Object.values(v).map(({ title }) => title).filter(Boolean)
-      : v.title
-  }, [multiSelect, simple])
+      : userSelect ? v.value : v.title
+  }, [multiSelect, simple, userSelect])
+
   return <DropdownSelect
     simple={simple}
     classes={{
@@ -68,11 +81,11 @@ const CustomSelect = ({
   />
 }
 
-
 CustomSelect.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
   multiSelect: PropTypes.bool,
+  userSelect: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
   onSelect: PropTypes.func.isRequired,
   onClear: PropTypes.func,
@@ -80,10 +93,12 @@ CustomSelect.propTypes = {
   icons: PropTypes.arrayOf(PropTypes.elementType),
   descriptions: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.node])),
 }
+
 CustomSelect.defaultProps = {
   classes: {},
   data: [],
   multiSelect: false,
+  userSelect: false,
   value: '',
   onClear: () => { },
   fullWidth: false,
