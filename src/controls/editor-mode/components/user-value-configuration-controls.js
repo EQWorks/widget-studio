@@ -34,6 +34,8 @@ const UserValueConfigurationControls = () => {
   const addUserControls = useStoreState((state) => state.addUserControls)
   const userControlHeadline = useStoreState((state) => state.userControlHeadline)
   const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
+  const dataCategoryKey = useStoreState((state) => state.dataCategoryKey)
+  const selectedCategValue = useStoreState((state) => state.selectedCategValue)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
@@ -77,7 +79,12 @@ const UserValueConfigurationControls = () => {
       <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !addUserControls}>
         <WidgetControlCard
           title={type === types.MAP ? 'User Control Configuration' : 'Benchmark Configuration'}
-          clear={() => resetValue({ userControlKeyValues, userControlHeadline })}
+          clear={() => resetValue({
+            userControlKeyValues,
+            userControlHeadline,
+            dataCategoryKey,
+            selectedCategValue,
+          })}
         >
           <div className={classes.row}>
             { renderRow('Columns',
