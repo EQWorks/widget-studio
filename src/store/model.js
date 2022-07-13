@@ -161,10 +161,6 @@ export default {
       (state) => state.addUserControls,
       (state) => state.userControlHeadline,
       (state) => state.userControlKeyValues,
-      (state) => state.selectedUserDataControlIndex,
-      (state) => state.renderCategoryKeyValueSelect,
-      (state) => state.categoryKeyValues,
-      (state) => state.selectedCategValue,
       (state) => state.presetColors,
       (state) => state.dateAggregation,
       (state) => state.mapTooltipLabelTitles,
@@ -190,10 +186,6 @@ export default {
       addUserControls,
       userControlHeadline,
       userControlKeyValues,
-      selectedUserDataControlIndex,
-      renderCategoryKeyValueSelect,
-      categoryKeyValues,
-      selectedCategValue,
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
@@ -220,10 +212,6 @@ export default {
       addUserControls,
       userControlHeadline,
       userControlKeyValues,
-      selectedUserDataControlIndex,
-      renderCategoryKeyValueSelect,
-      categoryKeyValues,
-      selectedCategValue,
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
@@ -558,7 +546,6 @@ export default {
       (state) => state.type,
       (state) => state.renderableValueKeys,
       (state) => state.finalUserControlKeyValues,
-      (state) => state.renderCategoryKeyValueSelect,
       (state) => state.dataCategoryKey,
     ],
     (
@@ -566,7 +553,6 @@ export default {
       type,
       renderableValueKeys,
       finalUserControlKeyValues,
-      renderCategoryKeyValueSelect,
       dataCategoryKey,
     ) => {
       if (addUserControls) {
@@ -575,17 +561,44 @@ export default {
           return finalUserControlKeyValues.indexOf(renderableValueKeys[1].key)
         }
         if (type === types.MAP && renderableValueKeys.length > 0) {
-          const categKey = DATA_CATEGORIES_KEYS.find(e =>
-            DATA_CATEGORIES[e].includes(renderableValueKeys[0].key))
-          if (!renderCategoryKeyValueSelect &&
+          if (!dataCategoryKey &&
             finalUserControlKeyValues.includes(renderableValueKeys[0].key)){
             return finalUserControlKeyValues.indexOf(renderableValueKeys[0].key)
-          } else if (renderCategoryKeyValueSelect) {
-            return finalUserControlKeyValues.indexOf(dataCategoryKey || categKey)
+          } else if (dataCategoryKey) {
+            return finalUserControlKeyValues.indexOf(dataCategoryKey)
           }
         }
       }
     }
+  ),
+
+  categoryKeyValues: computed(
+    [
+      (state) => state.type,
+      (state) => state.dataCategoryKey,
+      (state) => state.userControlKeyValues,
+    ],
+    (
+      type,
+      dataCategoryKey,
+      userControlKeyValues,
+    ) => Boolean(type === types.MAP && dataCategoryKey && userControlKeyValues?.length) &&
+        userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val)) ||
+        []
+  ),
+
+  selectedCategoryValue: computed(
+    [
+      (state) => state.type,
+      (state) => state.renderableValueKeys,
+      (state) => state.categoryKeyValues,
+    ],
+    (
+      type,
+      renderableValueKeys,
+      categoryKeyValues,
+    ) => Boolean(type === types.MAP && renderableValueKeys?.length && categoryKeyValues?.length) &&
+      categoryKeyValues.find(e => e === renderableValueKeys[0].key) || null
   ),
 
   /** ACTIONS ------------------------------------------------------------------ */
