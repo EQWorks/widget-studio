@@ -23,7 +23,7 @@ const useStyles = ({ type, renderUserControlValues }) => makeStyles({
   },
   userValueDropdownSelect: {
     position: 'absolute',
-    margin: '2.0625rem 0 0 2.3125rem',
+    margin: '1rem',
     zIndex: '10',
   },
 })
@@ -49,7 +49,7 @@ const WidgetAdapter = () => {
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const addUserControls = useStoreState((state) => state.addUserControls)
   const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
-  const renderCategoryKeyValueSelect = useStoreState((state) => state.renderCategoryKeyValueSelect)
+  const selectedUserDataControlIndex = useStoreState((state) => state.selectedUserDataControlIndex)
   const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
   const userValueDropdownSelect = useStoreState((state) => state.userValueDropdownSelect)
 
@@ -83,14 +83,13 @@ const WidgetAdapter = () => {
         <UserValueControls/>
       }
       <div className={classes.widget}>
-        {/* 64 is the height of the WidgetValueControls container */}
-        {userControlKeyValues?.length > 0 && renderCategoryKeyValueSelect &&
-          categoryKeyValues?.length > 0 && (
+        {Boolean(addUserControls && categoryKeyValues?.length && selectedUserDataControlIndex >= 0) && (
           <div className={classes.userValueDropdownSelect}>
             {userValueDropdownSelect}
           </div>
         )}
         {createElement(component,
+          // 64 is the height of the WidgetValueControls container
           { width, height: renderUserControlValues ? height - 64 : height, ...adaptedDataAndConfig }
         )}
       </div>
