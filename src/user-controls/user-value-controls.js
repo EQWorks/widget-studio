@@ -67,12 +67,19 @@ const UserValueControls = () => {
   const renderableValueKeys = useStoreState((state) => state. renderableValueKeys)
   const type = useStoreState((state) => state.type)
   const userControlHeadline = useStoreState((state) => state.userControlHeadline)
-  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
   const finalUserControlKeyValues = useStoreState((state) => state.finalUserControlKeyValues)
   const selectedUserDataControlIndex = useStoreState((state) => state.selectedUserDataControlIndex)
-  const renderCategoryKeyValueSelect = useStoreState((state) => state.renderCategoryKeyValueSelect)
+  const dataCategoryKey = useStoreState((state) => state.dataCategoryKey)
   const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
-  const selectedCategValue = useStoreState((state) => state.selectedCategValue)
+  const selectedCategoryValue = useStoreState((state) => state.selectedCategoryValue)
+
+  useEffect(() => {
+    if (renderableValueKeys.length && !dataCategoryKey &&
+      !finalUserControlKeyValues.includes(renderableValueKeys[0].key)) {
+      update({ dataCategoryKey: DATA_CATEGORIES_KEYS.find(key =>
+        DATA_CATEGORIES[key].includes(renderableValueKeys[0].key)) })
+    }
+  }, [update, renderableValueKeys, dataCategoryKey, finalUserControlKeyValues, categoryKeyValues])
 
   const onClickHandle = useCallback((key) => {
     if (type === types.BAR) {
@@ -96,8 +103,6 @@ const UserValueControls = () => {
       const { agg, mapVis } = renderableValueKeys[0]
       if (DATA_CATEGORIES_KEYS.includes(key)) {
         update({ dataCategoryKey: key })
-        update({ renderCategoryKeyValueSelect: true })
-        update({ categoryKeyValues: DATA_CATEGORIES[key].filter(e => userControlKeyValues.includes(e)) })
       } else {
         const title = `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`
         const val = {
@@ -107,9 +112,9 @@ const UserValueControls = () => {
           mapVis,
         }
         const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
+        update({ dataCategoryKey: null })
         update({ mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v) })
-        update({ renderCategoryKeyValueSelect: false })
-        update({ selectedCategValue: null })
+        update({ selectedCategoryValue: null })
       }
     }
   },
@@ -118,13 +123,12 @@ const UserValueControls = () => {
     valueKeys,
     mapValueKeys,
     renderableValueKeys,
-    userControlKeyValues,
     formattedColumnNames,
     update,
   ])
 
   useEffect(() => {
-    if (renderCategoryKeyValueSelect && categoryKeyValues?.length) {
+    if (categoryKeyValues?.length) {
       update({ userValueDropdownSelect: (
         <CustomSelect
           userSelect
@@ -138,7 +142,7 @@ const UserValueControls = () => {
           overflow='vertical'
           endIcon={<Icons.ArrowDown size='md' />}
           data={categoryKeyValues}
-          value={selectedCategValue}
+          value={selectedCategoryValue}
           onSelect={v => {
             if (v) {
               const { agg, mapVis } = renderableValueKeys[0]
@@ -159,9 +163,8 @@ const UserValueControls = () => {
       ) })
     }
   }, [
-    renderCategoryKeyValueSelect,
     categoryKeyValues,
-    selectedCategValue,
+    selectedCategoryValue,
     renderableValueKeys,
     formattedColumnNames,
     mapValueKeys,
