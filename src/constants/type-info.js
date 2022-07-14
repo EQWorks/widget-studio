@@ -38,6 +38,11 @@ export default {
         type: Boolean,
         defaultValue: true,
       },
+      horizontal: {
+        name: 'Horizontal',
+        type: Boolean,
+        defaultValue: false,
+      },
     },
   },
   [types.SCATTER]: {

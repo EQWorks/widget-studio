@@ -15,6 +15,7 @@ export default {
       data,
       x: config.groupKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
+      orientation: uniqueOptions.horizontal ? 'h' : 'v',
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
