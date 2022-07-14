@@ -39,7 +39,7 @@ export default {
         defaultValue: true,
       },
       horizontal: {
-        name: 'horizontal',
+        name: 'Horizontal',
         type: Boolean,
         defaultValue: false,
       },
