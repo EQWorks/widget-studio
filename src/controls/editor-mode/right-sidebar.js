@@ -96,18 +96,6 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
-            {type === types.PYRAMID && renderItem('xAxis Labels',
-              <SliderControl
-                style={'map'}
-                range={false}
-                min={1}
-                max={10}
-                value={xAxisLabelLength}
-                update={v => userUpdate({
-                  genericOptions: { xAxisLabelLength: v },
-                })}
-              />
-            )}
             {renderToggle(
               'Legend',
               showLegend,
@@ -135,6 +123,18 @@ const EditorRightSidebar = () => {
                 renderableValueKeys?.length <= 1
               )
             }
+            {type === types.PYRAMID && renderItem('x-Axis Labels',
+              <SliderControl
+                style={'right'}
+                range={false}
+                min={1}
+                max={10}
+                value={xAxisLabelLength}
+                update={v => userUpdate({
+                  genericOptions: { xAxisLabelLength: v },
+                })}
+              />
+            )}
           </>
         )
       }
