@@ -15,14 +15,16 @@ const classes = makeStyles({
   item: {
     display: 'flex',
     flexDirection: 'column',
-    color: getTailwindConfigColor('secondary-900'),
+    alignItems: 'center',
   },
   value: {
-    fontSize: '3rem',
+    fontSize: '2.25rem',
     fontWeight: 600,
+    color: getTailwindConfigColor('secondary-800'),
   },
   label: {
-    paddingLeft: '0.1rem',
+    fontSize: '1.5rem',
+    color: getTailwindConfigColor('secondary-700'),
   },
   divider: {
     background: getTailwindConfigColor('secondary-300'),
@@ -33,7 +35,10 @@ const classes = makeStyles({
   },
 })
 
-const Stat = ({ data, values }) => {
+const Stat = ({ data, values, genericOptions }) => {
+  const { showLabels, showCurrency } = genericOptions
+  // console.log('props: ', {data, values})
+  // console.log('data: ', data[0])
   return (
     <div className={classes.outerContainer}>
       {
@@ -41,11 +46,13 @@ const Stat = ({ data, values }) => {
           <div key={k}>
             <div className={classes.item}>
               <div className={classes.value}>
-                {data[0][k]}
+                {Number(data[0][k]).toLocaleString('en-US', {maximumFractionDigits:2})}
               </div>
-              <div className={classes.label}>
-                {k}
-              </div>
+              {showLabels &&     
+                <div className={classes.label}>
+                  {k}
+                </div>
+              }
             </div>
             {
               i < (values.length - 1) &&

@@ -78,14 +78,14 @@ export default {
         'key': 'submitted_deals',
         'title': 'Submitted deals',
       },
-      {
-        'key': 'approved_deals',
-        'title': 'Approved deals',
-      },
-      {
-        'key': 'funded_deals',
-        'title': 'Funded deals',
-      },
+      // {
+      //   'key': 'approved_deals',
+      //   'title': 'Approved deals',
+      // },
+      // {
+      //   'key': 'funded_deals',
+      //   'title': 'Funded deals',
+      // },
     ],
     'mapValueKeys': [],
     'formatDataFunctions': {},
@@ -101,10 +101,12 @@ export default {
     'genericOptions': {
       'showWidgetTitle': false,
       'groupByValue': false,
-      'showLegend': true,
-      'showTooltip': true,
-      'showAxisTitles': true,
-      'showSubPlotTitles': true,
+      // 'showLegend': true,
+      // 'showTooltip': true,
+      // 'showAxisTitles': true,
+      // 'showSubPlotTitles': true,
+      'showLabels': true,
+      'showCurrency': true,
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
