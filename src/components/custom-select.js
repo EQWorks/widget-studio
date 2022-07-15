@@ -2,8 +2,6 @@ import React, { createElement, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { DropdownSelect, Icons } from '@eqworks/lumen-labs'
 
-import { useStoreState } from '../store'
-
 
 export const DROPDOWN_SELECT_CLASSES = {
   root: 'shadow-light-10 border-2 border-secondary-200 rounded-md',
@@ -30,8 +28,6 @@ const CustomSelect = ({
   descriptions,
   ...props
 }) => {
-  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
-
   const simple = useMemo(() => !(icons || descriptions || userSelect),
     [descriptions, icons, userSelect])
 
@@ -41,20 +37,20 @@ const CustomSelect = ({
     }
     return [{
       items: data.map((d, i) => ({
-        title: userSelect ? formattedColumnNames[d]: d,
+        title: userSelect ? d.title: d,
         ...(icons && { startIcon: createElement(icons[i], { size: 'sm' }) }),
         ...(descriptions && { description: descriptions[i] }),
-        value: d,
+        value: d.key,
       })),
     }]
-  }, [data, descriptions, icons, simple, userSelect, formattedColumnNames])
+  }, [data, descriptions, icons, simple, userSelect])
 
   const transformedValue = useMemo(() => {
     if (simple) return value
     return multiSelect
       ? (value || []).map(title => ({ title })) || []
-      : { title: userSelect ? formattedColumnNames[value]: value }
-  }, [multiSelect, simple, value, userSelect, formattedColumnNames])
+      : { title: value }
+  }, [multiSelect, simple, value])
 
   const getTransformedTarget = useCallback(v => {
     if (simple) return v
