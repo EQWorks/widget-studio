@@ -10,7 +10,7 @@ import { DATA_CATEGORIES, DATA_CATEGORIES_KEYS } from '../constants/insights-dat
 
 
 const classes = makeStyles({
-  benchmarkContainer: {
+  userControlContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -20,7 +20,7 @@ const classes = makeStyles({
     background: getTailwindConfigColor('secondary-50'),
     boxShadow: '0px 0.125rem 0.5rem rgba(54, 111, 228, 0.1)',
   },
-  benchmarkItems: {
+  userControlItem: {
     fontFamily: 'Open Sans',
     fontStyle: 'normal',
     fontWeight: '700',
@@ -55,6 +55,7 @@ const classes = makeStyles({
   },
   selectedOptionTitle: {
     color: getTailwindConfigColor('secondary-700'),
+    textTransform: 'none',
   },
 })
 
@@ -142,7 +143,7 @@ const UserValueControls = () => {
           overflow='vertical'
           endIcon={<Icons.ArrowDown size='md' />}
           data={categoryKeyValues}
-          value={selectedCategoryValue}
+          value={selectedCategoryValue?.title}
           onSelect={v => {
             if (v) {
               const { agg, mapVis } = renderableValueKeys[0]
@@ -172,9 +173,9 @@ const UserValueControls = () => {
   ])
 
   return (
-    <div className={classes.benchmarkContainer}>
+    <div className={classes.userControlContainer}>
       {type === types.BAR && userControlHeadline &&
-        <div className={classes.benchmarkItems}>
+        <div className={classes.userControlItem}>
           {userControlHeadline}:
         </div>
       }
@@ -182,8 +183,8 @@ const UserValueControls = () => {
         <button
           key={i}
           className={selectedUserDataControlIndex === i ?
-            `${classes.benchmarkItems} ${classes.selectedKey}` :
-            `${classes.benchmarkItems}`
+            `${classes.userControlItem} ${classes.selectedKey}` :
+            `${classes.userControlItem}`
           }
           onClick={() => {
             update({ selectedUserDataControlIndex: i })
