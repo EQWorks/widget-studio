@@ -577,14 +577,16 @@ export default {
       (state) => state.type,
       (state) => state.dataCategoryKey,
       (state) => state.userControlKeyValues,
+      (state) => state.formattedColumnNames,
     ],
     (
       type,
       dataCategoryKey,
       userControlKeyValues,
+      formattedColumnNames
     ) => Boolean(type === types.MAP && dataCategoryKey && userControlKeyValues?.length) &&
-        userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val)) ||
-        []
+        userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val))
+          .map(key => ({ title: formattedColumnNames[key], key })) || []
   ),
 
   selectedCategoryValue: computed(
@@ -598,7 +600,7 @@ export default {
       renderableValueKeys,
       categoryKeyValues,
     ) => Boolean(type === types.MAP && renderableValueKeys?.length && categoryKeyValues?.length) &&
-      categoryKeyValues.find(e => e === renderableValueKeys[0].key) || null
+      categoryKeyValues.find(e => e.key === renderableValueKeys[0].key) || null
   ),
 
   /** ACTIONS ------------------------------------------------------------------ */
