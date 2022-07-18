@@ -7,7 +7,6 @@ export default {
   [types.STAT]: {
     component: Stat,
     adapt: (data, { valueKeys, genericOptions }) => {
-      console.log('data: ', {data, valueKeys, genericOptions})
       return ({
         data,
         values: valueKeys.map(({ title }) => title),
