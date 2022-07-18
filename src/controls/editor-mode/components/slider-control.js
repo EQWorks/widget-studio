@@ -25,7 +25,18 @@ const classes = makeStyles({
   },
   dropdownButtonMap: {
     width: '6.918rem !important',
+    height: '1.75rem !important',
+    color: getTailwindConfigColor('interactive-600'),
+  },
+  dropdownMenuRight: {
+    width: '14.5rem',
+    right: 0,
+    overflowY: 'visible !important',
+  },
+  dropdownButtonRight: {
+    width: '100%',
     height: '1.75rem',
+    maxWidth: '9.5315rem',
     color: getTailwindConfigColor('interactive-600'),
   },
 })
@@ -37,21 +48,32 @@ const SliderControl = ({ value, min, max, step, update, range, style }) => {
       : quickNumericFormat(value)
   ), [range, value])
 
+  const getClasses = (type) => {
+    switch (type) {
+      case 'map':
+        return {
+          menu: classes.dropdownMenuMap,
+          button: classes.dropdownButtonMap,
+        }
+      case 'chart':
+        return {
+          menu: classes.dropdownMenuChart,
+          button: classes.dropdownButtonChart,
+        }
+      case 'right':
+        return {
+          menu: classes.dropdownMenuRight,
+          button: classes.dropdownButtonRight,
+        }
+    }
+  }
+
   return (
     <CustomDropdown
       {...{ selectedString, style }}
       // NOTE - TO BE CHANGED: style 'map' or 'chart' has nothing to do with the type of widget
       // it is used to differantiate the styling for the MapLayerDisplay section in the right panel
-      classes={style === 'map' ?
-        {
-          menu: classes.dropdownMenuMap,
-          button: classes.dropdownButtonMap,
-        } :
-        {
-          root: classes.dropdownRootChart,
-          menu: classes.dropdownMenuChart,
-        }
-      }
+      classes={getClasses(style)}
       placeholder={range ? 'Range' : 'Value'}
       disabled={
         (Array.isArray(value) && !value[0] && !value[1]) ||

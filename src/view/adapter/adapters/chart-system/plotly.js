@@ -71,7 +71,7 @@ export default {
       const determineGraphVal = max > 10 ? getRoundToNumberDigit(max) : 10
 
       const xAxisValues = [...Array(xAxisLabelLength).keys()].map((val) => (
-        (determineGraphVal / xAxisLabelLength) * (xAxisLabelLength - val)
+        Math.round((determineGraphVal / xAxisLabelLength) * (xAxisLabelLength - val))
       ))
 
       return ({
