@@ -37,8 +37,7 @@ const classes = makeStyles({
 
 const Stat = ({ data, values, genericOptions }) => {
   const { showLabels, showCurrency } = genericOptions
-  // console.log('props: ', {data, values})
-  // console.log('data: ', data[0])
+
   return (
     <div className={classes.outerContainer}>
       {
@@ -46,7 +45,7 @@ const Stat = ({ data, values, genericOptions }) => {
           <div key={k}>
             <div className={classes.item}>
               <div className={classes.value}>
-                {Number(data[0][k]).toLocaleString('en-US', {maximumFractionDigits:2})}
+                {showCurrency && '$'}{Number(data[0][k]).toLocaleString('en-US', {maximumFractionDigits:2})}
               </div>
               {showLabels &&     
                 <div className={classes.label}>
