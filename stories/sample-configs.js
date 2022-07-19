@@ -482,9 +482,9 @@ export default {
       'id': '2000',
     },
     'percentageMode': false,
-    'addBenchmark': true,
-    'benchmarkHeadline': 'Benchmark by',
-    'benchmarkKeyValues': [
+    'addUserControls': true,
+    'userControlHeadline': 'Benchmark by',
+    'userControlKeyValues': [
       'city',
       'provincial',
       'national',
@@ -916,72 +916,112 @@ export default {
   'dev-map-3': {
     'title': 'My example map widget - xwi report',
     'type': 'map',
-    'filters': [
-      // {
-      //   'key': 'visits',
-      //   'filter': [
-      //     0,
-      //     100,
-      //   ],
-      // },
-    ],
+    'filters': [],
     'groupFilter': [],
     'valueKeys': [],
-    'mapValueKeys': [
-      // {
-      //   'mapVis': 'radius',
-      //   'key': 'visits',
-      //   'title': 'Visits (sum)',
-      //   'agg': 'sum',
-      // },
-      // {
-      //   'title:': 'Unique visitors (sum)',
-      //   'mapVis': 'fill',
-      //   'key': 'unique_visitors',
-      //   'agg': 'sum',
-      // },
-    ],
+    'mapValueKeys': [],
     'formatDataFunctions': {},
     'group': true,
     'groupKey': null,
-    // 'mapGroupKey': 'poi_id',
+    'mapGroupKey': null,
     'indexKey': null,
-    // 'mapGroupKeyTitle': 'Poi id',
     'uniqueOptions': {
-      // 'radius': {
-      //   'value': 10,
-      //   'valueOptions': [
-      //     5,
-      //     15,
-      //   ],
-      // },
-      // 'fill': {
-      //   'value': [
-      //     39,
-      //     85,
-      //     196,
-      //   ],
-      //   'valueOptions': [
-      //     [
-      //       214,
-      //       232,
-      //       253,
-      //     ],
-      //     [
-      //       39,
-      //       85,
-      //       196,
-      //     ],
-      //   ],
-      // },
-      // 'elevation': {
-      //   'value': 1000,
-      // },
+      'radius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'fill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'targetRadius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'targetFill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'arcWidth': {
+        'value': 1,
+        'valueOptions': [
+          1,
+          20,
+        ],
+      },
+      'elevation': {
+        'value': 1000,
+      },
       'lineWidth': {
         'value': 1,
       },
       'opacity': {
         'value': 20,
+      },
+      'size': {
+        'value': 4,
+      },
+      'mapViewState': {
+        'value': {
+          'latitude': 49.95629223186103,
+          'longitude': -95.2493957499999,
+          'zoom': 3.5259095514967456,
+          'width': 808,
+          'height': 834,
+          'bearing': 0,
+          'pitch': 45,
+          'altitude': 1.5,
+          'maxZoom': 20,
+          'minZoom': 0,
+          'maxPitch': 60,
+          'minPitch': 0,
+          'position': [
+            0,
+            0,
+            0,
+          ],
+        },
+        'postalCode': {
+          'latitude': 43.75,
+          'longitude': -79.4,
+          'zoom': 10,
+        },
       },
     },
     'genericOptions': {
@@ -991,6 +1031,10 @@ export default {
       'showTooltip': true,
       'showAxisTitles': true,
       'showSubPlotTitles': true,
+      'showLabels': false,
+      'mapHideSourceLayer': false,
+      'mapHideTargetLayer': false,
+      'mapHideArcLayer': false,
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -1004,43 +1048,194 @@ export default {
       'legendSize': 'Small',
       'baseColor': '#366fe4',
     },
-    'mapViewState': {
-      'value': {
-        'latitude': 49.04458924229672,
-        'longitude': -87.95359000000006,
-        'zoom': 2.9427361735841195,
-        'width': 917,
-        'height': 742,
-        'bearing': 0,
-        'pitch': 0,
-        'altitude': 1.5,
-        'maxZoom': 20,
-        'minZoom': 0,
-        'maxPitch': 60,
-        'minPitch': 0,
-      },
-      'postalCode': {
-        'latitude': 43.75,
-        'longitude': -79.4,
-        'zoom': 10,
-      },
-    },
     'dataSource': {
       'type': 'Execution',
       'id': '2123',
     },
     'percentageMode': false,
+    'addUserControls': false,
+    'userControlHeadline': 'Benchmark By',
+    'userControlKeyValues': [],
     'presetColors': [
       '#3232F5',
       '#07A0C3',
       '#F0C808',
       '#91F5AD',
       '#dd1c1a',
-      '#463F3A',
+      '#366fe4',
     ],
     'mapTooltipLabelTitles': {
       'sourceTitle': 'Poi name',
     },
+  },
+  'dev-map-4': {
+    'title': 'My example map widget - user value controls',
+    'type': 'map',
+    'filters': [],
+    'groupFilter': [],
+    'valueKeys': [],
+    'mapValueKeys': [
+      {
+        'mapVis': 'fill',
+        'key': 'no_education',
+        'title': 'No education',
+      },
+    ],
+    'formatDataFunctions': {},
+    'group': true,
+    'groupKey': null,
+    'mapGroupKey': 'geo_ca_fsa',
+    'indexKey': null,
+    'mapGroupKeyTitle': 'Geo ca fsa',
+    'uniqueOptions': {
+      'radius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'fill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'targetRadius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'targetFill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'arcWidth': {
+        'value': 1,
+        'valueOptions': [
+          1,
+          20,
+        ],
+      },
+      'elevation': {
+        'value': 10000,
+      },
+      'lineWidth': {
+        'value': 1,
+      },
+      'opacity': {
+        'value': 30,
+      },
+      'size': {
+        'value': 4,
+      },
+      'mapViewState': {
+        'value': {
+          'latitude': 43.69729166871382,
+          'longitude': -79.30322360425139,
+          'zoom': 11.250307063380061,
+          'width': 1028,
+          'height': 837,
+          'bearing': 0,
+          'pitch': 0,
+          'altitude': 1.5,
+          'maxZoom': 20,
+          'minZoom': 0,
+          'maxPitch': 60,
+          'minPitch': 0,
+          'position': [
+            0,
+            0,
+            0,
+          ],
+        },
+        'postalCode': {
+          'latitude': 43.75,
+          'longitude': -79.4,
+          'zoom': 10,
+        },
+      },
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLegend': true,
+      'showTooltip': true,
+      'showAxisTitles': true,
+      'showSubPlotTitles': true,
+      'showLabels': false,
+      'mapHideSourceLayer': false,
+      'mapHideTargetLayer': false,
+      'mapHideArcLayer': false,
+      'subPlots': false,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        0,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'legendSize': 'Small',
+      'baseColor': '#366fe4',
+    },
+    'dataSource': {
+      'type': 'Manual',
+      'id': '3000',
+    },
+    'percentageMode': false,
+    'addUserControls': true,
+    'userControlHeadline': 'Benchmark By',
+    'userControlKeyValues': [
+      'population',
+      'home_value',
+      'no_education',
+      'secondary_education',
+      'apprenticeship_trades',
+      'college_uni_below_bachelor',
+      'uni_bachelor',
+      'uni_advanced',
+    ],
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#366fe4',
+    ],
+    'mapTooltipLabelTitles': null,
   },
   'filter-test-1': {
     'title': 'Household income',

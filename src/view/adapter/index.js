@@ -6,10 +6,11 @@ import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreActions, useStoreState } from '../../store'
 import typeInfo from '../../constants/type-info'
+import types from '../../constants/types'
 import UserValueControls from '../../user-controls/user-value-controls'
 
 
-const useStyles = (renderUserControlValues) => makeStyles({
+const useStyles = ({ type, renderUserControlValues }) => makeStyles({
   container: {
     position: 'relative',
     width: '100%',
@@ -18,7 +19,12 @@ const useStyles = (renderUserControlValues) => makeStyles({
   widget: {
     // 64px is the height of the WidgetValueControls container
     height: renderUserControlValues ? 'calc(100% - 64px)' : '100%',
-    padding: renderUserControlValues ? '1rem' : 0,
+    padding: renderUserControlValues && type !== types.MAP ? '1rem' : 0,
+  },
+  userValueDropdownSelect: {
+    position: 'absolute',
+    margin: '1rem',
+    zIndex: '10',
   },
 })
 
@@ -40,9 +46,13 @@ const WidgetAdapter = () => {
   const type = useStoreState((state) => state.type)
   const config = useStoreState((state) => state.config)
   const transformedData = useStoreState((state) => state.transformedData)
-  const addBenchmark = useStoreState((state) => state.addBenchmark)
-  const benchmarkHeadline = useStoreState((state) => state.benchmarkHeadline)
-  const benchmarkKeyValues = useStoreState((state) => state.benchmarkKeyValues)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const addUserControls = useStoreState((state) => state.addUserControls)
+  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
+  const selectedUserDataControlIndex = useStoreState((state) => state.selectedUserDataControlIndex)
+  const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
+  const userValueDropdownSelect = useStoreState((state) => state.userValueDropdownSelect)
+
   const { ref, width, height } = useResizeDetector({
     refreshMode: 'debounce',
     refreshRate: 100,
@@ -52,11 +62,11 @@ const WidgetAdapter = () => {
     ref?.current && update({ ui: { screenshotRef: ref.current } })
   }, [ref, update])
 
-  const renderUserControlValues = useMemo(() => Boolean(addBenchmark &&
-    (benchmarkHeadline || benchmarkKeyValues.length > 0))
-  , [addBenchmark, benchmarkHeadline, benchmarkKeyValues])
+  const renderUserControlValues = useMemo(() => Boolean(addUserControls &&
+    (userControlKeyValues.length > 0))
+  , [addUserControls, userControlKeyValues])
 
-  const classes = useStyles(renderUserControlValues)
+  const classes = useStyles({ type, renderUserControlValues })
 
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
@@ -68,12 +78,18 @@ const WidgetAdapter = () => {
   // render the component
   return (
     <div ref={ref} className={classes.container} >
-      {addBenchmark && (benchmarkHeadline || benchmarkKeyValues.length > 0) &&
+      {addUserControls && userControlKeyValues?.length > 0 && (type === types.BAR ||
+        (type === types.MAP && renderableValueKeys?.length === 1)) &&
         <UserValueControls/>
       }
       <div className={classes.widget}>
-        {/* 64 is the height of the WidgetValueControls container */}
+        {Boolean(addUserControls && categoryKeyValues?.length && selectedUserDataControlIndex >= 0) && (
+          <div className={classes.userValueDropdownSelect}>
+            {userValueDropdownSelect}
+          </div>
+        )}
         {createElement(component,
+          // 64 is the height of the WidgetValueControls container
           { width, height: renderUserControlValues ? height - 64 : height, ...adaptedDataAndConfig }
         )}
       </div>

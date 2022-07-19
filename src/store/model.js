@@ -1,12 +1,17 @@
 import { getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { computed, action, thunk, thunkOn } from 'easy-peasy'
 
-import types from '../constants/types'
-import typeInfo from '../constants/type-info'
-import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
+import { deepMerge } from './util'
 import { cleanUp, truncateString } from '../util/string-manipulation'
 import { createWidget, saveWidget, getWidget, localGetWidget, requestData } from '../util/api'
 import { geoKeyHasCoordinates } from '../util'
+import { getKeyFormatFunction } from '../util/data-format-functions'
+import { columnInference } from '../util/columns'
+import { mapDataIsValid } from '../util/map_data_validation'
+import { screenshot } from '../util/export'
+import types from '../constants/types'
+import typeInfo from '../constants/type-info'
+import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import {
   MAP_LAYERS,
   MAP_GEO_KEYS,
@@ -15,19 +20,18 @@ import {
   COORD_KEYS,
   GEO_KEY_TYPE_NAMES,
 } from '../constants/map'
-import { getKeyFormatFunction } from '../util/data-format-functions'
-import { deepMerge } from './util'
+import {
+  DATA_CATEGORIES,
+  DATA_CATEGORIES_KEYS,
+  DATA_CATEGORIES_VALUES,
+} from '../constants/insights-data-categories'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
-import { columnInference } from '../util/columns'
-import { mapDataIsValid } from '../util/map_data_validation'
 import { EXPORT_TYPES } from '../constants/export'
-import { screenshot } from '../util/export'
 import { dataSourceTypes } from '../constants/data-source'
 
 
 const MAX_UNDO_STEPS = 10
-
 
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
@@ -85,9 +89,11 @@ const stateDefaults = [
   { key: 'saveWithInsightsData', defaultValue: false, resettable: false },
   { key: 'reportType', defaultValue: null, resettable: true },
   { key: 'percentageMode', defaultValue: false, resettable: true },
-  { key: 'addBenchmark', defaultValue: false, resettable: true },
-  { key: 'benchmarkHeadline', defaultValue: 'Benchmark By', resettable: true },
-  { key: 'benchmarkKeyValues', defaultValue: [], resettable: true },
+  { key: 'addUserControls', defaultValue: false, resettable: true },
+  { key: 'userControlHeadline', defaultValue: 'Benchmark By', resettable: true },
+  { key: 'userControlKeyValues', defaultValue: [], resettable: true },
+  { key: 'dataCategoryKey', defaultValue: null, resettable: true },
+  { key: 'selectedCategValue', defaultValue: null, resettable: true },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
   {
     key: 'ui',
@@ -152,9 +158,9 @@ export default {
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
       (state) => state.percentageMode,
-      (state) => state.addBenchmark,
-      (state) => state.benchmarkHeadline,
-      (state) => state.benchmarkKeyValues,
+      (state) => state.addUserControls,
+      (state) => state.userControlHeadline,
+      (state) => state.userControlKeyValues,
       (state) => state.presetColors,
       (state) => state.dateAggregation,
       (state) => state.mapTooltipLabelTitles,
@@ -177,9 +183,9 @@ export default {
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
       percentageMode,
-      addBenchmark,
-      benchmarkHeadline,
-      benchmarkKeyValues,
+      addUserControls,
+      userControlHeadline,
+      userControlKeyValues,
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
@@ -203,9 +209,9 @@ export default {
       genericOptions,
       dataSource: { type: dataSourceType, id: dataSourceID },
       percentageMode,
-      addBenchmark,
-      benchmarkHeadline,
-      benchmarkKeyValues,
+      addUserControls,
+      userControlHeadline,
+      userControlKeyValues,
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
@@ -510,6 +516,92 @@ export default {
 
   undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
   redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
+
+  finalUserControlKeyValues: computed(
+    [
+      (state) => state.type,
+      (state) => state.userControlKeyValues,
+    ],
+    (
+      type,
+      userControlKeyValues,
+    ) => {
+      // for map widget the finalUserControlKeyValues is a mix of column keys & data categories
+      if (type === types.MAP) {
+        return userControlKeyValues.reduce((acc, key) => {
+          const category = DATA_CATEGORIES_VALUES.includes(key) ?
+            DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
+            key
+          acc = category && acc.includes(category) ? acc : [...acc, category]
+          return acc
+        }, [])
+      }
+      return userControlKeyValues
+    }
+  ),
+
+  selectedUserDataControlIndex: computed(
+    [
+      (state) => state.addUserControls,
+      (state) => state.type,
+      (state) => state.renderableValueKeys,
+      (state) => state.finalUserControlKeyValues,
+      (state) => state.dataCategoryKey,
+    ],
+    (
+      addUserControls,
+      type,
+      renderableValueKeys,
+      finalUserControlKeyValues,
+      dataCategoryKey,
+    ) => {
+      if (addUserControls) {
+        if (type === types.BAR && renderableValueKeys.length > 1 &&
+          finalUserControlKeyValues.includes(renderableValueKeys[1].key)) {
+          return finalUserControlKeyValues.indexOf(renderableValueKeys[1].key)
+        }
+        if (type === types.MAP && renderableValueKeys.length > 0) {
+          if (!dataCategoryKey &&
+            finalUserControlKeyValues.includes(renderableValueKeys[0].key)){
+            return finalUserControlKeyValues.indexOf(renderableValueKeys[0].key)
+          } else if (dataCategoryKey) {
+            return finalUserControlKeyValues.indexOf(dataCategoryKey)
+          }
+        }
+      }
+    }
+  ),
+
+  categoryKeyValues: computed(
+    [
+      (state) => state.type,
+      (state) => state.dataCategoryKey,
+      (state) => state.userControlKeyValues,
+      (state) => state.formattedColumnNames,
+    ],
+    (
+      type,
+      dataCategoryKey,
+      userControlKeyValues,
+      formattedColumnNames
+    ) => Boolean(type === types.MAP && dataCategoryKey && userControlKeyValues?.length) &&
+        userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val))
+          .map(key => ({ title: formattedColumnNames[key], key })) || []
+  ),
+
+  selectedCategoryValue: computed(
+    [
+      (state) => state.type,
+      (state) => state.renderableValueKeys,
+      (state) => state.categoryKeyValues,
+    ],
+    (
+      type,
+      renderableValueKeys,
+      categoryKeyValues,
+    ) => Boolean(type === types.MAP && renderableValueKeys?.length && categoryKeyValues?.length) &&
+      categoryKeyValues.find(e => e.key === renderableValueKeys[0].key) || null
+  ),
 
   /** ACTIONS ------------------------------------------------------------------ */
 

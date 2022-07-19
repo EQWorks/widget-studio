@@ -13,16 +13,19 @@ import { MAP_LAYERS, MAP_VALUE_VIS } from '../../constants/map'
 const classes = makeStyles({
   // TO DO - readjust when we revise all styling
   opacityRow: {
+    width: '100%',
     marginTop: '-0.625rem',
   },
   layerControl: {
     width: '100%',
     display: 'flex',
+    gap: '0.625rem',
   },
   layerControlNoOpacity : {
     width: '100%',
     display: 'flex',
     marginTop: '-1.25rem',
+    gap: '0.625rem',
   },
   layerName: {
     fontSize: '0.75rem',
@@ -30,7 +33,7 @@ const classes = makeStyles({
     color: getTailwindConfigColor('secondary-700'),
   },
   textFieldContainer: {
-    width: '6.918rem',
+    width: '9.5315rem',
   },
   radius: {
     display: 'flex',

@@ -310,7 +310,8 @@ const useDashboards = (reportID) => {
   const key = `Get Dashboards for report ${reportID}`
   const { isError, error, isLoading, data = [] } = useQuery(
     key,
-    () => api.get(`/insights/dashboards/${reportID}`).then(({ data }) => data),
+    // TO CHANGE: remove label param once the api conflict is resolved in firstorder
+    () => api.get(`/insights/dashboards/${reportID}?label=`).then(({ data }) => data),
     { refetchOnWindowFocus: false },
   )
   useEffect(() => {

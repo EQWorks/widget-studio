@@ -13,7 +13,7 @@ import types from '../constants/types'
 import { dataSourceTypes } from '../constants/data-source'
 
 
-const useStyles = ({ mode, tableExpanded, type, addBenchmark }) => makeStyles(
+const useStyles = ({ mode, tableExpanded, type, addUserControls }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
@@ -84,7 +84,7 @@ const useStyles = ({ mode, tableExpanded, type, addBenchmark }) => makeStyles(
     }
     : {
       outerContainer: {
-        padding: addBenchmark ? 0 : '0.25rem 1rem 1rem 1rem',
+        padding: addUserControls ? 0 : '0.25rem 1rem 1rem 1rem',
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -106,7 +106,7 @@ const WidgetView = () => {
   const domain = useStoreState((state) => state.domain)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
-  const addBenchmark = useStoreState((state) => state.addBenchmark)
+  const addUserControls = useStoreState((state) => state.addUserControls)
 
   // data source state
   const dataSourceType = useStoreState((state) => state.dataSource.type)
@@ -123,7 +123,7 @@ const WidgetView = () => {
   const [tableExpanded, setTableExpanded] = useState(false)
   const [autoExpandedTable, setAutoExpandedTable] = useState(false)
 
-  const classes = useStyles({ mode, tableExpanded, type, addBenchmark })
+  const classes = useStyles({ mode, tableExpanded, type, addUserControls })
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
