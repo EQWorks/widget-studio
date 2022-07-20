@@ -193,9 +193,9 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
       classes={{ button: classes.editButton }}
       horizontalMargin
       variant={mode === modes.COMPACT ? 'borderless' : 'filled'}
-      onClick={() => {
+      onClick={(e) => {
         onOpenInEditor
-          ? onOpenInEditor(tentativeConfig)
+          ? onOpenInEditor(e, tentativeConfig)
           : update({ ui: { mode: modes.EDITOR } })
       }}
       {...(mode !== modes.COMPACT && { endIcon: <Icons.ShareExternalLink size='md' /> })}
