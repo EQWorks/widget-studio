@@ -34,7 +34,7 @@ const EditorLeftSidebar = () => {
           : <>
             <DomainControls />
             <ValueControls />
-            {type !== types.PYRAMID && <DataTransformationControls />}
+            {![types.PYRAMID, types.STAT].includes(type) && <DataTransformationControls />}
             {/* restrict to dev only for now */}
             { hasDevAccess() && type === types.BAR && numericColumns.length > 1 &&
               ((renderableValueKeys.length <= 1 && !addBenchmark) || addBenchmark) &&
