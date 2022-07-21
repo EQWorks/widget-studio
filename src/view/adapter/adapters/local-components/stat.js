@@ -136,6 +136,7 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
 
   return (
     <div className={classes.outerContainer}>
+      {showWidgetTitle && <div className="title-container">{title}</div>}
       <div className={classes.innerContainer}>
         <div className={`content-container ${showVertical && 'is-vertical'}`}>
           {
