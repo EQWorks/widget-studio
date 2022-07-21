@@ -7,10 +7,14 @@ const classes = makeStyles({
   outerContainer: {
     width: '100%',
     height: '100%',
+    padding: '2rem 3rem',
+  },
+  innerContainer: {
+    width: '100%',
+    height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '2rem 3rem',
   },
   item: {
     display: 'flex',
@@ -40,6 +44,7 @@ const Stat = ({ data, values, genericOptions }) => {
 
   return (
     <div className={classes.outerContainer}>
+      <div className={classes.innerContainer}>
       {
         values?.map((k, i) => (
           <div key={k}>
@@ -60,6 +65,7 @@ const Stat = ({ data, values, genericOptions }) => {
           </div>
         ))
       }
+      </div>
     </div>
   )
 }
