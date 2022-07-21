@@ -55,6 +55,12 @@ const EditorRightSidebar = () => {
   const isReady = useStoreState((state) => state.isReady)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
+  const uniqueOptions = useStoreState((state) => state.uniqueOptions)
+
+  // common state
+  const group = useStoreState((state) => state.group)
+  const groups = useStoreState((state) => state.groups)
+  const rows = useStoreState((state) => state.rows)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
@@ -223,6 +229,44 @@ const EditorRightSidebar = () => {
     )
   )
 
+  const renderStatLayer = (
+    renderItem('Compare to current trend',
+      <CustomSelect
+        fullWidth
+        simple
+        data={groups}
+        value={uniqueOptions.selectedTrend ? uniqueOptions.selectedTrend.value : ''}
+        onSelect={val => {
+          let getMatchedTrend = {}
+          rows.forEach((value) => {
+            if (value[domain.value].toString() === val) {
+              getMatchedTrend = value
+            }
+          })
+
+          userUpdate({
+            uniqueOptions: {
+              selectedTrend: {
+                value: val ?? '',
+                domain: domain,
+                ...getMatchedTrend,
+              },
+            },
+          })
+        }}
+        onClear={() => userUpdate({
+          uniqueOptions: {
+            selectedTrend: {
+              value: '',
+            },
+          },
+        })}
+        placeholder={group && domain.value ? `Select a ${domain.value} to compare` : 'N/A'}
+        disabled={!group || !domain.value}
+      />
+    )
+  )
+
   return (
     <EditorSidebarBase>
       <MutedBarrier mute={!type ||
@@ -244,12 +288,20 @@ const EditorRightSidebar = () => {
                     {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
                   </>
                 )}
-                {renderSection('Styling',
-                  <>
-                    {renderRow(null, renderStyling)}
-                    {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
-                  </>
-                )}
+                {type !== types.STAT &&
+                  renderSection('Styling',
+                    <>
+                      {renderRow(null, renderStyling)}
+                      {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
+                    </>
+                  )}
+                {type === types.STAT &&
+                  renderSection('Stat Layer Display',
+                    <>
+                      {renderRow(null, renderStatLayer)}
+                    </>
+                  )
+                }
                 {type === types.MAP && <MapLayerDisplay />}
               </>
             )
@@ -257,7 +309,7 @@ const EditorRightSidebar = () => {
         </WidgetControlCard >
       </MutedBarrier>
       {
-        type !== types.MAP &&
+        ![types.MAP, types.STAT].includes(type) &&
         <WidgetControlCard title='Color Scheme'>
           <ColorSchemeControls />
         </WidgetControlCard >

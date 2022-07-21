@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
 
 
 const classes = makeStyles({
@@ -8,6 +8,15 @@ const classes = makeStyles({
     width: '100%',
     height: '100%',
     padding: '2rem 3rem',
+
+    '& .title-container': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontWeight: 700,
+      fontSize: '1.3rem',
+      color: getTailwindConfigColor('secondary-800'),
+    },
   },
   innerContainer: {
     width: '100%',
@@ -65,10 +74,65 @@ const classes = makeStyles({
     height: '100%',
     margin: '0 2rem',
   },
+  trendLabel: {
+    marginTop: '0.625rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '0.875rem',
+    color: getTailwindConfigColor('secondary-600'),
+
+    '& .percentage-label': {
+      display: 'flex',
+      alignItems: 'center',
+      letterSpacing: '1px',
+
+      '& .icon-container': {
+        marginRight: '0.313rem',
+      },
+    },
+
+    '& .increased': {
+      color: getTailwindConfigColor('success-500'),
+    },
+
+    '& .decreased': {
+      color: getTailwindConfigColor('error-500'),
+    },
+  },
 })
 
-const Stat = ({ data, values, genericOptions }) => {
-  const { showLabels, showCurrency, showVertical } = genericOptions
+const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
+  const { showLabels, showCurrency, showWidgetTitle } = genericOptions
+  const { selectedTrend } = uniqueOptions
+
+  const calculateTrend = (curr, versus) => {
+    return curr > 0 ? ((Number(versus) - Number(curr)) / Number(curr)) * 100 : 100
+  }
+
+  const renderTrend = (value) => {
+    if (value > 0) {
+      return (
+        <label className='percentage-label increased'>
+          <div className="icon-container">
+            <Icons.ArrowUpRegular size='md'/>
+          </div>
+          {value}%
+        </label>
+      )
+    } else if (value < 0) {
+      return (
+        <label className='percentage-label decreased'>
+          <div className="icon-container">
+            <Icons.ArrowDownRegular size='md'/>
+          </div>
+          {Math.abs(value)}%
+        </label>
+      )
+    } else {
+      return (<label className='percentage-label'>0% </label>)
+    }
+  }
 
   return (
     <div className={classes.outerContainer}>
@@ -87,6 +151,12 @@ const Stat = ({ data, values, genericOptions }) => {
                     </div>
                   }
                 </div>
+                { selectedTrend && selectedTrend.value &&
+                  <div className={`trend-label-container ${classes.trendLabel}`}>
+                    {renderTrend(Math.round(calculateTrend(selectedTrend[v.key], data[0][v.title])))}
+                    &nbsp;vs {selectedTrend.value} {selectedTrend.domain.value}
+                  </div>
+                }
               </div>
             ))
           }
@@ -99,6 +169,8 @@ const Stat = ({ data, values, genericOptions }) => {
 Stat.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  title: PropTypes.string,
   genericOptions: PropTypes.object.isRequired,
+  uniqueOptions: PropTypes.object.isRequired,
 }
 export default Stat
