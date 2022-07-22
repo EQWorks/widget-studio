@@ -15,11 +15,38 @@ const classes = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  item: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+
+    '& .content-container': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+
+      '& .item-container': {
+        margin: '0.25rem 0',
+        borderWidth: '0 2px 0 0',
+        borderColor: 'black',
+  
+        '& .item': {
+          padding: '0 1.25rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        },
+      },
+  
+      '& .item-container:last-child': {
+        borderRight: '0'
+      },
+
+      '& .is-vertical': {
+        width: '100%',
+        borderWidth: '0'
+      },
+    },
+
+    '& .is-vertical': {
+      flexDirection: 'column'
+    }
   },
   value: {
     fontSize: '2.25rem',
@@ -41,30 +68,29 @@ const classes = makeStyles({
 
 const Stat = ({ data, values, genericOptions }) => {
   const { showLabels, showCurrency } = genericOptions
+  const vertical = true
 
   return (
     <div className={classes.outerContainer}>
       <div className={classes.innerContainer}>
-      {
-        values?.map((k, i) => (
-          <div key={k}>
-            <div className={classes.item}>
-              <div className={classes.value}>
-                {showCurrency && '$'}{Number(data[0][k]).toLocaleString('en-US', {maximumFractionDigits:2})}
-              </div>
-              {showLabels &&     
-                <div className={classes.label}>
-                  {k}
+        <div className={`content-container ${vertical && 'is-vertical'}`}>
+          {
+            values?.map((k) => (
+              <div key={k} className={`item-container ${vertical && 'is-vertical'}`}>
+                <div className='item'>
+                  <div className={classes.value}>
+                    {showCurrency && '$'}{Number(data[0][k]).toLocaleString('en-US', {maximumFractionDigits:2})}
+                  </div>
+                  {showLabels &&     
+                    <div className={classes.label}>
+                      {k}
+                    </div>
+                  }
                 </div>
-              }
-            </div>
-            {
-              i < (values.length - 1) &&
-              <div className={classes.divider} />
-            }
-          </div>
-        ))
-      }
+              </div>
+            ))
+          }
+        </div>
       </div>
     </div>
   )
