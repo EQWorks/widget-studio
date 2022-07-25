@@ -51,6 +51,7 @@ const EditorRightSidebar = () => {
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
   const showLabels = useStoreState((state) => state.genericOptions.showLabels)
   const showCurrency = useStoreState((state) => state.genericOptions.showCurrency)
+  const showVertical = useStoreState((state) => state.genericOptions.showVertical)
   const isReady = useStoreState((state) => state.isReady)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
@@ -123,6 +124,13 @@ const EditorRightSidebar = () => {
                 'Labels',
                 showLabels,
                 v => userUpdate({ genericOptions: { showLabels: v } }),
+              )
+            }
+            {type === types.STAT &&
+              renderToggle(
+                'Vertical',
+                showVertical,
+                v => userUpdate({ genericOptions: { showVertical: v } }),
               )
             }
             {![types.PIE, types.MAP, types.PYRAMID, types.STAT].includes(type) &&
