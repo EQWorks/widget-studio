@@ -43,7 +43,7 @@ const Filters = () => {
         fullWidth
         multiSelect={type === types.STAT ? false : true}
         data={groups}
-        value={type === types.STAT ? groupFilter[0] ?? '' : groupFilter ?? []}
+        value={type === types.STAT ? (groupFilter[0] ?? '') : (groupFilter ?? [])}
         onSelect={val => userUpdate({ groupFilter: type === types.STAT ? [val] : val })}
         placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
         disabled={!group || !domain.value}
