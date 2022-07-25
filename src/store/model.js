@@ -63,6 +63,7 @@ const stateDefaults = [
       showSubPlotTitles: true,
       showLabels: false,
       showCurrency: false,
+      showVertical: false,
       mapHideSourceLayer: false,
       mapHideTargetLayer: false,
       mapHideArcLayer: false,

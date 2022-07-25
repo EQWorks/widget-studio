@@ -10,7 +10,7 @@ export default {
       return ({
         data,
         values: valueKeys.map(({ title }) => title),
-        genericOptions
+        genericOptions,
       })
     },
   },

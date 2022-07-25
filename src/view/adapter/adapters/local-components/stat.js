@@ -25,7 +25,7 @@ const classes = makeStyles({
         margin: '0.25rem 0',
         borderWidth: '0 2px 0 0',
         borderColor: 'black',
-  
+
         '& .item': {
           padding: '0 1.25rem',
           display: 'flex',
@@ -33,20 +33,20 @@ const classes = makeStyles({
           alignItems: 'center',
         },
       },
-  
+
       '& .item-container:last-child': {
-        borderRight: '0'
+        borderRight: '0',
       },
 
       '& .is-vertical': {
         width: '100%',
-        borderWidth: '0'
+        borderWidth: '0',
       },
     },
 
     '& .is-vertical': {
-      flexDirection: 'column'
-    }
+      flexDirection: 'column',
+    },
   },
   value: {
     fontSize: '2.25rem',
@@ -67,21 +67,20 @@ const classes = makeStyles({
 })
 
 const Stat = ({ data, values, genericOptions }) => {
-  const { showLabels, showCurrency } = genericOptions
-  const vertical = true
+  const { showLabels, showCurrency, showVertical } = genericOptions
 
   return (
     <div className={classes.outerContainer}>
       <div className={classes.innerContainer}>
-        <div className={`content-container ${vertical && 'is-vertical'}`}>
+        <div className={`content-container ${showVertical && 'is-vertical'}`}>
           {
             values?.map((k) => (
-              <div key={k} className={`item-container ${vertical && 'is-vertical'}`}>
+              <div key={k} className={`item-container ${showVertical && 'is-vertical'}`}>
                 <div className='item'>
                   <div className={classes.value}>
-                    {showCurrency && '$'}{Number(data[0][k]).toLocaleString('en-US', {maximumFractionDigits:2})}
+                    {showCurrency && '$'}{Number(data[0][k]).toLocaleString('en-US', { maximumFractionDigits:2 })}
                   </div>
-                  {showLabels &&     
+                  {showLabels &&
                     <div className={classes.label}>
                       {k}
                     </div>
@@ -99,5 +98,6 @@ const Stat = ({ data, values, genericOptions }) => {
 Stat.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  genericOptions: PropTypes.object.isRequired,
 }
 export default Stat
