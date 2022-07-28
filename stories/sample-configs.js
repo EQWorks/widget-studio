@@ -122,6 +122,65 @@ export default {
       '#463F3A',
     ],
   },
+  'dev-stat-2': {
+    'title': 'stat trend example',
+    'type': 'stat',
+    'filters': [
+      {
+        key: 'resolution',
+        filter: [20000],
+      },
+    ],
+    'groupFilter': [],
+    'valueKeys': [
+      {
+        'key': 'submitted_deals',
+        'title': 'Submitted deals',
+      },
+    ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
+    'group': true,
+    'groupKey': 'resolution',
+    'mapGroupKey': null,
+    'indexKey': null,
+    'groupKeyTitle': 'Resolution',
+    'uniqueOptions': {
+      'showTicks': true,
+      'spline': false,
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLabels': true,
+      'showCurrency': false,
+      'subPlots': false,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        0,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'legendSize': 'Small',
+      'baseColor': '#366fe4',
+    },
+    'dataSource': {
+      'type': 'Manual',
+      'id': '2001',
+    },
+    'percentageMode': false,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#463F3A',
+    ],
+  },
   'dev-pie-1': {
     'title': 'My example pie widget',
     'type': 'pie',

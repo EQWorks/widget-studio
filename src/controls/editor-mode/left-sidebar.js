@@ -16,6 +16,8 @@ import DataSourceControls from './components/data-source-controls'
 import UserValueConfigurationControls from './components/user-value-configuration-controls'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderToggle } from '../shared/util'
+import BenchmarkControls from './components/benchmark-controls'
+import TrendControls from './components/trend-controls'
 import { hasDevAccess  } from '../../util/access'
 
 
@@ -58,6 +60,9 @@ const EditorLeftSidebar = () => {
             { hasDevAccess() && type === types.BAR && numericColumns.length > 1 &&
               ((renderableValueKeys.length <= 1 && !addBenchmark) || addBenchmark) &&
               <BenchmarkControls />
+            }
+            { type === types.STAT &&
+              <TrendControls />
             }
           </>
       }
