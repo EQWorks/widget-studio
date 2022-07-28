@@ -12,7 +12,7 @@ import types from '../../../constants/types'
 
 const classes = makeStyles({
   toggle: {
-    margin: '.625rem 0 0 1.5rem',
+    margin: '.625rem 0 0 1.35rem',
   },
   row: {
     marginBottom: '.625rem',
