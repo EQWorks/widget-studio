@@ -20,6 +20,7 @@ const EditorLeftSidebar = () => {
   const userUpdate = useStoreActions(actions => actions.userUpdate)
 
   const type = useStoreState((state) => state.type)
+  const columns = useStoreState((state) => state.columns)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const numericColumns = useStoreState((state) => state.numericColumns)
   const addUserControls = useStoreState((state) => state.addUserControls)
@@ -44,6 +45,8 @@ const EditorLeftSidebar = () => {
       }
       {/* restrict to dev only for now */}
       {hasDevAccess() && [types.BAR, types.LINE].includes(type) && !addUserControls &&
+        renderableValueKeys.length > 0 &&
+        ['category', 'ranking'].every(elem => JSON.stringify(columns).includes(elem)) &&
         <WidgetControlCard title='Top Categories'>
           {
             renderToggle('Add Top Categories',
