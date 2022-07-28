@@ -11,6 +11,7 @@ import EditorSidebarBase from './sidebar-base'
 import DataTransformationControls from '../shared/data-transformation-controls'
 import DataSourceControls from './components/data-source-controls'
 import BenchmarkControls from './components/benchmark-controls'
+import TrendControls from './components/trend-controls'
 import { hasDevAccess  } from '../../util/access'
 
 
@@ -39,6 +40,9 @@ const EditorLeftSidebar = () => {
             { hasDevAccess() && type === types.BAR && numericColumns.length > 1 &&
               ((renderableValueKeys.length <= 1 && !addBenchmark) || addBenchmark) &&
               <BenchmarkControls />
+            }
+            { type === types.STAT &&
+              <TrendControls />
             }
           </>
       }
