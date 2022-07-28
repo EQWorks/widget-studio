@@ -8,7 +8,7 @@ export const quickNumericFormat = Intl.NumberFormat('en-US', {
 export const priceStringToNumeric = s => parseFloat(s?.split('$')[1]?.replace(/,/g, ''))
 
 /**
- * getRoundToNumberDigit - rounds a number up to the next largest integer based of the lenght of its digits and returns the result.
+ * getRoundToNumberDigit - rounds a number up to the next largest integer based of the lenght of its digits and returns the result
  * @param { numeric } key - numeric key param
  */
 export const getRoundToNumberDigit = (num) => {
@@ -22,4 +22,28 @@ export const getRoundToNumberDigit = (num) => {
   }
 
   return Math.ceil(num / roundTo) * roundTo
+}
+
+/**
+ * numberToOrdinal - transforms a number into the corresponding short ordinal, ex: 1 -> 1st
+ * @param { numeric } num - a number
+ * @returns { string } - a string representing the short ordinal form of a number
+ */
+export const numberToOrdinal = (num) => {
+  let label
+  const lastChar = num.toString().charAt(num.length -1)
+  switch(lastChar) {
+    case '1':
+      label = num + 'st'
+      break
+    case '2':
+      label = num + 'nd'
+      break
+    case '3':
+      label = num + 'rd'
+      break
+    default:
+      label = num + 'th'
+  }
+  return label
 }
