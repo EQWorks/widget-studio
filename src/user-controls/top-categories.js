@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 
 import { List, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
-import { useStoreState } from '../store'
+import { useStoreState, useStoreActions } from '../store'
 import { cleanUp } from '../util/string-manipulation'
 import { numberToOrdinal } from '../util/numeric'
 
@@ -40,7 +40,10 @@ const classes = makeStyles({
 })
 
 const TopCategories = () => {
-  const rows = useStoreState((state) => state.rows)
+  const update = useStoreActions(actions => actions.update)
+
+  const rows = useStoreState(state => state.rows)
+  const propFilters = useStoreState(state => state.propFilters)
   const [selectedCategory, setSelectedCategory] = useState(0)
 
   const rankedCategories = useMemo(() => rows.reduce((acc, { category, ranking }) => {
@@ -49,6 +52,16 @@ const TopCategories = () => {
     }
     return acc
   }, [] ).sort((a, b) => a.ranking - b.ranking), [rows])
+
+  useEffect(() => {
+    if (selectedCategory === 0 && !propFilters.length) {
+      update({
+        propFilters: [
+          { key: 'category', filter: [rankedCategories[0].category] },
+        ],
+      })
+    }
+  }, [selectedCategory, propFilters, rankedCategories, update])
 
   return (
     <>
@@ -62,7 +75,14 @@ const TopCategories = () => {
                 className={index === selectedCategory ?
                   `${classes.button} ${classes.selectedCategory}` :
                   `${classes.button}`}
-                onClick={() => setSelectedCategory(index)}
+                onClick={() => {
+                  setSelectedCategory(index)
+                  update({
+                    propFilters: [
+                      { key: 'category', filter: [item.category] },
+                    ],
+                  })
+                }}
               >
                 <div className={classes.ranking}>
                   {numberToOrdinal(item.ranking)}
