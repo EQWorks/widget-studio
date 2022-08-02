@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 
-import { List, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../store'
 import { cleanUp } from '../util/string-manipulation'
@@ -8,14 +8,17 @@ import { numberToOrdinal } from '../util/numeric'
 
 
 const classes = makeStyles({
+  topCategories: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '.625rem 0rem',
+  },
   button: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     gap: '1.75rem',
-    height: '3.1875',
-    width: '15rem',
-    padding: '0.625rem  1rem',
+    padding: '0.8435rem 1rem',
     borderRight: `0.0625rem solid ${getTailwindConfigColor('secondary-200')}`,
     outline: 'none',
     '&:focus': {
@@ -36,6 +39,9 @@ const classes = makeStyles({
     fontSize: '1rem',
     fontWeight: 400,
     color: getTailwindConfigColor('secondary-900'),
+    whiteSpace: 'nowrap',
+    width: 'fit-content',
+    textAlign: 'left',
   },
 })
 
@@ -64,38 +70,31 @@ const TopCategories = () => {
   }, [selectedCategory, propFilters, rankedCategories, update])
 
   return (
-    <>
-      <List
-        gridCols={2}
-        data={rankedCategories}
-        renderItem={( { item, index, ListCol }) => (
-          <List.ListItem key={index}>
-            <ListCol colSpan={1}>
-              <button
-                className={index === selectedCategory ?
-                  `${classes.button} ${classes.selectedCategory}` :
-                  `${classes.button}`}
-                onClick={() => {
-                  setSelectedCategory(index)
-                  update({
-                    propFilters: [
-                      { key: 'category', filter: [item.category] },
-                    ],
-                  })
-                }}
-              >
-                <div className={classes.ranking}>
-                  {numberToOrdinal(item.ranking)}
-                </div>
-                <div className={classes.category}>
-                  {cleanUp(item.category)}
-                </div>
-              </button>
-            </ListCol>
-          </List.ListItem>
-        )}
-      />
-    </>
+    <div className={classes.topCategories}>
+      {rankedCategories.map((item, index) => (
+        <button
+          key={index}
+          className={index === selectedCategory ?
+            `${classes.button} ${classes.selectedCategory}` :
+            `${classes.button}`}
+          onClick={() => {
+            setSelectedCategory(index)
+            update({
+              propFilters: [
+                { key: 'category', filter: [item.category] },
+              ],
+            })
+          }}
+        >
+          <div className={classes.ranking}>
+            {numberToOrdinal(item.ranking)}
+          </div>
+          <div id='category' className={classes.category}>
+            {cleanUp(item.category)}
+          </div>
+        </button>
+      ))}
+    </div>
   )
 }
 
