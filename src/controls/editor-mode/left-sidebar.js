@@ -18,6 +18,7 @@ import { hasDevAccess  } from '../../util/access'
 
 const EditorLeftSidebar = () => {
   const userUpdate = useStoreActions(actions => actions.userUpdate)
+  const update = useStoreActions(actions => actions.update)
 
   const type = useStoreState((state) => state.type)
   const columns = useStoreState((state) => state.columns)
@@ -51,7 +52,12 @@ const EditorLeftSidebar = () => {
           {
             renderToggle('Add Top Category Controls',
               addTopCategories,
-              () => userUpdate({ addTopCategories: !addTopCategories }),
+              () => {
+                if (addTopCategories) {
+                  update({ propFilters: [] })
+                }
+                userUpdate({ addTopCategories: !addTopCategories })
+              },
             )
           }
         </WidgetControlCard>
