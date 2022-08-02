@@ -44,12 +44,12 @@ const EditorLeftSidebar = () => {
           </>
       }
       {/* restrict to dev only for now */}
-      {hasDevAccess() && [types.BAR, types.LINE].includes(type) && !addUserControls &&
+      {hasDevAccess() && type === types.BAR && !addUserControls &&
         renderableValueKeys.length > 0 &&
         ['category', 'ranking'].every(elem => JSON.stringify(columns).includes(elem)) &&
         <WidgetControlCard title='Top Categories'>
           {
-            renderToggle('Add Top Categories',
+            renderToggle('Add Top Category Controls',
               addTopCategories,
               () => userUpdate({ addTopCategories: !addTopCategories }),
             )
