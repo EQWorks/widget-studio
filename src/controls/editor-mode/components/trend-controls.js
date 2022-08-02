@@ -1,42 +1,22 @@
-import React, { useMemo } from 'react'
-
-import { TextField, Tooltip, Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
+import React from 'react'
 
 import { useStoreState, useStoreActions } from '../../../store'
+
 import WidgetControlCard from '../../shared/components/widget-control-card'
-import { renderRow, renderToggle, renderItem } from '../../shared/util'
+import { renderRow } from '../../shared/util'
 import MutedBarrier from '../../shared/muted-barrier'
 import CustomSelect from '../../../components/custom-select'
 
 
-const classes = makeStyles({
-  toggle: {
-    margin: '.625rem 0 0 1.5rem',
-  },
-  row: {
-    marginBottom: '.625rem',
-  },
-  benchmark: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '0.25rem',
-    marginTop: '0.625rem',
-    gap: '0.406rem',
-  },
-  tooltip: {
-    marginBottom: '0.2rem',
-  },
-})
-
 const TrendControls = () => {
+  const userUpdate = useStoreActions((state) => state.userUpdate)
+
   const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
   const rows = useStoreState((state) => state.rows)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
-  const transformedData = useStoreState((state) => state.transformedData)
   const groupFilter = useStoreState((state) => state.groupFilter)
   
-  console.log('data: ', {rows, transformedData, domain, renderableValueKeys})
   const getValueKeys = renderableValueKeys.length ? renderableValueKeys.map(val => val.key) : []
   
   const parseTrendObject = () => {
@@ -75,15 +55,15 @@ const TrendControls = () => {
         if (k.includes(`${v}`)) {
           parsedTrend = {
             ...parsedTrend,
-            [v]: {
-              ...parsedTrend[v],
+            [v.replaceAll('_', ' ')]: {
+              ...parsedTrend[v.replaceAll('_', ' ')],
               [k]: trendObject[k]
             }
           }
           }
       })
     })
-    
+
     return parsedTrend
   }
 
@@ -92,14 +72,31 @@ const TrendControls = () => {
       <WidgetControlCard
         title='Trend Config'
       >
-        <CustomSelect         
-          fullWidth
-          simple
-          data={Object.keys(parseAvailableTrend())}
-          onSelect={val => {
-            console.log('onSelect: ', parseAvailableTrend()[val])
-          }}
-        />
+        <div className="row-container">
+          {(renderRow('Select a trend', 
+            <CustomSelect         
+              fullWidth
+              simple
+              data={Object.keys(parseAvailableTrend())}
+              onSelect={val => {
+                userUpdate({
+                  uniqueOptions: {
+                    selectedTrend: {
+                      value: parseAvailableTrend()[val] ?? '',
+                      title: val,
+                    },
+                  },
+                })
+              }}
+              onClear={() => userUpdate({
+                uniqueOptions: {
+                  selectedTrend: {},
+                },
+              })}
+              placeholder={`Select a Trend to compare`}
+            />
+          ))}
+        </div>
       </WidgetControlCard>
     </MutedBarrier>
   )

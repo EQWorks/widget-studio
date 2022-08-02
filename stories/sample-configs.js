@@ -137,6 +137,10 @@ export default {
         'key': 'submitted_deals',
         'title': 'Submitted deals',
       },
+      {
+        'key': 'funded_deals',
+        'title': 'funded deals',
+      },
     ],
     'mapValueKeys': [],
     'formatDataFunctions': {},
