@@ -103,7 +103,7 @@ const classes = makeStyles({
 })
 
 const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
-  const { showLabels, showCurrency, showWidgetTitle } = genericOptions
+  const { showLabels, showCurrency, showWidgetTitle, showVertical } = genericOptions
   const { selectedTrend } = uniqueOptions
 
   const calculateTrend = (curr, versus) => {
@@ -167,8 +167,8 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
                 </div>
                 { selectedTrend && selectedTrend.value &&
                   <div className={`trend-label-container ${classes.trendLabel}`}>
-                    {renderTrend(Math.round(calculateTrend(selectedTrend[v.key], data[0][v.title])))}
-                    &nbsp;vs {selectedTrend.value} {selectedTrend.domain.value}
+                    {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(v.key))))}
+                    &nbsp;vs {selectedTrend.title}
                   </div>
                 }
               </div>

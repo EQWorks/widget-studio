@@ -16,9 +16,9 @@ const TrendControls = () => {
   const rows = useStoreState((state) => state.rows)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const groupFilter = useStoreState((state) => state.groupFilter)
-  
+
   const getValueKeys = renderableValueKeys.length ? renderableValueKeys.map(val => val.key) : []
-  
+
   const parseTrendObject = () => {
     let getTrendObject = {}
     const availableTrend = []
@@ -35,14 +35,14 @@ const TrendControls = () => {
 
             getTrendObject = {
               ...getTrendObject,
-              [k]: row[k]
+              [k]: row[k],
             }
           }
         })
       })
     })
 
-    return {...getTrendObject, availableTrend}
+    return { ...getTrendObject, availableTrend }
   }
 
   const parseAvailableTrend = () => {
@@ -57,10 +57,10 @@ const TrendControls = () => {
             ...parsedTrend,
             [v.replaceAll('_', ' ')]: {
               ...parsedTrend[v.replaceAll('_', ' ')],
-              [k]: trendObject[k]
-            }
+              [k]: trendObject[k],
+            },
           }
-          }
+        }
       })
     })
 
@@ -73,8 +73,8 @@ const TrendControls = () => {
         title='Trend Config'
       >
         <div className="row-container">
-          {(renderRow('Select a trend', 
-            <CustomSelect         
+          {(renderRow('Select a trend',
+            <CustomSelect
               fullWidth
               simple
               data={Object.keys(parseAvailableTrend())}
@@ -90,10 +90,12 @@ const TrendControls = () => {
               }}
               onClear={() => userUpdate({
                 uniqueOptions: {
-                  selectedTrend: {},
+                  selectedTrend: {
+                    value: '',
+                  },
                 },
               })}
-              placeholder={`Select a Trend to compare`}
+              placeholder={'Select a Trend to compare'}
             />
           ))}
         </div>
