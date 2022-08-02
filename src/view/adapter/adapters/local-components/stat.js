@@ -107,7 +107,7 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
   const { selectedTrend } = uniqueOptions
 
   const calculateTrend = (curr, versus) => {
-    return curr > 0 ? ((Number(versus) - Number(curr)) / Number(curr)) * 100 : 100
+    return versus > 0 ? ((Number(curr) - Number(versus)) / Number(versus)) * 100 : 100
   }
 
   const renderTrend = (value) => {
@@ -134,21 +134,34 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
     }
   }
 
+  const getMatchedTrend = (key) => {
+    const selectedTrendObject = Object.keys(selectedTrend.value)
+    let matchedTrend = 0
+
+    selectedTrendObject.forEach(val => {
+      if (val.includes(key)) {
+        matchedTrend = selectedTrend.value[val]
+      }
+    })
+
+    return matchedTrend
+  }
+
   return (
     <div className={classes.outerContainer}>
       {showWidgetTitle && <div className="title-container">{title}</div>}
       <div className={classes.innerContainer}>
         <div className={`content-container ${showVertical && 'is-vertical'}`}>
           {
-            values?.map((k) => (
-              <div key={k} className={`item-container ${showVertical && 'is-vertical'}`}>
+            values?.map(v => (
+              <div key={v.title} className={`item-container ${showVertical && 'is-vertical'}`}>
                 <div className='item'>
                   <div className={classes.value}>
-                    {showCurrency && '$'}{Number(data[0][k]).toLocaleString('en-US', { maximumFractionDigits:2 })}
+                    {showCurrency && '$'}{Number(data[0][v.title]).toLocaleString('en-US', { maximumFractionDigits:2 })}
                   </div>
                   {showLabels &&
                     <div className={classes.label}>
-                      {k}
+                      {v.title}
                     </div>
                   }
                 </div>
