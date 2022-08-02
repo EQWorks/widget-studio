@@ -49,6 +49,7 @@ const TopCategories = () => {
   const update = useStoreActions(actions => actions.update)
 
   const rows = useStoreState(state => state.rows)
+  const addTopCategories = useStoreState(state => state.addTopCategories)
   const propFilters = useStoreState(state => state.propFilters)
   const [selectedCategory, setSelectedCategory] = useState(0)
 
@@ -60,14 +61,14 @@ const TopCategories = () => {
   }, [] ).sort((a, b) => a.ranking - b.ranking), [rows])
 
   useEffect(() => {
-    if (selectedCategory === 0 && !propFilters.length) {
+    if (addTopCategories && selectedCategory === 0 && !propFilters.length) {
       update({
         propFilters: [
           { key: 'category', filter: [rankedCategories[0].category] },
         ],
       })
     }
-  }, [selectedCategory, propFilters, rankedCategories, update])
+  }, [addTopCategories, selectedCategory, propFilters, rankedCategories, update])
 
   return (
     <div className={classes.topCategories}>
