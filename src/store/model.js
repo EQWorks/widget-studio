@@ -71,6 +71,7 @@ const stateDefaults = [
       size: 0.8,
       titlePosition: [0, 0],
       legendPosition: [1, 0],
+      labelPosition: 'Bottom',
       legendSize: 'Small',
       baseColor: getTailwindConfigColor('primary-500'),
       xAxisLabelLength: 5,

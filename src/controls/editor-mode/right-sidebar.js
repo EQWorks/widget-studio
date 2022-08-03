@@ -44,6 +44,7 @@ const EditorRightSidebar = () => {
   const size = useStoreState((state) => state.genericOptions.size)
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
+  const labelPosition = useStoreState((state) => state.genericOptions.labelPosition)
   const legendSize = useStoreState((state) => state.genericOptions.legendSize)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
   const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
@@ -161,7 +162,7 @@ const EditorRightSidebar = () => {
 
   const renderStyling = (
     <>
-      {type !== types.MAP && renderItem('Title Position',
+      {![types.MAP, types.STAT].includes(type) && renderItem('Title Position',
         <CustomDropdown
           selectedString={positions.string[positions.numeric.map(JSON.stringify)
             .indexOf(JSON.stringify(titlePosition))]}
@@ -175,7 +176,7 @@ const EditorRightSidebar = () => {
           />
         </CustomDropdown>
       )}
-      {renderItem('Legend Position',
+      {type !== types.STAT && renderItem('Legend Position',
         <CustomDropdown
           disabled={!showLegend}
           selectedString={positions.string[positions.numeric.map(JSON.stringify)
@@ -206,6 +207,18 @@ const EditorRightSidebar = () => {
               {legendSize}
             </span>
           }
+        />
+      )}
+      {type === types.STAT && renderItem('Label Position',
+        <CustomSelect
+          simple
+          fullWidth
+          data={['Top', 'Bottom']}
+          value={labelPosition}
+          onSelect={labelPosition => userUpdate({ genericOptions: { labelPosition } })}
+          placeholder={!showLabels ? 'N/A' : 'Select'}
+          disabled={!showLabels}
+          allowClear={false}
         />
       )}
     </>
