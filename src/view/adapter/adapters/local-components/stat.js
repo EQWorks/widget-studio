@@ -43,6 +43,14 @@ const classes = makeStyles({
           flexDirection: 'column',
           alignItems: 'center',
         },
+
+        '& .label-top': {
+          flexDirection: 'column-reverse',
+        },
+
+        '& .label-bottom': {
+          flexDirection: 'column',
+        },
       },
 
       '& .item-container:last-child': {
@@ -106,6 +114,18 @@ const classes = makeStyles({
 const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
   const { showLabels, showCurrency, showWidgetTitle, showVertical } = genericOptions
   const { compareTrend } = uniqueOptions
+  const { selectedPercentage } = uniqueOptions
+
+  const renderValue = (val, ob) => {
+    let _val = val
+
+    if (selectedPercentage && selectedPercentage.length) {
+      if (selectedPercentage.includes(ob.key)) {
+        _val = `${((data[0][ob.title] * 100) / data[0][values[0].title]).toFixed(2)}%`
+      }
+    }
+    return _val
+  }
 
   const calculateTrend = (curr, versus) => {
     return versus > 0 ? ((Number(curr) - Number(versus)) / Number(versus)) * 100 : 100
@@ -153,13 +173,13 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
           {
             values?.map((v, i) => (
               <div key={v.title} className={`item-container ${showVertical && 'is-vertical'}`}>
-                <div className='item'>
+                <div className={`item label-${labelPosition.toLowerCase()}`}>
                   <div className={classes.value}>
-                    {showCurrency && '$'}{Number(data[0][v.title]).toLocaleString('en-US', { maximumFractionDigits:2 })}
+                    {showCurrency && '$'}{renderValue(Number(data[0][v.title]).toLocaleString('en-US', { maximumFractionDigits:2 }), v)}
                   </div>
                   {showLabels &&
                     <div className={classes.label}>
-                      {v.title}
+                      {v.title} {selectedPercentage && selectedPercentage.includes(v.key) && '(%)'}
                     </div>
                   }
                 </div>

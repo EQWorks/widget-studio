@@ -12,6 +12,7 @@ import MapValueControls from '../shared/map-value-controls'
 import MutedBarrier from '../shared/muted-barrier'
 import EditorSidebarBase from './sidebar-base'
 import DataTransformationControls from '../shared/data-transformation-controls'
+import PercentageControls from '../shared/percentage-controls'
 import DataSourceControls from './components/data-source-controls'
 import UserValueConfigurationControls from './components/user-value-configuration-controls'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -55,6 +56,7 @@ const EditorLeftSidebar = () => {
             <DomainControls />
             <ValueControls />
             {![types.PYRAMID, types.STAT].includes(type) && <DataTransformationControls />}
+            {type === types.STAT && <PercentageControls />}
           </>
       }
       {/* restrict to dev only for now */}

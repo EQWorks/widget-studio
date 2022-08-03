@@ -239,6 +239,7 @@ export default {
       comparedTrend: {
         values: [],
       },
+      selectedPercentage: [],
     },
   },
   [types.TABLE]: {
