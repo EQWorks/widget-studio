@@ -236,8 +236,8 @@ export default {
     adapter: LocalAdapters[types.STAT],
     mustGroup: false,
     uniqueOptions: {
-      selectedTrend: {
-        value: '',
+      comparedTrend: {
+        values: [],
       },
     },
   },

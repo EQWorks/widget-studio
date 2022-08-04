@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { useStoreState, useStoreActions } from '../../../store'
 
@@ -10,28 +10,27 @@ import CustomSelect from '../../../components/custom-select'
 
 const TrendControls = () => {
   const userUpdate = useStoreActions((state) => state.userUpdate)
+  const resetValue = useStoreActions((state) => state.userUpdate)
 
   const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
   const rows = useStoreState((state) => state.rows)
+  const columns = useStoreState((state) => state.columns)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const groupFilter = useStoreState((state) => state.groupFilter)
+  const uniqueOptions = useStoreState((state) => state.uniqueOptions)
 
-  const getValueKeys = renderableValueKeys.length ? renderableValueKeys.map(val => val.key) : []
+  const availableTrend = useMemo(() => columns.map(val => val.name), [columns] )
 
-  const parseTrendObject = () => {
+  const parseTrendObject = (val) => {
     let getTrendObject = {}
-    const availableTrend = []
+    const selectedTrend = []
     rows.forEach(row => {
       const objectKeys = Object.keys(row)
       objectKeys.forEach(k => {
-        getValueKeys.forEach(v => {
-          if (row[domain.value] === Number(groupFilter[0]) && k.includes(`${v}_`)) {
-            const replace = k.replace(`${v}_`, '')
-
-            if (!availableTrend.includes(replace)) {
-              availableTrend.push(replace)
-            }
+        val.forEach(v => {
+          if (row[domain.value] === Number(groupFilter[0]) && k.includes(v)) {
+            selectedTrend.push(k)
 
             getTrendObject = {
               ...getTrendObject,
@@ -42,60 +41,39 @@ const TrendControls = () => {
       })
     })
 
-    return { ...getTrendObject, availableTrend }
-  }
-
-  const parseAvailableTrend = () => {
-    const trendObject = parseTrendObject()
-    let parsedTrend = {}
-
-    const objectKeys = Object.keys(trendObject)
-    objectKeys.forEach(k => {
-      trendObject.availableTrend.forEach(v => {
-        if (k.includes(`${v}`)) {
-          parsedTrend = {
-            ...parsedTrend,
-            [v.replaceAll('_', ' ')]: {
-              ...parsedTrend[v.replaceAll('_', ' ')],
-              [k]: trendObject[k],
-            },
-          }
-        }
-      })
-    })
-
-    return parsedTrend
+    return { ...getTrendObject, selectedTrend }
   }
 
   return (
     <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !groupFilter.length}>
       <WidgetControlCard
         title='Trend Config'
+        clear={() => resetValue({ uniqueOptions })}
       >
         <div className="row-container">
-          {(renderRow('Select a trend',
+          {(renderRow(`Select a column ${renderableValueKeys.length && `up to (${renderableValueKeys.length})`}`,
             <CustomSelect
               fullWidth
-              simple
-              data={Object.keys(parseAvailableTrend())}
+              multiSelect
+              data={availableTrend}
               onSelect={val => {
                 userUpdate({
                   uniqueOptions: {
-                    selectedTrend: {
-                      value: parseAvailableTrend()[val] ?? '',
-                      title: val,
+                    compareTrend: {
+                      value: parseTrendObject(val),
                     },
                   },
                 })
               }}
+              limit={renderableValueKeys.length}
               onClear={() => userUpdate({
                 uniqueOptions: {
-                  selectedTrend: {
-                    value: '',
+                  compareTrend: {
+                    value: [],
                   },
                 },
               })}
-              placeholder={'Select a Trend to compare'}
+              placeholder={'Select a column to compare'}
             />
           ))}
         </div>
