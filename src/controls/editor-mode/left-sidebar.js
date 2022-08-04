@@ -61,7 +61,7 @@ const EditorLeftSidebar = () => {
               ((renderableValueKeys.length <= 1 && !addBenchmark) || addBenchmark) &&
               <BenchmarkControls />
             }
-            { type === types.STAT &&
+            { hasDevAccess() && type === types.STAT &&
               <TrendControls />
             }
           </>

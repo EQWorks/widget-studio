@@ -28,7 +28,6 @@ const Filters = () => {
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const type = useStoreState((state) => state.type)
 
-
   const filterData = useMemo(() => (
     Object.fromEntries(Object.entries(columnsAnalysis)
       .filter(([, { min, max, isNumeric }]) => isNumeric && min !== max)

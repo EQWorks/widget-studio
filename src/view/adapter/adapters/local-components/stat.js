@@ -33,11 +33,11 @@ const classes = makeStyles({
 
       '& .item-container': {
         margin: '0.25rem 0',
+        padding: '0 1.25rem',
         borderWidth: '0 2px 0 0',
         borderColor: 'black',
 
         '& .item': {
-          padding: '0 1.25rem',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -104,7 +104,7 @@ const classes = makeStyles({
 
 const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
   const { showLabels, showCurrency, showWidgetTitle, showVertical } = genericOptions
-  const { selectedTrend } = uniqueOptions
+  const { compareTrend } = uniqueOptions
 
   const calculateTrend = (curr, versus) => {
     return versus > 0 ? ((Number(curr) - Number(versus)) / Number(versus)) * 100 : 100
@@ -129,20 +129,17 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
           {Math.abs(value)}%
         </label>
       )
-    } else {
-      return (<label className='percentage-label'>0% </label>)
     }
+
+    return (<label className='percentage-label'>0% </label>)
   }
 
-  const getMatchedTrend = (key) => {
-    const selectedTrendObject = Object.keys(selectedTrend.value)
-    let matchedTrend = 0
+  const getMatchedTrend = (index) => {
+    let matchedTrend = null
 
-    selectedTrendObject.forEach(val => {
-      if (val.includes(key)) {
-        matchedTrend = selectedTrend.value[val]
-      }
-    })
+    if (compareTrend.value[compareTrend.value.selectedTrend[index]]) {
+      matchedTrend = compareTrend.value[compareTrend.value.selectedTrend[index]]
+    }
 
     return matchedTrend
   }
@@ -153,7 +150,7 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
       <div className={classes.innerContainer}>
         <div className={`content-container ${showVertical && 'is-vertical'}`}>
           {
-            values?.map(v => (
+            values?.map((v, i) => (
               <div key={v.title} className={`item-container ${showVertical && 'is-vertical'}`}>
                 <div className='item'>
                   <div className={classes.value}>
@@ -165,10 +162,10 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
                     </div>
                   }
                 </div>
-                { selectedTrend && selectedTrend.value &&
+                { compareTrend && compareTrend.value && getMatchedTrend(i) &&
                   <div className={`trend-label-container ${classes.trendLabel}`}>
-                    {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(v.key))))}
-                    &nbsp;vs {selectedTrend.title}
+                    {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(i))))}
+                    &nbsp;vs {compareTrend.value.selectedTrend[i].replaceAll('_', ' ')}
                   </div>
                 }
               </div>
