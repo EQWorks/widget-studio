@@ -26,24 +26,14 @@ export const getRoundToNumberDigit = (num) => {
 
 /**
  * numberToOrdinal - transforms a number into the corresponding short ordinal, ex: 1 -> 1st
- * @param { numeric } num - a number
+ * @param { numeric } n - a number
  * @returns { string } - a string representing the short ordinal form of a number
  */
-export const numberToOrdinal = (num) => {
-  let label
-  const lastChar = num.toString().charAt(num.length -1)
-  switch(lastChar) {
-    case '1':
-      label = num + 'st'
-      break
-    case '2':
-      label = num + 'nd'
-      break
-    case '3':
-      label = num + 'rd'
-      break
-    default:
-      label = num + 'th'
+export const numberToOrdinal = (n) => {
+  if (n <= 0 || !Number.isInteger(parseFloat(n))) {
+    return n
   }
-  return label
+  const s = ['th', 'st', 'nd', 'rd']
+  const v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
 }
