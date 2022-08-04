@@ -127,8 +127,8 @@ export default {
     'type': 'stat',
     'filters': [
       {
-        key: 'resolution',
-        filter: [20000],
+        key: 'dealerId',
+        filter: [1],
       },
     ],
     'groupFilter': [],
@@ -145,10 +145,10 @@ export default {
     'mapValueKeys': [],
     'formatDataFunctions': {},
     'group': true,
-    'groupKey': 'resolution',
+    'groupKey': 'dealerId',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Resolution',
+    'groupKeyTitle': 'Dealer Id',
     'uniqueOptions': {
       'showTicks': true,
       'spline': false,
