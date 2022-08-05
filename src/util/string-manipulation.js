@@ -1,4 +1,7 @@
 export const STRING_REPLACE_DICT = {
+  'pop': 'Population',
+  'income-sources_total_income_recepients': 'Total income recepients',
+  'income_sources_total_income_avg': 'Total income average',
   'income_sources_market_income_recipients': 'Market income',
   'income_sources_government_transfer_recipients': 'Government transfer income',
   'income_sources_employment_income_recipients': 'Employment income',
@@ -12,6 +15,9 @@ export const STRING_REPLACE_DICT = {
   'dta': 'DTA',
   'aoi': 'AOI',
   'da': 'DA',
+  'Minivans': 'Minivan',
+  'value_conscious_shoppers': 'Dining out',
+  'avg_household_income': 'Median income',
 }
 
 const HEADER_START = [
