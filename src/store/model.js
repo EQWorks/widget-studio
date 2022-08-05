@@ -743,7 +743,7 @@ export default {
     requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
         const { results: rows, columns, whitelabelID, customerID, clientToken } = data
-        const yearMonthClient = clientToken?.match(/[_][0-6]{6}[_][0-9].*/g)?.[0]
+        const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9].*/g)?.[0]
         const reportType = clientToken?.replace(yearMonthClient, '')
         actions.update({
           rows,
