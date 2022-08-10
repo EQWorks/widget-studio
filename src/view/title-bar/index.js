@@ -247,7 +247,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
     if (isHover) {
       return (
         <div className='showTitleBarArrow-container' onClick={() => setShowTitleBar(!showTitleBar)}>
-          {showTitleBar ? <Icons.ChevronUp size='md' /> : <Icons.ChevronUp size='md' />}
+          {showTitleBar ? <Icons.ChevronUp size='md' /> : <Icons.ChevronDown size='md' />}
         </div>
       )
     }
@@ -255,9 +255,9 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
 
   if (mode === modes.COMPACT) {
     return (
-      <div 
-        className={`compact-overlay ${classes.compactOverlay}`} 
-        onMouseEnter={() => setIsHover(true)} 
+      <div
+        className={`compact-overlay ${classes.compactOverlay}`}
+        onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
       >
         <div className={`outer-container ${classes.outerContainer}`}>
