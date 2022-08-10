@@ -6,7 +6,7 @@ import { useStoreState, useStoreActions } from '../../store'
 import modes from '../../constants/modes'
 
 
-const classes = makeStyles({
+const useStyles = (mode) => makeStyles({
   outerContainer: {
     fontSize: '0.875rem',
     letterSpacing: '0.016rem',
@@ -22,7 +22,7 @@ const classes = makeStyles({
     },
 
     '& .subtitle-container': {
-      margin: '0 0.6rem',
+      margin: mode === modes.COMPACT ? 0 : '0 0.6rem',
       color: getTailwindConfigColor('secondary-600'),
     },
   },
@@ -40,6 +40,8 @@ const EditableSubtitle = () => {
   const showWidgetSubtitle = useStoreState((state) => state.genericOptions.showWidgetSubtitle)
 
   const [tentativeSubtitle, setTentativeSubtitle] = useState(subtitle)
+
+  const classes = useStyles(mode)
 
   return (
     <div className={classes.outerContainer}>
