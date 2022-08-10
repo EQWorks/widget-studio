@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
+import { capitalize } from '../../../../util/string-manipulation'
 
 
 const classes = makeStyles({
@@ -14,8 +15,8 @@ const classes = makeStyles({
       alignItems: 'center',
       justifyContent: 'center',
       fontWeight: 700,
-      fontSize: '1.3rem',
-      color: getTailwindConfigColor('secondary-800'),
+      fontSize: '1.5rem',
+      color: getTailwindConfigColor('secondary-700'),
     },
   },
   innerContainer: {
@@ -34,8 +35,8 @@ const classes = makeStyles({
       '& .item-container': {
         margin: '0.25rem 0',
         padding: '0 1.25rem',
-        borderWidth: '0 2px 0 0',
-        borderColor: 'black',
+        borderWidth: '0 1px 0 0',
+        borderColor: getTailwindConfigColor('neutral-100'),
 
         '& .item': {
           display: 'flex',
@@ -60,7 +61,7 @@ const classes = makeStyles({
   },
   value: {
     fontSize: '2.25rem',
-    fontWeight: 600,
+    fontWeight: 700,
     color: getTailwindConfigColor('secondary-800'),
   },
   label: {
@@ -75,7 +76,7 @@ const classes = makeStyles({
     margin: '0 2rem',
   },
   trendLabel: {
-    marginTop: '0.625rem',
+    marginTop: '0.75rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -165,7 +166,7 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
                 { compareTrend && compareTrend.value && getMatchedTrend(i) &&
                   <div className={`trend-label-container ${classes.trendLabel}`}>
                     {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(i))))}
-                    &nbsp;vs {compareTrend.value.selectedTrend[i].replaceAll('_', ' ')}
+                    &nbsp;vs. {capitalize(compareTrend.value.selectedTrend[i].replaceAll('_', ' '))}
                   </div>
                 }
               </div>
