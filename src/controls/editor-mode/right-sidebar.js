@@ -19,6 +19,7 @@ import MutedBarrier from '../shared/muted-barrier'
 import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 import ExportControls from './components/export-controls'
 import SliderControl from './components/slider-control'
+import EditableSubtitle from '../../view/title-bar/editable-subtitle'
 
 
 const classes = makeStyles({
@@ -41,6 +42,7 @@ const EditorRightSidebar = () => {
   const domain = useStoreState((state) => state.domain)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
   const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
+  const showWidgetSubtitle = useStoreState((state) => state.genericOptions.showWidgetSubtitle)
   const size = useStoreState((state) => state.genericOptions.size)
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
@@ -95,6 +97,13 @@ const EditorRightSidebar = () => {
                 'Currency',
                 showCurrency,
                 v => userUpdate({ genericOptions: { showCurrency: v } }),
+              )
+            }
+            {
+              renderToggle(
+                'Subtitle',
+                showWidgetSubtitle,
+                v => userUpdate({ genericOptions: { showWidgetSubtitle: v } }),
               )
             }
           </>,
@@ -252,6 +261,11 @@ const EditorRightSidebar = () => {
                     </>
                   )}
                 {type === types.MAP && <MapLayerDisplay />}
+                {showWidgetSubtitle &&
+                  renderSection('Subtitle',
+                    <EditableSubtitle />
+                  )
+                }
               </>
             )
           }
