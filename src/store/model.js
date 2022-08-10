@@ -57,7 +57,7 @@ const stateDefaults = [
   {
     key: 'genericOptions', defaultValue: {
       showWidgetTitle: false,
-      showWidgetSubtitle: false,
+      showWidgetSubtitle: true,
       groupByValue: false,
       showLegend: true,
       showTooltip: true,
