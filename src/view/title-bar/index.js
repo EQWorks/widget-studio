@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
@@ -41,9 +41,24 @@ const commonClasses = {
     display: 'flex',
     flexDirection: 'column',
   },
+  compactOverlay: {
+    position: 'relative',
+    minHeight: '0.5rem',
+
+    '& .showTitleBarArrow-container': {
+      position: 'absolute',
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderBottom: `solid 1px ${getTailwindConfigColor('neutral-100')}`,
+      cursor: 'pointer',
+      zIndex: 1000,
+    },
+  },
 }
 
-const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
+const useStyles = ({ mode, allowOpenInEditor, showTitleBar }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
@@ -72,10 +87,10 @@ const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
         fontWeight: 600,
         borderBottom: `solid 1px ${getTailwindConfigColor('neutral-100')}`,
         padding: '0.4rem 0.8rem',
-        display: 'flex',
+        display: showTitleBar ? 'flex' : 'none',
         alignItems: 'center',
 
-        '& .compact-mode-container': {
+        '& .compact-container': {
           flex: 1,
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
@@ -155,7 +170,10 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
-  const classes = useStyles({ mode, allowOpenInEditor })
+  const [isHover, setIsHover] = useState(false)
+  const [showTitleBar, setShowTitleBar] = useState(false)
+
+  const classes = useStyles({ mode, allowOpenInEditor, showTitleBar })
 
   const renderTitleAndID = (
     <div className={`render-title-container ${classes.main}`}>
@@ -225,18 +243,35 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
     </CustomButton >
   )
 
+  const showTitleBarArrow = () => {
+    if (isHover) {
+      return (
+        <div className='showTitleBarArrow-container' onClick={() => setShowTitleBar(!showTitleBar)}>
+          {showTitleBar ? <Icons.ChevronUp size='md' /> : <Icons.ChevronUp size='md' />}
+        </div>
+      )
+    }
+  }
+
   if (mode === modes.COMPACT) {
     return (
-      <div className={`outer-container ${classes.outerContainer}`}>
-        <div className='compact-mode-container'>
-          {isLoading ? '' :
-            <div className={`title-container ${classes.titleContainer}`}>
-              <span className='title-span'>{title}</span>
-              <EditableSubtitle />
-            </div>
-          }
+      <div 
+        className={`compact-overlay ${classes.compactOverlay}`} 
+        onMouseEnter={() => setIsHover(true)} 
+        onMouseLeave={() => setIsHover(false)}
+      >
+        <div className={`outer-container ${classes.outerContainer}`}>
+          <div className='compact-container'>
+            {isLoading ? '' :
+              <div className={`title-container ${classes.titleContainer}`}>
+                <span className='title-span'>{title}</span>
+                <EditableSubtitle />
+              </div>
+            }
+          </div>
+          {allowOpenInEditor && renderOpenInEditorButton}
         </div>
-        {allowOpenInEditor && renderOpenInEditorButton}
+        {showTitleBarArrow()}
       </div>
     )
   }
