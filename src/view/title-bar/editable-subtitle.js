@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { TextField, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import { useStoreState, useStoreActions } from '../../store'
+import { useStoreState } from '../../store'
 import modes from '../../constants/modes'
 
 
@@ -33,7 +33,6 @@ const textfieldClasses = Object.freeze({
 })
 
 const EditableSubtitle = () => {
-  const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const isLoading = useStoreState((state) => state.isLoading)
   const subtitle = useStoreState((state) => state.subtitle)
   const mode = useStoreState((state) => state.ui.mode)
@@ -53,7 +52,6 @@ const EditableSubtitle = () => {
             onChange={(val) => setTentativeSubtitle(val)}
             onBlur={(e) => {
               setTentativeSubtitle(e.target.value)
-              userUpdate({ subtitle: e.target.value })
             }}
             maxLength={100}
           />
