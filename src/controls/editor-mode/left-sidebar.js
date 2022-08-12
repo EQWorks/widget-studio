@@ -16,7 +16,6 @@ import DataSourceControls from './components/data-source-controls'
 import UserValueConfigurationControls from './components/user-value-configuration-controls'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderToggle } from '../shared/util'
-import BenchmarkControls from './components/benchmark-controls'
 import TrendControls from './components/trend-controls'
 import { hasDevAccess  } from '../../util/access'
 
@@ -56,18 +55,12 @@ const EditorLeftSidebar = () => {
             <DomainControls />
             <ValueControls />
             {![types.PYRAMID, types.STAT].includes(type) && <DataTransformationControls />}
-            {/* restrict to dev only for now */}
-            { hasDevAccess() && type === types.BAR && numericColumns.length > 1 &&
-              ((renderableValueKeys.length <= 1 && !addBenchmark) || addBenchmark) &&
-              <BenchmarkControls />
-            }
-            { hasDevAccess() && type === types.STAT &&
-              <TrendControls />
-            }
           </>
       }
       {/* restrict to dev only for now */}
       {hasDevAccess() &&
+      <>
+        {type === types.STAT && <TrendControls />}
         <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length}>
           <WidgetControlCard title=''>
             <div className={classes.row}>
@@ -139,6 +132,7 @@ const EditorLeftSidebar = () => {
             <UserValueConfigurationControls />
           }
         </MutedBarrier>
+      </>
       }
     </EditorSidebarBase>
   )
