@@ -75,4 +75,4 @@ export const truncateString = (fullStr, strLen, separator = ' ... ') => {
  * @param { string } s - string to format
  * @returns { string } - capitalized string
  */
-export const capitalize = s => (s && s[0].toUpperCase() + s.slice(1)) || ''
+export const capitalize = s => (s?.[0]?.toUpperCase() + s?.slice(1)) || ''
