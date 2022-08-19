@@ -257,13 +257,12 @@ const EditorRightSidebar = () => {
                     {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
                   </>
                 )}
-                {type !== types.STAT &&
-                  renderSection('Styling',
-                    <>
-                      {renderRow(null, renderStyling)}
-                      {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
-                    </>
-                  )}
+                {renderSection('Styling',
+                  <>
+                    {renderRow(null, renderStyling)}
+                    {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
+                  </>
+                )}
                 {type === types.MAP && <MapLayerDisplay />}
               </>
             )

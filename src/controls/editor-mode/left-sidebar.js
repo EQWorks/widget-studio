@@ -12,7 +12,7 @@ import MapValueControls from '../shared/map-value-controls'
 import MutedBarrier from '../shared/muted-barrier'
 import EditorSidebarBase from './sidebar-base'
 import DataTransformationControls from '../shared/data-transformation-controls'
-import PercentageControls from '../shared/percentage-controls'
+import PercentageControls from './components/percentage-controls'
 import DataSourceControls from './components/data-source-controls'
 import UserValueConfigurationControls from './components/user-value-configuration-controls'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -56,13 +56,13 @@ const EditorLeftSidebar = () => {
             <DomainControls />
             <ValueControls />
             {![types.PYRAMID, types.STAT].includes(type) && <DataTransformationControls />}
-            {type === types.STAT && <PercentageControls />}
           </>
       }
       {/* restrict to dev only for now */}
       {hasDevAccess() &&
       <>
         {type === types.STAT && <TrendControls />}
+        {type === types.STAT && <PercentageControls />}
         <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length}>
           <WidgetControlCard title=''>
             <div className={classes.row}>
