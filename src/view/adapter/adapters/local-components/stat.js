@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
 import { capitalize } from '../../../../util/string-manipulation'
+import clsx from 'clsx'
 
 
 const classes = makeStyles({
@@ -38,18 +39,45 @@ const classes = makeStyles({
         borderWidth: '0 1px 0 0',
         borderColor: getTailwindConfigColor('neutral-100'),
 
-        '& .item': {
+        '& .item-wrapper': {
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+
+          '& .item': {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+
+          '& .is-percentage': {
+            width: '240px',
+            margin: '0.25rem 0',
+            padding: '0 1.25rem',
+            borderWidth: '0 1px 0 0',
+            borderColor: getTailwindConfigColor('neutral-100'),
+          },
+
+          '& .label-top': {
+            flexDirection: 'column-reverse',
+          },
+
+          '& .label-bottom': {
+            flexDirection: 'column',
+          },
+
+          '& .is-percentage:last-child, .single-vertical, .multiple-horizontal': {
+            borderRight: '0',
+          },
         },
 
-        '& .label-top': {
-          flexDirection: 'column-reverse',
+        '& .single-value': {
+          flexDirection: 'row',
         },
 
-        '& .label-bottom': {
-          flexDirection: 'column',
+        '& .multiple-vertical': {
+          flexDirection: 'row',
+          justifyContent: 'center',
         },
       },
 
@@ -73,8 +101,11 @@ const classes = makeStyles({
     color: getTailwindConfigColor('secondary-800'),
   },
   label: {
+    width: '100%',
+    textAlign: 'center',
     fontSize: '1.5rem',
     color: getTailwindConfigColor('secondary-700'),
+    wordWrap: 'break-word',
   },
   divider: {
     background: getTailwindConfigColor('secondary-300'),
@@ -111,20 +142,28 @@ const classes = makeStyles({
   },
 })
 
+const conditionalClasses = ({ showVertical, values, labelPosition, selectedPercentage, index }) => ({
+  contentContainer: clsx('content-container', { 'is-vertical': showVertical }),
+  itemContainer: clsx('item-container', { 'is-vertical': showVertical }),
+  itemWrapper: clsx('item-wrapper', { 'multiple-vertical': showVertical && values.length > 1 },
+    { 'single-value': values.length === 1 && !showVertical }),
+  item: clsx(`item label-${labelPosition.toLowerCase()}`,
+    { 'is-percentage': selectedPercentage && selectedPercentage.values[index] },
+    { 'single-vertical': showVertical && values.length === 1 },
+    { 'multiple-horizontal': !showVertical && values.length > 1 }
+  ),
+})
+
 const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
-  const { showLabels, showCurrency, showWidgetTitle, showVertical } = genericOptions
-  const { compareTrend } = uniqueOptions
-  const { selectedPercentage } = uniqueOptions
+  const { showLabels, showCurrency, showWidgetTitle, showVertical, labelPosition } = genericOptions
+  const { compareTrend, selectedPercentage } = uniqueOptions
+
+  const _conditionalClasses = (index = null) => conditionalClasses({ showVertical, values, labelPosition, selectedPercentage, index })
 
   const renderValue = (val, ob) => {
-    let _val = val
-
-    if (selectedPercentage && selectedPercentage.length) {
-      if (selectedPercentage.includes(ob.key)) {
-        _val = `${((data[0][ob.title] * 100) / data[0][values[0].title]).toFixed(2)}%`
-      }
+    if (val) {
+      return `${((data[0][ob.title] / val) * 100).toFixed(2)}%`
     }
-    return _val
   }
 
   const calculateTrend = (curr, versus) => {
@@ -169,25 +208,39 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
     <div className={classes.outerContainer}>
       {showWidgetTitle && <div className="title-container">{title}</div>}
       <div className={classes.innerContainer}>
-        <div className={`content-container ${showVertical && 'is-vertical'}`}>
+        <div className={_conditionalClasses().contentContainer}>
           {
             values?.map((v, i) => (
-              <div key={v.title} className={`item-container ${showVertical && 'is-vertical'}`}>
-                <div className={`item label-${labelPosition.toLowerCase()}`}>
-                  <div className={classes.value}>
-                    {showCurrency && '$'}{renderValue(Number(data[0][v.title]).toLocaleString('en-US', { maximumFractionDigits:2 }), v)}
-                  </div>
-                  {showLabels &&
-                    <div className={classes.label}>
-                      {v.title} {selectedPercentage && selectedPercentage.includes(v.key) && '(%)'}
+              <div key={v.title} className={_conditionalClasses().itemContainer}>
+                <div  className={_conditionalClasses().itemWrapper}>
+                  <div className={_conditionalClasses(i).item}>
+                    <div className={classes.value}>
+                      {showCurrency && '$'}{Number(data[0][v.title].toLocaleString('en-US', { maximumFractionDigits:2 }))}
                     </div>
+                    {showLabels &&
+                        <div className={classes.label}>
+                          {v.title}
+                        </div>
+                    }
+                  </div>
+                  {(selectedPercentage && selectedPercentage.values[i]) &&
+                      <div className={_conditionalClasses(i).item}>
+                        <div className={classes.value}>
+                          {showCurrency && '$'}{renderValue(selectedPercentage.values[i].toLocaleString('en-US', { maximumFractionDigits:2 }), v)}
+                        </div>
+                        {showLabels &&
+                          <div className={classes.label}>
+                            {capitalize(selectedPercentage.titles[i].replaceAll('_', ' '))} {selectedPercentage && selectedPercentage.values[i] && '(%)'}
+                          </div>
+                        }
+                      </div>
                   }
                 </div>
                 { compareTrend && compareTrend.value && getMatchedTrend(i) &&
-                  <div className={`trend-label-container ${classes.trendLabel}`}>
-                    {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(i))))}
-                    &nbsp;vs. {capitalize(compareTrend.value.selectedTrend[i].replaceAll('_', ' '))}
-                  </div>
+                    <div className={`trend-label-container ${classes.trendLabel}`}>
+                      {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(i))))}
+                      &nbsp;vs. {capitalize(compareTrend.value.selectedTrend[i].replaceAll('_', ' '))}
+                    </div>
                 }
               </div>
             ))
