@@ -50,6 +50,8 @@ const EditorRightSidebar = () => {
   const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
   const showLabels = useStoreState((state) => state.genericOptions.showLabels)
+  const showCurrency = useStoreState((state) => state.genericOptions.showCurrency)
+  const showVertical = useStoreState((state) => state.genericOptions.showVertical)
   const isReady = useStoreState((state) => state.isReady)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
@@ -73,7 +75,7 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
               )
             }
-            {type !== types.PIE &&
+            {![types.PIE, types.STAT].includes(type) &&
               renderToggle(
                 'Axis Titles',
                 showAxisTitles,
@@ -88,6 +90,13 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
               )
             }
+            {type === types.STAT &&
+              renderToggle(
+                'Currency',
+                showCurrency,
+                v => userUpdate({ genericOptions: { showCurrency: v } }),
+              )
+            }
           </>,
           null,
           subPlots && type !== types.PIE // really dumb, but temporary until control item layout mechanism is reworked
@@ -96,11 +105,13 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
-            {renderToggle(
-              'Legend',
-              showLegend,
-              v => userUpdate({ genericOptions: { showLegend: v } }),
-            )}
+            {!type === types.STAT &&
+              renderToggle(
+                'Legend',
+                showLegend,
+                v => userUpdate({ genericOptions: { showLegend: v } }),
+              )
+            }
             {type === types.MAP &&
               renderToggle(
                 'Tooltip',
@@ -108,14 +119,21 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showTooltip: v } }),
               )
             }
-            {type === types.MAP && !JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation) &&
+            {((type === types.MAP && !JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)) || type === types.STAT) &&
               renderToggle(
                 'Labels',
                 showLabels,
                 v => userUpdate({ genericOptions: { showLabels: v } }),
               )
             }
-            {![types.PIE, types.MAP, types.PYRAMID].includes(type) &&
+            {type === types.STAT &&
+              renderToggle(
+                'Vertical',
+                showVertical,
+                v => userUpdate({ genericOptions: { showVertical: v } }),
+              )
+            }
+            {![types.PIE, types.MAP, types.PYRAMID, types.STAT].includes(type) &&
               renderToggle(
                 'Subplots',
                 subPlots,
@@ -226,12 +244,13 @@ const EditorRightSidebar = () => {
                     {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
                   </>
                 )}
-                {renderSection('Styling',
-                  <>
-                    {renderRow(null, renderStyling)}
-                    {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
-                  </>
-                )}
+                {type !== types.STAT &&
+                  renderSection('Styling',
+                    <>
+                      {renderRow(null, renderStyling)}
+                      {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
+                    </>
+                  )}
                 {type === types.MAP && <MapLayerDisplay />}
               </>
             )
@@ -239,7 +258,7 @@ const EditorRightSidebar = () => {
         </WidgetControlCard >
       </MutedBarrier>
       {
-        type !== types.MAP &&
+        ![types.MAP, types.STAT].includes(type) &&
         <WidgetControlCard title='Color Scheme'>
           <ColorSchemeControls />
         </WidgetControlCard >

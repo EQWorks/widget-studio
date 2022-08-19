@@ -6,10 +6,15 @@ import Stat from './local-components/stat'
 export default {
   [types.STAT]: {
     component: Stat,
-    adapt: (data, { valueKeys }) => ({
-      data,
-      values: valueKeys.map(({ title }) => title),
-    }),
+    adapt: (data, { title, valueKeys, genericOptions, uniqueOptions }) => {
+      return ({
+        data,
+        title,
+        values: valueKeys,
+        genericOptions,
+        uniqueOptions,
+      })
+    },
   },
   [types.TABLE]: {
     component: Table,

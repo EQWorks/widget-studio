@@ -235,7 +235,11 @@ export default {
     icon: Icons.Hash,
     adapter: LocalAdapters[types.STAT],
     mustGroup: false,
-    uniqueOptions: {},
+    uniqueOptions: {
+      comparedTrend: {
+        values: [],
+      },
+    },
   },
   [types.TABLE]: {
     icon: Icons.Table,

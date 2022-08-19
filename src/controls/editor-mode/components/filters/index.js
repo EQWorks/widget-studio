@@ -9,6 +9,7 @@ import PluralLinkedSelect from '../../../../components/plural-linked-select'
 import CustomSelect from '../../../../components/custom-select'
 import SliderControl from '../../components/slider-control'
 import DateDomainFilter from './date-domain-filter'
+import types from '../../../../constants/types'
 
 
 const Filters = () => {
@@ -25,7 +26,7 @@ const Filters = () => {
   const domain = useStoreState((state) => state.domain)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
-
+  const type = useStoreState((state) => state.type)
 
   const filterData = useMemo(() => (
     Object.fromEntries(Object.entries(columnsAnalysis)
@@ -36,14 +37,16 @@ const Filters = () => {
   const renderGroupFilter = (
     domainIsDate
       ? <DateDomainFilter/>
-      : <CustomSelect
+      : type &&
+      <CustomSelect
         fullWidth
-        multiSelect
+        multiSelect={type === types.STAT ? false : true}
         data={groups}
-        value={groupFilter ?? []}
-        onSelect={val => userUpdate({ groupFilter: val })}
+        value={type === types.STAT ? (groupFilter[0] ?? '') : (groupFilter ?? [])}
+        onSelect={val => userUpdate({ groupFilter: type === types.STAT ? [val] : val })}
         placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
         disabled={!group || !domain.value}
+        onClear={() => userUpdate({ groupFilter: [] })}
       />
   )
 

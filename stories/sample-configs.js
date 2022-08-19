@@ -78,14 +78,6 @@ export default {
         'key': 'submitted_deals',
         'title': 'Submitted deals',
       },
-      {
-        'key': 'approved_deals',
-        'title': 'Approved deals',
-      },
-      {
-        'key': 'funded_deals',
-        'title': 'Funded deals',
-      },
     ],
     'mapValueKeys': [],
     'formatDataFunctions': {},
@@ -101,10 +93,8 @@ export default {
     'genericOptions': {
       'showWidgetTitle': false,
       'groupByValue': false,
-      'showLegend': true,
-      'showTooltip': true,
-      'showAxisTitles': true,
-      'showSubPlotTitles': true,
+      'showLabels': true,
+      'showCurrency': false,
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -121,6 +111,69 @@ export default {
     'dataSource': {
       'type': 'Execution',
       'id': '1830',
+    },
+    'percentageMode': false,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#463F3A',
+    ],
+  },
+  'dev-stat-2': {
+    'title': 'stat trend example',
+    'type': 'stat',
+    'filters': [
+      {
+        key: 'dealerId',
+        filter: [1],
+      },
+    ],
+    'groupFilter': [],
+    'valueKeys': [
+      {
+        'key': 'submitted_deals',
+        'title': 'Submitted deals',
+      },
+      {
+        'key': 'funded_deals',
+        'title': 'funded deals',
+      },
+    ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
+    'group': true,
+    'groupKey': 'dealerId',
+    'mapGroupKey': null,
+    'indexKey': null,
+    'groupKeyTitle': 'Dealer Id',
+    'uniqueOptions': {
+      'showTicks': true,
+      'spline': false,
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLabels': true,
+      'showCurrency': false,
+      'subPlots': false,
+      'size': 0.8,
+      'titlePosition': [
+        0,
+        0,
+      ],
+      'legendPosition': [
+        1,
+        0,
+      ],
+      'legendSize': 'Small',
+      'baseColor': '#366fe4',
+    },
+    'dataSource': {
+      'type': 'Manual',
+      'id': '2001',
     },
     'percentageMode': false,
     'presetColors': [
