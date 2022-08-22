@@ -204,6 +204,14 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
     return matchedTrend
   }
 
+  const getTitle = (title, label) => {
+    let _title = capitalize(title.replaceAll('_', ' '))
+    if (label) {
+      _title = _title.replaceAll(`${label} `, '')
+    }
+    return _title
+  }
+
   return (
     <div className={classes.outerContainer}>
       {showWidgetTitle && <div className="title-container">{title}</div>}
@@ -212,35 +220,37 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
           {
             values?.map((v, i) => (
               <div key={v.title} className={_conditionalClasses().itemContainer}>
-                <div  className={_conditionalClasses().itemWrapper}>
-                  <div className={_conditionalClasses(i).item}>
-                    <div className={classes.value}>
-                      {showCurrency && '$'}{Number(data[0][v.title].toLocaleString('en-US', { maximumFractionDigits:2 }))}
+                {data[0][v.title] &&
+                  <div className={_conditionalClasses().itemWrapper}>
+                    <div className={_conditionalClasses(i).item}>
+                      <div className={classes.value}>
+                        {showCurrency && '$'}{Number(data[0][v.title].toLocaleString('en-US', { maximumFractionDigits:2 }))}
+                      </div>
+                      {showLabels &&
+                          <div className={classes.label}>
+                            {v.title}
+                          </div>
+                      }
                     </div>
-                    {showLabels &&
-                        <div className={classes.label}>
-                          {v.title}
+                    {(selectedPercentage && selectedPercentage.values[i]) &&
+                        <div className={_conditionalClasses(i).item}>
+                          <div className={classes.value}>
+                            {showCurrency && '$'}{renderValue(selectedPercentage.values[i].toLocaleString('en-US', { maximumFractionDigits:2 }), v)}
+                          </div>
+                          {showLabels &&
+                            <div className={classes.label}>
+                              {getTitle(selectedPercentage.titles[i])} {selectedPercentage && selectedPercentage.values[i] && '(%)'}
+                            </div>
+                          }
                         </div>
                     }
                   </div>
-                  {(selectedPercentage && selectedPercentage.values[i]) &&
-                      <div className={_conditionalClasses(i).item}>
-                        <div className={classes.value}>
-                          {showCurrency && '$'}{renderValue(selectedPercentage.values[i].toLocaleString('en-US', { maximumFractionDigits:2 }), v)}
-                        </div>
-                        {showLabels &&
-                          <div className={classes.label}>
-                            {capitalize(selectedPercentage.titles[i].replaceAll('_', ' '))} {selectedPercentage && selectedPercentage.values[i] && '(%)'}
-                          </div>
-                        }
-                      </div>
-                  }
-                </div>
-                { compareTrend && compareTrend.value && getMatchedTrend(i) &&
-                    <div className={`trend-label-container ${classes.trendLabel}`}>
-                      {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(i))))}
-                      &nbsp;vs. {capitalize(compareTrend.value.selectedTrend[i].replaceAll('_', ' '))}
-                    </div>
+                }
+                { compareTrend && compareTrend.value && getMatchedTrend(i) && data[0][v.title] &&
+                  <div className={`trend-label-container ${classes.trendLabel}`}>
+                    {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(i))))}
+                    &nbsp;vs. {getTitle(compareTrend.value.selectedTrend[i], v.title)}
+                  </div>
                 }
               </div>
             ))
