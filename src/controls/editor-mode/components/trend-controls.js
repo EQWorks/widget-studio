@@ -47,11 +47,11 @@ const TrendControls = () => {
   return (
     <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !groupFilter.length}>
       <WidgetControlCard
-        title='Trend Config'
+        title='Trend Configuration'
         clear={() => resetValue({ uniqueOptions })}
       >
         <div className="row-container">
-          {(renderRow(`Select a column ${renderableValueKeys.length && `up to (${renderableValueKeys.length})`}`,
+          {(renderRow(`Select a column ${renderableValueKeys.length && 'up to 1 column'}`,
             <CustomSelect
               fullWidth
               multiSelect

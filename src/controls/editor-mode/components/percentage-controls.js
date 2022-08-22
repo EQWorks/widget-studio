@@ -48,7 +48,7 @@ const PercentageControls = () => {
         clear={() => resetValue({ uniqueOptions })}
       >
         <div className="row-container">
-          {(renderRow(`Select a column ${renderableValueKeys.length && `up to (${renderableValueKeys.length})`}`,
+          {(renderRow(`Select a column ${renderableValueKeys.length && 'up to 1 column'}`,
             <CustomSelect
               fullWidth
               multiSelect

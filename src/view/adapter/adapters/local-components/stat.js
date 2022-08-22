@@ -224,7 +224,7 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
                   <div className={_conditionalClasses().itemWrapper}>
                     <div className={_conditionalClasses(i).item}>
                       <div className={classes.value}>
-                        {showCurrency && '$'}{Number(data[0][v.title].toLocaleString('en-US', { maximumFractionDigits:2 }))}
+                        {showCurrency && '$'}{Number(data[0][v.title].toLocaleString('en-US', { maximumFractionDigits: 2 }))}
                       </div>
                       {showLabels &&
                           <div className={classes.label}>
@@ -235,7 +235,7 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
                     {(selectedPercentage && selectedPercentage.values[i]) &&
                         <div className={_conditionalClasses(i).item}>
                           <div className={classes.value}>
-                            {showCurrency && '$'}{renderValue(selectedPercentage.values[i].toLocaleString('en-US', { maximumFractionDigits:2 }), v)}
+                            {showCurrency && '$'}{renderValue(selectedPercentage.values[i].toLocaleString('en-US', { maximumFractionDigits: 2 }), v)}
                           </div>
                           {showLabels &&
                             <div className={classes.label}>
