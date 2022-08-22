@@ -4,6 +4,7 @@ import { TextField, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-la
 
 import { useStoreState, useStoreActions } from '../../store'
 import modes from '../../constants/modes'
+import { getTextSize } from '../../util/string-manipulation'
 
 
 const commonClasses = {
@@ -75,7 +76,8 @@ const EditableTitle = () => {
   const renderTextfield = () => {
     if (textfieldRef.current) {
       let el = textfieldRef.current.childNodes[0][0]
-      el.style.width = `${(el.value.length + 2) * 8}px`
+      el.style.width = `${getTextSize(el.value, 700, 16, 'Open Sans').width}px`
+      // console.log(getTextSize(el.value, 700, 20, 'Open Sans'))
     }
 
     return (
