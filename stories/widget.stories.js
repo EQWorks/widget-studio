@@ -14,7 +14,6 @@ import Widget, { WidgetManager } from '../src'
 import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
-import CustomButton from '../src/components/custom-button'
 import InsightsDataProvider from '../src/insights-data-provider'
 
 
@@ -105,44 +104,6 @@ Object.values(modes).forEach(mode => {
   })
 
 })
-
-storiesOf('Multiple widgets (dashboard)')
-  .add('Multiple widgets (dashboard)', () => {
-    const [editMode, setEditMode] = useState(true)
-    return (
-      <>
-        <div style={{
-          display: 'flex',
-          padding: '2rem',
-        }}>
-          <div style={{ flex: 1 }}>
-            Demo
-          </div>
-          <CustomButton
-            size='lg'
-            variant='filled'
-            onClick={() => setEditMode(!editMode)}
-          >
-            EDIT
-          </CustomButton>
-        </div>
-        <div className={classes.dashboardGrid} >
-          {
-            Object.keys(sampleConfigs).map(id =>
-              <Widget {...devProps}
-                key={id}
-                mode={modes.COMPACT}
-                id={id}
-                staticData
-                className={classes.dashboardWidget}
-                allowOpenInEditor={editMode}
-              />
-            )
-          }
-        </div>
-      </>
-    )
-  })
 
 // add blank widget
 storiesOf('Blank Widget (data source control)', module)
