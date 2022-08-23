@@ -123,6 +123,7 @@ const stateDefaults = [
       exportType: EXPORT_TYPES[0],
       screenshotRef: null,
       image: null,
+      showTitleBar: false,
     },
     resettable: false,
   },
