@@ -34,7 +34,7 @@ const classes = makeStyles({
       justifyContent: 'center',
 
       '& .item-container': {
-        margin: '0.25rem 0',
+        margin: '0.5rem 0',
         padding: '0 1.25rem',
         borderWidth: '0 1px 0 0',
         borderColor: getTailwindConfigColor('neutral-100'),
@@ -52,7 +52,7 @@ const classes = makeStyles({
 
           '& .is-percentage': {
             width: '240px',
-            margin: '0.25rem 0',
+            margin: '0.5rem 0',
             padding: '0 1.25rem',
             borderWidth: '0 1px 0 0',
             borderColor: getTailwindConfigColor('neutral-100'),
@@ -104,6 +104,7 @@ const classes = makeStyles({
     width: '100%',
     textAlign: 'center',
     fontSize: '1.5rem',
+    fontWeight: 300,
     color: getTailwindConfigColor('secondary-700'),
     wordWrap: 'break-word',
   },
