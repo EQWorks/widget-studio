@@ -70,7 +70,7 @@ const UserValueConfigurationControls = () => {
             />
           )}
         </div>
-        {renderRow(
+        {type === types.BAR && renderRow(
           null,
           renderItem('Headline',
             <TextField
