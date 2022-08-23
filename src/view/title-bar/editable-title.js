@@ -16,6 +16,16 @@ const commonClasses = {
 
     '& .textfield-container': {
       backgroundColor: getTailwindConfigColor('secondary-100'),
+
+      '& .textfield-root': {
+        outlineWidth: 0,
+        outlineColor: 'transparent',
+        borderTop: 0,
+      },
+
+      '& .textfield-root:focus-within': {
+        borderColor: getTailwindConfigColor('primary-500'),
+      },
     },
   },
   button: {
@@ -46,8 +56,8 @@ const useStyles = () => makeStyles(
 
 const textFieldClasses = Object.freeze({
   container: 'textfield-container',
-  root: 'focus-within:border-primary-500',
-  input: 'mb-0 text-sm focus:text-secondary-900',
+  root: 'textfield-root',
+  input: 'textfield-input mb-0 text-sm focus:text-secondary-900',
 })
 
 const EditableTitle = () => {
@@ -76,8 +86,8 @@ const EditableTitle = () => {
   const renderTextfield = () => {
     if (textfieldRef.current) {
       let el = textfieldRef.current.childNodes[0][0]
-      el.style.width = `${getTextSize(el.value, 700, 16, 'Open Sans').width}px`
-      // console.log(getTextSize(el.value, 700, 20, 'Open Sans'))
+      const lengthSize = el.value.length > 12 ? 14 : 16
+      el.style.width = `${getTextSize(el.value, 700, lengthSize, 'Open Sans').width}px`
     }
 
     return (
