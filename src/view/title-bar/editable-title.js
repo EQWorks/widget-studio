@@ -18,9 +18,13 @@ const commonClasses = {
       backgroundColor: getTailwindConfigColor('secondary-100'),
 
       '& .textfield-root': {
-        outlineWidth: 0,
-        outlineColor: 'transparent',
         borderTop: 0,
+
+        '& .textfield-input': {
+          fontFamily: 'Open Sans',
+          outlineWidth: 0,
+          outlineColor: 'transparent',
+        },
       },
 
       '& .textfield-root:focus-within': {
