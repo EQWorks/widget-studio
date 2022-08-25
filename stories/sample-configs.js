@@ -66,6 +66,7 @@ export default {
   },
   'dev-stat-1': {
     'title': 'stat example widget',
+    'showTitleBar': true,
     'type': 'stat',
     'filters': [
       {
@@ -125,6 +126,7 @@ export default {
   },
   'dev-stat-2': {
     'title': 'stat trend example',
+    'showTitleBar': true,
     'type': 'stat',
     'filters': [
       {
@@ -188,6 +190,7 @@ export default {
   },
   'dev-pie-1': {
     'title': 'My example pie widget',
+    'showTitleBar': true,
     'type': 'pie',
     'filters': [
       {
@@ -250,6 +253,7 @@ export default {
   },
   'dev-pie-2': {
     'title': 'Percentage widget',
+    'showTitleBar': true,
     'type': 'pie',
     'filters': [],
     'groupFilter': [],
@@ -299,6 +303,7 @@ export default {
   },
   'dev-pie-3': {
     'title': 'Paymi Sample 1',
+    'showTitleBar': true,
     'type': 'pie',
     'filters': [],
     'groupFilter': [],
@@ -366,6 +371,7 @@ export default {
   },
   'dev-bar-1': {
     'title': 'My example bar widget',
+    'showTitleBar': true,
     'type': 'bar',
     'filters': [
       {
@@ -423,6 +429,7 @@ export default {
   },
   'dev-bar-2': {
     'title': 'Time/Price Widget',
+    'showTitleBar': true,
     'type': 'bar',
     'filters': [],
     'groupFilter': [
@@ -483,6 +490,7 @@ export default {
   },
   'dev-bar-3' : {
     'title': 'My example bar - benchmark widget',
+    'showTitleBar': true,
     'type': 'bar',
     'filters': [],
     'groupFilter': [],
@@ -555,6 +563,7 @@ export default {
   },
   'dev-bar-4' : {
     'title': 'My example bar - top category insights',
+    'showTitleBar': true,
     'type': 'bar',
     'filters': [],
     'groupFilter': [],
@@ -634,6 +643,7 @@ export default {
   },
   'dev-line-1': {
     'title': 'Another Line Widget',
+    'showTitleBar': true,
     'type': 'line',
     'filters': [
       {
@@ -689,6 +699,7 @@ export default {
   },
   'dev-line-2': {
     'title': 'My example line widget',
+    'showTitleBar': true,
     'type': 'line',
     'filters': [],
     'groupFilter': [],
@@ -736,6 +747,7 @@ export default {
   },
   'dev-scatter-1': {
     'title': 'My example scatter widget',
+    'showTitleBar': true,
     'type': 'scatter',
     'filters': [
       {
@@ -805,6 +817,7 @@ export default {
   },
   'dev-map-1': {
     'title': 'My example map widget - polygon geojson layer FSA & postal code',
+    'showTitleBar': true,
     'type': 'map',
     'filters': [
       {
@@ -922,6 +935,7 @@ export default {
   },
   'dev-map-2': {
     'title': 'My example map widget - scatterplot layer',
+    'showTitleBar': true,
     'type': 'map',
     'filters': [
       {
@@ -1048,6 +1062,7 @@ export default {
   },
   'dev-map-3': {
     'title': 'My example map widget - xwi report',
+    'showTitleBar': true,
     'type': 'map',
     'filters': [],
     'groupFilter': [],
@@ -1203,6 +1218,7 @@ export default {
   },
   'dev-map-4': {
     'title': 'My example map widget - user value controls',
+    'showTitleBar': false,
     'type': 'map',
     'filters': [],
     'groupFilter': [],
@@ -1372,6 +1388,7 @@ export default {
   },
   'filter-test-1': {
     'title': 'Household income',
+    'showTitleBar': true,
     'type': 'bar',
     'filters': [],
     'groupFilter': [],
@@ -1446,6 +1463,7 @@ export default {
   },
   'dev-pyramid-1': {
     'title': 'My example pyramid widget',
+    'showTitleBar': true,
     'type': 'pyramid',
     'filters': [
       {

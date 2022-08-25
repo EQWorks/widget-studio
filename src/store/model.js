@@ -37,7 +37,7 @@ const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
   { key: 'title', defaultValue: 'Untitled Widget', resettable: false },
   { key: 'subtitle', defaultValue: 'Unsubtitled Widget ', resettable: false },
-  { key: 'showTitleBar', defaultValue: false, resettable: false },
+  { key: 'showTitleBar', defaultValue: true, resettable: false },
   { key: 'type', defaultValue: '', resettable: true },
   { key: 'filters', defaultValue: [], resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
