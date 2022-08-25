@@ -26,6 +26,7 @@ const CustomButton = ({
   // lumen-labs props
   onClick,
   children,
+  size,
   ...props
 }) => {
   const renderButton = (
@@ -34,6 +35,7 @@ const CustomButton = ({
         e.stopPropagation()
         onClick(e)
       }}
+      size={size}
       {...props}
     >
       {children}

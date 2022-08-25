@@ -36,6 +36,8 @@ const MAX_UNDO_STEPS = 10
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
   { key: 'title', defaultValue: 'Untitled Widget', resettable: false },
+  { key: 'subtitle', defaultValue: 'Unsubtitled Widget ', resettable: false },
+  { key: 'showTitleBar', defaultValue: true, resettable: false },
   { key: 'type', defaultValue: '', resettable: true },
   { key: 'filters', defaultValue: [], resettable: true },
   { key: 'group', defaultValue: false, resettable: true },
@@ -56,6 +58,7 @@ const stateDefaults = [
   {
     key: 'genericOptions', defaultValue: {
       showWidgetTitle: false,
+      showWidgetSubtitle: true,
       groupByValue: false,
       showLegend: true,
       showTooltip: true,
@@ -146,6 +149,8 @@ export default {
   tentativeConfig: computed(
     [
       (state) => state.title,
+      (state) => state.subtitle,
+      (state) => state.showTitleBar,
       (state) => state.type,
       (state) => state.filters,
       (state) => state.groupFilter,
@@ -172,6 +177,8 @@ export default {
     ],
     (
       title,
+      subtitle,
+      showTitleBar,
       type,
       filters,
       groupFilter,
@@ -197,6 +204,8 @@ export default {
       mapTooltipLabelTitles,
     ) => ({
       title,
+      subtitle,
+      showTitleBar,
       type,
       filters: filters.filter(({ key, filter }) => key && filter),
       groupFilter,

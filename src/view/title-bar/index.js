@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { Accordion, Icons, Chip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
@@ -9,6 +9,7 @@ import CustomButton from '../../components/custom-button'
 import modes from '../../constants/modes'
 import EditableTitle from './editable-title'
 import WidgetMeta from '../meta'
+import EditableSubtitle from './editable-subtitle'
 
 
 const commonClasses = {
@@ -26,20 +27,38 @@ const commonClasses = {
     alignItems: 'center',
   },
   squareButton: {
+    margin: '0 0.357rem',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '1.4rem !important',
-    height: '1.4rem !important',
   },
   saveButton: {
     marginLeft: '0.357rem',
     display: 'flex',
     alignItems: 'stretch',
   },
+  titleContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  compactOverlay: {
+    position: 'relative',
+    minHeight: '0.5rem',
+
+    '& .showTitleBarArrow-container': {
+      position: 'absolute',
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderBottom: `solid 1px ${getTailwindConfigColor('neutral-100')}`,
+      cursor: 'pointer',
+      zIndex: 1000,
+    },
+  },
 }
 
-const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
+const useStyles = ({ mode, allowOpenInEditor, showTitleBar }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
@@ -68,13 +87,20 @@ const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
         fontWeight: 600,
         borderBottom: `solid 1px ${getTailwindConfigColor('neutral-100')}`,
         padding: '0.4rem 0.8rem',
-        display: 'flex',
+        display: showTitleBar ? 'flex' : 'none',
         alignItems: 'center',
-        '&> :first-child': {
+
+        '& .compact-container': {
           flex: 1,
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
           overflow: 'hidden',
+
+          '& .title-span': {
+            fontSize: '1.125rem',
+            color: getTailwindConfigColor('secondary-900'),
+            letterSpacing: '0.016rem',
+          },
         },
       },
       editButton: {
@@ -110,6 +136,13 @@ const useStyles = ({ mode, allowOpenInEditor }) => makeStyles(
           opacity: + allowOpenInEditor,
           ...(!allowOpenInEditor && { visibility: 'hidden' }),
         },
+        accordionContainer: {
+          '& .accordion-header-container': {
+            '& span:last-child': {
+              width: '100%',
+            },
+          },
+        },
         ...commonClasses,
       })
 
@@ -133,14 +166,17 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const unsavedChanges = useStoreState((state) => state.unsavedChanges)
   const title = useStoreState((state) => state.title)
   const isLoading = useStoreState((state) => state.isLoading)
+  const showTitleBar = useStoreState((state) => state.showTitleBar)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
-  const classes = useStyles({ mode, allowOpenInEditor })
+  const [isHover, setIsHover] = useState(false)
+
+  const classes = useStyles({ mode, allowOpenInEditor, showTitleBar })
 
   const renderTitleAndID = (
-    <div className={classes.main}>
+    <div className={`render-title-container ${classes.main}`}>
       <EditableTitle />
       {
         mode === modes.EDITOR && unsavedChanges &&
@@ -178,7 +214,6 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const renderDownloadConfigButton = (
     (dev || location?.hostname === 'localhost') && config &&
     <CustomButton
-      horizontalMargin
       classes={{
         button: classes.squareButton,
       }}
@@ -191,8 +226,8 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const renderOpenInEditorButton = (
     <CustomButton
       classes={{ button: classes.editButton }}
-      horizontalMargin
       variant={mode === modes.COMPACT ? 'borderless' : 'filled'}
+      size='sm'
       onClick={(e) => {
         onOpenInEditor
           ? onOpenInEditor(e, tentativeConfig)
@@ -208,11 +243,35 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
     </CustomButton >
   )
 
+  const showTitleBarArrow = () => {
+    if (isHover) {
+      return (
+        <div className='showTitleBarArrow-container' onClick={() => update({ showTitleBar: !showTitleBar })}>
+          {showTitleBar ? <Icons.ChevronUp size='md' /> : <Icons.ChevronDown size='md' />}
+        </div>
+      )
+    }
+  }
+
   if (mode === modes.COMPACT) {
     return (
-      <div className={classes.outerContainer}>
-        <span>{isLoading ? '' : title}</span>
-        {allowOpenInEditor && renderOpenInEditorButton}
+      <div
+        className={`compact-overlay ${classes.compactOverlay}`}
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+      >
+        <div className={`outer-container ${classes.outerContainer}`}>
+          <div className='compact-container'>
+            {isLoading ? '' :
+              <div className={`title-container ${classes.titleContainer}`}>
+                <span className='title-span'>{title}</span>
+                <EditableSubtitle />
+              </div>
+            }
+          </div>
+          {allowOpenInEditor && renderOpenInEditorButton}
+        </div>
+        {showTitleBarArrow()}
       </div>
     )
   }
@@ -288,18 +347,21 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
         </div>
       )
       : (
-        <Accordion color='secondary' className='flex-initial flex p-4 border-b-2 border-neutral-100 shadow-blue-20'>
+        <Accordion color='secondary' className={`flex-initial flex p-4 border-b-2 border-neutral-100 shadow-blue-20 ${classes.accordionContainer}`}>
           <Accordion.Panel
             color='transparent'
             classes={{
               iconRoot: 'bg-opacity-0 children:text-primary-500',
               icon: 'fill-current text-primary-500',
-              header: 'flex items-center children:not-first:flex-1',
+              header: 'flex items-center accordion-header-container',
             }}
             header={
-              <div className='py-2 flex items-center'>
-                {renderTitleAndID}
-                <div className='flex items-stretch ml-auto'>
+              <div className='flex justify-between items-center'>
+                <div className='flex flex-col'>
+                  {renderTitleAndID}
+                  <EditableSubtitle />
+                </div>
+                <div className='h-5 flex'>
                   {/* <CustomButton
                     horizontalMargin
                     onClick={() => window.alert('not implemented')}
