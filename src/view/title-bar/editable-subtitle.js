@@ -9,6 +9,7 @@ import modes from '../../constants/modes'
 const useStyles = (mode) => makeStyles({
   outerContainer: {
     fontSize: '0.875rem',
+    fontWeight: 400,
     letterSpacing: '0.016rem',
 
     '& .textfield-container': {
