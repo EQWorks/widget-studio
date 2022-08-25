@@ -166,10 +166,10 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const unsavedChanges = useStoreState((state) => state.unsavedChanges)
   const title = useStoreState((state) => state.title)
   const isLoading = useStoreState((state) => state.isLoading)
+  const showTitleBar = useStoreState((state) => state.showTitleBar)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
-  const showTitleBar = useStoreState((state) => state.ui.showTitleBar)
 
   const [isHover, setIsHover] = useState(false)
 
@@ -246,7 +246,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
   const showTitleBarArrow = () => {
     if (isHover) {
       return (
-        <div className='showTitleBarArrow-container' onClick={() => update({ ui: { showTitleBar: !showTitleBar } })}>
+        <div className='showTitleBarArrow-container' onClick={() => update({ showTitleBar: !showTitleBar })}>
           {showTitleBar ? <Icons.ChevronUp size='md' /> : <Icons.ChevronDown size='md' />}
         </div>
       )

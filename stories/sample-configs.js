@@ -1,6 +1,7 @@
 export default {
   'dev-table-1': {
     'title': 'table example widget',
+    'showTitleBar': true,
     'type': 'table',
     'filters': [],
     'groupFilter': [],
