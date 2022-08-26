@@ -26,9 +26,10 @@ import {
   DATA_CATEGORIES_VALUES,
 } from '../constants/insights-data-categories'
 import { dateAggregations } from '../constants/time'
-import { columnTypes } from '../constants/columns'
+import { columnTypes, COLUMN_CATEGORY_TITLES } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
 import { dataSourceTypes } from '../constants/data-source'
+import { COX_CATEGORY_SEGMENTS } from '../constants/client-specific'
 
 
 const MAX_UNDO_STEPS = 10
@@ -384,7 +385,7 @@ export default {
         .map(({ key, agg, ...rest }) => ({
           ...rest,
           key,
-          title: `${formattedColumnNames[key]}${group && agg ? ` (${agg})` : ''}` || key,
+          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance ? ` (${agg})` : ''}` || key,
           ...(agg && { agg }),
         }))
     )
@@ -533,17 +534,45 @@ export default {
   undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
   redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
 
+  // determines a category in data object we could filter by in UserValueControls
+  categoryFilter: computed(
+    [
+      (state) => state.columns,
+    ],
+    (
+      columns,
+    ) => columns.find(({ name }) => COLUMN_CATEGORY_TITLES.includes(name))?.name
+  ),
+
   finalUserControlKeyValues: computed(
     [
       (state) => state.type,
+      (state) => state.categoryFilter,
+      (state) => state.rows,
       (state) => state.userControlKeyValues,
+      (state) => state.wl,
     ],
     (
       type,
+      categoryFilter,
+      rows,
       userControlKeyValues,
+      wl,
     ) => {
-      // for map widget the finalUserControlKeyValues is a mix of column keys & data categories
       if (type === types.MAP) {
+        // use data categories if present in the data object
+        if (categoryFilter) {
+          let userControlKeyValues = rows.reduce((acc, el) => acc.includes(el[categoryFilter]) ?
+            acc :
+            [...acc, el[categoryFilter]], [])
+          // specific to Cox - Top Spending needs to be first in the tab list
+          // TO DO: change wl to Cox so it's only active for Cox dashboard
+          if (wl === 2423 && userControlKeyValues.every(el => COX_CATEGORY_SEGMENTS.includes(el))) {
+            userControlKeyValues = COX_CATEGORY_SEGMENTS
+          }
+          return userControlKeyValues
+        }
+        // for map widget the finalUserControlKeyValues is a mix of column keys & data categories
         return userControlKeyValues.reduce((acc, key) => {
           const category = DATA_CATEGORIES_VALUES.includes(key) ?
             DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
@@ -591,18 +620,28 @@ export default {
   categoryKeyValues: computed(
     [
       (state) => state.type,
+      (state) => state.categoryFilter,
       (state) => state.dataCategoryKey,
       (state) => state.userControlKeyValues,
       (state) => state.formattedColumnNames,
     ],
     (
       type,
+      categoryFilter,
       dataCategoryKey,
       userControlKeyValues,
       formattedColumnNames
-    ) => Boolean(type === types.MAP && dataCategoryKey && userControlKeyValues?.length) &&
-        userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val))
-          .map(key => ({ title: formattedColumnNames[key], key })) || []
+    ) => {
+      if (type === types.MAP && userControlKeyValues.length) {
+        if (categoryFilter) {
+          return userControlKeyValues.map(key => ({ title: formattedColumnNames[key], key }))
+        } else if (dataCategoryKey) {
+          userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val))
+            .map(key => ({ title: formattedColumnNames[key], key }))
+        }
+      }
+      return []
+    }
   ),
 
   selectedCategoryValue: computed(
