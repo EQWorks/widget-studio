@@ -26,7 +26,7 @@ import {
   DATA_CATEGORIES_VALUES,
 } from '../constants/insights-data-categories'
 import { dateAggregations } from '../constants/time'
-import { columnTypes, COLUMN_CATEGORY_TITLES } from '../constants/columns'
+import { columnTypes } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
 import { dataSourceTypes } from '../constants/data-source'
 import { COX_CATEGORY_SEGMENTS } from '../constants/client-specific'
@@ -100,6 +100,7 @@ const stateDefaults = [
   { key: 'addTopCategories', defaultValue: false, resettable: true },
   { key: 'userControlHeadline', defaultValue: 'Benchmark By', resettable: true },
   { key: 'userControlKeyValues', defaultValue: [], resettable: true },
+  { key: 'categoryFilter', defaultValues: null, resettable: true },
   { key: 'dataCategoryKey', defaultValue: null, resettable: true },
   { key: 'selectedCategValue', defaultValue: null, resettable: true },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
@@ -172,6 +173,7 @@ export default {
       (state) => state.userControlHeadline,
       (state) => state.userControlKeyValues,
       (state) => state.addTopCategories,
+      (state) => state.categoryFilter,
       (state) => state.presetColors,
       (state) => state.dateAggregation,
       (state) => state.mapTooltipLabelTitles,
@@ -200,6 +202,7 @@ export default {
       userControlHeadline,
       userControlKeyValues,
       addTopCategories,
+      categoryFilter,
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
@@ -229,6 +232,7 @@ export default {
       userControlHeadline,
       userControlKeyValues,
       addTopCategories,
+      categoryFilter,
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
@@ -534,16 +538,6 @@ export default {
   undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
   redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
 
-  // determines a category in data object we could filter by in UserValueControls
-  categoryFilter: computed(
-    [
-      (state) => state.columns,
-    ],
-    (
-      columns,
-    ) => columns.find(({ name }) => COLUMN_CATEGORY_TITLES.includes(name))?.name
-  ),
-
   finalUserControlKeyValues: computed(
     [
       (state) => state.type,
@@ -562,17 +556,17 @@ export default {
       if (type === types.MAP) {
         // use data categories if present in the data object
         if (categoryFilter) {
-          let userControlKeyValues = rows.reduce((acc, el) => acc.includes(el[categoryFilter]) ?
+          let userCategoryControlKeyValues = rows.reduce((acc, el) => acc.includes(el[categoryFilter]) ?
             acc :
             [...acc, el[categoryFilter]], [])
           // specific to Cox - Top Spending needs to be first in the tab list
           // TO DO: change wl to Cox so it's only active for Cox dashboard
           if (wl === 2423 && userControlKeyValues.every(el => COX_CATEGORY_SEGMENTS.includes(el))) {
-            userControlKeyValues = COX_CATEGORY_SEGMENTS
+            userCategoryControlKeyValues = COX_CATEGORY_SEGMENTS
           }
-          return userControlKeyValues
+          return userCategoryControlKeyValues
         }
-        // for map widget the finalUserControlKeyValues is a mix of column keys & data categories
+        // for map widget iwth no categoryFilter the finalUserControlKeyValues is a mix of column keys & data categories
         return userControlKeyValues.reduce((acc, key) => {
           const category = DATA_CATEGORIES_VALUES.includes(key) ?
             DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
@@ -635,8 +629,9 @@ export default {
       if (type === types.MAP && userControlKeyValues.length) {
         if (categoryFilter) {
           return userControlKeyValues.map(key => ({ title: formattedColumnNames[key], key }))
-        } else if (dataCategoryKey) {
-          userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val))
+        }
+        if (dataCategoryKey) {
+          return userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val))
             .map(key => ({ title: formattedColumnNames[key], key }))
         }
       }
