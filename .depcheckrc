@@ -1,4 +1,4 @@
-ignore-dirs: ["dist", "node_modules", "storybook-static"]
+ignore-patterns: ["dist", "node_modules", "storybook-static"]
 ignores: [
     "jest",
     "jest-*",
