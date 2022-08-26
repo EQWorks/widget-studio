@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { TextField, makeStyles } from '@eqworks/lumen-labs'
+import { TextField, Button, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../../store'
 import WidgetControlCard from '../../shared/components/widget-control-card'
@@ -51,6 +51,14 @@ const UserValueConfigurationControls = () => {
           selectedCategValue,
         })}
       >
+        <div className={classes.row}>
+          <Button
+            size='sm'
+            onClick={() => userUpdate({ userControlKeyValues: numericColumns })}
+          >
+            add all columns
+          </Button>
+        </div>
         <div className={classes.row}>
           {renderRow('Columns',
             <CustomSelect
