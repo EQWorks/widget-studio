@@ -69,18 +69,28 @@ const UserValueControls = () => {
   const type = useStoreState((state) => state.type)
   const userControlHeadline = useStoreState((state) => state.userControlHeadline)
   const finalUserControlKeyValues = useStoreState((state) => state.finalUserControlKeyValues)
+  const categoryFilter = useStoreState(state => state.categoryFilter)
   const selectedUserDataControlIndex = useStoreState((state) => state.selectedUserDataControlIndex)
   const dataCategoryKey = useStoreState((state) => state.dataCategoryKey)
   const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
   const selectedCategoryValue = useStoreState((state) => state.selectedCategoryValue)
 
   useEffect(() => {
-    if (renderableValueKeys.length && !dataCategoryKey &&
-      !finalUserControlKeyValues.includes(renderableValueKeys[0].key)) {
-      update({ dataCategoryKey: DATA_CATEGORIES_KEYS.find(key =>
-        DATA_CATEGORIES[key].includes(renderableValueKeys[0].key)) })
+    if (renderableValueKeys.length && !dataCategoryKey) {
+      if (categoryFilter) {
+        update({ dataCategoryKey:  finalUserControlKeyValues[0] })
+      } else if (!finalUserControlKeyValues.includes(renderableValueKeys[0].key)) {
+        update({ dataCategoryKey: DATA_CATEGORIES_KEYS.find(key =>
+          DATA_CATEGORIES[key].includes(renderableValueKeys[0].key)) })
+      }
     }
-  }, [update, renderableValueKeys, dataCategoryKey, finalUserControlKeyValues, categoryKeyValues])
+  }, [update, renderableValueKeys, dataCategoryKey, finalUserControlKeyValues, categoryKeyValues, categoryFilter])
+
+  useEffect(() => {
+    if (categoryFilter) {
+      update({ propFilters: [{ key: categoryFilter, filter: [dataCategoryKey] }] })
+    }
+  }, [categoryFilter, dataCategoryKey, update])
 
   const onClickHandle = useCallback((key) => {
     if (type === types.BAR) {
@@ -100,9 +110,13 @@ const UserValueControls = () => {
       )
       update({ valueKeys: valueKeysCopy })
     }
+
     if (type === types.MAP) {
       const { agg, mapVis } = renderableValueKeys[0]
-      if (DATA_CATEGORIES_KEYS.includes(key)) {
+      if (categoryFilter) {
+        update({ propFilters: [{ key: categoryFilter, filter: [dataCategoryKey] }] })
+        update({ dataCategoryKey: key })
+      } else if (DATA_CATEGORIES_KEYS.includes(key)) {
         update({ dataCategoryKey: key })
       } else {
         const title = `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`
@@ -121,6 +135,8 @@ const UserValueControls = () => {
   },
   [
     type,
+    categoryFilter,
+    dataCategoryKey,
     valueKeys,
     mapValueKeys,
     renderableValueKeys,
