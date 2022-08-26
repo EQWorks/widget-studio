@@ -4,18 +4,21 @@ import { TextField, Button, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../../store'
 import WidgetControlCard from '../../shared/components/widget-control-card'
-import { renderRow, renderItem } from '../../shared/util'
+import { renderRow, renderSection, renderSuperSection } from '../../shared/util'
 import MutedBarrier from '../../shared/muted-barrier'
 import CustomSelect from '../../../components/custom-select'
 import types from '../../../constants/types'
 
 
 const classes = makeStyles({
-  row: {
-    marginBottom: '.625rem',
+  button: {
+    marginRight: '0.15rem',
   },
   select: {
     width: '19.18rem',
+  },
+  root: {
+    zIndex: 20,
   },
 })
 
@@ -33,6 +36,15 @@ const UserValueConfigurationControls = () => {
   const numericColumns = useStoreState((state) => state.numericColumns)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const categoryFilter = useStoreState((state) => state.categoryFilter)
+
+  const eligibleDomainValues = useMemo(() => (
+    Object.fromEntries(
+      Object.entries(columnsAnalysis)
+        .filter(([, { isNumeric }]) => (!isNumeric))
+        .map(([c, { Icon }]) => [c, { Icon }])
+    )
+  ), [columnsAnalysis])
 
   const eligibleColumns = useMemo(() =>
     Object.fromEntries(
@@ -51,44 +63,62 @@ const UserValueConfigurationControls = () => {
           selectedCategValue,
         })}
       >
-        <div className={classes.row}>
-          <Button
-            size='sm'
-            onClick={() => userUpdate({ userControlKeyValues: numericColumns })}
-          >
-            add all columns
-          </Button>
-        </div>
-        <div className={classes.row}>
-          {renderRow('Columns',
-            <CustomSelect
-              multiSelect
-              value={userControlKeyValues}
-              data={numericColumns}
-              onSelect={(val) => {
-                userUpdate({ userControlKeyValues: val })}
-              }
-              icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
-              disabled={!addUserControls}
-              classes={{
-                root: '',
-                menu: classes.select,
-                button: classes.select,
-              }}
-            />
-          )}
-        </div>
-        {type === types.BAR && renderRow(
-          null,
-          renderItem('Headline',
-            <TextField
-              value={userControlHeadline}
-              classes={{ root: classes.select }}
-              inputProps={{ placeholder: 'Add benchmark headline' }}
-              onChange={v => userUpdate({ userControlHeadline: v })}
-              disabled={!addUserControls}
-            />
-          ),
+        {renderSuperSection(
+          <>
+            {type === types.MAP && renderSection('Category',
+              <CustomSelect
+                value={categoryFilter}
+                data={Object.keys(eligibleDomainValues)}
+                onSelect={(val) => userUpdate({ categoryFilter: val })}
+                onClear={() => userUpdate({ categoryFilter: null })}
+                placeholder='Column'
+                icons={Object.values(eligibleDomainValues).map(({ Icon }) => Icon)}
+                disabled={!addUserControls}
+                classes={{
+                  root: classes.root,
+                  menu: classes.select,
+                  button: classes.select,
+                }}
+              />,
+            )}
+            {renderSection('Values',
+              renderRow('Columns',
+                <CustomSelect
+                  multiSelect
+                  placeholder='Columns'
+                  value={userControlKeyValues}
+                  data={numericColumns}
+                  onSelect={(val) => {
+                    userUpdate({ userControlKeyValues: val })}
+                  }
+                  icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
+                  disabled={!addUserControls}
+                  classes={{
+                    root: '',
+                    menu: classes.select,
+                    button: classes.select,
+                  }}
+                />,
+                <div className={classes.button}>
+                  <Button
+                    size='sm'
+                    onClick={() => userUpdate({ userControlKeyValues: numericColumns })}
+                  >
+                    add all columns
+                  </Button>
+                </div>,
+              )
+            )}
+            {type === types.BAR && renderSection('Headline',
+              <TextField
+                value={userControlHeadline}
+                classes={{ root: classes.select }}
+                inputProps={{ placeholder: 'Add benchmark headline' }}
+                onChange={v => userUpdate({ userControlHeadline: v })}
+                disabled={!addUserControls}
+              />,
+            )}
+          </>
         )}
       </WidgetControlCard>
     </MutedBarrier>
