@@ -12,6 +12,8 @@ export const STRING_REPLACE_DICT = {
   'dta': 'DTA',
   'aoi': 'AOI',
   'da': 'DA',
+  'Top Spending Geography': 'Top Spending',
+  'Frequently Transacting Geography': 'Frequently Transacting',
 }
 
 const HEADER_START = [
