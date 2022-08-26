@@ -63,5 +63,3 @@ export const columnTypeInfo = {
     },
   },
 }
-
-export const COLUMN_CATEGORY_TITLES = ['category', 'segment_type']
