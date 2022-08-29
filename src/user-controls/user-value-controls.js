@@ -76,10 +76,10 @@ const UserValueControls = () => {
   const selectedCategoryValue = useStoreState((state) => state.selectedCategoryValue)
 
   useEffect(() => {
-    if (renderableValueKeys.length && !dataCategoryKey) {
-      if (categoryFilter) {
+    if (renderableValueKeys.length) {
+      if (categoryFilter && (!dataCategoryKey || !finalUserControlKeyValues.includes(dataCategoryKey))) {
         update({ dataCategoryKey:  finalUserControlKeyValues[0] })
-      } else if (!finalUserControlKeyValues.includes(renderableValueKeys[0].key)) {
+      } else if (!dataCategoryKey && !finalUserControlKeyValues.includes(renderableValueKeys[0].key)) {
         update({ dataCategoryKey: DATA_CATEGORIES_KEYS.find(key =>
           DATA_CATEGORIES[key].includes(renderableValueKeys[0].key)) })
       }
