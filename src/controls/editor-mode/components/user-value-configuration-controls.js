@@ -71,9 +71,9 @@ const UserValueConfigurationControls = () => {
                 data={Object.keys(eligibleCategoryColumns)}
                 onSelect={(val) => userUpdate({ categoryFilter: val })}
                 onClear={() => userUpdate({ categoryFilter: null })}
-                placeholder='Column'
+                placeholder={Object.keys(eligibleCategoryColumns)?.length ? 'Column' : 'N/A'}
                 icons={Object.values(eligibleCategoryColumns).map(({ Icon }) => Icon)}
-                disabled={!addUserControls}
+                disabled={!addUserControls || !Object.keys(eligibleCategoryColumns)?.length}
                 classes={{
                   root: classes.root,
                   menu: classes.select,
