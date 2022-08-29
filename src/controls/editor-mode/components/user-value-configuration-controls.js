@@ -38,19 +38,19 @@ const UserValueConfigurationControls = () => {
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const categoryFilter = useStoreState((state) => state.categoryFilter)
 
-  const eligibleDomainValues = useMemo(() => (
+  const eligibleCategoryColumns = useMemo(() => (
     Object.fromEntries(
       Object.entries(columnsAnalysis)
-        .filter(([, { isNumeric }]) => (!isNumeric))
+        .filter(([c, { isNumeric }]) => c !== domain.value && !isNumeric)
         .map(([c, { Icon }]) => [c, { Icon }])
     )
-  ), [columnsAnalysis])
+  ), [domain, columnsAnalysis])
 
-  const eligibleColumns = useMemo(() =>
+  const eligibleValueColumns = useMemo(() =>
     Object.fromEntries(
       Object.entries(columnsAnalysis)
-        .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric)
-    ), [columnsAnalysis, domain.value])
+        .filter(([, { isNumeric }]) => isNumeric))
+  , [columnsAnalysis])
 
   return (
     <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !addUserControls}>
@@ -68,11 +68,11 @@ const UserValueConfigurationControls = () => {
             {type === types.MAP && renderSection('Category',
               <CustomSelect
                 value={categoryFilter}
-                data={Object.keys(eligibleDomainValues)}
+                data={Object.keys(eligibleCategoryColumns)}
                 onSelect={(val) => userUpdate({ categoryFilter: val })}
                 onClear={() => userUpdate({ categoryFilter: null })}
                 placeholder='Column'
-                icons={Object.values(eligibleDomainValues).map(({ Icon }) => Icon)}
+                icons={Object.values(eligibleCategoryColumns).map(({ Icon }) => Icon)}
                 disabled={!addUserControls}
                 classes={{
                   root: classes.root,
@@ -88,10 +88,8 @@ const UserValueConfigurationControls = () => {
                   placeholder='Columns'
                   value={userControlKeyValues}
                   data={numericColumns}
-                  onSelect={(val) => {
-                    userUpdate({ userControlKeyValues: val })}
-                  }
-                  icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
+                  onSelect={(val) => userUpdate({ userControlKeyValues: val })}
+                  icons={Object.values(eligibleValueColumns).map(({ Icon }) => Icon)}
                   disabled={!addUserControls}
                   classes={{
                     root: '',
