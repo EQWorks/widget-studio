@@ -46,8 +46,8 @@ const PercentageControls = () => {
       })
     })
 
-    renderableValueKeys.forEach(v => {
-      if (v.agg) {
+    renderableValueKeys.forEach((v, i) => {
+      if (v.agg && val[i]) {
         val.forEach((k, i) => {
           values.push(aggFunctions[renderableValueKeys[i].agg](getAggTrendObject[k]))
         })

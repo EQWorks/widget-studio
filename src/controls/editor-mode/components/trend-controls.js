@@ -50,8 +50,8 @@ const TrendControls = () => {
       })
     })
 
-    renderableValueKeys.forEach(v => {
-      if (v.agg) {
+    renderableValueKeys.forEach((v,i) => {
+      if (v.agg && val[i]) {
         val.forEach((k, i) => {
           getTrendObject = {
             ...getTrendObject,
