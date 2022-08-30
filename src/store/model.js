@@ -65,7 +65,7 @@ const stateDefaults = [
       showTooltip: true,
       showAxisTitles: true,
       showSubPlotTitles: true,
-      showLabels: false,
+      showLabels: true,
       showCurrency: false,
       showVertical: false,
       mapHideSourceLayer: false,
