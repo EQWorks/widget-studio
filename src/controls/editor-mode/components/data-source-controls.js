@@ -55,7 +55,7 @@ const DataSourceControls = () => {
           ((dataSourceType === dataSourceTypes.INSIGHTS_DATA && clientToken) ||
             dataSourceType !== dataSourceTypes.INSIGHTS_DATA))
         .map(({ queryID, executionID, columns, views = [], clientToken }) => {
-          const yearMonthClient = clientToken?.match(/[_][0-6]{6}[_][0-9].*/g)?.[0]
+          const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9].*/g)?.[0]
           const reportType = clientToken?.replace(yearMonthClient, '')
           let name
           if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {

@@ -457,7 +457,7 @@ const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, 
             <Widget
               className={classes.newWidget}
               mode='editor'
-              {...{ wl, cu, saveWithInsightsData }}
+              {...{ wl, cu, saveWithInsightsData, filters }}
             />
           </CustomModal>
         )

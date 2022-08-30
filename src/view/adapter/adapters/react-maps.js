@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import { useDebounce } from 'use-debounce'
@@ -47,16 +47,21 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const mode = useStoreState(state => state.ui.mode)
   const mapGroupKey = useStoreState(state => state.mapGroupKey)
   const uniqueOptions = useStoreState(state => state.uniqueOptions)
+  const addUserControls = useStoreState((state) => state.addUserControls)
+  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
 
   const [currentViewport, setCurrentViewport] = useState({})
   const [debouncedCurrentViewport] = useDebounce(currentViewport, 500)
   const [showToastMessage, setShowToastMessage] = useState(false)
 
+  const haveUserControls = useMemo(() => Boolean(addUserControls && userControlKeyValues.length),
+    [addUserControls, userControlKeyValues])
+
   const MODE_DIMENSIONS = Object.freeze({
     [modes.EDITOR]: { marginTop: 0 },
-    [modes.QL]: { marginTop: 0.75 },
-    [modes.VIEW]: { marginTop: 0.75 },
-    [modes.COMPACT]: { marginTop: 0.75 },
+    [modes.QL]: { marginTop: haveUserControls ? 0 : 0.75 },
+    [modes.VIEW]: { marginTop: haveUserControls ? 0 : 0.75 },
+    [modes.COMPACT]: { marginTop: haveUserControls? 0 : 0.75 },
   })
 
   const finalMarginTop = MODE_DIMENSIONS[mode].marginTop || 0
