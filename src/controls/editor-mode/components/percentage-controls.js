@@ -6,6 +6,7 @@ import WidgetControlCard from '../../shared/components/widget-control-card'
 import { renderRow } from '../../shared/util'
 import MutedBarrier from '../../shared/muted-barrier'
 import CustomSelect from '../../../components/custom-select'
+import aggFunctions from '../../../util/agg-functions'
 
 
 const PercentageControls = () => {
@@ -24,21 +25,36 @@ const PercentageControls = () => {
 
   const handleOnSelect = (val) => {
     const values = []
-    const titles = []
+    let getAggTrendObject = {}
 
     rows.forEach(row => {
       const objectKeys = Object.keys(row)
       objectKeys.forEach(k => {
-        val.forEach(v => {
-          if (v === k) {
-            values.push(row[k])
-            titles.push(k)
+        val.forEach((v, i) => {
+          if (row[domain.value].toString() === groupFilter[0] && v === k) {
+            if (renderableValueKeys[i].agg) {
+              if (!(k in getAggTrendObject)) {
+                getAggTrendObject[k] = []
+              }
+
+              getAggTrendObject[k].push(row[k])
+            } else {
+              values.push(row[k])
+            }
           }
         })
       })
     })
 
-    return { titles, values }
+    renderableValueKeys.forEach(v => {
+      if (v.agg) {
+        val.forEach((k, i) => {
+          values.push(aggFunctions[renderableValueKeys[i].agg](getAggTrendObject[k]))
+        })
+      }
+    })
+
+    return { titles: val, values }
   }
 
   return (
