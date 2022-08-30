@@ -37,13 +37,3 @@ export const numberToOrdinal = (n) => {
   const v = n % 100
   return n + (s[(v - 20) % 10] || s[v] || s[0])
 }
-
-/**
- * toFixedIfNecessary - transforms a number into the desired max number of decimal place if decimal exists
- * @param { numeric } value - a number
- * @param { numeric } dp - a number that defines the number of decimal place, default 2 decimal place
- * @returns { numeric } - a number fixed with the defined decimal place if there are decimal
- */
-export const toFixedIfNecessary = ( value, dp = 2 ) => {
-  return +parseFloat(value).toFixed( dp )
-}

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
 import { capitalize } from '../../../../util/string-manipulation'
 import clsx from 'clsx'
-import { toFixedIfNecessary } from '../../../../util/numeric'
 
 
 const classes = makeStyles({
@@ -159,7 +158,7 @@ const conditionalClasses = ({ showVertical, values, labelPosition, selectedPerce
 const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
   const { showLabels, showCurrency, showWidgetTitle, showVertical, labelPosition } = genericOptions
   const { compareTrend, selectedPercentage } = uniqueOptions
-  // console.log('unique: ', { compareTrend, selectedPercentage })
+
   const _conditionalClasses = (index = null) => conditionalClasses({ showVertical, values, labelPosition, selectedPercentage, index })
 
   const renderValue = (val, ob) => {
@@ -226,7 +225,7 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
                   <div className={_conditionalClasses().itemWrapper}>
                     <div className={_conditionalClasses(i).item}>
                       <div className={classes.value}>
-                        {showCurrency && '$'}{toFixedIfNecessary(Number(data[0][v.title]))}
+                        {showCurrency && '$'}{Number(data[0][v.title]).toLocaleString('en-US', { maximumFractionDigits: 2 })}
                       </div>
                       {showLabels &&
                           <div className={classes.label}>
