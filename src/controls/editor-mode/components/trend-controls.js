@@ -6,11 +6,12 @@ import WidgetControlCard from '../../shared/components/widget-control-card'
 import { renderRow } from '../../shared/util'
 import MutedBarrier from '../../shared/muted-barrier'
 import CustomSelect from '../../../components/custom-select'
+import aggFunctions from '../../../util/agg-functions'
 
 
 const TrendControls = () => {
   const userUpdate = useStoreActions((state) => state.userUpdate)
-  const resetValue = useStoreActions((state) => state.userUpdate)
+  const resetValue = useStoreActions((state) => state.resetValue)
 
   const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
@@ -24,24 +25,43 @@ const TrendControls = () => {
 
   const parseTrendObject = (val) => {
     let getTrendObject = {}
-    const selectedTrend = []
+    let getAggTrendObject = {}
+
     rows.forEach(row => {
       const objectKeys = Object.keys(row)
       objectKeys.forEach(k => {
-        val.forEach(v => {
-          if (row[domain.value] === Number(groupFilter[0]) && !k.localeCompare(v)) {
-            selectedTrend.push(k)
+        val.forEach((v, i) => {
+          if (row[domain.value].toString() === groupFilter[0] && !k.localeCompare(v)) {
+            if (renderableValueKeys[i].agg) {
+              if (!(k in getAggTrendObject)) {
+                getAggTrendObject[k] = []
+              }
 
-            getTrendObject = {
-              ...getTrendObject,
-              [k]: row[k],
+              getAggTrendObject[k].push(row[k])
+
+            } else {
+              getTrendObject = {
+                ...getTrendObject,
+                [k]: row[k],
+              }
             }
           }
         })
       })
     })
 
-    return { ...getTrendObject, selectedTrend }
+    renderableValueKeys.forEach((v,i) => {
+      if (v.agg && val[i]) {
+        val.forEach((k, i) => {
+          getTrendObject = {
+            ...getTrendObject,
+            [k]: aggFunctions[renderableValueKeys[i].agg](getAggTrendObject[k]),
+          }
+        })
+      }
+    })
+
+    return { ...getTrendObject, selectedTrend: val }
   }
 
   return (
@@ -56,6 +76,7 @@ const TrendControls = () => {
               fullWidth
               multiSelect
               data={availableTrend}
+              value={uniqueOptions.compareTrend && uniqueOptions.compareTrend.value.selectedTrend}
               onSelect={val => {
                 userUpdate({
                   uniqueOptions: {
