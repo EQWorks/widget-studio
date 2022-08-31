@@ -569,12 +569,12 @@ export default {
             [...acc, el[categoryFilter]], [])
           // specific to Cox - Top Spending needs to be first in the tab list
           // TO DO: change wl to Cox so it's only active for Cox dashboard
-          if (wl === 2423 && userControlKeyValues.every(el => COX_CATEGORY_SEGMENTS.includes(el))) {
+          if (wl === 2456 && userCategoryControlKeyValues.every(el => COX_CATEGORY_SEGMENTS.includes(el))) {
             userCategoryControlKeyValues = COX_CATEGORY_SEGMENTS
           }
           return userCategoryControlKeyValues
         }
-        // for map widget iwth no categoryFilter the finalUserControlKeyValues is a mix of column keys & data categories
+        // for map widget with no categoryFilter the finalUserControlKeyValues is a mix of column keys & data categories
         return userControlKeyValues.reduce((acc, key) => {
           const category = DATA_CATEGORIES_VALUES.includes(key) ?
             DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
