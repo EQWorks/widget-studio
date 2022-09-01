@@ -5,6 +5,7 @@ import { makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 import { useStoreState, useStoreActions } from '../store'
 import { cleanUp } from '../util/string-manipulation'
 import { numberToOrdinal } from '../util/numeric'
+import { TOP_COLUMN_KEYS } from '../constants/columns'
 
 
 const classes = makeStyles({
@@ -53,22 +54,28 @@ const TopCategories = () => {
   const propFilters = useStoreState(state => state.propFilters)
   const [selectedCategory, setSelectedCategory] = useState(0)
 
-  const rankedCategories = useMemo(() => rows.reduce((acc, { category, ranking }) => {
-    if (!JSON.stringify(acc).includes(category)) {
-      acc = [...acc, { category, ranking }]
+  const categoryKey = useMemo(() =>
+    Object.keys(rows[0]).find(key => key.includes(TOP_COLUMN_KEYS.category)), [rows])
+  const rankingKey = useMemo(() =>
+    Object.keys(rows[0]).find(key => key.includes(TOP_COLUMN_KEYS.ranking)), [rows])
+
+  const rankedCategories = useMemo(() => rows.reduce((acc, row) => {
+    if (!JSON.stringify(acc).includes(row[categoryKey])) {
+      const { [rankingKey]: ranking, [categoryKey]: category } = row
+      acc = [...acc, { ranking, category }]
     }
     return acc
-  }, [] ).sort((a, b) => a.ranking - b.ranking), [rows])
+  }, [] ).sort((a, b) => a.ranking - b.ranking), [categoryKey, rankingKey, rows])
 
   useEffect(() => {
-    if (addTopCategories && selectedCategory === 0 && !propFilters.length) {
+    if (addTopCategories && selectedCategory === 0 && !JSON.stringify(propFilters).includes(categoryKey)) {
       update({
         propFilters: [
-          { key: 'category', filter: [rankedCategories[0].category] },
+          { key: categoryKey, filter: [rankedCategories[0].category] },
         ],
       })
     }
-  }, [addTopCategories, selectedCategory, propFilters, rankedCategories, update])
+  }, [addTopCategories, selectedCategory, propFilters, rankedCategories, categoryKey, update])
 
   return (
     <div className={classes.topCategories}>
@@ -82,7 +89,7 @@ const TopCategories = () => {
             setSelectedCategory(index)
             update({
               propFilters: [
-                { key: 'category', filter: [item.category] },
+                { key: categoryKey, filter: [item.category] },
               ],
             })
           }}
