@@ -63,3 +63,8 @@ export const columnTypeInfo = {
     },
   },
 }
+
+export const TOP_COLUMN_KEYS = {
+  category: 'category',
+  ranking: 'rank',
+}
