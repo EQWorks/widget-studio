@@ -38,6 +38,8 @@ const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
   { key: 'title', defaultValue: 'Untitled Widget', resettable: false },
   { key: 'subtitle', defaultValue: 'Unsubtitled Widget ', resettable: false },
+  { key: 'subtitleLinkLabel', defaultValue: '', resettable: true },
+  { key: 'subtitleHyperlink', defaultValue: '', resettable: true },
   { key: 'showTitleBar', defaultValue: true, resettable: false },
   { key: 'type', defaultValue: '', resettable: true },
   { key: 'filters', defaultValue: [], resettable: true },
@@ -58,8 +60,8 @@ const stateDefaults = [
   },
   {
     key: 'genericOptions', defaultValue: {
-      showWidgetTitle: false,
-      showWidgetSubtitle: true,
+      showWidgetTitle: true,
+      showWidgetSubtitle: false,
       groupByValue: false,
       showLegend: true,
       showTooltip: true,
@@ -152,6 +154,8 @@ export default {
     [
       (state) => state.title,
       (state) => state.subtitle,
+      (state) => state.subtitleLinkLabel,
+      (state) => state.subtitleHyperlink,
       (state) => state.showTitleBar,
       (state) => state.type,
       (state) => state.filters,
@@ -181,6 +185,8 @@ export default {
     (
       title,
       subtitle,
+      subtitleLinkLabel,
+      subtitleHyperlink,
       showTitleBar,
       type,
       filters,
@@ -209,6 +215,8 @@ export default {
     ) => ({
       title,
       subtitle,
+      subtitleLinkLabel,
+      subtitleHyperlink,
       showTitleBar,
       type,
       filters: filters.filter(({ key, filter }) => key && filter),
