@@ -32,11 +32,17 @@ const useStyles = (mode) => makeStyles({
       letterSpacing: '0.016rem',
       margin: mode === modes.COMPACT ? 0 : '0 0.6rem',
       color: getTailwindConfigColor('secondary-600'),
+      display: 'flex',
+      gap: '0.25rem',
     },
   },
-  hyperlink: {
+  hyperlinkContainer: {
     marginTop: '-6px',
     width: '100%',
+  },
+  hyperlink: {
+    color: getTailwindConfigColor('interactive-500'),
+    textDecoration: 'underline',
   },
 })
 
@@ -96,7 +102,7 @@ const EditableSubtitle = () => {
             />
           )}
           {renderItem('Hyperlink',
-            <div className={classes.hyperlink}>
+            <div className={classes.hyperlinkContainer}>
               <TextField.Area
                 classes={textfieldClasses}
                 placeholder='Add subtitle link'
@@ -118,6 +124,11 @@ const EditableSubtitle = () => {
         showWidgetSubtitle && (
           <div className='subtitle-container'>
             {isLoading ? '...' : subtitle}
+            {subtitleLinkLabel && subtitleHyperlink &&
+              <a className={classes.hyperlink} href={subtitleHyperlink}>
+                {subtitleLinkLabel}
+              </a>
+            }
           </div>
         )
       }
