@@ -4,6 +4,7 @@ import { Tooltip, Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lum
 
 import { useStoreState, useStoreActions } from '../../store'
 import types from '../../constants/types'
+import { TOP_COLUMN_KEYS } from '../../constants/columns'
 import WidgetTypeControls from '../shared/type-controls'
 import DomainControls from '../shared/domain-controls'
 import MapDomainControls from '../shared/map-domain-controls'
@@ -98,7 +99,7 @@ const EditorLeftSidebar = () => {
                 </MutedBarrier>
               }
               {type === types.BAR &&
-                ['category', 'ranking'].every(elem => JSON.stringify(columns).includes(elem)) &&
+                Object.values(TOP_COLUMN_KEYS).every(elem => JSON.stringify(columns).includes(elem)) &&
                 <MutedBarrier mute={addUserControls}>
                   {renderToggle('Add Top Categories',
                     addTopCategories,

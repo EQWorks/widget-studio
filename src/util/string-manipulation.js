@@ -31,9 +31,9 @@ const HEADER_START = [
 ]
 
 const customCleanUp = s => {
-  const header = HEADER_START.find(h => s.toString().startsWith(h))
+  const header = HEADER_START.find(h => s?.toString().startsWith(h))
   if (header && !STRING_REPLACE_DICT[s]) {
-    const label = s.toString().replace(header, '').replace(/./, v => v.toUpperCase())
+    const label = s?.toString().replace(header, '').replace(/./, v => v.toUpperCase())
     if (header.includes('hh_income')) {
       return label.replace('_', '-')
     }
@@ -46,7 +46,7 @@ const customCleanUp = s => {
 }
 
 export const cleanUp = s => (
-  customCleanUp(s) || s.toString().replace(/_/g, ' ').replace(/./, v => v.toUpperCase())
+  customCleanUp(s) || s?.toString().replace(/_/g, ' ').replace(/./, v => v.toUpperCase())
 )
 export const getLongestString = arr => arr.reduce((a, b) => (a.length > b.length ? a : b))
 export const isString = v => typeof v === 'string' || v instanceof String
