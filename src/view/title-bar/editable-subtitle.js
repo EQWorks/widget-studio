@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 
 import { TextField, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
@@ -37,7 +37,6 @@ const useStyles = (mode) => makeStyles({
     },
   },
   hyperlinkContainer: {
-    marginTop: '-6px',
     width: '100%',
   },
   hyperlink: {
@@ -63,6 +62,12 @@ const EditableSubtitle = () => {
   const [tentativeSubtitle, setTentativeSubtitle] = useState(subtitle)
   const [tentativeLinkLabel, setTentativeLinkLabel] = useState(subtitleLinkLabel)
   const [tentativeHyperlink, setTentativeHyperlink] = useState(subtitleHyperlink)
+
+  const validHyperlink = useMemo(() => Boolean(tentativeHyperlink
+    // source: https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff650303(v=pandp.10)?redirectedfrom=MSDN#:~:text=e%2Dmail%20address.-,URL,-%5E(ht%7Cf)tp
+    ?.match(/^http(s?):\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-.?,'/\\+&amp;%$#_]*)?$/g)
+    ?.length)
+  ,[tentativeHyperlink])
 
   const classes = useStyles(mode)
 
@@ -103,9 +108,11 @@ const EditableSubtitle = () => {
           )}
           {renderItem('Hyperlink',
             <div className={classes.hyperlinkContainer}>
-              <TextField.Area
+              <TextField
+                error={!validHyperlink}
+                helperText={validHyperlink ? '' : 'Invalid hyperlink'}
                 classes={textfieldClasses}
-                placeholder='Add subtitle link'
+                placeholder='Add subtitle link (ex: http://..)'
                 value={tentativeHyperlink}
                 onChange={(val) => setTentativeHyperlink(val)}
                 onBlur={(e) => {
