@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 
 import { TextField, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
@@ -36,7 +36,8 @@ const useStyles = (mode) => makeStyles({
       gap: '0.25rem',
     },
   },
-  hyperlinkContainer: {
+  subtitle: {
+    marginTop: '-0.4rem',
     width: '100%',
   },
   hyperlink: {
@@ -57,11 +58,14 @@ const EditableSubtitle = () => {
   const subtitleLinkLabel = useStoreState((state) => state.subtitleLinkLabel)
   const subtitleHyperlink = useStoreState((state) => state.subtitleHyperlink)
   const mode = useStoreState((state) => state.ui.mode)
-  const showWidgetSubtitle = useStoreState((state) => state.genericOptions.showWidgetSubtitle)
 
   const [tentativeSubtitle, setTentativeSubtitle] = useState(subtitle)
   const [tentativeLinkLabel, setTentativeLinkLabel] = useState(subtitleLinkLabel)
   const [tentativeHyperlink, setTentativeHyperlink] = useState(subtitleHyperlink)
+
+  useEffect(() => setTentativeSubtitle(subtitle), [subtitle])
+  useEffect(() => setTentativeLinkLabel(subtitleLinkLabel), [subtitleLinkLabel])
+  useEffect(() => setTentativeHyperlink(subtitleHyperlink), [subtitleHyperlink])
 
   const validHyperlink = useMemo(() => Boolean(tentativeHyperlink
     // source: https://docs.microsoft.com/en-us/previous-versions/msp-n-p/ff650303(v=pandp.10)?redirectedfrom=MSDN#:~:text=e%2Dmail%20address.-,URL,-%5E(ht%7Cf)tp
@@ -75,60 +79,52 @@ const EditableSubtitle = () => {
     <div className={classes.outerContainer}>
       {mode === modes.EDITOR ?
         <div className='editor-mode-container'>
-          <TextField.Area
-            classes={textfieldClasses}
-            value={tentativeSubtitle}
-            onChange={(val) => setTentativeSubtitle(val)}
-            onBlur={(e) => {
-              setTentativeSubtitle(e.target.value)
-              userUpdate({ subtitle: (e.target.value) })
-            }}
-            onSubmit={(e) => {
-              e.nativeEvent.preventDefault()
-              e.nativeEvent.stopPropagation()
-            }}
-            maxLength={100}
-          />
+          {renderItem('Subtitle',
+            <div className={classes.subtitle}>
+              <TextField.Area
+                classes={textfieldClasses}
+                value={tentativeSubtitle}
+                inputProps={{ placeholder: 'Add subtitle' }}
+                onChange={(val) => setTentativeSubtitle(val)}
+                onBlur={(e) => {
+                  setTentativeSubtitle(e.target.value)
+                  userUpdate({ subtitle: (e.target.value) })
+                }}
+                maxLength={100}
+              />
+            </div>
+          )}
           {renderItem('Link Label',
             <TextField
               classes={textfieldClasses}
               value={tentativeLinkLabel}
-              placeholder='Add subtitle link label'
+              inputProps={{ placeholder: 'Add subtitle link label' }}
               onChange={(val) => setTentativeLinkLabel(val)}
               onBlur={(e) => {
                 setTentativeLinkLabel(e.target.value)
                 userUpdate({ subtitleLinkLabel: (e.target.value) })
               }}
-              onSubmit={(e) => {
-                e.nativeEvent.preventDefault()
-                e.nativeEvent.stopPropagation()
-              }}
               maxLength={30}
             />
           )}
           {renderItem('Hyperlink',
-            <div className={classes.hyperlinkContainer}>
-              <TextField
-                error={!validHyperlink}
-                helperText={validHyperlink ? '' : 'Invalid hyperlink'}
-                classes={textfieldClasses}
-                placeholder='Add subtitle link (ex: http://..)'
-                value={tentativeHyperlink}
-                onChange={(val) => setTentativeHyperlink(val)}
-                onBlur={(e) => {
-                  setTentativeHyperlink(e.target.value)
-                  userUpdate({ subtitleHyperlink: e.target.value })
-                }}
-                onSubmit={(e) => {
-                  e.nativeEvent.preventDefault()
-                  e.nativeEvent.stopPropagation()
-                }}
-              />
-            </div>
+            <TextField
+              error={!validHyperlink}
+              disabled={!tentativeLinkLabel}
+              helperText={validHyperlink ? '' : 'Invalid hyperlink'}
+              classes={textfieldClasses}
+              inputProps={{ placeholder: 'Add subtitle link (ex: http://..)' }}
+              value={tentativeHyperlink}
+              onChange={(val) => setTentativeHyperlink(val)}
+              onBlur={(e) => {
+                setTentativeHyperlink(e.target.value)
+                userUpdate({ subtitleHyperlink: e.target.value })
+              }}
+            />
           )}
         </div>
         :
-        showWidgetSubtitle && (
+        subtitle || (subtitleLinkLabel && subtitleHyperlink) && (
           <div className='subtitle-container'>
             {isLoading ? '...' : subtitle}
             {subtitleLinkLabel && subtitleHyperlink &&
