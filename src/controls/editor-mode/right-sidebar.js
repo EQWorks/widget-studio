@@ -20,6 +20,7 @@ import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 import ExportControls from './components/export-controls'
 import SliderControl from './components/slider-control'
 import EditableSubtitle from '../../view/title-bar/editable-subtitle'
+import { hasDevAccess  } from '../../util/access'
 
 
 const classes = makeStyles({
@@ -100,7 +101,7 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showCurrency: v } }),
               )
             }
-            {
+            {hasDevAccess &&
               renderToggle(
                 'Subtitle',
                 showWidgetSubtitle,
@@ -253,7 +254,6 @@ const EditorRightSidebar = () => {
       } >
         <Filters />
       </MutedBarrier>
-      {/* TO CHANGE: temporary enable Map Settings controls for xwi report data */}
       <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
         <WidgetControlCard title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}>
           {
@@ -273,10 +273,12 @@ const EditorRightSidebar = () => {
                   </>
                 )}
                 {type === types.MAP && <MapLayerDisplay />}
-                {showWidgetSubtitle &&
-                  renderSection('Subtitle',
-                    <EditableSubtitle />
-                  )
+                {hasDevAccess &&
+                  <MutedBarrier mute={!showWidgetSubtitle} >
+                    {renderSection('Subtitle',
+                      <EditableSubtitle />
+                    )}
+                  </MutedBarrier>
                 }
               </>
             )
