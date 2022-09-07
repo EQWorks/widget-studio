@@ -37,7 +37,7 @@ const MAX_UNDO_STEPS = 10
 const stateDefaults = [
   { key: 'id', defaultValue: null, resettable: false },
   { key: 'title', defaultValue: 'Untitled Widget', resettable: false },
-  { key: 'subtitle', defaultValue: 'Unsubtitled Widget ', resettable: false },
+  { key: 'subtitle', defaultValue: '', resettable: false },
   { key: 'subtitleLinkLabel', defaultValue: '', resettable: true },
   { key: 'subtitleHyperlink', defaultValue: '', resettable: true },
   { key: 'showTitleBar', defaultValue: true, resettable: false },
@@ -61,7 +61,6 @@ const stateDefaults = [
   {
     key: 'genericOptions', defaultValue: {
       showWidgetTitle: true,
-      showWidgetSubtitle: false,
       groupByValue: false,
       showLegend: true,
       showTooltip: true,
