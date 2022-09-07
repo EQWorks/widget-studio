@@ -26,19 +26,19 @@ const useStyles = (mode) => makeStyles({
         },
       },
     },
-    '& .subtitle-container': {
-      fontSize: '0.875rem',
-      fontWeight: 400,
-      letterSpacing: '0.016rem',
-      margin: mode === modes.COMPACT ? 0 : '0 0.6rem',
-      color: getTailwindConfigColor('secondary-600'),
-      display: 'flex',
-      gap: '0.25rem',
-    },
   },
   subtitle: {
     marginTop: '-0.4rem',
     width: '100%',
+  },
+  subtitleContainer: {
+    margin: mode === modes.COMPACT ? 0 : '0 0.6rem',
+    display: 'flex',
+    gap: '0.25rem',
+    fontSize: '0.875rem',
+    fontWeight: 400,
+    letterSpacing: '0.016rem',
+    color: getTailwindConfigColor('secondary-600'),
   },
   hyperlink: {
     color: getTailwindConfigColor('interactive-500'),
@@ -90,7 +90,7 @@ const EditableSubtitle = () => {
                   setTentativeSubtitle(e.target.value)
                   userUpdate({ subtitle: (e.target.value) })
                 }}
-                maxLength={100}
+                maxLength={120}
               />
             </div>
           )}
@@ -123,18 +123,16 @@ const EditableSubtitle = () => {
             />
           )}
         </div>
-        :
-        subtitle || (subtitleLinkLabel && subtitleHyperlink) && (
-          <div className='subtitle-container'>
+        : (subtitle || (subtitleLinkLabel && subtitleHyperlink)) && (
+          <div className={classes.subtitleContainer}>
             {isLoading ? '...' : subtitle}
-            {subtitleLinkLabel && subtitleHyperlink &&
+            {!isLoading && subtitleLinkLabel && subtitleHyperlink &&
               <a className={classes.hyperlink} href={subtitleHyperlink}>
                 {subtitleLinkLabel}
               </a>
             }
           </div>
-        )
-      }
+        )}
     </div>
   )
 }
