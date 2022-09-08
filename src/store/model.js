@@ -96,6 +96,7 @@ const stateDefaults = [
   // TO DELETE or change in the future when we implement data tree selection
   { key: 'saveWithInsightsData', defaultValue: false, resettable: false },
   { key: 'reportType', defaultValue: null, resettable: true },
+  { key: 'reportYM', defaultValue: null, resettable: true },
   { key: 'percentageMode', defaultValue: false, resettable: true },
   { key: 'addUserControls', defaultValue: false, resettable: true },
   { key: 'addTopCategories', defaultValue: false, resettable: true },
@@ -679,7 +680,7 @@ export default {
   }),
 
   save: thunk(async (actions, _, { getState }) => {
-    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType } = getState()
+    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType, reportYM } = getState()
     if (!config) {
       actions.toast({
         title: `The widget is not configured yet, but will be ${id ? 'saved' : 'created'} anyway.`,
@@ -697,7 +698,7 @@ export default {
           ...tentativeConfig,
           dataSource: {
             type: dataSourceTypes.INSIGHTS_DATA,
-            id: reportType,
+            id: reportYM ? `${reportType}_YM` : reportType,
           },
         } :
         tentativeConfig,
@@ -800,8 +801,10 @@ export default {
     requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
         const { results: rows, columns, whitelabelID, customerID, clientToken } = data
-        const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9].*/g)?.[0]
-        const reportType = clientToken?.replace(yearMonthClient, '')
+        const reportYM = clientToken?.match(/[_][0-9]{6}[_]/g)?.[0]
+        const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9]+$/g)?.[0]
+        const clientId = clientToken?.match(/[_][0-9]+$/g)?.[0]
+        const reportType = clientToken?.replace(yearMonthClient ? yearMonthClient : clientId, '')
         actions.update({
           rows,
           columns,
@@ -813,6 +816,7 @@ export default {
             dataSourceError: null,
           },
           reportType,
+          reportYM,
         })
         if (!init) {
           actions.toast({
