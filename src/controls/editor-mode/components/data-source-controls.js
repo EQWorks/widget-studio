@@ -42,6 +42,7 @@ const classes = makeStyles({
 const DataSourceControls = () => {
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
+
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
   const cu = useStoreState((state) => state.cu)
@@ -55,8 +56,9 @@ const DataSourceControls = () => {
           ((dataSourceType === dataSourceTypes.INSIGHTS_DATA && clientToken) ||
             dataSourceType !== dataSourceTypes.INSIGHTS_DATA))
         .map(({ queryID, executionID, columns, views = [], clientToken }) => {
-          const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9].*/g)?.[0]
-          const reportType = clientToken?.replace(yearMonthClient, '')
+          const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9]+$/g)?.[0]
+          const clientId = clientToken?.match(/[_][0-9]+$/g)?.[0]
+          const reportType = clientToken?.replace(yearMonthClient ? yearMonthClient : clientId, '')
           let name
           if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
             name = reportType?.split('_')?.map((word) =>
