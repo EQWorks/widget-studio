@@ -13,7 +13,7 @@ export const priceStringToNumeric = s => parseFloat(s?.split('$')[1]?.replace(/,
  */
 export const getRoundToNumberDigit = (num) => {
   let roundTo = 1
-  const arrayOfZero = [...Array(num.toString().length - 1).fill('0')]
+  const arrayOfZero = [...Array(Math.round(num).toString().length - 1).fill('0')]
   arrayOfZero.forEach(val => { roundTo = Number(roundTo) + val})
 
   // to prevent getting doubled the space view in the graph for values less than one half
