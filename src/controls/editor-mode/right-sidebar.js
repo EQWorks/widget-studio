@@ -20,6 +20,7 @@ import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 import ExportControls from './components/export-controls'
 import SliderControl from './components/slider-control'
 import EditableSubtitle from '../../view/title-bar/editable-subtitle'
+import { hasDevAccess  } from '../../util/access'
 
 
 const classes = makeStyles({
@@ -42,7 +43,6 @@ const EditorRightSidebar = () => {
   const domain = useStoreState((state) => state.domain)
   const subPlots = useStoreState((state) => state.genericOptions.subPlots)
   const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
-  const showWidgetSubtitle = useStoreState((state) => state.genericOptions.showWidgetSubtitle)
   const size = useStoreState((state) => state.genericOptions.size)
   const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
   const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
@@ -86,25 +86,11 @@ const EditorRightSidebar = () => {
                 false
               )
             }
-            {(subPlots || type === types.PIE) &&
-              renderToggle(
-                'Subplot Titles',
-                showSubPlotTitles,
-                v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
-              )
-            }
             {type === types.STAT &&
               renderToggle(
                 'Currency',
                 showCurrency,
                 v => userUpdate({ genericOptions: { showCurrency: v } }),
-              )
-            }
-            {
-              renderToggle(
-                'Subtitle',
-                showWidgetSubtitle,
-                v => userUpdate({ genericOptions: { showWidgetSubtitle: v } }),
               )
             }
           </>,
@@ -115,7 +101,7 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
-            {!type === types.STAT &&
+            {type !== types.STAT &&
               renderToggle(
                 'Legend',
                 showLegend,
@@ -143,12 +129,19 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showVertical: v } }),
               )
             }
-            {![types.PIE, types.MAP, types.PYRAMID, types.STAT].includes(type) &&
+            {![types.PIE, types.MAP, types.PYRAMID, types.STAT, types.TABLE].includes(type) &&
               renderToggle(
                 'Subplots',
                 subPlots,
                 v => userUpdate({ genericOptions: { subPlots: v } }),
                 renderableValueKeys?.length <= 1
+              )
+            }
+            {(subPlots || type === types.PIE) &&
+              renderToggle(
+                'Subplot Titles',
+                showSubPlotTitles,
+                v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
               )
             }
             {type === types.PYRAMID && renderItem('x-Axis Labels',
@@ -253,7 +246,6 @@ const EditorRightSidebar = () => {
       } >
         <Filters />
       </MutedBarrier>
-      {/* TO CHANGE: temporary enable Map Settings controls for xwi report data */}
       <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
         <WidgetControlCard title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}>
           {
@@ -273,21 +265,29 @@ const EditorRightSidebar = () => {
                   </>
                 )}
                 {type === types.MAP && <MapLayerDisplay />}
-                {showWidgetSubtitle &&
-                  renderSection('Subtitle',
-                    <EditableSubtitle />
-                  )
-                }
               </>
             )
           }
         </WidgetControlCard >
       </MutedBarrier>
-      {
-        ![types.MAP, types.STAT].includes(type) &&
+      {![types.MAP, types.STAT].includes(type) &&
         <WidgetControlCard title='Color Scheme'>
           <ColorSchemeControls />
         </WidgetControlCard >
+      }
+      {hasDevAccess &&
+        <WidgetControlCard
+          clear={() => userUpdate({
+            subtitle: '',
+            subtitleLinkLabel: '',
+            subtitleHyperlink: '',
+          })}
+          title='Widget Subtitle'
+        >
+          {renderSection(null,
+            <EditableSubtitle />
+          )}
+        </WidgetControlCard>
       }
       <ExportControls />
     </EditorSidebarBase >

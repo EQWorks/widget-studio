@@ -18,7 +18,6 @@ const useStyles = ({ baseColor, showPicker, type }) => makeStyles({
     alignItems: 'stretch',
     ...(type !== types.MAP && {
       marginTop: '0.8rem',
-      marginBottom: '0.6rem',
     }),
   },
   row: {

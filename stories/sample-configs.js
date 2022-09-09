@@ -562,23 +562,26 @@ export default {
     'mapTooltipLabelTitles': null,
   },
   'dev-bar-4' : {
-    'title': 'My example bar - top category insights',
+    'title': 'Insights on Top 10 Consumer Spending Categories',
+    'subtitle': 'Check sub-categories of the Top 10 Spending Categories in your Market Area.',
+    'subtitleLinkLabel': 'Learn More',
+    'subtitleHyperlink': 'https://www.eqworks.com/',
     'showTitleBar': true,
     'type': 'bar',
     'filters': [],
     'groupFilter': [],
     'valueKeys': [
       {
-        'key': 'market_area',
         'title': 'Market area',
+        'key': 'market_area',
       },
       {
-        'key': 'city',
         'title': 'City',
+        'key': 'city',
       },
       {
-        'key': 'province',
         'title': 'Province',
+        'key': 'province',
       },
       {
         'key': 'country',
@@ -605,6 +608,8 @@ export default {
       'showAxisTitles': false,
       'showSubPlotTitles': true,
       'showLabels': false,
+      'showCurrency': false,
+      'showVertical': false,
       'mapHideSourceLayer': false,
       'mapHideTargetLayer': false,
       'mapHideArcLayer': false,
@@ -618,6 +623,7 @@ export default {
         0.5,
         0,
       ],
+      'labelPosition': 'Bottom',
       'legendSize': 'Small',
       'baseColor': '#00548a',
       'xAxisLabelLength': 5,
@@ -1388,7 +1394,7 @@ export default {
   },
   'dev-map-5':{
     'title': 'My example map widget - user value controls - top segments',
-    'subtitle': 'Unsubtitled Widget ',
+    'subtitle': '',
     'showTitleBar': true,
     'type': 'map',
     'filters': [],
@@ -1509,7 +1515,6 @@ export default {
     },
     'genericOptions': {
       'showWidgetTitle': false,
-      'showWidgetSubtitle': true,
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
