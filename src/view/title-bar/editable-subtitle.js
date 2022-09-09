@@ -90,7 +90,7 @@ const EditableSubtitle = () => {
                   setTentativeSubtitle(e.target.value)
                   userUpdate({ subtitle: (e.target.value) })
                 }}
-                maxLength={120}
+                maxLength={130}
               />
             </div>
           )}
@@ -109,9 +109,9 @@ const EditableSubtitle = () => {
           )}
           {renderItem('Hyperlink',
             <TextField
-              error={!validHyperlink}
+              error={tentativeLinkLabel && !validHyperlink}
               disabled={!tentativeLinkLabel}
-              helperText={validHyperlink ? '' : 'Invalid hyperlink'}
+              helperText={tentativeLinkLabel && !validHyperlink ? 'Invalid hyperlink' : ''}
               classes={textfieldClasses}
               inputProps={{ placeholder: 'Add subtitle link (ex: http://..)' }}
               value={tentativeHyperlink}
