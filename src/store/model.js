@@ -30,6 +30,8 @@ import { columnTypes } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
 import { dataSourceTypes } from '../constants/data-source'
 import { COX_CATEGORY_SEGMENTS } from '../constants/client-specific'
+import { yearMonthClientRegExp, clientIdRegExp, reportYMRegExp } from '../constants/regexp'
+
 
 
 const MAX_UNDO_STEPS = 10
@@ -801,9 +803,9 @@ export default {
     requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
         const { results: rows, columns, whitelabelID, customerID, clientToken } = data
-        const reportYM = clientToken?.match(/[_][0-9]{6}[_]/g)?.[0]
-        const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9]+$/g)?.[0]
-        const clientId = clientToken?.match(/[_][0-9]+$/g)?.[0]
+        const reportYM = clientToken?.match(reportYMRegExp)?.[0]
+        const yearMonthClient = clientToken?.match(yearMonthClientRegExp)?.[0]
+        const clientId = clientToken?.match(clientIdRegExp)?.[0]
         const reportType = clientToken?.replace(yearMonthClient ? yearMonthClient : clientId, '')
         actions.update({
           rows,
