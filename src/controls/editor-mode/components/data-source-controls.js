@@ -8,8 +8,9 @@ import CustomSelect from '../../../components/custom-select'
 import { renderRow } from '../../shared/util'
 import WidgetControlCard from '../../shared/components/widget-control-card'
 import { columnTypeInfo, columnTypes } from '../../../constants/columns'
-import { STRING_REPLACE_DICT } from '../../../util/string-manipulation'
 import { dataSourceTypes } from '../../../constants/data-source'
+import { yearMonthClientRegExp, clientIdRegExp } from '../../../constants/regexp'
+import { STRING_REPLACE_DICT } from '../../../util/string-manipulation'
 
 
 const classes = makeStyles({
@@ -56,8 +57,8 @@ const DataSourceControls = () => {
           ((dataSourceType === dataSourceTypes.INSIGHTS_DATA && clientToken) ||
             dataSourceType !== dataSourceTypes.INSIGHTS_DATA))
         .map(({ queryID, executionID, columns, views = [], clientToken }) => {
-          const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9]+$/g)?.[0]
-          const clientId = clientToken?.match(/[_][0-9]+$/g)?.[0]
+          const yearMonthClient = clientToken?.match(yearMonthClientRegExp)?.[0]
+          const clientId = clientToken?.match(clientIdRegExp)?.[0]
           const reportType = clientToken?.replace(yearMonthClient ? yearMonthClient : clientId, '')
           let name
           if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
