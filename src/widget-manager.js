@@ -599,7 +599,7 @@ const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, 
                         key={currentlyViewing}
                         id={currentlyViewing}
                         mode='view_only'
-                        filters={filters}
+                        {...{ wl, cu, saveWithInsightsData, filters }}
                       />
                     </InsightsDataProvider>
                   }

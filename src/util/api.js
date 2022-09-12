@@ -173,14 +173,11 @@ const requestExecutionResults = async (id) => {
   return { data, name }
 }
 
-export const fetchInsightsData = ({ name, ...params }) => {
-  return ({
-    cox: (api.get(`/cox/reports/${name}/results`, { params } )
-      .then(({ data }) => requestExecutionResults(data.executionID))
-      .then(({ data }) => data)),
-  })
-}
-
+export const fetchInsightsData = ({ name, ...params }) => ({
+  cox: (api.get(`/cox/reports/${name}/results`, { params } )
+    .then(({ data }) => requestExecutionResults(data.executionID))
+    .then(({ data }) => data)),
+})
 
 export const requestData = async (dataSourceType, dataSourceID, sampleData = null) => {
   const localCopy = sampleData?.[`${dataSourceType}-${dataSourceID}`]
