@@ -30,8 +30,6 @@ import { columnTypes } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
 import { dataSourceTypes } from '../constants/data-source'
 import { COX_CATEGORY_SEGMENTS } from '../constants/client-specific'
-import { yearMonthClientRegExp, clientIdRegExp, reportYMRegExp } from '../constants/regexp'
-
 
 
 const MAX_UNDO_STEPS = 10
@@ -682,7 +680,7 @@ export default {
   }),
 
   save: thunk(async (actions, _, { getState }) => {
-    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType, reportYM } = getState()
+    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType, reportYM, dataSource } = getState()
     if (!config) {
       actions.toast({
         title: `The widget is not configured yet, but will be ${id ? 'saved' : 'created'} anyway.`,
@@ -694,13 +692,20 @@ export default {
       ? saveWidget
       : createWidget
     saveFn({
-      // TO DELETE: workaround until we implemet data source tree selection
-      config: saveWithInsightsData ?
+      /**TO DELETE: workaround until we implemet data source tree selection; also need to replicate
+        this code from DataSourceControls as the last sets the data source to get results for the widgets
+        using either executions or insights data (we still use execution results when creating a widget),
+        and the second saves a widget with the particular data configuration needed for the widget
+        (ie widgets created with InsigthsDataProvider will be saved with insights data type of data source,
+        the rest will be saved with execution type of data source)
+      */
+      // when creating a new widget with an execution using InsightsDataProvider, dataSource.types is execution type
+      config: saveWithInsightsData &&  dataSource.types !== dataSourceTypes.INSIGHTS_DATA ?
         {
           ...tentativeConfig,
           dataSource: {
             type: dataSourceTypes.INSIGHTS_DATA,
-            id: reportYM ? `${reportType}_YM` : reportType,
+            id: reportType + (reportYM ? '_YM' : ''),
           },
         } :
         tentativeConfig,
@@ -802,11 +807,7 @@ export default {
     // TO DELETE: once Cox executions are not pulled from qldev stage, delete cu
     requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
-        const { results: rows, columns, whitelabelID, customerID, clientToken } = data
-        const reportYM = clientToken?.match(reportYMRegExp)?.[0]
-        const yearMonthClient = clientToken?.match(yearMonthClientRegExp)?.[0]
-        const clientId = clientToken?.match(clientIdRegExp)?.[0]
-        const reportType = clientToken?.replace(yearMonthClient ? yearMonthClient : clientId, '')
+        const { results: rows, columns, whitelabelID, customerID } = data
         actions.update({
           rows,
           columns,
@@ -817,8 +818,6 @@ export default {
             dataSourceName: name,
             dataSourceError: null,
           },
-          reportType,
-          reportYM,
         })
         if (!init) {
           actions.toast({
