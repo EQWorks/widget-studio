@@ -9,7 +9,7 @@ import { renderRow } from '../../shared/util'
 import WidgetControlCard from '../../shared/components/widget-control-card'
 import { columnTypeInfo, columnTypes } from '../../../constants/columns'
 import { dataSourceTypes } from '../../../constants/data-source'
-import { yearMonthClientRegExp, clientIdRegExp } from '../../../constants/regexp'
+import { yearMonthClientRegExp, clientIdRegExp, reportYMRegExp } from '../../../constants/regexp'
 import { STRING_REPLACE_DICT } from '../../../util/string-manipulation'
 
 
@@ -57,6 +57,7 @@ const DataSourceControls = () => {
           ((dataSourceType === dataSourceTypes.INSIGHTS_DATA && clientToken) ||
             dataSourceType !== dataSourceTypes.INSIGHTS_DATA))
         .map(({ queryID, executionID, columns, views = [], clientToken }) => {
+          const reportYM = clientToken?.match(reportYMRegExp)?.[0]
           const yearMonthClient = clientToken?.match(yearMonthClientRegExp)?.[0]
           const clientId = clientToken?.match(clientIdRegExp)?.[0]
           const reportType = clientToken?.replace(yearMonthClient ? yearMonthClient : clientId, '')
@@ -88,6 +89,7 @@ const DataSourceControls = () => {
                 </span>
               </span>
             ),
+            reportYM,
           }
         })
       : []
@@ -128,14 +130,17 @@ const DataSourceControls = () => {
             descriptions={dataSourceList?.map(({ description }) => description)}
             data={dataSourceList?.map(({ label }) => label)}
             onSelect={v => {
+              let { reportYM, reportType } = dataSourceList?.find(({ label }) => v === label) || {}
               resetWidget()
               userUpdate({
+                reportYM,
+                reportType,
                 dataSource: {
                   type: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
                     dataSourceTypes.INSIGHTS_DATA :
                     dataSourceTypes.EXECUTIONS,
                   id: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
-                    dataSourceList.find(({ label }) => v === label).reportType :
+                    reportType + (reportYM ? '_YM' : '') :
                     v.split('[')[1].split(']')[0], // TODO something that is not this
                 },
               })
