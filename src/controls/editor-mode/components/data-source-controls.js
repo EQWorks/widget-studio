@@ -102,7 +102,7 @@ const DataSourceControls = () => {
       }
       return dataSourceList?.find(({ id }) => Number(id) === Number(dataSourceID))
     }
-    return dataSourceList?.find(({ reportType }) => reportType === dataSourceID)
+    return dataSourceList?.find(({ reportType }) => reportType === (dataSourceID?.replace('_YM', '')))
   } , [dataSourceID, dataSourceType, dataSourceList])
 
   const placeholder = useMemo(() => {
