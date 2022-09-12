@@ -198,7 +198,7 @@ const useTransformedData = () => {
       const res = renderableValueKeys.reduce((res, { key, agg, title }) => {
         const val = dataHasVariance
           ? aggFunctions[agg](values[key])
-          : values[key][0]
+          : values?.[key]?.[0]
         res[title] = val
         return res
       }, { [formattedDomain]: group })

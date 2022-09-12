@@ -8,8 +8,9 @@ import CustomSelect from '../../../components/custom-select'
 import { renderRow } from '../../shared/util'
 import WidgetControlCard from '../../shared/components/widget-control-card'
 import { columnTypeInfo, columnTypes } from '../../../constants/columns'
-import { STRING_REPLACE_DICT } from '../../../util/string-manipulation'
 import { dataSourceTypes } from '../../../constants/data-source'
+import { yearMonthClientRegExp, clientIdRegExp, reportYMRegExp } from '../../../constants/regexp'
+import { STRING_REPLACE_DICT } from '../../../util/string-manipulation'
 
 
 const classes = makeStyles({
@@ -42,6 +43,7 @@ const classes = makeStyles({
 const DataSourceControls = () => {
   const resetWidget = useStoreActions((actions) => actions.resetWidget)
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
+
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
   const cu = useStoreState((state) => state.cu)
@@ -55,8 +57,10 @@ const DataSourceControls = () => {
           ((dataSourceType === dataSourceTypes.INSIGHTS_DATA && clientToken) ||
             dataSourceType !== dataSourceTypes.INSIGHTS_DATA))
         .map(({ queryID, executionID, columns, views = [], clientToken }) => {
-          const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9].*/g)?.[0]
-          const reportType = clientToken?.replace(yearMonthClient, '')
+          const reportYM = clientToken?.match(reportYMRegExp)?.[0]
+          const yearMonthClient = clientToken?.match(yearMonthClientRegExp)?.[0]
+          const clientId = clientToken?.match(clientIdRegExp)?.[0]
+          const reportType = clientToken?.replace(yearMonthClient ? yearMonthClient : clientId, '')
           let name
           if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
             name = reportType?.split('_')?.map((word) =>
@@ -85,6 +89,7 @@ const DataSourceControls = () => {
                 </span>
               </span>
             ),
+            reportYM,
           }
         })
       : []
@@ -97,7 +102,7 @@ const DataSourceControls = () => {
       }
       return dataSourceList?.find(({ id }) => Number(id) === Number(dataSourceID))
     }
-    return dataSourceList?.find(({ reportType }) => reportType === dataSourceID)
+    return dataSourceList?.find(({ reportType }) => reportType === (dataSourceID?.replace('_YM', '')))
   } , [dataSourceID, dataSourceType, dataSourceList])
 
   const placeholder = useMemo(() => {
@@ -125,14 +130,17 @@ const DataSourceControls = () => {
             descriptions={dataSourceList?.map(({ description }) => description)}
             data={dataSourceList?.map(({ label }) => label)}
             onSelect={v => {
+              let { reportYM, reportType } = dataSourceList?.find(({ label }) => v === label) || {}
               resetWidget()
               userUpdate({
+                reportYM,
+                reportType,
                 dataSource: {
                   type: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
                     dataSourceTypes.INSIGHTS_DATA :
                     dataSourceTypes.EXECUTIONS,
                   id: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
-                    dataSourceList.find(({ label }) => v === label).reportType :
+                    reportType + (reportYM ? '_YM' : '') :
                     v.split('[')[1].split(']')[0], // TODO something that is not this
                 },
               })

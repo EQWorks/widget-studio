@@ -184,7 +184,7 @@ storiesOf('TMP filter prop demo', module)
   })
 
 const YEAR = 2022
-const MONTH = 1
+const MONTH = 8
 
 // InsightsDataProvider demonstration
 storiesOf('InsightsDataProvider', module)

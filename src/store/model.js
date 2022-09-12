@@ -96,6 +96,7 @@ const stateDefaults = [
   // TO DELETE or change in the future when we implement data tree selection
   { key: 'saveWithInsightsData', defaultValue: false, resettable: false },
   { key: 'reportType', defaultValue: null, resettable: true },
+  { key: 'reportYM', defaultValue: null, resettable: true },
   { key: 'percentageMode', defaultValue: false, resettable: true },
   { key: 'addUserControls', defaultValue: false, resettable: true },
   { key: 'addTopCategories', defaultValue: false, resettable: true },
@@ -679,7 +680,7 @@ export default {
   }),
 
   save: thunk(async (actions, _, { getState }) => {
-    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType } = getState()
+    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType, reportYM, dataSource } = getState()
     if (!config) {
       actions.toast({
         title: `The widget is not configured yet, but will be ${id ? 'saved' : 'created'} anyway.`,
@@ -691,13 +692,20 @@ export default {
       ? saveWidget
       : createWidget
     saveFn({
-      // TO DELETE: workaround until we implemet data source tree selection
-      config: saveWithInsightsData ?
+      /**TO DELETE: workaround until we implemet data source tree selection; also need to replicate
+        this code from DataSourceControls as the last sets the data source to get results for the widgets
+        using either executions or insights data (we still use execution results when creating a widget),
+        and the second saves a widget with the particular data configuration needed for the widget
+        (ie widgets created with InsigthsDataProvider will be saved with insights data type of data source,
+        the rest will be saved with execution type of data source)
+      */
+      // when creating a new widget with an execution using InsightsDataProvider, dataSource.types is execution type
+      config: saveWithInsightsData &&  dataSource.types !== dataSourceTypes.INSIGHTS_DATA ?
         {
           ...tentativeConfig,
           dataSource: {
             type: dataSourceTypes.INSIGHTS_DATA,
-            id: reportType,
+            id: reportType + (reportYM ? '_YM' : ''),
           },
         } :
         tentativeConfig,
@@ -799,9 +807,7 @@ export default {
     // TO DELETE: once Cox executions are not pulled from qldev stage, delete cu
     requestData(dataSource.type, dataSource.id, sampleData, cu)
       .then(({ data, name }) => {
-        const { results: rows, columns, whitelabelID, customerID, clientToken } = data
-        const yearMonthClient = clientToken?.match(/[_][0-9]{6}[_][0-9].*/g)?.[0]
-        const reportType = clientToken?.replace(yearMonthClient, '')
+        const { results: rows, columns, whitelabelID, customerID } = data
         actions.update({
           rows,
           columns,
@@ -812,7 +818,6 @@ export default {
             dataSourceName: name,
             dataSourceError: null,
           },
-          reportType,
         })
         if (!init) {
           actions.toast({
