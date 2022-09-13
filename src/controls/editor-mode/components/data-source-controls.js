@@ -102,7 +102,7 @@ const DataSourceControls = () => {
       }
       return dataSourceList?.find(({ id }) => Number(id) === Number(dataSourceID))
     }
-    return dataSourceList?.find(({ reportType }) => reportType === (dataSourceID?.replace('_YM', '')))
+    return dataSourceList?.find(({ reportType }) => reportType === (dataSourceID?.toString()?.replace('_YM', '')))
   } , [dataSourceID, dataSourceType, dataSourceList])
 
   const placeholder = useMemo(() => {
@@ -123,14 +123,15 @@ const DataSourceControls = () => {
             'Insights data' : 'Query Execution',
           <CustomSelect
             allowClear={false}
-            disabled={executionsLoading || executionsList === []}
+            // disabled={executionsLoading || executionsList === []}
+            disabled={ executionsList === []}
             placeholder={placeholder}
             fullWidth
             value={selected?.label}
             descriptions={dataSourceList?.map(({ description }) => description)}
             data={dataSourceList?.map(({ label }) => label)}
             onSelect={v => {
-              let { reportYM, reportType } = dataSourceList?.find(({ label }) => v === label) || {}
+              const { reportYM, reportType } = dataSourceList?.find(({ label }) => v === label) || {}
               resetWidget()
               userUpdate({
                 reportYM,
