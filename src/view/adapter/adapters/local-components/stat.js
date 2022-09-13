@@ -155,7 +155,7 @@ const conditionalClasses = ({ showVertical, values, labelPosition, selectedPerce
   ),
 })
 
-const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
+const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }) => {
   const { showLabels, showCurrency, showWidgetTitle, showVertical, labelPosition } = genericOptions
   const { compareTrend, selectedPercentage } = uniqueOptions
 
@@ -225,7 +225,11 @@ const Stat = ({ data, title, values, genericOptions, uniqueOptions }) => {
                   <div className={_conditionalClasses().itemWrapper}>
                     <div className={_conditionalClasses(i).item}>
                       <div className={classes.value}>
-                        {showCurrency && '$'}{Number(data[0][v.title]).toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                        {showCurrency && '$'}
+                        {typeof formatData[v.title] === 'function' ?
+                          formatData[v.title](data[0][v.title]) :
+                          Number(data[0][v.title]).toLocaleString('en-US', { maximumFractionDigits: 2 })
+                        }
                       </div>
                       {showLabels &&
                           <div className={classes.label}>
@@ -266,6 +270,7 @@ Stat.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string,
+  formatData: PropTypes.objectOf(PropTypes.func),
   genericOptions: PropTypes.object.isRequired,
   uniqueOptions: PropTypes.object.isRequired,
 }
