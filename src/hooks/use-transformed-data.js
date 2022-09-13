@@ -114,7 +114,7 @@ const useTransformedData = () => {
     group
       ? truncatedData.reduce((res, r) => {
         // FSAs are the first 3 letters of a postal code
-        let group = groupFSAByPC ? r[newGroupKey].trim().slice(0, 3) : r[newGroupKey]
+        let group = groupFSAByPC ? r[newGroupKey]?.trim().slice(0, 3) : r[newGroupKey]
         // eliminate spaces from polygon geo key values
         if (MAP_LAYER_GEO_KEYS.geojson.includes(newGroupKey)) {
           group = group.replace(' ', '')
