@@ -6,11 +6,12 @@ import Stat from './local-components/stat'
 export default {
   [types.STAT]: {
     component: Stat,
-    adapt: (data, { title, valueKeys, genericOptions, uniqueOptions }) => {
+    adapt: (data, { title, valueKeys, genericOptions, uniqueOptions, ...config }) => {
       return ({
         data,
         title,
         values: valueKeys,
+        formatData: config.formatDataFunctions,
         genericOptions,
         uniqueOptions,
       })
