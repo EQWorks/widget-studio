@@ -700,7 +700,7 @@ export default {
         the rest will be saved with execution type of data source)
       */
       // when creating a new widget with an execution using InsightsDataProvider, dataSource.types is execution type
-      config: saveWithInsightsData &&  dataSource.types !== dataSourceTypes.INSIGHTS_DATA ?
+      config: saveWithInsightsData && dataSource.type !== dataSourceTypes.INSIGHTS_DATA ?
         {
           ...tentativeConfig,
           dataSource: {
