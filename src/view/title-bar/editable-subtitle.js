@@ -32,13 +32,16 @@ const useStyles = (mode) => makeStyles({
     width: '100%',
   },
   subtitleContainer: {
+    maxHeight: '2.5rem',
     margin: mode === modes.COMPACT ? 0 : '0 0.6rem',
     display: 'flex',
     gap: '0.25rem',
     fontSize: '0.875rem',
     fontWeight: 400,
+    lineHeight: '1.25rem',
     letterSpacing: '0.016rem',
     color: getTailwindConfigColor('secondary-600'),
+    whiteSpace: 'normal',
   },
   hyperlink: {
     color: getTailwindConfigColor('interactive-500'),
@@ -90,7 +93,7 @@ const EditableSubtitle = () => {
                   setTentativeSubtitle(e.target.value)
                   userUpdate({ subtitle: (e.target.value) })
                 }}
-                maxLength={80}
+                maxLength={150}
               />
             </div>
           )}
