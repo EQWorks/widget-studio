@@ -55,6 +55,7 @@ const EditorRightSidebar = () => {
   const showLabels = useStoreState((state) => state.genericOptions.showLabels)
   const showCurrency = useStoreState((state) => state.genericOptions.showCurrency)
   const showVertical = useStoreState((state) => state.genericOptions.showVertical)
+  const showTitleBar = useStoreState((state) => state.showTitleBar)
   const isReady = useStoreState((state) => state.isReady)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
@@ -282,10 +283,19 @@ const EditorRightSidebar = () => {
             subtitleLinkLabel: '',
             subtitleHyperlink: '',
           })}
-          title='Widget Subtitle'
+          title='Widget Title & Subtitle'
         >
           {renderSection(null,
-            <EditableSubtitle />
+            <>
+              {
+                renderToggle(
+                  'Title',
+                  showTitleBar,
+                  v => userUpdate({ showTitleBar: v }),
+                )
+              }
+              <EditableSubtitle />
+            </>
           )}
         </WidgetControlCard>
       }
