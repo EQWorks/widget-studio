@@ -74,6 +74,7 @@ const Widget = ({
   onOpenInEditor,
   onInsightsDataRequired,
   saveWithInsightsData,
+  dataProviderResponse,
   // temporary:
   filters,
   executionID,
@@ -99,6 +100,21 @@ const Widget = ({
   // ui state
   const mode = useStoreState(state => state.ui.mode)
   const baseMode = useStoreState(state => state.ui.baseMode)
+
+  // update state for case when we use InsightsDataProvider
+  useEffect(() => {
+    if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
+      const { isSuccess, isLoading, error } = dataProviderResponse
+      const dataSourceError = error?.response?.data?.message
+      update({
+        dataReady: isSuccess,
+        ui: {
+          dataSourceLoading: isLoading,
+          dataSourceError,
+        },
+      })
+    }
+  }, [dataSourceType, dataProviderResponse, update])
 
   useTransformedData()
 
@@ -238,6 +254,7 @@ Widget.propTypes = {
   filters: PropTypes.arrayOf(PropTypes.object),
   onInsightsDataRequired: PropTypes.func,
   saveWithInsightsData: PropTypes.bool,
+  dataProviderResponse: PropTypes.object,
   mapTooltipLabelTitles: PropTypes.object,
 }
 
@@ -259,6 +276,7 @@ Widget.defaultProps = {
   filters: [],
   onInsightsDataRequired: () => {},
   saveWithInsightsData: false,
+  dataProviderResponse: {},
   mapTooltipLabelTitles: null,
 }
 
