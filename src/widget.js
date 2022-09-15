@@ -94,6 +94,7 @@ const Widget = ({
   const id = useStoreState((state) => state.id)
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
+  const userValueFilter = useStoreState((state) => state.userValueFilter)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
@@ -105,9 +106,10 @@ const Widget = ({
 
   useEffect(() => {
     if (filters) {
-      update({ propFilters: filters })
+      update({ propFilters: [...userValueFilter, ...filters] })
     }
-  }, [filters, update])
+  }, [filters, userValueFilter, update])
+
   // on first load,
   useEffect(() => {
     // validate mode prop

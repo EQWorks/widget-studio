@@ -88,7 +88,7 @@ const UserValueControls = () => {
 
   useEffect(() => {
     if (categoryFilter) {
-      update({ propFilters: [{ key: categoryFilter, filter: [dataCategoryKey] }] })
+      update({ userValueFilter: [{ key: categoryFilter, filter: [dataCategoryKey] }] })
     }
   }, [categoryFilter, dataCategoryKey, update])
 
@@ -114,8 +114,10 @@ const UserValueControls = () => {
     if (type === types.MAP) {
       const { agg, mapVis } = renderableValueKeys[0]
       if (categoryFilter) {
-        update({ propFilters: [{ key: categoryFilter, filter: [dataCategoryKey] }] })
-        update({ dataCategoryKey: key })
+        update({
+          userValueFilter: [{ key: categoryFilter, filter: [dataCategoryKey] }],
+          dataCategoryKey: key,
+        })
       } else if (DATA_CATEGORIES_KEYS.includes(key)) {
         update({ dataCategoryKey: key })
       } else {
@@ -127,9 +129,11 @@ const UserValueControls = () => {
           mapVis,
         }
         const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
-        update({ dataCategoryKey: null })
-        update({ mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v) })
-        update({ selectedCategoryValue: null })
+        update({
+          dataCategoryKey: null,
+          mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v),
+          selectedCategoryValue: null,
+        })
       }
     }
   },
@@ -171,8 +175,10 @@ const UserValueControls = () => {
                 mapVis,
               }
               const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
-              update({ selectedCategValue: v })
-              update({ mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v) })
+              update({
+                selectedCategValue: v,
+                mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v),
+              })
             }
           }}
           placeholder='Select data column'

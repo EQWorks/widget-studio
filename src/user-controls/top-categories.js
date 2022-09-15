@@ -51,7 +51,7 @@ const TopCategories = () => {
 
   const rows = useStoreState(state => state.rows)
   const addTopCategories = useStoreState(state => state.addTopCategories)
-  const propFilters = useStoreState(state => state.propFilters)
+  const userValueFilter = useStoreState(state => state.userValueFilter)
   const [selectedCategory, setSelectedCategory] = useState(0)
 
   const categoryKey = useMemo(() =>
@@ -68,14 +68,14 @@ const TopCategories = () => {
   }, [] ).sort((a, b) => a.ranking - b.ranking), [categoryKey, rankingKey, rows])
 
   useEffect(() => {
-    if (addTopCategories && selectedCategory === 0 && !JSON.stringify(propFilters).includes(categoryKey)) {
+    if (addTopCategories && selectedCategory === 0 && !JSON.stringify(userValueFilter).includes(categoryKey)) {
       update({
-        propFilters: [
+        userValueFilter: [
           { key: categoryKey, filter: [rankedCategories[0].category] },
         ],
       })
     }
-  }, [addTopCategories, selectedCategory, propFilters, rankedCategories, categoryKey, update])
+  }, [addTopCategories, selectedCategory, userValueFilter, rankedCategories, categoryKey, update])
 
   return (
     <div className={classes.topCategories}>
@@ -88,7 +88,7 @@ const TopCategories = () => {
           onClick={() => {
             setSelectedCategory(index)
             update({
-              propFilters: [
+              userValueFilter: [
                 { key: categoryKey, filter: [item.category] },
               ],
             })
