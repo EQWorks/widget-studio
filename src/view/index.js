@@ -149,6 +149,9 @@ const WidgetView = () => {
     let primary, secondary
     if (!dataSourceID || !dataSourceType) {
       primary = 'Please select a data source.'
+    } else if (dataSourceError === 'Invalid client token') {
+      primary = 'No data was found for this date.',
+      secondary = 'Select another date.'
     } else if (dataSourceError) {
       primary = 'Something went wrong.'
       secondary = `${dataSourceError}`
