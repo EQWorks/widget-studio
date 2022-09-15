@@ -174,9 +174,10 @@ const requestExecutionResults = async (id) => {
 }
 
 export const fetchInsightsData = ({ name, ...params }) => ({
-  cox: (api.get(`/cox/reports/${name}/results`, { params } )
+  cox: (api.get(`/cox/reports/${name}/results`, { params })
     .then(({ data }) => requestExecutionResults(data.executionID))
-    .then(({ data }) => data)),
+    .then(({ data }) => data)
+  ),
 })
 
 export const requestData = async (dataSourceType, dataSourceID, sampleData = null) => {

@@ -149,11 +149,14 @@ const WidgetView = () => {
     let primary, secondary
     if (!dataSourceID || !dataSourceType) {
       primary = 'Please select a data source.'
+    } else if (dataSourceError === 'Invalid client token') {
+      primary = 'No data found.',
+      secondary = 'Try adjusting the filters.'
     } else if (dataSourceError) {
       primary = 'Something went wrong.'
       secondary = `${dataSourceError}`
     } else if (!rows.length) {
-      primary = 'Sorry, this data is empty.'
+      primary = 'This data is empty.'
     } else if (!type) {
       primary = 'Select a widget type.'
     } else if ((!domain?.value || !renderableValueKeys?.length) && !dataIsXWIReport) {

@@ -55,6 +55,7 @@ const InsightsDataProvider = ({
         onInsightsDataRequired: widgetCallback,
         // pass the fetched data if available
         ...(results && columns && { rows: results, columns }),
+        dataProviderResponse: target,
       })
     }
     )
