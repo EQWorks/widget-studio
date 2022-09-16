@@ -183,8 +183,8 @@ storiesOf('TMP filter prop demo', module)
     )
   })
 
-const YEAR = 2022
-const MONTH = 8
+const YEAR = 2021
+const MONTH = 1
 
 // InsightsDataProvider demonstration
 storiesOf('InsightsDataProvider', module)
@@ -223,7 +223,8 @@ storiesOf('Widget Management with Insights Data saved configuration', module)
             cu={DEFAULT_CU}
             dealer={DEFAULT_DEALER}
             saveWithInsightsData
-            filters={[{ key: 'resolution', filter: [5000] }]}
+            filters={[{ key: 'resolution', filter: [20000] }]}
+            //{ key: 'OEM', filter: ['Acura'] }]
             year={YEAR}
             month={MONTH}
           />
