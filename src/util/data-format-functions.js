@@ -7,5 +7,5 @@ import { DATA_KEY_FORMATTING } from '../constants/data-format'
  * @returns { function } - formatting function
  */
 export const getKeyFormatFunction = (key) => Object.values(DATA_KEY_FORMATTING)
-  .find(({ keyList }) => keyList.find(listKey => key.toLowerCase().includes(listKey)))?.formatFunction ||
+  .find(({ keyList }) => keyList.find(listKey => key.toLowerCase().includes(listKey) || key.includes(listKey)))?.formatFunction ||
   DATA_KEY_FORMATTING.numericOthers.formatFunction
