@@ -105,7 +105,7 @@ const UserValueControls = () => {
           key,
           title: formattedColumnNames[key],
           // only add 'agg' key if we have aggregation operation attached to the value key in the valueKeys array
-          ...(useAgg && { ['agg']: 'unique' }),
+          ...(useAgg && { ['agg']: 'sum' }),
         }
       )
       update({ valueKeys: valueKeysCopy })
