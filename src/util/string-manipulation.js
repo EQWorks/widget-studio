@@ -9,8 +9,8 @@ export const STRING_REPLACE_DICT = {
   'income_sources_government_transfer_avg': 'Government transfer income',
   'income_sources_employment_income_avg': 'Employment income',
   'census_fam_couple_with_no_children': 'Couple - no children',
-  'census_fam_couple_with_children': 'Couple - children',
-  'census_fam_person_not_in_census_family': 'Not in census family',
+  'census_fam_couple_with_children': 'Couple - with children',
+  'census_fam_person_not_in_census_family': 'Other',
   'commute_time_60+min': '> 60 min',
   'dta': 'DTA',
   'aoi': 'AOI',
@@ -25,6 +25,11 @@ export const STRING_REPLACE_DICT = {
   'dmasaleprice': 'DMA',
   'dmareserveprice': 'DMA',
   'dmareservepct': 'DMA',
+  'hh_income_0_50k': '$0 - $50k',
+  'hh_income_50_100k': '$50 - $100k',
+  'hh_income_100_150k': '$100 - $150k',
+  'hh_income_150_200k': '$150 - $200k',
+  'hh_income_200k+': '$200k+',
 }
 
 const HEADER_START = [
