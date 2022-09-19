@@ -46,7 +46,12 @@ const InsightsDataProvider = ({
       const { props: { id } } = child
       // grab any data that may have been fetched for this widget
       const target = fetchedData[Object.keys(widgetDataDict).indexOf(`${id}`)]
-      const { data } = target || {}
+      const { data, isSuccess, isLoading, error } = target || {}
+      const dataProviderResponse = {
+        dataReady: isSuccess,
+        dataSourceLoading: isLoading,
+        dataSourceError: error?.response?.data?.message,
+      }
       const { results, columns } = data || {}
       return cloneElement(child, {
         wl: _wl,
@@ -55,7 +60,7 @@ const InsightsDataProvider = ({
         onInsightsDataRequired: widgetCallback,
         // pass the fetched data if available
         ...(results && columns && { rows: results, columns }),
-        dataProviderResponse: target,
+        dataProviderResponse,
       })
     }
     )
