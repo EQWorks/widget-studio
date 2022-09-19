@@ -104,12 +104,11 @@ const Widget = ({
   // update state for case when we use InsightsDataProvider
   useEffect(() => {
     if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
-      const { isSuccess, isLoading, error } = dataProviderResponse
-      const dataSourceError = error?.response?.data?.message
+      const { dataReady, dataSourceLoading, dataSourceError } = dataProviderResponse
       update({
-        dataReady: isSuccess,
+        dataReady,
         ui: {
-          dataSourceLoading: isLoading,
+          dataSourceLoading,
           dataSourceError,
         },
       })
