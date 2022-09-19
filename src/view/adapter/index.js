@@ -56,6 +56,10 @@ const WidgetAdapter = () => {
   const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
   const userValueDropdownSelect = useStoreState((state) => state.userValueDropdownSelect)
 
+  const dataKeyTitles = useMemo(() => Object.keys(transformedData?.[0]), [transformedData])
+  const valueTitles = useMemo(() => renderableValueKeys.map(({ title }) => title), [renderableValueKeys])
+  const transfDataIsReady = useMemo(() => valueTitles.every(title => dataKeyTitles.includes(title)), [valueTitles, dataKeyTitles])
+
   const { ref, width, height } = useResizeDetector({
     refreshMode: 'debounce',
     refreshRate: 100,
@@ -75,8 +79,10 @@ const WidgetAdapter = () => {
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
 
   // pass the processed data to the rendering adapter and memoize the results
-  const adaptedDataAndConfig = useMemo(() => adapt(transformedData ?? [], config)
-    , [adapt, config, transformedData])
+  const adaptedDataAndConfig = useMemo(() => transformedData.length && transfDataIsReady ?
+    adapt(transformedData, config) :
+    null
+  , [adapt, config, transformedData, transfDataIsReady])
 
   // render the component
   return (
@@ -94,7 +100,7 @@ const WidgetAdapter = () => {
             {userValueDropdownSelect}
           </div>
         )}
-        {createElement(component,
+        {adaptedDataAndConfig && createElement(component,
           // 64 is the height of the WidgetValueControls container
           { width, height: renderUserControlValues ? height - 64 : height, ...adaptedDataAndConfig }
         )}
