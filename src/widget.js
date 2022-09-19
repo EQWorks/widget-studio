@@ -115,8 +115,6 @@ const Widget = ({
     }
   }, [dataSourceType, dataProviderResponse, update])
 
-  useTransformedData()
-
   const initDone = useMemo(() => Boolean(mode), [mode])
 
   useEffect(() => {
@@ -194,6 +192,8 @@ const Widget = ({
       }
     }
   }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id])
+
+  useTransformedData()
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-hidden flex-1 min-w-0 flex items-stretch', {
