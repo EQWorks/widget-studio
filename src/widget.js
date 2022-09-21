@@ -239,7 +239,10 @@ Widget.propTypes = {
   className: PropTypes.string,
   allowOpenInEditor: PropTypes.bool,
   mode: PropTypes.string,
-  id: PropTypes.string,
+  id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   staticData: PropTypes.bool,
   config: PropTypes.object,
   executionID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
