@@ -5,7 +5,6 @@ import PlotlyScatterChart from '@eqworks/chart-system/dist/components/plotly/sca
 import PlotlyPyramidChart from '@eqworks/chart-system/dist/components/plotly/pyramid-bar'
 
 import types from '../../../../constants/types'
-import { getRoundToNumberDigit } from '../../../../util/numeric'
 
 
 export default {
@@ -61,27 +60,13 @@ export default {
     component: PlotlyPyramidChart,
     adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => {
       const { xAxisLabelLength, showWidgetTitle } = genericOptions
-      let max = 0
-
-      data.forEach((val) => {
-        config.valueKeys.forEach(({ title }) => {
-          if (val[title] > max) {
-            max = val[title]
-          }
-        })
-      })
-
-      const determineGraphVal = max > 10 ? getRoundToNumberDigit(max) : 10
-
-      const xAxisValues = [...Array(xAxisLabelLength).keys()].map((val) => (
-        Math.round((determineGraphVal / xAxisLabelLength) * (xAxisLabelLength - val))
-      ))
 
       return ({
         data,
-        x: xAxisValues,
-        y: config.valueKeys.map(({ title }) => title),
+        x: config.valueKeys.map(({ title }) => title),
+        y: [config.groupKeyTitle],
         formatData: config.formatDataFunctions,
+        xAxisLabelLength,
         ...(showWidgetTitle && { title }),
         ...uniqueOptions,
         ...genericOptions,
