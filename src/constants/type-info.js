@@ -218,14 +218,14 @@ export default {
         type: Object,
         defaultValue: {
           value: {
-            latitude: 44.4,
-            longitude: -79.23,
-            zoom: 7,
+            latitude: 55,
+            longitude: -102,
+            zoom: 3,
           },
           postalCode: {
-            latitude: 43.75,
+            latitude: 43.65,
             longitude: -79.4,
-            zoom: 10,
+            zoom: 12,
           },
         },
       },
