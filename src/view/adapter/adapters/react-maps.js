@@ -43,7 +43,6 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
 
 const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const toast = useStoreActions(actions => actions.toast)
-  const userUpdate = useStoreActions(actions => actions.userUpdate)
   const mode = useStoreState(state => state.ui.mode)
   const mapGroupKey = useStoreState(state => state.mapGroupKey)
   const uniqueOptions = useStoreState(state => state.uniqueOptions)
@@ -69,41 +68,23 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const classes = useStyles({ width, height, marginTop: finalMarginTop })
 
   useEffect(() => {
-    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
-        currentViewport?.zoom < MIN_ZOOM.postalCode - MAP_TOAST_ZOOM_ADJUSTMENT &&
-        showToastMessage) {
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && showToastMessage &&
+      debouncedCurrentViewport?.zoom < MIN_ZOOM.postalCode - MAP_TOAST_ZOOM_ADJUSTMENT) {
       toast({
         title: 'Zoom in for postal code visualization!',
         color: 'warning',
       })
     }
-  }, [toast, mapGroupKey, uniqueOptions, currentViewport, showToastMessage])
+  }, [toast, mapGroupKey, uniqueOptions, debouncedCurrentViewport, showToastMessage])
 
   useEffect(() => {
-    // display toast message only after the initial zooming in for postal code visualization
     if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
-        currentViewport?.zoom >= MIN_ZOOM.postalCode) {
+      debouncedCurrentViewport?.zoom < MIN_ZOOM.postalCode) {
       setShowToastMessage(true)
-    }
-    if (!GEO_KEY_TYPES.postalcode.includes(mapGroupKey)) {
+    } else {
       setShowToastMessage(false)
     }
-  }, [mapGroupKey, currentViewport])
-
-  // update uniqueOptions.mapViewState with current map viewport config
-  useEffect(() => {
-    if (debouncedCurrentViewport.width) {
-      userUpdate(
-        {
-          uniqueOptions: {
-            mapViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
-              { postalCode: debouncedCurrentViewport } :
-              { value: debouncedCurrentViewport },
-          },
-        }
-      )
-    }
-  }, [debouncedCurrentViewport, mapGroupKey, userUpdate])
+  }, [mapGroupKey, debouncedCurrentViewport])
 
   if (width > 0 && height > 0) {
     return (
@@ -361,6 +342,8 @@ export default {
             MIN_ZOOM.postalCode :
             MIN_ZOOM.defaultValue,
           maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
+          // restrict initial zoom-in to data for postal code polygons; the browser might not be able to handle it
+          initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey),
         },
       ]
 
