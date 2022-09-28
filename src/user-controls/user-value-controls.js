@@ -19,6 +19,7 @@ const classes = makeStyles({
     height: '4rem',
     background: getTailwindConfigColor('secondary-50'),
     boxShadow: '0px 0.125rem 0.5rem rgba(54, 111, 228, 0.1)',
+    overflowX: 'auto',
   },
   userControlItem: {
     fontFamily: 'Open Sans',
@@ -105,7 +106,7 @@ const UserValueControls = () => {
           key,
           title: formattedColumnNames[key],
           // only add 'agg' key if we have aggregation operation attached to the value key in the valueKeys array
-          ...(useAgg && { ['agg']: 'unique' }),
+          ...(useAgg && { ['agg']: 'sum' }),
         }
       )
       update({ valueKeys: valueKeysCopy })

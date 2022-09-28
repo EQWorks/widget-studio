@@ -188,7 +188,7 @@ const WidgetTypeControls = () => {
               return (
                 <button
                   key={i}
-                  variant='borderless'
+                  // variant='borderless'
                   className={`${classes.button} ${disabled ? classes.disabledButton : ''}`}
                   onClick={() => {
                     if (!disabled && type !== selectedType) {

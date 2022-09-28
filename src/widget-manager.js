@@ -197,7 +197,7 @@ const useStyles = ({ widgetPreviewExpanded }) => makeStyles({
     width: '100%',
     borderTopLeftRadius: '0.5rem',
     borderTopRightRadius: '0.5rem',
-    height: widgetPreviewExpanded ? '30rem' : '2.85rem',
+    height: widgetPreviewExpanded ? '43rem' : '2.85rem',
     transition: 'all 0.3s',
     background: getTailwindConfigColor('secondary-50'),
   },
@@ -560,7 +560,7 @@ const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, 
                         onClick={() => {
                           const { id, items, layout } = selectedDashboard
                           const newItems = selection.filter(id => !items.includes(id))
-                          const newLayout = newItems.map(id => ({ x: 0, y: 0, w: 6, h: 4, i: id }))
+                          const newLayout = newItems.map(id => ({ x: 0, y: 0, w: 6, h: 4, i: id.toString() }))
                           api.post(`/insights/dashboards/${id}`, {
                             items: items.concat(newItems),
                             layout: layout.concat(newLayout),
@@ -647,7 +647,7 @@ WidgetManager.propTypes = {
   saveWithInsightsData: PropTypes.bool,
   year: PropTypes.number,
   month: PropTypes.number,
-  filters: PropTypes.object,
+  filters: PropTypes.arrayOf(PropTypes.object),
 }
 WidgetManager.defaultProps = {
   wl: -1,

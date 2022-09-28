@@ -570,7 +570,7 @@ export default {
             [...acc, el[categoryFilter]], [])
           // specific to Cox - Top Spending needs to be first in the tab list
           if (wl === 2456 && userCategoryControlKeyValues.every(el => COX_CATEGORY_SEGMENTS.includes(el))) {
-            return  COX_CATEGORY_SEGMENTS
+            return COX_CATEGORY_SEGMENTS
           }
           return userCategoryControlKeyValues
         }
@@ -700,7 +700,7 @@ export default {
         the rest will be saved with execution type of data source)
       */
       // when creating a new widget with an execution using InsightsDataProvider, dataSource.types is execution type
-      config: saveWithInsightsData &&  dataSource.types !== dataSourceTypes.INSIGHTS_DATA ?
+      config: saveWithInsightsData && dataSource.type !== dataSourceTypes.INSIGHTS_DATA ?
         {
           ...tentativeConfig,
           dataSource: {

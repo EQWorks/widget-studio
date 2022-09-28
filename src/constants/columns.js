@@ -5,7 +5,7 @@ import { MAP_GEO_KEYS, ID_KEYS, COORD_KEYS } from './map'
 
 
 export const EXCLUDE_NUMERIC = [
-  ...['whitelabel', 'customer', 'resolution'],
+  ...['whitelabel', 'customer', 'resolution', 'sale_price'],
   ...MAP_GEO_KEYS,
   ...ID_KEYS,
   ...Object.values(COORD_KEYS).flat(),
