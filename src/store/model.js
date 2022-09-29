@@ -657,8 +657,8 @@ export default {
       type,
       renderableValueKeys,
       categoryKeyValues,
-    ) => Boolean(type === types.MAP && renderableValueKeys?.length && categoryKeyValues?.length) &&
-      categoryKeyValues.find(e => e.key === renderableValueKeys[0].key) || null
+    ) => (Boolean(type === types.MAP && renderableValueKeys?.length && categoryKeyValues?.length) &&
+      (categoryKeyValues.find(e => e.key === renderableValueKeys[0].key) || categoryKeyValues[0])) || {}
   ),
 
   /** ACTIONS ------------------------------------------------------------------ */
