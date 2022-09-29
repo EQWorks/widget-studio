@@ -93,6 +93,33 @@ const UserValueControls = () => {
     }
   }, [categoryFilter, dataCategoryKey, update])
 
+  // handles case when we select a new data category & we need to update visualization to the first key in categoryKeyValues
+  useEffect(() => {
+    const { key } = selectedCategoryValue
+    if (type === types.MAP && dataCategoryKey && categoryKeyValues?.length && key &&
+      !renderableValueKeys.map(({ key }) => key).includes(key)) {
+      const { agg, mapVis } = renderableValueKeys[0]
+      const val = {
+        key,
+        title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`,
+        ...(agg && { agg }),
+        mapVis,
+      }
+      const index = mapValueKeys.findIndex(v => v.mapVis === mapVis)
+      update({
+        mapValueKeys: mapValueKeys.map((v, _i) => index === _i ? val : v),
+      })
+    }
+  }, [
+    selectedCategoryValue,
+    type,
+    dataCategoryKey,
+    categoryKeyValues,
+    renderableValueKeys,
+    mapValueKeys,
+    formattedColumnNames,
+  ])
+
   const onClickHandle = useCallback((key) => {
     if (type === types.BAR) {
       if (valueKeys.length > 1) {
@@ -122,10 +149,9 @@ const UserValueControls = () => {
       } else if (DATA_CATEGORIES_KEYS.includes(key)) {
         update({ dataCategoryKey: key })
       } else {
-        const title = `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`
         const val = {
           key,
-          title,
+          title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`,
           ...(agg && { agg }),
           mapVis,
         }
