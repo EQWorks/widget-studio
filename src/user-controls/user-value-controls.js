@@ -27,7 +27,7 @@ const classes = makeStyles({
     fontWeight: '700',
     fontSize: '1.123rem',
     lineHeight: '1.875rem',
-    textTransform: 'capitalize',
+    whiteSpace: 'pre-wrap',
     color: getTailwindConfigColor('secondary-900'),
     outline: 'none',
     '&:focus': {
@@ -37,7 +37,7 @@ const classes = makeStyles({
     },
   },
   selectedKey: {
-    color: getTailwindConfigColor('primary-500'),
+    color: `${getTailwindConfigColor('primary-500')} !important`,
     borderBottom: `0.125rem solid ${getTailwindConfigColor('primary-500')}`,
   },
   selectRoot: {
@@ -118,6 +118,7 @@ const UserValueControls = () => {
     renderableValueKeys,
     mapValueKeys,
     formattedColumnNames,
+    update,
   ])
 
   const onClickHandle = useCallback((key) => {
@@ -231,16 +232,15 @@ const UserValueControls = () => {
       {finalUserControlKeyValues?.map((key, i) => (
         <button
           key={i}
-          className={selectedUserDataControlIndex === i ?
-            `${classes.userControlItem} ${classes.selectedKey}` :
-            `${classes.userControlItem}`
+          className={
+            `${classes.userControlItem} ${selectedUserDataControlIndex === i ? classes.selectedKey : ''}`
           }
           onClick={() => {
             update({ selectedUserDataControlIndex: i })
             onClickHandle(key)
           }}
         >
-          {formattedColumnNames[key] ? formattedColumnNames[key] : cleanUp(key)}
+          {formattedColumnNames[key] || cleanUp(key)}
         </button>
       ))}
     </div>
