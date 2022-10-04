@@ -24,6 +24,7 @@ import {
   MAP_LEGEND_SIZE,
   MIN_ZOOM,
   MAX_ZOOM,
+  MAP_VIEW_STATE,
   MAP_TOAST_ZOOM_ADJUSTMENT,
   LABEL_OFFSET,
   KEY_ALIASES,
@@ -437,8 +438,8 @@ export default {
         showMapLegend: showLegend,
         showMapTooltip: showTooltip,
         initViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
-          uniqueOptions.mapViewState.postalCode :
-          uniqueOptions.mapViewState.value,
+          MAP_VIEW_STATE.postalCode :
+          MAP_VIEW_STATE.value,
         pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ||
           (isXWIReportMap &&
           (!mapHideArcLayer ||
