@@ -163,6 +163,19 @@ export const MAX_ZOOM = {
   geojson: 14,
 }
 
+export const MAP_VIEW_STATE = {
+  value: {
+    latitude: 55,
+    longitude: -102,
+    zoom: 2.5,
+  },
+  postalCode: {
+    latitude: 43.65,
+    longitude: -79.4,
+    zoom: 10,
+  },
+}
+
 export const LABEL_OFFSET = {
   point: 5,
   polygon: -30,

@@ -350,11 +350,6 @@ export default {
       'legendSize': 'Small',
       'baseColor': '#366fe4',
     },
-    'mapViewState': {
-      'latitude': 44.41,
-      'longitude': -79.23,
-      'zoom': 7,
-    },
     'dataSource': {
       'type': 'Execution',
       'id': '1591',
@@ -913,18 +908,6 @@ export default {
       'legendSize': 'Small',
       'baseColor': '#366fe4',
     },
-    'mapViewState': {
-      'value': {
-        'latitude': 44.4,
-        'longitude': -79.23,
-        'zoom': 7,
-      },
-      'postalCode': {
-        'latitude': 43.75,
-        'longitude': -79.4,
-        'zoom': 10,
-      },
-    },
     'dataSource': {
       'type': 'Execution',
       'id': '1389',
@@ -1031,27 +1014,6 @@ export default {
       'legendSize': 'Small',
       'baseColor': '#366fe4',
     },
-    'mapViewState': {
-      'value': {
-        'latitude': 49.04458924229672,
-        'longitude': -87.95359000000006,
-        'zoom': 2.9427361735841195,
-        'width': 917,
-        'height': 742,
-        'bearing': 0,
-        'pitch': 0,
-        'altitude': 1.5,
-        'maxZoom': 20,
-        'minZoom': 0,
-        'maxPitch': 60,
-        'minPitch': 0,
-      },
-      'postalCode': {
-        'latitude': 43.75,
-        'longitude': -79.4,
-        'zoom': 10,
-      },
-    },
     'dataSource': {
       'type': 'Execution',
       'id': '913',
@@ -1150,32 +1112,6 @@ export default {
       },
       'size': {
         'value': 4,
-      },
-      'mapViewState': {
-        'value': {
-          'latitude': 49.95629223186103,
-          'longitude': -95.2493957499999,
-          'zoom': 3.5259095514967456,
-          'width': 808,
-          'height': 834,
-          'bearing': 0,
-          'pitch': 45,
-          'altitude': 1.5,
-          'maxZoom': 20,
-          'minZoom': 0,
-          'maxPitch': 60,
-          'minPitch': 0,
-          'position': [
-            0,
-            0,
-            0,
-          ],
-        },
-        'postalCode': {
-          'latitude': 43.75,
-          'longitude': -79.4,
-          'zoom': 10,
-        },
       },
     },
     'genericOptions': {
@@ -1316,33 +1252,6 @@ export default {
       },
       'size': {
         'value': 4,
-      },
-      'mapViewState': {
-        'value': {
-          'latitude': 43.69729166871382,
-          'longitude': -79.30322360425139,
-          'zoom': 11.250307063380061,
-          'width': 1007,
-          'height': 983,
-          'bearing': 0,
-          'pitch': 0,
-          'altitude': 1.5,
-          'maxZoom': 20,
-          'minZoom': 0,
-          'maxPitch': 60,
-          'minPitch': 0,
-          'position': [
-            0,
-            0,
-            0,
-          ],
-          'normalize': true,
-        },
-        'postalCode': {
-          'latitude': 43.75,
-          'longitude': -79.4,
-          'zoom': 10,
-        },
       },
     },
     'genericOptions': {
@@ -1495,32 +1404,6 @@ export default {
       },
       'size': {
         'value': 4,
-      },
-      'mapViewState': {
-        'value': {
-          'latitude': 43.869603965027565,
-          'longitude': -79.02997816440869,
-          'zoom': 10.382325285496147,
-          'width': 808,
-          'height': 952,
-          'bearing': 0,
-          'pitch': 0,
-          'altitude': 1.5,
-          'maxZoom': 20,
-          'minZoom': 0,
-          'maxPitch': 60,
-          'minPitch': 0,
-          'position': [
-            0,
-            0,
-            0,
-          ],
-        },
-        'postalCode': {
-          'latitude': 43.75,
-          'longitude': -79.4,
-          'zoom': 10,
-        },
       },
     },
     'genericOptions': {
