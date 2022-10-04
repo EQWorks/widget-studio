@@ -545,7 +545,7 @@ export default {
     },
     'percentageMode': false,
     'addUserControls': true,
-    'userControlHeadline': 'Benchmark by',
+    'userControlHeadline': 'Top 10 Consumer Spending Categories    Benchmark by',
     'userControlKeyValues': [
       'city',
       'provincial',
