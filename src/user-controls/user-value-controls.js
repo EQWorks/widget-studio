@@ -4,7 +4,7 @@ import { Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import CustomSelect from '../components/custom-select'
 import { useStoreState, useStoreActions } from '../store'
-import { cleanUp } from '../util/string-manipulation'
+import { cleanUp, capitalizeWords } from '../util/string-manipulation'
 import types from '../constants/types'
 import { DATA_CATEGORIES, DATA_CATEGORIES_KEYS } from '../constants/insights-data-categories'
 
@@ -226,7 +226,7 @@ const UserValueControls = () => {
     <div className={classes.userControlContainer}>
       {type === types.BAR && userControlHeadline &&
         <div className={classes.userControlItem}>
-          {userControlHeadline}:
+          {capitalizeWords(userControlHeadline)}:
         </div>
       }
       {finalUserControlKeyValues?.map((key, i) => (
