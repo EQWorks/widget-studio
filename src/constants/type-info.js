@@ -213,22 +213,6 @@ export default {
           value: 4,
         },
       },
-      mapViewState: {
-        name: 'View State',
-        type: Object,
-        defaultValue: {
-          value: {
-            latitude: 55,
-            longitude: -102,
-            zoom: 3,
-          },
-          postalCode: {
-            latitude: 43.65,
-            longitude: -79.4,
-            zoom: 12,
-          },
-        },
-      },
     },
   },
   [types.STAT]: {
