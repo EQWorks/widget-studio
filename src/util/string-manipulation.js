@@ -6,7 +6,6 @@ export const STRING_REPLACE_DICT = {
   'census_fam_person_not_in_census_family': 'Other',
   'Top Spending Geography': 'Top Spending',
   'Frequently Transacting Geography': 'Transaction Frequency',
-  'value_conscious_shoppers': 'Dining out',
   'dealersaleprice': 'Dealer',
   'dealerreserveprice': 'Dealer',
   'dealerreservepct': 'Dealer',
@@ -29,8 +28,7 @@ const HEADER_START = [
 const customCleanUp = s => {
   const header = HEADER_START.find(h => s?.toString().startsWith(h))
   if (header && !STRING_REPLACE_DICT[s]) {
-    const label = s?.toString().replace(header, '').replace(/./, v => v.toUpperCase())
-    return label.replaceAll('_', ' ')
+    return s?.toString().replace(header, '').replace(/./, v => v.toUpperCase()).replaceAll('_', ' ')
   }
   return STRING_REPLACE_DICT[s]
 }
@@ -38,6 +36,21 @@ const customCleanUp = s => {
 export const cleanUp = s => (
   customCleanUp(s) || s?.toString().replace(/_/g, ' ').replace(/./, v => v.toUpperCase())
 )
+
+const PREPOSITIONS = ['a', 'above', 'across', 'against', 'along', 'among', 'an', 'around', 'at',
+  'before', 'behind', 'below', 'beneath', 'beside', 'between', 'by', 'down', 'from', 'in', 'into',
+  'near', 'of', 'off', 'on', 'onto', 'or', 'over', 'the', 'through', 'to', 'toward', 'under', 'upon',
+  'with', 'within',
+]
+
+/**
+ * capitalizeWords - returns formatted string, by capitalizing each word in the string except prepositions
+ * @param { string } fullStr - string to format
+ * @returns { string } - formatted string
+ */
+export const capitalizeWords = s => s.split(' ').map((w, i) =>
+  w.replace(/./, v => i && PREPOSITIONS.includes(w) ? v : v.toUpperCase())).join(' ')
+
 export const getLongestString = arr => arr.reduce((a, b) => (a.length > b.length ? a : b))
 export const isString = v => typeof v === 'string' || v instanceof String
 
