@@ -182,6 +182,7 @@ export default {
       (state) => state.presetColors,
       (state) => state.dateAggregation,
       (state) => state.mapTooltipLabelTitles,
+      (state) => state.wl,
     ],
     (
       title,
@@ -213,6 +214,7 @@ export default {
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
+      wl,
     ) => ({
       title,
       subtitle,
@@ -245,6 +247,7 @@ export default {
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
+      wl,
     })),
 
   config: computed(
@@ -383,6 +386,7 @@ export default {
       (state) => state.group,
       (state) => state.type,
       (state) => state.dataHasVariance,
+      (state) => state.dataIsXWIReport,
       (state) => state.formattedColumnNames,
     ],
     (
@@ -391,14 +395,15 @@ export default {
       group,
       type,
       dataHasVariance,
-      formattedColumnNames
+      dataIsXWIReport,
+      formattedColumnNames,
     ) => (
       (type === types.MAP ? mapValueKeys : valueKeys)
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
         .map(({ key, agg, ...rest }) => ({
           ...rest,
           key,
-          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance ? ` (${agg})` : ''}` || key,
+          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && !dataIsXWIReport ? ` (${agg})` : ''}` || key,
           ...(agg && { agg }),
         }))
     )

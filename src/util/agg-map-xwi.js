@@ -75,11 +75,14 @@ export const xwiAggData = ({
       // keep coord keys unformatted
       if (Object.values(COORD_KEYS).flat().includes(k)) {
         finalKey = k
-      } else if (!(columnsAnalysis[k].isNumeric || Object.values(COORD_KEYS).flat().includes(k))) {
-        finalKey = formattedColumnNames[k]
+      // } else if (!(columnsAnalysis[k].isNumeric || Object.values(COORD_KEYS).flat().includes(k))) {
+      //   finalKey = formattedColumnNames[k]
       } else {
-        finalKey = formattedColumnNames[k] + ' (sum)'
+        finalKey = formattedColumnNames[k]
       }
+      // else {
+      //   finalKey = formattedColumnNames[k] + ' (sum)'
+      // }
       if (res[group][finalKey]) {
         if (columnsAnalysis[k]?.isNumeric) {
           res[group][finalKey] += v
