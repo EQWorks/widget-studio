@@ -31,6 +31,8 @@ import {
   XWI_KEY_ALIASES,
 } from '../../../constants/map'
 
+import { COX_XWI_KEY_ALIASES } from '../../../constants/client-specific'
+
 
 const useStyles = ({ width, height, marginTop }) => makeStyles({
   mapWrapper: {
@@ -192,6 +194,27 @@ export default {
     const targetLayerValueKeys =
       getLayerValueKeys({ mapValueKeys, dataKeys, data: data?.targetData, layer: MAP_LAYERS.targetScatterplot })
 
+    // TO DO: move this logic out to Cox app
+    const getFinalLayerTitle = i => {
+      let layerTitle
+      if (isXWIReportMap) {
+        if (config.wl === 2456) {
+          layerTitle = i === 0 ? data?.arcData?.[0]?.['Poi name'] || 'Dealer' : 'Competitor'
+        } else {
+          layerTitle = i === 0 ? 'Source Layer' : 'Target Layer'
+        }
+      }
+      return layerTitle
+    }
+
+    // TO DO: move this logic out to Cox app
+    const finalMapTooltipLabelTitles = config.wl === 2456 ?
+      {
+        sourceTitle: 'Poi name',
+        targetTitle: 'Target poi name',
+      } :
+      mapTooltipLabelTitles
+
     let layerConfig = isXWIReportMap ?
       [
         {
@@ -219,8 +242,8 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                tooltipTitle1: mapTooltipLabelTitles?.soureTitle || sourcePOIId,
-                tooltipTitle2: mapTooltipLabelTitles?.targetTitle || targetPOIId,
+                tooltipTitle1: finalMapTooltipLabelTitles?.sourceTitle || sourcePOIId,
+                tooltipTitle2: finalMapTooltipLabelTitles?.targetTitle || targetPOIId,
                 metricKeys: arcLayerValueKeys,
               },
             },
@@ -229,7 +252,8 @@ export default {
             showLegend: true,
             layerTitle: 'Arc Layer',
           },
-          keyAliases: XWI_KEY_ALIASES,
+          // TO DO: move this logic out to Cox app
+          keyAliases: config.wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           schemeColor: baseColor,
@@ -271,17 +295,18 @@ export default {
             tooltip: {
               tooltipKeys: {
                 tooltipTitle1: i === 0 ?
-                  mapTooltipLabelTitles?.sourceTitle || sourcePOIId :
-                  mapTooltipLabelTitles?.targetTitle || targetPOIId,
+                  finalMapTooltipLabelTitles?.sourceTitle || sourcePOIId :
+                  finalMapTooltipLabelTitles?.targetTitle || targetPOIId,
                 metricKeys: longitude === targetLon ? targetLayerValueKeys : sourceLayerValueKeys,
               },
             },
           },
           legend: {
             showLegend: true,
-            layerTitle: i === 0 ? 'Source Layer' : 'Target Layer',
+            layerTitle: getFinalLayerTitle(i),
           },
-          keyAliases: XWI_KEY_ALIASES,
+          // TO DO: move this logic out to Cox app
+          keyAliases: config.wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           // we don't apply opacity to icon layer for POI locations
@@ -380,7 +405,8 @@ export default {
               value:  [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point],
             },
           },
-          keyAliases: XWI_KEY_ALIASES,
+          // TO DO: move this logic out to Cox app
+          keyAliases: config.wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {},
