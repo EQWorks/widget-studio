@@ -70,21 +70,19 @@ const EditorRightSidebar = () => {
     <>
       {
         renderRow(null,
-          type !== types.MAP &&
           <>
-            {
+            {type !== types.MAP &&
               renderToggle(
                 'Title',
                 showWidgetTitle,
                 v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
               )
             }
-            {![types.PIE, types.STAT].includes(type) &&
+            {![types.STAT, types.TABLE, types.MAP].includes(type) &&
               renderToggle(
-                'Axis Titles',
-                showAxisTitles,
-                v => userUpdate({ genericOptions: { showAxisTitles: v } }),
-                false
+                'Legend',
+                showLegend,
+                v => userUpdate({ genericOptions: { showLegend: v } }),
               )
             }
             {type === types.STAT &&
@@ -102,7 +100,7 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
-            {type !== types.STAT &&
+            {type === types.MAP &&
               renderToggle(
                 'Legend',
                 showLegend,
@@ -116,7 +114,8 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showTooltip: v } }),
               )
             }
-            {((type === types.MAP && !JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)) || type === types.STAT) &&
+            {((type === types.MAP && !JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)) ||
+              type === types.STAT) &&
               renderToggle(
                 'Labels',
                 showLabels,
@@ -157,6 +156,14 @@ const EditorRightSidebar = () => {
                 })}
               />
             )}
+            {![types.PIE, types.STAT, types.TABLE, types.MAP].includes(type) &&
+              renderToggle(
+                'Axis Titles',
+                showAxisTitles,
+                v => userUpdate({ genericOptions: { showAxisTitles: v } }),
+                false
+              )
+            }
           </>
         )
       }
@@ -247,31 +254,33 @@ const EditorRightSidebar = () => {
       } >
         <Filters />
       </MutedBarrier>
-      <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
-        <WidgetControlCard title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}>
-          {
-            renderSuperSection(
-              <>
-                {renderSection(
-                  'Display Options',
-                  <>
-                    {renderGenericOptions}
-                    {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
-                  </>
-                )}
-                {renderSection('Styling',
-                  <>
-                    {renderRow(null, renderStyling)}
-                    {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
-                  </>
-                )}
-                {type === types.MAP && <MapLayerDisplay />}
-              </>
-            )
-          }
-        </WidgetControlCard >
-      </MutedBarrier>
-      {![types.MAP, types.STAT].includes(type) &&
+      {type !== types.TABLE &&
+        <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
+          <WidgetControlCard title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}>
+            {
+              renderSuperSection(
+                <>
+                  {renderSection(
+                    'Display Options',
+                    <>
+                      {renderGenericOptions}
+                      {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
+                    </>
+                  )}
+                  {renderSection('Styling',
+                    <>
+                      {renderRow(null, renderStyling)}
+                      {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
+                    </>
+                  )}
+                  {type === types.MAP && <MapLayerDisplay />}
+                </>
+              )
+            }
+          </WidgetControlCard >
+        </MutedBarrier>
+      }
+      {![types.MAP, types.STAT, types.TABLE].includes(type) &&
         <WidgetControlCard title='Color Scheme'>
           <ColorSchemeControls />
         </WidgetControlCard >
