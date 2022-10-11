@@ -92,9 +92,19 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showCurrency: v } }),
               )
             }
+            {type === types.PYRAMID && renderItem('x-Axis Labels',
+              <SliderControl
+                style={'right'}
+                range={false}
+                min={1}
+                max={10}
+                value={xAxisLabelLength}
+                update={v => userUpdate({
+                  genericOptions: { xAxisLabelLength: v },
+                })}
+              />
+            )}
           </>,
-          null,
-          subPlots && type !== types.PIE // really dumb, but temporary until control item layout mechanism is reworked
         )
       }
       {
@@ -114,12 +124,13 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showTooltip: v } }),
               )
             }
-            {((type === types.MAP && !JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)) ||
+            {(type === types.MAP ||
               type === types.STAT) &&
               renderToggle(
                 'Labels',
                 showLabels,
                 v => userUpdate({ genericOptions: { showLabels: v } }),
+                JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)
               )
             }
             {type === types.STAT &&
@@ -129,7 +140,7 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showVertical: v } }),
               )
             }
-            {![types.PIE, types.MAP, types.PYRAMID, types.STAT, types.TABLE].includes(type) &&
+            {[types.BAR, types.SCATTER, types.LINE].includes(type) &&
               renderToggle(
                 'Subplots',
                 subPlots,
@@ -137,34 +148,36 @@ const EditorRightSidebar = () => {
                 renderableValueKeys?.length <= 1
               )
             }
-            {(subPlots || type === types.PIE) &&
+            {[types.BAR, types.SCATTER, types.LINE, types.PIE].includes(type) &&
               renderToggle(
                 'Subplot Titles',
                 showSubPlotTitles,
                 v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
-              )
-            }
-            {type === types.PYRAMID && renderItem('x-Axis Labels',
-              <SliderControl
-                style={'right'}
-                range={false}
-                min={1}
-                max={10}
-                value={xAxisLabelLength}
-                update={v => userUpdate({
-                  genericOptions: { xAxisLabelLength: v },
-                })}
-              />
-            )}
-            {![types.PIE, types.STAT, types.TABLE, types.MAP].includes(type) &&
-              renderToggle(
-                'Axis Titles',
-                showAxisTitles,
-                v => userUpdate({ genericOptions: { showAxisTitles: v } }),
-                false
+                !(type === types.PIE || subPlots),
               )
             }
           </>
+        )
+      }
+      {[types.BAR, types.SCATTER, types.LINE].includes(type) &&
+        renderRow(null,
+          <>
+            {
+              renderToggle(
+                'x-Axis Title',
+                showAxisTitles.x,
+                v => userUpdate({ genericOptions: { showAxisTitles: { x: v } } }),
+              )
+            }
+            {
+              renderToggle(
+                'y-Axis Title',
+                showAxisTitles.y,
+                v => userUpdate({ genericOptions: { showAxisTitles: { y: v } } }),
+                false
+              )
+            }
+          </>,
         )
       }
     </>
