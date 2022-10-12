@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { TextField, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -33,6 +33,14 @@ const classes = makeStyles({
   legendSize: {
     color: getTailwindConfigColor('primary-600'),
   },
+  textfieldForm: {
+    '& .textfield-form': {
+    },
+  },
+})
+
+const textfieldClasses = Object.freeze({
+  container: 'textfield-form',
 })
 
 const EditorRightSidebar = () => {
@@ -50,6 +58,7 @@ const EditorRightSidebar = () => {
   const legendSize = useStoreState((state) => state.genericOptions.legendSize)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
   const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
+  const axisTitles = useStoreState((state) => state.genericOptions.axisTitles)
   const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
   const showLabels = useStoreState((state) => state.genericOptions.showLabels)
@@ -160,25 +169,59 @@ const EditorRightSidebar = () => {
         )
       }
       {[types.BAR, types.SCATTER, types.LINE].includes(type) &&
-        renderRow(null,
+      <>
+        {renderRow(null,
           <>
             {
               renderToggle(
-                'x-Axis Title',
+                'Show x-Axis Title',
                 showAxisTitles.x,
                 v => userUpdate({ genericOptions: { showAxisTitles: { x: v } } }),
               )
             }
             {
               renderToggle(
-                'y-Axis Title',
+                'Show y-Axis Title',
                 showAxisTitles.y,
                 v => userUpdate({ genericOptions: { showAxisTitles: { y: v } } }),
                 false
               )
             }
           </>,
-        )
+        )}
+        {renderRow(null,
+          <>
+            {renderItem('x-Axis Title',
+              <TextField
+                classes={textfieldClasses}
+                value={axisTitles.x}
+                inputProps={{ placeholder: 'Add x-axis custom title' }}
+                onChange={(val) => userUpdate({ genericOptions: { axisTitles: { x: val } } })}
+                onBlur={(e) => {
+                  userUpdate({ genericOptions: { axisTitles: { x: e.target.value } } })
+                }}
+                maxLength={100}
+              />,
+              '',
+              true,
+            )}
+            {renderItem('y-Axis Title',
+              <TextField
+                classes={textfieldClasses}
+                value={axisTitles.y}
+                inputProps={{ placeholder: 'Add y-axis custom title' }}
+                onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
+                onBlur={(e) => {
+                  userUpdate({ genericOptions: { axisTitles: { y: e.target.value } } })
+                }}
+                maxLength={100}
+              />,
+              '',
+              true,
+            )}
+          </>,
+        )}
+      </>
       }
     </>
   )
