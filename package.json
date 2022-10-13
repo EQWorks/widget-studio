@@ -82,7 +82,7 @@
     "tailwindcss-children": "^2.1.0"
   },
   "dependencies": {
-    "@eqworks/chart-system": "0.8.0-alpha.2",
+    "@eqworks/chart-system": "^0.8.1",
     "@eqworks/lumen-table": "2.0.0-alpha.10",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@react-hook/resize-observer": "^1.2.4",
