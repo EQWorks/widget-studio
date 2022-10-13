@@ -33,10 +33,6 @@ const classes = makeStyles({
   legendSize: {
     color: getTailwindConfigColor('primary-600'),
   },
-  textfieldForm: {
-    '& .textfield-form': {
-    },
-  },
 })
 
 const textfieldClasses = Object.freeze({
@@ -176,14 +172,22 @@ const EditorRightSidebar = () => {
               renderToggle(
                 'Show x-Axis Title',
                 showAxisTitles.x,
-                v => userUpdate({ genericOptions: { showAxisTitles: { x: v } } }),
+                v => userUpdate({
+                  genericOptions: {
+                    showAxisTitles: { x: v },
+                  },
+                }),
               )
             }
             {
               renderToggle(
                 'Show y-Axis Title',
                 showAxisTitles.y,
-                v => userUpdate({ genericOptions: { showAxisTitles: { y: v } } }),
+                v => userUpdate({
+                  genericOptions: {
+                    showAxisTitles: { y: v },
+                  },
+                }),
                 false
               )
             }
@@ -194,13 +198,11 @@ const EditorRightSidebar = () => {
             {renderItem('x-Axis Title',
               <TextField
                 classes={textfieldClasses}
-                value={axisTitles.x}
+                value={showAxisTitles.x ? axisTitles.x : 'N/A'}
                 inputProps={{ placeholder: 'Add x-axis custom title' }}
                 onChange={(val) => userUpdate({ genericOptions: { axisTitles: { x: val } } })}
-                onBlur={(e) => {
-                  userUpdate({ genericOptions: { axisTitles: { x: e.target.value } } })
-                }}
                 maxLength={100}
+                disabled={!showAxisTitles.x}
               />,
               '',
               true,
@@ -208,13 +210,11 @@ const EditorRightSidebar = () => {
             {renderItem('y-Axis Title',
               <TextField
                 classes={textfieldClasses}
-                value={axisTitles.y}
+                value={showAxisTitles.y ? axisTitles.y : 'N/A'}
                 inputProps={{ placeholder: 'Add y-axis custom title' }}
                 onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
-                onBlur={(e) => {
-                  userUpdate({ genericOptions: { axisTitles: { y: e.target.value } } })
-                }}
                 maxLength={100}
+                disabled={!showAxisTitles.y}
               />,
               '',
               true,
