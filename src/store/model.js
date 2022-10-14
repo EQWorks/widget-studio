@@ -64,7 +64,14 @@ const stateDefaults = [
       groupByValue: false,
       showLegend: true,
       showTooltip: true,
-      showAxisTitles: true,
+      showAxisTitles: {
+        x: true,
+        y: true,
+      },
+      axisTitles: {
+        x: '',
+        y: '',
+      },
       showSubPlotTitles: true,
       showLabels: true,
       showCurrency: false,

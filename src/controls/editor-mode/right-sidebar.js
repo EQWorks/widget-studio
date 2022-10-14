@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { TextField, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
@@ -35,6 +35,10 @@ const classes = makeStyles({
   },
 })
 
+const textfieldClasses = Object.freeze({
+  container: 'textfield-form',
+})
+
 const EditorRightSidebar = () => {
   const update = useStoreActions((state) => state.update)
   const userUpdate = useStoreActions((state) => state.userUpdate)
@@ -50,6 +54,7 @@ const EditorRightSidebar = () => {
   const legendSize = useStoreState((state) => state.genericOptions.legendSize)
   const showLegend = useStoreState((state) => state.genericOptions.showLegend)
   const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
+  const axisTitles = useStoreState((state) => state.genericOptions.axisTitles)
   const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
   const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
   const showLabels = useStoreState((state) => state.genericOptions.showLabels)
@@ -70,21 +75,19 @@ const EditorRightSidebar = () => {
     <>
       {
         renderRow(null,
-          type !== types.MAP &&
           <>
-            {
+            {type !== types.MAP &&
               renderToggle(
                 'Title',
                 showWidgetTitle,
                 v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
               )
             }
-            {![types.PIE, types.STAT].includes(type) &&
+            {![types.STAT, types.TABLE, types.MAP].includes(type) &&
               renderToggle(
-                'Axis Titles',
-                showAxisTitles,
-                v => userUpdate({ genericOptions: { showAxisTitles: v } }),
-                false
+                'Legend',
+                showLegend,
+                v => userUpdate({ genericOptions: { showLegend: v } }),
               )
             }
             {type === types.STAT &&
@@ -92,57 +95,6 @@ const EditorRightSidebar = () => {
                 'Currency',
                 showCurrency,
                 v => userUpdate({ genericOptions: { showCurrency: v } }),
-              )
-            }
-          </>,
-          null,
-          subPlots && type !== types.PIE // really dumb, but temporary until control item layout mechanism is reworked
-        )
-      }
-      {
-        renderRow(null,
-          <>
-            {type !== types.STAT &&
-              renderToggle(
-                'Legend',
-                showLegend,
-                v => userUpdate({ genericOptions: { showLegend: v } }),
-              )
-            }
-            {type === types.MAP &&
-              renderToggle(
-                'Tooltip',
-                showTooltip,
-                v => userUpdate({ genericOptions: { showTooltip: v } }),
-              )
-            }
-            {((type === types.MAP && !JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)) || type === types.STAT) &&
-              renderToggle(
-                'Labels',
-                showLabels,
-                v => userUpdate({ genericOptions: { showLabels: v } }),
-              )
-            }
-            {type === types.STAT &&
-              renderToggle(
-                'Vertical',
-                showVertical,
-                v => userUpdate({ genericOptions: { showVertical: v } }),
-              )
-            }
-            {![types.PIE, types.MAP, types.PYRAMID, types.STAT, types.TABLE].includes(type) &&
-              renderToggle(
-                'Subplots',
-                subPlots,
-                v => userUpdate({ genericOptions: { subPlots: v } }),
-                renderableValueKeys?.length <= 1
-              )
-            }
-            {(subPlots || type === types.PIE) &&
-              renderToggle(
-                'Subplot Titles',
-                showSubPlotTitles,
-                v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
               )
             }
             {type === types.PYRAMID && renderItem('x-Axis Labels',
@@ -157,8 +109,118 @@ const EditorRightSidebar = () => {
                 })}
               />
             )}
+          </>,
+        )
+      }
+      {
+        renderRow(null,
+          <>
+            {type === types.MAP &&
+              renderToggle(
+                'Legend',
+                showLegend,
+                v => userUpdate({ genericOptions: { showLegend: v } }),
+              )
+            }
+            {type === types.MAP &&
+              renderToggle(
+                'Tooltip',
+                showTooltip,
+                v => userUpdate({ genericOptions: { showTooltip: v } }),
+              )
+            }
+            {(type === types.MAP || type === types.STAT) &&
+              renderToggle(
+                'Labels',
+                showLabels,
+                v => userUpdate({ genericOptions: { showLabels: v } }),
+                JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)
+              )
+            }
+            {type === types.STAT &&
+              renderToggle(
+                'Vertical',
+                showVertical,
+                v => userUpdate({ genericOptions: { showVertical: v } }),
+              )
+            }
+            {[types.BAR, types.SCATTER, types.LINE].includes(type) &&
+              renderToggle(
+                'Subplots',
+                subPlots,
+                v => userUpdate({ genericOptions: { subPlots: v } }),
+                renderableValueKeys?.length <= 1
+              )
+            }
+            {[types.BAR, types.SCATTER, types.LINE, types.PIE].includes(type) &&
+              renderToggle(
+                'Subplot Titles',
+                showSubPlotTitles,
+                v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
+                !(type === types.PIE || subPlots),
+              )
+            }
           </>
         )
+      }
+      {[types.BAR, types.SCATTER, types.LINE, types.PYRAMID].includes(type) &&
+        <>
+          {renderRow(null,
+            <>
+              {
+                renderToggle(
+                  'Show x-Axis Title',
+                  showAxisTitles.x,
+                  v => userUpdate({
+                    genericOptions: {
+                      showAxisTitles: { x: v },
+                    },
+                  }),
+                )
+              }
+              {
+                renderToggle(
+                  'Show y-Axis Title',
+                  showAxisTitles.y,
+                  v => userUpdate({
+                    genericOptions: {
+                      showAxisTitles: { y: v },
+                    },
+                  }),
+                  false
+                )
+              }
+            </>,
+          )}
+          {renderRow(null,
+            <>
+              {renderItem('x-Axis Title',
+                <TextField
+                  classes={textfieldClasses}
+                  value={showAxisTitles.x ? axisTitles.x : 'N/A'}
+                  inputProps={{ placeholder: 'Add x-axis custom title' }}
+                  onChange={(val) => userUpdate({ genericOptions: { axisTitles: { x: val } } })}
+                  maxLength={100}
+                  disabled={!showAxisTitles.x}
+                />,
+                '',
+                true,
+              )}
+              {renderItem('y-Axis Title',
+                <TextField
+                  classes={textfieldClasses}
+                  value={showAxisTitles.y ? axisTitles.y : 'N/A'}
+                  inputProps={{ placeholder: 'Add y-axis custom title' }}
+                  onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
+                  maxLength={100}
+                  disabled={!showAxisTitles.y}
+                />,
+                '',
+                true,
+              )}
+            </>,
+          )}
+        </>
       }
     </>
   )
@@ -247,31 +309,33 @@ const EditorRightSidebar = () => {
       } >
         <Filters />
       </MutedBarrier>
-      <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
-        <WidgetControlCard title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}>
-          {
-            renderSuperSection(
-              <>
-                {renderSection(
-                  'Display Options',
-                  <>
-                    {renderGenericOptions}
-                    {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
-                  </>
-                )}
-                {renderSection('Styling',
-                  <>
-                    {renderRow(null, renderStyling)}
-                    {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
-                  </>
-                )}
-                {type === types.MAP && <MapLayerDisplay />}
-              </>
-            )
-          }
-        </WidgetControlCard >
-      </MutedBarrier>
-      {![types.MAP, types.STAT].includes(type) &&
+      {type !== types.TABLE &&
+        <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
+          <WidgetControlCard title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}>
+            {
+              renderSuperSection(
+                <>
+                  {renderSection(
+                    'Display Options',
+                    <>
+                      {renderGenericOptions}
+                      {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
+                    </>
+                  )}
+                  {renderSection('Styling',
+                    <>
+                      {renderRow(null, renderStyling)}
+                      {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
+                    </>
+                  )}
+                  {type === types.MAP && <MapLayerDisplay />}
+                </>
+              )
+            }
+          </WidgetControlCard >
+        </MutedBarrier>
+      }
+      {![types.MAP, types.STAT, types.TABLE].includes(type) &&
         <WidgetControlCard title='Color Scheme'>
           <ColorSchemeControls />
         </WidgetControlCard >

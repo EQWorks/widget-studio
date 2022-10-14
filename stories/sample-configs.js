@@ -35,7 +35,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': true,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'subPlots': false,
       'size': 0.8,
@@ -245,6 +252,14 @@ export default {
       ],
       'baseColor': '#f2ff00',
       'showWidgetTitle': false,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
     },
     'dataSource': {
       'type': 'Saved query',
@@ -295,6 +310,14 @@ export default {
         0,
       ],
       'baseColor': '#366fe4',
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -335,7 +358,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': true,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'subPlots': false,
       'size': 0.8,
@@ -416,6 +446,14 @@ export default {
         1,
       ],
       'baseColor': '#366fe4',
+      'showAxisTitles': {
+        'x': true,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
     },
     'dataSource': {
       'type': 'Saved query',
@@ -467,6 +505,14 @@ export default {
       ],
       'legendSize': 'Small',
       'baseColor': '#366fe4',
+      'showAxisTitles': {
+        'x': true,
+        'y': true,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -515,7 +561,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': false,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'showLabels': false,
       'mapHideSourceLayer': false,
@@ -600,7 +653,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': false,
+      'showAxisTitles': {
+        'x': false,
+        'y': true,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': 'Score',
+      },
       'showSubPlotTitles': true,
       'showLabels': false,
       'showCurrency': false,
@@ -632,6 +692,7 @@ export default {
     'userControlHeadline': 'Benchmark By',
     'userControlKeyValues': [],
     'addTopCategories': true,
+    'categoryFilter': null,
     'presetColors': [
       '#3232F5',
       '#07A0C3',
@@ -641,6 +702,7 @@ export default {
       '#00548a',
     ],
     'mapTooltipLabelTitles': null,
+    'wl': 2423,
   },
   'dev-line-1': {
     'title': 'Another Line Widget',
@@ -692,6 +754,14 @@ export default {
         0,
       ],
       'baseColor': '#366fe4',
+      'showAxisTitles': {
+        'x': true,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
     },
     'dataSource': {
       'type': 'Saved query',
@@ -740,6 +810,14 @@ export default {
       ],
       'baseColor': '#366fe4',
       'showWidgetTitle': true,
+      'showAxisTitles': {
+        'x': true,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -801,6 +879,14 @@ export default {
       ],
       'legendSize': 'Small',
       'baseColor': '#366fe4',
+      'showAxisTitles': {
+        'x': true,
+        'y': true,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
     },
     'dataSource': {
       'type': 'Saved query',
@@ -893,7 +979,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': true,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'subPlots': false,
       'size': 0.8,
@@ -999,7 +1092,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': true,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'subPlots': false,
       'size': 0.8,
@@ -1119,7 +1219,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': true,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'showLabels': false,
       'mapHideSourceLayer': false,
@@ -1259,7 +1366,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': true,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'showLabels': false,
       'showCurrency': false,
@@ -1411,7 +1525,14 @@ export default {
       'groupByValue': false,
       'showLegend': true,
       'showTooltip': true,
-      'showAxisTitles': true,
+      'showAxisTitles': {
+        'x': false,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'showLabels': false,
       'showCurrency': false,
@@ -1509,7 +1630,14 @@ export default {
       'groupByValue': true,
       'showLegend': false,
       'showTooltip': true,
-      'showAxisTitles': false,
+      'showAxisTitles': {
+        'x': true,
+        'y': false,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
       'showSubPlotTitles': true,
       'subPlots': false,
       'size': 0.8,
@@ -1591,6 +1719,14 @@ export default {
       ],
       'baseColor': '#366fe4',
       'xAxisLabelLength': 5,
+      'showAxisTitles': {
+        'x': false,
+        'y': true,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+      },
     },
     'dataSource': {
       'type': 'Saved query',
