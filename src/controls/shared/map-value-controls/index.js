@@ -8,6 +8,7 @@ import WidgetControlCard from '../components/widget-control-card'
 
 import modes from '../../../constants/modes'
 import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
+import { hasDevAccess } from '../../../util/access'
 
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -15,7 +16,6 @@ const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
 const MapValueControls = () => {
   // common actions
   const userUpdate = useStoreActions(actions => actions.userUpdate)
-  const resetValue = useStoreActions(actions => actions.resetValue)
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
@@ -61,10 +61,14 @@ const MapValueControls = () => {
 
   return (
     <WidgetControlCard
-      clear={() => resetValue({ mapValueKeys })}
+      clear={() => userUpdate({ mapValueKeys: [] })}
       showIfEmpty
       title='Value Configuration'
       description={widgetControlCardDescription}
+      enableEdit
+      disableEditButton={!hasDevAccess() ||
+        (!mapValueKeys.length || mapValueKeys.every(({ key }) => !key))
+      }
     >
       {dataIsXWIReport ?
         (
@@ -76,7 +80,7 @@ const MapValueControls = () => {
         (mapLayer &&
           <MapValueSelect
             categories={MAP_LAYER_VALUE_VIS[mapLayer]}
-            titles={['Column', 'Operation']}
+            titles={['Column', 'Operation', 'Alias']}
             data={numericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
             disableSubs={!dataHasVariance}
