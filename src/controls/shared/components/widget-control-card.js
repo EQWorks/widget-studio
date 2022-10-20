@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import CustomButton from '../../../components/custom-button'
-import { useStoreState } from '../../../store'
+import { useStoreState, useStoreActions } from '../../../store'
 import modes from '../../../constants/modes'
 
 
@@ -81,7 +81,9 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const WidgetControlCard = ({ title, titleExtra, description, clear, children }) => {
+const WidgetControlCard = ({ title, titleExtra, description, clear, enableEdit, disableEditButton = true, children }) => {
+  const userUpdate = useStoreActions((actions) => actions.userUpdate)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
   const mode = useStoreState((state) => state.ui.mode)
   const classes = useStyles(mode)
 
@@ -91,6 +93,21 @@ const WidgetControlCard = ({ title, titleExtra, description, clear, children }) 
         {`${title}:`}
       </div>
       {titleExtra}
+      {enableEdit && mode === modes.EDITOR &&
+        <CustomButton
+          type='secondary'
+          size={mode === modes.QL ? 'sm' : 'md'}
+          onClick={() => userUpdate({ widgetControlCardEdit: !widgetControlCardEdit })}
+          {...(classes.clearButton && {
+            classes: {
+              button: classes.clearButton,
+            },
+          })}
+          disabled={disableEditButton}
+        >
+          {widgetControlCardEdit ? 'Done' : 'Edit'}
+        </CustomButton>
+      }
       {clear &&
         <CustomButton
           type='secondary'
@@ -106,7 +123,8 @@ const WidgetControlCard = ({ title, titleExtra, description, clear, children }) 
           })}
         >
           Clear
-        </CustomButton>}
+        </CustomButton>
+      }
     </div >
   )
 
@@ -126,6 +144,8 @@ WidgetControlCard.propTypes = {
   titleExtra: PropTypes.node,
   description: PropTypes.node,
   clear: PropTypes.func,
+  enableEdit: PropTypes.bool,
+  disableEditButton: PropTypes.bool,
 }
 
 WidgetControlCard.defaultProps = {
@@ -134,6 +154,8 @@ WidgetControlCard.defaultProps = {
   titleExtra: null,
   description: null,
   clear: null,
+  enableEdit: false,
+  disableEditButton: false,
 }
 
 export default WidgetControlCard
