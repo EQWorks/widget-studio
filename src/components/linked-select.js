@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import clsx from 'clsx'
-import { makeStyles, Icons, Tooltip } from '@eqworks/lumen-labs'
+import { makeStyles, Icons, Tooltip, TextField } from '@eqworks/lumen-labs'
 
 import CustomSelect from '../components/custom-select'
 import CustomButton from '../components/custom-button'
+import { hasDevAccess  } from '../util/access'
 
 
 const useStyles = ({ showDelete }) => makeStyles({
@@ -22,6 +22,18 @@ const useStyles = ({ showDelete }) => makeStyles({
     width: '100% !important',
     justifyContent: 'center !important',
   },
+  gridOneColumn: {
+    gridColumn: 'span 1 / span 1',
+    minWidth: '0',
+  },
+  gridTwoColumns: {
+    gridColumn: 'span 2 / span 2',
+    minWidth: '0',
+  },
+})
+
+const textfieldClasses = Object.freeze({
+  container: 'mt-0.5',
 })
 
 const LinkedSelect = ({
@@ -39,6 +51,7 @@ const LinkedSelect = ({
   disableSubMessage,
   customRender,
   customRenderSub,
+  editMode,
   icons,
 }) => {
   const [choice, setChoice] = useState(init)
@@ -102,28 +115,44 @@ const LinkedSelect = ({
       </CustomButton>
     </div>
 
+  const renderAliasTextfield = (
+    <TextField
+      classes={textfieldClasses}
+      size={'md'}
+      // value={showAxisTitles.y ? axisTitles.y : 'N/A'}
+      inputProps={{ placeholder: 'Column title alias' }}
+      // onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
+      // maxLength={100}
+      disabled={!choice}
+    />
+  )
+
   return (
     <>
-      <div className={`col-span-1 ${className}`}>
-        {
-          disableSub
-            ? <Tooltip
-              classes={{ container: 'w-full' }}
-              arrow={false}
-              description={disableSubMessage}
-            >
-              {renderSub}
-            </Tooltip>
-            : renderSub
-        }
-      </div>
-      <div className={clsx(`min-w-0 ${className}`, {
-        'col-span-2': !deletable,
-        'col-span-1': deletable,
-      })}>
+      {!editMode &&
+        <div className={`${classes.gridOneColumn} ${className}`}>
+          {
+            disableSub
+              ? <Tooltip
+                classes={{ container: 'w-full' }}
+                arrow={false}
+                description={disableSubMessage}
+              >
+                {renderSub}
+              </Tooltip>
+              : renderSub
+          }
+        </div>
+      }
+      <div className={`${classes.gridTwoColumns} ${className}`}>
         {renderPrimary}
       </div>
-      {deletable && renderDelete}
+      {hasDevAccess() && editMode &&
+        <div className={`${classes.gridTwoColumns} ${className}`}>
+          {renderAliasTextfield}
+        </div>
+      }
+      {deletable && editMode && renderDelete}
     </>
   )
 }
@@ -132,6 +161,7 @@ LinkedSelect.propTypes = {
   deletable: PropTypes.bool,
   deleteCallback: PropTypes.func,
   showDelete: PropTypes.bool,
+  editMode: PropTypes.bool,
   callback: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(PropTypes.any).isRequired,
   subData: PropTypes.arrayOf(PropTypes.any).isRequired,
@@ -150,6 +180,7 @@ LinkedSelect.defaultProps = {
   deletable: false,
   deleteCallback: () => console.error('Not implemented'),
   showDelete: false,
+  editMode: false,
   init: '',
   subInit: '',
   placeholders: ['Select', 'Select'],
