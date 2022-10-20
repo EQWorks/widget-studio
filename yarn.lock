@@ -1418,10 +1418,10 @@
     react-window "^1.8.6"
     use-debounce "^7.0.1"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.58":
-  version "0.1.0-alpha.58"
-  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-labs/0.1.0-alpha.58/c190b33839de77d20295b7a755f5a78e322e535e#c190b33839de77d20295b7a755f5a78e322e535e"
-  integrity sha512-akcLcNRE1OBMAyBluxDf1QaXQk9if1nH/7y07sJsgN0nZV922JQN0fxSMT7gi+o121seaKFpRsgo9igtvS6bkw==
+"@eqworks/lumen-labs@^0.1.0-alpha.64":
+  version "0.1.0-alpha.64"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-labs/0.1.0-alpha.64/88c714f1a964bac13fab1078acd796473b11a447#88c714f1a964bac13fab1078acd796473b11a447"
+  integrity sha512-mlaD167bckXsDY7Xw+9Bk22g42Io0OlD5N8qwOAmJdUg33x9T+Pd0aPkZ4W7CD3oduy/PnJh8ZAXaSCmLHGbQw==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
