@@ -11,6 +11,7 @@ import { renderRow } from './util'
 import MutedBarrier from './muted-barrier'
 import CustomSelect from '../../components/custom-select'
 import types from '../../constants/types'
+import { hasDevAccess } from '../../util/access'
 
 
 const ValueControls = () => {
@@ -26,6 +27,7 @@ const ValueControls = () => {
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const addUserControls = useStoreState((state) => state.addUserControls)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
 
   const eligibleColumns = useMemo(() =>
     Object.fromEntries(
@@ -34,28 +36,28 @@ const ValueControls = () => {
     ), [columnsAnalysis, domain.value])
 
   const staticQuantity = useMemo(() => {
-    if (addUserControls) {
+    if (addUserControls || type === types.PYRAMID) {
       return 2
     }
     return 3
-  }, [addUserControls])
+  }, [addUserControls, type])
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
-      {...(mode === modes.QL || addUserControls ? {
+      {...(mode === modes.QL ? {
         staticQuantity,
       }
         : {
           headerIcons: [
             Icons.Columns,
             Icons.Sum,
+            Icons.Alias,
           ],
         })}
-      staticQuantity={type === types.PYRAMID ? 2 : null}
-      titles={['Column', 'Operation']}
+      titles={['Column', 'Operation', 'Alias']}
       values={valueKeys}
       valueIcons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
       primaryKey='key'
@@ -64,6 +66,7 @@ const ValueControls = () => {
       subData={Object.keys(aggFunctions)}
       disableSubs={!dataHasVariance}
       disableSubMessage="doesn't require aggregation."
+      editMode={widgetControlCardEdit}
       callback={(i, val) => {
         if (i === valueKeys.length) {
           const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
@@ -103,9 +106,14 @@ const ValueControls = () => {
         clear={() => resetValue({ valueKeys })}
         title='Value Configuration'
         {...mode === modes.QL && { description: 'Select up to 3 keys, open in editor for more options.' }}
+        enableEdit
+        disableEditButton={mode === modes.QL ||
+          (!hasDevAccess() && valueKeys?.length === 1)
+          || !valueKeys.length || valueKeys.every(({ key }) => !key)
+        }
       >
         {
-          group
+          group || widgetControlCardEdit
             ? renderRow(null, renderGroupedValueKeysSelect)
             : renderRow('Columns', renderNonGroupedValueKeysSelect)
         }
