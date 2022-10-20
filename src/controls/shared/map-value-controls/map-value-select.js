@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { Tooltip, TextField, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import CustomSelect from '../../../components/custom-select'
 import PluralLinkedSelect from '../../../components/plural-linked-select'
@@ -29,6 +29,18 @@ const classes = makeStyles({
     color: getTailwindConfigColor('secondary-800'),
     overflowY: 'visible',
   },
+  grid: {
+    width: '100%',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+  },
+  twoColumns: {
+    gridColumn: 'span 2 / span 2',
+  },
+})
+
+const textfieldClasses = Object.freeze({
+  container: 'h-8',
 })
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -50,6 +62,7 @@ const MapValueSelect = ({
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const mapLayer = useStoreState((state) => state.mapLayer)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
 
   return (
     categories.map((mapVis, i) => {
@@ -89,26 +102,43 @@ const MapValueSelect = ({
           </div>
           {dataIsXWIReport ?
             (
-              <CustomSelect
-                fullWidth
-                data={_data}
-                icons={icons}
-                value={mapValueKeys[match] ? mapValueKeys[match]?.[PRIMARY_KEY] : ''}
-                onSelect={val => callback(
-                  match,
-                  {
-                    mapVis,
-                    [PRIMARY_KEY]: val,
-                    [SECONDARY_KEY]: 'sum',
-                  }
-                )}
-                onClear={() => {
-                  const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
-                  valueKeysCopy.splice(match, 1)
-                  userUpdate({ mapValueKeys: valueKeysCopy })
-                }}
-                placeholder={'Column'}
-              />
+              <div className={classes.grid}>
+                <div className={`${widgetControlCardEdit ? '' : classes.twoColumns}`}>
+                  <CustomSelect
+                    fullWidth
+                    data={_data}
+                    icons={icons}
+                    value={mapValueKeys[match]?.[PRIMARY_KEY] || ''}
+                    onSelect={val => callback(
+                      match,
+                      {
+                        mapVis,
+                        [PRIMARY_KEY]: val,
+                        [SECONDARY_KEY]: 'sum',
+                      }
+                    )}
+                    onClear={() => {
+                      const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
+                      valueKeysCopy.splice(match, 1)
+                      userUpdate({ mapValueKeys: valueKeysCopy })
+                    }}
+                    placeholder={'Column'}
+                  />
+                </div>
+                {widgetControlCardEdit &&
+                  <div>
+                    <TextField
+                      classes={textfieldClasses}
+                      size={'md'}
+                      // value={showAxisTitles.y ? axisTitles.y : 'N/A'}
+                      inputProps={{ placeholder: 'Column title alias' }}
+                      // onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
+                      // maxLength={100}
+                      disabled={!mapValueKeys[match]?.[PRIMARY_KEY]}
+                    />
+                  </div>
+                }
+              </div>
             ) :
             (
               <PluralLinkedSelect
@@ -116,6 +146,7 @@ const MapValueSelect = ({
                 headerIcons={[
                   Icons.Columns,
                   Icons.Sum,
+                  Icons.Alias,
                 ]}
                 titles={titles}
                 values={mapValueKeys[match] ? [mapValueKeys[match]] : []}
@@ -134,6 +165,7 @@ const MapValueSelect = ({
                 secondaryKey={SECONDARY_KEY}
                 disableSubs={disableSubs}
                 disableSubMessage={disableSubMessage}
+                editMode={widgetControlCardEdit}
               />
             )
           }
