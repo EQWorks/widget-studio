@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { Chip, makeStyles } from '@eqworks/lumen-labs'
+import { Chip, TextField, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
@@ -10,12 +10,17 @@ import typeInfo from '../../constants/type-info'
 import MutedBarrier from './muted-barrier'
 import { DATE_RESOLUTIONS } from '../../constants/time'
 import { columnTypeInfo } from '../../constants/columns'
+import { hasDevAccess } from '../../util/access'
 
 
 const classes = makeStyles({
   dateGroupByContainer: {
     paddingLeft: '0.8rem',
   },
+})
+
+const textfieldClasses = Object.freeze({
+  container: 'mt-0.5',
 })
 
 
@@ -30,6 +35,7 @@ const DomainControls = () => {
   const domain = useStoreState((state) => state.domain)
   const domainIsDate = useStoreState((state) => state.domainIsDate)
   const dateAggregation = useStoreState((state) => state.dateAggregation)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
 
   // local state
   const { mustGroup } = useMemo(() => typeInfo[type] || {}, [type])
@@ -60,77 +66,88 @@ const DomainControls = () => {
         { message: 'There are no eligible columns in this dataset.' }
       )}
     >
-      <WidgetControlCard title={'Domain Configuration'} >
-        {
-          renderRow(null,
-            <>
-              {
-                renderItem('Column',
-                  <CustomSelect
-                    fullWidth
-                    data={Object.keys(eligibleDomainValues)}
-                    icons={Object.values(eligibleDomainValues).map(({ Icon }) => Icon)}
-                    value={domain.value}
-                    onSelect={val => {
-                      const willGroup = mustGroup || !columnsAnalysis[val]?.isNumeric
-                      userUpdate({
-                        group: willGroup,
-                        ...(
-                          willGroup
-                            ? {
-                              groupKey: val,
-                              indexKey: null,
-                            }
-                            : {
-                              indexKey: val,
-                              groupKey: null,
-                            }
-                        ),
-                        groupFilter: [],
-                      })
-                      // if the new group key is a valid geo key,
-                      if (willGroup && validMapGroupKeys.includes(val)) {
-                        update({
-                          // update mapGroupKey with groupKey value
-                          mapGroupKey: val,
-                          // reset mapValueKeys in case mapGroupKey value requires a new map layer
-                          mapValueKeys: [],
-                        })
-                      }
-                    }}
-                    onClear={() => userUpdate({
-                      groupKey: null,
-                      indexKey: null,
-                      mapGroupKey: null,
+      <WidgetControlCard
+        title={'Domain Configuration'}
+        enableEdit={hasDevAccess() && domain.value}
+      >
+        {renderRow(null,
+          <>
+            {renderItem('Column',
+              <CustomSelect
+                fullWidth
+                data={Object.keys(eligibleDomainValues)}
+                icons={Object.values(eligibleDomainValues).map(({ Icon }) => Icon)}
+                value={domain.value}
+                onSelect={val => {
+                  const willGroup = mustGroup || !columnsAnalysis[val]?.isNumeric
+                  userUpdate({
+                    group: willGroup,
+                    ...(
+                      willGroup
+                        ? {
+                          groupKey: val,
+                          indexKey: null,
+                        }
+                        : {
+                          indexKey: val,
+                          groupKey: null,
+                        }
+                    ),
+                    groupFilter: [],
+                  })
+                  // if the new group key is a valid geo key,
+                  if (willGroup && validMapGroupKeys.includes(val)) {
+                    update({
+                      // update mapGroupKey with groupKey value
+                      mapGroupKey: val,
+                      // reset mapValueKeys in case mapGroupKey value requires a new map layer
                       mapValueKeys: [],
-                    })}
-                    placeholder='Select column'
-                  />,
-                  renderCategory()
-                )
-              }
-              {
-                domainIsDate && group &&
-                <div className={classes.dateGroupByContainer}>
-                  {
-                    renderItem(
-                      'Group by',
-                      <CustomSelect
-                        fullWidth
-                        allowClear={false}
-                        data={Object.values(DATE_RESOLUTIONS)}
-                        value={domainIsDate && group && dateAggregation}
-                        onSelect={v => v && userUpdate({ dateAggregation: v })}
-                      />,
-                      null,
-                      false
-                    )
+                    })
                   }
-                </div>
-              }
-            </>
-          )
-        }
+                }}
+                onClear={() => userUpdate({
+                  groupKey: null,
+                  indexKey: null,
+                  mapGroupKey: null,
+                  mapValueKeys: [],
+                })}
+                placeholder='Select column'
+              />,
+              !widgetControlCardEdit && renderCategory()
+            )}
+            {!widgetControlCardEdit && domainIsDate && group &&
+              <div className={classes.dateGroupByContainer}>
+                {
+                  renderItem(
+                    'Group by',
+                    <CustomSelect
+                      fullWidth
+                      allowClear={false}
+                      data={Object.values(DATE_RESOLUTIONS)}
+                      value={domainIsDate && group && dateAggregation}
+                      onSelect={v => v && userUpdate({ dateAggregation: v })}
+                    />,
+                    null,
+                    false
+                  )
+                }
+              </div>
+            }
+            {widgetControlCardEdit &&
+              renderItem('Alias', (
+                <TextField
+                  classes={textfieldClasses}
+                  size={'md'}
+                  // value={showAxisTitles.y ? axisTitles.y : 'N/A'}
+                  inputProps={{ placeholder: 'Column title alias' }}
+                  // onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
+                  // maxLength={100}
+                  disabled={!domain.value}
+                />
+              ))
+            }
+          </>
+        )}
       </WidgetControlCard>
     </MutedBarrier>
   )
