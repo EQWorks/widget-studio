@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import { Icons } from '@eqworks/lumen-labs'
 
 import modes from '../../constants/modes'
+import cardTypes from '../../constants/card-types'
 import aggFunctions from '../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../store'
 import PluralLinkedSelect from '../../components/plural-linked-select'
@@ -66,7 +67,7 @@ const ValueControls = () => {
       subData={Object.keys(aggFunctions)}
       disableSubs={!dataHasVariance}
       disableSubMessage="doesn't require aggregation."
-      editMode={widgetControlCardEdit}
+      editMode={widgetControlCardEdit[cardTypes.VALUE]}
       callback={(i, val) => {
         if (i === valueKeys.length) {
           const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
@@ -111,9 +112,10 @@ const ValueControls = () => {
           (!hasDevAccess() && valueKeys?.length === 1)
           || !valueKeys.length || valueKeys.every(({ key }) => !key)
         }
+        type={cardTypes.VALUE}
       >
         {
-          group || widgetControlCardEdit
+          group || widgetControlCardEdit[cardTypes.VALUE]
             ? renderRow(null, renderGroupedValueKeysSelect)
             : renderRow('Columns', renderNonGroupedValueKeysSelect)
         }

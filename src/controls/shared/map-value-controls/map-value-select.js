@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Tooltip, TextField, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import CustomSelect from '../../../components/custom-select'
 import PluralLinkedSelect from '../../../components/plural-linked-select'
+import ColumnAliasControls from '../../editor-mode/components/column-alias-controls'
 import types from '../../../constants/type-info'
+import cardTypes from '../../../constants/card-types'
 import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
 import { useStoreState, useStoreActions } from '../../../store'
 
@@ -37,10 +39,6 @@ const classes = makeStyles({
   twoColumns: {
     gridColumn: 'span 2 / span 2',
   },
-})
-
-const textfieldClasses = Object.freeze({
-  container: 'h-8',
 })
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -103,7 +101,7 @@ const MapValueSelect = ({
           {dataIsXWIReport ?
             (
               <div className={classes.grid}>
-                <div className={`${widgetControlCardEdit ? '' : classes.twoColumns}`}>
+                <div className={`${widgetControlCardEdit[cardTypes.VALUE] ? '' : classes.twoColumns}`}>
                   <CustomSelect
                     fullWidth
                     data={_data}
@@ -125,18 +123,11 @@ const MapValueSelect = ({
                     placeholder={'Column'}
                   />
                 </div>
-                {widgetControlCardEdit &&
-                  <div>
-                    <TextField
-                      classes={textfieldClasses}
-                      size={'md'}
-                      // value={showAxisTitles.y ? axisTitles.y : 'N/A'}
-                      inputProps={{ placeholder: 'Column title alias' }}
-                      // onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
-                      // maxLength={100}
-                      disabled={!mapValueKeys[match]?.[PRIMARY_KEY]}
-                    />
-                  </div>
+                {widgetControlCardEdit[cardTypes.VALUE] &&
+                  <ColumnAliasControls
+                    value={mapValueKeys[match]?.[PRIMARY_KEY] || ''}
+                    disabled={!mapValueKeys[match]?.[PRIMARY_KEY]}
+                  />
                 }
               </div>
             ) :
@@ -165,7 +156,7 @@ const MapValueSelect = ({
                 secondaryKey={SECONDARY_KEY}
                 disableSubs={disableSubs}
                 disableSubMessage={disableSubMessage}
-                editMode={widgetControlCardEdit}
+                editMode={widgetControlCardEdit[cardTypes.VALUE]}
               />
             )
           }

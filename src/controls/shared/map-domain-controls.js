@@ -1,19 +1,17 @@
 import React from 'react'
 
-import { TextField, Icons } from '@eqworks/lumen-labs'
+import { Icons } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
+import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
 import { renderRow, renderItem } from './util'
 import { setMapValueKeys } from '../../util/map-layer-value-functions'
 import { hasDevAccess } from '../../util/access'
+import cardTypes from '../../constants/card-types'
 import { MAP_LAYERS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
 
-
-const textfieldClasses = Object.freeze({
-  container: 'mt-0.5',
-})
 
 const MapDomainControls = () => {
   // common actions
@@ -57,14 +55,9 @@ const MapDomainControls = () => {
   ))
 
   const renderAlias = renderItem('Alias', (
-    <TextField
-      classes={textfieldClasses}
-      size={'md'}
-      // value={showAxisTitles.y ? axisTitles.y : 'N/A'}
-      inputProps={{ placeholder: 'Column title alias' }}
-      // onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
-      // maxLength={100}
-      disabled={!domain.value}
+    <ColumnAliasControls
+      value={domain.value || ''}
+      disabled={hasDevAccess() && !domain.value}
     />
   ))
 
@@ -72,11 +65,12 @@ const MapDomainControls = () => {
     <WidgetControlCard
       title={'Map Layer Configuration'}
       enableEdit={hasDevAccess() && domain.value}
+      type={cardTypes.DOMAIN}
     >
       {renderRow('',
         <>
           {renderControls}
-          {widgetControlCardEdit && renderAlias}
+          {widgetControlCardEdit[cardTypes.DOMAIN] && renderAlias}
         </>
       )}
     </WidgetControlCard>

@@ -5,7 +5,7 @@ import { useStoreState, useStoreActions } from '../../../store'
 import MapValueSelect from './map-value-select'
 import XWIReportValueControls from './xwi-report-value-controls'
 import WidgetControlCard from '../components/widget-control-card'
-
+import cardTypes from '../../../constants/card-types'
 import modes from '../../../constants/modes'
 import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
 import { hasDevAccess } from '../../../util/access'
@@ -69,6 +69,7 @@ const MapValueControls = () => {
       disableEditButton={!hasDevAccess() ||
         (!mapValueKeys.length || mapValueKeys.every(({ key }) => !key))
       }
+      type={cardTypes.VALUE}
     >
       {dataIsXWIReport ?
         (

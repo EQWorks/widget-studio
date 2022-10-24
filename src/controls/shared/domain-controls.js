@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react'
 
-import { Chip, TextField, makeStyles } from '@eqworks/lumen-labs'
+import { Chip, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
+import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
 import { renderItem, renderRow } from './util'
 import typeInfo from '../../constants/type-info'
+import cardTypes from '../../constants/card-types'
 import MutedBarrier from './muted-barrier'
 import { DATE_RESOLUTIONS } from '../../constants/time'
 import { columnTypeInfo } from '../../constants/columns'
@@ -18,11 +20,6 @@ const classes = makeStyles({
     paddingLeft: '0.8rem',
   },
 })
-
-const textfieldClasses = Object.freeze({
-  container: 'mt-0.5',
-})
-
 
 const DomainControls = () => {
   const update = useStoreActions(actions => actions.update)
@@ -43,8 +40,7 @@ const DomainControls = () => {
   const eligibleDomainValues = useMemo(() => (
     Object.fromEntries(
       Object.entries(columnsAnalysis)
-        .filter(([c, { isNumeric }]) =>
-          (!mustGroup || !isNumeric)
+        .filter(([c, { isNumeric }]) => (!mustGroup || !isNumeric)
           && !(valueKeys.map(({ key }) => key).includes(c)))
         .map(([c, { Icon }]) => [c, { Icon }])
     )
@@ -69,6 +65,7 @@ const DomainControls = () => {
       <WidgetControlCard
         title={'Domain Configuration'}
         enableEdit={hasDevAccess() && domain.value}
+        type={cardTypes.DOMAIN}
       >
         {renderRow(null,
           <>
@@ -111,40 +108,30 @@ const DomainControls = () => {
                   mapGroupKey: null,
                   mapValueKeys: [],
                 })}
-                placeholder='Select column'
-              />,
-              !widgetControlCardEdit && renderCategory()
+                placeholder='Select column' />,
+              !widgetControlCardEdit[cardTypes.DOMAIN] && renderCategory()
             )}
-            {!widgetControlCardEdit && domainIsDate && group &&
+            {!widgetControlCardEdit[cardTypes.DOMAIN] && domainIsDate && group &&
               <div className={classes.dateGroupByContainer}>
-                {
-                  renderItem(
-                    'Group by',
-                    <CustomSelect
-                      fullWidth
-                      allowClear={false}
-                      data={Object.values(DATE_RESOLUTIONS)}
-                      value={domainIsDate && group && dateAggregation}
-                      onSelect={v => v && userUpdate({ dateAggregation: v })}
-                    />,
-                    null,
-                    false
-                  )
-                }
-              </div>
-            }
-            {widgetControlCardEdit &&
-              renderItem('Alias', (
-                <TextField
-                  classes={textfieldClasses}
-                  size={'md'}
-                  // value={showAxisTitles.y ? axisTitles.y : 'N/A'}
-                  inputProps={{ placeholder: 'Column title alias' }}
-                  // onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
-                  // maxLength={100}
+                {renderItem(
+                  'Group by',
+                  <CustomSelect
+                    fullWidth
+                    allowClear={false}
+                    data={Object.values(DATE_RESOLUTIONS)}
+                    value={domainIsDate && group && dateAggregation}
+                    onSelect={v => v && userUpdate({ dateAggregation: v })} />,
+                  null,
+                  false
+                )}
+              </div>}
+            {widgetControlCardEdit[cardTypes.DOMAIN] &&
+              renderItem('Alias',
+                <ColumnAliasControls
+                  value={domain.value || ''}
                   disabled={!domain.value}
                 />
-              ))
+              )
             }
           </>
         )}
