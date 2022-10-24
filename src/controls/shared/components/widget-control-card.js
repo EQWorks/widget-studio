@@ -5,6 +5,7 @@ import { Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import CustomButton from '../../../components/custom-button'
 import { useStoreState, useStoreActions } from '../../../store'
+import card_types from '../../../constants/card-types'
 import modes from '../../../constants/modes'
 
 
@@ -81,7 +82,16 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
     }
 )
 
-const WidgetControlCard = ({ title, titleExtra, description, clear, enableEdit, disableEditButton = true, children }) => {
+const WidgetControlCard = ({
+  title,
+  titleExtra,
+  description,
+  clear,
+  enableEdit,
+  disableEditButton,
+  children,
+  type,
+}) => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
   const mode = useStoreState((state) => state.ui.mode)
@@ -97,7 +107,7 @@ const WidgetControlCard = ({ title, titleExtra, description, clear, enableEdit, 
         <CustomButton
           type='secondary'
           size={mode === modes.QL ? 'sm' : 'md'}
-          onClick={() => userUpdate({ widgetControlCardEdit: !widgetControlCardEdit })}
+          onClick={() => userUpdate({ widgetControlCardEdit: { [type]: !widgetControlCardEdit[type] } })}
           {...(classes.clearButton && {
             classes: {
               button: classes.clearButton,
@@ -105,7 +115,7 @@ const WidgetControlCard = ({ title, titleExtra, description, clear, enableEdit, 
           })}
           disabled={disableEditButton}
         >
-          {widgetControlCardEdit ? 'Done' : 'Edit'}
+          {widgetControlCardEdit[type] ? 'Done' : 'Edit'}
         </CustomButton>
       }
       {clear &&
@@ -146,6 +156,7 @@ WidgetControlCard.propTypes = {
   clear: PropTypes.func,
   enableEdit: PropTypes.bool,
   disableEditButton: PropTypes.bool,
+  type: PropTypes.string,
 }
 
 WidgetControlCard.defaultProps = {
@@ -156,6 +167,7 @@ WidgetControlCard.defaultProps = {
   clear: null,
   enableEdit: false,
   disableEditButton: false,
+  type: card_types.GENERAL,
 }
 
 export default WidgetControlCard
