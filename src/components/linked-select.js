@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles, Icons, Tooltip, TextField } from '@eqworks/lumen-labs'
+import { makeStyles, Icons, Tooltip } from '@eqworks/lumen-labs'
 
 import CustomSelect from '../components/custom-select'
 import CustomButton from '../components/custom-button'
+import ColumnAliasControls from '../controls/editor-mode/components/column-alias-controls'
 import { hasDevAccess  } from '../util/access'
 
 
@@ -30,10 +31,6 @@ const useStyles = ({ showDelete }) => makeStyles({
     gridColumn: 'span 2 / span 2',
     minWidth: '0',
   },
-})
-
-const textfieldClasses = Object.freeze({
-  container: 'mt-0.5',
 })
 
 const LinkedSelect = ({
@@ -116,13 +113,8 @@ const LinkedSelect = ({
     </div>
 
   const renderAliasTextfield = (
-    <TextField
-      classes={textfieldClasses}
-      size={'md'}
-      // value={showAxisTitles.y ? axisTitles.y : 'N/A'}
-      inputProps={{ placeholder: 'Column title alias' }}
-      // onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
-      // maxLength={100}
+    <ColumnAliasControls
+      value={choice || ''}
       disabled={!choice}
     />
   )
