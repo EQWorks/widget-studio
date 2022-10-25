@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
+import { Tooltip, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import CustomButton from '../../../components/custom-button'
+import ControlCardButton from './control-card-button'
 import { useStoreState, useStoreActions } from '../../../store'
 import card_types from '../../../constants/card-types'
 import modes from '../../../constants/modes'
@@ -48,15 +48,6 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         '&:first-child': {
           marginTop: '0 !important',
           paddingTop: '0 !important',
-        },
-      },
-      clearButton: {
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center !important',
-        padding: '0 0.4rem !important',
-        '&>div': {
-          margin: '0 !important',
         },
       },
       ...commonClasses,
@@ -104,36 +95,32 @@ const WidgetControlCard = ({
       </div>
       {titleExtra}
       {enableEdit && mode === modes.EDITOR &&
-        <CustomButton
-          type='secondary'
-          size={mode === modes.QL ? 'sm' : 'md'}
-          onClick={() => userUpdate({ widgetControlCardEdit: { [type]: !widgetControlCardEdit[type] } })}
-          {...(classes.clearButton && {
-            classes: {
-              button: classes.clearButton,
-            },
-          })}
-          disabled={disableEditButton}
-        >
-          {widgetControlCardEdit[type] ? 'Done' : 'Edit'}
-        </CustomButton>
+        (
+          disableEditButton && !widgetControlCardEdit[type]
+            ? <Tooltip
+              arrow={false}
+              description={'No editable feature.'}
+            >
+              <ControlCardButton
+                disabled={disableEditButton}
+              >
+                {widgetControlCardEdit[type] ? 'Done' : 'Edit'}
+              </ControlCardButton>
+            </Tooltip>
+            : <ControlCardButton
+              onClick={() => userUpdate({ widgetControlCardEdit: { [type]: !widgetControlCardEdit[type] } })}
+              disabled={disableEditButton}
+            >
+              {widgetControlCardEdit[type] ? 'Done' : 'Edit'}
+            </ControlCardButton>
+        )
       }
       {clear &&
-        <CustomButton
-          type='secondary'
-          size={mode === modes.QL ? 'sm' : 'md'}
+        <ControlCardButton
           onClick={clear}
-          {...(mode === modes.QL && {
-            endIcon: <Icons.Trash size='sm' />,
-          })}
-          {...(classes.clearButton && {
-            classes: {
-              button: classes.clearButton,
-            },
-          })}
         >
           Clear
-        </CustomButton>
+        </ControlCardButton>
       }
     </div >
   )
