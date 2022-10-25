@@ -70,7 +70,7 @@ const EditorLeftSidebar = () => {
               {[types.BAR, types.MAP].includes(type) &&
                 <MutedBarrier mute={addTopCategories ||
                   !((type == types.BAR && numericColumns.length > 1 &&
-                    ((renderableValueKeys.length <= 1 && !addUserControls) || addUserControls)) ||
+                    ((renderableValueKeys.length <= 2 && !addUserControls) || addUserControls)) ||
                     (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1))}>
                   {renderToggle(
                     type === types.MAP ? 'Add Value Controls' : 'Add Benchmark',
