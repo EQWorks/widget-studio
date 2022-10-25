@@ -48,7 +48,7 @@ const ValueControls = () => {
 
   const renderGroupedValueKeysSelect =
     <PluralLinkedSelect
-      {...(mode === modes.QL ? {
+      {...(mode === modes.QL || addUserControls || type === types.PYRAMID ? {
         staticQuantity,
       }
         : {
@@ -109,8 +109,8 @@ const ValueControls = () => {
         {...mode === modes.QL && { description: 'Select up to 3 keys, open in editor for more options.' }}
         enableEdit
         disableEditButton={mode === modes.QL ||
-          (!hasDevAccess() && valueKeys?.length === 1)
-          || !valueKeys.length || valueKeys.every(({ key }) => !key)
+          (!hasDevAccess() && valueKeys?.length === 1) ||
+          (valueKeys.every(({ key }) => !key) && !widgetControlCardEdit[cardTypes.VALUE])
         }
         type={cardTypes.VALUE}
       >

@@ -24,6 +24,7 @@ const MapValueControls = () => {
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const mapLayer = useStoreState((state) => state.mapLayer)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -67,7 +68,7 @@ const MapValueControls = () => {
       description={widgetControlCardDescription}
       enableEdit
       disableEditButton={!hasDevAccess() ||
-        (!mapValueKeys.length || mapValueKeys.every(({ key }) => !key))
+        ((mapValueKeys.every(({ key }) => !key)) && !widgetControlCardEdit[cardTypes.VALUE])
       }
       type={cardTypes.VALUE}
     >
