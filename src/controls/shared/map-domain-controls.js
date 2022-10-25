@@ -50,7 +50,7 @@ const MapDomainControls = () => {
         mapGroupKey: null,
         mapValueKeys: setMapValueKeys({ mapLayer, dataIsXWIReport }) || [],
       })}
-      placeholder={'Select a column to group by'}
+      placeholder={'Select column'}
     />
   ))
 
@@ -64,7 +64,8 @@ const MapDomainControls = () => {
   return (
     <WidgetControlCard
       title={'Map Layer Configuration'}
-      enableEdit={hasDevAccess() && domain.value}
+      enableEdit={hasDevAccess()}
+      disableEditButton={!(domain.value || widgetControlCardEdit[cardTypes.DOMAIN])}
       type={cardTypes.DOMAIN}
     >
       {renderRow('',

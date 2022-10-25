@@ -64,7 +64,8 @@ const DomainControls = () => {
     >
       <WidgetControlCard
         title={'Domain Configuration'}
-        enableEdit={hasDevAccess() && domain.value}
+        enableEdit={hasDevAccess()}
+        disableEditButton={!(domain.value || widgetControlCardEdit[cardTypes.DOMAIN])}
         type={cardTypes.DOMAIN}
       >
         {renderRow(null,
