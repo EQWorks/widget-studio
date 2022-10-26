@@ -16,6 +16,8 @@ const ColumnAliasControls = ({ value, disabled }) => {
   const [alias, setAlias] = useState(columnNameAliases[value])
   const [debouncedAlias] = useDebounce(alias, 500)
 
+  useEffect(() => setAlias(columnNameAliases[value]), [columnNameAliases, value])
+
   const existingAliases = useMemo(() =>
     Object.entries(columnNameAliases).filter(([key, val]) => key !== value && val)
       .map(([, val]) => val.toLowerCase())
