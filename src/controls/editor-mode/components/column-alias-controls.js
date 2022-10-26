@@ -14,11 +14,11 @@ const ColumnAliasControls = ({ value, disabled }) => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const columnNameAliases = useStoreState((state) => state.columnNameAliases || {})
   const [alias, setAlias] = useState(columnNameAliases[value])
-  const [debouncedAlias] = useDebounce(alias, 1000)
+  const [debouncedAlias] = useDebounce(alias, 500)
 
   const existingAliases = useMemo(() =>
     Object.entries(columnNameAliases).filter(([key, val]) => key !== value && val)
-      .map(([, val]) => val)
+      .map(([, val]) => val.toLowerCase())
   , [value, columnNameAliases])
 
   useEffect(() => {
@@ -28,9 +28,9 @@ const ColumnAliasControls = ({ value, disabled }) => {
     }
   }, [userUpdate, value, debouncedAlias, columnNameAliases, existingAliases])
 
-  const aliasError = useMemo(() => Boolean(value && debouncedAlias &&
-    existingAliases.includes(debouncedAlias)),
-  [value, existingAliases, debouncedAlias])
+  const aliasError = useMemo(() => Boolean(value && alias &&
+    existingAliases.includes(alias.toLowerCase())),
+  [value, existingAliases, alias])
 
   return (
     <TextField
