@@ -29,6 +29,7 @@ const ValueControls = () => {
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const addUserControls = useStoreState((state) => state.addUserControls)
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
+  const columnNameAliases = useStoreState((state) => state.columnNameAliases || {})
 
   const eligibleColumns = useMemo(() =>
     Object.fromEntries(
@@ -104,7 +105,7 @@ const ValueControls = () => {
       )}
     >
       <WidgetControlCard
-        clear={() => resetValue({ valueKeys })}
+        clear={() => resetValue({ valueKeys, columnNameAliases })}
         title='Value Configuration'
         {...mode === modes.QL && { description: 'Select up to 3 keys, open in editor for more options.' }}
         enableEdit

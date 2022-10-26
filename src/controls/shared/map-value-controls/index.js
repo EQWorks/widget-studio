@@ -16,6 +16,7 @@ const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
 const MapValueControls = () => {
   // common actions
   const userUpdate = useStoreActions(actions => actions.userUpdate)
+  const resetValue = useStoreActions(actions => actions.userUpdate)
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
@@ -25,6 +26,7 @@ const MapValueControls = () => {
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const mapLayer = useStoreState((state) => state.mapLayer)
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
+  const columnNameAliases = useStoreState((state) => state.columnNameAliases || {})
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -62,7 +64,7 @@ const MapValueControls = () => {
 
   return (
     <WidgetControlCard
-      clear={() => userUpdate({ mapValueKeys: [] })}
+      clear={() => resetValue({ mapValueKeys, columnNameAliases })}
       showIfEmpty
       title='Value Configuration'
       description={widgetControlCardDescription}
