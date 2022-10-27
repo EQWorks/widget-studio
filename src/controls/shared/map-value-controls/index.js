@@ -5,9 +5,10 @@ import { useStoreState, useStoreActions } from '../../../store'
 import MapValueSelect from './map-value-select'
 import XWIReportValueControls from './xwi-report-value-controls'
 import WidgetControlCard from '../components/widget-control-card'
-
+import cardTypes from '../../../constants/card-types'
 import modes from '../../../constants/modes'
 import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
+import { hasDevAccess } from '../../../util/access'
 
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -15,7 +16,7 @@ const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
 const MapValueControls = () => {
   // common actions
   const userUpdate = useStoreActions(actions => actions.userUpdate)
-  const resetValue = useStoreActions(actions => actions.resetValue)
+  const resetValue = useStoreActions(actions => actions.userUpdate)
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
@@ -24,6 +25,8 @@ const MapValueControls = () => {
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const mapLayer = useStoreState((state) => state.mapLayer)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
+  const columnNameAliases = useStoreState((state) => state.columnNameAliases || {})
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
@@ -61,10 +64,15 @@ const MapValueControls = () => {
 
   return (
     <WidgetControlCard
-      clear={() => resetValue({ mapValueKeys })}
+      clear={() => resetValue({ mapValueKeys, columnNameAliases })}
       showIfEmpty
       title='Value Configuration'
       description={widgetControlCardDescription}
+      enableEdit
+      disableEditButton={!hasDevAccess() ||
+        ((mapValueKeys.every(({ key }) => !key)) && !widgetControlCardEdit[cardTypes.VALUE])
+      }
+      type={cardTypes.VALUE}
     >
       {dataIsXWIReport ?
         (
@@ -76,7 +84,7 @@ const MapValueControls = () => {
         (mapLayer &&
           <MapValueSelect
             categories={MAP_LAYER_VALUE_VIS[mapLayer]}
-            titles={['Column', 'Operation']}
+            titles={['Column', 'Operation', 'Alias']}
             data={numericColumns}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
             disableSubs={!dataHasVariance}

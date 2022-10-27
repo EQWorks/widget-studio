@@ -11,6 +11,7 @@ import { mapDataIsValid } from '../util/map_data_validation'
 import { screenshot } from '../util/export'
 import types from '../constants/types'
 import typeInfo from '../constants/type-info'
+import cardTypes from '../constants/card-types'
 import { COLOR_REPRESENTATIONS, DEFAULT_PRESET_COLORS } from '../constants/color'
 import {
   MAP_LAYERS,
@@ -98,6 +99,7 @@ const stateDefaults = [
   },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
+  { key: 'columnNameAliases', defaultValue: {}, resettable: true },
   { key: 'transformedData', defaultValue: [], resettable: false },
   { key: 'dataHasVariance', defaultValue: true, resettable: false },
   // TO DELETE or change in the future when we implement data tree selection
@@ -113,6 +115,11 @@ const stateDefaults = [
   { key: 'userValueFilter', defaultValue: [], resettable: true },
   { key: 'dataCategoryKey', defaultValue: null, resettable: true },
   { key: 'selectedCategValue', defaultValue: null, resettable: true },
+  {
+    key: 'widgetControlCardEdit',
+    defaultValue: Object.fromEntries(Object.keys(cardTypes).map(type => ([type, false]))) ,
+    resettable: true,
+  },
   { key: 'presetColors', defaultValue: DEFAULT_PRESET_COLORS, resettable: true },
   {
     key: 'ui',
@@ -178,6 +185,7 @@ export default {
       (state) => state.genericOptions,
       (state) => state.uniqueOptions,
       (state) => state.isReady,
+      (state) => state.columnNameAliases,
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
       (state) => state.percentageMode,
@@ -210,6 +218,7 @@ export default {
       genericOptions,
       uniqueOptions,
       isReady,
+      columnNameAliases,
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
       percentageMode,
@@ -235,6 +244,7 @@ export default {
       mapValueKeys: type === types.MAP ? renderableValueKeys : [],
       formatDataKey,
       formatDataFunctions,
+      columnNameAliases,
       group,
       groupKey,
       mapGroupKey,
@@ -420,12 +430,14 @@ export default {
     [
       (state) => state.columns,
       (state) => state.groupFSAByPC,
+      (state) => state.columnNameAliases,
     ],
     (
       columns,
       groupFSAByPC,
+      columnNameAliases,
     ) => (
-      Object.fromEntries(columns.map(({ name }) => [name, cleanUp(name)])
+      Object.fromEntries(columns.map(({ name }) => [name, columnNameAliases?.[name] || cleanUp(name)])
         .concat(groupFSAByPC ? [['geo_ca_fsa', cleanUp('geo_ca_fsa')]] : []))
     )
   ),

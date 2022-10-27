@@ -422,6 +422,10 @@ export default {
     ],
     'mapValueKeys': [],
     'formatDataFunctions': {},
+    'columnNameAliases': {
+      'geo_ca_city': 'City',
+      'city_clicks': 'Clicks',
+    },
     'group': true,
     'groupKey': 'geo_ca_city',
     'mapGroupKey': null,

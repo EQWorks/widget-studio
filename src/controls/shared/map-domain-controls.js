@@ -1,12 +1,16 @@
 import React from 'react'
 
+import { Icons } from '@eqworks/lumen-labs'
+
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow } from './util'
-import { MAP_LAYERS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
+import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
+import { renderRow, renderItem } from './util'
 import { setMapValueKeys } from '../../util/map-layer-value-functions'
-import { Icons } from '@eqworks/lumen-labs'
+import { hasDevAccess } from '../../util/access'
+import cardTypes from '../../constants/card-types'
+import { MAP_LAYERS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
 
 
 const MapDomainControls = () => {
@@ -19,8 +23,9 @@ const MapDomainControls = () => {
   const domain = useStoreState((state) => state.domain)
   const mapLayer = useStoreState((state) => state.mapLayer)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
 
-  const renderControls = (
+  const renderControls = renderItem('Column', (
     <CustomSelect
       fullWidth
       data={validMapGroupKeys}
@@ -32,9 +37,9 @@ const MapDomainControls = () => {
         const newLayer = Object.keys(MAP_LAYERS)
           .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(val))
         /*
-         * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
-         * as different layer requires different visualization types
-         */
+        * reset mapValueKeys when we change to a mapGroupKey that requires a different layer,
+        * as different layer requires different visualization types
+        */
         if (newLayer !== mapLayer) {
           update({ mapValueKeys: setMapValueKeys({ mapLayer, dataIsXWIReport }) || [] })
         }
@@ -45,13 +50,30 @@ const MapDomainControls = () => {
         mapGroupKey: null,
         mapValueKeys: setMapValueKeys({ mapLayer, dataIsXWIReport }) || [],
       })}
-      placeholder={'Select a column to group by'}
+      placeholder={'Select column'}
     />
-  )
+  ))
+
+  const renderAlias = renderItem('Alias', (
+    <ColumnAliasControls
+      value={domain.value || ''}
+      disabled={hasDevAccess() && !domain.value}
+    />
+  ))
 
   return (
-    <WidgetControlCard title={'Map Layer Configuration'}>
-      {renderRow('Column', renderControls)}
+    <WidgetControlCard
+      title={'Map Layer Configuration'}
+      enableEdit={hasDevAccess()}
+      disableEditButton={!(domain.value || widgetControlCardEdit[cardTypes.DOMAIN])}
+      type={cardTypes.DOMAIN}
+    >
+      {renderRow('',
+        <>
+          {renderControls}
+          {widgetControlCardEdit[cardTypes.DOMAIN] && renderAlias}
+        </>
+      )}
     </WidgetControlCard>
   )
 }

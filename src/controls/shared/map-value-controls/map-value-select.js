@@ -5,7 +5,9 @@ import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lum
 
 import CustomSelect from '../../../components/custom-select'
 import PluralLinkedSelect from '../../../components/plural-linked-select'
+import ColumnAliasControls from '../../editor-mode/components/column-alias-controls'
 import types from '../../../constants/type-info'
+import cardTypes from '../../../constants/card-types'
 import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
 import { useStoreState, useStoreActions } from '../../../store'
 
@@ -29,6 +31,14 @@ const classes = makeStyles({
     color: getTailwindConfigColor('secondary-800'),
     overflowY: 'visible',
   },
+  grid: {
+    width: '100%',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+  },
+  twoColumns: {
+    gridColumn: 'span 2 / span 2',
+  },
 })
 
 const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
@@ -50,6 +60,7 @@ const MapValueSelect = ({
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const mapLayer = useStoreState((state) => state.mapLayer)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
 
   return (
     categories.map((mapVis, i) => {
@@ -89,26 +100,36 @@ const MapValueSelect = ({
           </div>
           {dataIsXWIReport ?
             (
-              <CustomSelect
-                fullWidth
-                data={_data}
-                icons={icons}
-                value={mapValueKeys[match] ? mapValueKeys[match]?.[PRIMARY_KEY] : ''}
-                onSelect={val => callback(
-                  match,
-                  {
-                    mapVis,
-                    [PRIMARY_KEY]: val,
-                    [SECONDARY_KEY]: 'sum',
-                  }
-                )}
-                onClear={() => {
-                  const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
-                  valueKeysCopy.splice(match, 1)
-                  userUpdate({ mapValueKeys: valueKeysCopy })
-                }}
-                placeholder={'Column'}
-              />
+              <div className={classes.grid}>
+                <div className={`${widgetControlCardEdit[cardTypes.VALUE] ? '' : classes.twoColumns}`}>
+                  <CustomSelect
+                    fullWidth
+                    data={_data}
+                    icons={icons}
+                    value={mapValueKeys[match]?.[PRIMARY_KEY] || ''}
+                    onSelect={val => callback(
+                      match,
+                      {
+                        mapVis,
+                        [PRIMARY_KEY]: val,
+                        [SECONDARY_KEY]: 'sum',
+                      }
+                    )}
+                    onClear={() => {
+                      const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
+                      valueKeysCopy.splice(match, 1)
+                      userUpdate({ mapValueKeys: valueKeysCopy })
+                    }}
+                    placeholder={'Column'}
+                  />
+                </div>
+                {widgetControlCardEdit[cardTypes.VALUE] &&
+                  <ColumnAliasControls
+                    value={mapValueKeys[match]?.[PRIMARY_KEY] || ''}
+                    disabled={!mapValueKeys[match]?.[PRIMARY_KEY]}
+                  />
+                }
+              </div>
             ) :
             (
               <PluralLinkedSelect
@@ -116,6 +137,7 @@ const MapValueSelect = ({
                 headerIcons={[
                   Icons.Columns,
                   Icons.Sum,
+                  Icons.Alias,
                 ]}
                 titles={titles}
                 values={mapValueKeys[match] ? [mapValueKeys[match]] : []}
@@ -134,6 +156,7 @@ const MapValueSelect = ({
                 secondaryKey={SECONDARY_KEY}
                 disableSubs={disableSubs}
                 disableSubMessage={disableSubMessage}
+                editMode={widgetControlCardEdit[cardTypes.VALUE]}
               />
             )
           }

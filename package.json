@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/widget-studio",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -29,7 +29,7 @@
     "build-tailwindcss-prod": "NODE_ENV=production npx postcss src/styles/tailwind.css -o src/styles/index.css"
   },
   "peerDependencies": {
-    "@eqworks/lumen-labs": "^0.1.0-alpha.58",
+    "@eqworks/lumen-labs": "^0.1.0-alpha.64",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@eqworks/react-maps": "^0.10.3",
     "@material-ui/core": "^4.11.0",
@@ -50,7 +50,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@eqworks/common-login": "^0.9.0-alpha.13",
-    "@eqworks/lumen-labs": "^0.1.0-alpha.58",
+    "@eqworks/lumen-labs": "^0.1.0-alpha.64",
     "@eqworks/react-labs": "^1.12.1-alpha.5",
     "@eqworks/react-maps": "^0.10.3",
     "@material-ui/core": "^4.11.0",
@@ -82,7 +82,7 @@
     "tailwindcss-children": "^2.1.0"
   },
   "dependencies": {
-    "@eqworks/chart-system": "^0.8.1",
+    "@eqworks/chart-system": "^0.9.0",
     "@eqworks/lumen-table": "2.0.0-alpha.10",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@react-hook/resize-observer": "^1.2.4",

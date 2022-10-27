@@ -1,10 +1,10 @@
-import React, { createElement, useEffect, useMemo, useState } from 'react'
+import React, { createElement, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import { Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 import CustomButton from '../components/custom-button'
-
 import LinkedSelect from './linked-select'
+import { hasDevAccess  } from '../util/access'
 
 
 const classes = makeStyles({
@@ -14,11 +14,6 @@ const classes = makeStyles({
   addButton: {
     marginTop: '0.5rem',
     flex: 1,
-  },
-  editButton: {
-    marginTop: '0.5rem',
-    marginLeft: '0.5rem',
-    width: '3rem',
   },
   addButtonInterior: {
     display: 'flex',
@@ -32,6 +27,9 @@ const classes = makeStyles({
     display: 'grid',
     gridTemplateColumns: 'auto 1fr auto',
   },
+  gridColumnEdit : {
+    gridTemplateColumns: '1fr 1fr 1fr 1fr auto',
+  },
   header: {
     display: 'flex',
     alignItems: 'center',
@@ -43,11 +41,8 @@ const classes = makeStyles({
     paddingTop: 0,
     paddingLeft: '0.2rem',
   },
-  twoColumns: {
+  gridTwoColumns: {
     gridColumn: 'span 2 / span 2',
-  },
-  threeColumns: {
-    gridColumn: 'span 3 / span 3',
   },
   headerIcon: {
     height: '0.714rem !important',
@@ -72,20 +67,18 @@ const PluralLinkedSelect = ({
   addMessage,
   customRenderPrimary,
   customRenderSecondary,
+  editMode,
 }) => {
-  const [editMode, setEditMode] = useState(false)
-  const quantity = useMemo(() => staticQuantity ? staticQuantity : Math.max(values?.length, 1), [staticQuantity, values])
-  useEffect(() => {
-    if (values?.length <= 1) {
-      setEditMode(false)
-    }
-  }, [values?.length])
+  const quantity = useMemo(() => staticQuantity ? staticQuantity : Math.max(values?.length, 1),
+    [staticQuantity, values])
+
   const renderValue = i => {
     const primary = values[i]?.[primaryKey]
     const secondary = values[i]?.[secondaryKey]
     const remainingData = data
       .map((d, i) => ({ d, i }))
       .filter((({ d }) => primary === d || !values.map(v => v[primaryKey]).includes(d)))
+
     return (
       <LinkedSelect
         key={i}
@@ -108,28 +101,37 @@ const PluralLinkedSelect = ({
         {...(customRenderSecondary && {
           customRenderSub: () => customRenderSecondary(i, primary, secondary),
         })}
+        {...{ editMode }}
       />
     )
   }
+
   return (
     <div className={classes.outerContainer}>
-      <div className={classes.grid}>
+      <div className={`${classes.grid} ${(hasDevAccess() && editMode) ? classes.gridColumnEdit : ''}`}>
         {Boolean(headerIcons.length) &&
           <>
-            <span className={classes.header}>
-              {createElement(headerIcons[1], { size: 'sm', className: classes.headerIcon })}
-              {titles[1]}
-            </span>
-            <span className={`${classes.header} ${classes.twoColumns}`}>
+            {!editMode &&
+              <span className={classes.header}>
+                {createElement(headerIcons[1], { size: 'sm', className: classes.headerIcon })}
+                {titles[1]}
+              </span>
+            }
+            <span className={`${classes.header} ${classes.gridTwoColumns}`}>
               {createElement(headerIcons[0], { size: 'sm', className: classes.headerIcon })}
               {titles[0]}
             </span>
+            {hasDevAccess && editMode &&
+              <span className={`${classes.header} ${classes.gridTwoColumns}`}>
+                {createElement(headerIcons[2], { size: 'sm', className: classes.headerIcon })}
+                {titles[2]}
+              </span>
+            }
           </>
         }
         {[...Array(quantity)].map((_, i) => renderValue(i))}
       </div >
-      {
-        !staticQuantity &&
+      {!staticQuantity &&
         <div className='flex'>
           {
             values.length < data.length &&
@@ -139,22 +141,12 @@ const PluralLinkedSelect = ({
               variant='borderless'
               size='md'
               onClick={() => callback(values.length, { [primaryKey]: '', [secondaryKey]: '' })}
+              disabled={editMode}
             >
               <div className={classes.addButtonInterior}>
                 {addMessage}
                 <Icons.Add size='sm' />
               </div>
-            </CustomButton>
-          }
-          {
-            values?.length > 1 &&
-            <CustomButton
-              classes={{ button: classes.editButton }}
-              variant={editMode ? 'borderless' : 'elevated'}
-              type={editMode ? 'error' : 'secondary'}
-              onClick={() => setEditMode(!editMode)}
-            >
-              {editMode ? 'done' : 'edit'}
             </CustomButton>
           }
         </div>
@@ -177,6 +169,7 @@ PluralLinkedSelect.propTypes = {
   valueIcons: PropTypes.arrayOf(PropTypes.elementType),
   disableSubs: PropTypes.bool,
   disableSubMessage: PropTypes.string,
+  editMode: PropTypes.bool,
   addMessage: PropTypes.string,
   customRenderPrimary: PropTypes.func,
   customRenderSecondary: PropTypes.func,
@@ -190,6 +183,7 @@ PluralLinkedSelect.defaultProps = {
   valueIcons: null,
   disableSubs: false,
   disableSubMessage: '',
+  editMode: false,
   addMessage: 'Add',
   customRenderPrimary: null,
   customRenderSecondary: null,
