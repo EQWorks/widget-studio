@@ -36,6 +36,10 @@ const classes = makeStyles({
       '& .item-container': {
         margin: '0.5rem 0',
         padding: '0 1.25rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
         borderWidth: '0 1px 0 0',
         borderColor: getTailwindConfigColor('neutral-100'),
 
@@ -160,7 +164,7 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }
   const { compareTrend, selectedPercentage } = uniqueOptions
 
   const _conditionalClasses = (index = null) => conditionalClasses({ showVertical, values, labelPosition, selectedPercentage, index })
-
+  
   const renderValue = (val, ob) => {
     if (val) {
       return `${((data[0][ob.title] / val) * 100).toFixed(2)}%`
@@ -268,7 +272,7 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }
 
 Stat.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  values: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string,
   formatData: PropTypes.objectOf(PropTypes.func),
   genericOptions: PropTypes.object.isRequired,
