@@ -20,6 +20,7 @@ import {
   MAP_LAYER_GEO_KEYS,
   COORD_KEYS,
   GEO_KEY_TYPE_NAMES,
+  MAP_VIEW_STATE,
 } from '../constants/map'
 import {
   DATA_CATEGORIES,
@@ -74,7 +75,7 @@ const stateDefaults = [
         y: '',
       },
       showSubPlotTitles: true,
-      showLabels: true,
+      showLabels: false,
       showCurrency: false,
       showVertical: false,
       mapHideSourceLayer: false,
@@ -699,6 +700,32 @@ export default {
       const lon = columns.find(({ name, category }) =>
         COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
       return Boolean(type === types.MAP && lat && lon && !dataIsXWIReport)
+    }
+  ),
+
+  mapInitViewState: computed(
+    [
+      (state) => state.columns,
+      (state) => state.rows,
+      (state) => state.isXWIReportMap,
+      (state) => state.type,
+    ],
+    (
+      columns,
+      rows,
+      isXWIReportMap,
+      type,
+    ) => {
+      const lat = columns.find(({ name }) => name === MAP_VIEW_STATE.lat)?.name
+      const lon = columns.find(({ name }) => name === MAP_VIEW_STATE.lon)?.name
+
+      if (type === types.MAP && lat && lon && !isXWIReportMap) {
+        return {
+          latitude: rows?.[0][lat],
+          longitude: rows?.[0][lon],
+        }
+      }
+      return {}
     }
   ),
 
