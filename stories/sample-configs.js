@@ -75,13 +75,8 @@ export default {
     'title': 'stat example widget',
     'showTitleBar': true,
     'type': 'stat',
-    'filters': [
-      {
-        key: 'resolution',
-        filter: [20000],
-      },
-    ],
-    'groupFilter': [],
+    'filters': [],
+    'groupFilter': ['5000'],
     'valueKeys': [
       {
         'key': 'submitted_deals',
