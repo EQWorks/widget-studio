@@ -80,6 +80,7 @@ const stateDefaults = [
       mapHideSourceLayer: false,
       mapHideTargetLayer: false,
       mapHideArcLayer: false,
+      showLocationPins: false,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],
@@ -197,7 +198,6 @@ export default {
       (state) => state.presetColors,
       (state) => state.dateAggregation,
       (state) => state.mapTooltipLabelTitles,
-      (state) => state.wl,
     ],
     (
       title,
@@ -230,7 +230,6 @@ export default {
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
-      wl,
     ) => ({
       title,
       subtitle,
@@ -264,7 +263,6 @@ export default {
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
-      wl,
     })),
 
   config: computed(
@@ -683,6 +681,25 @@ export default {
       categoryKeyValues,
     ) => (Boolean(type === types.MAP && renderableValueKeys?.length && categoryKeyValues?.length) &&
       (categoryKeyValues.find(e => e.key === renderableValueKeys[0].key) || categoryKeyValues[0])) || {}
+  ),
+
+  enableLocationPins: computed(
+    [
+      (state) => state.columns,
+      (state) => state.dataIsXWIReport,
+      (state) => state.type,
+    ],
+    (
+      columns,
+      dataIsXWIReport,
+      type,
+    ) => {
+      const lat = columns.find(({ name, category }) =>
+        COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
+      const lon = columns.find(({ name, category }) =>
+        COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
+      return Boolean(type === types.MAP && lat && lon && !dataIsXWIReport)
+    }
   ),
 
   /** ACTIONS ------------------------------------------------------------------ */
