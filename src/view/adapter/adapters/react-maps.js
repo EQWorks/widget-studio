@@ -125,7 +125,7 @@ Map.defaultProps = {
 
 export default {
   component: Map,
-  adapt: (data, { wl, genericOptions, uniqueOptions, ...config }) => {
+  adapt: (data, { wl, mapInitViewState, genericOptions, uniqueOptions, ...config }) => {
     const {
       mapGroupKey,
       mapGroupKeyTitle,
@@ -387,10 +387,8 @@ export default {
             MIN_ZOOM.defaultValue,
           maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
           // restrict initial zoom-in to data for postal code polygons; the browser might not be able to handle it
-          // TO DELETE or adjust - allow temp for Cox for testing
-          initialViewportDataAdjustment: wl === 2456 ?
-            true :
-            !GEO_KEY_TYPES.postalcode.includes(mapGroupKey),
+          initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ||
+            (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && data.length < 1000),
         },
       ]
 
@@ -510,6 +508,7 @@ export default {
           //   },
           // },
           schemeColor: complementaryColor({ baseColor }),
+          initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey),
         },
       ]
     }
@@ -524,9 +523,12 @@ export default {
           process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN, // <ignore scan-env>
         showMapLegend: showLegend,
         showMapTooltip: showTooltip,
-        initViewState: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
-          MAP_VIEW_STATE.postalCode :
-          MAP_VIEW_STATE.value,
+        initViewState:  {
+          ...GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+            MAP_VIEW_STATE.postalCode :
+            MAP_VIEW_STATE.value,
+          ...mapInitViewState,
+        },
         pitch: mapValueKeys.map(({ mapVis }) => mapVis).includes(MAP_VALUE_VIS.elevation) ||
           (isXWIReportMap &&
           (!mapHideArcLayer ||
