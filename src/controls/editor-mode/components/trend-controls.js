@@ -33,7 +33,7 @@ const TrendControls = () => {
   }
 
   const handleOnSelect = (val) => {
-    let getTrendObject = {}
+    const values = []
     let getAggTrendObject = {}
 
     rows.forEach(row => {
@@ -47,30 +47,23 @@ const TrendControls = () => {
               }
 
               getAggTrendObject[k].push(row[k])
-
             } else {
-              getTrendObject = {
-                ...getTrendObject,
-                [k]: row[k],
-              }
+              values.push(row[k])
             }
           }
         })
       })
     })
 
-    renderableValueKeys.forEach((v,i) => {
+    renderableValueKeys.forEach((v, i) => {
       if (v.agg && val[i]) {
         val.forEach((k, i) => {
-          getTrendObject = {
-            ...getTrendObject,
-            [k]: aggFunctions[renderableValueKeys[i].agg](getAggTrendObject[k]),
-          }
+          values.push(aggFunctions[renderableValueKeys[i].agg](getAggTrendObject[k]))
         })
       }
     })
 
-    return { ...getTrendObject, selectedTrend: val }
+    return { titles: val, values }
   }
 
   return (
@@ -85,25 +78,24 @@ const TrendControls = () => {
               fullWidth
               multiSelect
               data={availableTrend}
-              value={uniqueOptions.compareTrend && uniqueOptions.compareTrend.value.selectedTrend}
+              value={uniqueOptions.selectedTrend && uniqueOptions.selectedTrend.titles}
               onSelect={val => {
                 userUpdate({
                   uniqueOptions: {
-                    compareTrend: {
-                      value: handleOnSelect(val),
-                    },
+                    selectedTrend: handleOnSelect(val),
                   },
                 })
               }}
               limit={renderableValueKeys.length}
               onClear={() => userUpdate({
                 uniqueOptions: {
-                  compareTrend: {
-                    value: [],
+                  selectedTrend: {
+                    titles: [],
+                    values: [],
                   },
                 },
               })}
-              placeholder={'Select a column to compare'}
+              placeholder={'Select a column'}
             />
           ))}
         </div>

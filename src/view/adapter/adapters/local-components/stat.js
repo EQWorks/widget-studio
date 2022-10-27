@@ -161,13 +161,13 @@ const conditionalClasses = ({ showVertical, values, labelPosition, selectedPerce
 
 const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }) => {
   const { showLabels, showCurrency, showWidgetTitle, showVertical, labelPosition } = genericOptions
-  const { compareTrend, selectedPercentage } = uniqueOptions
+  const { selectedTrend, selectedPercentage } = uniqueOptions
 
   const _conditionalClasses = (index = null) => conditionalClasses({ showVertical, values, labelPosition, selectedPercentage, index })
-  
-  const renderValue = (val, ob) => {
+
+  const renderValue = (curr, val) => {
     if (val) {
-      return `${((data[0][ob.title] / val) * 100).toFixed(2)}%`
+      return `${((curr / val) * 100).toFixed(2)}%`
     }
   }
 
@@ -197,16 +197,6 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }
     }
 
     return (<label className='percentage-label'>0% </label>)
-  }
-
-  const getMatchedTrend = (index) => {
-    let matchedTrend = null
-
-    if (compareTrend.value[compareTrend.value.selectedTrend[index]]) {
-      matchedTrend = compareTrend.value[compareTrend.value.selectedTrend[index]]
-    }
-
-    return matchedTrend
   }
 
   const getTitle = (title, label) => {
@@ -241,10 +231,10 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }
                           </div>
                       }
                     </div>
-                    {(selectedPercentage && selectedPercentage.values[i]) &&
+                    {(selectedPercentage && selectedPercentage.values[i]) && data[0][v.title] &&
                         <div className={_conditionalClasses(i).item}>
                           <div className={classes.value}>
-                            {showCurrency && '$'}{renderValue(Number(selectedPercentage.values[i]), v)}
+                            {showCurrency && '$'}{renderValue(data[0][v.title], Number(selectedPercentage.values[i]))}
                           </div>
                           {showLabels &&
                             <div className={classes.label}>
@@ -255,10 +245,10 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }
                     }
                   </div>
                 }
-                { compareTrend && compareTrend.value && getMatchedTrend(i) && data[0][v.title] &&
+                {(selectedTrend && selectedTrend.values[i]) && data[0][v.title] &&
                   <div className={`trend-label-container ${classes.trendLabel}`}>
-                    {renderTrend(Math.round(calculateTrend(data[0][v.title], getMatchedTrend(i))))}
-                    &nbsp;vs. {getTitle(compareTrend.value.selectedTrend[i], v.title)}
+                    {renderTrend(Math.round(calculateTrend(data[0][v.title], Number(selectedTrend.values[i]))))}
+                    &nbsp;vs. {getTitle(selectedTrend.titles[i], v.title)}
                   </div>
                 }
               </div>

@@ -40,7 +40,7 @@ const PercentageControls = () => {
       const objectKeys = Object.keys(row)
       objectKeys.forEach(k => {
         val.forEach((v, i) => {
-          if (row[domain.value].toString() === getCurrentGroupFilter()[0] && v === k) {
+          if (row[domain.value].toString() === getCurrentGroupFilter()[0] && !k.localeCompare(v)) {
             if (renderableValueKeys[i].agg) {
               if (!(k in getAggTrendObject)) {
                 getAggTrendObject[k] = []
@@ -64,14 +64,6 @@ const PercentageControls = () => {
     })
 
     return { titles: val, values }
-  }
-
-  const isGroupFilter = () => {
-    let isMultipleDomain = !groupFilter.length
-    if (groups.length === 1) {
-      isMultipleDomain = false
-    }
-    return isMultipleDomain
   }
 
   return (

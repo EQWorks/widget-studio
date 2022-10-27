@@ -45,7 +45,7 @@ const Filters = () => {
       }
       return groupFilter ?? []
     }
-    
+
     return (
       domainIsDate
         ? <DateDomainFilter/>
