@@ -8,6 +8,7 @@ import { makeStyles } from '@eqworks/lumen-labs'
 import { useStoreState, useStoreActions } from '../../../store'
 import modes from '../../../constants/modes'
 import { getLayerValueKeys } from '../../../util/map-layer-value-functions'
+import { complementaryColor } from '../../../util/color'
 import { pixelOffset } from '../../../util/map-text-layer-offset'
 import {
   COORD_KEYS,
@@ -29,6 +30,7 @@ import {
   LABEL_OFFSET,
   KEY_ALIASES,
   XWI_KEY_ALIASES,
+  ONE_ICON_SIZE,
 } from '../../../constants/map'
 
 import { COX_XWI_KEY_ALIASES } from '../../../constants/client-specific'
@@ -123,7 +125,7 @@ Map.defaultProps = {
 
 export default {
   component: Map,
-  adapt: (data, { genericOptions, uniqueOptions, ...config }) => {
+  adapt: (data, { wl, genericOptions, uniqueOptions, ...config }) => {
     const {
       mapGroupKey,
       mapGroupKeyTitle,
@@ -141,6 +143,7 @@ export default {
       mapHideSourceLayer,
       mapHideTargetLayer,
       mapHideArcLayer,
+      showLocationPins,
     } = genericOptions
 
     const mapLayer = Object.keys(MAP_LAYERS)
@@ -160,14 +163,29 @@ export default {
     const isXWIReportMap = Boolean(data.arcData)
 
     let finalData = data
+    let iconData = []
     let geometry = {}
+    let iconLayerGeometry = {}
     let mapGroupKeyType = ''
 
-    if (mapLayer === MAP_LAYERS.scatterplot) {
+    if ((mapLayer === MAP_LAYERS.scatterplot || showLocationPins) && !isXWIReportMap) {
       const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
       const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
-      geometry = { longitude, latitude }
+
+      if (mapLayer === MAP_LAYERS.scatterplot) {
+        geometry = { longitude, latitude }
+      }
+
+      if (showLocationPins) {
+        iconLayerGeometry = { longitude, latitude }
+        iconData = data.reduce((acc, el ) => acc.find((elem) =>
+          elem[longitude] === el[longitude] && elem[latitude] === el[latitude]) ?
+          acc :
+          [...acc, el]
+        ,[])
+      }
     }
+
     if (mapLayer === MAP_LAYERS.geojson) {
       geometry = {
         geoKey: mapGroupKeyTitle,
@@ -198,7 +216,7 @@ export default {
     const getFinalLayerTitle = i => {
       let layerTitle
       if (isXWIReportMap) {
-        if (config.wl === 2456) {
+        if (wl === 2456) {
           layerTitle = i === 0 ? data?.arcData?.[0]?.['Poi name'] || 'Dealer' : 'Competitor'
         } else {
           layerTitle = i === 0 ? 'Source Layer' : 'Target Layer'
@@ -208,7 +226,7 @@ export default {
     }
 
     // TO DO: move this logic out to Cox app
-    const finalMapTooltipLabelTitles = config.wl === 2456 ?
+    const finalMapTooltipLabelTitles = wl === 2456 ?
       {
         sourceTitle: 'Poi name',
         targetTitle: 'Target poi name',
@@ -253,7 +271,7 @@ export default {
             layerTitle: 'Arc Layer',
           },
           // TO DO: move this logic out to Cox app
-          keyAliases: config.wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
+          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           schemeColor: baseColor,
@@ -306,7 +324,7 @@ export default {
             layerTitle: getFinalLayerTitle(i),
           },
           // TO DO: move this logic out to Cox app
-          keyAliases: config.wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
+          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           // we don't apply opacity to icon layer for POI locations
@@ -369,7 +387,10 @@ export default {
             MIN_ZOOM.defaultValue,
           maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
           // restrict initial zoom-in to data for postal code polygons; the browser might not be able to handle it
-          initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey),
+          // TO DELETE or adjust - allow temp for Cox for testing
+          initialViewportDataAdjustment: wl === 2456 ?
+            true :
+            !GEO_KEY_TYPES.postalcode.includes(mapGroupKey),
         },
       ]
 
@@ -406,7 +427,7 @@ export default {
             },
           },
           // TO DO: move this logic out to Cox app
-          keyAliases: config.wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
+          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {},
@@ -445,16 +466,56 @@ export default {
       ]
     }
 
+    let dataConfig = []
+
+    if (isXWIReportMap) {
+      dataConfig = [
+        { id: `${id}-${type}-arc`, data: finalData.arcData },
+        { id: `${id}-${type}-source`, data: finalData.sourceData },
+        { id: `${id}-${type}-target`, data: finalData.targetData },
+      ]
+    } else {
+      dataConfig = [
+        { id: `${id}-${type}`, data: finalData },
+      ]
+      if (iconData.length) {
+        dataConfig = [...dataConfig, { id: `${id}-${type}-icon`, data: iconData }]
+      }
+    }
+
+    if (showLocationPins && iconData.length && !isXWIReportMap) {
+      layerConfig = [
+        ...layerConfig,
+        {
+          layer: MAP_LAYERS.icon,
+          dataId: `${id}-${type}-icon`,
+          geometry: iconLayerGeometry,
+          visualizations: Object.fromEntries(
+            Object.keys(MAP_VIS_OTHERS).map(vis =>
+              [
+                vis,
+                {
+                  value: iconData.length === 1 ?
+                    ONE_ICON_SIZE :
+                    uniqueOptions[vis]?.value,
+                },
+              ],
+            )
+          ),
+          // interactions: {
+          //   tooltip: {
+          //     tooltipKeys: {
+          //       tooltipTitle1: ,
+          //     },
+          //   },
+          // },
+          schemeColor: complementaryColor({ baseColor }),
+        },
+      ]
+    }
+
     return ({
-      dataConfig: isXWIReportMap ?
-        [
-          { id: `${id}-${type}-arc`, data: finalData.arcData },
-          { id: `${id}-${type}-source`, data: finalData.sourceData },
-          { id: `${id}-${type}-target`, data: finalData.targetData },
-        ] :
-        [
-          { id: `${id}-${type}`, data: finalData },
-        ],
+      dataConfig,
       layerConfig,
       mapConfig: {
         legendPosition: MAP_LEGEND_POSITION[JSON.stringify(legendPosition)],
