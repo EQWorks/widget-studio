@@ -64,6 +64,8 @@ const EditorRightSidebar = () => {
   const isReady = useStoreState((state) => state.isReady)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
+  const enableLocationPins = useStoreState((state) => state.enableLocationPins)
+  const showLocationPins = useStoreState((state) => state.genericOptions.showLocationPins)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
@@ -83,11 +85,18 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
               )
             }
-            {![types.STAT, types.TABLE, types.MAP].includes(type) &&
+            {![types.STAT, types.TABLE].includes(type) &&
               renderToggle(
                 'Legend',
                 showLegend,
                 v => userUpdate({ genericOptions: { showLegend: v } }),
+              )
+            }
+            {type === types.MAP &&
+              renderToggle(
+                'Tooltip',
+                showTooltip,
+                v => userUpdate({ genericOptions: { showTooltip: v } }),
               )
             }
             {type === types.STAT &&
@@ -115,26 +124,19 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
-            {type === types.MAP &&
-              renderToggle(
-                'Legend',
-                showLegend,
-                v => userUpdate({ genericOptions: { showLegend: v } }),
-              )
-            }
-            {type === types.MAP &&
-              renderToggle(
-                'Tooltip',
-                showTooltip,
-                v => userUpdate({ genericOptions: { showTooltip: v } }),
-              )
-            }
             {(type === types.MAP || type === types.STAT) &&
               renderToggle(
                 'Labels',
                 showLabels,
                 v => userUpdate({ genericOptions: { showLabels: v } }),
                 JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)
+              )
+            }
+            {enableLocationPins && type === types.MAP &&
+              renderToggle(
+                'Location Pins',
+                showLocationPins,
+                v => userUpdate({ genericOptions: { showLocationPins: v } }),
               )
             }
             {type === types.STAT &&
