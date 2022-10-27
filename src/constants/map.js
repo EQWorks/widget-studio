@@ -100,6 +100,7 @@ export const COORD_KEYS = {
     'locus_poi_lat',
     'source_lat',
     'source_latitude',
+    'mapview_lat',
   ],
   longitude: [
     'lon',
@@ -111,6 +112,7 @@ export const COORD_KEYS = {
     'source_lon',
     'source_lng',
     'source_longitude',
+    'mapview_lon',
   ],
   // targetPOI coords need to be separated because they are the markers for xwi-reports
   targetLon: [
@@ -170,9 +172,9 @@ export const MAP_VIEW_STATE = {
     zoom: 2.5,
   },
   postalCode: {
-    latitude: 43.65,
-    longitude: -79.4,
-    zoom: 10,
+    latitude: 43.84,
+    longitude: -79.03,
+    zoom: 12,
   },
 }
 
@@ -211,3 +213,5 @@ export const XWI_KEY_ALIASES = {
   'Poi name': 'Source POI name',
   'Target poi name': 'Target POI name',
 }
+
+export const ONE_ICON_SIZE = 10
