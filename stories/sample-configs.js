@@ -130,12 +130,7 @@ export default {
     'title': 'stat trend example',
     'showTitleBar': true,
     'type': 'stat',
-    'filters': [
-      {
-        key: 'dealerId',
-        filter: [1],
-      },
-    ],
+    'filters': [],
     'groupFilter': [],
     'valueKeys': [
       {
