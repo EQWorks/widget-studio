@@ -6,10 +6,10 @@ import { LocusMap } from '@eqworks/react-maps'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../../store'
-import modes from '../../../constants/modes'
 import { getLayerValueKeys } from '../../../util/map-layer-value-functions'
 import { complementaryColor } from '../../../util/color'
 import { pixelOffset } from '../../../util/map-text-layer-offset'
+import modes from '../../../constants/modes'
 import {
   COORD_KEYS,
   MAP_LAYERS,
@@ -144,6 +144,7 @@ export default {
       mapHideTargetLayer,
       mapHideArcLayer,
       showLocationPins,
+      mapPinTooltipKey,
     } = genericOptions
 
     const mapLayer = Object.keys(MAP_LAYERS)
@@ -500,13 +501,15 @@ export default {
               ],
             )
           ),
-          // interactions: {
-          //   tooltip: {
-          //     tooltipKeys: {
-          //       tooltipTitle1: ,
-          //     },
-          //   },
-          // },
+          interactions: mapPinTooltipKey?.title ?
+            {
+              tooltip: {
+                tooltipKeys: {
+                  tooltipTitle1: mapPinTooltipKey.title,
+                },
+              },
+            } :
+            {},
           schemeColor: complementaryColor({ baseColor }),
           initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey),
         },
