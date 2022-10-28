@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { TextField, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
@@ -66,12 +66,23 @@ const EditorRightSidebar = () => {
   const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
   const enableLocationPins = useStoreState((state) => state.enableLocationPins)
   const showLocationPins = useStoreState((state) => state.genericOptions.showLocationPins)
+  const mapPinTooltipKey = useStoreState((state) => state.genericOptions.pinTooltipKey)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
       update({ genericOptions: { subPlots: false } })
     }
   }, [renderableValueKeys?.length, update])
+
+  const eligibleTooltipKeys = useMemo(() => (
+    Object.fromEntries(
+      Object.entries(columnsAnalysis)
+        .filter(([, { isNumeric }]) => !isNumeric)
+        .map(([c, { Icon }]) => [c, { Icon }])
+    )
+  ), [columnsAnalysis])
 
   const renderGenericOptions = (
     <>
@@ -132,7 +143,7 @@ const EditorRightSidebar = () => {
                 JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)
               )
             }
-            {enableLocationPins && type === types.MAP &&
+            {type === types.MAP && enableLocationPins &&
               renderToggle(
                 'Location Pins',
                 showLocationPins,
@@ -165,6 +176,34 @@ const EditorRightSidebar = () => {
           </>
         )
       }
+      {type === types.MAP && enableLocationPins && renderRow(null,
+        renderItem('Pin Tooltip Key',
+          <CustomSelect
+            fullWidth
+            data={Object.keys(eligibleTooltipKeys)}
+            icons={Object.values(eligibleTooltipKeys).map(({ Icon }) => Icon)}
+            value={mapPinTooltipKey}
+            onSelect={val => userUpdate({
+              genericOptions: {
+                mapPinTooltipKey: {
+                  key: val,
+                  title: formattedColumnNames[val],
+                },
+              },
+            })}
+            onClear={() => userUpdate({
+              genericOptions: {
+                mapPinTooltipKey: {
+                  key: '',
+                  title: '',
+                },
+              },
+            })}
+            placeholder='Select column'
+            disabled={!showLocationPins}
+          />,
+        ),
+      )}
       {[types.BAR, types.SCATTER, types.LINE, types.PYRAMID].includes(type) &&
         <>
           {renderRow(null,
