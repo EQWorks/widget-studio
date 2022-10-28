@@ -141,10 +141,12 @@ export default {
       {
         'key': 'submitted_deals',
         'title': 'Submitted deals',
+        'agg': 'sum',
       },
       {
         'key': 'funded_deals',
         'title': 'funded deals',
+        'agg': 'sum',
       },
     ],
     'mapValueKeys': [],

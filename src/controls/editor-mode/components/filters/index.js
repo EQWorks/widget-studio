@@ -46,20 +46,21 @@ const Filters = () => {
       return groupFilter ?? []
     }
 
+    if (domainIsDate) {
+      return <DateDomainFilter/>
+    }
+
     return (
-      domainIsDate
-        ? <DateDomainFilter/>
-        : type &&
-        <CustomSelect
-          fullWidth
-          multiSelect={type === types.STAT ? false : true}
-          data={groups}
-          value={getGroupFilterValue()}
-          onSelect={val => userUpdate({ groupFilter: type === types.STAT ? [val] : val })}
-          placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
-          disabled={!group || !domain.value}
-          onClear={() => userUpdate({ groupFilter: [] })}
-        />
+      type && <CustomSelect
+        fullWidth
+        multiSelect={type === types.STAT ? false : true}
+        data={groups}
+        value={getGroupFilterValue()}
+        onSelect={val => userUpdate({ groupFilter: type === types.STAT ? [val] : val })}
+        placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
+        disabled={!group || !domain.value}
+        onClear={() => userUpdate({ groupFilter: [] })}
+      />
     )
   }
 
