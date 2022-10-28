@@ -82,6 +82,7 @@ const stateDefaults = [
       mapHideTargetLayer: false,
       mapHideArcLayer: false,
       showLocationPins: false,
+      mapPinTooltipKey: null,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],
