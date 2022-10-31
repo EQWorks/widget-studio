@@ -150,8 +150,7 @@ export default {
     const mapLayer = Object.keys(MAP_LAYERS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
     //----TO DO - extend geometry logic for other layers if necessary
-    const dataKeys = Object.keys(data.arcData ? data.arcData[0] : data[0] || {})
-
+    const dataKeys = Object.keys(data.arcData?.[0] || data[0]?.properties || data[0] || {})
     const findKey = keyArray => dataKeys?.find(key => keyArray.includes(key))
 
     const sourcePOIId = findKey(MAP_LAYER_GEO_KEYS.scatterplot)
@@ -178,12 +177,29 @@ export default {
       }
 
       if (showLocationPins) {
-        iconLayerGeometry = { longitude, latitude }
-        iconData = data.reduce((acc, el ) => acc.find((elem) =>
-          elem[longitude] === el[longitude] && elem[latitude] === el[latitude]) ?
-          acc :
-          [...acc, el]
-        ,[])
+        if (!GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)) {
+          iconLayerGeometry = { longitude, latitude }
+          iconData = data.reduce((acc, el ) => acc.find((elem) =>
+            elem[longitude] === el[longitude] && elem[latitude] === el[latitude]) ?
+            acc :
+            [...acc, el]
+          ,[])
+        } else {
+          iconLayerGeometry = { longitude, latitude }
+          iconData = data.reduce((acc, el ) => acc.find((elem) => {
+            return elem[longitude] === el.properties[longitude] &&
+              elem[latitude] === el.properties[latitude]}) ?
+            acc :
+            [
+              ...acc,
+              { ...el.properties,
+                lon: el.properties[longitude],
+                lat: el.properties[latitude],
+              },
+            ]
+          ,
+          [])
+        }
       }
     }
 
@@ -511,7 +527,8 @@ export default {
             } :
             {},
           schemeColor: complementaryColor({ baseColor }),
-          initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey),
+          initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ||
+            (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && data.length < 1000),
         },
       ]
     }
