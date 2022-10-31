@@ -159,6 +159,7 @@ const stateDefaults = [
   { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
   { key: 'formatDataKey', defaultValue: (label) => truncateString(label, 30), resettable: false },
   { key: 'mapTooltipLabelTitles', defaultValue: null, resettable: false },
+  { key: 'aliasesReseted', defaultValue: false, resettable: true },
 ]
 
 export default {
