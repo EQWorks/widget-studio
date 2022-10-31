@@ -1021,6 +1021,9 @@ export default {
   },
   'dev-map-2': {
     'title': 'My example map widget - scatterplot layer',
+    'subtitle': '',
+    'subtitleLinkLabel': '',
+    'subtitleHyperlink': '',
     'showTitleBar': true,
     'type': 'map',
     'filters': [
@@ -1038,17 +1041,21 @@ export default {
       {
         'mapVis': 'radius',
         'key': 'visits',
-        'title': 'Visits (sum)',
+        'title': 'Visits',
         'agg': 'sum',
       },
       {
         'title:': 'Unique visitors (sum)',
         'mapVis': 'fill',
         'key': 'unique_visitors',
+        'title': 'Unique visitors',
         'agg': 'sum',
       },
     ],
     'formatDataFunctions': {},
+    'columnNameAliases': {
+      'address_city': 'City',
+    },
     'group': true,
     'groupKey': null,
     'mapGroupKey': 'poi_id',
@@ -1081,6 +1088,39 @@ export default {
           ],
         ],
       },
+      'targetRadius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'targetFill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'arcWidth': {
+        'value': 1,
+        'valueOptions': [
+          1,
+          20,
+        ],
+      },
       'elevation': {
         'value': 1000,
       },
@@ -1089,6 +1129,9 @@ export default {
       },
       'opacity': {
         'value': 20,
+      },
+      'size': {
+        'value': 4,
       },
     },
     'genericOptions': {
@@ -1105,6 +1148,17 @@ export default {
         'y': '',
       },
       'showSubPlotTitles': true,
+      'showLabels': false,
+      'showCurrency': false,
+      'showVertical': false,
+      'mapHideSourceLayer': false,
+      'mapHideTargetLayer': false,
+      'mapHideArcLayer': false,
+      'showLocationPins': true,
+      'mapPinTooltipKey': {
+        'key': 'address_city',
+        'title': 'City',
+      },
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -1115,22 +1169,30 @@ export default {
         1,
         0,
       ],
+      'labelPosition': 'Bottom',
       'legendSize': 'Small',
       'baseColor': '#366fe4',
+      'xAxisLabelLength': 5,
     },
     'dataSource': {
       'type': 'Execution',
       'id': '913',
     },
     'percentageMode': false,
+    'addUserControls': false,
+    'userControlHeadline': 'Benchmark By',
+    'userControlKeyValues': [],
+    'addTopCategories': false,
+    'categoryFilter': null,
     'presetColors': [
       '#3232F5',
       '#07A0C3',
       '#F0C808',
       '#91F5AD',
       '#dd1c1a',
-      '#463F3A',
+      '#366fe4',
     ],
+    'mapTooltipLabelTitles': null,
   },
   'dev-map-3': {
     'title': 'My example map widget - xwi report',
