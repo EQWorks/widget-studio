@@ -16,7 +16,6 @@ const [PRIMARY_KEY, SECONDARY_KEY] = ['key', 'agg']
 const MapValueControls = () => {
   // common actions
   const userUpdate = useStoreActions(actions => actions.userUpdate)
-  const resetValue = useStoreActions(actions => actions.userUpdate)
 
   // common state
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
@@ -64,7 +63,18 @@ const MapValueControls = () => {
 
   return (
     <WidgetControlCard
-      clear={() => resetValue({ mapValueKeys, columnNameAliases })}
+      clear={() => {
+        Object.keys(columnNameAliases).forEach(key => {
+          if (JSON.stringify(mapValueKeys).includes(key)) {
+            delete columnNameAliases[key]
+          }
+        })
+        userUpdate({
+          aliasesReseted: true,
+          columnNameAliases,
+          mapValueKeys: [],
+        })
+      }}
       showIfEmpty
       title='Value Configuration'
       description={widgetControlCardDescription}
