@@ -13,10 +13,15 @@ const textfieldClasses = Object.freeze({
 const ColumnAliasControls = ({ value, disabled }) => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const columnNameAliases = useStoreState((state) => state.columnNameAliases || {})
+  const aliasesReseted =  useStoreState((state) => state.aliasesReseted)
   const [alias, setAlias] = useState(columnNameAliases[value])
-  const [debouncedAlias] = useDebounce(alias, 500)
+  const [debouncedAlias] = useDebounce(value? alias : '', 500)
 
-  useEffect(() => setAlias(columnNameAliases[value]), [columnNameAliases, value])
+  useEffect(() => {
+    if (aliasesReseted && !columnNameAliases[value]) {
+      setAlias('')
+    }
+  }, [aliasesReseted, columnNameAliases, value])
 
   const existingAliases = useMemo(() =>
     Object.entries(columnNameAliases).filter(([key, val]) => key !== value && val)
@@ -24,11 +29,11 @@ const ColumnAliasControls = ({ value, disabled }) => {
   , [value, columnNameAliases])
 
   useEffect(() => {
-    if (columnNameAliases[value] !== debouncedAlias &&
+    if (!aliasesReseted && value && columnNameAliases[value] !== debouncedAlias &&
       !existingAliases.includes(debouncedAlias)) {
       userUpdate({ columnNameAliases: { [value]: debouncedAlias } })
     }
-  }, [userUpdate, value, debouncedAlias, columnNameAliases, existingAliases])
+  }, [userUpdate, value, debouncedAlias, columnNameAliases, existingAliases, aliasesReseted])
 
   const aliasError = useMemo(() => Boolean(value && alias &&
     existingAliases.includes(alias.toLowerCase())),
@@ -40,7 +45,10 @@ const ColumnAliasControls = ({ value, disabled }) => {
       size={'md'}
       value={alias}
       inputProps={{ placeholder: 'Column title alias' }}
-      onChange={setAlias}
+      onChange={(val) => {
+        userUpdate({ aliasesReseted: false })
+        setAlias(val)
+      }}
       {...{ disabled }}
       error={aliasError}
       helperText={aliasError && 'Alias is already in use!'}

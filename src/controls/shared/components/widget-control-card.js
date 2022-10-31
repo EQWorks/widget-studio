@@ -108,7 +108,11 @@ const WidgetControlCard = ({
               </ControlCardButton>
             </Tooltip>
             : <ControlCardButton
-              onClick={() => userUpdate({ widgetControlCardEdit: { [type]: !widgetControlCardEdit[type] } })}
+              onClick={() => userUpdate({
+                widgetControlCardEdit: {
+                  [type]: !widgetControlCardEdit[type],
+                },
+              })}
               disabled={disableEditButton}
             >
               {widgetControlCardEdit[type] ? 'Done' : 'Edit'}
