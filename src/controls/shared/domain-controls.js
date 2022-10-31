@@ -24,6 +24,7 @@ const classes = makeStyles({
 const DomainControls = () => {
   const update = useStoreActions(actions => actions.update)
   const userUpdate = useStoreActions(actions => actions.userUpdate)
+
   const type = useStoreState((state) => state.type)
   const group = useStoreState((state) => state.group)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
@@ -67,6 +68,15 @@ const DomainControls = () => {
         enableEdit={hasDevAccess()}
         disableEditButton={!(domain.value || widgetControlCardEdit[cardTypes.DOMAIN])}
         type={cardTypes.DOMAIN}
+        clear={() => userUpdate({
+          aliasesReseted: true,
+          columnNameAliases: {},
+          groupKey: null,
+          indexKey: null,
+          mapGroupKey: null,
+          mapValueKeys: [],
+        })
+        }
       >
         {renderRow(null,
           <>
