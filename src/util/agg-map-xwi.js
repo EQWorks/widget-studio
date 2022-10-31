@@ -84,7 +84,7 @@ export const xwiAggData = ({
       //   finalKey = formattedColumnNames[k] + ' (sum)'
       // }
       if (res[group][finalKey]) {
-        if (columnsAnalysis[k]?.isNumeric) {
+        if (columnsAnalysis[k]?.isNumeric && !uniqueKey) {
           res[group][finalKey] += v
         } else if (!uniqueKey) {
           res[group][finalKey].push(v)
