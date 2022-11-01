@@ -7,7 +7,7 @@ import XWIReportValueControls from './xwi-report-value-controls'
 import WidgetControlCard from '../components/widget-control-card'
 import cardTypes from '../../../constants/card-types'
 import modes from '../../../constants/modes'
-import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
+import { MAP_LAYER_VALUE_VIS, COORD_KEYS } from '../../../constants/map'
 import { hasDevAccess } from '../../../util/access'
 
 
@@ -61,6 +61,9 @@ const MapValueControls = () => {
     }
   }, [mapValueKeys, userUpdate])
 
+  const validValueKeys = useMemo(() =>
+    numericColumns.filter(key => !Object.values(COORD_KEYS).flat().includes(key)), [numericColumns])
+
   return (
     <WidgetControlCard
       clear={() => {
@@ -87,7 +90,7 @@ const MapValueControls = () => {
       {dataIsXWIReport ?
         (
           <XWIReportValueControls
-            data={numericColumns}
+            data={validValueKeys}
             callback={callback}
           />
         ) :
@@ -95,7 +98,7 @@ const MapValueControls = () => {
           <MapValueSelect
             categories={MAP_LAYER_VALUE_VIS[mapLayer]}
             titles={['Column', 'Operation', 'Alias']}
-            data={numericColumns}
+            data={validValueKeys}
             subData={mapGroupKey ? Object.keys(aggFunctions) : []}
             disableSubs={!dataHasVariance}
             disableSubMessage="doesn't require aggregation."
