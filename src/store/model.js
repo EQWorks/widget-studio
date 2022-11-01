@@ -161,6 +161,7 @@ const stateDefaults = [
   { key: 'formatDataKey', defaultValue: (label) => truncateString(label, 30), resettable: false },
   { key: 'mapTooltipLabelTitles', defaultValue: null, resettable: false },
   { key: 'aliasesReseted', defaultValue: false, resettable: true },
+  { key: 'useMVTOption', defaultValue: true, resettable: false },
 ]
 
 export default {
@@ -376,6 +377,19 @@ export default {
     ],
     (mapGroupKey) =>
       Object.keys(MAP_LAYERS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+  ),
+
+  showMVTOption: computed(
+    [
+      (state) => state.mapGroupKey,
+      (state) => state.columns,
+    ],
+    (
+      mapGroupKey,
+      columns,
+    ) => (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
+      ['type', 'geometry'].every(key => columns.map(e => e.name).includes(key))
+    )
   ),
 
   // determines to use postal code geo key to aggregate by FSA
