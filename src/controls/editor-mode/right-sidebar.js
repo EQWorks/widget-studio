@@ -74,13 +74,13 @@ const EditorRightSidebar = () => {
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
   const columnNameAliases = useStoreState((state) => state.columnNameAliases)
 
-
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
       update({ genericOptions: { subPlots: false } })
     }
   }, [renderableValueKeys?.length, update])
 
+  // update mapPinTooltipKey.title if alias changes
   useEffect(() => {
     if (mapPinTooltipKey?.title !== formattedColumnNames[mapPinTooltipKey?.key]) {
       update({
@@ -212,10 +212,7 @@ const EditorRightSidebar = () => {
                 })}
                 onClear={() => userUpdate({
                   genericOptions: {
-                    mapPinTooltipKey: {
-                      key: '',
-                      title: '',
-                    },
+                    mapPinTooltipKey: null,
                   },
                 })}
                 placeholder='Select column'
@@ -227,9 +224,7 @@ const EditorRightSidebar = () => {
             renderItem('Pin Tooltip Key Alias',
               <ColumnAliasControls
                 value={mapPinTooltipKey.key || ''}
-                disabled={!hasDevAccess() || !mapPinTooltipKey.key ||
-                  mapPinTooltipKey.key === domain.value
-                }
+                disabled={!hasDevAccess() || !mapPinTooltipKey}
               />
             )
           }
@@ -388,21 +383,22 @@ const EditorRightSidebar = () => {
             enableEdit={hasDevAccess() && type === types.MAP && enableLocationPins}
             disableEditButton={
               type !== types.MAP ||
-              !mapPinTooltipKey.key ||
-              (mapPinTooltipKey.key && domain.value === mapPinTooltipKey.key)
+              !mapPinTooltipKey
             }
             type={cardTypes.RIGHT_SIDEBAR}
             {...(hasDevAccess() && type === types.MAP && enableLocationPins && {
               clear: () => {
                 Object.keys(columnNameAliases).forEach(key => {
-                  if (mapPinTooltipKey.key == key) {
+                  if (mapPinTooltipKey?.key === key) {
                     delete columnNameAliases[key]
                   }
                 })
                 userUpdate({
                   aliasesReseted: true,
                   columnNameAliases,
-                  mapPinTooltipKey: {},
+                  genericOptions: {
+                    mapPinTooltipKey: null,
+                  },
                 })
               },
             })}
