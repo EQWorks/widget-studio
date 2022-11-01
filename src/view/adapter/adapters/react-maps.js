@@ -556,6 +556,10 @@ export default {
               .some(vis => JSON.stringify(mapValueKeys)?.includes(vis)))) ?
           PITCH.elevation :
           PITCH.default,
+        controller: {
+          scrollZoom: false,
+          doubleClickZoom: true,
+        },
       },
     })
   },
