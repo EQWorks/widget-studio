@@ -1,17 +1,23 @@
 import React from 'react'
 
-import { Icons } from '@eqworks/lumen-labs'
+import { Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
-import { renderRow, renderItem } from './util'
+import { renderRow, renderItem, renderToggle } from './util'
 import { setMapValueKeys } from '../../util/map-layer-value-functions'
 import { hasDevAccess } from '../../util/access'
 import cardTypes from '../../constants/card-types'
 import { MAP_LAYERS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
 
+
+const classes = makeStyles({
+  toggle: {
+    marginTop: '0.7rem',
+  },
+})
 
 const MapDomainControls = () => {
   // common actions
@@ -24,6 +30,8 @@ const MapDomainControls = () => {
   const mapLayer = useStoreState((state) => state.mapLayer)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
+  const showMVTOption = useStoreState((state) => state.showMVTOption)
+  const useMVTOption = useStoreState((state) => state.useMVTOption)
 
   const renderControls = renderItem('Column', (
     <CustomSelect
@@ -81,6 +89,16 @@ const MapDomainControls = () => {
           {renderControls}
           {widgetControlCardEdit[cardTypes.DOMAIN] && renderAlias}
         </>
+      )}
+      {/* toggle for MVT or direct geom render for postal codes */}
+      {showMVTOption && renderRow('',
+        <div className={classes.toggle}>
+          {renderToggle(
+            'Use MVT Render',
+            useMVTOption,
+            v => userUpdate({ useMVTOption: v }),
+          )}
+        </div>,
       )}
     </WidgetControlCard>
   )
