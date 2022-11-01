@@ -1,14 +1,13 @@
 import { Icons } from '@eqworks/lumen-labs'
 import { priceStringToNumeric } from '../util/numeric'
 import { isString } from '../util/string-manipulation'
-import { MAP_GEO_KEYS, ID_KEYS, COORD_KEYS } from './map'
+import { MAP_GEO_KEYS, ID_KEYS } from './map'
 
 
 export const EXCLUDE_NUMERIC = [
   ...['whitelabel', 'customer', 'resolution', 'sale_price'],
   ...MAP_GEO_KEYS,
   ...ID_KEYS,
-  ...Object.values(COORD_KEYS).flat(),
 ]
 
 export const EXCLUDE_NUMERIC_ENDINGS = ['name', 'type', 'id']

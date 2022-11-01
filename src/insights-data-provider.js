@@ -17,8 +17,8 @@ const InsightsDataProvider = ({
   source = COX_SOURCE,
   year,
   month,
-  _wl = COX_WL,
-  _customer = COX_CU,
+  wl = COX_WL,
+  cu = COX_CU,
 }) => {
   // keep track of which widgets need which data
   const [widgetDataDict, setWidgetDataDict] = useState({})
@@ -28,7 +28,7 @@ const InsightsDataProvider = ({
   const fetchedData = useQueries(
     dataNeeded.map(name => ({
       queryKey: [name, year, month],
-      queryFn: () => fetchInsightsData({ name, year, month, _wl, _customer })[source],
+      queryFn: () => fetchInsightsData({ name, year, month, _wl: wl, _customer: cu })[source],
       refetchOnWindowFocus: false,
     }))
   )
@@ -54,8 +54,6 @@ const InsightsDataProvider = ({
       }
       const { results, columns } = data || {}
       return cloneElement(child, {
-        wl: _wl,
-        cu: _customer,
         // provide a callback for the widget to ask for data
         onInsightsDataRequired: widgetCallback,
         // pass the fetched data if available

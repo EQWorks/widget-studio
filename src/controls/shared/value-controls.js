@@ -105,7 +105,18 @@ const ValueControls = () => {
       )}
     >
       <WidgetControlCard
-        clear={() => resetValue({ valueKeys, columnNameAliases })}
+        clear={() => {
+          Object.keys(columnNameAliases).forEach(key => {
+            if (JSON.stringify(valueKeys).includes(key)) {
+              delete columnNameAliases[key]
+            }
+          })
+          userUpdate({
+            aliasesReseted: true,
+            columnNameAliases,
+          })
+          resetValue({ valueKeys })
+        }}
         title='Value Configuration'
         {...mode === modes.QL && { description: 'Select up to 3 keys, open in editor for more options.' }}
         enableEdit

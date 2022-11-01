@@ -33,6 +33,21 @@ export const MAP_LAYER_VALUE_VIS = {
   icon: [],
 }
 
+export const MAP_VIEW_STATE = {
+  value: {
+    latitude: 55,
+    longitude: -102,
+    zoom: 2.5,
+  },
+  postalCode: {
+    latitude: 43.65,
+    longitude: -79.4,
+    zoom: 11,
+  },
+  lat: 'mapview_lat',
+  lon: 'mapview_lon',
+}
+
 export const GEO_KEY_TYPES = {
   fsa: ['geo_ca_fsa', 'geo_cohort_fsa', 'household_fsa'],
   postalcode: [
@@ -100,6 +115,7 @@ export const COORD_KEYS = {
     'locus_poi_lat',
     'source_lat',
     'source_latitude',
+    MAP_VIEW_STATE.lat,
   ],
   longitude: [
     'lon',
@@ -111,6 +127,7 @@ export const COORD_KEYS = {
     'source_lon',
     'source_lng',
     'source_longitude',
+    MAP_VIEW_STATE.lon,
   ],
   // targetPOI coords need to be separated because they are the markers for xwi-reports
   targetLon: [
@@ -155,25 +172,12 @@ export const PITCH = {
 
 export const MIN_ZOOM = {
   defaultValue: 2,
-  postalCode: 10,
+  postalCode: 11,
 }
 
 export const MAX_ZOOM = {
   defaultValue: 23,
   geojson: 14,
-}
-
-export const MAP_VIEW_STATE = {
-  value: {
-    latitude: 55,
-    longitude: -102,
-    zoom: 2.5,
-  },
-  postalCode: {
-    latitude: 43.65,
-    longitude: -79.4,
-    zoom: 10,
-  },
 }
 
 export const LABEL_OFFSET = {
@@ -211,3 +215,5 @@ export const XWI_KEY_ALIASES = {
   'Poi name': 'Source POI name',
   'Target poi name': 'Target POI name',
 }
+
+export const ONE_ICON_SIZE = 10

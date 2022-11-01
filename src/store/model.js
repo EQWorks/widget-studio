@@ -20,6 +20,7 @@ import {
   MAP_LAYER_GEO_KEYS,
   COORD_KEYS,
   GEO_KEY_TYPE_NAMES,
+  MAP_VIEW_STATE,
 } from '../constants/map'
 import {
   DATA_CATEGORIES,
@@ -74,12 +75,14 @@ const stateDefaults = [
         y: '',
       },
       showSubPlotTitles: true,
-      showLabels: true,
+      showLabels: false,
       showCurrency: false,
       showVertical: false,
       mapHideSourceLayer: false,
       mapHideTargetLayer: false,
       mapHideArcLayer: false,
+      showLocationPins: false,
+      mapPinTooltipKey: null,
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],
@@ -156,6 +159,7 @@ const stateDefaults = [
   { key: 'dateAggregation', defaultValue: dateAggregations.NONE, resettable: true },
   { key: 'formatDataKey', defaultValue: (label) => truncateString(label, 30), resettable: false },
   { key: 'mapTooltipLabelTitles', defaultValue: null, resettable: false },
+  { key: 'aliasesReseted', defaultValue: false, resettable: true },
 ]
 
 export default {
@@ -197,7 +201,6 @@ export default {
       (state) => state.presetColors,
       (state) => state.dateAggregation,
       (state) => state.mapTooltipLabelTitles,
-      (state) => state.wl,
     ],
     (
       title,
@@ -230,7 +233,6 @@ export default {
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
-      wl,
     ) => ({
       title,
       subtitle,
@@ -264,7 +266,6 @@ export default {
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
-      wl,
     })),
 
   config: computed(
@@ -683,6 +684,51 @@ export default {
       categoryKeyValues,
     ) => (Boolean(type === types.MAP && renderableValueKeys?.length && categoryKeyValues?.length) &&
       (categoryKeyValues.find(e => e.key === renderableValueKeys[0].key) || categoryKeyValues[0])) || {}
+  ),
+
+  enableLocationPins: computed(
+    [
+      (state) => state.columns,
+      (state) => state.dataIsXWIReport,
+      (state) => state.type,
+    ],
+    (
+      columns,
+      dataIsXWIReport,
+      type,
+    ) => {
+      const lat = columns.find(({ name, category }) =>
+        COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
+      const lon = columns.find(({ name, category }) =>
+        COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
+      return Boolean(type === types.MAP && lat && lon && !dataIsXWIReport)
+    }
+  ),
+
+  mapInitViewState: computed(
+    [
+      (state) => state.columns,
+      (state) => state.rows,
+      (state) => state.isXWIReportMap,
+      (state) => state.type,
+    ],
+    (
+      columns,
+      rows,
+      isXWIReportMap,
+      type,
+    ) => {
+      const lat = columns.find(({ name }) => name === MAP_VIEW_STATE.lat)?.name
+      const lon = columns.find(({ name }) => name === MAP_VIEW_STATE.lon)?.name
+
+      if (type === types.MAP && lat && lon && !isXWIReportMap) {
+        return {
+          latitude: rows?.[0][lat],
+          longitude: rows?.[0][lon],
+        }
+      }
+      return {}
+    }
   ),
 
   /** ACTIONS ------------------------------------------------------------------ */

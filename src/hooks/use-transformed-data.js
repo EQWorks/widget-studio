@@ -43,6 +43,7 @@ const useTransformedData = () => {
   const dateAggregation = useStoreState((state) => state.dateAggregation)
   const propFilters = useStoreState((state) => state.propFilters)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const { showLocationPins, mapPinTooltipKey } = useStoreState((state) => state.genericOptions)
 
   const dataKeys = useMemo(() => Object.keys(columnsAnalysis || {}), [columnsAnalysis])
 
@@ -195,13 +196,19 @@ const useTransformedData = () => {
       })).sort((a, b) => sortFn(a[formattedDomain], b[formattedDomain]))
     }
     return Object.entries(filteredGroupedData).map(([group, values]) => {
-      const res = renderableValueKeys.reduce((res, { key, agg, title }) => {
-        const val = dataHasVariance
-          ? aggFunctions[agg](values[key])
-          : values?.[key]?.[0]
-        res[title] = val
-        return res
-      }, { [formattedDomain]: group })
+      const res =(mapPinTooltipKey && mapPinTooltipKey.key !== finalGroupKey ?
+        [
+          ...renderableValueKeys,
+          { key: mapPinTooltipKey.key, title: formattedColumnNames[mapPinTooltipKey.key] },
+        ] :
+        renderableValueKeys)
+        .reduce((res, { key, agg, title }) => {
+          const val = dataHasVariance && agg
+            ? aggFunctions[agg](values[key])
+            : values?.[key]?.[0]
+          res[title] = val
+          return res
+        }, { [formattedDomain]: group })
       return res
     })
   }, [
@@ -215,6 +222,7 @@ const useTransformedData = () => {
     renderableValueKeys,
     finalGroupKey,
     dataHasVariance,
+    mapPinTooltipKey,
   ])
 
   const percentageData = useMemo(() => {
@@ -269,13 +277,14 @@ const useTransformedData = () => {
   // enrich data with coords for scatterplot & geojson data; special aggregation for xwi-reports
   const getMapEnrichedData = useCallback(async () => {
     if ( type && type === types.MAP && !dataIsXWIReport) {
+      let mapEnrichedData = aggregatedData
       // add coordinates for map widget data
-      if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+      if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey) || showLocationPins) {
         const lat = columns.find(({ name, category }) =>
           COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
         const lon = columns.find(({ name, category }) =>
           COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
-        return aggregatedData.reduce((acc, d) => {
+        mapEnrichedData = aggregatedData.reduce((acc, d) => {
           if (lat && lon) {
             if (latIsValid(d[lat]) && lonIsValid(d[lon])) {
               return [...acc, d]
@@ -293,6 +302,9 @@ const useTransformedData = () => {
               acc
           }
         }, [])
+        if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey)) {
+          return mapEnrichedData
+        }
       }
       if (GEO_KEY_TYPES.region.includes(mapGroupKey)) {
         const formattedDomain = formattedColumnNames[mapGroupKey]
@@ -314,8 +326,8 @@ const useTransformedData = () => {
         } catch (err) {
           console.error(err)
         }
-        if (regionPolygons && aggregatedData.length) {
-          return aggregatedData.reduce((acc, regionData) => {
+        if (regionPolygons && mapEnrichedData.length) {
+          return mapEnrichedData.reduce((acc, regionData) => {
             const regionName = regionData[formattedDomain].toUpperCase().trim()
             const { type, coordinates } = regionPolygons[regionName] || {}
             return regionPolygons[regionName] ?
@@ -339,7 +351,7 @@ const useTransformedData = () => {
         const geoKey = Object.keys(GEO_KEY_TYPES)
           .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
         const formattedDomain = formattedColumnNames[mapGroupKey]
-        return aggregatedData.reduce((acc, d) =>
+        return mapEnrichedData.reduce((acc, d) =>
           geoKeyIsValid({ geoKey, d: d[formattedDomain].replace(' ', '').toUpperCase() }) ?
             [
               ...acc,
@@ -362,6 +374,7 @@ const useTransformedData = () => {
     mapGroupKey,
     groupedData,
     formattedColumnNames,
+    showLocationPins,
   ])
 
   // simply format and sort data if grouping is not enabled

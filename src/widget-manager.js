@@ -594,7 +594,7 @@ const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, 
                     </CustomButton>
                   </div>
                   {currentlyViewing && saveWithInsightsData &&
-                    <InsightsDataProvider {...{ year, month }}>
+                    <InsightsDataProvider {...{ year, month, wl, cu }}>
                       <Widget
                         key={currentlyViewing}
                         id={currentlyViewing}
@@ -608,7 +608,7 @@ const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, 
                         key={currentlyViewing}
                         id={currentlyViewing}
                         mode='view_only'
-                        filters={filters}
+                        {...{ filters, wl, cu }}
                       />
                   }
                   {!currentlyViewing &&

@@ -197,6 +197,8 @@ storiesOf('InsightsDataProvider', module)
             {WIDGET_IDS.map(id => (
               <div className={classes.dashboardWidget} key={id}>
                 <Widget
+                  wl={DEFAULT_WL}
+                  cu={DEFAULT_CU}
                   id={id}
                   mode='compact_view_only'
                   filters={[{ key: 'resolution', filter: [5000] }]} // just for demonstration, some of these widgets require a resolution filter

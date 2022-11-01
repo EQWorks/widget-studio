@@ -67,6 +67,14 @@ const MapDomainControls = () => {
       enableEdit={hasDevAccess()}
       disableEditButton={!(domain.value || widgetControlCardEdit[cardTypes.DOMAIN])}
       type={cardTypes.DOMAIN}
+      clear={() => userUpdate({
+        aliasesReseted: true,
+        columnNameAliases: {},
+        groupKey: null,
+        indexKey: null,
+        mapGroupKey: null,
+        mapValueKeys: setMapValueKeys({ mapLayer, dataIsXWIReport }) || [],
+      })}
     >
       {renderRow('',
         <>

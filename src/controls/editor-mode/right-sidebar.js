@@ -1,26 +1,28 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { TextField, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { positions, sizes } from '../../constants/viz-options'
-import types from '../../constants/types'
+import MutedBarrier from '../shared/muted-barrier'
 import CustomSelect from '../../components/custom-select'
 import XYSelect from '../../components/xy-select'
 import ColorSchemeControls from './components/color-scheme-controls'
-import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection } from '../shared/util'
 import UniqueOptionControls from './components/unique-option-controls'
 import EditorSidebarBase from './sidebar-base'
 import MapLayerDisplay from './map-layer-display'
 import Filters from './components/filters'
 import CustomDropdown from './components/custom-dropdown'
-import MutedBarrier from '../shared/muted-barrier'
-import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 import ExportControls from './components/export-controls'
 import SliderControl from './components/slider-control'
 import EditableSubtitle from '../../view/title-bar/editable-subtitle'
+import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
 import { hasDevAccess  } from '../../util/access'
+import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection } from '../shared/util'
+import { positions, sizes } from '../../constants/viz-options'
+import types from '../../constants/types'
+import cardTypes from '../../constants/card-types'
+import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 
 
 const classes = makeStyles({
@@ -64,12 +66,40 @@ const EditorRightSidebar = () => {
   const isReady = useStoreState((state) => state.isReady)
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
+  const enableLocationPins = useStoreState((state) => state.enableLocationPins)
+  const showLocationPins = useStoreState((state) => state.genericOptions.showLocationPins)
+  const mapPinTooltipKey = useStoreState((state) => state.genericOptions.mapPinTooltipKey || {})
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
+  const columnNameAliases = useStoreState((state) => state.columnNameAliases)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
       update({ genericOptions: { subPlots: false } })
     }
   }, [renderableValueKeys?.length, update])
+
+  // update mapPinTooltipKey.title if alias changes
+  useEffect(() => {
+    if (mapPinTooltipKey?.title !== formattedColumnNames[mapPinTooltipKey?.key]) {
+      update({
+        genericOptions: {
+          mapPinTooltipKey: {
+            title: formattedColumnNames[mapPinTooltipKey?.key],
+          },
+        },
+      })
+    }
+  }, [mapPinTooltipKey, formattedColumnNames, update])
+
+  const eligibleTooltipKeys = useMemo(() => (
+    Object.fromEntries(
+      Object.entries(columnsAnalysis)
+        .filter(([, { isNumeric }]) => !isNumeric)
+        .map(([c, { Icon }]) => [c, { Icon }])
+    )
+  ), [columnsAnalysis])
 
   const renderGenericOptions = (
     <>
@@ -83,11 +113,18 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showWidgetTitle: v } }),
               )
             }
-            {![types.STAT, types.TABLE, types.MAP].includes(type) &&
+            {![types.STAT, types.TABLE].includes(type) &&
               renderToggle(
                 'Legend',
                 showLegend,
                 v => userUpdate({ genericOptions: { showLegend: v } }),
+              )
+            }
+            {type === types.MAP &&
+              renderToggle(
+                'Tooltip',
+                showTooltip,
+                v => userUpdate({ genericOptions: { showTooltip: v } }),
               )
             }
             {type === types.STAT &&
@@ -115,26 +152,19 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
-            {type === types.MAP &&
-              renderToggle(
-                'Legend',
-                showLegend,
-                v => userUpdate({ genericOptions: { showLegend: v } }),
-              )
-            }
-            {type === types.MAP &&
-              renderToggle(
-                'Tooltip',
-                showTooltip,
-                v => userUpdate({ genericOptions: { showTooltip: v } }),
-              )
-            }
             {(type === types.MAP || type === types.STAT) &&
               renderToggle(
                 'Labels',
                 showLabels,
                 v => userUpdate({ genericOptions: { showLabels: v } }),
                 JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)
+              )
+            }
+            {type === types.MAP && enableLocationPins &&
+              renderToggle(
+                'Location Pins',
+                showLocationPins,
+                v => userUpdate({ genericOptions: { showLocationPins: v } }),
               )
             }
             {type === types.STAT &&
@@ -163,6 +193,43 @@ const EditorRightSidebar = () => {
           </>
         )
       }
+      {type === types.MAP && enableLocationPins && renderRow(null,
+        <>
+          {
+            renderItem('Pin Tooltip Key',
+              <CustomSelect
+                fullWidth
+                data={Object.keys(eligibleTooltipKeys)}
+                icons={Object.values(eligibleTooltipKeys).map(({ Icon }) => Icon)}
+                value={mapPinTooltipKey.key}
+                onSelect={val => userUpdate({
+                  genericOptions: {
+                    mapPinTooltipKey: {
+                      key: val,
+                      title: formattedColumnNames[val],
+                    },
+                  },
+                })}
+                onClear={() => userUpdate({
+                  genericOptions: {
+                    mapPinTooltipKey: null,
+                  },
+                })}
+                placeholder='Select column'
+                disabled={!showLocationPins}
+              />,
+            )
+          }
+          {widgetControlCardEdit[cardTypes.RIGHT_SIDEBAR] &&
+            renderItem('Pin Tooltip Key Alias',
+              <ColumnAliasControls
+                value={mapPinTooltipKey.key || ''}
+                disabled={!hasDevAccess() || !mapPinTooltipKey}
+              />
+            )
+          }
+        </>,
+      )}
       {[types.BAR, types.SCATTER, types.LINE, types.PYRAMID].includes(type) &&
         <>
           {renderRow(null,
@@ -311,7 +378,31 @@ const EditorRightSidebar = () => {
       </MutedBarrier>
       {type !== types.TABLE &&
         <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
-          <WidgetControlCard title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}>
+          <WidgetControlCard
+            title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}
+            enableEdit={hasDevAccess() && type === types.MAP && enableLocationPins}
+            disableEditButton={
+              type !== types.MAP ||
+              !mapPinTooltipKey
+            }
+            type={cardTypes.RIGHT_SIDEBAR}
+            {...(hasDevAccess() && type === types.MAP && enableLocationPins && {
+              clear: () => {
+                Object.keys(columnNameAliases).forEach(key => {
+                  if (mapPinTooltipKey?.key === key) {
+                    delete columnNameAliases[key]
+                  }
+                })
+                userUpdate({
+                  aliasesReseted: true,
+                  columnNameAliases,
+                  genericOptions: {
+                    mapPinTooltipKey: null,
+                  },
+                })
+              },
+            })}
+          >
             {
               renderSuperSection(
                 <>
