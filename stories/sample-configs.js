@@ -75,13 +75,8 @@ export default {
     'title': 'stat example widget',
     'showTitleBar': true,
     'type': 'stat',
-    'filters': [
-      {
-        key: 'resolution',
-        filter: [20000],
-      },
-    ],
-    'groupFilter': [],
+    'filters': [],
+    'groupFilter': ['5000'],
     'valueKeys': [
       {
         'key': 'submitted_deals',
@@ -135,21 +130,18 @@ export default {
     'title': 'stat trend example',
     'showTitleBar': true,
     'type': 'stat',
-    'filters': [
-      {
-        key: 'dealerId',
-        filter: [1],
-      },
-    ],
+    'filters': [],
     'groupFilter': [],
     'valueKeys': [
       {
         'key': 'submitted_deals',
         'title': 'Submitted deals',
+        'agg': 'sum',
       },
       {
         'key': 'funded_deals',
         'title': 'funded deals',
+        'agg': 'sum',
       },
     ],
     'mapValueKeys': [],

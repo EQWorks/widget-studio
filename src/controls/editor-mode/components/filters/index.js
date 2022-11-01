@@ -34,21 +34,35 @@ const Filters = () => {
       .map(([c, { Icon }]) => [c, { Icon }]))
   ), [columnsAnalysis])
 
-  const renderGroupFilter = (
-    domainIsDate
-      ? <DateDomainFilter/>
-      : type &&
-      <CustomSelect
+  const renderGroupFilter = () => {
+    const getGroupFilterValue = () => {
+      if (type === types.STAT) {
+        let _groupFilter = groupFilter
+        if (groups.length === 1) {
+          _groupFilter = groups
+        }
+        return _groupFilter[0] ?? ''
+      }
+      return groupFilter ?? []
+    }
+
+    if (domainIsDate) {
+      return <DateDomainFilter/>
+    }
+
+    return (
+      type && <CustomSelect
         fullWidth
         multiSelect={type === types.STAT ? false : true}
         data={groups}
-        value={type === types.STAT ? (groupFilter[0] ?? '') : (groupFilter ?? [])}
+        value={getGroupFilterValue()}
         onSelect={val => userUpdate({ groupFilter: type === types.STAT ? [val] : val })}
         placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
         disabled={!group || !domain.value}
         onClear={() => userUpdate({ groupFilter: [] })}
       />
-  )
+    )
+  }
 
   const renderRangeFilters = (
     <PluralLinkedSelect
@@ -109,7 +123,7 @@ const Filters = () => {
         renderSection(
           null,
           <>
-            {renderRow(dataIsXWIReport ? 'Source Layer Group Filter' : 'Group Filter', renderGroupFilter)}
+            {renderRow(dataIsXWIReport ? 'Source Layer Group Filter' : 'Group Filter', renderGroupFilter())}
             {renderRow('Range Filters', renderRangeFilters)}
           </>
         )

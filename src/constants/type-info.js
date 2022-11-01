@@ -220,7 +220,8 @@ export default {
     adapter: LocalAdapters[types.STAT],
     mustGroup: false,
     uniqueOptions: {
-      comparedTrend: {
+      selectedTrend: {
+        titles: [],
         values: [],
       },
       selectedPercentage: {
