@@ -23,7 +23,7 @@ export const DATA_KEY_FORMATTING = {
       'cost', 'spend', 'revenue', 'dealersaleprice', 'dealerreserveprice', 'dmasaleprice',
       'dmareserveprice',
     ],
-    formatFunction: val => numeral(val).format('$0,0.00'),
+    formatFunction: val => numeral(val).format('$0,0'),
   },
   percentage: {
     keyList: ['rate', 'Rate', 'ctr',
