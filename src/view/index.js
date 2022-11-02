@@ -84,7 +84,7 @@ const useStyles = ({ mode, tableExpanded, type, addUserControls }) => makeStyles
     }
     : {
       outerContainer: {
-        padding: addUserControls ? 0 : '0.25rem 1rem 1rem 1rem',
+        padding: addUserControls || type === types.MAP ? 0 : '0.25rem 1rem 1rem 1rem',
         width: '100%',
         height: '100%',
         display: 'flex',
