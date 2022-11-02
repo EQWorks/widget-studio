@@ -65,7 +65,7 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
     [modes.EDITOR]: { marginTop: 0 },
     [modes.QL]: { marginTop: haveUserControls ? 0 : 0.75 },
     [modes.VIEW]: { marginTop: haveUserControls ? 0 : 0.75 },
-    [modes.COMPACT]: { marginTop: haveUserControls? 0 : 0.75 },
+    [modes.COMPACT]: { marginTop: 0 },
   })
 
   const finalMarginTop = MODE_DIMENSIONS[mode].marginTop || 0

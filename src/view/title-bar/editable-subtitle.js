@@ -93,7 +93,7 @@ const EditableSubtitle = () => {
                   setTentativeSubtitle(e.target.value)
                   userUpdate({ subtitle: (e.target.value) })
                 }}
-                maxLength={160}
+                maxLength={180}
               />
             </div>
           )}
