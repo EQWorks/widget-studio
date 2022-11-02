@@ -1,15 +1,16 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useMemo, useCallback } from 'react'
 
 import { Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import CustomSelect from '../components/custom-select'
 import { useStoreState, useStoreActions } from '../store'
 import { cleanUp, capitalizeWords } from '../util/string-manipulation'
+import modes from '../constants/modes'
 import types from '../constants/types'
 import { DATA_CATEGORIES, DATA_CATEGORIES_KEYS } from '../constants/insights-data-categories'
 
 
-const classes = makeStyles({
+const useStyles = ({ marginTop }) => makeStyles({
   userControlContainer: {
     display: 'flex',
     flexDirection: 'row',
@@ -20,6 +21,7 @@ const classes = makeStyles({
     background: getTailwindConfigColor('secondary-50'),
     boxShadow: '0px 0.125rem 0.5rem rgba(54, 111, 228, 0.1)',
     overflowX: 'auto',
+    marginTop: `${marginTop}rem`,
   },
   userControlItem: {
     fontFamily: 'Open Sans',
@@ -75,6 +77,21 @@ const UserValueControls = () => {
   const dataCategoryKey = useStoreState((state) => state.dataCategoryKey)
   const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
   const selectedCategoryValue = useStoreState((state) => state.selectedCategoryValue)
+  const mode = useStoreState(state => state.ui.mode)
+  const addUserControls = useStoreState((state) => state.addUserControls)
+  const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
+
+  const haveUserControls = useMemo(() => Boolean(addUserControls && userControlKeyValues.length),
+    [addUserControls, userControlKeyValues])
+
+  const MODE_DIMENSIONS = Object.freeze({
+    [modes.EDITOR]: { marginTop: 0 },
+    [modes.QL]: { marginTop: haveUserControls ? 0.75 : 0 },
+    [modes.VIEW]: { marginTop: haveUserControls ? 0.75 : 0 },
+    [modes.COMPACT]: { marginTop: 0 },
+  })
+
+  const classes = useStyles({ marginTop: MODE_DIMENSIONS[mode].marginTop || 0 })
 
   useEffect(() => {
     if (renderableValueKeys.length) {
