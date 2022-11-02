@@ -81,7 +81,7 @@ const Widget = ({
   config: _config,
   sampleData,
   sampleConfigs,
-  mapTooltipLabelTitles,
+  ...others
 }) => {
   const classes = useStyles(_mode)
 
@@ -147,7 +147,7 @@ const Widget = ({
         staticData,
       },
       saveWithInsightsData,
-      mapTooltipLabelTitles,
+      ...others,
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -161,6 +161,7 @@ const Widget = ({
           },
         }
         ),
+        ...others,
       })
     }
     // use executionID passed from QL if available
@@ -182,7 +183,9 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType, onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles])
+  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig,
+    loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType,
+    onInsightsDataRequired, saveWithInsightsData, others])
 
   // load data if source changes
   useEffect(() => {
@@ -254,7 +257,6 @@ Widget.propTypes = {
   onInsightsDataRequired: PropTypes.func,
   saveWithInsightsData: PropTypes.bool,
   dataProviderResponse: PropTypes.object,
-  mapTooltipLabelTitles: PropTypes.object,
 }
 
 Widget.defaultProps = {
@@ -276,7 +278,6 @@ Widget.defaultProps = {
   onInsightsDataRequired: () => {},
   saveWithInsightsData: false,
   dataProviderResponse: {},
-  mapTooltipLabelTitles: null,
 }
 
 export default withQueryClient(withStore(Widget))
