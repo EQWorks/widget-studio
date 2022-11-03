@@ -6,22 +6,16 @@ export const STRING_REPLACE_DICT = {
   'census_fam_person_not_in_census_family': 'Other',
   'Top Spending Geography': 'Top Spending',
   'Frequently Transacting Geography': 'Transaction Frequency',
-  'dealersaleprice': 'Dealer',
-  'dealerreserveprice': 'Dealer',
-  'dealerreservepct': 'Dealer',
-  'dmasaleprice': 'DMA',
-  'dmareserveprice': 'DMA',
-  'dmareservepct': 'DMA',
-  'hh_income_0_50k': '$0 - $50k',
-  'hh_income_50_100k': '$50 - $100k',
-  'hh_income_100_150k': '$100 - $150k',
-  'hh_income_150_200k': '$150 - $200k',
-  'hh_income_200k+': '$200k+',
+  'highest_education_secondary_education' : 'Secondary Education',
+  'highest_education_college_uni_below_bachelor' : 'Degree - Below Bachelor',
+  'highest_education_uni_advanced' : 'Degree - Masters or Higher',
+  'highest_education_apprenticeship_trades' : 'Apprenticeship Trades',
+  'highest_education_uni_bachelor' : 'Degree - Bachelors',
+  'highest_education_no_education' : 'No Education',
 }
 
 const HEADER_START = [
   'pop_',
-  'highest_education_',
   'census_fam_',
 ]
 
