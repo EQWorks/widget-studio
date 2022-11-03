@@ -237,6 +237,7 @@ const UserValueControls = () => {
     formattedColumnNames,
     mapValueKeys,
     update,
+    classes,
   ])
 
   return (
