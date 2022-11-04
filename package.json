@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/widget-studio",
-  "version": "0.5.2-alpha.2",
+  "version": "0.5.2",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
