@@ -820,7 +820,7 @@ export default {
       ui: { configLoading: true },
       id: payload,
     })
-    const { sampleConfigs } = getState()
+    const { sampleConfigs, mapGroupKey } = getState()
     const getFn = sampleConfigs
       ? localGetWidget
       : getWidget
@@ -832,7 +832,8 @@ export default {
             createdAt: created_at,
           },
         })
-        actions.loadConfig(config)
+        // while updateing with config, use mapGroupKey Widget prop value
+        actions.loadConfig({ ...config, ...(mapGroupKey && { mapGroupKey }) })
       })
       .catch(err => {
         actions.update({
