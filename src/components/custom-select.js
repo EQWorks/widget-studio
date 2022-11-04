@@ -60,6 +60,7 @@ const CustomSelect = ({
   }, [multiSelect, simple, userSelect])
 
   return <DropdownSelect
+    id='dropdown-select'
     simple={simple}
     classes={{
       root: fullWidth ? [root, 'w-full'].join(' ') : root,
