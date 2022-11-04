@@ -197,6 +197,7 @@ const UserValueControls = () => {
     if (categoryKeyValues?.length) {
       update({ userValueDropdownSelect: (
         <CustomSelect
+          id='user-value-custom-select'
           userSelect
           allowClear={false}
           classes={{
@@ -240,7 +241,7 @@ const UserValueControls = () => {
   ])
 
   return (
-    <div className={classes.userControlContainer}>
+    <div id='user-control-container' className={classes.userControlContainer}>
       {type === types.BAR && userControlHeadline &&
         <div className={classes.userControlItem}>
           {capitalizeWords(userControlHeadline)}:
