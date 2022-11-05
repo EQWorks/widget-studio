@@ -151,6 +151,8 @@ export const XWI_REPORT = {
   source: 'poi',
 }
 
+export const GEOJSON_KEYS = ['type', 'geometry']
+
 export const LAYER_SCALE = 'linear'
 
 export const MAP_LEGEND_POSITION = {
@@ -202,7 +204,7 @@ export const KEY_ALIASES = {
   'Locus poi id': 'POI ID',
   'Address region': 'Region',
   'Geo ca region': 'Region',
-  'Geo ca postal code': 'Postal code',
+  'Geo ca postalcode': 'Postal code',
   'Address postalcode': 'Postal code',
   'Geo ca fsa': 'FSA',
   'Geo ca da': 'DA',
