@@ -160,7 +160,7 @@ const stateDefaults = [
   { key: 'formatDataKey', defaultValue: (label) => truncateString(label, 30), resettable: false },
   { key: 'mapTooltipLabelTitles', defaultValue: null, resettable: false },
   { key: 'aliasesReseted', defaultValue: false, resettable: true },
-  { key: 'useMVTOption', defaultValue: true, resettable: false },
+  { key: 'useMVTOption', defaultValue: true, resettable: true },
 ]
 
 export default {
@@ -183,6 +183,7 @@ export default {
       (state) => state.group,
       (state) => state.groupKey,
       (state) => state.mapGroupKey,
+      (state) => state.useMVTOption,
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
       (state) => state.formatDataKey,
@@ -215,6 +216,7 @@ export default {
       group,
       groupKey,
       mapGroupKey,
+      useMVTOption,
       indexKey,
       renderableValueKeys,
       formatDataKey,
@@ -251,6 +253,7 @@ export default {
       group,
       groupKey,
       mapGroupKey,
+      useMVTOption,
       indexKey,
       ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
       ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
