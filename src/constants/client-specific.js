@@ -4,6 +4,6 @@ export const COX_CATEGORY_SEGMENTS = ['Top Spending Geography', 'Frequently Tran
 export const COX_XWI_KEY_ALIASES = {
   'Poi id': 'Dealer ID',
   'Target poi id': 'Competitor ID',
-  'Poi name': 'Dealer name',
-  'Target poi name': 'Competitor name',
+  'Poi name': 'Dealer',
+  'Target poi name': 'Competitor',
 }
