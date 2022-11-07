@@ -120,7 +120,7 @@ const useTransformedData = () => {
         let group = groupFSAByPC ? r[newGroupKey]?.trim().slice(0, 3) : r[newGroupKey]
         // eliminate spaces from polygon geo key values
         if (MAP_LAYER_GEO_KEYS.geojson.includes(newGroupKey)) {
-          group = group.replace(' ', '')
+          group = group?.replace(' ', '')
         }
         res[group] = res[group] || {}
         Object.entries(r).forEach(([k, v]) => {
@@ -360,12 +360,12 @@ const useTransformedData = () => {
             .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
           const formattedDomain = formattedColumnNames[mapGroupKey]
           return mapEnrichedData.reduce((acc, d) =>
-            geoKeyIsValid({ geoKey, d: d[formattedDomain].replace(' ', '').toUpperCase() }) ?
+            geoKeyIsValid({ geoKey, d: d[formattedDomain]?.replace(' ', '').toUpperCase() }) ?
               [
                 ...acc,
                 {
                   ...d,
-                  formattedDomain: d[formattedDomain].replace(' ', '').toUpperCase(),
+                  formattedDomain: d[formattedDomain]?.replace(' ', '').toUpperCase(),
                 },
               ] :
               acc
