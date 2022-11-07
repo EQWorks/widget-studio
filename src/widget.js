@@ -97,6 +97,7 @@ const Widget = ({
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
   const userValueFilter = useStoreState((state) => state.userValueFilter)
+  const type = useStoreState((state) => state.type)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
@@ -192,12 +193,12 @@ const Widget = ({
   useEffect(() => {
     if (!staticData && dataSourceType && dataSourceID) {
       if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
-        onInsightsDataRequired(id, dataSourceID)
+        onInsightsDataRequired(id, dataSourceID, type)
       } else if (dataSourceType !== dataSourceTypes.MANUAL) {
         loadData({ type: dataSourceType, id: dataSourceID })
       }
     }
-  }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id])
+  }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id, type])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-hidden flex-1 min-w-0 flex items-stretch', {
