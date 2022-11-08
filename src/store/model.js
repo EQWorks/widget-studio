@@ -404,6 +404,21 @@ export default {
       !columns.map(({ name }) => name).includes(mapGroupKey)
   ),
 
+  lon: computed(
+    [
+      (state) => state.rows,
+    ],
+    (rows) => Object.keys(rows?.[0] || {}).find(key => COORD_KEYS.longitude.includes(key))
+  ),
+
+  lat: computed(
+    [
+      (state) => state.rows,
+    ],
+    (rows) => Object.keys(rows?.[0] || {}).find(key => COORD_KEYS.latitude.includes(key))
+  ),
+
+
   domainIsDate: computed(
     [
       (state) => state.domain,
@@ -724,19 +739,17 @@ export default {
 
   mapInitViewState: computed(
     [
-      (state) => state.columns,
       (state) => state.rows,
       (state) => state.isXWIReportMap,
       (state) => state.type,
     ],
     (
-      columns,
       rows,
       isXWIReportMap,
       type,
     ) => {
-      const lat = columns.find(({ name }) => name === MAP_VIEW_STATE.lat)?.name
-      const lon = columns.find(({ name }) => name === MAP_VIEW_STATE.lon)?.name
+      const lat = Object.keys(rows?.[0] || {}).find(key => key === MAP_VIEW_STATE.lat)
+      const lon = Object.keys(rows?.[0] || {}).find(key => key === MAP_VIEW_STATE.lon)
 
       if (type === types.MAP && lat && lon && !isXWIReportMap) {
         return {
