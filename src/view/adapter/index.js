@@ -27,7 +27,7 @@ const useStyles = ({ type, renderUserControlValues, addTopCategories, topMargin 
   },
   userValueDropdownSelect: {
     position: 'absolute',
-    margin: '1rem',
+    margin: '1rem 1rem 0rem 4rem',
     zIndex: '10',
   },
 })
