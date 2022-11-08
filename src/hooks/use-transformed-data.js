@@ -4,7 +4,6 @@ import { useStoreActions, useStoreState } from '../store'
 import aggFunctions from '../util/agg-functions'
 import { getRegionPolygons } from '../util/api'
 import {
-  COORD_KEYS,
   MAP_LAYER_GEO_KEYS,
   GEO_KEY_TYPES,
   GEO_KEY_TYPE_NAMES,
@@ -26,7 +25,6 @@ const useTransformedData = () => {
   // state
   const rows = useStoreState((state) => state.rows)
   const type = useStoreState((state) => state.type)
-  const columns = useStoreState((state) => state.columns)
   const filters = useStoreState((state) => state.filters)
   const groupFilter = useStoreState((state) => state.groupFilter)
   const indexKey = useStoreState((state) => state.indexKey)
@@ -46,6 +44,8 @@ const useTransformedData = () => {
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const { showLocationPins, mapPinTooltipKey } = useStoreState((state) => state.genericOptions)
   const useMVTOption = useStoreState((state) => state.useMVTOption)
+  const lon = useStoreState((state) => state.lon)
+  const lat = useStoreState((state) => state.lat)
 
   const dataKeys = useMemo(() => Object.keys(columnsAnalysis || {}), [columnsAnalysis])
 
@@ -285,12 +285,7 @@ const useTransformedData = () => {
   const getMapEnrichedData = useCallback(async () => {
     if (type && type === types.MAP && !dataIsXWIReport) {
       let mapEnrichedData = aggregatedData
-      // add coordinates for map widget data
-      if (MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey) || showLocationPins) {
-        const lat = columns.find(({ name, category }) =>
-          COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
-        const lon = columns.find(({ name, category }) =>
-          COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
+      if ((MAP_LAYER_GEO_KEYS.scatterplot.includes(mapGroupKey) || showLocationPins) && lat && lon) {
         mapEnrichedData = aggregatedData.reduce((acc, d) => {
           if (lat && lon) {
             if (latIsValid(d[lat]) && lonIsValid(d[lon])) {
@@ -380,12 +375,13 @@ const useTransformedData = () => {
     dataIsXWIReport,
     aggregatedData,
     filteredGroupedData,
-    columns,
     mapGroupKey,
     groupedData,
     formattedColumnNames,
     showLocationPins,
     useMVTOption,
+    lat,
+    lon,
   ])
 
   // simply format and sort data if grouping is not enabled
