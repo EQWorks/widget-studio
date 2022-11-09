@@ -84,6 +84,7 @@ const Widget = ({
   sampleConfigs,
   mapTooltipLabelTitles,
   mapGroupKey,
+  useMVTOption,
 }) => {
   const classes = useStyles(_mode)
 
@@ -152,6 +153,7 @@ const Widget = ({
       saveWithInsightsData,
       mapTooltipLabelTitles,
       ...(mapGroupKey && { mapGroupKey }),
+      useMVTOption,
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -188,7 +190,7 @@ const Widget = ({
     }
   }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig,
     loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType,
-    onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey])
+    onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey, useMVTOption])
 
   // load data if source changes
   useEffect(() => {
@@ -265,6 +267,7 @@ Widget.propTypes = {
   dataProviderResponse: PropTypes.object,
   mapTooltipLabelTitles: PropTypes.object,
   mapGroupKey: PropTypes.string,
+  useMVTOption: PropTypes.bool,
 }
 
 Widget.defaultProps = {
@@ -289,6 +292,7 @@ Widget.defaultProps = {
   dataProviderResponse: {},
   mapTooltipLabelTitles: null,
   mapGroupKey: '',
+  useMVTOption: null,
 }
 
 export default withQueryClient(withStore(Widget))
