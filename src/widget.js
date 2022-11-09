@@ -75,6 +75,7 @@ const Widget = ({
   onInsightsDataRequired,
   saveWithInsightsData,
   dataProviderResponse,
+  setWidgetRender,
   // temporary:
   filters,
   executionID,
@@ -98,8 +99,9 @@ const Widget = ({
   const userValueFilter = useStoreState((state) => state.userValueFilter)
 
   // ui state
-  const mode = useStoreState(state => state.ui.mode)
-  const baseMode = useStoreState(state => state.ui.baseMode)
+  const { mode, baseMode } = useStoreState(state => state.ui)
+
+  useEffect(() => update({ ui: { setWidgetRender } }), [update, setWidgetRender])
 
   // update state for case when we use InsightsDataProvider
   useEffect(() => {
@@ -254,6 +256,7 @@ Widget.propTypes = {
   onInsightsDataRequired: PropTypes.func,
   saveWithInsightsData: PropTypes.bool,
   dataProviderResponse: PropTypes.object,
+  setWidgetRender: PropTypes.func,
   mapTooltipLabelTitles: PropTypes.object,
 }
 
@@ -276,6 +279,7 @@ Widget.defaultProps = {
   onInsightsDataRequired: () => {},
   saveWithInsightsData: false,
   dataProviderResponse: {},
+  setWidgetRender: () => {},
   mapTooltipLabelTitles: null,
 }
 
