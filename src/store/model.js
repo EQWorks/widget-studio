@@ -720,21 +720,17 @@ export default {
 
   enableLocationPins: computed(
     [
-      (state) => state.columns,
+      (state) => state.lon,
+      (state) => state.lat,
       (state) => state.dataIsXWIReport,
       (state) => state.type,
     ],
     (
-      columns,
+      lon,
+      lat,
       dataIsXWIReport,
       type,
-    ) => {
-      const lat = columns.find(({ name, category }) =>
-        COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
-      const lon = columns.find(({ name, category }) =>
-        COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
-      return Boolean(type === types.MAP && lat && lon && !dataIsXWIReport)
-    }
+    ) => Boolean(type === types.MAP && lat && lon && !dataIsXWIReport)
   ),
 
   mapInitViewState: computed(
@@ -836,7 +832,7 @@ export default {
       ui: { configLoading: true },
       id: payload,
     })
-    const { sampleConfigs, mapGroupKey } = getState()
+    const { sampleConfigs, mapGroupKey, useMVTOption } = getState()
     const getFn = sampleConfigs
       ? localGetWidget
       : getWidget
@@ -848,8 +844,12 @@ export default {
             createdAt: created_at,
           },
         })
-        // while updateing with config, use mapGroupKey Widget prop value
-        actions.loadConfig({ ...config, ...(mapGroupKey && { mapGroupKey }) })
+        // while updating with config, use mapGroupKey & useMVTOption Widget prop values
+        actions.loadConfig({
+          ...config,
+          ...(mapGroupKey && { mapGroupKey }),
+          ...useMVTOption,
+        })
       })
       .catch(err => {
         actions.update({
