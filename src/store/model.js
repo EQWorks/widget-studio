@@ -139,6 +139,7 @@ const stateDefaults = [
       dataSourceLoading: false,
       dataSourceError: null,
       dataSourceName: null,
+      setWidgetRender: () => {},
       colorRepresentation: COLOR_REPRESENTATIONS[0],
       allowReset: true,
       recentReset: false,
