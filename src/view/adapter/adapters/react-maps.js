@@ -174,9 +174,11 @@ export default {
     let iconLayerGeometry = {}
     let mapGroupKeyType = ''
 
-    if ((mapLayer === MAP_LAYERS.scatterplot || showLocationPins) && !isXWIReportMap) {
-      const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
-      const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
+    const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
+    const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
+
+    if ((mapLayer === MAP_LAYERS.scatterplot || showLocationPins) &&
+      !isXWIReportMap && latitude && longitude) {
 
       if (mapLayer === MAP_LAYERS.scatterplot) {
         geometry = { longitude, latitude }
@@ -563,6 +565,7 @@ export default {
           scrollZoom: false,
           doubleClickZoom: true,
         },
+        setMapInRenderState: () => {},
       },
     })
   },
