@@ -23,13 +23,14 @@ export const DATA_CATEGORIES = {
     'income_sources_total_income_avg',
   ],
   'Vehicle Type': [
-    'Sedan', 'Coupe', 'Pickup', 'SUV', 'Wagon', 'Luxury', 'Minivan',
+    'Sedan', 'Coupe', 'Pickup', 'SUV', 'Wagon', 'Luxury', 'Minivan', 'Hybrid/Electric', 'Not Described',
   ],
   'Vehicle Make': [
-    'Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Cadillac', 'Chevrolet',
-    'Dodge', 'Ferrari', 'Fiat', 'Ford', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Kia', 'Lamborghini',
-    'Land Rover', 'Lexus', 'Lincoln', 'Lotus', 'Maseratti', 'Mazda', 'Mercedes Benz', 'Mini', 'Mitsu',
-    'Nissan', 'Porsche', 'Rolls Royce', 'Subaru', 'Toyota', 'Tesla', 'Volkswagen', 'Volvo',
+    'Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Bugatti', 'Buick', 'Cadillac',
+    'Chevrolet', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar',
+    'Kia', 'Lamborghini', 'Land Rover', 'Lexus', 'Lincoln', 'Lotus', 'Maseratti', 'Mazda',
+    'Mercedes Benz', 'Mini', 'Mitsu', 'Nissan', 'Porsche', 'Rolls Royce', 'Subaru', 'Toyota', 'Tesla',
+    'Volkswagen', 'Volvo',
   ],
   'Vehicle Age': [
     '<3 Years', '3 Years', '4 Years', '5 Years', '6 Years', '7 Years', '7+ Years',
