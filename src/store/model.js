@@ -385,13 +385,13 @@ export default {
   showMVTOption: computed(
     [
       (state) => state.mapGroupKey,
-      (state) => state.columns,
+      (state) => state.columnsAnalysis,
     ],
     (
       mapGroupKey,
-      columns,
+      columnsAnalysis,
     ) => (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
-      ['type', 'geometry'].every(key => columns.map(e => e.name).includes(key))
+      ['type', 'geometry'].every(key => Object.keys(columnsAnalysis).includes(key))
     )
   ),
 
@@ -399,24 +399,27 @@ export default {
   groupFSAByPC: computed(
     [
       (state) => state.mapGroupKey,
-      (state) => state.columns,
+      (state) => state.columnsAnalysis,
     ],
-    (mapGroupKey, columns) => GEO_KEY_TYPES.fsa.includes(mapGroupKey) &&
-      !columns.map(({ name }) => name).includes(mapGroupKey)
+    (
+      mapGroupKey,
+      columnsAnalysis,
+    ) => GEO_KEY_TYPES.fsa.includes(mapGroupKey) &&
+      !Object.keys(columnsAnalysis).includes(mapGroupKey)
   ),
 
   lon: computed(
     [
-      (state) => state.rows,
+      (state) => state.columnsAnalysis,
     ],
-    (rows) => Object.keys(rows?.[0] || {}).find(key => COORD_KEYS.longitude.includes(key))
+    (columnsAnalysis) => Object.keys(columnsAnalysis || {}).find(key => COORD_KEYS.longitude.includes(key))
   ),
 
   lat: computed(
     [
-      (state) => state.rows,
+      (state) => state.columnsAnalysis,
     ],
-    (rows) => Object.keys(rows?.[0] || {}).find(key => COORD_KEYS.latitude.includes(key))
+    (columnsAnalysis) => Object.keys(columnsAnalysis || {}).find(key => COORD_KEYS.latitude.includes(key))
   ),
 
 
@@ -531,19 +534,21 @@ export default {
   dataIsXWIReport: computed(
     [
       (state) => state.columnsAnalysis,
+      (state) => state.lon,
+      (state) => state.lat,
     ],
     (
       columnsAnalysis,
+      lon,
+      lat,
     ) => {
-      const dataKeys = Object.keys(columnsAnalysis) || []
+      const dataKeys = Object.keys(columnsAnalysis || {})
       const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
-      const sourceLon = findCoord(COORD_KEYS.longitude)
-      const sourceLat = findCoord(COORD_KEYS.latitude)
       const targetLon = findCoord(COORD_KEYS.targetLon)
       const targetLat = findCoord(COORD_KEYS.targetLat)
       const sourcePOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
       const targetPOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
-      return Boolean(sourceLon && sourceLat && targetLon && targetLat &&
+      return Boolean(lon && lat && targetLon && targetLat &&
         sourcePOIid && targetPOIid)
     }),
 
@@ -736,17 +741,19 @@ export default {
 
   mapInitViewState: computed(
     [
-      (state) => state.rows,
+      (state) => state.columnsAnalysis,
       (state) => state.isXWIReportMap,
       (state) => state.type,
+      (state) => state.rows,
     ],
     (
-      rows,
+      columnsAnalysis,
       isXWIReportMap,
       type,
+      rows,
     ) => {
-      const lat = Object.keys(rows?.[0] || {}).find(key => key === MAP_VIEW_STATE.lat)
-      const lon = Object.keys(rows?.[0] || {}).find(key => key === MAP_VIEW_STATE.lon)
+      const lat = Object.keys(columnsAnalysis || {}).find(key => key === MAP_VIEW_STATE.lat)
+      const lon = Object.keys(columnsAnalysis || {}).find(key => key === MAP_VIEW_STATE.lon)
 
       if (type === types.MAP && lat && lon && !isXWIReportMap) {
         return {
