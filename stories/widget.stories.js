@@ -62,6 +62,9 @@ const WlCuControlsProvider = withQueryClient(({ children }) => {
   )
 })
 
+const onWidgetReady = (res) => {
+  console.log('res: ', res)
+}
 
 Object.values(modes).forEach(mode => {
   // for each non-empty sample config,
@@ -71,6 +74,7 @@ Object.values(modes).forEach(mode => {
         <Widget {...devProps}
           mode={mode}
           id={id}
+          onWidgetReady={onWidgetReady}
         />
       )
       const renderWidgetAuth = (
@@ -82,6 +86,7 @@ Object.values(modes).forEach(mode => {
             <Widget {...devProps}
               mode={mode}
               id={id}
+              onWidgetReady={onWidgetReady}
             />
           </div>
         </Authenticated>

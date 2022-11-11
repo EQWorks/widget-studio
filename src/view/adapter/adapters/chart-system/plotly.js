@@ -10,12 +10,13 @@ import types from '../../../../constants/types'
 export default {
   [types.BAR]: {
     component: PlotlyBarChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => ({
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => ({
       data,
       x: config.groupKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
       orientation: uniqueOptions.horizontal ? 'h' : 'v',
       formatData: config.formatDataFunctions,
+      onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,

@@ -48,7 +48,7 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
 
 const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const toast = useStoreActions(actions => actions.toast)
-  const mode = useStoreState(state => state.ui.mode)
+  const { mode, onWidgetRender } = useStoreState(state => state.ui)
   const mapGroupKey = useStoreState(state => state.mapGroupKey)
   const uniqueOptions = useStoreState(state => state.uniqueOptions)
   const addUserControls = useStoreState((state) => state.addUserControls)
