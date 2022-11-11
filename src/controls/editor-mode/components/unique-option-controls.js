@@ -1,3 +1,4 @@
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useStoreActions, useStoreState } from '../../../store'
@@ -14,12 +15,16 @@ const UniqueOptionControls = ({ type }) => {
       .map(([k, { name, type: _type }], i) => {
         switch (_type) {
           case Boolean: // TODO support types other than bool
-            return renderCheckbox(
-              name,
-              uniqueOptions[k],
-              v => userUpdate({ uniqueOptions: { [k]: v } }),
-              false,
-              i
+            return (
+              <div key={i}>
+                {renderCheckbox(
+                  name,
+                  uniqueOptions[k],
+                  v => userUpdate({ uniqueOptions: { [k]: v } }),
+                  false,
+                  i
+                )}
+              </div>
             )
         }
       })
