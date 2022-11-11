@@ -85,7 +85,7 @@ const DataSourceControls = () => {
                 <span className={classes.dropdownDescriptionIcons}>
                   {[... new Set(columns.map(({ category }) => category).filter(c => Object.values(columnTypes).includes(c)))]
                     .sort()
-                    .map((c, i) => createElement(columnTypeInfo[c]?.Icon, { size: 'sm' }, { key: i }))}
+                    .map((c, i) => createElement(columnTypeInfo[c]?.Icon, { size: 'sm', key: i }))}
                 </span>
               </span>
             ),
@@ -124,7 +124,7 @@ const DataSourceControls = () => {
           <CustomSelect
             allowClear={false}
             // disabled={executionsLoading || executionsList === []}
-            disabled={ executionsList === []}
+            disabled={Array.isArray(executionsList) && !executionsList.length}
             placeholder={placeholder}
             fullWidth
             value={selected?.label}
