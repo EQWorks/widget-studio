@@ -21,6 +21,7 @@ import {
   COORD_KEYS,
   GEO_KEY_TYPE_NAMES,
   MAP_VIEW_STATE,
+  GEOJSON_KEYS,
 } from '../constants/map'
 import {
   DATA_CATEGORIES,
@@ -162,6 +163,7 @@ const stateDefaults = [
   { key: 'mapTooltipLabelTitles', defaultValue: null, resettable: false },
   { key: 'aliasesReseted', defaultValue: false, resettable: true },
   { key: 'useMVTOption', defaultValue: true, resettable: true },
+  { key: 'MVTOptionProp', defaultValue: null, resettable: false },
 ]
 
 export default {
@@ -384,15 +386,13 @@ export default {
 
   showMVTOption: computed(
     [
-      (state) => state.mapGroupKey,
+      (state) => state.type,
       (state) => state.columnsAnalysis,
     ],
     (
-      mapGroupKey,
+      type,
       columnsAnalysis,
-    ) => (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
-      ['type', 'geometry'].every(key => Object.keys(columnsAnalysis).includes(key))
-    )
+    ) => type === types.MAP && GEOJSON_KEYS.every(key => Object.keys(columnsAnalysis).includes(key))
   ),
 
   // determines to use postal code geo key to aggregate by FSA
@@ -840,7 +840,7 @@ export default {
       ui: { configLoading: true },
       id: payload,
     })
-    const { sampleConfigs, mapGroupKey, useMVTOption } = getState()
+    const { sampleConfigs, mapGroupKey, MVTOptionProp } = getState()
     const getFn = sampleConfigs
       ? localGetWidget
       : getWidget
@@ -856,7 +856,7 @@ export default {
         actions.loadConfig({
           ...config,
           ...(mapGroupKey && { mapGroupKey }),
-          ...useMVTOption,
+          ...(MVTOptionProp !== null && { useMVTOption: MVTOptionProp }),
         })
       })
       .catch(err => {
