@@ -1,6 +1,6 @@
 {
   "name": "@eqworks/widget-studio",
-  "version": "0.5.2",
+  "version": "0.5.3-alpha.1",
   "main": "dist/index.js",
   "source": "src/index.js",
   "files": [
@@ -82,7 +82,7 @@
     "tailwindcss-children": "^2.1.0"
   },
   "dependencies": {
-    "@eqworks/chart-system": "^0.9.1",
+    "@eqworks/chart-system": "^0.9.2",
     "@eqworks/lumen-table": "2.0.0-alpha.10",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@react-hook/resize-observer": "^1.2.4",

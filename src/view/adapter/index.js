@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useMemo, useCallback, useState } from 'react'
+import React, { createElement, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import { useResizeDetector } from 'react-resize-detector'
@@ -68,12 +68,6 @@ const WidgetAdapter = () => {
     ref?.current && update({ ui: { screenshotRef: ref.current } })
   }, [ref, update])
 
-  const onAfterPlot = useCallback(res => {
-    if (!(res?.response?.isEqualNode(onWidgetRender?.response))) {
-      update({ ui: { onWidgetRender: res } })
-    }
-  }, [update, onWidgetRender])
-
   const renderUserControlValues = useMemo(() => Boolean(addUserControls &&
     (userControlKeyValues.length > 0))
   , [addUserControls, userControlKeyValues])
@@ -84,7 +78,7 @@ const WidgetAdapter = () => {
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
 
   // pass the processed data to the rendering adapter and memoize the results
-  const adaptedDataAndConfig = useMemo(() => adapt(transformedData ?? [], { ...config, wl, mapInitViewState, onAfterPlot })
+  const adaptedDataAndConfig = useMemo(() => adapt(transformedData ?? [], { ...config, wl, mapInitViewState, onAfterPlot: onWidgetRender })
     , [adapt, config, transformedData, wl, mapInitViewState, onWidgetRender])
 
   // render the component

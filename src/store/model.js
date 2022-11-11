@@ -147,7 +147,7 @@ const stateDefaults = [
       exportType: EXPORT_TYPES[0],
       screenshotRef: null,
       image: null,
-      onWidgetRender: {}
+      onWidgetRender: () => {},
     },
     resettable: false,
   },

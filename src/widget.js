@@ -75,7 +75,7 @@ const Widget = ({
   onInsightsDataRequired,
   saveWithInsightsData,
   dataProviderResponse,
-  onWidgetReady,
+  onWidgetRender,
   // temporary:
   filters,
   executionID,
@@ -101,7 +101,7 @@ const Widget = ({
   // ui state
   const mode = useStoreState(state => state.ui.mode)
   const baseMode = useStoreState(state => state.ui.baseMode)
-  const onWidgetRender = useStoreState(state => state.ui.onWidgetRender)
+  // const onWidgetRender = useStoreState(state => state.ui.onWidgetRender)
 
   // update state for case when we use InsightsDataProvider
   useEffect(() => {
@@ -197,11 +197,7 @@ const Widget = ({
     }
   }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id])
 
-  useEffect(() => {
-    if (onWidgetRender?.response) {
-      onWidgetReady(onWidgetRender)
-    }
-  }, [onWidgetRender, onWidgetReady])
+  useEffect(() => update({ ui: { onWidgetRender } }), [update, onWidgetRender])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-hidden flex-1 min-w-0 flex items-stretch', {
@@ -260,7 +256,7 @@ Widget.propTypes = {
   columns: PropTypes.array,
   filters: PropTypes.arrayOf(PropTypes.object),
   onInsightsDataRequired: PropTypes.func,
-  onWidgetReady: PropTypes.func,
+  onWidgetRender: PropTypes.func,
   saveWithInsightsData: PropTypes.bool,
   dataProviderResponse: PropTypes.object,
   mapTooltipLabelTitles: PropTypes.object,
@@ -283,7 +279,7 @@ Widget.defaultProps = {
   columns: null,
   filters: [],
   onInsightsDataRequired: () => {},
-  onWidgetReady: () => {},
+  onWidgetRender: () => {},
   saveWithInsightsData: false,
   dataProviderResponse: {},
   mapTooltipLabelTitles: null,

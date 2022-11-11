@@ -24,11 +24,12 @@ export default {
   },
   [types.LINE]: {
     component: PlotlyLineChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => ({
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => ({
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
       formatData: config.formatDataFunctions,
+      onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
@@ -36,10 +37,11 @@ export default {
   },
   [types.PIE]: {
     component: PlotlyPieChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => ({
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => ({
       data,
       label: config.groupKeyTitle,
       values: config.valueKeys.map(({ title }) => title),
+      onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
@@ -47,11 +49,12 @@ export default {
   },
   [types.SCATTER]: {
     component: PlotlyScatterChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => ({
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => ({
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
       formatData: config.formatDataFunctions,
+      onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
@@ -59,7 +62,7 @@ export default {
   },
   [types.PYRAMID]: {
     component: PlotlyPyramidChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => {
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => {
       const { xAxisLabelLength, showWidgetTitle } = genericOptions
 
       return ({
@@ -68,6 +71,7 @@ export default {
         y: [config.groupKeyTitle],
         formatData: config.formatDataFunctions,
         xAxisLabelLength,
+        onAfterPlot,
         ...(showWidgetTitle && { title }),
         ...uniqueOptions,
         ...genericOptions,
