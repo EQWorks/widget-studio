@@ -42,7 +42,8 @@ export const DATA_CATEGORIES = {
     'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
   ],
   'Local Brands Visitation': [
-    'Costco', 'Walmart', 'Loblaws', 'Tim Hortons', 'Gap Inc',
+    'Costco', 'Canadian Superstore', 'Walmart', 'Winners', 'Loblaws', 'Lowes', 'Tim Hortons',
+    'Toysrus', 'Gap Inc', 'Home Depot', 'Starbucks', 'The Bay',
   ],
 }
 
