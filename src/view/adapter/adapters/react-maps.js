@@ -101,6 +101,7 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
             mapConfig: {
               ...mapConfig,
               setCurrentViewport,
+              setMapInRenderState: onWidgetRender,
             },
           }
         } />
