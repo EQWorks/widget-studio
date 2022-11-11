@@ -152,7 +152,7 @@ const Widget = ({
       saveWithInsightsData,
       mapTooltipLabelTitles,
       ...(mapGroupKey && { mapGroupKey }),
-      useMVTOption,
+      ...(useMVTOption !==null && { MVTOptionProp: useMVTOption }),
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
