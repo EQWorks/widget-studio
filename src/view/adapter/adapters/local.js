@@ -6,7 +6,7 @@ import Stat from './local-components/stat'
 export default {
   [types.STAT]: {
     component: Stat,
-    adapt: (data, { title, valueKeys, genericOptions, uniqueOptions, ...config }) => {
+    adapt: (data, { title, valueKeys, genericOptions, uniqueOptions, onAfterPlot, ...config }) => {
       return ({
         data,
         title,
@@ -14,6 +14,7 @@ export default {
         formatData: config.formatDataFunctions,
         genericOptions,
         uniqueOptions,
+        onAfterPlot,
       })
     },
   },
