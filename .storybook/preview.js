@@ -1,4 +1,4 @@
 export const parameters = {
-  controls: { disabled: true },
+  controls: { disable: true },
   layout: 'fullscreen',
 }
