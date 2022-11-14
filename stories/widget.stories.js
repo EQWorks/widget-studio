@@ -81,7 +81,6 @@ Object.values(modes).forEach(mode => {
             <Widget {...devProps}
               mode={mode}
               id={id}
-
             />
           </div>
         </Authenticated>

@@ -101,7 +101,6 @@ const Widget = ({
   // ui state
   const mode = useStoreState(state => state.ui.mode)
   const baseMode = useStoreState(state => state.ui.baseMode)
-  // const onWidgetRender = useStoreState(state => state.ui.onWidgetRender)
 
   // update state for case when we use InsightsDataProvider
   useEffect(() => {
