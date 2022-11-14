@@ -75,6 +75,7 @@ const Widget = ({
   onInsightsDataRequired,
   saveWithInsightsData,
   dataProviderResponse,
+  onWidgetRender,
   // temporary:
   filters,
   executionID,
@@ -195,6 +196,8 @@ const Widget = ({
     }
   }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id])
 
+  useEffect(() => update({ ui: { onWidgetRender } }), [update, onWidgetRender])
+
   const renderView = (
     <div className={clsx('min-h-0 overflow-hidden flex-1 min-w-0 flex items-stretch', {
       'h-full': mode === modes.VIEW,
@@ -252,6 +255,7 @@ Widget.propTypes = {
   columns: PropTypes.array,
   filters: PropTypes.arrayOf(PropTypes.object),
   onInsightsDataRequired: PropTypes.func,
+  onWidgetRender: PropTypes.func,
   saveWithInsightsData: PropTypes.bool,
   dataProviderResponse: PropTypes.object,
   mapTooltipLabelTitles: PropTypes.object,
@@ -274,6 +278,7 @@ Widget.defaultProps = {
   columns: null,
   filters: [],
   onInsightsDataRequired: () => {},
+  onWidgetRender: () => {},
   saveWithInsightsData: false,
   dataProviderResponse: {},
   mapTooltipLabelTitles: null,

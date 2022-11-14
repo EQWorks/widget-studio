@@ -62,7 +62,6 @@ const WlCuControlsProvider = withQueryClient(({ children }) => {
   )
 })
 
-
 Object.values(modes).forEach(mode => {
   // for each non-empty sample config,
   Object.entries(sampleConfigs).forEach(([id, config]) => {

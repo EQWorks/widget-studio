@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
 import { capitalize } from '../../../../util/string-manipulation'
@@ -159,11 +159,18 @@ const conditionalClasses = ({ showVertical, values, labelPosition, selectedPerce
   ),
 })
 
-const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }) => {
+const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions, onAfterPlot }) => {
+  const statRef = useRef(null)
   const { showLabels, showCurrency, showWidgetTitle, showVertical, labelPosition } = genericOptions
   const { selectedTrend, selectedPercentage } = uniqueOptions
 
   const _conditionalClasses = (index = null) => conditionalClasses({ showVertical, values, labelPosition, selectedPercentage, index })
+
+  useEffect(() => {
+    if (statRef?.current) {
+      onAfterPlot({ response: statRef.current, isLoading: false })
+    }
+  }, [statRef, onAfterPlot])
 
   const renderValue = (curr, val) => {
     if (val) {
@@ -208,7 +215,7 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions }
   }
 
   return (
-    <div className={classes.outerContainer}>
+    <div ref={statRef} className={classes.outerContainer}>
       {showWidgetTitle && <div className="title-container">{title}</div>}
       <div className={classes.innerContainer}>
         <div className={_conditionalClasses().contentContainer}>
@@ -267,5 +274,6 @@ Stat.propTypes = {
   formatData: PropTypes.objectOf(PropTypes.func),
   genericOptions: PropTypes.object.isRequired,
   uniqueOptions: PropTypes.object.isRequired,
+  onAfterPlot: PropTypes.func,
 }
 export default Stat
