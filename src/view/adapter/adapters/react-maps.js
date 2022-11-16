@@ -53,6 +53,7 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const uniqueOptions = useStoreState(state => state.uniqueOptions)
   const addUserControls = useStoreState((state) => state.addUserControls)
   const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
+  const useMVTOption = useStoreState((state) => state.useMVTOption)
 
   const [currentViewport, setCurrentViewport] = useState({})
   const [debouncedCurrentViewport] = useDebounce(currentViewport, 500)
@@ -73,23 +74,23 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const classes = useStyles({ width, height, marginTop: finalMarginTop })
 
   useEffect(() => {
-    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && showToastMessage &&
+    if (useMVTOption && GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && showToastMessage &&
       debouncedCurrentViewport?.zoom < MIN_ZOOM.postalCode - MAP_TOAST_ZOOM_ADJUSTMENT) {
       toast({
         title: 'Zoom in for postal code visualization!',
         color: 'warning',
       })
     }
-  }, [toast, mapGroupKey, uniqueOptions, debouncedCurrentViewport, showToastMessage])
+  }, [useMVTOption, toast, mapGroupKey, uniqueOptions, debouncedCurrentViewport, showToastMessage])
 
   useEffect(() => {
-    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
+    if (useMVTOption && GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
       debouncedCurrentViewport?.zoom < MIN_ZOOM.postalCode) {
       setShowToastMessage(true)
     } else {
       setShowToastMessage(false)
     }
-  }, [mapGroupKey, debouncedCurrentViewport])
+  }, [useMVTOption, mapGroupKey, debouncedCurrentViewport])
 
   if (width > 0 && height > 0) {
     return (
@@ -134,6 +135,7 @@ export default {
       formatDataKey,
       formatDataFunctions,
       mapTooltipLabelTitles,
+      useMVTOption,
     } = config
     const {
       baseColor,
@@ -148,8 +150,12 @@ export default {
       mapPinTooltipKey,
     } = genericOptions
 
+    const mapGroupKeyIsRegion = GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)
+    const mapGroupKeyIsPostalcode = GEO_KEY_TYPES.postalcode.includes(mapGroupKey)
+
     const mapLayer = Object.keys(MAP_LAYERS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
+
     //----TO DO - extend geometry logic for other layers if necessary
     const dataKeys = Object.keys(data.arcData?.[0] || data[0]?.properties || data[0] || {})
     const findKey = keyArray => dataKeys?.find(key => keyArray.includes(key))
@@ -169,37 +175,40 @@ export default {
     let iconLayerGeometry = {}
     let mapGroupKeyType = ''
 
-    if ((mapLayer === MAP_LAYERS.scatterplot || showLocationPins) && !isXWIReportMap) {
-      const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
-      const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
+    const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
+    const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
+
+    if ((mapLayer === MAP_LAYERS.scatterplot || showLocationPins) &&
+      !isXWIReportMap && latitude && longitude) {
 
       if (mapLayer === MAP_LAYERS.scatterplot) {
         geometry = { longitude, latitude }
       }
 
       if (showLocationPins) {
-        if (!GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)) {
+        if ((!mapGroupKeyIsRegion && useMVTOption) || !useMVTOption) {
           iconLayerGeometry = { longitude, latitude }
-          iconData = data.reduce((acc, el ) => acc.find((elem) =>
-            elem[longitude] === el[longitude] && elem[latitude] === el[latitude]) ?
+          iconData = data.reduce((acc, el ) => acc.find(elem => {
+            return elem[longitude] === el[longitude] && elem[latitude] === el[latitude]
+          }) ?
             acc :
             [...acc, el]
-          ,[])
+          ,[data[0]])
         } else {
           iconLayerGeometry = { longitude, latitude }
-          iconData = data.reduce((acc, el ) => acc.find((elem) => {
-            return elem[longitude] === el.properties[longitude] &&
-              elem[latitude] === el.properties[latitude]}) ?
+          iconData = data.reduce((acc, el ) => acc.find(elem => {
+            return elem[longitude] === el.properties?.[longitude] &&
+              elem[latitude] === el.properties?.[latitude]}) ?
             acc :
             [
               ...acc,
               { ...el.properties,
-                lon: el.properties[longitude],
-                lat: el.properties[latitude],
+                lon: el.properties?.[longitude],
+                lat: el.properties?.[latitude],
               },
             ]
           ,
-          [])
+          [data[0].properties])
         }
       }
     }
@@ -207,13 +216,13 @@ export default {
     if (mapLayer === MAP_LAYERS.geojson) {
       geometry = {
         geoKey: mapGroupKeyTitle,
-        longitude: 'longitude',
-        latitude: 'latitude',
-        geometryAccessor: d => d.properties,
       }
+
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
         .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
-      if (!GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)) {
+
+      // for mapGroupKey === 'region' we dont't use the MVT render option for polygons in map widget
+      if (!mapGroupKeyIsRegion && useMVTOption) {
         finalData = {
           tileGeom: `${process.env.TEGOLA_SERVER_URL || process.env.STORYBOOK_TEGOLA_SERVER_URL}/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`, // <ignore scan-env>
           tileData: data,
@@ -359,7 +368,7 @@ export default {
         {
           layer: mapLayer,
           dataId: `${id}-${type}`,
-          dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
+          dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson && useMVTOption ? d => d.properties : d => d,
           geometry,
           visualizations: Object.fromEntries(
             MAP_LAYER_VALUE_VIS[mapLayer]?.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
@@ -400,13 +409,12 @@ export default {
           legend: { showLegend: true },
           schemeColor: baseColor,
           opacity: uniqueOptions.opacity.value / 100,
-          minZoom: GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+          minZoom: mapGroupKeyIsPostalcode ?
             MIN_ZOOM.postalCode :
             MIN_ZOOM.defaultValue,
           maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
           // restrict initial zoom-in to data for postal code polygons; the browser might not be able to handle it
-          initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ||
-            (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && data.length < 1000),
+          initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
         },
       ]
 
@@ -482,23 +490,6 @@ export default {
       ]
     }
 
-    let dataConfig = []
-
-    if (isXWIReportMap) {
-      dataConfig = [
-        { id: `${id}-${type}-arc`, data: finalData.arcData },
-        { id: `${id}-${type}-source`, data: finalData.sourceData },
-        { id: `${id}-${type}-target`, data: finalData.targetData },
-      ]
-    } else {
-      dataConfig = [
-        { id: `${id}-${type}`, data: finalData },
-      ]
-      if (iconData.length) {
-        dataConfig = [...dataConfig, { id: `${id}-${type}-icon`, data: iconData }]
-      }
-    }
-
     if (showLocationPins && iconData.length && !isXWIReportMap) {
       layerConfig = [
         ...layerConfig,
@@ -528,10 +519,24 @@ export default {
             } :
             {},
           schemeColor: complementaryColor({ baseColor }),
-          initialViewportDataAdjustment: !GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ||
-            (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && data.length < 1000),
+          initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
         },
       ]
+    }
+
+    let dataConfig = []
+
+    if (isXWIReportMap) {
+      dataConfig = [
+        { id: `${id}-${type}-arc`, data: finalData.arcData },
+        { id: `${id}-${type}-source`, data: finalData.sourceData },
+        { id: `${id}-${type}-target`, data: finalData.targetData },
+      ]
+    } else {
+      dataConfig = [
+        { id: `${id}-${type}`, data: finalData },
+        iconData.length ? { id: `${id}-${type}-icon`, data: iconData } : '',
+      ].filter(el => el)
     }
 
     return ({
@@ -545,7 +550,7 @@ export default {
         showMapLegend: showLegend,
         showMapTooltip: showTooltip,
         initViewState:  {
-          ...GEO_KEY_TYPES.postalcode.includes(mapGroupKey) ?
+          ...mapGroupKeyIsPostalcode ?
             MAP_VIEW_STATE.postalCode :
             MAP_VIEW_STATE.value,
           ...mapInitViewState,

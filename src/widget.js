@@ -83,6 +83,8 @@ const Widget = ({
   sampleData,
   sampleConfigs,
   mapTooltipLabelTitles,
+  mapGroupKey,
+  useMVTOption,
 }) => {
   const classes = useStyles(_mode)
 
@@ -97,6 +99,7 @@ const Widget = ({
   const dataSourceType = useStoreState((state) => state.dataSource.type)
   const dataSourceID = useStoreState((state) => state.dataSource.id)
   const userValueFilter = useStoreState((state) => state.userValueFilter)
+  const type = useStoreState((state) => state.type)
 
   // ui state
   const mode = useStoreState(state => state.ui.mode)
@@ -149,6 +152,8 @@ const Widget = ({
       },
       saveWithInsightsData,
       mapTooltipLabelTitles,
+      ...(mapGroupKey && { mapGroupKey }),
+      ...(useMVTOption !==null && { useMVTOption, MVTOptionProp: useMVTOption }),
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -183,18 +188,20 @@ const Widget = ({
       // error on incorrect component usage
       throw new Error(`Incorrect usage: Widgets in ${validatedBaseMode} mode must have an ID.`)
     }
-  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig, loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType, onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles])
+  }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig,
+    loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType,
+    onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey, useMVTOption])
 
   // load data if source changes
   useEffect(() => {
     if (!staticData && dataSourceType && dataSourceID) {
       if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
-        onInsightsDataRequired(id, dataSourceID)
+        onInsightsDataRequired(id, dataSourceID, type)
       } else if (dataSourceType !== dataSourceTypes.MANUAL) {
         loadData({ type: dataSourceType, id: dataSourceID })
       }
     }
-  }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id])
+  }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id, type])
 
   useEffect(() => update({ ui: { onWidgetRender } }), [update, onWidgetRender])
 
@@ -259,6 +266,8 @@ Widget.propTypes = {
   saveWithInsightsData: PropTypes.bool,
   dataProviderResponse: PropTypes.object,
   mapTooltipLabelTitles: PropTypes.object,
+  mapGroupKey: PropTypes.string,
+  useMVTOption: PropTypes.bool,
 }
 
 Widget.defaultProps = {
@@ -282,6 +291,8 @@ Widget.defaultProps = {
   saveWithInsightsData: false,
   dataProviderResponse: {},
   mapTooltipLabelTitles: null,
+  mapGroupKey: '',
+  useMVTOption: null,
 }
 
 export default withQueryClient(withStore(Widget))

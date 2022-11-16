@@ -21,6 +21,7 @@ import {
   COORD_KEYS,
   GEO_KEY_TYPE_NAMES,
   MAP_VIEW_STATE,
+  GEOJSON_KEYS,
 } from '../constants/map'
 import {
   DATA_CATEGORIES,
@@ -161,6 +162,8 @@ const stateDefaults = [
   { key: 'formatDataKey', defaultValue: (label) => truncateString(label, 30), resettable: false },
   { key: 'mapTooltipLabelTitles', defaultValue: null, resettable: false },
   { key: 'aliasesReseted', defaultValue: false, resettable: true },
+  { key: 'useMVTOption', defaultValue: true, resettable: true },
+  { key: 'MVTOptionProp', defaultValue: null, resettable: false },
 ]
 
 export default {
@@ -183,6 +186,7 @@ export default {
       (state) => state.group,
       (state) => state.groupKey,
       (state) => state.mapGroupKey,
+      (state) => state.useMVTOption,
       (state) => state.indexKey,
       (state) => state.renderableValueKeys,
       (state) => state.formatDataKey,
@@ -215,6 +219,7 @@ export default {
       group,
       groupKey,
       mapGroupKey,
+      useMVTOption,
       indexKey,
       renderableValueKeys,
       formatDataKey,
@@ -251,6 +256,7 @@ export default {
       group,
       groupKey,
       mapGroupKey,
+      useMVTOption,
       indexKey,
       ...(groupKey && { groupKeyTitle: formattedColumnNames[groupKey] } || groupKey),
       ...(mapGroupKey && { mapGroupKeyTitle: formattedColumnNames[mapGroupKey] } || mapGroupKey),
@@ -378,15 +384,44 @@ export default {
       Object.keys(MAP_LAYERS).find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
   ),
 
+  showMVTOption: computed(
+    [
+      (state) => state.type,
+      (state) => state.columnsAnalysis,
+    ],
+    (
+      type,
+      columnsAnalysis,
+    ) => type === types.MAP && GEOJSON_KEYS.every(key => Object.keys(columnsAnalysis).includes(key))
+  ),
+
   // determines to use postal code geo key to aggregate by FSA
   groupFSAByPC: computed(
     [
       (state) => state.mapGroupKey,
-      (state) => state.columns,
+      (state) => state.columnsAnalysis,
     ],
-    (mapGroupKey, columns) => GEO_KEY_TYPES.fsa.includes(mapGroupKey) &&
-      !columns.map(({ name }) => name).includes(mapGroupKey)
+    (
+      mapGroupKey,
+      columnsAnalysis,
+    ) => GEO_KEY_TYPES.fsa.includes(mapGroupKey) &&
+      !Object.keys(columnsAnalysis).includes(mapGroupKey)
   ),
+
+  lon: computed(
+    [
+      (state) => state.columnsAnalysis,
+    ],
+    (columnsAnalysis) => Object.keys(columnsAnalysis || {}).find(key => COORD_KEYS.longitude.includes(key))
+  ),
+
+  lat: computed(
+    [
+      (state) => state.columnsAnalysis,
+    ],
+    (columnsAnalysis) => Object.keys(columnsAnalysis || {}).find(key => COORD_KEYS.latitude.includes(key))
+  ),
+
 
   domainIsDate: computed(
     [
@@ -499,19 +534,21 @@ export default {
   dataIsXWIReport: computed(
     [
       (state) => state.columnsAnalysis,
+      (state) => state.lon,
+      (state) => state.lat,
     ],
     (
       columnsAnalysis,
+      lon,
+      lat,
     ) => {
-      const dataKeys = Object.keys(columnsAnalysis) || []
+      const dataKeys = Object.keys(columnsAnalysis || {})
       const findCoord = coordArray => dataKeys?.find(key => coordArray.includes(key))
-      const sourceLon = findCoord(COORD_KEYS.longitude)
-      const sourceLat = findCoord(COORD_KEYS.latitude)
       const targetLon = findCoord(COORD_KEYS.targetLon)
       const targetLat = findCoord(COORD_KEYS.targetLat)
       const sourcePOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
       const targetPOIid = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
-      return Boolean(sourceLon && sourceLat && targetLon && targetLat &&
+      return Boolean(lon && lat && targetLon && targetLat &&
         sourcePOIid && targetPOIid)
     }),
 
@@ -689,38 +726,34 @@ export default {
 
   enableLocationPins: computed(
     [
-      (state) => state.columns,
+      (state) => state.lon,
+      (state) => state.lat,
       (state) => state.dataIsXWIReport,
       (state) => state.type,
     ],
     (
-      columns,
+      lon,
+      lat,
       dataIsXWIReport,
       type,
-    ) => {
-      const lat = columns.find(({ name, category }) =>
-        COORD_KEYS.latitude.includes(name) && category === columnTypes.NUMERIC)?.name
-      const lon = columns.find(({ name, category }) =>
-        COORD_KEYS.longitude.includes(name) && category === columnTypes.NUMERIC)?.name
-      return Boolean(type === types.MAP && lat && lon && !dataIsXWIReport)
-    }
+    ) => Boolean(type === types.MAP && lat && lon && !dataIsXWIReport)
   ),
 
   mapInitViewState: computed(
     [
-      (state) => state.columns,
-      (state) => state.rows,
+      (state) => state.columnsAnalysis,
       (state) => state.isXWIReportMap,
       (state) => state.type,
+      (state) => state.rows,
     ],
     (
-      columns,
-      rows,
+      columnsAnalysis,
       isXWIReportMap,
       type,
+      rows,
     ) => {
-      const lat = columns.find(({ name }) => name === MAP_VIEW_STATE.lat)?.name
-      const lon = columns.find(({ name }) => name === MAP_VIEW_STATE.lon)?.name
+      const lat = Object.keys(columnsAnalysis || {}).find(key => key === MAP_VIEW_STATE.lat)
+      const lon = Object.keys(columnsAnalysis || {}).find(key => key === MAP_VIEW_STATE.lon)
 
       if (type === types.MAP && lat && lon && !isXWIReportMap) {
         return {
@@ -807,7 +840,7 @@ export default {
       ui: { configLoading: true },
       id: payload,
     })
-    const { sampleConfigs } = getState()
+    const { sampleConfigs, mapGroupKey, MVTOptionProp } = getState()
     const getFn = sampleConfigs
       ? localGetWidget
       : getWidget
@@ -819,7 +852,12 @@ export default {
             createdAt: created_at,
           },
         })
-        actions.loadConfig(config)
+        // while updating with config, use mapGroupKey & useMVTOption Widget prop values
+        actions.loadConfig({
+          ...config,
+          ...(mapGroupKey && { mapGroupKey }),
+          ...(MVTOptionProp !== null && { useMVTOption: MVTOptionProp }),
+        })
       })
       .catch(err => {
         actions.update({

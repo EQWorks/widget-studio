@@ -5,17 +5,19 @@ import { useResizeDetector } from 'react-resize-detector'
 import { makeStyles } from '@eqworks/lumen-labs'
 
 import { useStoreActions, useStoreState } from '../../store'
+import modes from '../../constants/modes'
 import typeInfo from '../../constants/type-info'
 import types from '../../constants/types'
 import UserValueControls from '../../user-controls/user-value-controls'
 import TopCategories from '../../user-controls/top-categories'
 
 
-const useStyles = ({ type, renderUserControlValues, addTopCategories }) => makeStyles({
+const useStyles = ({ type, renderUserControlValues, addTopCategories, topMargin }) => makeStyles({
   container: {
     position: 'relative',
     width: '100%',
     height: '100%',
+    marginTop: `${topMargin}rem`,
   },
   widget: {
     ...(addTopCategories && { display: 'flex' }),
@@ -25,7 +27,7 @@ const useStyles = ({ type, renderUserControlValues, addTopCategories }) => makeS
   },
   userValueDropdownSelect: {
     position: 'absolute',
-    margin: '1rem',
+    margin: '1rem 1rem 0rem 4rem',
     zIndex: '10',
   },
 })
@@ -46,6 +48,7 @@ Object.entries(typeInfo).forEach(([key, { adapter }]) => {
 const WidgetAdapter = () => {
   const update = useStoreActions((actions) => actions.update)
   const type = useStoreState((state) => state.type)
+  const mode = useStoreState(state => state.ui.mode)
   const config = useStoreState((state) => state.config)
   const transformedData = useStoreState((state) => state.transformedData)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
@@ -68,11 +71,27 @@ const WidgetAdapter = () => {
     ref?.current && update({ ui: { screenshotRef: ref.current } })
   }, [ref, update])
 
+  const haveUserControls = useMemo(() => Boolean(addUserControls && userControlKeyValues?.length > 0 &&
+    (type === types.BAR || (type === types.MAP && renderableValueKeys?.length === 1))),
+  [addUserControls, userControlKeyValues, renderableValueKeys, type])
+
   const renderUserControlValues = useMemo(() => Boolean(addUserControls &&
     (userControlKeyValues.length > 0))
   , [addUserControls, userControlKeyValues])
 
-  const classes = useStyles({ type, renderUserControlValues, addTopCategories })
+  const MODE_DIMENSIONS = Object.freeze({
+    [modes.EDITOR]: { marginTop: 0 },
+    [modes.QL]: { marginTop: haveUserControls ? 0.75 : 0 },
+    [modes.VIEW]: { marginTop: haveUserControls ? 0.75 : 0 },
+    [modes.COMPACT]: { marginTop: 0 },
+  })
+
+  const classes = useStyles({
+    type,
+    renderUserControlValues,
+    addTopCategories,
+    topMargin: MODE_DIMENSIONS[mode].marginTop || 0,
+  })
 
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
