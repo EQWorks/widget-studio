@@ -109,7 +109,7 @@ const stateDefaults = [
   // TO DELETE or change in the future when we implement data tree selection
   { key: 'saveWithInsightsData', defaultValue: false, resettable: false },
   { key: 'reportType', defaultValue: null, resettable: true },
-  { key: 'reportYM', defaultValue: null, resettable: true },
+  { key: 'reportSuffix', defaultValue: null, resettable: true },
   { key: 'percentageMode', defaultValue: false, resettable: true },
   { key: 'addUserControls', defaultValue: false, resettable: true },
   { key: 'addTopCategories', defaultValue: false, resettable: true },
@@ -784,7 +784,7 @@ export default {
   }),
 
   save: thunk(async (actions, _, { getState }) => {
-    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType, reportYM, dataSource } = getState()
+    const { config, tentativeConfig, id, wl, cu, saveWithInsightsData, reportType, reportSuffix, dataSource } = getState()
     if (!config) {
       actions.toast({
         title: `The widget is not configured yet, but will be ${id ? 'saved' : 'created'} anyway.`,
@@ -809,7 +809,7 @@ export default {
           ...tentativeConfig,
           dataSource: {
             type: dataSourceTypes.INSIGHTS_DATA,
-            id: reportType + (reportYM ? '_YM' : ''),
+            id: reportType + reportSuffix,
           },
         } :
         tentativeConfig,

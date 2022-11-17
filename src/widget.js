@@ -149,6 +149,7 @@ const Widget = ({
         ...(validatedBaseMode === modes.QL && { showTable: true }),
         baseMode: validatedBaseMode,
         staticData,
+        onWidgetRender,
       },
       saveWithInsightsData,
       mapTooltipLabelTitles,
@@ -190,7 +191,8 @@ const Widget = ({
     }
   }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig,
     loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType,
-    onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey, useMVTOption])
+    onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey, useMVTOption,
+    onWidgetRender])
 
   // load data if source changes
   useEffect(() => {
@@ -202,8 +204,6 @@ const Widget = ({
       }
     }
   }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id, type])
-
-  useEffect(() => update({ ui: { onWidgetRender } }), [update, onWidgetRender])
 
   const renderView = (
     <div className={clsx('min-h-0 overflow-hidden flex-1 min-w-0 flex items-stretch', {

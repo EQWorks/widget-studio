@@ -145,7 +145,7 @@ const useTransformedData = () => {
       // whether the configured group key has produced data with any variance
       const data = Object.values(groupedData)
       if (data[0]) {
-        const testKey = Object.keys(data[0]).find(key => columnsAnalysis[key].isNumeric)
+        const testKey = Object.keys(data[0]).find(key => columnsAnalysis[key]?.isNumeric)
         update({ dataHasVariance: data.some(g => g[testKey]?.length > 1) })
       }
     }
