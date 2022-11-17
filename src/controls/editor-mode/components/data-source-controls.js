@@ -9,7 +9,12 @@ import { renderRow } from '../../shared/util'
 import WidgetControlCard from '../../shared/components/widget-control-card'
 import { columnTypeInfo, columnTypes } from '../../../constants/columns'
 import { dataSourceTypes } from '../../../constants/data-source'
-import { yearMonthClientRegExp, clientIdRegExp, reportYMRegExp } from '../../../constants/regexp'
+import {
+  yearClientRegExp,
+  yearMonthClientRegExp,
+  clientIdRegExp,
+  yearQuarterClientRegExp,
+} from '../../../constants/regexp'
 import { STRING_REPLACE_DICT } from '../../../util/string-manipulation'
 
 
@@ -57,10 +62,21 @@ const DataSourceControls = () => {
           ((dataSourceType === dataSourceTypes.INSIGHTS_DATA && clientToken) ||
             dataSourceType !== dataSourceTypes.INSIGHTS_DATA))
         .map(({ queryID, executionID, columns, views = [], clientToken }) => {
-          const reportYM = clientToken?.match(reportYMRegExp)?.[0]
-          const yearMonthClient = clientToken?.match(yearMonthClientRegExp)?.[0]
+          const reportYearClient = clientToken?.match(yearClientRegExp)?.[0]
+          const reportYearMonthClient = clientToken?.match(yearMonthClientRegExp)?.[0]
+          const reportYearQuarterClient = clientToken?.match(yearQuarterClientRegExp)?.[0]
           const clientId = clientToken?.match(clientIdRegExp)?.[0]
-          const reportType = clientToken?.replace(yearMonthClient ? yearMonthClient : clientId, '')
+          const reportType = clientToken?.replace(reportYearClient || reportYearMonthClient || reportYearQuarterClient || clientId, '')
+          let reportSuffix = ''
+          if (reportYearClient) {
+            reportSuffix = '_Y'
+          }
+          if (reportYearMonthClient) {
+            reportSuffix = '_YM'
+          }
+          if (reportYearQuarterClient) {
+            reportSuffix = '_Y3M'
+          }
           let name
           if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
             name = reportType?.split('_')?.map((word) =>
@@ -75,6 +91,7 @@ const DataSourceControls = () => {
             id: executionID,
             queryID,
             reportType,
+            reportSuffix,
             label: `${dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
               '' : `[${executionID}]`} ${name || `unsaved: ${views.map(({ id }) => id).join(', ')}`}`,
             description: (
@@ -89,7 +106,6 @@ const DataSourceControls = () => {
                 </span>
               </span>
             ),
-            reportYM,
           }
         })
       : []
@@ -131,17 +147,17 @@ const DataSourceControls = () => {
             descriptions={dataSourceList?.map(({ description }) => description)}
             data={dataSourceList?.map(({ label }) => label)}
             onSelect={v => {
-              const { reportYM, reportType } = dataSourceList?.find(({ label }) => v === label) || {}
+              const { reportSuffix, reportType } = dataSourceList?.find(({ label }) => v === label) || {}
               resetWidget()
               userUpdate({
-                reportYM,
                 reportType,
+                reportSuffix,
                 dataSource: {
                   type: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
                     dataSourceTypes.INSIGHTS_DATA :
                     dataSourceTypes.EXECUTIONS,
                   id: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
-                    reportType + (reportYM ? '_YM' : '') :
+                    reportType + reportSuffix :
                     v.split('[')[1].split(']')[0], // TODO something that is not this
                 },
               })
