@@ -1361,10 +1361,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/chart-system@^0.9.2":
-  version "0.9.2"
-  resolved "https://npm.pkg.github.com/download/@EQWorks/chart-system/0.9.2/2e5276ce9443eb00739cb1d0f84bbb0a9fafa675#2e5276ce9443eb00739cb1d0f84bbb0a9fafa675"
-  integrity sha512-mCXEYr1TZq2cjMw6zMbxR9uoCa3inZbdo6KkBat5GBHoa/VA05Ym6vlFsmYRSuQs1qGyWCqacQiXt3+tB5K9Tw==
+"@eqworks/chart-system@^0.9.3":
+  version "0.9.3"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/chart-system/0.9.3/6aa967da0d052f7a4cf43536856e9883bb28ec50#6aa967da0d052f7a4cf43536856e9883bb28ec50"
+  integrity sha512-FetDczKf3zEkH1M1HxuK8lBeq8vbg6oXXdsDoYNH4Zqt3pLLllRIpa2KalIp1/QoB8TnlDX/gUgTModsmkLr3A==
   dependencies:
     "@nivo/bar" "^0.62.0"
     "@nivo/core" "^0.62.0"
@@ -1456,10 +1456,10 @@
     slick-carousel "^1.8.1"
     use-cached "^2.0.0"
 
-"@eqworks/react-maps@^0.11.4":
-  version "0.11.4"
-  resolved "https://npm.pkg.github.com/download/@EQWorks/react-maps/0.11.4/b7e12e3b064cb48a0155561b693119bb6a0a6305#b7e12e3b064cb48a0155561b693119bb6a0a6305"
-  integrity sha512-HuIjIugZoVygHPGJ0YPnbXTP5cFvchTVeXNJCUaBkDA+7ITHl73KJuWy9GHMw5l3HWEo86nIR9/g6bO064CeFQ==
+"@eqworks/react-maps@^0.11.5-alpha.1":
+  version "0.11.5-alpha.1"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/react-maps/0.11.5-alpha.1/838f69d3671966e947af304ecbe7d66de8727db3#838f69d3671966e947af304ecbe7d66de8727db3"
+  integrity sha512-/poIvkNF7uyIAz1qksuPlcoTk4OqI+MnY/l/Crcy73Vk1Mri/PdhsiFC9bRGPe6Bp2xf/WY49v78Mn8LThO/lA==
   dependencies:
     "@deck.gl/aggregation-layers" "^8.7.5"
     "@deck.gl/core" "^8.7.5"
