@@ -85,6 +85,7 @@ const Widget = ({
   mapTooltipLabelTitles,
   mapGroupKey,
   useMVTOption,
+  customColors,
 }) => {
   const classes = useStyles(_mode)
 
@@ -155,6 +156,7 @@ const Widget = ({
       mapTooltipLabelTitles,
       ...(mapGroupKey && { mapGroupKey }),
       ...(useMVTOption !==null && { useMVTOption, MVTOptionProp: useMVTOption }),
+      ...(customColors && { customColors, customColorProp: customColors }),
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -268,6 +270,13 @@ Widget.propTypes = {
   mapTooltipLabelTitles: PropTypes.object,
   mapGroupKey: PropTypes.string,
   useMVTOption: PropTypes.bool,
+  customColors: PropTypes.shape({
+    chart: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.string])),
+    map: PropTypes.shape({
+      baseColor: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+      iconColor: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+    }),
+  }),
 }
 
 Widget.defaultProps = {
@@ -293,6 +302,16 @@ Widget.defaultProps = {
   mapTooltipLabelTitles: null,
   mapGroupKey: '',
   useMVTOption: null,
+  // customColors: {
+  //   chart: ['#004C86', '#CF7047', '#1F7F79', '#B24456', '#582A7D', '#D3A642', '#3175AC', '#7A002D',
+  //     '#437345', '#802C6D'],
+  //   map: {
+  //     // baseColor: '#3175AC',
+  //     targetLayerColor: '',
+  //     iconColor: '#CF7047',
+  //   },
+  // },
+  customColors: null,
 }
 
 export default withQueryClient(withStore(Widget))
