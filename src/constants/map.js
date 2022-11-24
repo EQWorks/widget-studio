@@ -5,6 +5,7 @@ export const MAP_LAYERS = [
   'geojson',
   'arc',
   'icon',
+  'MVT',
 ].reduce((a, v) => ({ ...a, [v]: v }), {})
 
 // visualizations used in Value Configuration
@@ -27,8 +28,8 @@ export const MAP_VIS_OTHERS = [
 export const MAP_LAYER_VALUE_VIS = {
   scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
   targetScatterplot: [MAP_VALUE_VIS.targetFill, MAP_VALUE_VIS.targetRadius],
-  // MVT: [MAP_VALUE_VIS.fill],
   geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
+  MVT: [MAP_VALUE_VIS.fill],
   arc: [MAP_VALUE_VIS.arcWidth],
   icon: [],
 }
@@ -42,7 +43,7 @@ export const MAP_VIEW_STATE = {
   postalCode: {
     latitude: 43.65,
     longitude: -79.4,
-    zoom: 11,
+    zoom: 10,
   },
   lat: 'mapview_lat',
   lon: 'mapview_lon',
@@ -80,6 +81,7 @@ export const MAP_LAYER_GEO_KEYS = {
   // arc layer has no specific & unique geo keys to be identified with
   arc: [],
   geojson: Object.values(GEO_KEY_TYPES).flat(),
+  MVT: Object.values(GEO_KEY_TYPES).flat(),
   icon: [],
 }
 
@@ -174,7 +176,7 @@ export const PITCH = {
 
 export const MIN_ZOOM = {
   defaultValue: 2,
-  postalCode: 11,
+  postalCode: 10,
 }
 
 export const MAX_ZOOM = {
