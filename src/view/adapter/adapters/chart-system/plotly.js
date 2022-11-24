@@ -10,7 +10,7 @@ import types from '../../../../constants/types'
 export default {
   [types.BAR]: {
     component: PlotlyBarChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => ({
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
       x: config.groupKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
@@ -20,11 +20,12 @@ export default {
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
+      ...(customColors?.chart && { customColors: customColors?.chart }),
     }),
   },
   [types.LINE]: {
     component: PlotlyLineChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => ({
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
@@ -33,11 +34,12 @@ export default {
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
+      ...(customColors?.chart && { customColors: customColors?.chart }),
     }),
   },
   [types.PIE]: {
     component: PlotlyPieChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => ({
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
       label: config.groupKeyTitle,
       values: config.valueKeys.map(({ title }) => title),
@@ -45,11 +47,12 @@ export default {
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
+      ...(customColors?.chart && { customColors: customColors?.chart }),
     }),
   },
   [types.SCATTER]: {
     component: PlotlyScatterChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => ({
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
@@ -58,13 +61,13 @@ export default {
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
+      ...(customColors?.chart && { customColors: customColors?.chart }),
     }),
   },
   [types.PYRAMID]: {
     component: PlotlyPyramidChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, ...config }) => {
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => {
       const { xAxisLabelLength, showWidgetTitle } = genericOptions
-
       return ({
         data,
         x: config.valueKeys.map(({ title }) => title),
@@ -75,7 +78,7 @@ export default {
         ...(showWidgetTitle && { title }),
         ...uniqueOptions,
         ...genericOptions,
-
+        ...(customColors?.chart && { customColors: customColors?.chart }),
       })
     },
   },
