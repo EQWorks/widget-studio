@@ -394,11 +394,17 @@ export default {
     [
       (state) => state.type,
       (state) => state.columnsAnalysis,
+      (state) => state.rows,
     ],
     (
       type,
       columnsAnalysis,
-    ) => type === types.MAP && GEOJSON_KEYS.every(key => Object.keys(columnsAnalysis).includes(key))
+      rows,
+    ) => {
+      const dataSample = rows[0]
+      return type === types.MAP
+        && GEOJSON_KEYS.every(key => Object.keys(columnsAnalysis)?.includes(key) && dataSample[key])
+    }
   ),
 
   // determines to use postal code geo key to aggregate by FSA
