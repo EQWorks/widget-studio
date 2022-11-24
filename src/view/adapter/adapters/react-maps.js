@@ -136,6 +136,7 @@ export default {
       formatDataFunctions,
       mapTooltipLabelTitles,
       useMVTOption,
+      customColors,
     } = config
     const {
       baseColor,
@@ -301,7 +302,7 @@ export default {
           keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
-          schemeColor: baseColor,
+          schemeColor: customColors?.map?.baseColor || baseColor,
           visible: !mapHideArcLayer,
         },
       ].concat(
@@ -360,7 +361,7 @@ export default {
             uniqueOptions.opacity.value / 100 :
             1,
           isTargetLayer: i === 1,
-          schemeColor: baseColor,
+          schemeColor: customColors?.map?.baseColor || baseColor,
           visible: i === 0 ? !mapHideSourceLayer : !mapHideTargetLayer,
         }))
       ) :
@@ -407,7 +408,7 @@ export default {
             },
           },
           legend: { showLegend: true },
-          schemeColor: baseColor,
+          schemeColor: customColors?.map?.baseColor || baseColor,
           opacity: uniqueOptions.opacity.value / 100,
           minZoom: mapGroupKeyIsPostalcode ?
             MIN_ZOOM.postalCode :
@@ -518,7 +519,7 @@ export default {
               },
             } :
             {},
-          schemeColor: complementaryColor({ baseColor }),
+          schemeColor: customColors?.map?.iconColor || complementaryColor({ baseColor }),
           initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
         },
       ]
