@@ -154,7 +154,7 @@ export default {
     const mapGroupKeyIsRegion = GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(mapGroupKey)
     const mapGroupKeyIsPostalcode = GEO_KEY_TYPES.postalcode.includes(mapGroupKey)
 
-    const mapLayer = Object.keys(MAP_LAYERS)
+    let mapLayer = Object.keys(MAP_LAYERS)
       .find(layer => MAP_LAYER_GEO_KEYS[layer].includes(mapGroupKey))
 
     //----TO DO - extend geometry logic for other layers if necessary
@@ -228,6 +228,8 @@ export default {
           tileGeom: `${process.env.TEGOLA_SERVER_URL || process.env.STORYBOOK_TEGOLA_SERVER_URL}/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`, // <ignore scan-env>
           tileData: data,
         }
+        const elevationVis = JSON.stringify(mapValueKeys)?.includes(MAP_VALUE_VIS.elevation)
+        mapLayer = elevationVis ? mapLayer : MAP_LAYERS.MVT
       }
     }
 
@@ -374,19 +376,25 @@ export default {
           visualizations: Object.fromEntries(
             MAP_LAYER_VALUE_VIS[mapLayer]?.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
               const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+              const fillKeyTitle = mapValueKeys.find(({ mapVis }) => mapVis === MAP_VALUE_VIS.fill)?.title
+              let value = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
+              if (keyTitle) {
+                value = { field: keyTitle }
+              }
+              // this config will help setting up the MVT polygons not part of data invisible
+              if (mapLayer === MAP_LAYERS.MVT && fillKeyTitle && vis === MAP_VIS_OTHERS.lineColor) {
+                value = { field: fillKeyTitle }
+              }
               /*
               * we only allow to set the max elevation value, keeping the min=0, therefore,
               * in Widget Studio in uniqueOptions, we work with one value to use in slider updates;
               * however, the LocusMap receives an array valueOptions prop for elevation, hence
               * the special case for elevation in this case
               */
-              const visValue = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
               return [
                 vis,
                 {
-                  value: keyTitle ?
-                    { field: keyTitle } :
-                    visValue,
+                  value,
                   valueOptions: vis === MAP_VALUE_VIS.elevation ?
                     [0, uniqueOptions[vis]?.value] :
                     uniqueOptions[vis]?.valueOptions,
@@ -404,6 +412,12 @@ export default {
                 tooltipTitle1: mapLayer === MAP_LAYERS.scatterplot ?
                   mapTooltipLabelTitles?.title || mapGroupKeyTitle :
                   mapGroupKeyTitle,
+                tooltipTitle1Accessor: [MAP_LAYERS.geojson, MAP_LAYERS.MVT].includes(mapLayer) && useMVTOption ?
+                  d => d.properties :
+                  d => d,
+                metricAccessor: [MAP_LAYERS.geojson, MAP_LAYERS.MVT].includes(mapLayer) && useMVTOption ?
+                  d => d.properties :
+                  d => d,
               },
             },
           },
@@ -414,7 +428,7 @@ export default {
             MIN_ZOOM.postalCode :
             MIN_ZOOM.defaultValue,
           maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
-          // restrict initial zoom-in to data for postal code polygons; the browser might not be able to handle it
+          // restrict initial zoom-in to data for postal code polygons & MVT render; the browser might not be able to handle it
           initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
         },
       ]
@@ -468,7 +482,7 @@ export default {
         {
           layer: 'text',
           dataId: `${id}-${type}`,
-          dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson ? d => d.properties : d => d,
+          dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson && useMVTOption ? d => d.properties : d => d,
           geometry,
           visualizations: {
             text: {
@@ -520,7 +534,6 @@ export default {
             } :
             {},
           schemeColor: customColors?.map?.iconColor || complementaryColor({ baseColor: baseColor.color1 }),
-          initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
         },
       ]
     }
