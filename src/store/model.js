@@ -257,6 +257,7 @@ export default {
       formatDataKey,
       formatDataFunctions,
       columnNameAliases,
+      formattedColumnNames,
       group,
       groupKey,
       mapGroupKey,
