@@ -164,6 +164,8 @@ const stateDefaults = [
   { key: 'aliasesReseted', defaultValue: false, resettable: true },
   { key: 'useMVTOption', defaultValue: true, resettable: true },
   { key: 'MVTOptionProp', defaultValue: null, resettable: false },
+  { key: 'customColors', defaultValues: null, resettable: false },
+  { key: 'customColorProp', defaultValues: null, resettable: false },
 ]
 
 export default {
@@ -206,6 +208,7 @@ export default {
       (state) => state.presetColors,
       (state) => state.dateAggregation,
       (state) => state.mapTooltipLabelTitles,
+      (state) => state.customColors,
     ],
     (
       title,
@@ -239,6 +242,7 @@ export default {
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
+      customColors,
     ) => ({
       title,
       subtitle,
@@ -253,6 +257,7 @@ export default {
       formatDataKey,
       formatDataFunctions,
       columnNameAliases,
+      formattedColumnNames,
       group,
       groupKey,
       mapGroupKey,
@@ -273,6 +278,7 @@ export default {
       presetColors,
       dateAggregation,
       mapTooltipLabelTitles,
+      customColors,
     })),
 
   config: computed(
@@ -840,7 +846,7 @@ export default {
       ui: { configLoading: true },
       id: payload,
     })
-    const { sampleConfigs, mapGroupKey, MVTOptionProp } = getState()
+    const { sampleConfigs, mapGroupKey, MVTOptionProp, customColorProp } = getState()
     const getFn = sampleConfigs
       ? localGetWidget
       : getWidget
@@ -857,6 +863,7 @@ export default {
           ...config,
           ...(mapGroupKey && { mapGroupKey }),
           ...(MVTOptionProp !== null && { useMVTOption: MVTOptionProp }),
+          ...(customColorProp && { customColors: customColorProp }),
         })
       })
       .catch(err => {

@@ -85,6 +85,7 @@ const Widget = ({
   mapTooltipLabelTitles,
   mapGroupKey,
   useMVTOption,
+  customColors,
 }) => {
   const classes = useStyles(_mode)
 
@@ -155,6 +156,7 @@ const Widget = ({
       mapTooltipLabelTitles,
       ...(mapGroupKey && { mapGroupKey }),
       ...(useMVTOption !==null && { useMVTOption, MVTOptionProp: useMVTOption }),
+      ...(customColors && { customColors, customColorProp: customColors }),
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -192,7 +194,7 @@ const Widget = ({
   }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig,
     loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType,
     onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey, useMVTOption,
-    onWidgetRender])
+    onWidgetRender, customColors])
 
   // load data if source changes
   useEffect(() => {
@@ -268,6 +270,14 @@ Widget.propTypes = {
   mapTooltipLabelTitles: PropTypes.object,
   mapGroupKey: PropTypes.string,
   useMVTOption: PropTypes.bool,
+  customColors: PropTypes.shape({
+    chart: PropTypes.arrayOf(PropTypes.string),
+    map: PropTypes.shape({
+      baseColor: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
+      targetLayerColor: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
+      iconColor: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
+    }),
+  }),
 }
 
 Widget.defaultProps = {
@@ -293,6 +303,7 @@ Widget.defaultProps = {
   mapTooltipLabelTitles: null,
   mapGroupKey: '',
   useMVTOption: null,
+  customColors: null,
 }
 
 export default withQueryClient(withStore(Widget))
