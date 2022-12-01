@@ -43,7 +43,7 @@ export const MAP_VIEW_STATE = {
   postalCode: {
     latitude: 43.65,
     longitude: -79.4,
-    zoom: 10,
+    zoom: 9.3,
   },
   lat: 'mapview_lat',
   lon: 'mapview_lon',
@@ -176,7 +176,7 @@ export const PITCH = {
 
 export const MIN_ZOOM = {
   defaultValue: 2,
-  postalCode: 10,
+  postalCode: 8,
 }
 
 export const MAX_ZOOM = {
