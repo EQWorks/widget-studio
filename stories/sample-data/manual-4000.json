@@ -1,0 +1,363 @@
+{
+  "data": {
+    "whitelabelID": 2423,
+    "customerID": 27124,
+    "columns": [
+      {
+        "name": "dealerId",
+        "category": "String"
+      },
+      {
+        "name": "ranking",
+        "category": "Numeric"
+      },
+      {
+        "name": "category",
+        "category": "String"
+      },
+      {
+        "name": "name",
+        "category": "String"
+      },
+      {
+        "name": "market_area",
+        "category": "Numeric"
+      },
+      {
+        "name": "city",
+        "category": "Numeric"
+      },
+      {
+        "name": "province",
+        "category": "Numeric"
+      },
+      {
+        "name": "country",
+        "category": "Numeric"
+      }
+    ],
+    "results": [
+      {
+        "dealerId": 1,
+        "ranking": 1,
+        "category": "Grocery",
+        "name": "Wholesale Clubs",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 1,
+        "category": "Grocery",
+        "name": "Grocery Stores",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 1,
+        "category": "Grocery",
+        "name": "Online Grocery Stores",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 2,
+        "category": "Fashion Buyers",
+        "name": "Family",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 2,
+        "category": "Fashion Buyers",
+        "name": "Men",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 2,
+        "category": "Fashion Buyers",
+        "name": "Women",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 2,
+        "category": "Fashion Buyers",
+        "name": "Shoes",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 2,
+        "category": "Fashion Buyers",
+        "name": "Jewelry & Giftware",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 3,
+        "category": "Travel",
+        "name": "Car Travel",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 3,
+        "category": "Travel",
+        "name": "Bus Travel",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 3,
+        "category": "Travel",
+        "name": "Airlines Travel",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 4,
+        "category": "Dining",
+        "name": "Casual Chain Restaurants",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 4,
+        "category": "Dining",
+        "name": "Fine Dining",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 4,
+        "category": "Dining",
+        "name": "Family Dining",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 5,
+        "category": "Movies & Theater",
+        "name": "Movies",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 5,
+        "category": "Movies & Theater",
+        "name": "Theater",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 5,
+        "category": "Movies & Theater",
+        "name": "Opera",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 6,
+        "category": "Automotive",
+        "name": "Fuel",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 6,
+        "category": "Automotive",
+        "name": "New and Used Car Sales",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 6,
+        "category": "Automotive",
+        "name": "Parts & Accessories",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 8,
+        "category": "Arts Aficionados",
+        "name": "Music and Videos",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 8,
+        "category": "Arts Aficionados",
+        "name": "Photofinishing Services",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 8,
+        "category": "Arts Aficionados",
+        "name": "Photography Services",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 7,
+        "category": "Sports & Outdoors",
+        "name": "Gyms and Sports Clubs",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 7,
+        "category": "Sports & Outdoors",
+        "name": "Professional Sports Teams",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 7,
+        "category": "Sports & Outdoors",
+        "name": "Sporting Goods Stores",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 9,
+        "category": "Early Tech Adopters",
+        "name": "Consumer Electronics Online",
+        "market_area": 50,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 9,
+        "category": "Early Tech Adopters",
+        "name": "Consumer Electronics and Appliances",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 9,
+        "category": "Early Tech Adopters",
+        "name": "Computer and Software Stores",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      },
+      {
+        "dealerId": 1,
+        "ranking": 10,
+        "category": "Gamers",
+        "name": "Video and Game Rentals",
+        "market_area": 55,
+        "city": 48,
+        "province": 59,
+        "country": 51
+      },
+      {
+        "dealerId": 1,
+        "ranking": 10,
+        "category": "Gamers",
+        "name": "Mobile In-App Games",
+        "market_area": 50,
+        "city": 40,
+        "province": 55,
+        "country": 45
+      },
+      {
+        "dealerId": 1,
+        "ranking": 10,
+        "category": "Gamers",
+        "name": "Mobile In-App Retail",
+        "market_area": 40,
+        "city": 35,
+        "province": 45,
+        "country": 40
+      }
+    ]
+  },
+  "name": "Top Categories"
+}

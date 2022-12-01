@@ -1,0 +1,558 @@
+{
+  "name": "saved query 191",
+  "data": {
+    "executionID": 199,
+    "whitelabelID": 1532,
+    "customerID": 20524,
+    "customerTimezone": "America/Toronto",
+    "queryHash": "IehBuYErri+h+Neasl9dgRjt3IQteWbgB5lcbCq7+lA=",
+    "columnHash": "uH1w3wCyZrBNYOxOFf0oQUvB/ZeC+wWcmGDCVURoSHg=",
+    "status": "SUCCEEDED",
+    "statusTS": "2021-03-11T15:59:09.450Z",
+    "queryID": 191,
+    "query": {
+      "from": "logs_imp_20524",
+      "type": "select",
+      "joins": [],
+      "where": [
+        null
+      ],
+      "having": [
+        null
+      ],
+      "columns": [
+        [
+          "flight_name",
+          "logs_imp_20524"
+        ],
+        [
+          "network_name",
+          "logs_imp_20524"
+        ],
+        [
+          "banner_size",
+          "logs_imp_20524"
+        ],
+        [
+          "banner_name",
+          "logs_imp_20524"
+        ],
+        {
+          "as": "impressions",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "impressions",
+              "logs_imp_20524"
+            ]
+          ]
+        },
+        {
+          "as": "clicks",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "clicks",
+              "logs_imp_20524"
+            ]
+          ]
+        },
+        {
+          "as": "revenue",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "revenue",
+              "logs_imp_20524"
+            ]
+          ]
+        },
+        {
+          "as": "cost",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "cost",
+              "logs_imp_20524"
+            ]
+          ]
+        }
+      ],
+      "groupBy": [
+        [
+          "flight_name",
+          "logs_imp_20524"
+        ],
+        [
+          "network_name",
+          "logs_imp_20524"
+        ],
+        [
+          "banner_size",
+          "logs_imp_20524"
+        ],
+        [
+          "banner_name",
+          "logs_imp_20524"
+        ]
+      ]
+    },
+    "columns": [
+      {
+        "name": "flight_name",
+        "category": "String"
+      },
+      {
+        "name": "network_name",
+        "category": "String"
+      },
+      {
+        "name": "banner_size",
+        "category": "String"
+      },
+      {
+        "name": "banner_name",
+        "category": "String"
+      },
+      {
+        "name": "impressions",
+        "category": "Numeric"
+      },
+      {
+        "name": "clicks",
+        "category": "Numeric"
+      },
+      {
+        "name": "revenue",
+        "category": "Numeric"
+      },
+      {
+        "name": "cost",
+        "category": "Numeric"
+      }
+    ],
+    "isInternal": true,
+    "isOrphaned": false,
+    "cost": 1,
+    "resultsParts": null,
+    "resultsSize": null,
+    "scheduleCron": null,
+    "scheduleTS": null,
+    "results": [
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Casale",
+        "banner_size": "160x600",
+        "banner_name": "P1H4GW3_80118_Mazda CX-5 Q4_160 x 600_Banner_P25-54_EN",
+        "impressions": 50,
+        "clicks": 0,
+        "revenue": 0.45,
+        "cost": 0.0281
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Casale",
+        "banner_size": "300x250",
+        "banner_name": "P1H4P1N_80118_Mazda CX-5 Q4_300 x 250_Banner_P25-54_EN",
+        "impressions": 3194,
+        "clicks": 2,
+        "revenue": 28.746,
+        "cost": 1.7555
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Casale",
+        "banner_size": "300x50",
+        "banner_name": "P1H4P1S_80118_Mazda CX-5 Q4_300 x 50_Banner_P25-54_EN",
+        "impressions": 982,
+        "clicks": 3,
+        "revenue": 8.838,
+        "cost": 0.5366
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Casale",
+        "banner_size": "300x600",
+        "banner_name": "P1H4P1Q_80118_Mazda CX-5 Q4_300 x 600_Banner_P25-54_EN",
+        "impressions": 168,
+        "clicks": 0,
+        "revenue": 1.512,
+        "cost": 0.0927
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Casale",
+        "banner_size": "320x50",
+        "banner_name": "P1H4P1T_80118_Mazda CX-5 Q4_320 x 50_Banner_P25-54_EN",
+        "impressions": 11638,
+        "clicks": 11,
+        "revenue": 104.742,
+        "cost": 6.3089
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Casale",
+        "banner_size": "728x90",
+        "banner_name": "P1H4P1R_80118_Mazda CX-5 Q4_728 x 90_Banner_P25-54_EN",
+        "impressions": 7908,
+        "clicks": 8,
+        "revenue": 71.172,
+        "cost": 4.8271
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "MoPub",
+        "banner_size": "300x250",
+        "banner_name": "P1H4P1N_80118_Mazda CX-5 Q4_300 x 250_Banner_P25-54_EN",
+        "impressions": 7667,
+        "clicks": 3,
+        "revenue": 69.003,
+        "cost": 4.2226
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "MoPub",
+        "banner_size": "300x50",
+        "banner_name": "P1H4P1S_80118_Mazda CX-5 Q4_300 x 50_Banner_P25-54_EN",
+        "impressions": 789,
+        "clicks": 4,
+        "revenue": 7.101,
+        "cost": 0.4166
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "MoPub",
+        "banner_size": "320x50",
+        "banner_name": "P1H4P1T_80118_Mazda CX-5 Q4_320 x 50_Banner_P25-54_EN",
+        "impressions": 151342,
+        "clicks": 307,
+        "revenue": 1362.08,
+        "cost": 79.0983
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "MoPub",
+        "banner_size": "728x90",
+        "banner_name": "P1H4P1R_80118_Mazda CX-5 Q4_728 x 90_Banner_P25-54_EN",
+        "impressions": 143,
+        "clicks": 0,
+        "revenue": 1.287,
+        "cost": 0.0788
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Nexage",
+        "banner_size": "300x250",
+        "banner_name": "P1H4P1N_80118_Mazda CX-5 Q4_300 x 250_Banner_P25-54_EN",
+        "impressions": 172,
+        "clicks": 0,
+        "revenue": 1.548,
+        "cost": 0.0204
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Nexage",
+        "banner_size": "320x50",
+        "banner_name": "P1H4P1T_80118_Mazda CX-5 Q4_320 x 50_Banner_P25-54_EN",
+        "impressions": 2626,
+        "clicks": 0,
+        "revenue": 23.634,
+        "cost": 0.5728
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Nexage",
+        "banner_size": "728x90",
+        "banner_name": "P1H4P1R_80118_Mazda CX-5 Q4_728 x 90_Banner_P25-54_EN",
+        "impressions": 537,
+        "clicks": 1,
+        "revenue": 4.833,
+        "cost": 0.1696
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Rubicon",
+        "banner_size": "160x600",
+        "banner_name": "P1H4GW3_80118_Mazda CX-5 Q4_160 x 600_Banner_P25-54_EN",
+        "impressions": 4092,
+        "clicks": 2,
+        "revenue": 36.828,
+        "cost": 2.2936
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Rubicon",
+        "banner_size": "300x250",
+        "banner_name": "P1H4P1N_80118_Mazda CX-5 Q4_300 x 250_Banner_P25-54_EN",
+        "impressions": 230366,
+        "clicks": 60,
+        "revenue": 2073.29,
+        "cost": 128.826
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Rubicon",
+        "banner_size": "300x600",
+        "banner_name": "P1H4P1Q_80118_Mazda CX-5 Q4_300 x 600_Banner_P25-54_EN",
+        "impressions": 5142,
+        "clicks": 5,
+        "revenue": 46.269,
+        "cost": 2.879
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Rubicon",
+        "banner_size": "320x50",
+        "banner_name": "P1H4P1T_80118_Mazda CX-5 Q4_320 x 50_Banner_P25-54_EN",
+        "impressions": 839959,
+        "clicks": 555,
+        "revenue": 7559.55,
+        "cost": 468.427
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity English",
+        "network_name": "Rubicon",
+        "banner_size": "728x90",
+        "banner_name": "P1H4P1R_80118_Mazda CX-5 Q4_728 x 90_Banner_P25-54_EN",
+        "impressions": 312790,
+        "clicks": 315,
+        "revenue": 2815.1,
+        "cost": 174.596
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Casale",
+        "banner_size": "160x600",
+        "banner_name": "P1H4HMF_80118_Mazda CX-5 Q4_160 x 600_Banner_P25-54_FR",
+        "impressions": 20,
+        "clicks": 0,
+        "revenue": 0.18,
+        "cost": 0.0113
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Casale",
+        "banner_size": "300x250",
+        "banner_name": "P1H4NM9_80118_Mazda CX-5 Q4_300 x 250_Banner_P25-54_FR",
+        "impressions": 429,
+        "clicks": 0,
+        "revenue": 3.861,
+        "cost": 0.237
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Casale",
+        "banner_size": "300x50",
+        "banner_name": "P1H4NMF_80118_Mazda CX-5 Q4_300 x 50_Banner_P25-54_FR",
+        "impressions": 1305,
+        "clicks": 0,
+        "revenue": 11.745,
+        "cost": 0.7209
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Casale",
+        "banner_size": "300x600",
+        "banner_name": "P1H4NMC_80118_Mazda CX-5 Q4_300 x 600_Banner_P25-54_FR",
+        "impressions": 33,
+        "clicks": 0,
+        "revenue": 0.297,
+        "cost": 0.0186
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Casale",
+        "banner_size": "320x50",
+        "banner_name": "P1H4NMG_80118_Mazda CX-5 Q4_320 x 50_Banner_P25-54_FR",
+        "impressions": 5846,
+        "clicks": 6,
+        "revenue": 52.614,
+        "cost": 3.3161
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Casale",
+        "banner_size": "728x90",
+        "banner_name": "P1H4NMD_80118_Mazda CX-5 Q4_728 x 90_Banner_P25-54_FR",
+        "impressions": 6816,
+        "clicks": 9,
+        "revenue": 61.344,
+        "cost": 4.2864
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "MoPub",
+        "banner_size": "300x250",
+        "banner_name": "P1H4NM9_80118_Mazda CX-5 Q4_300 x 250_Banner_P25-54_FR",
+        "impressions": 2402,
+        "clicks": 2,
+        "revenue": 21.618,
+        "cost": 1.3185
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "MoPub",
+        "banner_size": "300x50",
+        "banner_name": "P1H4NMF_80118_Mazda CX-5 Q4_300 x 50_Banner_P25-54_FR",
+        "impressions": 325,
+        "clicks": 0,
+        "revenue": 2.925,
+        "cost": 0.1776
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "MoPub",
+        "banner_size": "320x50",
+        "banner_name": "P1H4NMG_80118_Mazda CX-5 Q4_320 x 50_Banner_P25-54_FR",
+        "impressions": 86842,
+        "clicks": 130,
+        "revenue": 781.578,
+        "cost": 45.8261
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "MoPub",
+        "banner_size": "728x90",
+        "banner_name": "P1H4NMD_80118_Mazda CX-5 Q4_728 x 90_Banner_P25-54_FR",
+        "impressions": 216,
+        "clicks": 0,
+        "revenue": 1.944,
+        "cost": 0.1191
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Nexage",
+        "banner_size": "300x250",
+        "banner_name": "P1H4NM9_80118_Mazda CX-5 Q4_300 x 250_Banner_P25-54_FR",
+        "impressions": 111,
+        "clicks": 0,
+        "revenue": 0.999,
+        "cost": 0.0172
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Nexage",
+        "banner_size": "320x50",
+        "banner_name": "P1H4NMG_80118_Mazda CX-5 Q4_320 x 50_Banner_P25-54_FR",
+        "impressions": 602,
+        "clicks": 1,
+        "revenue": 5.418,
+        "cost": 0.1333
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Nexage",
+        "banner_size": "728x90",
+        "banner_name": "P1H4NMD_80118_Mazda CX-5 Q4_728 x 90_Banner_P25-54_FR",
+        "impressions": 142,
+        "clicks": 0,
+        "revenue": 1.278,
+        "cost": 0.0417
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Rubicon",
+        "banner_size": "160x600",
+        "banner_name": "P1H4HMF_80118_Mazda CX-5 Q4_160 x 600_Banner_P25-54_FR",
+        "impressions": 33,
+        "clicks": 0,
+        "revenue": 0.297,
+        "cost": 0.0192
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Rubicon",
+        "banner_size": "300x250",
+        "banner_name": "P1H4NM9_80118_Mazda CX-5 Q4_300 x 250_Banner_P25-54_FR",
+        "impressions": 29372,
+        "clicks": 8,
+        "revenue": 264.348,
+        "cost": 16.3302
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Rubicon",
+        "banner_size": "300x600",
+        "banner_name": "P1H4NMC_80118_Mazda CX-5 Q4_300 x 600_Banner_P25-54_FR",
+        "impressions": 423,
+        "clicks": 2,
+        "revenue": 3.807,
+        "cost": 0.2405
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Rubicon",
+        "banner_size": "320x50",
+        "banner_name": "P1H4NMG_80118_Mazda CX-5 Q4_320 x 50_Banner_P25-54_FR",
+        "impressions": 288350,
+        "clicks": 255,
+        "revenue": 2595.14,
+        "cost": 161.186
+      },
+      {
+        "flight_name": "80118 - Neo - Mazda CX-5 Q4 Activity French",
+        "network_name": "Rubicon",
+        "banner_size": "728x90",
+        "banner_name": "P1H4NMD_80118_Mazda CX-5 Q4_728 x 90_Banner_P25-54_FR",
+        "impressions": 194839,
+        "clicks": 231,
+        "revenue": 1753.54,
+        "cost": 108.602
+      },
+      {
+        "flight_name": "Mazda Competitive Targeting",
+        "network_name": "Casale",
+        "banner_size": "300x250",
+        "banner_name": "P1GDYC1_FR_Hyundai_300x250",
+        "impressions": 3,
+        "clicks": 0,
+        "revenue": 0.018,
+        "cost": 0.0097
+      },
+      {
+        "flight_name": "Mazda Competitive Targeting",
+        "network_name": "Casale",
+        "banner_size": "300x50",
+        "banner_name": "P1GDY9Y_FR_Honda_300x50",
+        "impressions": 1,
+        "clicks": 0,
+        "revenue": 0.006,
+        "cost": 0.0032
+      },
+      {
+        "flight_name": "Mazda Competitive Targeting",
+        "network_name": "Casale",
+        "banner_size": "300x600",
+        "banner_name": "P1GDYC6_FR_Volkswagen_300x600",
+        "impressions": 2,
+        "clicks": 0,
+        "revenue": 0.012,
+        "cost": 0.0064
+      },
+      {
+        "flight_name": "Mazda Competitive Targeting",
+        "network_name": "Casale",
+        "banner_size": "320x50",
+        "banner_name": "P1GDYCV_FR_Lexus_320x50",
+        "impressions": 2,
+        "clicks": 0,
+        "revenue": 0.012,
+        "cost": 0.0064
+      }
+    ],
+    "views": [
+      {
+        "id": "logs_imp_20524",
+        "type": "logs",
+        "category": "atom_campaigns",
+        "logType": "imp",
+        "agencyID": 20524,
+        "name": "ATOM Impressions - Mazda Canada (20524)"
+      }
+    ]
+  }
+}

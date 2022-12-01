@@ -1,0 +1,887 @@
+{
+  "name": "saved query 187",
+  "data": {
+    "executionID": 195,
+    "whitelabelID": 1532,
+    "customerID": 20524,
+    "customerTimezone": "America/Toronto",
+    "queryHash": "vLNx2hdK6AJxw3rrQcByHAOPM/Vnn+b+k5Y5j/wbSN4=",
+    "columnHash": "fyJm7dFY1i5nt8LD/5+HjP3zTNLONusM7S8d6WfXeQw=",
+    "status": "SUCCEEDED",
+    "statusTS": "2021-03-10T19:10:06.043Z",
+    "queryID": 187,
+    "query": {
+      "from": "reportvwi_3316_3447",
+      "type": "select",
+      "joins": [
+        {
+          "on": [
+            [
+              [
+                "geo_ca_fsa",
+                "logs_imp_20524"
+              ],
+              "=",
+              [
+                "geo_ca_fsa",
+                "reportvwi_3316_3447"
+              ]
+            ]
+          ],
+          "view": "logs_imp_20524",
+          "joinType": "left"
+        }
+      ],
+      "where": [
+        null
+      ],
+      "having": [
+        null
+      ],
+      "columns": [
+        [
+          "poi_id",
+          "reportvwi_3316_3447"
+        ],
+        [
+          "poi_name",
+          "reportvwi_3316_3447"
+        ],
+        [
+          "geo_ca_city",
+          "logs_imp_20524"
+        ],
+        {
+          "as": "unique_users",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "beacon_unique_user",
+              "reportvwi_3316_3447"
+            ]
+          ]
+        },
+        {
+          "as": "converted_users",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "converted_beacon_unique_user",
+              "reportvwi_3316_3447"
+            ]
+          ]
+        },
+        {
+          "as": "city_impressions",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "impressions",
+              "logs_imp_20524"
+            ]
+          ]
+        },
+        {
+          "as": "city_clicks",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "clicks",
+              "logs_imp_20524"
+            ]
+          ]
+        },
+        {
+          "as": "city_spend",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "revenue",
+              "logs_imp_20524"
+            ]
+          ]
+        }
+      ],
+      "groupBy": [
+        [
+          "poi_id",
+          "reportvwi_3316_3447"
+        ],
+        [
+          "poi_name",
+          "reportvwi_3316_3447"
+        ],
+        [
+          "geo_ca_city",
+          "logs_imp_20524"
+        ]
+      ]
+    },
+    "columns": [
+      {
+        "name": "poi_id",
+        "category": "Numeric"
+      },
+      {
+        "name": "poi_name",
+        "category": "String"
+      },
+      {
+        "name": "geo_ca_city",
+        "category": "String"
+      },
+      {
+        "name": "unique_users",
+        "category": "Numeric"
+      },
+      {
+        "name": "converted_users",
+        "category": "Numeric"
+      },
+      {
+        "name": "city_impressions",
+        "category": "Numeric"
+      },
+      {
+        "name": "city_clicks",
+        "category": "Numeric"
+      },
+      {
+        "name": "city_spend",
+        "category": "Numeric"
+      }
+    ],
+    "isInternal": true,
+    "isOrphaned": false,
+    "cost": 1,
+    "resultsParts": null,
+    "resultsSize": null,
+    "scheduleCron": null,
+    "scheduleTS": null,
+    "results": [
+      {
+        "poi_id": 2637782,
+        "poi_name": "46110 - Mazda de Laval",
+        "geo_ca_city": "LAVAL",
+        "unique_users": 2352010,
+        "converted_users": 136,
+        "city_impressions": 71652,
+        "city_clicks": 112,
+        "city_spend": 644.868
+      },
+      {
+        "poi_id": 2637783,
+        "poi_name": "46114 - Mazda 2-20",
+        "geo_ca_city": "NOTRE-DAME-DE-L''ILE-PERROT",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 196,
+        "city_clicks": 0,
+        "city_spend": 1.764
+      },
+      {
+        "poi_id": 2637783,
+        "poi_name": "46114 - Mazda 2-20",
+        "geo_ca_city": "PINCOURT",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 9156,
+        "city_clicks": 0,
+        "city_spend": 82.404
+      },
+      {
+        "poi_id": 2637785,
+        "poi_name": "46152 - Mazda Gabriel St-Jacques",
+        "geo_ca_city": "MONTREAL",
+        "unique_users": 2352010,
+        "converted_users": 204,
+        "city_impressions": 82628,
+        "city_clicks": 112,
+        "city_spend": 743.652
+      },
+      {
+        "poi_id": 2637786,
+        "poi_name": "46158 - Longueuil Mazda",
+        "geo_ca_city": "LONGUEUIL",
+        "unique_users": 2352010,
+        "converted_users": 24,
+        "city_impressions": 217336,
+        "city_clicks": 308,
+        "city_spend": 1956.02
+      },
+      {
+        "poi_id": 2637787,
+        "poi_name": "46164 - Spinelli Mazda",
+        "geo_ca_city": "COTE-SAINT-LUC",
+        "unique_users": 2352010,
+        "converted_users": 148,
+        "city_impressions": 392,
+        "city_clicks": 0,
+        "city_spend": 3.528
+      },
+      {
+        "poi_id": 2637787,
+        "poi_name": "46164 - Spinelli Mazda",
+        "geo_ca_city": "LACHINE",
+        "unique_users": 2352010,
+        "converted_users": 148,
+        "city_impressions": 38920,
+        "city_clicks": 0,
+        "city_spend": 350.28
+      },
+      {
+        "poi_id": 2637789,
+        "poi_name": "46170 - Mazda Gabriel Anjou",
+        "geo_ca_city": "MONTREAL",
+        "unique_users": 2352010,
+        "converted_users": 136,
+        "city_impressions": 70924,
+        "city_clicks": 28,
+        "city_spend": 638.316
+      },
+      {
+        "poi_id": 2637790,
+        "poi_name": "46172 - Beauport Mazda",
+        "geo_ca_city": "QUÉBEC",
+        "unique_users": 2352010,
+        "converted_users": 28,
+        "city_impressions": 156240,
+        "city_clicks": 140,
+        "city_spend": 1406.16
+      },
+      {
+        "poi_id": 2637793,
+        "poi_name": "46180 - Chambly Mazda",
+        "geo_ca_city": "CARIGNAN",
+        "unique_users": 2352010,
+        "converted_users": 56,
+        "city_impressions": 56,
+        "city_clicks": 0,
+        "city_spend": 0.504
+      },
+      {
+        "poi_id": 2637793,
+        "poi_name": "46180 - Chambly Mazda",
+        "geo_ca_city": "CHAMBLY",
+        "unique_users": 2352010,
+        "converted_users": 56,
+        "city_impressions": 146888,
+        "city_clicks": 168,
+        "city_spend": 1321.99
+      },
+      {
+        "poi_id": 2637793,
+        "poi_name": "46180 - Chambly Mazda",
+        "geo_ca_city": "SAINT-MATHIAS-SUR-RICHELIEU",
+        "unique_users": 2352010,
+        "converted_users": 56,
+        "city_impressions": 140,
+        "city_clicks": 0,
+        "city_spend": 1.26
+      },
+      {
+        "poi_id": 2637794,
+        "poi_name": "46182 - Elite Mazda",
+        "geo_ca_city": "GATINEAU",
+        "unique_users": 2352010,
+        "converted_users": 48,
+        "city_impressions": 106512,
+        "city_clicks": 84,
+        "city_spend": 958.608
+      },
+      {
+        "poi_id": 2637795,
+        "poi_name": "46184 - Laurier Mazda",
+        "geo_ca_city": "QUÉBEC",
+        "unique_users": 2352010,
+        "converted_users": 24,
+        "city_impressions": 69496,
+        "city_clicks": 56,
+        "city_spend": 625.464
+      },
+      {
+        "poi_id": 2637796,
+        "poi_name": "46186 - Albi Mazda",
+        "geo_ca_city": "LAVAL",
+        "unique_users": 2352010,
+        "converted_users": 56,
+        "city_impressions": 67032,
+        "city_clicks": 56,
+        "city_spend": 603.288
+      },
+      {
+        "poi_id": 2637797,
+        "poi_name": "46188 - Brossard Mazda",
+        "geo_ca_city": "BROSSARD",
+        "unique_users": 2352010,
+        "converted_users": 24,
+        "city_impressions": 121072,
+        "city_clicks": 196,
+        "city_spend": 1089.65
+      },
+      {
+        "poi_id": 2637798,
+        "poi_name": "46190 - Mazda Papineau",
+        "geo_ca_city": "MONTREAL",
+        "unique_users": 2352010,
+        "converted_users": 36,
+        "city_impressions": 58800,
+        "city_clicks": 0,
+        "city_spend": 529.2
+      },
+      {
+        "poi_id": 2637799,
+        "poi_name": "46192 - Mazda Gabriel - St Laurent",
+        "geo_ca_city": "SAINT-LAURENT",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 84,
+        "city_clicks": 0,
+        "city_spend": 0.756
+      },
+      {
+        "poi_id": 2637800,
+        "poi_name": "46194 - Mazda Pointe-aux-Trembles",
+        "geo_ca_city": "MONTREAL",
+        "unique_users": 2352010,
+        "converted_users": 164,
+        "city_impressions": 10696,
+        "city_clicks": 0,
+        "city_spend": 96.264
+      },
+      {
+        "poi_id": 2637800,
+        "poi_name": "46194 - Mazda Pointe-aux-Trembles",
+        "geo_ca_city": "MONTREAL EAST",
+        "unique_users": 2352010,
+        "converted_users": 164,
+        "city_impressions": 4536,
+        "city_clicks": 0,
+        "city_spend": 40.824
+      },
+      {
+        "poi_id": 2637801,
+        "poi_name": "46214 - Mazda Chatel",
+        "geo_ca_city": "QUÉBEC",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 15932,
+        "city_clicks": 28,
+        "city_spend": 143.388
+      },
+      {
+        "poi_id": 2637802,
+        "poi_name": "46216 - Argus Mazda",
+        "geo_ca_city": "GATINEAU",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 22400,
+        "city_clicks": 0,
+        "city_spend": 201.6
+      },
+      {
+        "poi_id": 2637804,
+        "poi_name": "46316 - Solution Mazda",
+        "geo_ca_city": "CHATEAUGUAY",
+        "unique_users": 2352010,
+        "converted_users": 64,
+        "city_impressions": 65072,
+        "city_clicks": 28,
+        "city_spend": 585.648
+      },
+      {
+        "poi_id": 2637806,
+        "poi_name": "46324 - Mazda de Magog",
+        "geo_ca_city": "MAGOG",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 78764,
+        "city_clicks": 56,
+        "city_spend": 708.876
+      },
+      {
+        "poi_id": 2637806,
+        "poi_name": "46324 - Mazda de Magog",
+        "geo_ca_city": "ORFORD LAKE",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 3164,
+        "city_clicks": 0,
+        "city_spend": 28.476
+      },
+      {
+        "poi_id": 2637807,
+        "poi_name": "46444 - Performe Mazda",
+        "geo_ca_city": "MONT-LAURIER",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 48132,
+        "city_clicks": 84,
+        "city_spend": 433.188
+      },
+      {
+        "poi_id": 2637808,
+        "poi_name": "46450 - Mazda Joliette",
+        "geo_ca_city": "JOLIETTE",
+        "unique_users": 2352010,
+        "converted_users": 20,
+        "city_impressions": 209048,
+        "city_clicks": 196,
+        "city_spend": 1881.43
+      },
+      {
+        "poi_id": 2637808,
+        "poi_name": "46450 - Mazda Joliette",
+        "geo_ca_city": "NOTRE-DAME-DES-PRAIRIES",
+        "unique_users": 2352010,
+        "converted_users": 20,
+        "city_impressions": 2324,
+        "city_clicks": 0,
+        "city_spend": 20.916
+      },
+      {
+        "poi_id": 2637808,
+        "poi_name": "46450 - Mazda Joliette",
+        "geo_ca_city": "SAINT-CHARLES-BORROMEE",
+        "unique_users": 2352010,
+        "converted_users": 20,
+        "city_impressions": 140,
+        "city_clicks": 0,
+        "city_spend": 1.26
+      },
+      {
+        "poi_id": 2637808,
+        "poi_name": "46450 - Mazda Joliette",
+        "geo_ca_city": null,
+        "unique_users": 2352010,
+        "converted_users": 20,
+        "city_impressions": 28,
+        "city_clicks": 0,
+        "city_spend": 0.252
+      },
+      {
+        "poi_id": 2637810,
+        "poi_name": "46456 - Mazda Drummond",
+        "geo_ca_city": "DRUMMONDVILLE",
+        "unique_users": 2352010,
+        "converted_users": 24,
+        "city_impressions": 116312,
+        "city_clicks": 56,
+        "city_spend": 1046.81
+      },
+      {
+        "poi_id": 2637811,
+        "poi_name": "46468 - Villeneuve Mazda",
+        "geo_ca_city": "MATANE",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 54516,
+        "city_clicks": 0,
+        "city_spend": 490.644
+      },
+      {
+        "poi_id": 2637812,
+        "poi_name": "46470 - Paquin Mazda",
+        "geo_ca_city": "ROUYN-NORANDA",
+        "unique_users": 2352010,
+        "converted_users": 40,
+        "city_impressions": 106960,
+        "city_clicks": 28,
+        "city_spend": 962.64
+      },
+      {
+        "poi_id": 2637813,
+        "poi_name": "46472 - Barnabe Mazda",
+        "geo_ca_city": "CLARENCE-ROCKLAND",
+        "unique_users": 2352010,
+        "converted_users": 24,
+        "city_impressions": 532,
+        "city_clicks": 0,
+        "city_spend": 4.788
+      },
+      {
+        "poi_id": 2637814,
+        "poi_name": "46504 - Amos Mazda",
+        "geo_ca_city": "AMOS",
+        "unique_users": 2352010,
+        "converted_users": 20,
+        "city_impressions": 44184,
+        "city_clicks": 0,
+        "city_spend": 397.656
+      },
+      {
+        "poi_id": 2637816,
+        "poi_name": "46512 - Mégantic Mazda",
+        "geo_ca_city": "FATIMA",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 2128,
+        "city_clicks": 28,
+        "city_spend": 19.152
+      },
+      {
+        "poi_id": 2637816,
+        "poi_name": "46512 - Mégantic Mazda",
+        "geo_ca_city": "LAC-MEGANTIC",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 21420,
+        "city_clicks": 84,
+        "city_spend": 192.78
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "ENTRELACS",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 336,
+        "city_clicks": 0,
+        "city_spend": 3.024
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "HUBERDEAU",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 840,
+        "city_clicks": 0,
+        "city_spend": 7.56
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "LABELLE",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 4424,
+        "city_clicks": 28,
+        "city_spend": 39.816
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "LAC-DES-PLAGES",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 1540,
+        "city_clicks": 0,
+        "city_spend": 13.86
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "LA CONCEPTION",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 2996,
+        "city_clicks": 0,
+        "city_spend": 26.964
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "LA MACAZA",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 1456,
+        "city_clicks": 28,
+        "city_spend": 13.104
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "LA MINERVE",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 1624,
+        "city_clicks": 0,
+        "city_spend": 14.616
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "L''ASCENSION",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 84,
+        "city_clicks": 0,
+        "city_spend": 0.756
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "MONT-TREMBLANT",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 616,
+        "city_clicks": 0,
+        "city_spend": 5.544
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "NOTRE-DAME-DE-LA-MERCI",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 4984,
+        "city_clicks": 0,
+        "city_spend": 44.856
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "SAINT-DONAT",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 84,
+        "city_clicks": 0,
+        "city_spend": 0.756
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "SAINT-DONAT-DE-MONTCALM",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 476,
+        "city_clicks": 0,
+        "city_spend": 4.284
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "SAINTE-LUCIE-DES-LAURENTIDES",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 3332,
+        "city_clicks": 0,
+        "city_spend": 29.988
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "SAINTE-MARGUERITE--ESTEREL",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 56,
+        "city_clicks": 0,
+        "city_spend": 0.504
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "VAL-DAVID",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 20664,
+        "city_clicks": 0,
+        "city_spend": 185.976
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "VAL-MORIN",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 1064,
+        "city_clicks": 28,
+        "city_spend": 9.576
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": "WENTWORTH-NORD",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 980,
+        "city_clicks": 0,
+        "city_spend": 8.82
+      },
+      {
+        "poi_id": 2637817,
+        "poi_name": "46514 - Mazda Val David",
+        "geo_ca_city": null,
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 280,
+        "city_clicks": 0,
+        "city_spend": 2.52
+      },
+      {
+        "poi_id": 2637820,
+        "poi_name": "46520 - Sept-Îles Mazda",
+        "geo_ca_city": "SEPT-ILES",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 87416,
+        "city_clicks": 168,
+        "city_spend": 786.744
+      },
+      {
+        "poi_id": 2637821,
+        "poi_name": "46522 - Val D'Or Mazda",
+        "geo_ca_city": "VAL-D''OR",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 89040,
+        "city_clicks": 84,
+        "city_spend": 801.36
+      },
+      {
+        "poi_id": 2637822,
+        "poi_name": "46524 - Cowansville Mazda",
+        "geo_ca_city": "BRIGHAM",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 1036,
+        "city_clicks": 0,
+        "city_spend": 9.324
+      },
+      {
+        "poi_id": 2637822,
+        "poi_name": "46524 - Cowansville Mazda",
+        "geo_ca_city": "COWANSVILLE",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 17024,
+        "city_clicks": 0,
+        "city_spend": 153.216
+      },
+      {
+        "poi_id": 2637824,
+        "poi_name": "46538 - Mazda Des Sources",
+        "geo_ca_city": "DORVAL",
+        "unique_users": 2352010,
+        "converted_users": 92,
+        "city_impressions": 476,
+        "city_clicks": 0,
+        "city_spend": 4.284
+      },
+      {
+        "poi_id": 2637825,
+        "poi_name": "46542 - Mazda Trois-Rivières",
+        "geo_ca_city": "TROIS-RIVIÈRES",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 71148,
+        "city_clicks": 140,
+        "city_spend": 640.332
+      },
+      {
+        "poi_id": 2637826,
+        "poi_name": "46544 - Lévis Mazda",
+        "geo_ca_city": "LEVIS",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 128492,
+        "city_clicks": 196,
+        "city_spend": 1156.43
+      },
+      {
+        "poi_id": 2637828,
+        "poi_name": "46550 - Albi Le Géant Mazda",
+        "geo_ca_city": "MASCOUCHE",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 135744,
+        "city_clicks": 56,
+        "city_spend": 1221.7
+      },
+      {
+        "poi_id": 2637829,
+        "poi_name": "46554 - Mazda Victoriaville",
+        "geo_ca_city": "ARTHABASKA REGIONAL COUNTY MUNICIPALITY",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 1568,
+        "city_clicks": 0,
+        "city_spend": 14.112
+      },
+      {
+        "poi_id": 2637829,
+        "poi_name": "46554 - Mazda Victoriaville",
+        "geo_ca_city": "VICTORIAVILLE",
+        "unique_users": 2352010,
+        "converted_users": 8,
+        "city_impressions": 169120,
+        "city_clicks": 140,
+        "city_spend": 1522.08
+      },
+      {
+        "poi_id": 2637831,
+        "poi_name": "46580 - Sittelle Mazda",
+        "geo_ca_city": "SAINT-GEORGES",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 87752,
+        "city_clicks": 56,
+        "city_spend": 789.768
+      },
+      {
+        "poi_id": 2637832,
+        "poi_name": "46586 - Alma Mazda",
+        "geo_ca_city": "ALMA",
+        "unique_users": 2352010,
+        "converted_users": 16,
+        "city_impressions": 136836,
+        "city_clicks": 56,
+        "city_spend": 1231.52
+      },
+      {
+        "poi_id": 2637833,
+        "poi_name": "46588 - Planete Mazda",
+        "geo_ca_city": "MIRABEL",
+        "unique_users": 2352010,
+        "converted_users": 56,
+        "city_impressions": 20300,
+        "city_clicks": 28,
+        "city_spend": 182.7
+      },
+      {
+        "poi_id": 2637835,
+        "poi_name": "46606 - Dubé Mazda",
+        "geo_ca_city": "RIVIÈRE-DU-LOUP",
+        "unique_users": 2352010,
+        "converted_users": 12,
+        "city_impressions": 75124,
+        "city_clicks": 28,
+        "city_spend": 676.116
+      },
+      {
+        "poi_id": 2637837,
+        "poi_name": "46610 - Mazda Repentigny",
+        "geo_ca_city": "REPENTIGNY",
+        "unique_users": 2352010,
+        "converted_users": 12,
+        "city_impressions": 119140,
+        "city_clicks": 112,
+        "city_spend": 1072.26
+      }
+    ],
+    "views": [
+      {
+        "id": "logs_imp_20524",
+        "type": "logs",
+        "category": "atom_campaigns",
+        "logType": "imp",
+        "agencyID": 20524,
+        "name": "ATOM Impressions - Mazda Canada (20524)"
+      },
+      {
+        "id": "reportvwi_3316_3447",
+        "type": "reportvwi",
+        "category": "report_vwi",
+        "report_id": 3447,
+        "layer_id": 3316,
+        "name": "80099 - Mazda Quebec Competitive Geofencing - MM3 - Nov"
+      }
+    ]
+  }
+}

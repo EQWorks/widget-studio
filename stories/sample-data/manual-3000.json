@@ -1,0 +1,267 @@
+{
+  "data": {
+    "whitelabelID": 2423,
+    "customerID": 27124,
+    "columns": [
+      {
+        "name": "geo_ca_fsa",
+        "category": "String"
+      },
+      {
+        "name": "pop",
+        "category": "Numeric"
+      },
+      {
+        "name": "home_value",
+        "category": "Numeric"
+      },
+      {
+        "name": "highest_education_no_education",
+        "category": "Numeric"
+      },
+      {
+        "name": "highest_education_secondary_education",
+        "category": "Numeric"
+      },
+      {
+        "name": "highest_education_apprenticeship_trades",
+        "category": "Numeric"
+      },
+      {
+        "name": "highest_education_college_uni_below_bachelor",
+        "category": "Numeric"
+      },
+      {
+        "name": "highest_education_uni_bachelor",
+        "category": "Numeric"
+      },
+      {
+        "name": "highest_education_uni_advanced",
+        "category": "Numeric"
+      }
+    ],
+    "results": [
+      {
+        "geo_ca_fsa": "M1K",
+        "pop": 2500,
+        "home_value": 800000,
+        "highest_education_no_education": 500,
+        "highest_education_secondary_education": 300,
+        "highest_education_apprenticeship_trades": 700,
+        "highest_education_college_uni_below_bachelor": 300,
+        "highest_education_uni_bachelor": 500,
+        "highest_education_uni_advanced": 200
+      },
+      {
+        "geo_ca_fsa": "M1L",
+        "pop": 1600,
+        "home_value": 800500,
+        "highest_education_no_education": 300,
+        "highest_education_secondary_education": 100,
+        "highest_education_apprenticeship_trades": 500,
+        "highest_education_college_uni_below_bachelor": 300,
+        "highest_education_uni_bachelor": 400,
+        "highest_education_uni_advanced": 100
+      },
+      {
+        "geo_ca_fsa": "M1N",
+        "pop": 3000,
+        "home_value": 900000,
+        "highest_education_no_education": 700,
+        "highest_education_secondary_education": 400,
+        "highest_education_apprenticeship_trades": 800,
+        "highest_education_college_uni_below_bachelor": 500,
+        "highest_education_uni_bachelor": 600,
+        "highest_education_uni_advanced": 300
+      },
+      {
+        "geo_ca_fsa": "M1R",
+        "pop": 2000,
+        "home_value": 750000,
+        "highest_education_no_education": 400,
+        "highest_education_secondary_education": 200,
+        "highest_education_apprenticeship_trades": 600,
+        "highest_education_college_uni_below_bachelor": 200,
+        "highest_education_uni_bachelor": 400,
+        "highest_education_uni_advanced": 100
+      },
+      {
+        "geo_ca_fsa": "M3C",
+        "pop": 2800,
+        "home_value": 850000,
+        "highest_education_no_education": 600,
+        "highest_education_secondary_education": 250,
+        "highest_education_apprenticeship_trades": 850,
+        "highest_education_college_uni_below_bachelor": 400,
+        "highest_education_uni_bachelor": 600,
+        "highest_education_uni_advanced": 300
+      },
+      {
+        "geo_ca_fsa": "M4A",
+        "pop": 3200,
+        "home_value": 950000,
+        "highest_education_no_education": 700,
+        "highest_education_secondary_education": 500,
+        "highest_education_apprenticeship_trades": 900,
+        "highest_education_college_uni_below_bachelor": 500,
+        "highest_education_uni_bachelor": 700,
+        "highest_education_uni_advanced": 300
+      },
+      {
+        "geo_ca_fsa": "M4B",
+        "pop": 2200,
+        "home_value": 650000,
+        "highest_education_no_education": 400,
+        "highest_education_secondary_education": 250,
+        "highest_education_apprenticeship_trades": 550,
+        "highest_education_college_uni_below_bachelor": 250,
+        "highest_education_uni_bachelor": 400,
+        "highest_education_uni_advanced": 100
+      },
+      {
+        "geo_ca_fsa": "M4C",
+        "pop": 2100,
+        "home_value": 1000000,
+        "highest_education_no_education": 400,
+        "highest_education_secondary_education": 250,
+        "highest_education_apprenticeship_trades": 650,
+        "highest_education_college_uni_below_bachelor": 150,
+        "highest_education_uni_bachelor": 600,
+        "highest_education_uni_advanced": 150
+      },
+      {
+        "geo_ca_fsa": "M4E",
+        "pop": 3000,
+        "home_value": 1500000,
+        "highest_education_no_education": 300,
+        "highest_education_secondary_education": 200,
+        "highest_education_apprenticeship_trades": 900,
+        "highest_education_college_uni_below_bachelor": 500,
+        "highest_education_uni_bachelor": 700,
+        "highest_education_uni_advanced": 300
+      },
+      {
+        "geo_ca_fsa": "M4G",
+        "pop": 2600,
+        "home_value": 845000,
+        "highest_education_no_education": 450,
+        "highest_education_secondary_education": 350,
+        "highest_education_apprenticeship_trades": 650,
+        "highest_education_college_uni_below_bachelor": 250,
+        "highest_education_uni_bachelor": 450,
+        "highest_education_uni_advanced": 250
+      },
+      {
+        "geo_ca_fsa": "M4H",
+        "pop": 2300,
+        "home_value": 950000,
+        "highest_education_no_education": 450,
+        "highest_education_secondary_education": 200,
+        "highest_education_apprenticeship_trades": 555,
+        "highest_education_college_uni_below_bachelor": 225,
+        "highest_education_uni_bachelor": 355,
+        "highest_education_uni_advanced": 115
+      },
+      {
+        "geo_ca_fsa": "M4J",
+        "pop": 1900,
+        "home_value": 1500000,
+        "highest_education_no_education": 300,
+        "highest_education_secondary_education": 500,
+        "highest_education_apprenticeship_trades": 500,
+        "highest_education_college_uni_below_bachelor": 450,
+        "highest_education_uni_bachelor": 300,
+        "highest_education_uni_advanced": 100
+      },
+      {
+        "geo_ca_fsa": "M4K",
+        "pop": 2000,
+        "home_value": 1300000,
+        "highest_education_no_education": 365,
+        "highest_education_secondary_education": 255,
+        "highest_education_apprenticeship_trades": 300,
+        "highest_education_college_uni_below_bachelor": 600,
+        "highest_education_uni_bachelor": 450,
+        "highest_education_uni_advanced": 250
+      },
+      {
+        "geo_ca_fsa": "M4L",
+        "pop": 2350,
+        "home_value": 650000,
+        "highest_education_no_education": 700,
+        "highest_education_secondary_education": 400,
+        "highest_education_apprenticeship_trades": 400,
+        "highest_education_college_uni_below_bachelor": 200,
+        "highest_education_uni_bachelor": 200,
+        "highest_education_uni_advanced": 100
+      },
+      {
+        "geo_ca_fsa": "M4M",
+        "pop": 2250,
+        "home_value": 750000,
+        "highest_education_no_education": 350,
+        "highest_education_secondary_education": 450,
+        "highest_education_apprenticeship_trades": 550,
+        "highest_education_college_uni_below_bachelor": 200,
+        "highest_education_uni_bachelor": 300,
+        "highest_education_uni_advanced": 100
+      },
+      {
+        "geo_ca_fsa": "M4S",
+        "pop": 2950,
+        "home_value": 870000,
+        "highest_education_no_education": 600,
+        "highest_education_secondary_education": 400,
+        "highest_education_apprenticeship_trades": 800,
+        "highest_education_college_uni_below_bachelor": 400,
+        "highest_education_uni_bachelor": 450,
+        "highest_education_uni_advanced": 150
+      },
+      {
+        "geo_ca_fsa": "M4T",
+        "pop": 2300,
+        "home_value": 680000,
+        "highest_education_no_education": 400,
+        "highest_education_secondary_education": 400,
+        "highest_education_apprenticeship_trades": 550,
+        "highest_education_college_uni_below_bachelor": 250,
+        "highest_education_uni_bachelor": 300,
+        "highest_education_uni_advanced": 150
+      },
+      {
+        "geo_ca_fsa": "M4W",
+        "pop": 3150,
+        "home_value": 770000,
+        "highest_education_no_education": 700,
+        "highest_education_secondary_education": 600,
+        "highest_education_apprenticeship_trades": 800,
+        "highest_education_college_uni_below_bachelor": 400,
+        "highest_education_uni_bachelor": 300,
+        "highest_education_uni_advanced": 100
+      },
+      {
+        "geo_ca_fsa": "M4X",
+        "pop": 2200,
+        "home_value": 690000,
+        "highest_education_no_education": 400,
+        "highest_education_secondary_education": 250,
+        "highest_education_apprenticeship_trades": 650,
+        "highest_education_college_uni_below_bachelor": 250,
+        "highest_education_uni_bachelor": 450,
+        "highest_education_uni_advanced": 150
+      },
+      {
+        "geo_ca_fsa": "M5A",
+        "pop": 2780,
+        "home_value": 950000,
+        "highest_education_no_education": 500,
+        "highest_education_secondary_education": 300,
+        "highest_education_apprenticeship_trades": 800,
+        "highest_education_college_uni_below_bachelor": 400,
+        "highest_education_uni_bachelor": 600,
+        "highest_education_uni_advanced": 300
+      }
+    ]
+  },
+  "name": "Demographic data"
+}
