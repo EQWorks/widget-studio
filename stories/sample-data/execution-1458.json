@@ -105,7 +105,7 @@
     "scheduleTS": null,
     "results": [
       {
-        "name": "Grocery Chain: Wal Mart Supercenters",
+        "name": "Grocery Chain: <BRAND 1>",
         "time": "2019-12-02T19:58:54.700Z",
         "price": "$300.00",
         "category": "Retail",
@@ -125,14 +125,14 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Ford Truck/Van, FSA",
+        "name": "<BRAND 1>, FSA",
         "time": "2019-12-13T20:00:57.926Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 14285,
         "source_id": 812,
         "whitelabel": 212,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Persona \"Melting pot origin\", PC",
@@ -172,7 +172,7 @@
         "customer": 10183,
         "source_id": 279,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "PickUp Vehicle",
@@ -182,10 +182,10 @@
         "customer": 10183,
         "source_id": 156,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Grocery Chain: Thrifty Foods",
+        "name": "Grocery Chain: <BRAND 2>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -202,7 +202,7 @@
         "customer": 10183,
         "source_id": 163,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Ownership Types, DA",
@@ -222,10 +222,10 @@
         "customer": 13933,
         "source_id": 160,
         "whitelabel": 147,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Grocery Chain: Provigo",
+        "name": "Grocery Chain: <BRAND 3>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -252,7 +252,7 @@
         "customer": 10183,
         "source_id": 252,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "SUVs Vehicle",
@@ -262,10 +262,10 @@
         "customer": 12675,
         "source_id": 155,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Grocery Chain: Costco",
+        "name": "Grocery Chain: <BRAND 4>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -282,7 +282,7 @@
         "customer": 10183,
         "source_id": 266,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Persona \"Settled Europeans\", DA",
@@ -295,7 +295,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Costco",
+        "name": "Grocery Chain: <BRAND 4>",
         "time": "2021-05-17T16:20:40.548Z",
         "price": "$300.00",
         "category": "Retail",
@@ -325,7 +325,7 @@
         "vendor_name": "WL TEST"
       },
       {
-        "name": "Grocery Chain: Fortinos",
+        "name": "Grocery Chain: <BRAND 5>",
         "time": "2021-05-17T17:06:00.579Z",
         "price": "$300.00",
         "category": "Retail",
@@ -365,24 +365,24 @@
         "vendor_name": "WL TEST"
       },
       {
-        "name": "Bmw, FSA",
+        "name": "<BRAND 2>, FSA",
         "time": "2019-12-13T19:55:04.924Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 14285,
         "source_id": 775,
         "whitelabel": 212,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Volano, FSA",
+        "name": "<BRAND 3>, FSA",
         "time": "2020-12-10T21:11:10.462Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 10183,
         "source_id": 953,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Persona \"Settled Anglophone\", PC",
@@ -412,7 +412,7 @@
         "customer": 10183,
         "source_id": 208,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Personas, PC",
@@ -472,7 +472,7 @@
         "customer": 23428,
         "source_id": 254,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Persona \"I've lived here for 40 years\", PC",
@@ -502,7 +502,7 @@
         "customer": 16100,
         "source_id": 185,
         "whitelabel": 608,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Motorcycle Vehicle",
@@ -512,10 +512,10 @@
         "customer": 10183,
         "source_id": 238,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Grocery Chain: Fortinos",
+        "name": "Grocery Chain: <BRAND 5>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -525,7 +525,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Costco",
+        "name": "Grocery Chain: <BRAND 4>",
         "time": "2019-11-12T10:19:33.407Z",
         "price": "$300.00",
         "category": "Retail",
@@ -535,7 +535,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: No Frills",
+        "name": "Grocery Chain: <BRAND 15>",
         "time": "2021-05-17T17:05:15.474Z",
         "price": "$300.00",
         "category": "Retail",
@@ -552,7 +552,7 @@
         "customer": 10183,
         "source_id": 196,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Occupations, DA",
@@ -565,7 +565,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Wal Mart Supercenters",
+        "name": "Grocery Chain: <BRAND 1>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -575,14 +575,14 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Zenn, FSA",
+        "name": "<BRAND 10>, FSA",
         "time": "2020-12-24T18:16:23.967Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 9533,
         "source_id": 960,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Ownership Types, DA",
@@ -605,7 +605,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Tim Hortons",
+        "name": "<BRAND 1> COFFEE",
         "time": "2019-08-29T20:12:54.884Z",
         "price": "$500.00",
         "category": "Custom",
@@ -615,14 +615,14 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Bourget's Bike Works, FSA",
+        "name": "<BRAND 11>, FSA",
         "time": "2020-09-28T18:28:38.612Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 9533,
         "source_id": 742,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Do Park",
@@ -652,17 +652,17 @@
         "customer": 14285,
         "source_id": 543,
         "whitelabel": 212,
-        "vendor_name": "TMG Analytics"
+        "vendor_name": "EQ Analytics"
       },
       {
-        "name": "Bmw, FSA",
+        "name": "<BRAND 2>, FSA",
         "time": "2020-09-30T19:45:56.658Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 20852,
         "source_id": 775,
         "whitelabel": 1598,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "PickUp Vehicle",
@@ -672,7 +672,7 @@
         "customer": 16100,
         "source_id": 156,
         "whitelabel": 608,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Vehicle Class Propensity",
@@ -682,7 +682,7 @@
         "customer": 16100,
         "source_id": 252,
         "whitelabel": 608,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Owners Ownership Type, DA",
@@ -695,7 +695,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Sobeys",
+        "name": "Grocery Chain: <BRAND 6>",
         "time": "2019-10-17T16:05:12.991Z",
         "price": "$300.00",
         "category": "Retail",
@@ -705,24 +705,24 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Acura, FSA",
+        "name": "<BRAND 12>, FSA",
         "time": "2020-12-17T22:59:12.514Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 10183,
         "source_id": 967,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Maserati, FSA",
+        "name": "<BRAND 13>, FSA",
         "time": "2021-02-12T19:16:44.532Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 14656,
         "source_id": 872,
         "whitelabel": 66,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "SUVs Vehicle",
@@ -732,7 +732,7 @@
         "customer": 10183,
         "source_id": 155,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Personas, PC",
@@ -745,14 +745,14 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Audi, FSA",
+        "name": "<BRAND 14>, FSA",
         "time": "2020-07-10T17:14:55.338Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 19798,
         "source_id": 755,
         "whitelabel": 1202,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Driver Behaviour in Area",
@@ -762,7 +762,7 @@
         "customer": 10183,
         "source_id": 275,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Management Occupations, DA",
@@ -782,7 +782,7 @@
         "customer": 21248,
         "source_id": 208,
         "whitelabel": 509,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Vehicle Brands Propensity",
@@ -792,10 +792,10 @@
         "customer": 14285,
         "source_id": 266,
         "whitelabel": 212,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Tim Hortons",
+        "name": "<BRAND 1> COFFEE",
         "time": "2020-09-30T19:43:39.066Z",
         "price": "$500.00",
         "category": "Custom",
@@ -805,7 +805,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Loblaws",
+        "name": "Grocery Chain: <BRAND 7>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -815,24 +815,24 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "American Motors, FSA",
+        "name": "<BRAND 15>, FSA",
         "time": "2020-10-17T19:44:06.755Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 9533,
         "source_id": 744,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Mercedes-Benz, FSA",
+        "name": "<BRAND 16>, FSA",
         "time": "2020-10-21T17:32:01.472Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 20852,
         "source_id": 879,
         "whitelabel": 1598,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Persona \"We moved here for the schools\", PC",
@@ -845,14 +845,14 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Audi, FSA",
+        "name": "<BRAND 14>, FSA",
         "time": "2021-04-07T16:26:52.000Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 16100,
         "source_id": 755,
         "whitelabel": 608,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Rental Price in FSA (174)",
@@ -862,7 +862,7 @@
         "customer": 16100,
         "source_id": 546,
         "whitelabel": 608,
-        "vendor_name": "TMG Analytics"
+        "vendor_name": "EQ Analytics"
       },
       {
         "name": "Vehicle Types in Area",
@@ -872,7 +872,7 @@
         "customer": 14285,
         "source_id": 185,
         "whitelabel": 212,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Persona \"Melting pot origin\", PC",
@@ -902,7 +902,7 @@
         "customer": 10183,
         "source_id": 185,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Personas, PC",
@@ -915,14 +915,14 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Subaru, FSA",
+        "name": "<BRAND 17>, FSA",
         "time": "2021-05-12T18:26:23.240Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 16100,
         "source_id": 932,
         "whitelabel": 608,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Persona \"Recent Francophone immigrants\", PC",
@@ -935,7 +935,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Sobeys",
+        "name": "Grocery Chain: <BRAND 6>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -945,24 +945,24 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Volkswagen, FSA",
+        "name": "<BRAND 4>, FSA",
         "time": "2021-01-19T20:35:58.627Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 21248,
         "source_id": 954,
         "whitelabel": 509,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Boss Hoss, FSA",
+        "name": "<BRAND 5>, FSA",
         "time": "2020-01-30T16:14:05.092Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 16370,
         "source_id": 745,
         "whitelabel": 509,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Top languages, DA",
@@ -975,7 +975,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Loblaws",
+        "name": "Grocery Chain: <BRAND 7>",
         "time": "2020-07-28T18:20:22.814Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1005,7 +1005,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Wal Mart Supercenters",
+        "name": "Grocery Chain: <BRAND 1>",
         "time": "2021-05-17T17:05:27.013Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1025,24 +1025,24 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Lexus, FSA",
+        "name": "<BRAND 6>, FSA",
         "time": "2019-12-13T19:56:38.822Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 14285,
         "source_id": 865,
         "whitelabel": 212,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Volkswagen, FSA",
+        "name": "<BRAND 4>, FSA",
         "time": "2021-01-27T21:31:40.425Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 16100,
         "source_id": 954,
         "whitelabel": 608,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Art Culture Recreation Sport Occupations, DA",
@@ -1055,7 +1055,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Loblaws",
+        "name": "Grocery Chain: <BRAND 7>",
         "time": "2019-12-16T18:48:55.745Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1075,7 +1075,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Costco",
+        "name": "Grocery Chain: <BRAND 4>",
         "time": "2019-12-02T20:00:13.316Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1085,7 +1085,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Loblaws",
+        "name": "Grocery Chain: <BRAND 7>",
         "time": "2021-05-17T17:05:03.282Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1115,7 +1115,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Zehrs Supermarkets",
+        "name": "Grocery Chain: <BRAND 8>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1135,7 +1135,7 @@
         "vendor_name": "WL TEST"
       },
       {
-        "name": "Grocery Chain: Foodbasics Supermarkets",
+        "name": "Grocery Chain: <BRAND 9>",
         "time": "2021-05-17T17:07:03.182Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1155,7 +1155,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Safeway Canada",
+        "name": "Grocery Chain: <BRAND 10>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1172,10 +1172,10 @@
         "customer": 16100,
         "source_id": 543,
         "whitelabel": 608,
-        "vendor_name": "TMG Analytics"
+        "vendor_name": "EQ Analytics"
       },
       {
-        "name": "Grocery Chain: Maxi",
+        "name": "Grocery Chain: <BRAND 11>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1192,7 +1192,7 @@
         "customer": 10183,
         "source_id": 249,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Persona \"Recent Anglophone immigrants\", PC",
@@ -1205,14 +1205,14 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Bedrooms Propensity, FSA",
+        "name": "<BRAND 18>, FSA",
         "time": "2020-05-28T13:18:00.282Z",
         "price": "$500.00",
         "category": "Household",
         "customer": 13933,
         "source_id": 231,
         "whitelabel": 147,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Dwellings by Type, DA",
@@ -1245,7 +1245,7 @@
         "vendor_name": "WL TEST"
       },
       {
-        "name": "Grocery Chain: Dominion Supermarkets",
+        "name": "Grocery Chain: <BRAND 12>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1265,7 +1265,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Foodbasics Supermarkets",
+        "name": "Grocery Chain: <BRAND 9>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1275,17 +1275,17 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Bmw, FSA",
+        "name": "<BRAND 2>, FSA",
         "time": "2021-01-19T20:36:37.232Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 21248,
         "source_id": 775,
         "whitelabel": 509,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Grocery Chain: Real Canadian Superstore",
+        "name": "Grocery Chain: <BRAND 13>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1305,7 +1305,7 @@
         "vendor_name": "WL TEST"
       },
       {
-        "name": "Grocery Chain: Longos Supermarkets",
+        "name": "Grocery Chain: <BRAND 14>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1342,7 +1342,7 @@
         "customer": 10183,
         "source_id": 239,
         "whitelabel": 4,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Agricult Forest Fish Hunt Industry, DA",
@@ -1365,14 +1365,14 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Toyota, FSA",
+        "name": "<BRAND 7>, FSA",
         "time": "2020-10-21T17:32:37.810Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 20852,
         "source_id": 945,
         "whitelabel": 1598,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Occupations, DA",
@@ -1395,7 +1395,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: No Frills",
+        "name": "Grocery Chain: <BRAND 15>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",
@@ -1415,24 +1415,24 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Chevrolet, FSA",
+        "name": "<BRAND 8>, FSA",
         "time": "2019-12-13T20:01:46.570Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 14285,
         "source_id": 783,
         "whitelabel": 212,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
-        "name": "Mini, FSA",
+        "name": "<BRAND 9>, FSA",
         "time": "2021-04-27T15:12:32.380Z",
         "price": "$500.00",
         "category": "Auto",
         "customer": 16100,
         "source_id": 884,
         "whitelabel": 608,
-        "vendor_name": "Opta"
+        "vendor_name": "EQ Cognitive"
       },
       {
         "name": "Business Finance And Administration Occupations, DA",
@@ -1445,7 +1445,7 @@
         "vendor_name": "EQ"
       },
       {
-        "name": "Grocery Chain: Metro Supermarkets",
+        "name": "Grocery Chain: <BRAND 16>",
         "time": "2020-10-20T16:17:15.448Z",
         "price": "$300.00",
         "category": "Retail",

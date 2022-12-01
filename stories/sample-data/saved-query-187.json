@@ -166,7 +166,7 @@
     "results": [
       {
         "poi_id": 2637782,
-        "poi_name": "46110 - Mazda de Laval",
+        "poi_name": "46110 - <BRAND 1> de Laval",
         "geo_ca_city": "LAVAL",
         "unique_users": 2352010,
         "converted_users": 136,
@@ -176,7 +176,7 @@
       },
       {
         "poi_id": 2637783,
-        "poi_name": "46114 - Mazda 2-20",
+        "poi_name": "46114 - <BRAND 1> 2-20",
         "geo_ca_city": "NOTRE-DAME-DE-L''ILE-PERROT",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -186,7 +186,7 @@
       },
       {
         "poi_id": 2637783,
-        "poi_name": "46114 - Mazda 2-20",
+        "poi_name": "46114 - <BRAND 1> 2-20",
         "geo_ca_city": "PINCOURT",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -196,7 +196,7 @@
       },
       {
         "poi_id": 2637785,
-        "poi_name": "46152 - Mazda Gabriel St-Jacques",
+        "poi_name": "46152 - <BRAND 1> Gabriel St-Jacques",
         "geo_ca_city": "MONTREAL",
         "unique_users": 2352010,
         "converted_users": 204,
@@ -206,7 +206,7 @@
       },
       {
         "poi_id": 2637786,
-        "poi_name": "46158 - Longueuil Mazda",
+        "poi_name": "46158 - Longueuil <BRAND 1>",
         "geo_ca_city": "LONGUEUIL",
         "unique_users": 2352010,
         "converted_users": 24,
@@ -216,7 +216,7 @@
       },
       {
         "poi_id": 2637787,
-        "poi_name": "46164 - Spinelli Mazda",
+        "poi_name": "46164 - Spinelli <BRAND 1>",
         "geo_ca_city": "COTE-SAINT-LUC",
         "unique_users": 2352010,
         "converted_users": 148,
@@ -226,7 +226,7 @@
       },
       {
         "poi_id": 2637787,
-        "poi_name": "46164 - Spinelli Mazda",
+        "poi_name": "46164 - Spinelli <BRAND 1>",
         "geo_ca_city": "LACHINE",
         "unique_users": 2352010,
         "converted_users": 148,
@@ -236,7 +236,7 @@
       },
       {
         "poi_id": 2637789,
-        "poi_name": "46170 - Mazda Gabriel Anjou",
+        "poi_name": "46170 - <BRAND 1> Gabriel Anjou",
         "geo_ca_city": "MONTREAL",
         "unique_users": 2352010,
         "converted_users": 136,
@@ -246,7 +246,7 @@
       },
       {
         "poi_id": 2637790,
-        "poi_name": "46172 - Beauport Mazda",
+        "poi_name": "46172 - Beauport <BRAND 1>",
         "geo_ca_city": "QUÉBEC",
         "unique_users": 2352010,
         "converted_users": 28,
@@ -256,7 +256,7 @@
       },
       {
         "poi_id": 2637793,
-        "poi_name": "46180 - Chambly Mazda",
+        "poi_name": "46180 - Chambly <BRAND 1>",
         "geo_ca_city": "CARIGNAN",
         "unique_users": 2352010,
         "converted_users": 56,
@@ -266,7 +266,7 @@
       },
       {
         "poi_id": 2637793,
-        "poi_name": "46180 - Chambly Mazda",
+        "poi_name": "46180 - Chambly <BRAND 1>",
         "geo_ca_city": "CHAMBLY",
         "unique_users": 2352010,
         "converted_users": 56,
@@ -276,7 +276,7 @@
       },
       {
         "poi_id": 2637793,
-        "poi_name": "46180 - Chambly Mazda",
+        "poi_name": "46180 - Chambly <BRAND 1>",
         "geo_ca_city": "SAINT-MATHIAS-SUR-RICHELIEU",
         "unique_users": 2352010,
         "converted_users": 56,
@@ -286,7 +286,7 @@
       },
       {
         "poi_id": 2637794,
-        "poi_name": "46182 - Elite Mazda",
+        "poi_name": "46182 - Elite <BRAND 1>",
         "geo_ca_city": "GATINEAU",
         "unique_users": 2352010,
         "converted_users": 48,
@@ -296,7 +296,7 @@
       },
       {
         "poi_id": 2637795,
-        "poi_name": "46184 - Laurier Mazda",
+        "poi_name": "46184 - Laurier <BRAND 1>",
         "geo_ca_city": "QUÉBEC",
         "unique_users": 2352010,
         "converted_users": 24,
@@ -306,7 +306,7 @@
       },
       {
         "poi_id": 2637796,
-        "poi_name": "46186 - Albi Mazda",
+        "poi_name": "46186 - Albi <BRAND 1>",
         "geo_ca_city": "LAVAL",
         "unique_users": 2352010,
         "converted_users": 56,
@@ -316,7 +316,7 @@
       },
       {
         "poi_id": 2637797,
-        "poi_name": "46188 - Brossard Mazda",
+        "poi_name": "46188 - Brossard <BRAND 1>",
         "geo_ca_city": "BROSSARD",
         "unique_users": 2352010,
         "converted_users": 24,
@@ -326,7 +326,7 @@
       },
       {
         "poi_id": 2637798,
-        "poi_name": "46190 - Mazda Papineau",
+        "poi_name": "46190 - <BRAND 1> Papineau",
         "geo_ca_city": "MONTREAL",
         "unique_users": 2352010,
         "converted_users": 36,
@@ -336,7 +336,7 @@
       },
       {
         "poi_id": 2637799,
-        "poi_name": "46192 - Mazda Gabriel - St Laurent",
+        "poi_name": "46192 - <BRAND 1> Gabriel - St Laurent",
         "geo_ca_city": "SAINT-LAURENT",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -346,7 +346,7 @@
       },
       {
         "poi_id": 2637800,
-        "poi_name": "46194 - Mazda Pointe-aux-Trembles",
+        "poi_name": "46194 - <BRAND 1> Pointe-aux-Trembles",
         "geo_ca_city": "MONTREAL",
         "unique_users": 2352010,
         "converted_users": 164,
@@ -356,7 +356,7 @@
       },
       {
         "poi_id": 2637800,
-        "poi_name": "46194 - Mazda Pointe-aux-Trembles",
+        "poi_name": "46194 - <BRAND 1> Pointe-aux-Trembles",
         "geo_ca_city": "MONTREAL EAST",
         "unique_users": 2352010,
         "converted_users": 164,
@@ -366,7 +366,7 @@
       },
       {
         "poi_id": 2637801,
-        "poi_name": "46214 - Mazda Chatel",
+        "poi_name": "46214 - <BRAND 1> Chatel",
         "geo_ca_city": "QUÉBEC",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -376,7 +376,7 @@
       },
       {
         "poi_id": 2637802,
-        "poi_name": "46216 - Argus Mazda",
+        "poi_name": "46216 - Argus <BRAND 1>",
         "geo_ca_city": "GATINEAU",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -386,7 +386,7 @@
       },
       {
         "poi_id": 2637804,
-        "poi_name": "46316 - Solution Mazda",
+        "poi_name": "46316 - Solution <BRAND 1>",
         "geo_ca_city": "CHATEAUGUAY",
         "unique_users": 2352010,
         "converted_users": 64,
@@ -396,7 +396,7 @@
       },
       {
         "poi_id": 2637806,
-        "poi_name": "46324 - Mazda de Magog",
+        "poi_name": "46324 - <BRAND 1> de Magog",
         "geo_ca_city": "MAGOG",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -406,7 +406,7 @@
       },
       {
         "poi_id": 2637806,
-        "poi_name": "46324 - Mazda de Magog",
+        "poi_name": "46324 - <BRAND 1> de Magog",
         "geo_ca_city": "ORFORD LAKE",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -416,7 +416,7 @@
       },
       {
         "poi_id": 2637807,
-        "poi_name": "46444 - Performe Mazda",
+        "poi_name": "46444 - Performe <BRAND 1>",
         "geo_ca_city": "MONT-LAURIER",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -426,7 +426,7 @@
       },
       {
         "poi_id": 2637808,
-        "poi_name": "46450 - Mazda Joliette",
+        "poi_name": "46450 - <BRAND 1> Joliette",
         "geo_ca_city": "JOLIETTE",
         "unique_users": 2352010,
         "converted_users": 20,
@@ -436,7 +436,7 @@
       },
       {
         "poi_id": 2637808,
-        "poi_name": "46450 - Mazda Joliette",
+        "poi_name": "46450 - <BRAND 1> Joliette",
         "geo_ca_city": "NOTRE-DAME-DES-PRAIRIES",
         "unique_users": 2352010,
         "converted_users": 20,
@@ -446,7 +446,7 @@
       },
       {
         "poi_id": 2637808,
-        "poi_name": "46450 - Mazda Joliette",
+        "poi_name": "46450 - <BRAND 1> Joliette",
         "geo_ca_city": "SAINT-CHARLES-BORROMEE",
         "unique_users": 2352010,
         "converted_users": 20,
@@ -456,7 +456,7 @@
       },
       {
         "poi_id": 2637808,
-        "poi_name": "46450 - Mazda Joliette",
+        "poi_name": "46450 - <BRAND 1> Joliette",
         "geo_ca_city": null,
         "unique_users": 2352010,
         "converted_users": 20,
@@ -466,7 +466,7 @@
       },
       {
         "poi_id": 2637810,
-        "poi_name": "46456 - Mazda Drummond",
+        "poi_name": "46456 - <BRAND 1> Drummond",
         "geo_ca_city": "DRUMMONDVILLE",
         "unique_users": 2352010,
         "converted_users": 24,
@@ -476,7 +476,7 @@
       },
       {
         "poi_id": 2637811,
-        "poi_name": "46468 - Villeneuve Mazda",
+        "poi_name": "46468 - Villeneuve <BRAND 1>",
         "geo_ca_city": "MATANE",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -486,7 +486,7 @@
       },
       {
         "poi_id": 2637812,
-        "poi_name": "46470 - Paquin Mazda",
+        "poi_name": "46470 - Paquin <BRAND 1>",
         "geo_ca_city": "ROUYN-NORANDA",
         "unique_users": 2352010,
         "converted_users": 40,
@@ -496,7 +496,7 @@
       },
       {
         "poi_id": 2637813,
-        "poi_name": "46472 - Barnabe Mazda",
+        "poi_name": "46472 - Barnabe <BRAND 1>",
         "geo_ca_city": "CLARENCE-ROCKLAND",
         "unique_users": 2352010,
         "converted_users": 24,
@@ -506,7 +506,7 @@
       },
       {
         "poi_id": 2637814,
-        "poi_name": "46504 - Amos Mazda",
+        "poi_name": "46504 - Amos <BRAND 1>",
         "geo_ca_city": "AMOS",
         "unique_users": 2352010,
         "converted_users": 20,
@@ -516,7 +516,7 @@
       },
       {
         "poi_id": 2637816,
-        "poi_name": "46512 - Mégantic Mazda",
+        "poi_name": "46512 - Mégantic <BRAND 1>",
         "geo_ca_city": "FATIMA",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -526,7 +526,7 @@
       },
       {
         "poi_id": 2637816,
-        "poi_name": "46512 - Mégantic Mazda",
+        "poi_name": "46512 - Mégantic <BRAND 1>",
         "geo_ca_city": "LAC-MEGANTIC",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -536,7 +536,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "ENTRELACS",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -546,7 +546,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "HUBERDEAU",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -556,7 +556,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "LABELLE",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -566,7 +566,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "LAC-DES-PLAGES",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -576,7 +576,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "LA CONCEPTION",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -586,7 +586,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "LA MACAZA",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -596,7 +596,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "LA MINERVE",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -606,7 +606,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "L''ASCENSION",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -616,7 +616,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "MONT-TREMBLANT",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -626,7 +626,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "NOTRE-DAME-DE-LA-MERCI",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -636,7 +636,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "SAINT-DONAT",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -646,7 +646,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "SAINT-DONAT-DE-MONTCALM",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -656,7 +656,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "SAINTE-LUCIE-DES-LAURENTIDES",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -666,7 +666,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "SAINTE-MARGUERITE--ESTEREL",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -676,7 +676,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "VAL-DAVID",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -686,7 +686,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "VAL-MORIN",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -696,7 +696,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": "WENTWORTH-NORD",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -706,7 +706,7 @@
       },
       {
         "poi_id": 2637817,
-        "poi_name": "46514 - Mazda Val David",
+        "poi_name": "46514 - <BRAND 1> Val David",
         "geo_ca_city": null,
         "unique_users": 2352010,
         "converted_users": 8,
@@ -716,7 +716,7 @@
       },
       {
         "poi_id": 2637820,
-        "poi_name": "46520 - Sept-Îles Mazda",
+        "poi_name": "46520 - Sept-Îles <BRAND 1>",
         "geo_ca_city": "SEPT-ILES",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -726,7 +726,7 @@
       },
       {
         "poi_id": 2637821,
-        "poi_name": "46522 - Val D'Or Mazda",
+        "poi_name": "46522 - Val D'Or <BRAND 1>",
         "geo_ca_city": "VAL-D''OR",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -736,7 +736,7 @@
       },
       {
         "poi_id": 2637822,
-        "poi_name": "46524 - Cowansville Mazda",
+        "poi_name": "46524 - Cowansville <BRAND 1>",
         "geo_ca_city": "BRIGHAM",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -746,7 +746,7 @@
       },
       {
         "poi_id": 2637822,
-        "poi_name": "46524 - Cowansville Mazda",
+        "poi_name": "46524 - Cowansville <BRAND 1>",
         "geo_ca_city": "COWANSVILLE",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -756,7 +756,7 @@
       },
       {
         "poi_id": 2637824,
-        "poi_name": "46538 - Mazda Des Sources",
+        "poi_name": "46538 - <BRAND 1> Des Sources",
         "geo_ca_city": "DORVAL",
         "unique_users": 2352010,
         "converted_users": 92,
@@ -766,7 +766,7 @@
       },
       {
         "poi_id": 2637825,
-        "poi_name": "46542 - Mazda Trois-Rivières",
+        "poi_name": "46542 - <BRAND 1> Trois-Rivières",
         "geo_ca_city": "TROIS-RIVIÈRES",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -776,7 +776,7 @@
       },
       {
         "poi_id": 2637826,
-        "poi_name": "46544 - Lévis Mazda",
+        "poi_name": "46544 - Lévis <BRAND 1>",
         "geo_ca_city": "LEVIS",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -786,7 +786,7 @@
       },
       {
         "poi_id": 2637828,
-        "poi_name": "46550 - Albi Le Géant Mazda",
+        "poi_name": "46550 - Albi Le Géant <BRAND 1>",
         "geo_ca_city": "MASCOUCHE",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -796,7 +796,7 @@
       },
       {
         "poi_id": 2637829,
-        "poi_name": "46554 - Mazda Victoriaville",
+        "poi_name": "46554 - <BRAND 1> Victoriaville",
         "geo_ca_city": "ARTHABASKA REGIONAL COUNTY MUNICIPALITY",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -806,7 +806,7 @@
       },
       {
         "poi_id": 2637829,
-        "poi_name": "46554 - Mazda Victoriaville",
+        "poi_name": "46554 - <BRAND 1> Victoriaville",
         "geo_ca_city": "VICTORIAVILLE",
         "unique_users": 2352010,
         "converted_users": 8,
@@ -816,7 +816,7 @@
       },
       {
         "poi_id": 2637831,
-        "poi_name": "46580 - Sittelle Mazda",
+        "poi_name": "46580 - Sittelle <BRAND 1>",
         "geo_ca_city": "SAINT-GEORGES",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -826,7 +826,7 @@
       },
       {
         "poi_id": 2637832,
-        "poi_name": "46586 - Alma Mazda",
+        "poi_name": "46586 - Alma <BRAND 1>",
         "geo_ca_city": "ALMA",
         "unique_users": 2352010,
         "converted_users": 16,
@@ -836,7 +836,7 @@
       },
       {
         "poi_id": 2637833,
-        "poi_name": "46588 - Planete Mazda",
+        "poi_name": "46588 - Planete <BRAND 1>",
         "geo_ca_city": "MIRABEL",
         "unique_users": 2352010,
         "converted_users": 56,
@@ -846,7 +846,7 @@
       },
       {
         "poi_id": 2637835,
-        "poi_name": "46606 - Dubé Mazda",
+        "poi_name": "46606 - Dubé <BRAND 1>",
         "geo_ca_city": "RIVIÈRE-DU-LOUP",
         "unique_users": 2352010,
         "converted_users": 12,
@@ -856,7 +856,7 @@
       },
       {
         "poi_id": 2637837,
-        "poi_name": "46610 - Mazda Repentigny",
+        "poi_name": "46610 - <BRAND 1> Repentigny",
         "geo_ca_city": "REPENTIGNY",
         "unique_users": 2352010,
         "converted_users": 12,
@@ -872,7 +872,7 @@
         "category": "atom_campaigns",
         "logType": "imp",
         "agencyID": 20524,
-        "name": "ATOM Impressions - Mazda Canada (20524)"
+        "name": "ATOM Impressions - <BRAND 1> Canada (20524)"
       },
       {
         "id": "reportvwi_3316_3447",
@@ -880,7 +880,7 @@
         "category": "report_vwi",
         "report_id": 3447,
         "layer_id": 3316,
-        "name": "80099 - Mazda Quebec Competitive Geofencing - MM3 - Nov"
+        "name": "80099 - <BRAND 1> Quebec Competitive Geofencing - MM3 - Nov"
       }
     ]
   }
