@@ -5,8 +5,6 @@
     "whitelabelID": 101,
     "customerID": 13147,
     "customerTimezone": "America/Toronto",
-    "queryHash": "L2dvYGT540UQ76mP5p2AhFBNaTx3aRADIvRLsmR7jlM=",
-    "columnHash": "JPVRxcdhjBLp764ZyPOHgcuUR1pFE4nhCxkjAuyfUB8=",
     "status": "SUCCEEDED",
     "statusTS": "2021-05-10T13:33:16.596Z",
     "queryID": null,
