@@ -1,0 +1,101 @@
+{
+  "data": {
+    "whitelabelID": 2423,
+    "customerID": 27124,
+    "columns": [
+      {
+        "name": "location_category",
+        "category": "String"
+      },
+      {
+        "name": "visitation",
+        "category": "Numeric"
+      },
+      {
+        "name": "city",
+        "category": "Numeric"
+      },
+      {
+        "name": "provincial",
+        "category": "Numeric"
+      },
+      {
+        "name": "national",
+        "category": "Numeric"
+      }
+    ],
+    "results": [
+      {
+        "location_category": "Grocery Stores",
+        "visitation": 2500,
+        "city": 2000,
+        "provincial": 1800,
+        "national": 1600
+      },
+      {
+        "location_category": "Department Stores",
+        "visitation": 2300,
+        "city": 1800,
+        "provincial": 1600,
+        "national": 1400
+      },
+      {
+        "location_category": "Transit Stations",
+        "visitation": 2200,
+        "city": 2000,
+        "provincial": 1800,
+        "national": 1600
+      },
+      {
+        "location_category": "Theater & Music Venues",
+        "visitation": 2000,
+        "city": 1600,
+        "provincial": 1200,
+        "national": 1000
+      },
+      {
+        "location_category": "Recreation & Sport Goods",
+        "visitation": 2700,
+        "city": 2500,
+        "provincial": 2200,
+        "national": 2000
+      },
+      {
+        "location_category": "Wholesale Clubs",
+        "visitation": 2900,
+        "city": 2800,
+        "provincial": 2600,
+        "national": 2400
+      },
+      {
+        "location_category": "Home Improvement Centers",
+        "visitation": 2700,
+        "city": 2500,
+        "provincial": 2300,
+        "national": 2100
+      },
+      {
+        "location_category": "Outdoors & Recreation",
+        "visitation": 2650,
+        "city": 2450,
+        "provincial": 2250,
+        "national": 2150
+      },
+      {
+        "location_category": "Discount Department Stores",
+        "visitation": 2500,
+        "city": 2300,
+        "provincial": 2200,
+        "national": 2000
+      },
+      {
+        "location_category": "Shopping Centers",
+        "visitation": 2450,
+        "city": 2350,
+        "provincial": 2150,
+        "national": 1950
+      }
+    ]
+  },
+  "name": "Visitation with benchmark data"
+}

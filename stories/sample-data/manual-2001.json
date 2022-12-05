@@ -1,0 +1,76 @@
+{
+  "data": {
+    "executionID": 2001,
+    "whitelabelID": 2423,
+    "customerID": 27124,
+    "columns": [
+      {
+        "name": "dealerId",
+        "category": "Numeric"
+      },
+      {
+        "name": "submitted_deals",
+        "category": "Numeric"
+      },
+      {
+        "name": "approved_deals",
+        "category": "Numeric"
+      },
+      {
+        "name": "funded_deals",
+        "category": "Numeric"
+      },
+      {
+        "name": "submitted_deals_a_year_ago",
+        "category": "Numeric"
+      },
+      {
+        "name": "submitted_deals_2_years_ago",
+        "category": "Numeric"
+      },
+      {
+        "name": "approved_deals_a_year_ago",
+        "category": "Numeric"
+      },
+      {
+        "name": "approved_deals_2_years_ago",
+        "category": "Numeric"
+      },
+      {
+        "name": "funded_deals_a_year_ago",
+        "category": "Numeric"
+      },
+      {
+        "name": "funded_deals_2_years_ago",
+        "category": "Numeric"
+      }
+    ],
+    "results": [
+      {
+        "dealerId": 1,
+        "submitted_deals": 44,
+        "approved_deals": 29,
+        "funded_deals": 15,
+        "submitted_deals_a_year_ago": 54,
+        "submitted_deals_2_years_ago": 40,
+        "approved_deals_a_year_ago": 39,
+        "approved_deals_2_years_ago": 20,
+        "funded_deals_a_year_ago": 25,
+        "funded_deals_2_years_ago": 12
+      },
+      {
+        "dealerId": 1,
+        "submitted_deals": 34,
+        "approved_deals": 19,
+        "funded_deals": 5,
+        "submitted_deals_a_year_ago": 44,
+        "submitted_deals_2_years_ago": 30,
+        "approved_deals_a_year_ago": 29,
+        "approved_deals_2_years_ago": 10,
+        "funded_deals_a_year_ago": 15,
+        "funded_deals_2_years_ago": 2
+      }
+    ]
+  },
+  "name": "Track dealer deals with trend data"
+}

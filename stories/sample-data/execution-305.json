@@ -1,0 +1,484 @@
+{
+  "name": "execution 305",
+  "data": {
+    "executionID": 305,
+    "whitelabelID": 101,
+    "customerID": 13147,
+    "customerTimezone": "America/Toronto",
+    "status": "SUCCEEDED",
+    "statusTS": "2021-05-10T13:33:16.596Z",
+    "queryID": null,
+    "query": {
+      "from": "logs_imp_13147",
+      "type": "select",
+      "joins": [
+        {
+          "on": [
+            [
+              [
+                "geo_ca_ct",
+                "layer_200_1"
+              ],
+              "=",
+              [
+                "geo_cohort_fsa",
+                "logs_imp_13147"
+              ]
+            ]
+          ],
+          "view": "layer_200_1",
+          "joinType": "inner"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_ct",
+                "layer_200_2"
+              ],
+              "=",
+              [
+                "geo_cohort_fsa",
+                "logs_imp_13147"
+              ]
+            ]
+          ],
+          "view": "layer_200_2",
+          "joinType": "inner"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_ct",
+                "layer_200_3"
+              ],
+              "=",
+              [
+                "geo_cohort_fsa",
+                "logs_imp_13147"
+              ]
+            ]
+          ],
+          "view": "layer_200_3",
+          "joinType": "inner"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_ct",
+                "layer_200_4"
+              ],
+              "=",
+              [
+                "geo_cohort_fsa",
+                "logs_imp_13147"
+              ]
+            ]
+          ],
+          "view": "layer_200_4",
+          "joinType": "inner"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_ct",
+                "layer_200_5"
+              ],
+              "=",
+              [
+                "geo_cohort_fsa",
+                "logs_imp_13147"
+              ]
+            ]
+          ],
+          "view": "layer_200_5",
+          "joinType": "inner"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_ct",
+                "layer_200_6"
+              ],
+              "=",
+              [
+                "geo_cohort_fsa",
+                "logs_imp_13147"
+              ]
+            ]
+          ],
+          "view": "layer_200_6",
+          "joinType": "inner"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_ct",
+                "layer_200_7"
+              ],
+              "=",
+              [
+                "geo_cohort_fsa",
+                "logs_imp_13147"
+              ]
+            ]
+          ],
+          "view": "layer_200_7",
+          "joinType": "inner"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_ct",
+                "layer_42_1"
+              ],
+              "=",
+              [
+                "geo_cohort_fsa",
+                "logs_imp_13147"
+              ]
+            ]
+          ],
+          "view": "layer_42_1",
+          "joinType": "inner"
+        }
+      ],
+      "where": [
+        null
+      ],
+      "having": [
+        null
+      ],
+      "columns": [
+        [
+          "geo_cohort_name",
+          "logs_imp_13147"
+        ],
+        {
+          "as": "impressions",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "impressions",
+              "logs_imp_13147"
+            ]
+          ]
+        },
+        {
+          "as": "clicks",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "clicks",
+              "logs_imp_13147"
+            ]
+          ]
+        },
+        {
+          "as": "spend",
+          "type": "function",
+          "values": [
+            "sum",
+            [
+              "revenue",
+              "logs_imp_13147"
+            ]
+          ]
+        },
+        {
+          "as": "avg_0_19_pct",
+          "type": "function",
+          "values": [
+            "avg",
+            [
+              "percent",
+              "layer_200_1"
+            ]
+          ]
+        },
+        {
+          "as": "avg_20_29_pct",
+          "type": "function",
+          "values": [
+            "avg",
+            [
+              "percent",
+              "layer_200_2"
+            ]
+          ]
+        },
+        {
+          "as": "avg_30_39_pct",
+          "type": "function",
+          "values": [
+            "avg",
+            [
+              "percent",
+              "layer_200_3"
+            ]
+          ]
+        },
+        {
+          "as": "avg_40_49_pct",
+          "type": "function",
+          "values": [
+            "avg",
+            [
+              "percent",
+              "layer_200_4"
+            ]
+          ]
+        },
+        {
+          "as": "avg_50_59_pct",
+          "type": "function",
+          "values": [
+            "avg",
+            [
+              "percent",
+              "layer_200_5"
+            ]
+          ]
+        },
+        {
+          "as": "avg_60_69_pct",
+          "type": "function",
+          "values": [
+            "avg",
+            [
+              "percent",
+              "layer_200_6"
+            ]
+          ]
+        },
+        {
+          "as": "avg_70_plus_pct",
+          "type": "function",
+          "values": [
+            "avg",
+            [
+              "percent",
+              "layer_200_7"
+            ]
+          ]
+        },
+        {
+          "as": "avg_hh_income",
+          "type": "function",
+          "values": [
+            "avg",
+            [
+              "value",
+              "layer_42_1"
+            ]
+          ]
+        }
+      ],
+      "groupBy": [
+        [
+          "geo_cohort_name",
+          "logs_imp_13147"
+        ]
+      ]
+    },
+    "columns": [
+      {
+        "name": "geo_cohort_name",
+        "category": "String"
+      },
+      {
+        "name": "impressions",
+        "category": "Numeric"
+      },
+      {
+        "name": "clicks",
+        "category": "Numeric"
+      },
+      {
+        "name": "spend",
+        "category": "Numeric"
+      },
+      {
+        "name": "avg_0_19_pct",
+        "category": "Numeric"
+      },
+      {
+        "name": "avg_20_29_pct",
+        "category": "Numeric"
+      },
+      {
+        "name": "avg_30_39_pct",
+        "category": "Numeric"
+      },
+      {
+        "name": "avg_40_49_pct",
+        "category": "Numeric"
+      },
+      {
+        "name": "avg_50_59_pct",
+        "category": "Numeric"
+      },
+      {
+        "name": "avg_60_69_pct",
+        "category": "Numeric"
+      },
+      {
+        "name": "avg_70_plus_pct",
+        "category": "Numeric"
+      },
+      {
+        "name": "avg_hh_income",
+        "category": "Numeric"
+      }
+    ],
+    "isInternal": true,
+    "isOrphaned": false,
+    "cost": 1,
+    "resultsParts": null,
+    "resultsSize": null,
+    "scheduleCron": null,
+    "scheduleTS": null,
+    "results": [
+      {
+        "geo_cohort_name": null,
+        "impressions": 1537,
+        "clicks": 0,
+        "spend": 4.2266965,
+        "avg_0_19_pct": 6.925236,
+        "avg_20_29_pct": 31.341406,
+        "avg_30_39_pct": 27.176508,
+        "avg_40_49_pct": 11.529553,
+        "avg_50_59_pct": 10.171224,
+        "avg_60_69_pct": 6.7704716,
+        "avg_70_plus_pct": 6.059033,
+        "avg_hh_income": 121865.93
+      },
+      {
+        "geo_cohort_name": "Men's Apparel - Top Spending",
+        "impressions": 678222340,
+        "clicks": 300930,
+        "spend": 1508065.4,
+        "avg_0_19_pct": 22.311937,
+        "avg_20_29_pct": 16.677408,
+        "avg_30_39_pct": 15.171192,
+        "avg_40_49_pct": 13.462623,
+        "avg_50_59_pct": 13.494168,
+        "avg_60_69_pct": 9.966222,
+        "avg_70_plus_pct": 8.948559,
+        "avg_hh_income": 98248.734
+      },
+      {
+        "geo_cohort_name": "Children's Apparel - Top Spending",
+        "impressions": 1773810800,
+        "clicks": 74664,
+        "spend": 4230778,
+        "avg_0_19_pct": 22.778063,
+        "avg_20_29_pct": 15.519704,
+        "avg_30_39_pct": 13.486852,
+        "avg_40_49_pct": 13.687473,
+        "avg_50_59_pct": 14.867011,
+        "avg_60_69_pct": 10.465299,
+        "avg_70_plus_pct": 9.203064,
+        "avg_hh_income": 102278.96
+      }
+    ],
+    "views": [
+      {
+        "id": "logs_imp_13147",
+        "type": "logs",
+        "category": "atom_campaigns",
+        "logType": "imp",
+        "agencyID": 13147,
+        "name": "ATOM Impressions - Internal EQ Works (13147)"
+      },
+      {
+        "id": "layer_200_1",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 200,
+        "layer_type_id": 19,
+        "resolution": "ct",
+        "categoryKey": 1,
+        "name": "Resident Age Breakdown // Age 0 to 19"
+      },
+      {
+        "id": "layer_200_2",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 200,
+        "layer_type_id": 19,
+        "resolution": "ct",
+        "categoryKey": 2,
+        "name": "Resident Age Breakdown // Age 20 to 29"
+      },
+      {
+        "id": "layer_200_3",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 200,
+        "layer_type_id": 19,
+        "resolution": "ct",
+        "categoryKey": 3,
+        "name": "Resident Age Breakdown // Age 30 to 39"
+      },
+      {
+        "id": "layer_200_4",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 200,
+        "layer_type_id": 19,
+        "resolution": "ct",
+        "categoryKey": 4,
+        "name": "Resident Age Breakdown // Age 40 to 49"
+      },
+      {
+        "id": "layer_200_5",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 200,
+        "layer_type_id": 19,
+        "resolution": "ct",
+        "categoryKey": 5,
+        "name": "Resident Age Breakdown // Age 50 to 59"
+      },
+      {
+        "id": "layer_200_6",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 200,
+        "layer_type_id": 19,
+        "resolution": "ct",
+        "categoryKey": 6,
+        "name": "Resident Age Breakdown // Age 60 to 69"
+      },
+      {
+        "id": "layer_200_7",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 200,
+        "layer_type_id": 19,
+        "resolution": "ct",
+        "categoryKey": 7,
+        "name": "Resident Age Breakdown // Age 70 and Greater"
+      },
+      {
+        "id": "layer_42_1",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 42,
+        "layer_type_id": 19,
+        "resolution": "ct",
+        "categoryKey": 1,
+        "name": "Household Income // All families"
+      }
+    ]
+  }
+}

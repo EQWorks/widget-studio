@@ -1,0 +1,1466 @@
+{
+  "name": "execution 1458",
+  "data": {
+    "executionID": 1458,
+    "whitelabelID": 4,
+    "customerID": 10340,
+    "customerTimezone": "America/Toronto",
+    "status": "SUCCEEDED",
+    "statusTS": "2022-02-11T20:02:38.673Z",
+    "queryID": null,
+    "query": {
+      "from": "ext_2169",
+      "type": "select",
+      "joins": [],
+      "where": [
+        null
+      ],
+      "having": [
+        null
+      ],
+      "columns": [
+        [
+          "name",
+          "ext_2169"
+        ],
+        [
+          "time",
+          "ext_2169"
+        ],
+        [
+          "price",
+          "ext_2169"
+        ],
+        [
+          "category",
+          "ext_2169"
+        ],
+        [
+          "customer",
+          "ext_2169"
+        ],
+        [
+          "source_id",
+          "ext_2169"
+        ],
+        [
+          "whitelabel",
+          "ext_2169"
+        ],
+        [
+          "vendor_name",
+          "ext_2169"
+        ]
+      ],
+      "groupBy": []
+    },
+    "columns": [
+      {
+        "name": "name",
+        "category": "String"
+      },
+      {
+        "name": "time",
+        "category": "Date"
+      },
+      {
+        "name": "price",
+        "category": "String"
+      },
+      {
+        "name": "category",
+        "category": "String"
+      },
+      {
+        "name": "customer",
+        "category": "Numeric"
+      },
+      {
+        "name": "source_id",
+        "category": "Numeric"
+      },
+      {
+        "name": "whitelabel",
+        "category": "Numeric"
+      },
+      {
+        "name": "vendor_name",
+        "category": "String"
+      }
+    ],
+    "isInternal": false,
+    "isOrphaned": false,
+    "cost": 1,
+    "resultsParts": [
+      {
+        "part": 1,
+        "lastIndex": 134,
+        "firstIndex": 0
+      }
+    ],
+    "resultsSize": 135,
+    "scheduleCron": null,
+    "scheduleTS": null,
+    "results": [
+      {
+        "name": "Grocery Chain: <BRAND 1>",
+        "time": "2019-12-02T19:58:54.700Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 16100,
+        "source_id": 173,
+        "whitelabel": 608,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Renters Ownership Type, DA",
+        "time": "2019-11-12T10:20:54.284Z",
+        "price": "$300.00",
+        "category": "Census",
+        "customer": 14119,
+        "source_id": 696,
+        "whitelabel": 175,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 1>, FSA",
+        "time": "2019-12-13T20:00:57.926Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 14285,
+        "source_id": 812,
+        "whitelabel": 212,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Persona \"Melting pot origin\", PC",
+        "time": "2021-01-27T16:12:21.269Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 12675,
+        "source_id": 1118,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"Recent Asian immigrants\", PC",
+        "time": "2021-04-06T23:43:05.930Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 1110,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Top languages, DA",
+        "time": "2020-09-30T19:42:21.282Z",
+        "price": "$1,200.00",
+        "category": "Census",
+        "customer": 20852,
+        "source_id": 736,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Vehicle Characteristics in Area",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 279,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "PickUp Vehicle",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 156,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 2>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 170,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Private Passenger Vehicle",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 163,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Ownership Types, DA",
+        "time": "2021-01-19T20:43:19.212Z",
+        "price": "$450.00",
+        "category": "Census",
+        "customer": 21248,
+        "source_id": 699,
+        "whitelabel": 509,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "751 to 1000 sqft Living Area",
+        "time": "2020-05-28T13:18:37.110Z",
+        "price": "$500.00",
+        "category": "Household",
+        "customer": 13933,
+        "source_id": 160,
+        "whitelabel": 147,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 3>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 259,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"First kid, first home\", PC",
+        "time": "2020-12-18T00:04:55.101Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 10183,
+        "source_id": 1086,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Vehicle Class Propensity",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 252,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "SUVs Vehicle",
+        "time": "2021-01-27T15:46:02.470Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 12675,
+        "source_id": 155,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 4>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 164,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Vehicle Brands Propensity",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 266,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Persona \"Settled Europeans\", DA",
+        "time": "2021-04-06T17:07:46.909Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 589,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 4>",
+        "time": "2021-05-17T16:20:40.548Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 24020,
+        "source_id": 164,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"This is our city home\", PC",
+        "time": "2020-12-17T17:10:14.326Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 10183,
+        "source_id": 1070,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Do Park",
+        "time": "2020-07-21T01:38:52.161Z",
+        "price": "$111.00",
+        "category": "EQ Persona",
+        "customer": 9326,
+        "source_id": 979,
+        "whitelabel": 2,
+        "vendor_name": "WL TEST"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 5>",
+        "time": "2021-05-17T17:06:00.579Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 24020,
+        "source_id": 166,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"Settled Anglophone\", DA",
+        "time": "2021-04-06T17:08:22.619Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 593,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Dwellings by Type, DA",
+        "time": "2019-12-13T19:41:42.639Z",
+        "price": "$450.00",
+        "category": "Census",
+        "customer": 14285,
+        "source_id": 703,
+        "whitelabel": 212,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Dog Parks",
+        "time": "2020-07-21T01:06:19.094Z",
+        "price": "$10.00",
+        "category": "Custom",
+        "customer": 9326,
+        "source_id": 970,
+        "whitelabel": 2,
+        "vendor_name": "WL TEST"
+      },
+      {
+        "name": "<BRAND 2>, FSA",
+        "time": "2019-12-13T19:55:04.924Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 14285,
+        "source_id": 775,
+        "whitelabel": 212,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "<BRAND 3>, FSA",
+        "time": "2020-12-10T21:11:10.462Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 953,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Persona \"Settled Anglophone\", PC",
+        "time": "2021-04-06T23:44:30.406Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 1117,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Ownership Types, DA",
+        "time": "2021-05-27T13:07:01.964Z",
+        "price": "$450.00",
+        "category": "Census",
+        "customer": 22947,
+        "source_id": 699,
+        "whitelabel": 148,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Mortgages Demographics, PC",
+        "time": "2020-12-17T23:03:32.160Z",
+        "price": "$500.00",
+        "category": "Financial",
+        "customer": 10183,
+        "source_id": 208,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Personas, PC",
+        "time": "2021-05-17T16:13:51.561Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 24020,
+        "source_id": 1119,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Top languages, DA",
+        "time": "2021-05-17T16:13:03.880Z",
+        "price": "$1,200.00",
+        "category": "Census",
+        "customer": 24020,
+        "source_id": 736,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Ownership Types, DA",
+        "time": "2021-05-10T19:27:31.052Z",
+        "price": "$450.00",
+        "category": "Census",
+        "customer": 23958,
+        "source_id": 699,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Health Occupations, DA",
+        "time": "2021-01-19T21:02:20.792Z",
+        "price": "$300.00",
+        "category": "Census",
+        "customer": 21248,
+        "source_id": 728,
+        "whitelabel": 509,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"We moved here for the schools\", PC",
+        "time": "2020-12-18T00:12:35.348Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 13837,
+        "source_id": 1105,
+        "whitelabel": 47,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Pool Propensity, PC",
+        "time": "2021-04-26T21:23:07.860Z",
+        "price": "$500.00",
+        "category": "Household",
+        "customer": 23428,
+        "source_id": 254,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Persona \"I've lived here for 40 years\", PC",
+        "time": "2021-03-29T20:25:12.448Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 12913,
+        "source_id": 1101,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"Settled Europeans\", PC",
+        "time": "2021-04-06T23:44:00.816Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 1113,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Vehicle Types in Area",
+        "time": "2021-01-27T16:34:27.461Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 16100,
+        "source_id": 185,
+        "whitelabel": 608,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Motorcycle Vehicle",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 238,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 5>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 166,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 4>",
+        "time": "2019-11-12T10:19:33.407Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 14119,
+        "source_id": 164,
+        "whitelabel": 175,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 15>",
+        "time": "2021-05-17T17:05:15.474Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 24020,
+        "source_id": 225,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Snow Vehicle",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 196,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Occupations, DA",
+        "time": "2021-04-06T17:08:42.500Z",
+        "price": "$1,500.00",
+        "category": "Census",
+        "customer": 20965,
+        "source_id": 735,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 1>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 173,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 10>, FSA",
+        "time": "2020-12-24T18:16:23.967Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 9533,
+        "source_id": 960,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Ownership Types, DA",
+        "time": "2019-12-13T19:42:24.936Z",
+        "price": "$450.00",
+        "category": "Census",
+        "customer": 14285,
+        "source_id": 699,
+        "whitelabel": 212,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"Recent Francophone immigrants\", DA",
+        "time": "2021-04-06T17:08:05.787Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 590,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 1> COFFEE",
+        "time": "2019-08-29T20:12:54.884Z",
+        "price": "$500.00",
+        "category": "Custom",
+        "customer": 14285,
+        "source_id": 675,
+        "whitelabel": 212,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 11>, FSA",
+        "time": "2020-09-28T18:28:38.612Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 9533,
+        "source_id": 742,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Do Park",
+        "time": "2020-07-29T16:21:01.440Z",
+        "price": "$111.00",
+        "category": "EQ Persona",
+        "customer": 15541,
+        "source_id": 979,
+        "whitelabel": 443,
+        "vendor_name": "WL TEST"
+      },
+      {
+        "name": "Occupations, DA",
+        "time": "2021-05-10T19:24:02.420Z",
+        "price": "$1,500.00",
+        "category": "Census",
+        "customer": 23958,
+        "source_id": 735,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Household Value in FSA (174)",
+        "time": "2019-12-13T19:44:48.823Z",
+        "price": "$350.00",
+        "category": "Household",
+        "customer": 14285,
+        "source_id": 543,
+        "whitelabel": 212,
+        "vendor_name": "EQ Analytics"
+      },
+      {
+        "name": "<BRAND 2>, FSA",
+        "time": "2020-09-30T19:45:56.658Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 20852,
+        "source_id": 775,
+        "whitelabel": 1598,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "PickUp Vehicle",
+        "time": "2021-01-27T16:34:52.648Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 16100,
+        "source_id": 156,
+        "whitelabel": 608,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Vehicle Class Propensity",
+        "time": "2021-01-27T16:34:34.664Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 16100,
+        "source_id": 252,
+        "whitelabel": 608,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Owners Ownership Type, DA",
+        "time": "2019-11-12T10:21:32.775Z",
+        "price": "$300.00",
+        "category": "Census",
+        "customer": 14119,
+        "source_id": 697,
+        "whitelabel": 175,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 6>",
+        "time": "2019-10-17T16:05:12.991Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 14119,
+        "source_id": 171,
+        "whitelabel": 175,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 12>, FSA",
+        "time": "2020-12-17T22:59:12.514Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 967,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "<BRAND 13>, FSA",
+        "time": "2021-02-12T19:16:44.532Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 14656,
+        "source_id": 872,
+        "whitelabel": 66,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "SUVs Vehicle",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 155,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Personas, PC",
+        "time": "2021-01-27T16:21:56.634Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 12675,
+        "source_id": 1119,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 14>, FSA",
+        "time": "2020-07-10T17:14:55.338Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 19798,
+        "source_id": 755,
+        "whitelabel": 1202,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Driver Behaviour in Area",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 275,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Management Occupations, DA",
+        "time": "2021-01-28T18:51:12.558Z",
+        "price": "$300.00",
+        "category": "Census",
+        "customer": 16100,
+        "source_id": 725,
+        "whitelabel": 608,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Mortgages Demographics, PC",
+        "time": "2021-01-19T20:57:46.586Z",
+        "price": "$500.00",
+        "category": "Financial",
+        "customer": 21248,
+        "source_id": 208,
+        "whitelabel": 509,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Vehicle Brands Propensity",
+        "time": "2019-08-28T21:13:42.744Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 14285,
+        "source_id": 266,
+        "whitelabel": 212,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "<BRAND 1> COFFEE",
+        "time": "2020-09-30T19:43:39.066Z",
+        "price": "$500.00",
+        "category": "Custom",
+        "customer": 20852,
+        "source_id": 675,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 7>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 172,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 15>, FSA",
+        "time": "2020-10-17T19:44:06.755Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 9533,
+        "source_id": 744,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "<BRAND 16>, FSA",
+        "time": "2020-10-21T17:32:01.472Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 20852,
+        "source_id": 879,
+        "whitelabel": 1598,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Persona \"We moved here for the schools\", PC",
+        "time": "2020-12-18T00:14:14.410Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 10183,
+        "source_id": 1105,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 14>, FSA",
+        "time": "2021-04-07T16:26:52.000Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 16100,
+        "source_id": 755,
+        "whitelabel": 608,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Rental Price in FSA (174)",
+        "time": "2020-12-03T21:25:24.517Z",
+        "price": "$350.00",
+        "category": "Household",
+        "customer": 16100,
+        "source_id": 546,
+        "whitelabel": 608,
+        "vendor_name": "EQ Analytics"
+      },
+      {
+        "name": "Vehicle Types in Area",
+        "time": "2019-12-13T19:59:22.438Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 14285,
+        "source_id": 185,
+        "whitelabel": 212,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Persona \"Melting pot origin\", PC",
+        "time": "2021-04-06T23:43:38.244Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 1118,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Generations, DA",
+        "time": "2021-04-07T19:00:41.090Z",
+        "price": "$1,200.00",
+        "category": "Census",
+        "customer": 16100,
+        "source_id": 738,
+        "whitelabel": 608,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Vehicle Types in Area",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 185,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Personas, PC",
+        "time": "2021-05-27T01:47:48.323Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 22947,
+        "source_id": 1119,
+        "whitelabel": 148,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 17>, FSA",
+        "time": "2021-05-12T18:26:23.240Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 16100,
+        "source_id": 932,
+        "whitelabel": 608,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Persona \"Recent Francophone immigrants\", PC",
+        "time": "2021-04-06T23:44:17.271Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 1114,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 6>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 171,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 4>, FSA",
+        "time": "2021-01-19T20:35:58.627Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 21248,
+        "source_id": 954,
+        "whitelabel": 509,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "<BRAND 5>, FSA",
+        "time": "2020-01-30T16:14:05.092Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 16370,
+        "source_id": 745,
+        "whitelabel": 509,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Top languages, DA",
+        "time": "2021-05-26T22:40:31.599Z",
+        "price": "$1,200.00",
+        "category": "Census",
+        "customer": 22947,
+        "source_id": 736,
+        "whitelabel": 148,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 7>",
+        "time": "2020-07-28T18:20:22.814Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 16100,
+        "source_id": 172,
+        "whitelabel": 608,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Retail Industry, DA",
+        "time": "2021-01-19T21:04:09.042Z",
+        "price": "$300.00",
+        "category": "Census",
+        "customer": 21248,
+        "source_id": 710,
+        "whitelabel": 509,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"This apartment has it all\", PC",
+        "time": "2020-12-18T00:12:16.972Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 10183,
+        "source_id": 1106,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 1>",
+        "time": "2021-05-17T17:05:27.013Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 24020,
+        "source_id": 173,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Top languages, DA",
+        "time": "2021-05-10T19:23:54.988Z",
+        "price": "$1,200.00",
+        "category": "Census",
+        "customer": 23958,
+        "source_id": 736,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 6>, FSA",
+        "time": "2019-12-13T19:56:38.822Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 14285,
+        "source_id": 865,
+        "whitelabel": 212,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "<BRAND 4>, FSA",
+        "time": "2021-01-27T21:31:40.425Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 16100,
+        "source_id": 954,
+        "whitelabel": 608,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Art Culture Recreation Sport Occupations, DA",
+        "time": "2021-01-19T21:01:28.973Z",
+        "price": "$300.00",
+        "category": "Census",
+        "customer": 21248,
+        "source_id": 730,
+        "whitelabel": 509,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 7>",
+        "time": "2019-12-16T18:48:55.745Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 14285,
+        "source_id": 172,
+        "whitelabel": 212,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Occupations, DA",
+        "time": "2021-05-27T13:05:57.855Z",
+        "price": "$1,500.00",
+        "category": "Census",
+        "customer": 22947,
+        "source_id": 735,
+        "whitelabel": 148,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 4>",
+        "time": "2019-12-02T20:00:13.316Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 16100,
+        "source_id": 164,
+        "whitelabel": 608,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 7>",
+        "time": "2021-05-17T17:05:03.282Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 24020,
+        "source_id": 172,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"Recent Asian immigrants\", DA",
+        "time": "2021-04-06T17:07:08.619Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 20965,
+        "source_id": 586,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Top languages, DA",
+        "time": "2021-01-19T20:42:59.840Z",
+        "price": "$1,200.00",
+        "category": "Census",
+        "customer": 21248,
+        "source_id": 736,
+        "whitelabel": 509,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 8>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 226,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Do Park",
+        "time": "2020-07-29T16:21:00.524Z",
+        "price": "$111.00",
+        "category": "EQ Persona",
+        "customer": 13337,
+        "source_id": 979,
+        "whitelabel": 4,
+        "vendor_name": "WL TEST"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 9>",
+        "time": "2021-05-17T17:07:03.182Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 24020,
+        "source_id": 165,
+        "whitelabel": 1598,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"Our house is a very very very fine house\", PC",
+        "time": "2020-12-17T17:48:49.676Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 10183,
+        "source_id": 1072,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 10>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 169,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Household Value in FSA (174)",
+        "time": "2020-12-03T21:22:29.520Z",
+        "price": "$350.00",
+        "category": "Household",
+        "customer": 16100,
+        "source_id": 543,
+        "whitelabel": 608,
+        "vendor_name": "EQ Analytics"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 11>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 223,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Camper Unit Vehicle",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 249,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Persona \"Recent Anglophone immigrants\", PC",
+        "time": "2021-02-19T19:10:36.226Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 9533,
+        "source_id": 1116,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 18>, FSA",
+        "time": "2020-05-28T13:18:00.282Z",
+        "price": "$500.00",
+        "category": "Household",
+        "customer": 13933,
+        "source_id": 231,
+        "whitelabel": 147,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Dwellings by Type, DA",
+        "time": "2020-11-05T18:36:14.008Z",
+        "price": "$450.00",
+        "category": "Census",
+        "customer": 9533,
+        "source_id": 703,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "test",
+        "time": "2021-01-28T14:37:56.820Z",
+        "price": "$100.00",
+        "category": "Brand Loyalty",
+        "customer": 12675,
+        "source_id": 969,
+        "whitelabel": 4,
+        "vendor_name": "WL TEST"
+      },
+      {
+        "name": "Do Park",
+        "time": "2020-07-29T16:21:00.961Z",
+        "price": "$111.00",
+        "category": "EQ Persona",
+        "customer": 17731,
+        "source_id": 979,
+        "whitelabel": 4,
+        "vendor_name": "WL TEST"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 12>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 250,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Ownership Types, DA",
+        "time": "2021-04-06T17:14:29.714Z",
+        "price": "$450.00",
+        "category": "Census",
+        "customer": 20965,
+        "source_id": 699,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 9>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 165,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 2>, FSA",
+        "time": "2021-01-19T20:36:37.232Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 21248,
+        "source_id": 775,
+        "whitelabel": 509,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 13>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 168,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Do Park",
+        "time": "2020-07-29T16:21:00.033Z",
+        "price": "$111.00",
+        "category": "EQ Persona",
+        "customer": 15440,
+        "source_id": 979,
+        "whitelabel": 103,
+        "vendor_name": "WL TEST"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 14>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 167,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"3 generations together\", DA",
+        "time": "2020-07-28T18:22:15.121Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 16100,
+        "source_id": 573,
+        "whitelabel": 608,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Occupations, DA",
+        "time": "2019-12-13T19:39:41.351Z",
+        "price": "$1,500.00",
+        "category": "Census",
+        "customer": 14285,
+        "source_id": 735,
+        "whitelabel": 212,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "ATV Non-Amphibious Vehicle",
+        "time": "2021-05-17T20:50:00.098Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 10183,
+        "source_id": 239,
+        "whitelabel": 4,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Agricult Forest Fish Hunt Industry, DA",
+        "time": "2019-10-18T20:40:22.564Z",
+        "price": "$300.00",
+        "category": "Census",
+        "customer": 13147,
+        "source_id": 704,
+        "whitelabel": 101,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Top languages, DA",
+        "time": "2021-04-06T17:38:45.174Z",
+        "price": "$1,200.00",
+        "category": "Census",
+        "customer": 20965,
+        "source_id": 736,
+        "whitelabel": 1631,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 7>, FSA",
+        "time": "2020-10-21T17:32:37.810Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 20852,
+        "source_id": 945,
+        "whitelabel": 1598,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Occupations, DA",
+        "time": "2019-10-18T20:39:55.930Z",
+        "price": "$1,500.00",
+        "category": "Census",
+        "customer": 13147,
+        "source_id": 735,
+        "whitelabel": 101,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Personas, DA",
+        "time": "2021-05-27T01:47:52.692Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 22947,
+        "source_id": 595,
+        "whitelabel": 148,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 15>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 225,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Persona \"Recent Francophone immigrants\", PC",
+        "time": "2021-01-27T16:13:54.428Z",
+        "price": "$1.00",
+        "category": "EQ Persona",
+        "customer": 12675,
+        "source_id": 1114,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "<BRAND 8>, FSA",
+        "time": "2019-12-13T20:01:46.570Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 14285,
+        "source_id": 783,
+        "whitelabel": 212,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "<BRAND 9>, FSA",
+        "time": "2021-04-27T15:12:32.380Z",
+        "price": "$500.00",
+        "category": "Auto",
+        "customer": 16100,
+        "source_id": 884,
+        "whitelabel": 608,
+        "vendor_name": "EQ Cognitive"
+      },
+      {
+        "name": "Business Finance And Administration Occupations, DA",
+        "time": "2021-01-20T16:56:00.620Z",
+        "price": "$300.00",
+        "category": "Census",
+        "customer": 21248,
+        "source_id": 726,
+        "whitelabel": 509,
+        "vendor_name": "EQ"
+      },
+      {
+        "name": "Grocery Chain: <BRAND 16>",
+        "time": "2020-10-20T16:17:15.448Z",
+        "price": "$300.00",
+        "category": "Retail",
+        "customer": 10340,
+        "source_id": 224,
+        "whitelabel": 4,
+        "vendor_name": "EQ"
+      }
+    ],
+    "views": [
+      {
+        "id": "ext_2169",
+        "type": "ext",
+        "category": "ext_s3",
+        "conn_id": 2169,
+        "name": "Testing"
+      }
+    ]
+  }
+}

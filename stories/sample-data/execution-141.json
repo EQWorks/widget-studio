@@ -1,0 +1,4973 @@
+{
+  "name": "execution 141",
+  "data": {
+    "executionID": 141,
+    "whitelabelID": 148,
+    "customerID": 22947,
+    "customerTimezone": "America/Toronto",
+    "status": "SUCCEEDED",
+    "statusTS": "2021-06-13T00:48:34.807Z",
+    "queryID": null,
+    "query": {
+      "from": "ext_2211",
+      "type": "select",
+      "joins": [
+        {
+          "on": [
+            [
+              [
+                "geo_ca_da",
+                "layer_969_1"
+              ],
+              "=",
+              [
+                "fsa",
+                "ext_2211"
+              ]
+            ]
+          ],
+          "view": "layer_969_1",
+          "joinType": "left"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_da",
+                "layer_969_2"
+              ],
+              "=",
+              [
+                "fsa",
+                "ext_2211"
+              ]
+            ]
+          ],
+          "view": "layer_969_2",
+          "joinType": "left"
+        },
+        {
+          "on": [
+            [
+              [
+                "geo_ca_da",
+                "layer_969_3"
+              ],
+              "=",
+              [
+                "fsa",
+                "ext_2211"
+              ]
+            ]
+          ],
+          "view": "layer_969_3",
+          "joinType": "left"
+        }
+      ],
+      "where": [
+        null
+      ],
+      "having": [
+        null
+      ],
+      "columns": [
+        [
+          "fsa",
+          "ext_2211"
+        ],
+        [
+          "city",
+          "ext_2211"
+        ],
+        [
+          "percent",
+          "layer_969_1",
+          "renters"
+        ],
+        [
+          "percent",
+          "layer_969_2",
+          "owners"
+        ],
+        [
+          "percent",
+          "layer_969_3",
+          "bands"
+        ]
+      ],
+      "groupBy": []
+    },
+    "columns": [
+      {
+        "name": "fsa",
+        "category": "String"
+      },
+      {
+        "name": "city",
+        "category": "String"
+      },
+      {
+        "name": "renters",
+        "category": "Numeric"
+      },
+      {
+        "name": "owners",
+        "category": "Numeric"
+      },
+      {
+        "name": "bands",
+        "category": "Numeric"
+      }
+    ],
+    "isInternal": false,
+    "isOrphaned": false,
+    "cost": 1,
+    "resultsParts": null,
+    "resultsSize": null,
+    "scheduleCron": null,
+    "scheduleTS": null,
+    "results": [
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 82,
+        "owners": 19,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 79,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 81,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 76,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 86,
+        "owners": 15,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 78,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 78,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 63,
+        "owners": 36,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 56,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 75,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 84,
+        "owners": 15,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 88,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 58,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 72,
+        "owners": 28,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 75,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 31,
+        "owners": 69,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 48,
+        "owners": 52,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 84,
+        "owners": 17,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 61,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 69,
+        "owners": 31,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 65,
+        "owners": 35,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 81,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 56,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 83,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 54,
+        "owners": 47,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 80,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 34,
+        "owners": 66,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 83,
+        "owners": 17,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 41,
+        "owners": 63,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 27,
+        "owners": 76,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 39,
+        "owners": 60,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 86,
+        "owners": 16,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 80,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 68,
+        "owners": 34,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 64,
+        "owners": 34,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 63,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 53,
+        "owners": 47,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 36,
+        "owners": 61,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 76,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 76,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 72,
+        "owners": 27,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 79,
+        "owners": 21,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 91,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 85,
+        "owners": 15,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 71,
+        "owners": 30,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 20,
+        "owners": 80,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 58,
+        "owners": 41,
+        "bands": 0
+      },
+      {
+        "fsa": "G1R",
+        "city": "Québec",
+        "renters": 19,
+        "owners": 81,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 0,
+        "owners": 97,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 0,
+        "owners": 94,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 36,
+        "owners": 64,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 83,
+        "owners": 16,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 81,
+        "owners": 19,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 81,
+        "owners": 19,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 62,
+        "owners": 36,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 65,
+        "owners": 36,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 33,
+        "owners": 70,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 84,
+        "owners": 16,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 73,
+        "owners": 29,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 71,
+        "owners": 29,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 69,
+        "owners": 33,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 69,
+        "owners": 28,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 94,
+        "owners": 4,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 84,
+        "owners": 16,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 80,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 49,
+        "owners": 54,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 78,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 80,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 92,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 91,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 79,
+        "owners": 21,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 82,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 22,
+        "owners": 75,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 21,
+        "owners": 76,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 48,
+        "owners": 50,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 71,
+        "owners": 29,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 67,
+        "owners": 35,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 100,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 8,
+        "owners": 93,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 17,
+        "owners": 83,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 0,
+        "owners": 100,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 43,
+        "owners": 57,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 72,
+        "owners": 26,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 46,
+        "owners": 55,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 90,
+        "owners": 10,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 61,
+        "owners": 42,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 33,
+        "owners": 67,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 5,
+        "owners": 95,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 70,
+        "owners": 31,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 0,
+        "owners": 100,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 0,
+        "owners": 97,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 46,
+        "owners": 52,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 42,
+        "owners": 57,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 71,
+        "owners": 27,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 98,
+        "owners": 2,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 75,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 82,
+        "owners": 21,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 10,
+        "owners": 88,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 0,
+        "owners": 98,
+        "bands": 0
+      },
+      {
+        "fsa": "G8Z",
+        "city": "Trois-Rivieres",
+        "renters": 26,
+        "owners": 74,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 53,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 72,
+        "owners": 28,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 41,
+        "owners": 59,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 47,
+        "owners": 55,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 55,
+        "owners": 45,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 64,
+        "owners": 36,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 58,
+        "owners": 42,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 61,
+        "owners": 37,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 53,
+        "owners": 45,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 52,
+        "owners": 48,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 52,
+        "owners": 48,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 46,
+        "owners": 54,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 80,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 59,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 60,
+        "owners": 40,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 76,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 45,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 51,
+        "owners": 49,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 60,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 45,
+        "owners": 57,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 50,
+        "owners": 50,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 53,
+        "owners": 47,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 53,
+        "owners": 45,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 59,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 67,
+        "owners": 33,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 55,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 53,
+        "owners": 48,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 70,
+        "owners": 31,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 78,
+        "owners": 22,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 86,
+        "owners": 14,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 48,
+        "owners": 52,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 22,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 59,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 34,
+        "owners": 66,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 34,
+        "owners": 68,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 64,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 50,
+        "owners": 50,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 45,
+        "owners": 57,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 87,
+        "owners": 16,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 96,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 16,
+        "owners": 84,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 16,
+        "owners": 86,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 9,
+        "owners": 91,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 65,
+        "owners": 37,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 63,
+        "owners": 37,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 8,
+        "owners": 92,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 51,
+        "owners": 49,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 34,
+        "owners": 63,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 15,
+        "owners": 82,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 82,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 52,
+        "owners": 48,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 53,
+        "owners": 49,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 88,
+        "owners": 10,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 72,
+        "owners": 28,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 76,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 42,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 35,
+        "owners": 64,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 80,
+        "owners": 17,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 60,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 56,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 100,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 2,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 55,
+        "owners": 45,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 88,
+        "owners": 12,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 86,
+        "owners": 14,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 98,
+        "owners": 2,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 76,
+        "owners": 26,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 88,
+        "owners": 12,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 0,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 78,
+        "owners": 22,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 53,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 90,
+        "owners": 13,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 81,
+        "owners": 19,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 74,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 65,
+        "owners": 33,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 73,
+        "owners": 27,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 82,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 68,
+        "owners": 32,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 66,
+        "owners": 32,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 74,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 80,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 78,
+        "owners": 22,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 85,
+        "owners": 15,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 84,
+        "owners": 16,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 27,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 54,
+        "owners": 46,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 79,
+        "owners": 21,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 95,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 64,
+        "owners": 36,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 80,
+        "owners": 22,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 41,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 64,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 58,
+        "owners": 42,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 78,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 47,
+        "owners": 53,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 59,
+        "owners": 41,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 92,
+        "owners": 8,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 79,
+        "owners": 21,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 72,
+        "owners": 28,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 72,
+        "owners": 28,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 76,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 82,
+        "owners": 16,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 81,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 98,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 43,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 69,
+        "owners": 31,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 76,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 79,
+        "owners": 19,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 68,
+        "owners": 32,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 72,
+        "owners": 28,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 70,
+        "owners": 27,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 81,
+        "owners": 19,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 79,
+        "owners": 22,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 69,
+        "owners": 33,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 78,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 76,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 70,
+        "owners": 30,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 70,
+        "owners": 30,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 74,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 67,
+        "owners": 31,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 56,
+        "owners": 46,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 79,
+        "owners": 17,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 61,
+        "owners": 35,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 26,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 71,
+        "owners": 29,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 60,
+        "owners": 40,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 66,
+        "owners": 34,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 83,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 73,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 47,
+        "owners": 53,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 64,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 49,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 61,
+        "owners": 41,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 39,
+        "owners": 61,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 81,
+        "owners": 18,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 96,
+        "owners": 5,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 56,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 3,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 88,
+        "owners": 12,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 67,
+        "owners": 33,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 52,
+        "owners": 46,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 67,
+        "owners": 33,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 69,
+        "owners": 32,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 79,
+        "owners": 21,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 81,
+        "owners": 21,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3B",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 77,
+        "owners": 23,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 52,
+        "owners": 50,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 25,
+        "owners": 75,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 80,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 64,
+        "owners": 36,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 68,
+        "owners": 32,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 67,
+        "owners": 35,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 67,
+        "owners": 33,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 38,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 79,
+        "owners": 21,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 48,
+        "owners": 50,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 61,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 54,
+        "owners": 45,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 60,
+        "owners": 40,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 57,
+        "owners": 45,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 48,
+        "owners": 54,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 45,
+        "owners": 55,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 2,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 53,
+        "owners": 46,
+        "bands": 0
+      },
+      {
+        "fsa": "H1L",
+        "city": "Montréal",
+        "renters": 26,
+        "owners": 74,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 87,
+        "owners": 13,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 89,
+        "owners": 10,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 68,
+        "owners": 32,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 55,
+        "owners": 44,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": null,
+        "owners": null,
+        "bands": null
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 48,
+        "owners": 52,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 83,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 94,
+        "owners": 6,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 71,
+        "owners": 29,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 78,
+        "owners": 22,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 85,
+        "owners": 19,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 99,
+        "owners": 3,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 41,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 93,
+        "owners": 7,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 75,
+        "owners": 24,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2X",
+        "city": "Montréal",
+        "renters": 62,
+        "owners": 39,
+        "bands": 0
+      },
+      {
+        "fsa": "H2K",
+        "city": "Montréal",
+        "renters": 11,
+        "owners": 89,
+        "bands": 0
+      },
+      {
+        "fsa": "H3A",
+        "city": "Montréal",
+        "renters": 50,
+        "owners": 49,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 39,
+        "owners": 61,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 4,
+        "owners": 96,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 20,
+        "owners": 77,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 16,
+        "owners": 84,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 17,
+        "owners": 83,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 52,
+        "owners": 48,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 59,
+        "owners": 41,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 60,
+        "owners": 42,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 52,
+        "owners": 48,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 4,
+        "owners": 96,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 8,
+        "owners": 96,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 26,
+        "owners": 74,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 64,
+        "owners": 36,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 43,
+        "owners": 56,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 78,
+        "owners": 22,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 81,
+        "owners": 19,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 71,
+        "owners": 28,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 88,
+        "owners": 11,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 21,
+        "owners": 79,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 13,
+        "owners": 87,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 80,
+        "owners": 20,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 57,
+        "owners": 40,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 98,
+        "owners": 4,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 98,
+        "owners": 4,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 98,
+        "owners": 2,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 71,
+        "owners": 29,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 91,
+        "owners": 9,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 97,
+        "owners": 3,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 75,
+        "owners": 25,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 9,
+        "owners": 91,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 51,
+        "owners": 49,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 0,
+        "owners": 95,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 49,
+        "owners": 51,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 22,
+        "owners": 78,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 4,
+        "owners": 96,
+        "bands": 0
+      },
+      {
+        "fsa": "J8Z",
+        "city": "Gatineau",
+        "renters": 5,
+        "owners": 95,
+        "bands": 0
+      }
+    ],
+    "views": [
+      {
+        "id": "layer_969_1",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 969,
+        "layer_type_id": 19,
+        "resolution": "da",
+        "categoryKey": 1,
+        "name": "Ownership Types, DA // renters"
+      },
+      {
+        "id": "layer_969_2",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 969,
+        "layer_type_id": 19,
+        "resolution": "da",
+        "categoryKey": 2,
+        "name": "Ownership Types, DA // owners"
+      },
+      {
+        "id": "layer_969_3",
+        "type": "layer",
+        "category": "layer_demographic",
+        "layer_id": 969,
+        "layer_type_id": 19,
+        "resolution": "da",
+        "categoryKey": 3,
+        "name": "Ownership Types, DA // bands"
+      },
+      {
+        "id": "ext_2211",
+        "type": "ext",
+        "category": "ext_google_sheet",
+        "conn_id": 2211,
+        "name": "2021_00058_subway_fr_pcr_vwi"
+      }
+    ]
+  }
+}
