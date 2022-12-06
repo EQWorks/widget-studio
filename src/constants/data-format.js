@@ -40,11 +40,11 @@ export const DATA_KEY_FORMATTING = {
   coxNumericC: {
     keyList: [
       "Visitor's Living Area", 'City', 'city', 'Province', 'province', 'Country', 'country',
-      'arts_aficionados', 'health_and_beauty', 'small_business_owners', 'readers', 'car_owner',
-      'students', 'small_business_insights', 'online_savvy_shoppers', 'home_owners', 'movies_goers',
-      'diyers', 'looking_for_love', 'big_grocery_spenders', 'online_cord', 'big_medical_spenders', 'sport_and_outdoor_enthusiasts', 'gamers', 'big_telco_spenders', 'value_conscious_shoppers',
-      'gamblers', 'frequent_travellers', 'families_and_children', 'early_tech_adopters',
-      'fashion_buyers', 'pet_owners', 'fitness_enthusiasts', 'dining_out',
+      'Arts Aficionados', 'Health and Beauty', 'Small Business Owners', 'Readers', 'Car Owner',
+      'Students', 'Small Business Insights', 'Online Savvy Shoppers', 'Home Owners', 'Movies Goers',
+      'Diyers', 'Looking For Love', 'Big Grocery Spenders', 'Online Cord', 'Big Medical Spenders', 'Sport and Outdoor Enthusiasts', 'Gamers', 'Big Telco Spenders', 'Value Conscious Shoppers',
+      'Gamblers', 'Frequent Travellers', 'Families and Children', 'Early Tech Adopters',
+      'Fashion Buyers', 'Pet Owners', 'Fitness Enthusiasts', 'Dining Out',
     ],
     formatFunction: val => numeral(val).format('0.00a'),
   },
