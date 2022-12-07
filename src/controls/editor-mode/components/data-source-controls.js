@@ -15,7 +15,6 @@ import {
   clientIdRegExp,
   yearQuarterClientRegExp,
 } from '../../../constants/regexp'
-import { STRING_REPLACE_DICT } from '../../../util/string-manipulation'
 
 
 const classes = makeStyles({
@@ -79,10 +78,7 @@ const DataSourceControls = () => {
           }
           let name
           if (dataSourceType === dataSourceTypes.INSIGHTS_DATA) {
-            name = reportType?.split('_')?.map((word) =>
-              STRING_REPLACE_DICT[word] ?
-                STRING_REPLACE_DICT[word] :
-                word.replace(/./, v => v.toUpperCase())
+            name = reportType?.split('_')?.map((word) => word.replace(/./, v => v.toUpperCase())
             ).join(' ')
           } else {
             name = (savedQueriesList.find(({ queryID: _id }) => queryID === _id) || {}).name
