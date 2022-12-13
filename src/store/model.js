@@ -53,6 +53,7 @@ const stateDefaults = [
   { key: 'mapGroupKey', defaultValue: null, resettable: true },
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
+  { key: 'lineValueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
@@ -252,7 +253,8 @@ export default {
       type,
       filters: filters.filter(({ key, filter }) => key && filter),
       groupFilter,
-      valueKeys: type !== types.MAP ? renderableValueKeys : [],
+      valueKeys: type !== types.MAP && renderableValueKeys ? renderableValueKeys.filter(({ type }) => !type) : [],
+      lineValueKeys: type !== types.MAP && renderableValueKeys ? renderableValueKeys.filter(({ type }) => type) : [],
       mapValueKeys: type === types.MAP ? renderableValueKeys : [],
       formatDataKey,
       formatDataFunctions,
@@ -442,6 +444,7 @@ export default {
   renderableValueKeys: computed(
     [
       (state) => state.valueKeys,
+      (state) => state.lineValueKeys,
       (state) => state.mapValueKeys,
       (state) => state.group,
       (state) => state.type,
@@ -451,6 +454,7 @@ export default {
     ],
     (
       valueKeys,
+      lineValueKeys,
       mapValueKeys,
       group,
       type,
@@ -458,13 +462,14 @@ export default {
       dataIsXWIReport,
       formattedColumnNames,
     ) => (
-      (type === types.MAP ? mapValueKeys : valueKeys)
+      (type === types.MAP ? mapValueKeys : [...valueKeys, ...lineValueKeys])
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
         .map(({ key, agg, ...rest }) => ({
           ...rest,
           key,
           title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && !dataIsXWIReport ? ` (${agg})` : ''}` || key,
           ...(agg && { agg }),
+          ...(type === types.BARLINE && lineValueKeys.find(el => el.key === key) && { type: types.LINE }),
         }))
     )
   ),
