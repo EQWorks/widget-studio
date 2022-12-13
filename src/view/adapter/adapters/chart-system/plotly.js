@@ -3,6 +3,7 @@ import PlotlyLineChart from '@eqworks/chart-system/dist/components/plotly/line'
 import PlotlyPieChart from '@eqworks/chart-system/dist/components/plotly/pie'
 import PlotlyScatterChart from '@eqworks/chart-system/dist/components/plotly/scatter'
 import PlotlyPyramidChart from '@eqworks/chart-system/dist/components/plotly/pyramid-bar'
+import { PlotlyBarLineChart } from '@eqworks/chart-system'
 
 import types from '../../../../constants/types'
 
@@ -29,6 +30,21 @@ export default {
       data,
       x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
+      formatData: config.formatDataFunctions,
+      onAfterPlot,
+      ...(genericOptions.showWidgetTitle && { title }),
+      ...uniqueOptions,
+      ...genericOptions,
+      ...(customColors?.chart && { customColors: customColors?.chart }),
+    }),
+  },
+  [types.BARLINE]: {
+    component: PlotlyBarLineChart,
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
+      data,
+      x: config.groupKeyTitle,
+      y: [...config.valueKeys, ...config.lineValueKeys].map(({ title }) => title),
+      orientation: uniqueOptions.horizontal ? 'h' : 'v',
       formatData: config.formatDataFunctions,
       onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
