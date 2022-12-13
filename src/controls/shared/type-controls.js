@@ -111,8 +111,8 @@ const useStyles = ({ mode = modes.EDITOR }) => makeStyles(
     ? {
       outerContainer: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        columnGap: '2.688rem',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        columnGap: '1.25rem',
         rowGap: '1.25rem',
       },
       icon: {
