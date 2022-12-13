@@ -45,6 +45,28 @@ export default {
       },
     },
   },
+  [types.BARLINE]: {
+    icon: Icons.BarChart,
+    adapter: PlotlyAdapters[types.BARLINE],
+    mustGroup: true,
+    uniqueOptions: {
+      stacked: {
+        name: 'Stacked',
+        type: Boolean,
+        defaultValue: false,
+      },
+      showTicks: {
+        name: 'Ticks',
+        type: Boolean,
+        defaultValue: true,
+      },
+      horizontal: {
+        name: 'Horizontal',
+        type: Boolean,
+        defaultValue: false,
+      },
+    },
+  },
   [types.SCATTER]: {
     icon: Icons.ScatterPlot,
     adapter: PlotlyAdapters[types.SCATTER],
