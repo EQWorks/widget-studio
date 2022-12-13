@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { Icons } from '@eqworks/lumen-labs'
+import { Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import modes from '../../constants/modes'
 import cardTypes from '../../constants/card-types'
@@ -8,12 +8,18 @@ import aggFunctions from '../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../store'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow } from './util'
+import { renderRow, renderSection, renderSuperSection } from './util'
 import MutedBarrier from './muted-barrier'
 import CustomSelect from '../../components/custom-select'
 import types from '../../constants/types'
 import { hasDevAccess } from '../../util/access'
 
+
+const classes = makeStyles({
+  valueContainer: {
+    width: '100%',
+  },
+})
 
 const ValueControls = () => {
   // common actions
@@ -25,6 +31,7 @@ const ValueControls = () => {
   const group = useStoreState((state) => state.group)
   const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
+  const lineValueKeys = useStoreState((state) => state.lineValueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const addUserControls = useStoreState((state) => state.addUserControls)
@@ -34,8 +41,17 @@ const ValueControls = () => {
   const eligibleColumns = useMemo(() =>
     Object.fromEntries(
       Object.entries(columnsAnalysis)
-        .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric)
-    ), [columnsAnalysis, domain.value])
+        .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric
+        && !lineValueKeys.find(({ key }) => key === c))
+    ), [columnsAnalysis, domain.value, lineValueKeys])
+
+  const eligibleLineColumns = useMemo(() =>
+    Object.fromEntries(
+      Object.entries(columnsAnalysis)
+        .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric
+        && !valueKeys.find(({ key }) => key === c))
+    ), [columnsAnalysis, domain.value, valueKeys])
+
 
   const staticQuantity = useMemo(() => {
     if (addUserControls || type === types.PYRAMID) {
@@ -47,44 +63,88 @@ const ValueControls = () => {
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
-  const renderGroupedValueKeysSelect =
-    <PluralLinkedSelect
-      {...(mode === modes.QL || addUserControls || type === types.PYRAMID ? {
-        staticQuantity,
-      }
-        : {
-          headerIcons: [
-            Icons.Columns,
-            Icons.Sum,
-            Icons.Alias,
-          ],
-        })}
-      titles={['Column', 'Operation', 'Alias']}
-      values={valueKeys}
-      valueIcons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
-      primaryKey='key'
-      secondaryKey='agg'
-      data={Object.keys(eligibleColumns)}
-      subData={Object.keys(aggFunctions)}
-      disableSubs={!dataHasVariance}
-      disableSubMessage="doesn't require aggregation."
-      editMode={widgetControlCardEdit[cardTypes.VALUE]}
-      callback={(i, val) => {
-        if (i === valueKeys.length) {
-          const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
-          valueKeysCopy.push(val)
-          userUpdate({ valueKeys: valueKeysCopy })
-        } else {
-          userUpdate({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
-        }
-      }}
-      deleteCallback={(i) => {
-        const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
-        valueKeysCopy.splice(i, 1)
-        userUpdate({ valueKeys: valueKeysCopy })
-      }}
-      addMessage='Add Value'
-    />
+  const renderGroupedValueKeysSelect = renderSuperSection(
+    <div className={classes.valueContainer}>
+      {renderSection(type === types.BARLINE ? 'Bar' : '',
+        <PluralLinkedSelect
+          {...(mode === modes.QL || addUserControls || type === types.PYRAMID ? {
+            staticQuantity,
+          }
+            : {
+              headerIcons: [
+                Icons.Columns,
+                Icons.Sum,
+                Icons.Alias,
+              ],
+            })}
+          titles={['Column', 'Operation', 'Alias']}
+          values={valueKeys}
+          valueIcons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
+          primaryKey='key'
+          secondaryKey='agg'
+          data={Object.keys(eligibleColumns)}
+          subData={Object.keys(aggFunctions)}
+          disableSubs={!dataHasVariance}
+          disableSubMessage="doesn't require aggregation."
+          editMode={widgetControlCardEdit[cardTypes.VALUE]}
+          callback={(i, val) => {
+            if (i === valueKeys.length) {
+              const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+              valueKeysCopy.push(val)
+              userUpdate({ valueKeys: valueKeysCopy })
+            } else {
+              userUpdate({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
+            }
+          }}
+          deleteCallback={(i) => {
+            const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+            valueKeysCopy.splice(i, 1)
+            userUpdate({ valueKeys: valueKeysCopy })
+          }}
+          addMessage='Add Value'
+        />,
+      )}
+      {type === types.BARLINE && renderSection('Line',
+        <PluralLinkedSelect
+          {...(mode === modes.QL || addUserControls || type === types.PYRAMID ? {
+            staticQuantity,
+          }
+            : {
+              headerIcons: [
+                Icons.Columns,
+                Icons.Sum,
+                Icons.Alias,
+              ],
+            })}
+          titles={['Column', 'Operation', 'Alias']}
+          values={lineValueKeys}
+          valueIcons={Object.values(eligibleLineColumns).map(({ Icon }) => Icon)}
+          primaryKey='key'
+          secondaryKey='agg'
+          data={Object.keys(eligibleLineColumns)}
+          subData={Object.keys(aggFunctions)}
+          disableSubs={!dataHasVariance}
+          disableSubMessage="doesn't require aggregation."
+          editMode={widgetControlCardEdit[cardTypes.VALUE]}
+          callback={(i, val) => {
+            if (i === lineValueKeys.length) {
+              const valueKeysCopy = JSON.parse(JSON.stringify(lineValueKeys))
+              valueKeysCopy.push(val)
+              userUpdate({ lineValueKeys: valueKeysCopy })
+            } else {
+              userUpdate({ lineValueKeys: lineValueKeys.map((v, _i) => i === _i ? val : v) })
+            }
+          }}
+          deleteCallback={(i) => {
+            const valueKeysCopy = JSON.parse(JSON.stringify(lineValueKeys))
+            valueKeysCopy.splice(i, 1)
+            userUpdate({ lineValueKeys: valueKeysCopy })
+          }}
+          addMessage='Add Value'
+        />,
+      )}
+    </div>
+  )
 
   const renderNonGroupedValueKeysSelect = (
     <CustomSelect
