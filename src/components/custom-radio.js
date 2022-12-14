@@ -10,16 +10,22 @@ const classes = makeStyles({
     fontSize: '0.857rem',
     width: '100%',
     display: 'flex',
+    marginBottom: '0.5rem',
+  },
+  radioContainer: {
+    display: 'flex',
   },
   label: {
-    color: getTailwindConfigColor('secondary-800'),
+    color: getTailwindConfigColor('secondary-600'),
     marginLeft: '0.4rem',
     marginRight: '1.7rem',
+    fontSize: '0.786rem',
   },
   disabledLabel: {
     color: getTailwindConfigColor('secondary-500'),
     userSelect: 'none',
     cursor: 'default',
+    fontSize: '0.786rem',
   },
 })
 
@@ -34,7 +40,7 @@ const CustomRadio = ({ labels, value, update, disableFirst, disableSecond }) => 
     <fieldset
       className={classes.outerContainer}
     >
-      <div>
+      <div className={classes.radioContainer}>
         <input
           type="radio"
           name={id}
@@ -47,7 +53,7 @@ const CustomRadio = ({ labels, value, update, disableFirst, disableSecond }) => 
           {labels[0]}
         </span>
       </div>
-      <div>
+      <div className={classes.radioContainer}>
         <input
           type="radio"
           name={id}
