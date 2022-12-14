@@ -55,7 +55,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -110,7 +113,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -171,7 +177,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Manual',
@@ -242,7 +251,10 @@ export default {
         1,
         0,
       ],
-      'baseColor': '#f2ff00',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showWidgetTitle': false,
       'showAxisTitles': {
         'x': false,
@@ -301,7 +313,10 @@ export default {
         1,
         0,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': false,
         'y': false,
@@ -370,7 +385,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -467,7 +485,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#f2ff00',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -563,7 +584,10 @@ export default {
         1,
         1,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': true,
         'y': false,
@@ -622,7 +646,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': true,
         'y': true,
@@ -703,7 +730,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#363ee3',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Manual',
@@ -798,7 +828,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#00548a',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -871,7 +904,10 @@ export default {
         1,
         0,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': true,
         'y': false,
@@ -926,7 +962,10 @@ export default {
         1,
         1,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showWidgetTitle': true,
       'showAxisTitles': {
         'x': true,
@@ -948,19 +987,20 @@ export default {
     'subtitleLinkLabel': '',
     'subtitleHyperlink': '',
     'showTitleBar': true,
-    'type': 'barline',
+    'type': 'barLine',
     'filters': [],
     'groupFilter': [],
     'valueKeys': [
       {
-        'title': 'Visitation',
         'key': 'visitation',
+        'title': 'Visitation',
       },
     ],
     'lineValueKeys': [
       {
         'key': 'city',
         'title': 'City',
+        'type': 'line',
       },
     ],
     'mapValueKeys': [],
@@ -980,9 +1020,10 @@ export default {
     'indexKey': null,
     'groupKeyTitle': 'Location category',
     'uniqueOptions': {
-      'stacked': false,
       'showTicks': true,
-      'horizontal': false,
+      'showLineMarkers': true,
+      'sharedYAxis': true,
+      'lineFill': false,
     },
     'genericOptions': {
       'showWidgetTitle': false,
@@ -990,12 +1031,14 @@ export default {
       'showLegend': true,
       'showTooltip': true,
       'showAxisTitles': {
-        'x': false,
-        'y': false,
+        'x': true,
+        'y': true,
+        'y2': true,
       },
       'axisTitles': {
         'x': '',
         'y': '',
+        'y2': '',
       },
       'showSubPlotTitles': true,
       'showLabels': false,
@@ -1018,8 +1061,12 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#363ee3',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
+      'chart1ZPosition': 'Back',
     },
     'dataSource': {
       'type': 'Manual',
@@ -1095,7 +1142,10 @@ export default {
         0.5,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': true,
         'y': true,
@@ -1216,7 +1266,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -1384,7 +1437,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -1522,7 +1578,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -1672,7 +1731,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -1831,7 +1893,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -1929,7 +1994,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -1996,7 +2064,10 @@ export default {
         1,
         1,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
       'showAxisTitles': {
         'x': false,
