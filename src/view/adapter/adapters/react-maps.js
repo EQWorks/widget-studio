@@ -302,7 +302,7 @@ export default {
           keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
           formatDataKey,
           formatDataValue: formatDataFunctions,
-          schemeColor: customColors?.map?.baseColor || baseColor,
+          schemeColor: customColors?.map?.baseColor || baseColor.color1,
           visible: !mapHideArcLayer,
         },
       ].concat(
@@ -361,7 +361,7 @@ export default {
             uniqueOptions.opacity.value / 100 :
             1,
           isTargetLayer: i === 1,
-          schemeColor: customColors?.map?.baseColor || baseColor,
+          schemeColor: customColors?.map?.baseColor || baseColor.color1,
           visible: i === 0 ? !mapHideSourceLayer : !mapHideTargetLayer,
         }))
       ) :
@@ -408,7 +408,7 @@ export default {
             },
           },
           legend: { showLegend: true },
-          schemeColor: customColors?.map?.baseColor || baseColor,
+          schemeColor: customColors?.map?.baseColor || baseColor.color1,
           opacity: uniqueOptions.opacity.value / 100,
           minZoom: mapGroupKeyIsPostalcode ?
             MIN_ZOOM.postalCode :
@@ -519,7 +519,7 @@ export default {
               },
             } :
             {},
-          schemeColor: customColors?.map?.iconColor || complementaryColor({ baseColor }),
+          schemeColor: customColors?.map?.iconColor || complementaryColor({ baseColor: baseColor.color1 }),
           initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
         },
       ]
