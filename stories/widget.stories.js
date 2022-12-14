@@ -89,7 +89,7 @@ Object.values(modes).forEach(mode => {
       storiesOf(`${mode.toUpperCase()} mode`, module)
         .add(id, () => (
           mode === modes.EDITOR
-            ? <div style={{ width: '100vw', height: '100vh', background: 'blue' }}>
+            ? <div style={{ width: '100vw', height: '100vh', background: 'white' }}>
               {id === 'dev-map-2' ? renderWidgetAuth : renderWidget}
             </div>
             : <Resizable
