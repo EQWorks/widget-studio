@@ -63,6 +63,10 @@ const useStyles = ({ mode, allowOpenInEditor, showTitleBar }) => makeStyles(
     ? {
       outerContainer: {
         display: 'flex',
+        position: 'sticky',
+        top:'0',
+        backgroundColor: 'white',
+        zIndex: '1',
         alignItems: 'center',
         width: '100%',
         height: '3rem',
