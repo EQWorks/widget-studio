@@ -33,6 +33,7 @@ import { columnTypes } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
 import { dataSourceTypes } from '../constants/data-source'
 import { COX_CATEGORY_SEGMENTS } from '../constants/client-specific'
+import { CHART_Z_POSITIONS } from '../constants/viz-options'
 
 
 const MAX_UNDO_STEPS = 10
@@ -96,6 +97,7 @@ const stateDefaults = [
         color2: getTailwindConfigColor('warning-500'),
       },
       xAxisLabelLength: 5,
+      chart1ZPosition: CHART_Z_POSITIONS.back,
     }, resettable: true,
   },
   {
