@@ -19,7 +19,7 @@ import EditableSubtitle from '../../view/title-bar/editable-subtitle'
 import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
 import { hasDevAccess  } from '../../util/access'
 import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection } from '../shared/util'
-import { positions, sizes } from '../../constants/viz-options'
+import { positions, sizes, CHART_Z_POSITIONS } from '../../constants/viz-options'
 import types from '../../constants/types'
 import cardTypes from '../../constants/card-types'
 import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
@@ -58,6 +58,7 @@ const EditorRightSidebar = () => {
 
   const {
     axisTitles,
+    chart1ZPosition,
     labelPosition,
     legendPosition,
     legendSize,
@@ -233,7 +234,7 @@ const EditorRightSidebar = () => {
           }
         </>,
       )}
-      {[types.BAR, types.SCATTER, types.LINE, types.PYRAMID].includes(type) &&
+      {[types.BAR, types.SCATTER, types.LINE, types.PYRAMID, types.BARLINE].includes(type) &&
         <>
           {renderRow(null,
             <>
@@ -360,15 +361,30 @@ const EditorRightSidebar = () => {
   )
 
   const renderStylingSecondRow = (
-    renderItem('Subplot Size',
-      <CustomSelect
-        fullWidth
-        allowClear={false}
-        data={sizes.string}
-        value={sizes.string[sizes.numeric.indexOf(size)]}
-        onSelect={v => userUpdate({ genericOptions: { size: sizes.dict[v] } })}
-      />
-    )
+    <>
+      {[types.LINE, types.BAR, types.PIE, types.SCATTER].includes(type) && renderItem('Subplot Size',
+        <CustomSelect
+          fullWidth
+          allowClear={false}
+          data={sizes.string}
+          value={sizes.string[sizes.numeric.indexOf(size)]}
+          onSelect={v => userUpdate({ genericOptions: { size: sizes.dict[v] } })}
+          disabled={!subPlots}
+        />,
+      )}
+      {type === types.BARLINE && renderItem('Bar Z Placement',
+        <CustomSelect
+          simple
+          fullWidth
+          data={Object.values(CHART_Z_POSITIONS)}
+          value={chart1ZPosition}
+          onSelect={chart1ZPosition => userUpdate({ genericOptions: { chart1ZPosition } })}
+          placeholder={'Select'}
+          disabled={!renderableValueKeys.filter(el => !el.type)}
+          allowClear={false}
+        />,
+      )}
+    </>
   )
 
   return (
@@ -410,13 +426,14 @@ const EditorRightSidebar = () => {
                     'Display Options',
                     <>
                       {renderGenericOptions}
-                      {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
+                      {type !== types.MAP && <UniqueOptionControls type={type} />}
                     </>
                   )}
                   {renderSection('Styling',
                     <>
                       {renderRow(null, renderStyling)}
-                      {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
+                      {[types.LINE, types.BAR, types.SCATTER, types.PIE, types.BARLINE].includes(type)
+                        && renderRow(null, renderStylingSecondRow)}
                     </>
                   )}
                   {type === types.MAP && <MapLayerDisplay />}
