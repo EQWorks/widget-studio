@@ -42,37 +42,40 @@ const textfieldClasses = Object.freeze({
 })
 
 const EditorRightSidebar = () => {
+  const columnNameAliases = useStoreState((state) => state.columnNameAliases)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const domain = useStoreState((state) => state.domain)
+  const enableLocationPins = useStoreState((state) => state.enableLocationPins)
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
+  const isReady = useStoreState((state) => state.isReady)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const showTitleBar = useStoreState((state) => state.showTitleBar)
+  const type = useStoreState((state) => state.type)
   const update = useStoreActions((state) => state.update)
   const userUpdate = useStoreActions((state) => state.userUpdate)
-  const type = useStoreState((state) => state.type)
-  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
-  const domain = useStoreState((state) => state.domain)
-  const subPlots = useStoreState((state) => state.genericOptions.subPlots)
-  const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
-  const size = useStoreState((state) => state.genericOptions.size)
-  const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
-  const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
-  const labelPosition = useStoreState((state) => state.genericOptions.labelPosition)
-  const legendSize = useStoreState((state) => state.genericOptions.legendSize)
-  const showLegend = useStoreState((state) => state.genericOptions.showLegend)
-  const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
-  const axisTitles = useStoreState((state) => state.genericOptions.axisTitles)
-  const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
-  const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
-  const showLabels = useStoreState((state) => state.genericOptions.showLabels)
-  const showCurrency = useStoreState((state) => state.genericOptions.showCurrency)
-  const showVertical = useStoreState((state) => state.genericOptions.showVertical)
-  const showTitleBar = useStoreState((state) => state.showTitleBar)
-  const isReady = useStoreState((state) => state.isReady)
-  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
-  const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
-  const enableLocationPins = useStoreState((state) => state.enableLocationPins)
-  const showLocationPins = useStoreState((state) => state.genericOptions.showLocationPins)
-  const mapPinTooltipKey = useStoreState((state) => state.genericOptions.mapPinTooltipKey || {})
-  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
-  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
-  const columnNameAliases = useStoreState((state) => state.columnNameAliases)
+
+  const {
+    axisTitles,
+    labelPosition,
+    legendPosition,
+    legendSize,
+    mapPinTooltipKey,
+    showAxisTitles,
+    showCurrency,
+    showLabels,
+    showLegend,
+    showLocationPins,
+    showSubPlotTitles,
+    showTooltip,
+    showVertical,
+    showWidgetTitle,
+    size,
+    subPlots,
+    titlePosition,
+    xAxisLabelLength,
+  } = useStoreState((state) => state.genericOptions)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
@@ -82,11 +85,11 @@ const EditorRightSidebar = () => {
 
   // update mapPinTooltipKey.title if alias changes
   useEffect(() => {
-    if (mapPinTooltipKey?.title !== formattedColumnNames[mapPinTooltipKey?.key]) {
+    if (mapPinTooltipKey?.key && mapPinTooltipKey.title !== formattedColumnNames[mapPinTooltipKey.key]) {
       update({
         genericOptions: {
           mapPinTooltipKey: {
-            title: formattedColumnNames[mapPinTooltipKey?.key],
+            title: formattedColumnNames[mapPinTooltipKey.key],
           },
         },
       })
@@ -201,7 +204,7 @@ const EditorRightSidebar = () => {
                 fullWidth
                 data={Object.keys(eligibleTooltipKeys)}
                 icons={Object.values(eligibleTooltipKeys).map(({ Icon }) => Icon)}
-                value={mapPinTooltipKey.key}
+                value={mapPinTooltipKey?.key}
                 onSelect={val => userUpdate({
                   genericOptions: {
                     mapPinTooltipKey: {
@@ -223,8 +226,8 @@ const EditorRightSidebar = () => {
           {widgetControlCardEdit[cardTypes.RIGHT_SIDEBAR] &&
             renderItem('Pin Tooltip Key Alias',
               <ColumnAliasControls
-                value={mapPinTooltipKey.key || ''}
-                disabled={!hasDevAccess() || !mapPinTooltipKey}
+                value={mapPinTooltipKey?.key || ''}
+                disabled={!hasDevAccess() || !mapPinTooltipKey?.key }
               />
             )
           }
@@ -381,10 +384,7 @@ const EditorRightSidebar = () => {
           <WidgetControlCard
             title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}
             enableEdit={hasDevAccess() && type === types.MAP && enableLocationPins}
-            disableEditButton={
-              type !== types.MAP ||
-              !mapPinTooltipKey
-            }
+            disableEditButton={type !== types.MAP || !mapPinTooltipKey?.key}
             type={cardTypes.RIGHT_SIDEBAR}
             {...(hasDevAccess() && type === types.MAP && enableLocationPins && {
               clear: () => {
