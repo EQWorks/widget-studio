@@ -45,7 +45,7 @@ const ValueControls = () => {
         && !chart2ValueKeys.find(({ key }) => key === c))
     ), [columnsAnalysis, domain.value, chart2ValueKeys])
 
-  const eligibleLineColumns = useMemo(() =>
+  const eligibleChart2Columns = useMemo(() =>
     Object.fromEntries(
       Object.entries(columnsAnalysis)
         .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric
@@ -118,10 +118,10 @@ const ValueControls = () => {
             })}
           titles={['Column', 'Operation', 'Alias']}
           values={chart2ValueKeys}
-          valueIcons={Object.values(eligibleLineColumns).map(({ Icon }) => Icon)}
+          valueIcons={Object.values(eligibleChart2Columns).map(({ Icon }) => Icon)}
           primaryKey='key'
           secondaryKey='agg'
-          data={Object.keys(eligibleLineColumns)}
+          data={Object.keys(eligibleChart2Columns)}
           subData={Object.keys(aggFunctions)}
           disableSubs={!dataHasVariance}
           disableSubMessage="doesn't require aggregation."
