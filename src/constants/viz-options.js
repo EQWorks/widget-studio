@@ -55,3 +55,8 @@ export const positions = multiExport([
     numeric: [1, 0.5],
   },
 ])
+
+export const CHART_Z_POSITIONS = [
+  'Front',
+  'Back',
+].reduce((a, v) => ({ ...a, [v.toLowerCase()]: v }), {})
