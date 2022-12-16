@@ -72,10 +72,12 @@ const stateDefaults = [
       showAxisTitles: {
         x: true,
         y: true,
+        y2: true,
       },
       axisTitles: {
         x: '',
         y: '',
+        y2: '',
       },
       showSubPlotTitles: true,
       showLabels: false,
