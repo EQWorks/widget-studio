@@ -6,6 +6,7 @@ import PlotlyPyramidChart from '@eqworks/chart-system/dist/components/plotly/pyr
 import { PlotlyBarLineChart } from '@eqworks/chart-system'
 
 import types from '../../../../constants/types'
+import { CHART_Z_POSITIONS } from '../../../../constants/viz-options'
 
 
 export default {
@@ -45,13 +46,13 @@ export default {
       x: config.groupKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
       y2: config.lineValueKeys.map(({ title }) => title),
-      // orientation: uniqueOptions.horizontal ? 'h' : 'v',
       formatData: config.formatDataFunctions,
       onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
       ...genericOptions,
       ...(customColors?.chart && { customColors: customColors?.chart }),
+      chartOverlay: genericOptions.chart1ZPosition === CHART_Z_POSITIONS.front,
     }),
   },
   [types.PIE]: {
