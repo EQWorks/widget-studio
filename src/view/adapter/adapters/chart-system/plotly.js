@@ -45,7 +45,7 @@ export default {
       data,
       x: config.groupKeyTitle,
       y: config.valueKeys.map(({ title }) => title),
-      y2: config.lineValueKeys.map(({ title }) => title),
+      y2: config.chart2ValueKeys.map(({ title }) => title),
       formatData: config.formatDataFunctions,
       onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),

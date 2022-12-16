@@ -31,7 +31,7 @@ const ValueControls = () => {
   const group = useStoreState((state) => state.group)
   const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
-  const lineValueKeys = useStoreState((state) => state.lineValueKeys)
+  const chart2ValueKeys = useStoreState((state) => state.chart2ValueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const addUserControls = useStoreState((state) => state.addUserControls)
@@ -42,8 +42,8 @@ const ValueControls = () => {
     Object.fromEntries(
       Object.entries(columnsAnalysis)
         .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric
-        && !lineValueKeys.find(({ key }) => key === c))
-    ), [columnsAnalysis, domain.value, lineValueKeys])
+        && !chart2ValueKeys.find(({ key }) => key === c))
+    ), [columnsAnalysis, domain.value, chart2ValueKeys])
 
   const eligibleLineColumns = useMemo(() =>
     Object.fromEntries(
@@ -117,7 +117,7 @@ const ValueControls = () => {
               ],
             })}
           titles={['Column', 'Operation', 'Alias']}
-          values={lineValueKeys}
+          values={chart2ValueKeys}
           valueIcons={Object.values(eligibleLineColumns).map(({ Icon }) => Icon)}
           primaryKey='key'
           secondaryKey='agg'
@@ -127,18 +127,18 @@ const ValueControls = () => {
           disableSubMessage="doesn't require aggregation."
           editMode={widgetControlCardEdit[cardTypes.VALUE]}
           callback={(i, val) => {
-            if (i === lineValueKeys.length) {
-              const valueKeysCopy = JSON.parse(JSON.stringify(lineValueKeys))
+            if (i === chart2ValueKeys.length) {
+              const valueKeysCopy = JSON.parse(JSON.stringify(chart2ValueKeys))
               valueKeysCopy.push(val)
-              userUpdate({ lineValueKeys: valueKeysCopy })
+              userUpdate({ chart2ValueKeys: valueKeysCopy })
             } else {
-              userUpdate({ lineValueKeys: lineValueKeys.map((v, _i) => i === _i ? val : v) })
+              userUpdate({ chart2ValueKeys: chart2ValueKeys.map((v, _i) => i === _i ? val : v) })
             }
           }}
           deleteCallback={(i) => {
-            const valueKeysCopy = JSON.parse(JSON.stringify(lineValueKeys))
+            const valueKeysCopy = JSON.parse(JSON.stringify(chart2ValueKeys))
             valueKeysCopy.splice(i, 1)
-            userUpdate({ lineValueKeys: valueKeysCopy })
+            userUpdate({ chart2ValueKeys: valueKeysCopy })
           }}
           addMessage='Add Value'
         />,

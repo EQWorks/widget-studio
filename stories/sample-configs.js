@@ -996,7 +996,7 @@ export default {
         'title': 'Visitation',
       },
     ],
-    'lineValueKeys': [
+    'chart2ValueKeys': [
       {
         'key': 'city',
         'title': 'City',
