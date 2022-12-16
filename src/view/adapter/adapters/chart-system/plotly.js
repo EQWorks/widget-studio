@@ -43,8 +43,9 @@ export default {
     adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
       x: config.groupKeyTitle,
-      y: [...config.valueKeys, ...config.lineValueKeys].map(({ title }) => title),
-      orientation: uniqueOptions.horizontal ? 'h' : 'v',
+      y: config.valueKeys.map(({ title }) => title),
+      y2: config.lineValueKeys.map(({ title }) => title),
+      // orientation: uniqueOptions.horizontal ? 'h' : 'v',
       formatData: config.formatDataFunctions,
       onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
