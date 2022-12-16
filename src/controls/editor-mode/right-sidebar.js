@@ -55,6 +55,7 @@ const EditorRightSidebar = () => {
   const update = useStoreActions((state) => state.update)
   const userUpdate = useStoreActions((state) => state.userUpdate)
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
+  const { sharedYAxis } = useStoreState((state) => state.uniqueOptions)
 
   const {
     axisTitles,
@@ -261,6 +262,18 @@ const EditorRightSidebar = () => {
                   false
                 )
               }
+              {type === types.BARLINE &&
+                renderToggle(
+                  'Show y2-Axis Title',
+                  showAxisTitles.y2,
+                  v => userUpdate({
+                    genericOptions: {
+                      showAxisTitles: { y2: v },
+                    },
+                  }),
+                  false
+                )
+              }
             </>,
           )}
           {renderRow(null,
@@ -269,7 +282,7 @@ const EditorRightSidebar = () => {
                 <TextField
                   classes={textfieldClasses}
                   value={showAxisTitles.x ? axisTitles.x : 'N/A'}
-                  inputProps={{ placeholder: 'Add x-axis custom title' }}
+                  inputProps={{ placeholder: 'Custom title' }}
                   onChange={(val) => userUpdate({ genericOptions: { axisTitles: { x: val } } })}
                   maxLength={100}
                   disabled={!showAxisTitles.x}
@@ -281,10 +294,22 @@ const EditorRightSidebar = () => {
                 <TextField
                   classes={textfieldClasses}
                   value={showAxisTitles.y ? axisTitles.y : 'N/A'}
-                  inputProps={{ placeholder: 'Add y-axis custom title' }}
+                  inputProps={{ placeholder: 'Custom title' }}
                   onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
                   maxLength={100}
                   disabled={!showAxisTitles.y}
+                />,
+                '',
+                true,
+              )}
+              {type === types.BARLINE && renderItem('y2-Axis Title',
+                <TextField
+                  classes={textfieldClasses}
+                  value={showAxisTitles.y2 ? axisTitles.y2 : 'N/A'}
+                  inputProps={{ placeholder: 'Custom title' }}
+                  onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y2: val } } })}
+                  maxLength={100}
+                  disabled={!showAxisTitles.y2}
                 />,
                 '',
                 true,
@@ -372,7 +397,7 @@ const EditorRightSidebar = () => {
           disabled={!subPlots}
         />,
       )}
-      {type === types.BARLINE && renderItem('Bar Z Placement',
+      {type === types.BARLINE && renderItem('Bar Position',
         <CustomSelect
           simple
           fullWidth
@@ -380,7 +405,7 @@ const EditorRightSidebar = () => {
           value={chart1ZPosition}
           onSelect={chart1ZPosition => userUpdate({ genericOptions: { chart1ZPosition } })}
           placeholder={'Select'}
-          disabled={!renderableValueKeys.filter(el => !el.type)}
+          disabled={!renderableValueKeys.filter(el => !el.type) || sharedYAxis}
           allowClear={false}
         />,
       )}
