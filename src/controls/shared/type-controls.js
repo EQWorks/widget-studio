@@ -214,9 +214,9 @@ const WidgetTypeControls = () => {
                   {
                     disabled
                       ? <Tooltip
-                        position='left'
+                        position='right'
                         description='No geo columns found in this dataset'
-                        {...(mode === modes.EDITOR && { width: '10rem' })}
+                        {...(mode === modes.EDITOR && { width: '8rem' })}
                       >
                         {renderIcon}
                       </Tooltip>
