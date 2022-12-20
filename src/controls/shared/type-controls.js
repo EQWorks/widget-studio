@@ -154,7 +154,6 @@ const useStyles = ({ mode = modes.EDITOR }) => makeStyles(
     }
 )
 
-
 const WidgetTypeControls = () => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
   const selectedType = useStoreState((state) => state.type)
@@ -201,6 +200,7 @@ const WidgetTypeControls = () => {
                             ...(domain?.key && { [domain.key]: null }),
                           }
                         ),
+                        chart2ValueKeys: [],
                         type,
                         uniqueOptions:
                         Object.entries(uniqueOptions).reduce((acc, [k, { defaultValue }]) => {
