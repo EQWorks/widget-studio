@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { Icons, makeStyles } from '@eqworks/lumen-labs'
 
@@ -12,6 +12,7 @@ import { renderRow, renderSection, renderSuperSection } from './util'
 import MutedBarrier from './muted-barrier'
 import CustomSelect from '../../components/custom-select'
 import types from '../../constants/types'
+import { cleanUp } from '../../util/string-manipulation'
 import { hasDevAccess } from '../../util/access'
 
 
@@ -63,85 +64,59 @@ const ValueControls = () => {
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
+  const renderPluralLinkedSelect = useCallback((valueKeys, eligibleColumns, selectType) => (
+    <PluralLinkedSelect
+      {...(mode === modes.QL || addUserControls || type === types.PYRAMID ? {
+        staticQuantity,
+      }
+        : {
+          headerIcons: [
+            Icons.Columns,
+            Icons.Sum,
+            Icons.Alias,
+          ],
+        })}
+      titles={['Column', 'Operation', 'Alias']}
+      values={valueKeys}
+      valueIcons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
+      primaryKey='key'
+      secondaryKey='agg'
+      data={Object.keys(eligibleColumns)}
+      subData={Object.keys(aggFunctions)}
+      disableSubs={!dataHasVariance}
+      disableSubMessage="doesn't require aggregation."
+      editMode={widgetControlCardEdit[cardTypes.VALUE]}
+      callback={(i, val) => {
+        if (i === valueKeys.length) {
+          const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+          valueKeysCopy.push(val)
+          userUpdate({
+            [selectType === types. BAR ? 'valueKeys' : 'chart2ValueKeys']: valueKeysCopy,
+          })
+        } else {
+          userUpdate({
+            [selectType === types. BAR ? 'valueKeys' : 'chart2ValueKeys']: valueKeys.map((v, _i) => i === _i ? val : v),
+          })
+        }
+      }}
+      deleteCallback={(i) => {
+        const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
+        valueKeysCopy.splice(i, 1)
+        userUpdate({
+          [selectType === types. BAR ? 'valueKeys' : 'chart2ValueKeys']: valueKeysCopy,
+        })
+      }}
+      addMessage='Add Value'
+    />
+  ),[mode, addUserControls, type, dataHasVariance, staticQuantity, userUpdate, widgetControlCardEdit])
+
   const renderGroupedValueKeysSelect = renderSuperSection(
     <div className={classes.valueContainer}>
-      {renderSection(type === types.BARLINE ? 'Bar' : '',
-        <PluralLinkedSelect
-          {...(mode === modes.QL || addUserControls || type === types.PYRAMID ? {
-            staticQuantity,
-          }
-            : {
-              headerIcons: [
-                Icons.Columns,
-                Icons.Sum,
-                Icons.Alias,
-              ],
-            })}
-          titles={['Column', 'Operation', 'Alias']}
-          values={valueKeys}
-          valueIcons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
-          primaryKey='key'
-          secondaryKey='agg'
-          data={Object.keys(eligibleColumns)}
-          subData={Object.keys(aggFunctions)}
-          disableSubs={!dataHasVariance}
-          disableSubMessage="doesn't require aggregation."
-          editMode={widgetControlCardEdit[cardTypes.VALUE]}
-          callback={(i, val) => {
-            if (i === valueKeys.length) {
-              const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
-              valueKeysCopy.push(val)
-              userUpdate({ valueKeys: valueKeysCopy })
-            } else {
-              userUpdate({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
-            }
-          }}
-          deleteCallback={(i) => {
-            const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
-            valueKeysCopy.splice(i, 1)
-            userUpdate({ valueKeys: valueKeysCopy })
-          }}
-          addMessage='Add Value'
-        />,
+      {renderSection(type === types.BARLINE ? cleanUp(types.BAR) : '',
+        renderPluralLinkedSelect(valueKeys, eligibleColumns, types.BAR),
       )}
-      {type === types.BARLINE && renderSection('Line',
-        <PluralLinkedSelect
-          {...(mode === modes.QL || addUserControls || type === types.PYRAMID ? {
-            staticQuantity,
-          }
-            : {
-              headerIcons: [
-                Icons.Columns,
-                Icons.Sum,
-                Icons.Alias,
-              ],
-            })}
-          titles={['Column', 'Operation', 'Alias']}
-          values={chart2ValueKeys}
-          valueIcons={Object.values(eligibleChart2Columns).map(({ Icon }) => Icon)}
-          primaryKey='key'
-          secondaryKey='agg'
-          data={Object.keys(eligibleChart2Columns)}
-          subData={Object.keys(aggFunctions)}
-          disableSubs={!dataHasVariance}
-          disableSubMessage="doesn't require aggregation."
-          editMode={widgetControlCardEdit[cardTypes.VALUE]}
-          callback={(i, val) => {
-            if (i === chart2ValueKeys.length) {
-              const valueKeysCopy = JSON.parse(JSON.stringify(chart2ValueKeys))
-              valueKeysCopy.push(val)
-              userUpdate({ chart2ValueKeys: valueKeysCopy })
-            } else {
-              userUpdate({ chart2ValueKeys: chart2ValueKeys.map((v, _i) => i === _i ? val : v) })
-            }
-          }}
-          deleteCallback={(i) => {
-            const valueKeysCopy = JSON.parse(JSON.stringify(chart2ValueKeys))
-            valueKeysCopy.splice(i, 1)
-            userUpdate({ chart2ValueKeys: valueKeysCopy })
-          }}
-          addMessage='Add Value'
-        />,
+      {type === types.BARLINE && renderSection(cleanUp(types.LINE),
+        renderPluralLinkedSelect(chart2ValueKeys, eligibleChart2Columns, types.LINE),
       )}
     </div>
   )
@@ -167,7 +142,7 @@ const ValueControls = () => {
       <WidgetControlCard
         clear={() => {
           Object.keys(columnNameAliases).forEach(key => {
-            if (JSON.stringify(valueKeys).includes(key)) {
+            if (JSON.stringify(valueKeys).includes(key) || JSON.stringify(chart2ValueKeys).includes(key)) {
               delete columnNameAliases[key]
             }
           })
@@ -175,14 +150,15 @@ const ValueControls = () => {
             aliasesReseted: true,
             columnNameAliases,
           })
-          resetValue({ valueKeys })
+          resetValue({ valueKeys, chart2ValueKeys })
         }}
         title='Value Configuration'
         {...mode === modes.QL && { description: 'Select up to 3 keys, open in editor for more options.' }}
         enableEdit
         disableEditButton={mode === modes.QL ||
-          (!hasDevAccess() && valueKeys?.length === 1) ||
-          (valueKeys.every(({ key }) => !key) && !widgetControlCardEdit[cardTypes.VALUE])
+          (!hasDevAccess() && (valueKeys?.length >= 1 || chart2ValueKeys.length >= 1)) ||
+          ((valueKeys.every(({ key }) => !key) && chart2ValueKeys.every(({ key }) => !key)) &&
+          !widgetControlCardEdit[cardTypes.VALUE])
         }
         type={cardTypes.VALUE}
       >
