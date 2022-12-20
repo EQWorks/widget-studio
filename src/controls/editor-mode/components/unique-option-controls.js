@@ -50,6 +50,8 @@ const UniqueOptionControls = ({ type }) => {
                   )}
                 </div>
               )
+            default:
+              return null
           }
         })
       }
