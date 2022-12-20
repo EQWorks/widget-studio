@@ -271,7 +271,7 @@ const EditorRightSidebar = () => {
                       showAxisTitles: { y2: v },
                     },
                   }),
-                  false
+                  sharedYAxis,
                 )
               }
             </>,
@@ -309,7 +309,7 @@ const EditorRightSidebar = () => {
                   inputProps={{ placeholder: 'Custom title' }}
                   onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y2: val } } })}
                   maxLength={100}
-                  disabled={!showAxisTitles.y2}
+                  disabled={!showAxisTitles.y2 || sharedYAxis}
                 />,
                 '',
                 true,
