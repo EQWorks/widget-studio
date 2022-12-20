@@ -241,7 +241,7 @@ const EditorRightSidebar = () => {
             <>
               {
                 renderToggle(
-                  'Show x-Axis Title',
+                  'x-Axis Title',
                   showAxisTitles.x,
                   v => userUpdate({
                     genericOptions: {
@@ -252,7 +252,7 @@ const EditorRightSidebar = () => {
               }
               {
                 renderToggle(
-                  'Show y-Axis Title',
+                  'y-Axis Title',
                   showAxisTitles.y,
                   v => userUpdate({
                     genericOptions: {
@@ -264,7 +264,7 @@ const EditorRightSidebar = () => {
               }
               {type === types.BARLINE &&
                 renderToggle(
-                  'Show y2-Axis Title',
+                  'y2-Axis Title',
                   showAxisTitles.y2,
                   v => userUpdate({
                     genericOptions: {
@@ -278,7 +278,7 @@ const EditorRightSidebar = () => {
           )}
           {renderRow(null,
             <>
-              {renderItem('x-Axis Title',
+              {renderItem('',
                 <TextField
                   classes={textfieldClasses}
                   value={showAxisTitles.x ? axisTitles.x : 'N/A'}
@@ -290,7 +290,7 @@ const EditorRightSidebar = () => {
                 '',
                 true,
               )}
-              {renderItem('y-Axis Title',
+              {renderItem('',
                 <TextField
                   classes={textfieldClasses}
                   value={showAxisTitles.y ? axisTitles.y : 'N/A'}
@@ -302,7 +302,7 @@ const EditorRightSidebar = () => {
                 '',
                 true,
               )}
-              {type === types.BARLINE && renderItem('y2-Axis Title',
+              {type === types.BARLINE && renderItem('',
                 <TextField
                   classes={textfieldClasses}
                   value={showAxisTitles.y2 ? axisTitles.y2 : 'N/A'}
