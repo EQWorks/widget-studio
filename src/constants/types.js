@@ -1,6 +1,7 @@
 export default [
   'line',
   'bar',
+  'barLine',
   'scatter',
   'pie',
   'map',

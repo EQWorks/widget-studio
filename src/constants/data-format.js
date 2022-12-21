@@ -32,7 +32,7 @@ export const DATA_KEY_FORMATTING = {
       ...DATA_CATEGORIES['Vehicle Age'],
       'Marketshare of vehicle age', 'OEM Auto Brand', 'dealer', 'dma',
       'hh_income_0_50k', 'hh_income_50_100k', 'hh_income_100_150k', 'hh_income_150_200k', 'hh_income_200k+',
-      'Unique Visitors', 'Repeat Visitors', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+      'Unique Visitors', 'Repeat Visitors', 'Cross Visits', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
       '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm',
     ],
     formatFunction: val => numeral(val/100).format('0.00%'),

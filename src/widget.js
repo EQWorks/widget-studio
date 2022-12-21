@@ -41,7 +41,8 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         display: 'flex',
         flexDirection: 'column',
         width: '100vw',
-        minHeight: '100%',
+        // minHeight: '100%',
+        height: '98%',
       },
       ...commonClasses,
     }
@@ -271,7 +272,10 @@ Widget.propTypes = {
   mapGroupKey: PropTypes.string,
   useMVTOption: PropTypes.bool,
   customColors: PropTypes.shape({
-    chart: PropTypes.arrayOf(PropTypes.string),
+    chart:  PropTypes.shape({
+      color1: PropTypes.arrayOf(PropTypes.string),
+      color2: PropTypes.arrayOf(PropTypes.string),
+    }),
     map: PropTypes.shape({
       baseColor: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
       targetLayerColor: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),

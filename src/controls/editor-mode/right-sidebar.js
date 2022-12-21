@@ -19,7 +19,7 @@ import EditableSubtitle from '../../view/title-bar/editable-subtitle'
 import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
 import { hasDevAccess  } from '../../util/access'
 import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection } from '../shared/util'
-import { positions, sizes } from '../../constants/viz-options'
+import { positions, sizes, CHART_Z_POSITIONS } from '../../constants/viz-options'
 import types from '../../constants/types'
 import cardTypes from '../../constants/card-types'
 import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
@@ -42,37 +42,42 @@ const textfieldClasses = Object.freeze({
 })
 
 const EditorRightSidebar = () => {
+  const columnNameAliases = useStoreState((state) => state.columnNameAliases)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const domain = useStoreState((state) => state.domain)
+  const enableLocationPins = useStoreState((state) => state.enableLocationPins)
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
+  const isReady = useStoreState((state) => state.isReady)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const showTitleBar = useStoreState((state) => state.showTitleBar)
+  const type = useStoreState((state) => state.type)
   const update = useStoreActions((state) => state.update)
   const userUpdate = useStoreActions((state) => state.userUpdate)
-  const type = useStoreState((state) => state.type)
-  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
-  const domain = useStoreState((state) => state.domain)
-  const subPlots = useStoreState((state) => state.genericOptions.subPlots)
-  const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
-  const size = useStoreState((state) => state.genericOptions.size)
-  const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
-  const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
-  const labelPosition = useStoreState((state) => state.genericOptions.labelPosition)
-  const legendSize = useStoreState((state) => state.genericOptions.legendSize)
-  const showLegend = useStoreState((state) => state.genericOptions.showLegend)
-  const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
-  const axisTitles = useStoreState((state) => state.genericOptions.axisTitles)
-  const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
-  const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
-  const showLabels = useStoreState((state) => state.genericOptions.showLabels)
-  const showCurrency = useStoreState((state) => state.genericOptions.showCurrency)
-  const showVertical = useStoreState((state) => state.genericOptions.showVertical)
-  const showTitleBar = useStoreState((state) => state.showTitleBar)
-  const isReady = useStoreState((state) => state.isReady)
-  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
-  const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
-  const enableLocationPins = useStoreState((state) => state.enableLocationPins)
-  const showLocationPins = useStoreState((state) => state.genericOptions.showLocationPins)
-  const mapPinTooltipKey = useStoreState((state) => state.genericOptions.mapPinTooltipKey || {})
-  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
-  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
-  const columnNameAliases = useStoreState((state) => state.columnNameAliases)
+  const { sharedYAxis } = useStoreState((state) => state.uniqueOptions)
+
+  const {
+    axisTitles,
+    chart1ZPosition,
+    labelPosition,
+    legendPosition,
+    legendSize,
+    mapPinTooltipKey,
+    showAxisTitles,
+    showCurrency,
+    showLabels,
+    showLegend,
+    showLocationPins,
+    showSubPlotTitles,
+    showTooltip,
+    showVertical,
+    showWidgetTitle,
+    size,
+    subPlots,
+    titlePosition,
+    xAxisLabelLength,
+  } = useStoreState((state) => state.genericOptions)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
@@ -82,11 +87,11 @@ const EditorRightSidebar = () => {
 
   // update mapPinTooltipKey.title if alias changes
   useEffect(() => {
-    if (mapPinTooltipKey?.title !== formattedColumnNames[mapPinTooltipKey?.key]) {
+    if (mapPinTooltipKey?.key && mapPinTooltipKey.title !== formattedColumnNames[mapPinTooltipKey.key]) {
       update({
         genericOptions: {
           mapPinTooltipKey: {
-            title: formattedColumnNames[mapPinTooltipKey?.key],
+            title: formattedColumnNames[mapPinTooltipKey.key],
           },
         },
       })
@@ -201,7 +206,7 @@ const EditorRightSidebar = () => {
                 fullWidth
                 data={Object.keys(eligibleTooltipKeys)}
                 icons={Object.values(eligibleTooltipKeys).map(({ Icon }) => Icon)}
-                value={mapPinTooltipKey.key}
+                value={mapPinTooltipKey?.key}
                 onSelect={val => userUpdate({
                   genericOptions: {
                     mapPinTooltipKey: {
@@ -223,20 +228,20 @@ const EditorRightSidebar = () => {
           {widgetControlCardEdit[cardTypes.RIGHT_SIDEBAR] &&
             renderItem('Pin Tooltip Key Alias',
               <ColumnAliasControls
-                value={mapPinTooltipKey.key || ''}
-                disabled={!hasDevAccess() || !mapPinTooltipKey}
+                value={mapPinTooltipKey?.key || ''}
+                disabled={!hasDevAccess() || !mapPinTooltipKey?.key }
               />
             )
           }
         </>,
       )}
-      {[types.BAR, types.SCATTER, types.LINE, types.PYRAMID].includes(type) &&
+      {[types.BAR, types.SCATTER, types.LINE, types.PYRAMID, types.BARLINE].includes(type) &&
         <>
           {renderRow(null,
             <>
               {
                 renderToggle(
-                  'Show x-Axis Title',
+                  'x-Axis Title',
                   showAxisTitles.x,
                   v => userUpdate({
                     genericOptions: {
@@ -247,7 +252,7 @@ const EditorRightSidebar = () => {
               }
               {
                 renderToggle(
-                  'Show y-Axis Title',
+                  'y-Axis Title',
                   showAxisTitles.y,
                   v => userUpdate({
                     genericOptions: {
@@ -257,15 +262,27 @@ const EditorRightSidebar = () => {
                   false
                 )
               }
+              {type === types.BARLINE &&
+                renderToggle(
+                  'y2-Axis Title',
+                  showAxisTitles.y2,
+                  v => userUpdate({
+                    genericOptions: {
+                      showAxisTitles: { y2: v },
+                    },
+                  }),
+                  sharedYAxis,
+                )
+              }
             </>,
           )}
           {renderRow(null,
             <>
-              {renderItem('x-Axis Title',
+              {renderItem('',
                 <TextField
                   classes={textfieldClasses}
                   value={showAxisTitles.x ? axisTitles.x : 'N/A'}
-                  inputProps={{ placeholder: 'Add x-axis custom title' }}
+                  inputProps={{ placeholder: 'Custom title' }}
                   onChange={(val) => userUpdate({ genericOptions: { axisTitles: { x: val } } })}
                   maxLength={100}
                   disabled={!showAxisTitles.x}
@@ -273,14 +290,26 @@ const EditorRightSidebar = () => {
                 '',
                 true,
               )}
-              {renderItem('y-Axis Title',
+              {renderItem('',
                 <TextField
                   classes={textfieldClasses}
                   value={showAxisTitles.y ? axisTitles.y : 'N/A'}
-                  inputProps={{ placeholder: 'Add y-axis custom title' }}
+                  inputProps={{ placeholder: 'Custom title' }}
                   onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y: val } } })}
                   maxLength={100}
                   disabled={!showAxisTitles.y}
+                />,
+                '',
+                true,
+              )}
+              {type === types.BARLINE && renderItem('',
+                <TextField
+                  classes={textfieldClasses}
+                  value={showAxisTitles.y2 ? axisTitles.y2 : 'N/A'}
+                  inputProps={{ placeholder: 'Custom title' }}
+                  onChange={(val) => userUpdate({ genericOptions: { axisTitles: { y2: val } } })}
+                  maxLength={100}
+                  disabled={!showAxisTitles.y2 || sharedYAxis}
                 />,
                 '',
                 true,
@@ -357,15 +386,30 @@ const EditorRightSidebar = () => {
   )
 
   const renderStylingSecondRow = (
-    renderItem('Subplot Size',
-      <CustomSelect
-        fullWidth
-        allowClear={false}
-        data={sizes.string}
-        value={sizes.string[sizes.numeric.indexOf(size)]}
-        onSelect={v => userUpdate({ genericOptions: { size: sizes.dict[v] } })}
-      />
-    )
+    <>
+      {[types.LINE, types.BAR, types.PIE, types.SCATTER].includes(type) && renderItem('Subplot Size',
+        <CustomSelect
+          fullWidth
+          allowClear={false}
+          data={sizes.string}
+          value={sizes.string[sizes.numeric.indexOf(size)]}
+          onSelect={v => userUpdate({ genericOptions: { size: sizes.dict[v] } })}
+          disabled={!subPlots}
+        />,
+      )}
+      {type === types.BARLINE && renderItem('Bar Position',
+        <CustomSelect
+          simple
+          fullWidth
+          data={Object.values(CHART_Z_POSITIONS)}
+          value={chart1ZPosition}
+          onSelect={chart1ZPosition => userUpdate({ genericOptions: { chart1ZPosition } })}
+          placeholder={'Select'}
+          disabled={!renderableValueKeys.filter(el => !el.type) || sharedYAxis}
+          allowClear={false}
+        />,
+      )}
+    </>
   )
 
   return (
@@ -381,10 +425,7 @@ const EditorRightSidebar = () => {
           <WidgetControlCard
             title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}
             enableEdit={hasDevAccess() && type === types.MAP && enableLocationPins}
-            disableEditButton={
-              type !== types.MAP ||
-              !mapPinTooltipKey
-            }
+            disableEditButton={type !== types.MAP || !mapPinTooltipKey?.key}
             type={cardTypes.RIGHT_SIDEBAR}
             {...(hasDevAccess() && type === types.MAP && enableLocationPins && {
               clear: () => {
@@ -410,13 +451,14 @@ const EditorRightSidebar = () => {
                     'Display Options',
                     <>
                       {renderGenericOptions}
-                      {type !== types.MAP && renderRow(null, <UniqueOptionControls type={type} />)}
+                      {type !== types.MAP && <UniqueOptionControls type={type} />}
                     </>
                   )}
                   {renderSection('Styling',
                     <>
                       {renderRow(null, renderStyling)}
-                      {type !== types.MAP && subPlots && renderRow(null, renderStylingSecondRow)}
+                      {[types.LINE, types.BAR, types.SCATTER, types.PIE, types.BARLINE].includes(type)
+                        && renderRow(null, renderStylingSecondRow)}
                     </>
                   )}
                   {type === types.MAP && <MapLayerDisplay />}

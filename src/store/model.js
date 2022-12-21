@@ -33,6 +33,7 @@ import { columnTypes } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
 import { dataSourceTypes } from '../constants/data-source'
 import { COX_CATEGORY_SEGMENTS } from '../constants/client-specific'
+import { CHART_Z_POSITIONS } from '../constants/viz-options'
 
 
 const MAX_UNDO_STEPS = 10
@@ -53,6 +54,7 @@ const stateDefaults = [
   { key: 'mapGroupKey', defaultValue: null, resettable: true },
   { key: 'indexKey', defaultValue: null, resettable: true },
   { key: 'valueKeys', defaultValue: [], resettable: true },
+  { key: 'chart2ValueKeys', defaultValue: [], resettable: true },
   { key: 'mapValueKeys', defaultValue: [], resettable: true },
   { key: 'uniqueOptions', defaultValue: {}, resettable: true },
   {
@@ -70,10 +72,12 @@ const stateDefaults = [
       showAxisTitles: {
         x: true,
         y: true,
+        y2: true,
       },
       axisTitles: {
         x: '',
         y: '',
+        y2: '',
       },
       showSubPlotTitles: true,
       showLabels: false,
@@ -90,8 +94,12 @@ const stateDefaults = [
       legendPosition: [1, 0],
       labelPosition: 'Bottom',
       legendSize: 'Small',
-      baseColor: getTailwindConfigColor('primary-500'),
+      baseColor: {
+        color1: getTailwindConfigColor('primary-500'),
+        color2: getTailwindConfigColor('warning-500'),
+      },
       xAxisLabelLength: 5,
+      chart1ZPosition: CHART_Z_POSITIONS.back,
     }, resettable: true,
   },
   {
@@ -141,6 +149,7 @@ const stateDefaults = [
       dataSourceError: null,
       dataSourceName: null,
       colorRepresentation: COLOR_REPRESENTATIONS[0],
+      widgetBaseColor1Selection: true,
       allowReset: true,
       recentReset: false,
       showToast: false,
@@ -252,7 +261,8 @@ export default {
       type,
       filters: filters.filter(({ key, filter }) => key && filter),
       groupFilter,
-      valueKeys: type !== types.MAP ? renderableValueKeys : [],
+      valueKeys: type !== types.MAP && renderableValueKeys ? renderableValueKeys.filter(({ type }) => !type) : [],
+      chart2ValueKeys: type !== types.MAP && renderableValueKeys ? renderableValueKeys.filter(({ type }) => type) : [],
       mapValueKeys: type === types.MAP ? renderableValueKeys : [],
       formatDataKey,
       formatDataFunctions,
@@ -442,6 +452,7 @@ export default {
   renderableValueKeys: computed(
     [
       (state) => state.valueKeys,
+      (state) => state.chart2ValueKeys,
       (state) => state.mapValueKeys,
       (state) => state.group,
       (state) => state.type,
@@ -451,6 +462,7 @@ export default {
     ],
     (
       valueKeys,
+      chart2ValueKeys,
       mapValueKeys,
       group,
       type,
@@ -458,13 +470,14 @@ export default {
       dataIsXWIReport,
       formattedColumnNames,
     ) => (
-      (type === types.MAP ? mapValueKeys : valueKeys)
+      (type === types.MAP ? mapValueKeys : [...valueKeys, ...chart2ValueKeys])
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
         .map(({ key, agg, ...rest }) => ({
           ...rest,
           key,
           title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && !dataIsXWIReport ? ` (${agg})` : ''}` || key,
           ...(agg && { agg }),
+          ...(type === types.BARLINE && chart2ValueKeys.find(el => el.key === key) && { type: types.LINE }),
         }))
     )
   ),

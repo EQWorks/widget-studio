@@ -1,4 +1,4 @@
-import React, { useEffect, createElement, useState } from 'react'
+import React, { useEffect, createElement, useState, useMemo } from 'react'
 
 import { useDebouncedCallback } from 'use-debounce'
 import { colord } from 'colord'
@@ -6,11 +6,13 @@ import { makeStyles, Button, getTailwindConfigColor, TextField } from '@eqworks/
 
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
-import { COLOR_REPRESENTATIONS } from '../../../constants/color'
+import CustomRadio from '../../../components/custom-radio'
+import { COLOR_REPRESENTATIONS, COLOR_RADIO_LABELS } from '../../../constants/color'
 import types from '../../../constants/types'
+import { renderRow } from '../../shared/util'
 
 
-const useStyles = ({ baseColor, showPicker, type }) => makeStyles({
+const useStyles = ({ color, showPicker, type }) => makeStyles({
   outerContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -19,6 +21,9 @@ const useStyles = ({ baseColor, showPicker, type }) => makeStyles({
     ...(type !== types.MAP && {
       marginTop: '0.8rem',
     }),
+  },
+  radioContainer: {
+    display: 'flex',
   },
   row: {
     display: 'flex',
@@ -68,7 +73,7 @@ const useStyles = ({ baseColor, showPicker, type }) => makeStyles({
   },
   baseSwatch: {
     transition: 'background 1s',
-    background: baseColor,
+    background: color,
     borderRadius: '0.3rem',
     width: '1.1rem',
     height: '1.1rem',
@@ -118,32 +123,45 @@ const ColorSchemeControls = () => {
   // common state
   const presetColors = useStoreState((state) => state.presetColors)
   const baseColor = useStoreState((state) => state.genericOptions.baseColor)
+  const widgetBaseColor1Selection = useStoreState((state) => state.ui.widgetBaseColor1Selection)
   const colorRepresentation = useStoreState((state) => state.ui.colorRepresentation)
   const type = useStoreState((state) => state.type)
 
+  const [color, selectedColor] = useMemo(() => widgetBaseColor1Selection
+    ? [baseColor.color1, Object.keys(baseColor)[0]]
+    : [baseColor.color2, Object.keys(baseColor)[1]]
+  ,[widgetBaseColor1Selection, baseColor])
+
   // local state
   const [selectedColorIndex, setSelectedColorIndex] = useState(
-    presetColors.indexOf(baseColor) === -1
+    presetColors.indexOf(color) === -1
       ? presetColors.length - 1
-      : presetColors.indexOf(baseColor)
+      : presetColors.indexOf(color)
   )
   const [inputError, setInputError] = useState(false)
   const [showPicker, setShowPicker] = useState(false)
   const [showInputHelper, setShowInputHelper] = useState(false)
 
-  const styles = useStyles({ baseColor, showPicker, type })
+  const styles = useStyles({ color, showPicker, type })
 
   const updateBaseColor = useDebouncedCallback(v => userUpdate({
-    genericOptions: { baseColor: colord(v).toHex() },
+    genericOptions: { baseColor: { [selectedColor]: colord(v).toHex() } },
   }), 100)
 
   useEffect(() => {
-    update({ presetColors: presetColors.map((_c, i) => i === selectedColorIndex ? baseColor : _c) })
+    update({ presetColors: presetColors.map((_c, i) => i === selectedColorIndex ? color : _c) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [baseColor, selectedColorIndex, update])
+  }, [color, selectedColorIndex, update])
 
   return (
     <div className={styles.outerContainer}>
+      {type === types.BARLINE && renderRow(null,
+        <CustomRadio
+          labels={COLOR_RADIO_LABELS[type]}
+          value={widgetBaseColor1Selection}
+          update={() => userUpdate({ ui: { widgetBaseColor1Selection: !widgetBaseColor1Selection } })}
+        />
+      )}
       <div className={styles.row}>
         <Button
           type='secondary'
@@ -164,7 +182,7 @@ const ColorSchemeControls = () => {
             error={inputError}
             helperText={showInputHelper ? 'Invalid color' : undefined}
             placeholder='#ABCDEF'
-            value={colorRepresentation?.display(baseColor)}
+            value={colorRepresentation?.display(color)}
             onBlur={() => {
               setInputError(false)
               setShowInputHelper(false)
@@ -202,7 +220,7 @@ const ColorSchemeControls = () => {
       <div className={styles.colorPicker}>
         {
           createElement(colorRepresentation.picker, {
-            color: colorRepresentation.set(baseColor),
+            color: colorRepresentation.set(color),
             onChange: v => updateBaseColor(v),
           })
         }
@@ -215,7 +233,7 @@ const ColorSchemeControls = () => {
                   style={{ background: c }}
                   onClick={() => {
                     setSelectedColorIndex(i)
-                    userUpdate({ genericOptions: { baseColor: c } })
+                    userUpdate({ genericOptions: { baseColor: { [selectedColor]: c } } })
                   }}
                 >
                   <span />

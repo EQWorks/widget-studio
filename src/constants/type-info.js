@@ -21,6 +21,16 @@ export default {
         type: Boolean,
         defaultValue: false,
       },
+      showLineMarkers: {
+        name: 'Line Markers',
+        type: Boolean,
+        defaultValue: true,
+      },
+      lineFill: {
+        name: 'Line Fill',
+        type: Boolean,
+        defaultValue: false,
+      },
     },
   },
   [types.BAR]: {
@@ -40,6 +50,33 @@ export default {
       },
       horizontal: {
         name: 'Horizontal',
+        type: Boolean,
+        defaultValue: false,
+      },
+    },
+  },
+  [types.BARLINE]: {
+    icon: Icons.BarLineChart,
+    adapter: PlotlyAdapters[types.BARLINE],
+    mustGroup: true,
+    uniqueOptions: {
+      showTicks: {
+        name: 'Ticks',
+        type: Boolean,
+        defaultValue: true,
+      },
+      showLineMarkers: {
+        name: 'Line Markers',
+        type: Boolean,
+        defaultValue: true,
+      },
+      sharedYAxis: {
+        name: 'Shared Y Axis',
+        type: Boolean,
+        defaultValue: true,
+      },
+      lineFill: {
+        name: 'Line Fill',
         type: Boolean,
         defaultValue: false,
       },
@@ -97,7 +134,7 @@ export default {
     },
   },
   [types.MAP]: {
-    icon: Icons.MapChart,
+    icon: Icons.Map,
     adapter: ReactMapsAdapter,
     mustGroup: true,
     uniqueOptions: {

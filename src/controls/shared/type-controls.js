@@ -111,8 +111,8 @@ const useStyles = ({ mode = modes.EDITOR }) => makeStyles(
     ? {
       outerContainer: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        columnGap: '2.688rem',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        columnGap: '1.25rem',
         rowGap: '1.25rem',
       },
       icon: {
@@ -153,7 +153,6 @@ const useStyles = ({ mode = modes.EDITOR }) => makeStyles(
       ...commonClasses,
     }
 )
-
 
 const WidgetTypeControls = () => {
   const userUpdate = useStoreActions((actions) => actions.userUpdate)
@@ -201,6 +200,7 @@ const WidgetTypeControls = () => {
                             ...(domain?.key && { [domain.key]: null }),
                           }
                         ),
+                        chart2ValueKeys: [],
                         type,
                         uniqueOptions:
                         Object.entries(uniqueOptions).reduce((acc, [k, { defaultValue }]) => {
@@ -214,9 +214,9 @@ const WidgetTypeControls = () => {
                   {
                     disabled
                       ? <Tooltip
-                        position='left'
+                        position='right'
                         description='No geo columns found in this dataset'
-                        {...(mode === modes.EDITOR && { width: '10rem' })}
+                        {...(mode === modes.EDITOR && { width: '8rem' })}
                       >
                         {renderIcon}
                       </Tooltip>

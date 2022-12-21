@@ -55,7 +55,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -110,7 +113,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -171,7 +177,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Manual',
@@ -242,7 +251,10 @@ export default {
         1,
         0,
       ],
-      'baseColor': '#f2ff00',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showWidgetTitle': false,
       'showAxisTitles': {
         'x': false,
@@ -301,7 +313,10 @@ export default {
         1,
         0,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': false,
         'y': false,
@@ -370,7 +385,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -467,7 +485,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#f2ff00',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -563,7 +584,10 @@ export default {
         1,
         1,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': true,
         'y': false,
@@ -622,7 +646,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': true,
         'y': true,
@@ -703,7 +730,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#363ee3',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Manual',
@@ -798,7 +828,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#00548a',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -871,7 +904,10 @@ export default {
         1,
         0,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': true,
         'y': false,
@@ -926,7 +962,10 @@ export default {
         1,
         1,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showWidgetTitle': true,
       'showAxisTitles': {
         'x': true,
@@ -941,6 +980,113 @@ export default {
       'type': 'Execution',
       'id': '305',
     },
+  },
+  'dev-barline-1' : {
+    'title': 'My example barline',
+    'subtitle': '',
+    'subtitleLinkLabel': '',
+    'subtitleHyperlink': '',
+    'showTitleBar': true,
+    'type': 'barLine',
+    'filters': [],
+    'groupFilter': [],
+    'valueKeys': [
+      {
+        'key': 'visitation',
+        'title': 'Visitation',
+      },
+    ],
+    'chart2ValueKeys': [
+      {
+        'key': 'city',
+        'title': 'City',
+        'type': 'line',
+      },
+    ],
+    'mapValueKeys': [],
+    'formatDataFunctions': {},
+    'columnNameAliases': {},
+    'formattedColumnNames': {
+      'location_category': 'Location category',
+      'visitation': 'Visitation',
+      'city': 'City',
+      'provincial': 'Provincial',
+      'national': 'National',
+    },
+    'group': true,
+    'groupKey': 'location_category',
+    'mapGroupKey': null,
+    'useMVTOption': true,
+    'indexKey': null,
+    'groupKeyTitle': 'Location category',
+    'uniqueOptions': {
+      'showTicks': true,
+      'showLineMarkers': true,
+      'sharedYAxis': true,
+      'lineFill': false,
+    },
+    'genericOptions': {
+      'showWidgetTitle': false,
+      'groupByValue': false,
+      'showLegend': true,
+      'showTooltip': true,
+      'showAxisTitles': {
+        'x': true,
+        'y': true,
+        'y2': true,
+      },
+      'axisTitles': {
+        'x': '',
+        'y': '',
+        'y2': '',
+      },
+      'showSubPlotTitles': true,
+      'showLabels': false,
+      'showCurrency': false,
+      'showVertical': false,
+      'mapHideSourceLayer': false,
+      'mapHideTargetLayer': false,
+      'mapHideArcLayer': false,
+      'showLocationPins': false,
+      'mapPinTooltipKey': null,
+      'subPlots': false,
+      'size': 0.6,
+      'titlePosition': [
+        0,
+        1,
+      ],
+      'legendPosition': [
+        0.5,
+        0,
+      ],
+      'labelPosition': 'Bottom',
+      'legendSize': 'Small',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
+      'xAxisLabelLength': 5,
+      'chart1ZPosition': 'Back',
+    },
+    'dataSource': {
+      'type': 'Manual',
+      'id': '2000',
+    },
+    'percentageMode': false,
+    'addUserControls': false,
+    'userControlHeadline': '',
+    'userControlKeyValues': [],
+    'addTopCategories': false,
+    'categoryFilter': null,
+    'presetColors': [
+      '#3232F5',
+      '#07A0C3',
+      '#F0C808',
+      '#91F5AD',
+      '#dd1c1a',
+      '#363ee3',
+    ],
+    'mapTooltipLabelTitles': null,
   },
   'dev-scatter-1': {
     'title': 'My example scatter widget',
@@ -996,7 +1142,10 @@ export default {
         0.5,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'showAxisTitles': {
         'x': true,
         'y': true,
@@ -1117,7 +1266,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -1285,7 +1437,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -1423,7 +1578,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -1573,7 +1731,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -1732,7 +1893,10 @@ export default {
       ],
       'labelPosition': 'Bottom',
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
     },
     'dataSource': {
@@ -1830,7 +1994,10 @@ export default {
         0,
       ],
       'legendSize': 'Small',
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
     },
     'dataSource': {
       'type': 'Execution',
@@ -1897,7 +2064,10 @@ export default {
         1,
         1,
       ],
-      'baseColor': '#366fe4',
+      'baseColor': {
+        'color1': '#366fe4',
+        'color2': '#faaf15',
+      },
       'xAxisLabelLength': 5,
       'showAxisTitles': {
         'x': false,

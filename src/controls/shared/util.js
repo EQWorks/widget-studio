@@ -13,6 +13,7 @@ const classes = makeStyles({
     '> :last-child': {
       marginBottom: '0px !important',
     },
+    width: '100%',
   },
   section: {
     width: '100%',

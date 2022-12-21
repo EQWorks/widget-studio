@@ -1109,11 +1109,11 @@
     regenerator-runtime "^0.13.10"
 
 "@babel/runtime@^7.2.0":
-  version "7.19.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.0.tgz#22b11c037b094d27a8a2504ea4dcff00f50e2259"
-  integrity sha512-eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==
+  version "7.20.6"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.20.6.tgz#facf4879bfed9b5326326273a64220f099b0fce3"
+  integrity sha512-Q+8MqP7TiHMWzSfwiJwXCjyf4GYA4Dgw3emg/7xmwsdLJOZUp+nMqcOwOzzYheuM1rhDu8FSj2l0aoMygEuXuA==
   dependencies:
-    regenerator-runtime "^0.13.4"
+    regenerator-runtime "^0.13.11"
 
 "@babel/template@^7.12.7", "@babel/template@^7.16.7":
   version "7.16.7"
@@ -1368,10 +1368,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/chart-system@^0.9.3":
-  version "0.9.3"
-  resolved "https://npm.pkg.github.com/download/@EQWorks/chart-system/0.9.3/6aa967da0d052f7a4cf43536856e9883bb28ec50#6aa967da0d052f7a4cf43536856e9883bb28ec50"
-  integrity sha512-FetDczKf3zEkH1M1HxuK8lBeq8vbg6oXXdsDoYNH4Zqt3pLLllRIpa2KalIp1/QoB8TnlDX/gUgTModsmkLr3A==
+"@eqworks/chart-system@^0.9.4":
+  version "0.9.4"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/chart-system/0.9.4/a91a3e86fe4c3237bbd125efa878311f7a4ab0bb#a91a3e86fe4c3237bbd125efa878311f7a4ab0bb"
+  integrity sha512-cpxJ3big+uL4O3ygxYYKKb9I/7oS0c5ZSPU7xeikdk81wxYfOU6w3/gqdiapVjdyIXUF/IlM/wNZfoXJV1KL6A==
   dependencies:
     "@nivo/bar" "^0.62.0"
     "@nivo/core" "^0.62.0"
@@ -1425,10 +1425,10 @@
     react-window "^1.8.6"
     use-debounce "^7.0.1"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.64":
-  version "0.1.0-alpha.64"
-  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-labs/0.1.0-alpha.64/88c714f1a964bac13fab1078acd796473b11a447#88c714f1a964bac13fab1078acd796473b11a447"
-  integrity sha512-mlaD167bckXsDY7Xw+9Bk22g42Io0OlD5N8qwOAmJdUg33x9T+Pd0aPkZ4W7CD3oduy/PnJh8ZAXaSCmLHGbQw==
+"@eqworks/lumen-labs@^0.1.0-alpha.71":
+  version "0.1.0-alpha.71"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-labs/0.1.0-alpha.71/648129210529205050b4efdf62a98f6f7658232f#648129210529205050b4efdf62a98f6f7658232f"
+  integrity sha512-PxKJS3HbO9YVRFr+wQ3R1wbnQ/dvAv/Rkx7IiUxH8X27wjUp1OprZQKh/kULp60XGim1lqe4ZDm1gQb+pobLVg==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
@@ -3830,9 +3830,9 @@
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
 "@types/lodash@^4.14.146", "@types/lodash@^4.14.160":
-  version "4.14.186"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.186.tgz#862e5514dd7bd66ada6c70ee5fce844b06c8ee97"
-  integrity sha512-eHcVlLXP0c2FlMPm56ITode2AgLMSa6aJ05JTTbYbI+7EMkCEE5qk2E41d5g2lCVTqRe0GnnRFurmlCsDODrPw==
+  version "4.14.191"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.191.tgz#09511e7f7cba275acd8b419ddac8da9a6a79e2fa"
+  integrity sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==
 
 "@types/mapbox-gl@^2.0.3":
   version "2.7.8"
@@ -10236,9 +10236,9 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
 mnemonist@^0.39.0:
-  version "0.39.2"
-  resolved "https://registry.yarnpkg.com/mnemonist/-/mnemonist-0.39.2.tgz#7e6a0bd5c7199460ee12a651103c7007adc6225a"
-  integrity sha512-n3ZCEosuMH03DVivZ9N0fcXPWiZrBLEdfSlEJ+S/mJxmk3zuo1ur0dj9URDczFyP1VS3wfiyKzqLLDXoPJ6rPA==
+  version "0.39.5"
+  resolved "https://registry.yarnpkg.com/mnemonist/-/mnemonist-0.39.5.tgz#5850d9b30d1b2bc57cc8787e5caa40f6c3420477"
+  integrity sha512-FPUtkhtJ0efmEFGpU14x7jGbTB+s18LrzRL2KgoWz9YvcY3cPomz8tih01GbHwnGk/OmkOKfqd/RAQoc8Lm7DQ==
   dependencies:
     obliterator "^2.0.1"
 
@@ -11149,9 +11149,9 @@ pkg-dir@^5.0.0:
     find-up "^5.0.0"
 
 plotly.js-basic-dist-min@^2.8.3:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/plotly.js-basic-dist-min/-/plotly.js-basic-dist-min-2.14.0.tgz#5026b3292d9d4d80c5c846a34d019ba23008f6ce"
-  integrity sha512-W3PpxHLdRIKFPIkn9ymn+PYjakrGzlDP0hq9UauIOxIkydfyvOg+SGnjOQWkvg9vNmI+nDjUqV+8jTcRqSmyzw==
+  version "2.16.5"
+  resolved "https://registry.yarnpkg.com/plotly.js-basic-dist-min/-/plotly.js-basic-dist-min-2.16.5.tgz#bd0fdbbee2d6072f0058a5de242098d7d623243b"
+  integrity sha512-SnDT7ylIRaV+O0G4Zf/DOUcEhwocITBdmPIDpvVb8QnK4GivJFDTYXFGSjKLX9Hd7vOZLxv8HNz22raecQPeUA==
 
 pnp-webpack-plugin@1.6.4:
   version "1.6.4"
@@ -12464,7 +12464,7 @@ regenerate@^1.4.2:
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.2.tgz#b9346d8827e8f5a32f7ba29637d398b69014848a"
   integrity sha512-zrceR/XhGYU/d/opr2EKO7aRHUeiBI8qjtfHqADTwZd6Szfy16la6kqD0MIUs5z5hx6AaKa+PixpPrR289+I0A==
 
-regenerator-runtime@^0.13.10:
+regenerator-runtime@^0.13.10, regenerator-runtime@^0.13.11:
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
   integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
@@ -13937,9 +13937,9 @@ typical@^5.2.0:
   integrity sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg==
 
 ua-parser-js@^0.7.30:
-  version "0.7.31"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.31.tgz#649a656b191dffab4f21d5e053e27ca17cbff5c6"
-  integrity sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ==
+  version "0.7.32"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.32.tgz#cd8c639cdca949e30fa68c44b7813ef13e36d211"
+  integrity sha512-f9BESNVhzlhEFf2CHMSj40NWOjYPl1YKYbrvIr/hFTDEmLq7SRbWvm7FcdcpCYT95zrOhC7gZSxjdnnTpBcwVw==
 
 uglify-js@^3.1.4:
   version "3.15.0"

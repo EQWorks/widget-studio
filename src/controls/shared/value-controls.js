@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
-import { Icons } from '@eqworks/lumen-labs'
+import { Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import modes from '../../constants/modes'
 import cardTypes from '../../constants/card-types'
@@ -8,12 +8,19 @@ import aggFunctions from '../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../store'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow } from './util'
+import { renderRow, renderSection, renderSuperSection } from './util'
 import MutedBarrier from './muted-barrier'
 import CustomSelect from '../../components/custom-select'
 import types from '../../constants/types'
+import { cleanUp } from '../../util/string-manipulation'
 import { hasDevAccess } from '../../util/access'
 
+
+const classes = makeStyles({
+  valueContainer: {
+    width: '100%',
+  },
+})
 
 const ValueControls = () => {
   // common actions
@@ -25,6 +32,7 @@ const ValueControls = () => {
   const group = useStoreState((state) => state.group)
   const domain = useStoreState((state) => state.domain)
   const valueKeys = useStoreState((state) => state.valueKeys)
+  const chart2ValueKeys = useStoreState((state) => state.chart2ValueKeys)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const addUserControls = useStoreState((state) => state.addUserControls)
@@ -34,8 +42,17 @@ const ValueControls = () => {
   const eligibleColumns = useMemo(() =>
     Object.fromEntries(
       Object.entries(columnsAnalysis)
-        .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric)
-    ), [columnsAnalysis, domain.value])
+        .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric
+        && !chart2ValueKeys.find(({ key }) => key === c))
+    ), [columnsAnalysis, domain.value, chart2ValueKeys])
+
+  const eligibleChart2Columns = useMemo(() =>
+    Object.fromEntries(
+      Object.entries(columnsAnalysis)
+        .filter(([c, { isNumeric }]) => c !== domain.value && isNumeric
+        && !valueKeys.find(({ key }) => key === c))
+    ), [columnsAnalysis, domain.value, valueKeys])
+
 
   const staticQuantity = useMemo(() => {
     if (addUserControls || type === types.PYRAMID) {
@@ -47,7 +64,7 @@ const ValueControls = () => {
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
-  const renderGroupedValueKeysSelect =
+  const renderPluralLinkedSelect = useCallback((valueKeys, eligibleColumns, selectType) => (
     <PluralLinkedSelect
       {...(mode === modes.QL || addUserControls || type === types.PYRAMID ? {
         staticQuantity,
@@ -73,18 +90,36 @@ const ValueControls = () => {
         if (i === valueKeys.length) {
           const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
           valueKeysCopy.push(val)
-          userUpdate({ valueKeys: valueKeysCopy })
+          userUpdate({
+            [selectType === types. BAR ? 'valueKeys' : 'chart2ValueKeys']: valueKeysCopy,
+          })
         } else {
-          userUpdate({ valueKeys: valueKeys.map((v, _i) => i === _i ? val : v) })
+          userUpdate({
+            [selectType === types. BAR ? 'valueKeys' : 'chart2ValueKeys']: valueKeys.map((v, _i) => i === _i ? val : v),
+          })
         }
       }}
       deleteCallback={(i) => {
         const valueKeysCopy = JSON.parse(JSON.stringify(valueKeys))
         valueKeysCopy.splice(i, 1)
-        userUpdate({ valueKeys: valueKeysCopy })
+        userUpdate({
+          [selectType === types. BAR ? 'valueKeys' : 'chart2ValueKeys']: valueKeysCopy,
+        })
       }}
       addMessage='Add Value'
     />
+  ),[mode, addUserControls, type, dataHasVariance, staticQuantity, userUpdate, widgetControlCardEdit])
+
+  const renderGroupedValueKeysSelect = renderSuperSection(
+    <div className={classes.valueContainer}>
+      {renderSection(type === types.BARLINE ? cleanUp(types.BAR) : '',
+        renderPluralLinkedSelect(valueKeys, eligibleColumns, types.BAR),
+      )}
+      {type === types.BARLINE && renderSection(cleanUp(types.LINE),
+        renderPluralLinkedSelect(chart2ValueKeys, eligibleChart2Columns, types.LINE),
+      )}
+    </div>
+  )
 
   const renderNonGroupedValueKeysSelect = (
     <CustomSelect
@@ -107,7 +142,7 @@ const ValueControls = () => {
       <WidgetControlCard
         clear={() => {
           Object.keys(columnNameAliases).forEach(key => {
-            if (JSON.stringify(valueKeys).includes(key)) {
+            if (JSON.stringify(valueKeys).includes(key) || JSON.stringify(chart2ValueKeys).includes(key)) {
               delete columnNameAliases[key]
             }
           })
@@ -115,14 +150,15 @@ const ValueControls = () => {
             aliasesReseted: true,
             columnNameAliases,
           })
-          resetValue({ valueKeys })
+          resetValue({ valueKeys, chart2ValueKeys })
         }}
         title='Value Configuration'
         {...mode === modes.QL && { description: 'Select up to 3 keys, open in editor for more options.' }}
         enableEdit
         disableEditButton={mode === modes.QL ||
-          (!hasDevAccess() && valueKeys?.length === 1) ||
-          (valueKeys.every(({ key }) => !key) && !widgetControlCardEdit[cardTypes.VALUE])
+          (!hasDevAccess() && (valueKeys?.length >= 1 || chart2ValueKeys.length >= 1)) ||
+          ((valueKeys.every(({ key }) => !key) && chart2ValueKeys.every(({ key }) => !key)) &&
+          !widgetControlCardEdit[cardTypes.VALUE])
         }
         type={cardTypes.VALUE}
       >
