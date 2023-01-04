@@ -77,7 +77,6 @@ const Widget = ({
   saveWithInsightsData,
   dataProviderResponse,
   onWidgetRender,
-  // temporary:
   filters,
   executionID,
   config: _config,
@@ -87,6 +86,8 @@ const Widget = ({
   mapGroupKey,
   useMVTOption,
   customColors,
+  dataFormat,
+  insightsDataCategories,
 }) => {
   const classes = useStyles(_mode)
 
@@ -158,6 +159,8 @@ const Widget = ({
       ...(mapGroupKey && { mapGroupKey }),
       ...(useMVTOption !==null && { useMVTOption, MVTOptionProp: useMVTOption }),
       ...(customColors && { customColors, customColorProp: customColors }),
+      ...(dataFormat && { customDataFormat: dataFormat }),
+      ...(insightsDataCategories && { insightsDataCategories }),
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -195,7 +198,7 @@ const Widget = ({
   }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig,
     loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType,
     onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey, useMVTOption,
-    onWidgetRender, customColors])
+    onWidgetRender, customColors, dataFormat, insightsDataCategories])
 
   // load data if source changes
   useEffect(() => {
@@ -282,6 +285,8 @@ Widget.propTypes = {
       iconColor: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
     }),
   }),
+  dataFormat: PropTypes.object,
+  insightsDataCategories: PropTypes.object,
 }
 
 Widget.defaultProps = {
@@ -308,6 +313,8 @@ Widget.defaultProps = {
   mapGroupKey: '',
   useMVTOption: null,
   customColors: null,
+  dataFormat: null,
+  insightsDataCategories: null,
 }
 
 export default withQueryClient(withStore(Widget))
