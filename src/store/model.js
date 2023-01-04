@@ -28,6 +28,7 @@ import {
   DATA_CATEGORIES_KEYS,
   DATA_CATEGORIES_VALUES,
 } from '../constants/insights-data-categories'
+import { DATA_KEY_FORMATTING } from '../constants/data-format'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
@@ -175,6 +176,8 @@ const stateDefaults = [
   { key: 'MVTOptionProp', defaultValue: null, resettable: false },
   { key: 'customColors', defaultValues: null, resettable: false },
   { key: 'customColorProp', defaultValues: null, resettable: false },
+  { key: 'customDataFormat', defaultValues: null, resettable: false },
+  { key: 'insightsDataCategories', defaultValues: null, resettable: false },
 ]
 
 export default {
@@ -499,9 +502,15 @@ export default {
   ),
 
   formatDataFunctions: computed(
-    [(state) => state.renderableValueKeys],
-    (renderableValueKeys) => Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
-      [title, getKeyFormatFunction(key)]
+    [
+      (state) => state.renderableValueKeys,
+      (state) => state.customDataFormat,
+    ],
+    (
+      renderableValueKeys,
+      dataFormatObject,
+    ) => Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
+      [title, getKeyFormatFunction(key, { ...dataFormatObject, ...DATA_KEY_FORMATTING })]
     )))
   ),
 
