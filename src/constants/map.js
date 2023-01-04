@@ -207,8 +207,9 @@ export const KEY_ALIASES = {
   'Geo ca postalcode': 'Postal code',
   'Address postalcode': 'Postal code',
   'Geo ca fsa': 'FSA',
+  'Geo cohort fsa': 'GeoCohort FSA',
   'Geo ca da': 'DA',
-  'Geo can ct': 'CT',
+  'Geo ca ct': 'CT',
 }
 
 export const XWI_KEY_ALIASES = {
