@@ -1616,7 +1616,7 @@ export default {
     'mapValueKeys': [
       {
         'mapVis': 'fill',
-        'key': 'pop',
+        'key': 'population',
         'title': 'Population',
       },
     ],
@@ -1745,7 +1745,7 @@ export default {
     'addUserControls': true,
     'userControlHeadline': 'Benchmark By',
     'userControlKeyValues': [
-      'pop',
+      'population',
       'home_value',
       'highest_education_no_education',
       'highest_education_secondary_education',
