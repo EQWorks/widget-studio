@@ -15,6 +15,7 @@ import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
 import InsightsDataProvider from '../src/insights-data-provider'
+import { DATA_CATEGORIES, DATA_KEY_FORMATTING } from './constants'
 
 
 const DEFAULT_WL = 2456
@@ -70,6 +71,8 @@ Object.values(modes).forEach(mode => {
         <Widget {...devProps}
           mode={mode}
           id={id}
+          dataFormat={DATA_KEY_FORMATTING}
+          insightsDataCategories={DATA_CATEGORIES}
         />
       )
       const renderWidgetAuth = (
@@ -211,7 +214,7 @@ storiesOf('InsightsDataProvider', module)
     )
   })
 
-// Temporary solution for dashboar widget management for Cox
+// Temporary solution for dashboard widget management for Cox
 storiesOf('Widget Management with Insights Data saved configuration', module)
   .add('Widget Management with Insights Data saved configuration', () => {
     const queryClient = new QueryClient()
@@ -228,6 +231,8 @@ storiesOf('Widget Management with Insights Data saved configuration', module)
             //{ key: 'OEM', filter: ['Acura'] }]
             year={YEAR}
             month={MONTH}
+            dataFormat={DATA_KEY_FORMATTING}
+            insightsDataCategories={DATA_CATEGORIES}
           />
         </WlCuControlsProvider>
       </QueryClientProvider>
