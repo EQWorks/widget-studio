@@ -88,6 +88,8 @@ const Widget = ({
   customColors,
   dataFormat,
   insightsDataCategories,
+  // list of category keys that are in the order to be used in widget tabs
+  categoryOrder,
 }) => {
   const classes = useStyles(_mode)
 
@@ -161,6 +163,7 @@ const Widget = ({
       ...(customColors && { customColors, customColorProp: customColors }),
       ...(dataFormat && { customDataFormat: dataFormat }),
       ...(insightsDataCategories && { insightsDataCategories }),
+      ...(categoryOrder && { categoryOrder }),
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -198,7 +201,7 @@ const Widget = ({
   }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig,
     loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType,
     onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey, useMVTOption,
-    onWidgetRender, customColors, dataFormat, insightsDataCategories])
+    onWidgetRender, customColors, dataFormat, insightsDataCategories, categoryOrder])
 
   // load data if source changes
   useEffect(() => {
@@ -287,6 +290,7 @@ Widget.propTypes = {
   }),
   dataFormat: PropTypes.object,
   insightsDataCategories: PropTypes.object,
+  categoryOrder: PropTypes.arrayOf(PropTypes.string),
 }
 
 Widget.defaultProps = {
@@ -315,6 +319,7 @@ Widget.defaultProps = {
   customColors: null,
   dataFormat: null,
   insightsDataCategories: null,
+  categoryOrder: null,
 }
 
 export default withQueryClient(withStore(Widget))
