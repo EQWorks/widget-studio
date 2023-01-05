@@ -322,7 +322,18 @@ const useDashboards = (reportID) => {
   return [isLoading, data]
 }
 
-const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, month, filters }) => {
+const WidgetManager = ({
+  wl,
+  cu,
+  dealer,
+  className,
+  saveWithInsightsData,
+  year,
+  month,
+  filters,
+  dataFormat,
+  insightsDataCategories,
+}) => {
   const [selectedReport, setSelectedReport] = useState(null)
   const [selectedDashboard, setSelectedDashboard] = useState(null)
 
@@ -457,7 +468,7 @@ const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, 
             <Widget
               className={classes.newWidget}
               mode='editor'
-              {...{ wl, cu, saveWithInsightsData, filters }}
+              {...{ wl, cu, saveWithInsightsData, filters, dataFormat, insightsDataCategories }}
             />
           </CustomModal>
         )
@@ -599,7 +610,7 @@ const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, 
                         key={currentlyViewing}
                         id={currentlyViewing}
                         mode='view_only'
-                        {...{ wl, cu, saveWithInsightsData, filters }}
+                        {...{ wl, cu, saveWithInsightsData, filters, dataFormat, insightsDataCategories }}
                       />
                     </InsightsDataProvider>
                   }
@@ -608,7 +619,7 @@ const WidgetManager = ({ wl, cu, dealer, className, saveWithInsightsData, year, 
                         key={currentlyViewing}
                         id={currentlyViewing}
                         mode='view_only'
-                        {...{ filters, wl, cu }}
+                        {...{ filters, wl, cu, dataFormat, insightsDataCategories }}
                       />
                   }
                   {!currentlyViewing &&
@@ -648,6 +659,8 @@ WidgetManager.propTypes = {
   year: PropTypes.number,
   month: PropTypes.number,
   filters: PropTypes.arrayOf(PropTypes.object),
+  dataFormat: PropTypes.object,
+  insightsDataCategories: PropTypes.object,
 }
 WidgetManager.defaultProps = {
   wl: -1,
@@ -658,6 +671,8 @@ WidgetManager.defaultProps = {
   year: 2022,
   month: 1,
   filters: undefined,
+  dataFormat: null,
+  insightsDataCategories: null,
 }
 
 
