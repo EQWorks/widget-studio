@@ -23,11 +23,6 @@ import {
   MAP_VIEW_STATE,
   GEOJSON_KEYS,
 } from '../constants/map'
-import {
-  DATA_CATEGORIES,
-  DATA_CATEGORIES_KEYS,
-  DATA_CATEGORIES_VALUES,
-} from '../constants/insights-data-categories'
 import { DATA_KEY_FORMATTING } from '../constants/data-format'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
@@ -174,10 +169,10 @@ const stateDefaults = [
   { key: 'aliasesReseted', defaultValue: false, resettable: true },
   { key: 'useMVTOption', defaultValue: true, resettable: true },
   { key: 'MVTOptionProp', defaultValue: null, resettable: false },
-  { key: 'customColors', defaultValues: null, resettable: false },
-  { key: 'customColorProp', defaultValues: null, resettable: false },
-  { key: 'customDataFormat', defaultValues: null, resettable: false },
-  { key: 'insightsDataCategories', defaultValues: null, resettable: false },
+  { key: 'customColors', defaultValue: {}, resettable: false },
+  { key: 'customColorProp', defaultValue: null, resettable: false },
+  { key: 'customDataFormat', defaultValue: {}, resettable: false },
+  { key: 'insightsDataCategories', defaultValue: {}, resettable: false },
 ]
 
 export default {
@@ -508,9 +503,9 @@ export default {
     ],
     (
       renderableValueKeys,
-      dataFormatObject,
+      customDataFormat,
     ) => Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
-      [title, getKeyFormatFunction(key, { ...dataFormatObject, ...DATA_KEY_FORMATTING })]
+      [title, getKeyFormatFunction(key, { ...customDataFormat, ...DATA_KEY_FORMATTING })]
     )))
   ),
 
@@ -645,6 +640,7 @@ export default {
       (state) => state.rows,
       (state) => state.userControlKeyValues,
       (state) => state.wl,
+      (state) => state.insightsDataCategories,
     ],
     (
       type,
@@ -652,6 +648,7 @@ export default {
       rows,
       userControlKeyValues,
       wl,
+      insightsDataCategories,
     ) => {
       if (type === types.MAP) {
         // use data categories if present in the data object
@@ -667,8 +664,8 @@ export default {
         }
         // for map widget with no categoryFilter the finalUserControlKeyValues is a mix of column keys & data categories
         return userControlKeyValues.reduce((acc, key) => {
-          const category = DATA_CATEGORIES_VALUES.includes(key) ?
-            DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
+          const category = Object.values(insightsDataCategories).flat().includes(key) ?
+            Object.keys(insightsDataCategories).find(e => insightsDataCategories[e]?.includes(key)) :
             key
           acc = category && acc.includes(category) ? acc : [...acc, category]
           return acc
@@ -717,20 +714,22 @@ export default {
       (state) => state.dataCategoryKey,
       (state) => state.userControlKeyValues,
       (state) => state.formattedColumnNames,
+      (state) => state.insightsDataCategories,
     ],
     (
       type,
       categoryFilter,
       dataCategoryKey,
       userControlKeyValues,
-      formattedColumnNames
+      formattedColumnNames,
+      insightsDataCategories,
     ) => {
       if (type === types.MAP && userControlKeyValues.length) {
         if (categoryFilter) {
           return userControlKeyValues.map(key => ({ title: formattedColumnNames[key], key }))
         }
         if (dataCategoryKey) {
-          return userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val))
+          return userControlKeyValues.filter(val => insightsDataCategories[dataCategoryKey]?.includes(val))
             .map(key => ({ title: formattedColumnNames[key], key }))
         }
       }
