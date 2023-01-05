@@ -28,7 +28,6 @@ import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
 import { dataSourceTypes } from '../constants/data-source'
-import { COX_CATEGORY_SEGMENTS } from '../constants/client-specific'
 import { CHART_Z_POSITIONS } from '../constants/viz-options'
 
 
@@ -173,6 +172,7 @@ const stateDefaults = [
   { key: 'customColorProp', defaultValue: null, resettable: false },
   { key: 'customDataFormat', defaultValue: {}, resettable: false },
   { key: 'insightsDataCategories', defaultValue: {}, resettable: false },
+  { key: 'categoryOrder', defaultValue: [], resetable: false },
 ]
 
 export default {
@@ -641,6 +641,7 @@ export default {
       (state) => state.userControlKeyValues,
       (state) => state.wl,
       (state) => state.insightsDataCategories,
+      (state) => state.categoryOrder,
     ],
     (
       type,
@@ -649,6 +650,7 @@ export default {
       userControlKeyValues,
       wl,
       insightsDataCategories,
+      categoryOrder,
     ) => {
       if (type === types.MAP) {
         // use data categories if present in the data object
@@ -656,9 +658,8 @@ export default {
           const userCategoryControlKeyValues = rows.reduce((acc, el) => acc.includes(el[categoryFilter]) ?
             acc :
             [...acc, el[categoryFilter]], [])
-          // specific to Cox - Top Spending needs to be first in the tab list
-          if (wl === 2456 && userCategoryControlKeyValues.every(el => COX_CATEGORY_SEGMENTS.includes(el))) {
-            return COX_CATEGORY_SEGMENTS
+          if (categoryOrder.length && userCategoryControlKeyValues.every(el => categoryOrder.includes(el))) {
+            return categoryOrder.filter(el => userCategoryControlKeyValues.includes(el))
           }
           return userCategoryControlKeyValues
         }
