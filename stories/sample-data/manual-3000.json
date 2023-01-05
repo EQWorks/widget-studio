@@ -8,7 +8,7 @@
         "category": "String"
       },
       {
-        "name": "pop",
+        "name": "population",
         "category": "Numeric"
       },
       {
@@ -43,7 +43,7 @@
     "results": [
       {
         "geo_ca_fsa": "M1K",
-        "pop": 2500,
+        "population": 2500,
         "home_value": 800000,
         "highest_education_no_education": 500,
         "highest_education_secondary_education": 300,
@@ -54,7 +54,7 @@
       },
       {
         "geo_ca_fsa": "M1L",
-        "pop": 1600,
+        "population": 1600,
         "home_value": 800500,
         "highest_education_no_education": 300,
         "highest_education_secondary_education": 100,
@@ -65,7 +65,7 @@
       },
       {
         "geo_ca_fsa": "M1N",
-        "pop": 3000,
+        "population": 3000,
         "home_value": 900000,
         "highest_education_no_education": 700,
         "highest_education_secondary_education": 400,
@@ -76,7 +76,7 @@
       },
       {
         "geo_ca_fsa": "M1R",
-        "pop": 2000,
+        "population": 2000,
         "home_value": 750000,
         "highest_education_no_education": 400,
         "highest_education_secondary_education": 200,
@@ -87,7 +87,7 @@
       },
       {
         "geo_ca_fsa": "M3C",
-        "pop": 2800,
+        "population": 2800,
         "home_value": 850000,
         "highest_education_no_education": 600,
         "highest_education_secondary_education": 250,
@@ -98,7 +98,7 @@
       },
       {
         "geo_ca_fsa": "M4A",
-        "pop": 3200,
+        "population": 3200,
         "home_value": 950000,
         "highest_education_no_education": 700,
         "highest_education_secondary_education": 500,
@@ -109,7 +109,7 @@
       },
       {
         "geo_ca_fsa": "M4B",
-        "pop": 2200,
+        "population": 2200,
         "home_value": 650000,
         "highest_education_no_education": 400,
         "highest_education_secondary_education": 250,
@@ -120,7 +120,7 @@
       },
       {
         "geo_ca_fsa": "M4C",
-        "pop": 2100,
+        "population": 2100,
         "home_value": 1000000,
         "highest_education_no_education": 400,
         "highest_education_secondary_education": 250,
@@ -131,7 +131,7 @@
       },
       {
         "geo_ca_fsa": "M4E",
-        "pop": 3000,
+        "population": 3000,
         "home_value": 1500000,
         "highest_education_no_education": 300,
         "highest_education_secondary_education": 200,
@@ -142,7 +142,7 @@
       },
       {
         "geo_ca_fsa": "M4G",
-        "pop": 2600,
+        "population": 2600,
         "home_value": 845000,
         "highest_education_no_education": 450,
         "highest_education_secondary_education": 350,
@@ -153,7 +153,7 @@
       },
       {
         "geo_ca_fsa": "M4H",
-        "pop": 2300,
+        "population": 2300,
         "home_value": 950000,
         "highest_education_no_education": 450,
         "highest_education_secondary_education": 200,
@@ -164,7 +164,7 @@
       },
       {
         "geo_ca_fsa": "M4J",
-        "pop": 1900,
+        "population": 1900,
         "home_value": 1500000,
         "highest_education_no_education": 300,
         "highest_education_secondary_education": 500,
@@ -175,7 +175,7 @@
       },
       {
         "geo_ca_fsa": "M4K",
-        "pop": 2000,
+        "population": 2000,
         "home_value": 1300000,
         "highest_education_no_education": 365,
         "highest_education_secondary_education": 255,
@@ -186,7 +186,7 @@
       },
       {
         "geo_ca_fsa": "M4L",
-        "pop": 2350,
+        "population": 2350,
         "home_value": 650000,
         "highest_education_no_education": 700,
         "highest_education_secondary_education": 400,
@@ -197,7 +197,7 @@
       },
       {
         "geo_ca_fsa": "M4M",
-        "pop": 2250,
+        "population": 2250,
         "home_value": 750000,
         "highest_education_no_education": 350,
         "highest_education_secondary_education": 450,
@@ -208,7 +208,7 @@
       },
       {
         "geo_ca_fsa": "M4S",
-        "pop": 2950,
+        "population": 2950,
         "home_value": 870000,
         "highest_education_no_education": 600,
         "highest_education_secondary_education": 400,
@@ -219,7 +219,7 @@
       },
       {
         "geo_ca_fsa": "M4T",
-        "pop": 2300,
+        "population": 2300,
         "home_value": 680000,
         "highest_education_no_education": 400,
         "highest_education_secondary_education": 400,
@@ -230,7 +230,7 @@
       },
       {
         "geo_ca_fsa": "M4W",
-        "pop": 3150,
+        "population": 3150,
         "home_value": 770000,
         "highest_education_no_education": 700,
         "highest_education_secondary_education": 600,
@@ -241,7 +241,7 @@
       },
       {
         "geo_ca_fsa": "M4X",
-        "pop": 2200,
+        "population": 2200,
         "home_value": 690000,
         "highest_education_no_education": 400,
         "highest_education_secondary_education": 250,
@@ -252,7 +252,7 @@
       },
       {
         "geo_ca_fsa": "M5A",
-        "pop": 2780,
+        "population": 2780,
         "home_value": 950000,
         "highest_education_no_education": 500,
         "highest_education_secondary_education": 300,
