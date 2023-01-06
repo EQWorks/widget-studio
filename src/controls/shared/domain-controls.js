@@ -5,7 +5,7 @@ import { Chip, makeStyles } from '@eqworks/lumen-labs'
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
+import ColumnNameAlias from '../editor-mode/components/column-name-alias'
 import { renderItem, renderRow } from './util'
 import typeInfo from '../../constants/type-info'
 import cardTypes from '../../constants/card-types'
@@ -138,7 +138,7 @@ const DomainControls = () => {
               </div>}
             {widgetControlCardEdit[cardTypes.DOMAIN] &&
               renderItem('Alias',
-                <ColumnAliasControls
+                <ColumnNameAlias
                   value={domain.value || ''}
                   disabled={!domain.value}
                 />

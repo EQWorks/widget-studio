@@ -5,7 +5,7 @@ import { Icons, Tooltip, makeStyles, getTailwindConfigColor } from '@eqworks/lum
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
+import ColumnNameAlias from '../editor-mode/components/column-name-alias'
 import { renderRow, renderItem, renderToggle } from './util'
 import { setMapValueKeys } from '../../util/map-layer-value-functions'
 import { hasDevAccess } from '../../util/access'
@@ -64,7 +64,7 @@ const MapDomainControls = () => {
   ))
 
   const renderAlias = renderItem('Alias', (
-    <ColumnAliasControls
+    <ColumnNameAlias
       value={domain.value || ''}
       disabled={hasDevAccess() && !domain.value}
     />
