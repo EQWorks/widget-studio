@@ -31,7 +31,8 @@ const classes = makeStyles({
 })
 
 const EditorLeftSidebar = () => {
-  const { userUpdate, update } = useStoreActions(actions => actions)
+  const update = useStoreActions(actions => actions.update)
+  const userUpdate = useStoreActions(actions => actions.userUpdate)
 
   const type = useStoreState((state) => state.type)
   const columns = useStoreState((state) => state.columns)
@@ -59,82 +60,91 @@ const EditorLeftSidebar = () => {
           </>
       }
       {/* restrict to dev only for now */}
-      {hasDevAccess() &&
-      <>
-        {type === types.STAT && <TrendControls />}
-        {type === types.STAT && <PercentageControls />}
-        <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length}>
-          <WidgetControlCard title=''>
-            <div className={classes.row}>
-              {[types.BAR, types.MAP].includes(type) &&
-                <MutedBarrier mute={addTopCategories ||
-                  !((type == types.BAR && numericColumns.length > 1 &&
-                    ((renderableValueKeys.length <= 2 && !addUserControls) || addUserControls)) ||
-                    (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1))}>
-                  {renderToggle(
-                    type === types.MAP ? 'Add Value Controls' : 'Add Benchmark',
-                    addUserControls,
-                    () => userUpdate({ addUserControls: !addUserControls }),
-                    false,
-                    <Tooltip
-                      description={type === types.MAP ?
-                        'Add data value controls on the widget' :
-                        'Benchmark values are unique values used to compare data with.'
-                      }
-                      width='9rem'
-                      arrow={false}
-                      position='right'
-                      classes={{
-                        container: 'mb-0.5',
-                        content: 'overflow-y-visible',
-                      }}
-                    >
-                      <Icons.AlertInformation
-                        size='sm'
-                        color={getTailwindConfigColor('secondary-500')}
-                      />
-                    </Tooltip>
-                  )}
-                </MutedBarrier>
+      {hasDevAccess()
+        && (type === types.STAT
+          || (type === types.BAR &&
+            (Object.values(TOP_COLUMN_KEYS).every(elem => JSON.stringify(columns).includes(elem))
+            || numericColumns.length > 1))
+          || (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1)
+        )
+        &&
+        <>
+          {type === types.STAT && <TrendControls />}
+          {type === types.STAT && <PercentageControls />}
+          {type !== types.STAT
+            && <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length}>
+              <WidgetControlCard title=''>
+                <div className={classes.row}>
+                  {[types.BAR, types.MAP].includes(type) &&
+                    <MutedBarrier mute={addTopCategories ||
+                      !((type == types.BAR && numericColumns.length > 1 &&
+                        ((renderableValueKeys.length <= 2 && !addUserControls) || addUserControls)) ||
+                        (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1))}>
+                      {renderToggle(
+                        type === types.MAP ? 'Add Value Controls' : 'Add Benchmark',
+                        addUserControls,
+                        () => userUpdate({ addUserControls: !addUserControls }),
+                        false,
+                        <Tooltip
+                          description={type === types.MAP ?
+                            'Add data value controls on the widget' :
+                            'Benchmark values are unique values used to compare data with.'
+                          }
+                          width='9rem'
+                          arrow={false}
+                          position='right'
+                          classes={{
+                            container: 'mb-0.5',
+                            content: 'overflow-y-visible',
+                          }}
+                        >
+                          <Icons.AlertInformation
+                            size='sm'
+                            color={getTailwindConfigColor('secondary-500')}
+                          />
+                        </Tooltip>
+                      )}
+                    </MutedBarrier>
+                  }
+                  {type === types.BAR &&
+                    Object.values(TOP_COLUMN_KEYS).every(elem => JSON.stringify(columns).includes(elem)) &&
+                    <MutedBarrier mute={addUserControls}>
+                      {renderToggle('Add Top Categories',
+                        addTopCategories,
+                        () => {
+                          if (addTopCategories) {
+                            update({ propFilters: [] })
+                          }
+                          userUpdate({ addTopCategories: !addTopCategories })
+                        },
+                        false,
+                        <Tooltip
+                          description={'Add top 10 category controls.'}
+                          width='9rem'
+                          arrow={false}
+                          position='right'
+                          classes={{
+                            container: 'mb-0.5',
+                            content: 'overflow-y-visible',
+                          }}
+                        >
+                          <Icons.AlertInformation
+                            size='sm'
+                            color={getTailwindConfigColor('secondary-500')}
+                          />
+                        </Tooltip>
+                      )}
+                    </MutedBarrier>
+                  }
+                </div>
+              </WidgetControlCard>
+              {((type == types.BAR && numericColumns.length > 1) ||
+                (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1)) &&
+                <UserValueConfigurationControls />
               }
-              {type === types.BAR &&
-                Object.values(TOP_COLUMN_KEYS).every(elem => JSON.stringify(columns).includes(elem)) &&
-                <MutedBarrier mute={addUserControls}>
-                  {renderToggle('Add Top Categories',
-                    addTopCategories,
-                    () => {
-                      if (addTopCategories) {
-                        update({ propFilters: [] })
-                      }
-                      userUpdate({ addTopCategories: !addTopCategories })
-                    },
-                    false,
-                    <Tooltip
-                      description={'Add top 10 category controls.'}
-                      width='9rem'
-                      arrow={false}
-                      position='right'
-                      classes={{
-                        container: 'mb-0.5',
-                        content: 'overflow-y-visible',
-                      }}
-                    >
-                      <Icons.AlertInformation
-                        size='sm'
-                        color={getTailwindConfigColor('secondary-500')}
-                      />
-                    </Tooltip>
-                  )}
-                </MutedBarrier>
-              }
-            </div>
-          </WidgetControlCard>
-          {((type == types.BAR && numericColumns.length > 1) ||
-            (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1)) &&
-            <UserValueConfigurationControls />
+            </MutedBarrier>
           }
-        </MutedBarrier>
-      </>
+        </>
       }
     </EditorSidebarBase>
   )
