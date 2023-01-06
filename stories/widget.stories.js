@@ -15,7 +15,7 @@ import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
 import InsightsDataProvider from '../src/insights-data-provider'
-import { DATA_CATEGORIES, DATA_KEY_FORMATTING } from './constants'
+import { DATA_CATEGORIES, DATA_KEY_FORMATTING, CATEGORY_ORDER } from './constants'
 
 
 const DEFAULT_WL = 2456
@@ -73,6 +73,7 @@ Object.values(modes).forEach(mode => {
           id={id}
           dataFormat={DATA_KEY_FORMATTING}
           insightsDataCategories={DATA_CATEGORIES}
+          categoryOrder={CATEGORY_ORDER}
         />
       )
       const renderWidgetAuth = (
@@ -233,6 +234,7 @@ storiesOf('Widget Management with Insights Data saved configuration', module)
             month={MONTH}
             dataFormat={DATA_KEY_FORMATTING}
             insightsDataCategories={DATA_CATEGORIES}
+            categoryOrder={CATEGORY_ORDER}
           />
         </WlCuControlsProvider>
       </QueryClientProvider>
