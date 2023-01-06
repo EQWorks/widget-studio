@@ -333,6 +333,7 @@ const WidgetManager = ({
   filters,
   dataFormat,
   insightsDataCategories,
+  categoryOrder,
 }) => {
   const [selectedReport, setSelectedReport] = useState(null)
   const [selectedDashboard, setSelectedDashboard] = useState(null)
@@ -468,7 +469,7 @@ const WidgetManager = ({
             <Widget
               className={classes.newWidget}
               mode='editor'
-              {...{ wl, cu, saveWithInsightsData, filters, dataFormat, insightsDataCategories }}
+              {...{ wl, cu, saveWithInsightsData, filters, dataFormat, insightsDataCategories, categoryOrder }}
             />
           </CustomModal>
         )
@@ -610,7 +611,9 @@ const WidgetManager = ({
                         key={currentlyViewing}
                         id={currentlyViewing}
                         mode='view_only'
-                        {...{ wl, cu, saveWithInsightsData, filters, dataFormat, insightsDataCategories }}
+                        {...{ wl, cu, saveWithInsightsData, filters, dataFormat,
+                          insightsDataCategories, categoryOrder,
+                        }}
                       />
                     </InsightsDataProvider>
                   }
@@ -619,7 +622,7 @@ const WidgetManager = ({
                         key={currentlyViewing}
                         id={currentlyViewing}
                         mode='view_only'
-                        {...{ filters, wl, cu, dataFormat, insightsDataCategories }}
+                        {...{ filters, wl, cu, dataFormat, insightsDataCategories, categoryOrder }}
                       />
                   }
                   {!currentlyViewing &&
@@ -661,6 +664,7 @@ WidgetManager.propTypes = {
   filters: PropTypes.arrayOf(PropTypes.object),
   dataFormat: PropTypes.object,
   insightsDataCategories: PropTypes.object,
+  categoryOrder: PropTypes.arrayOf(PropTypes.string),
 }
 WidgetManager.defaultProps = {
   wl: -1,
@@ -673,6 +677,7 @@ WidgetManager.defaultProps = {
   filters: undefined,
   dataFormat: null,
   insightsDataCategories: null,
+  categoryOrder: null,
 }
 
 
