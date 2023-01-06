@@ -106,3 +106,5 @@ export const DATA_KEY_FORMATTING = {
     formatFunction: (val) => numeral(val).format('$0,0'),
   },
 }
+
+export const CATEGORY_ORDER = ['Top Spending', 'Frequently Transacting']
