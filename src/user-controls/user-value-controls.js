@@ -6,7 +6,6 @@ import CustomSelect from '../components/custom-select'
 import { useStoreState, useStoreActions } from '../store'
 import { cleanUp, capitalizeWords } from '../util/string-manipulation'
 import types from '../constants/types'
-import { DATA_CATEGORIES, DATA_CATEGORIES_KEYS } from '../constants/insights-data-categories'
 
 
 const classes = makeStyles({
@@ -63,29 +62,40 @@ const classes = makeStyles({
 const UserValueControls = () => {
   const update = useStoreActions(actions => actions.userUpdate)
 
-  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
-  const valueKeys = useStoreState((state) => state.valueKeys)
-  const mapValueKeys = useStoreState((state) => state.mapValueKeys)
-  const renderableValueKeys = useStoreState((state) => state. renderableValueKeys)
-  const type = useStoreState((state) => state.type)
-  const userControlHeadline = useStoreState((state) => state.userControlHeadline)
-  const finalUserControlKeyValues = useStoreState((state) => state.finalUserControlKeyValues)
-  const categoryFilter = useStoreState(state => state.categoryFilter)
-  const selectedUserDataControlIndex = useStoreState((state) => state.selectedUserDataControlIndex)
-  const dataCategoryKey = useStoreState((state) => state.dataCategoryKey)
-  const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
-  const selectedCategoryValue = useStoreState((state) => state.selectedCategoryValue)
+  const {
+    formattedColumnNames,
+    valueKeys,
+    mapValueKeys,
+    renderableValueKeys,
+    type,
+    userControlHeadline,
+    finalUserControlKeyValues,
+    categoryFilter,
+    selectedUserDataControlIndex,
+    dataCategoryKey,
+    categoryKeyValues,
+    selectedCategoryValue,
+    insightsDataCategories,
+  } = useStoreState((state) => state)
 
   useEffect(() => {
     if (renderableValueKeys.length) {
       if (categoryFilter && (!dataCategoryKey || !finalUserControlKeyValues.includes(dataCategoryKey))) {
         update({ dataCategoryKey:  finalUserControlKeyValues[0] })
       } else if (!dataCategoryKey && !finalUserControlKeyValues.includes(renderableValueKeys[0].key)) {
-        update({ dataCategoryKey: DATA_CATEGORIES_KEYS.find(key =>
-          DATA_CATEGORIES[key].includes(renderableValueKeys[0].key)) })
+        update({ dataCategoryKey: Object.keys(insightsDataCategories).find(key =>
+          insightsDataCategories[key]?.includes(renderableValueKeys[0].key)) })
       }
     }
-  }, [update, renderableValueKeys, dataCategoryKey, finalUserControlKeyValues, categoryKeyValues, categoryFilter])
+  }, [
+    update,
+    renderableValueKeys,
+    dataCategoryKey,
+    finalUserControlKeyValues,
+    categoryKeyValues,
+    categoryFilter,
+    insightsDataCategories,
+  ])
 
   useEffect(() => {
     if (categoryFilter) {
@@ -147,7 +157,7 @@ const UserValueControls = () => {
           userValueFilter: [{ key: categoryFilter, filter: [dataCategoryKey] }],
           dataCategoryKey: key,
         })
-      } else if (DATA_CATEGORIES_KEYS.includes(key)) {
+      } else if (Object.keys(insightsDataCategories).includes(key)) {
         update({ dataCategoryKey: key })
       } else {
         const val = {
@@ -174,6 +184,7 @@ const UserValueControls = () => {
     renderableValueKeys,
     formattedColumnNames,
     update,
+    insightsDataCategories,
   ])
 
   useEffect(() => {

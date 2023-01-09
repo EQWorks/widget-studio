@@ -23,16 +23,11 @@ import {
   MAP_VIEW_STATE,
   GEOJSON_KEYS,
 } from '../constants/map'
-import {
-  DATA_CATEGORIES,
-  DATA_CATEGORIES_KEYS,
-  DATA_CATEGORIES_VALUES,
-} from '../constants/insights-data-categories'
+import { DATA_KEY_FORMATTING } from '../constants/data-format'
 import { dateAggregations } from '../constants/time'
 import { columnTypes } from '../constants/columns'
 import { EXPORT_TYPES } from '../constants/export'
 import { dataSourceTypes } from '../constants/data-source'
-import { COX_CATEGORY_SEGMENTS } from '../constants/client-specific'
 import { CHART_Z_POSITIONS } from '../constants/viz-options'
 
 
@@ -173,8 +168,11 @@ const stateDefaults = [
   { key: 'aliasesReseted', defaultValue: false, resettable: true },
   { key: 'useMVTOption', defaultValue: true, resettable: true },
   { key: 'MVTOptionProp', defaultValue: null, resettable: false },
-  { key: 'customColors', defaultValues: null, resettable: false },
-  { key: 'customColorProp', defaultValues: null, resettable: false },
+  { key: 'customColors', defaultValue: {}, resettable: false },
+  { key: 'customColorProp', defaultValue: null, resettable: false },
+  { key: 'customDataFormat', defaultValue: {}, resettable: false },
+  { key: 'insightsDataCategories', defaultValue: {}, resettable: false },
+  { key: 'categoryOrder', defaultValue: [], resetable: false },
 ]
 
 export default {
@@ -499,9 +497,15 @@ export default {
   ),
 
   formatDataFunctions: computed(
-    [(state) => state.renderableValueKeys],
-    (renderableValueKeys) => Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
-      [title, getKeyFormatFunction(key)]
+    [
+      (state) => state.renderableValueKeys,
+      (state) => state.customDataFormat,
+    ],
+    (
+      renderableValueKeys,
+      customDataFormat,
+    ) => Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
+      [title, getKeyFormatFunction(key, { ...customDataFormat, ...DATA_KEY_FORMATTING })]
     )))
   ),
 
@@ -636,6 +640,8 @@ export default {
       (state) => state.rows,
       (state) => state.userControlKeyValues,
       (state) => state.wl,
+      (state) => state.insightsDataCategories,
+      (state) => state.categoryOrder,
     ],
     (
       type,
@@ -643,6 +649,8 @@ export default {
       rows,
       userControlKeyValues,
       wl,
+      insightsDataCategories,
+      categoryOrder,
     ) => {
       if (type === types.MAP) {
         // use data categories if present in the data object
@@ -650,16 +658,15 @@ export default {
           const userCategoryControlKeyValues = rows.reduce((acc, el) => acc.includes(el[categoryFilter]) ?
             acc :
             [...acc, el[categoryFilter]], [])
-          // specific to Cox - Top Spending needs to be first in the tab list
-          if (wl === 2456 && userCategoryControlKeyValues.every(el => COX_CATEGORY_SEGMENTS.includes(el))) {
-            return COX_CATEGORY_SEGMENTS
+          if (categoryOrder.length && userCategoryControlKeyValues.every(el => categoryOrder.includes(el))) {
+            return categoryOrder.filter(el => userCategoryControlKeyValues.includes(el))
           }
           return userCategoryControlKeyValues
         }
         // for map widget with no categoryFilter the finalUserControlKeyValues is a mix of column keys & data categories
         return userControlKeyValues.reduce((acc, key) => {
-          const category = DATA_CATEGORIES_VALUES.includes(key) ?
-            DATA_CATEGORIES_KEYS.find(e => DATA_CATEGORIES[e].includes(key)) :
+          const category = Object.values(insightsDataCategories).flat().includes(key) ?
+            Object.keys(insightsDataCategories).find(e => insightsDataCategories[e]?.includes(key)) :
             key
           acc = category && acc.includes(category) ? acc : [...acc, category]
           return acc
@@ -708,20 +715,22 @@ export default {
       (state) => state.dataCategoryKey,
       (state) => state.userControlKeyValues,
       (state) => state.formattedColumnNames,
+      (state) => state.insightsDataCategories,
     ],
     (
       type,
       categoryFilter,
       dataCategoryKey,
       userControlKeyValues,
-      formattedColumnNames
+      formattedColumnNames,
+      insightsDataCategories,
     ) => {
       if (type === types.MAP && userControlKeyValues.length) {
         if (categoryFilter) {
           return userControlKeyValues.map(key => ({ title: formattedColumnNames[key], key }))
         }
         if (dataCategoryKey) {
-          return userControlKeyValues.filter(val => DATA_CATEGORIES[dataCategoryKey].includes(val))
+          return userControlKeyValues.filter(val => insightsDataCategories[dataCategoryKey]?.includes(val))
             .map(key => ({ title: formattedColumnNames[key], key }))
         }
       }
