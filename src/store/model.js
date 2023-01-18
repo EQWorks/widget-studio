@@ -104,6 +104,7 @@ const stateDefaults = [
     },
     resettable: false,
   },
+  { key: 'noDataSource', defaultValue: false, resettable: true },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
   { key: 'columnNameAliases', defaultValue: {}, resettable: true },
