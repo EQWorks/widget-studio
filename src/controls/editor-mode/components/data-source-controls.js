@@ -5,7 +5,7 @@ import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 import { useExecutions, useSavedQueries } from '../../../util/api'
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
-import { renderRow } from '../../shared/util'
+import { renderItem, renderToggle } from '../../shared/util'
 import WidgetControlCard from '../../shared/components/widget-control-card'
 import { columnTypeInfo, columnTypes } from '../../../constants/columns'
 import { dataSourceTypes } from '../../../constants/data-source'
@@ -18,6 +18,11 @@ import {
 
 
 const classes = makeStyles({
+  dataSelection: {
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: '0.7rem',
+  },
   dataSourceLabelContainer: {
     width: '100%',
     color: getTailwindConfigColor('secondary-600'),
@@ -45,13 +50,11 @@ const classes = makeStyles({
 })
 
 const DataSourceControls = () => {
-  const resetWidget = useStoreActions((actions) => actions.resetWidget)
-  const userUpdate = useStoreActions((actions) => actions.userUpdate)
+  const { resetWidget, userUpdate } = useStoreActions((actions) => actions)
 
-  const dataSourceType = useStoreState((state) => state.dataSource.type)
-  const dataSourceID = useStoreState((state) => state.dataSource.id)
-  const cu = useStoreState((state) => state.cu)
-  const dev = useStoreState((state) => state.dev)
+  const { type: dataSourceType, id: dataSourceID } = useStoreState((state) => state.dataSource)
+  const { cu, dev, noDataSource } = useStoreState((state) => state)
+
   const [executionsLoading, executionsList] = useExecutions()
   const [, savedQueriesList] = useSavedQueries()
 
@@ -129,39 +132,47 @@ const DataSourceControls = () => {
 
   return (
     <WidgetControlCard title='Data Source' >
-      {
-        renderRow(
-          dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
-            'Insights data' : 'Query Execution',
-          <CustomSelect
-            allowClear={false}
-            // disabled={executionsLoading || executionsList === []}
-            disabled={Array.isArray(executionsList) && !executionsList.length}
-            placeholder={placeholder}
-            fullWidth
-            value={selected?.label}
-            descriptions={dataSourceList?.map(({ description }) => description)}
-            data={dataSourceList?.map(({ label }) => label)}
-            onSelect={v => {
-              const { reportSuffix, reportType } = dataSourceList?.find(({ label }) => v === label) || {}
-              resetWidget()
-              userUpdate({
-                reportType,
-                reportSuffix,
-                dataSource: {
-                  type: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
-                    dataSourceTypes.INSIGHTS_DATA :
-                    dataSourceTypes.EXECUTIONS,
-                  id: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
-                    reportType + reportSuffix :
-                    v.split('[')[1].split(']')[0], // TODO something that is not this
-                },
-              })
-            }
-            }
-          />
-        )
-      }
+      <div className={classes.dataSelection}>
+        {
+          renderToggle(
+            'No Data',
+            noDataSource,
+            v => userUpdate({ noDataSource: v }),
+          )
+        }
+        {
+          renderItem(
+            dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
+              'Insights data' : 'Query Execution',
+            <CustomSelect
+              allowClear={false}
+              // disabled={executionsLoading || executionsList === []}
+              disabled={(Array.isArray(executionsList) && !executionsList.length) || noDataSource}
+              placeholder={placeholder}
+              fullWidth
+              value={selected?.label}
+              descriptions={dataSourceList?.map(({ description }) => description)}
+              data={dataSourceList?.map(({ label }) => label)}
+              onSelect={v => {
+                const { reportSuffix, reportType } = dataSourceList?.find(({ label }) => v === label) || {}
+                resetWidget()
+                userUpdate({
+                  reportType,
+                  reportSuffix,
+                  dataSource: {
+                    type: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
+                      dataSourceTypes.INSIGHTS_DATA :
+                      dataSourceTypes.EXECUTIONS,
+                    id: dataSourceType === dataSourceTypes.INSIGHTS_DATA ?
+                      reportType + reportSuffix :
+                      v.split('[')[1].split(']')[0], // TODO something that is not this
+                  },
+                })
+              }}
+            />,
+          )
+        }
+      </div>
     </WidgetControlCard >
   )
 }
