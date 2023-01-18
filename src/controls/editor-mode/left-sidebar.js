@@ -16,6 +16,7 @@ import DataTransformationControls from '../shared/data-transformation-controls'
 import PercentageControls from './components/percentage-controls'
 import DataSourceControls from './components/data-source-controls'
 import UserValueConfigurationControls from './components/user-value-configuration-controls'
+import ColumnAliasControls from './components/column-alias-controls'
 import WidgetControlCard from '../shared/components/widget-control-card'
 import { renderToggle } from '../shared/util'
 import TrendControls from './components/trend-controls'
@@ -145,6 +146,9 @@ const EditorLeftSidebar = () => {
             </MutedBarrier>
           }
         </>
+      }
+      {hasDevAccess() &&
+        <ColumnAliasControls/>
       }
     </EditorSidebarBase>
   )
