@@ -528,6 +528,7 @@ export default {
     [
       (state) => state.rows,
       (state) => state.columns,
+      (state) => state.noDataSource,
       (state) => state.type,
       (state) => state.renderableValueKeys,
       (state) => state.domain,
@@ -539,6 +540,7 @@ export default {
     (
       rows,
       columns,
+      noDataSource,
       type,
       renderableValueKeys,
       domain,
@@ -550,7 +552,7 @@ export default {
       const isXWIReportMap = Boolean(type && type === types.MAP && dataIsXWIReport &&
         columns.length && rows.length && transformedData?.arcData?.length)
       const mapChartReady = type && (type !== types.MAP || mapDataReady)
-      return isXWIReportMap ||
+      return isXWIReportMap || (type && noDataSource && renderableValueKeys.length) ||
         Boolean(mapChartReady && !isLoading && columns.length && rows.length &&
           transformedData?.length && renderableValueKeys.length && domain.value)
     }),
