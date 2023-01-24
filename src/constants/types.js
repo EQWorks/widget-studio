@@ -8,4 +8,5 @@ export default [
   'stat',
   'table',
   'pyramid',
+  'text',
 ].reduce((a, v) => ({ ...a, [v.toUpperCase()]: v }), {})
