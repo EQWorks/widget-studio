@@ -84,7 +84,9 @@ const useStyles = ({ mode, tableExpanded, type, addUserControls }) => makeStyles
     }
     : {
       outerContainer: {
-        padding: addUserControls || type === types.MAP ? 0 : '0.25rem 1rem 1rem 1rem',
+        padding: addUserControls || [types.MAP , types.TEXT].includes(type)
+          ? 0
+          : '0.25rem 1rem 1rem 1rem',
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -130,11 +132,11 @@ const WidgetView = () => {
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
-    dataSourceType && dataSourceID ?
+    dataSourceType && dataSourceID && !noDataSource?
       `Loading ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
       :
       'Loading'
-  ), [dataSourceType, dataSourceID])
+  ), [dataSourceType, dataSourceID, noDataSource])
 
   // auto-expand/collapse the table when viz readiness changes
   useEffect(() => {
@@ -162,13 +164,15 @@ const WidgetView = () => {
       primary = 'This data is empty.'
     } else if (!type) {
       primary = 'Select a widget type.'
+    } else if (type === types.TEXT && !renderableValueKeys?.length) {
+      primary = 'Input text to configure your widget.'
     } else if ((!domain?.value || !renderableValueKeys?.length) && !dataIsXWIReport) {
       primary = 'Select columns and configure your widget.'
     } else if (!transformedData?.length) {
       primary = 'This configuration resulted in an empty dataset.'
       secondary = 'Try adjusting your filters.'
     }
-    if (!secondary && dataSourceType && dataSourceType !== dataSourceTypes.MANUAL) {
+    if (!secondary && dataSourceType && dataSourceType !== dataSourceTypes.MANUAL && !noDataSource) {
       secondary = `Successfully loaded ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
     }
     if (mode === modes.QL && !(rows?.length) && !(columns?.length)) {
