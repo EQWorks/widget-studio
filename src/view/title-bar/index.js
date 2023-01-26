@@ -10,6 +10,7 @@ import modes from '../../constants/modes'
 import EditableTitle from './editable-title'
 import WidgetMeta from '../meta'
 import EditableSubtitle from './editable-subtitle'
+import types from '../../constants/types'
 
 
 const commonClasses = {
@@ -58,7 +59,7 @@ const commonClasses = {
   },
 }
 
-const useStyles = ({ mode, allowOpenInEditor, showTitleBar }) => makeStyles(
+const useStyles = ({ mode, allowOpenInEditor, showTitleBar, type }) => makeStyles(
   mode === modes.EDITOR
     ? {
       outerContainer: {
@@ -114,7 +115,13 @@ const useStyles = ({ mode, allowOpenInEditor, showTitleBar }) => makeStyles(
         opacity: + allowOpenInEditor,
         ...(!allowOpenInEditor && { visibility: 'hidden' }),
       },
-      ...commonClasses,
+      ...{
+        ...commonClasses,
+        compactOverlay: {
+          ...commonClasses.compactOverlay,
+          ...(type === types.TEXT && { backgroundColor: getTailwindConfigColor('neutral-200') }),
+        },
+      },
     }
       : {
         outerContainer: {
@@ -151,33 +158,38 @@ const useStyles = ({ mode, allowOpenInEditor, showTitleBar }) => makeStyles(
       })
 
 const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
-  const update = useStoreActions((actions) => actions.update)
-  const save = useStoreActions((actions) => actions.save)
-  const toast = useStoreActions((actions) => actions.toast)
-  const resetWidget = useStoreActions((actions) => actions.resetWidget)
-  const loadData = useStoreActions((actions) => actions.loadData)
-  const undo = useStoreActions((actions) => actions.undo)
-  const redo = useStoreActions((actions) => actions.redo)
-  const undoAvailable = useStoreState((state) => state.undoAvailable)
-  const redoAvailable = useStoreState((state) => state.redoAvailable)
+  const {
+    update,
+    save,
+    toast,
+    resetWidget,
+    loadData,
+    undo,
+    redo,
+  } = useStoreActions((actions) => actions)
+
+  const { undoAvailable, redoAvailable } = useStoreState((state) => state)
 
   // widget state
-  const dataSource = useStoreState((state) => state.dataSource)
-  const id = useStoreState((state) => state.id)
-  const tentativeConfig = useStoreState((state) => state.tentativeConfig)
-  const config = useStoreState((state) => state.config)
-  const dev = useStoreState((state) => state.dev)
-  const unsavedChanges = useStoreState((state) => state.unsavedChanges)
-  const title = useStoreState((state) => state.title)
-  const isLoading = useStoreState((state) => state.isLoading)
-  const showTitleBar = useStoreState((state) => state.showTitleBar)
+  const {
+    dataSource,
+    id,
+    tentativeConfig,
+    config,
+    dev,
+    unsavedChanges,
+    title,
+    isLoading,
+    showTitleBar,
+    type,
+  } = useStoreState((state) => state)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
 
   const [isHover, setIsHover] = useState(false)
 
-  const classes = useStyles({ mode, allowOpenInEditor, showTitleBar })
+  const classes = useStyles({ mode, allowOpenInEditor, showTitleBar, type })
 
   const renderTitleAndID = (
     <div className={`render-title-container ${classes.main}`}>
