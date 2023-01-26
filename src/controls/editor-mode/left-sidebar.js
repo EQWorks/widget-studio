@@ -57,7 +57,7 @@ const EditorLeftSidebar = () => {
           : <>
             {type !== types.TEXT && <DomainControls />}
             <ValueControls />
-            {![types.PYRAMID, types.STAT].includes(type) && <DataTransformationControls />}
+            {![types.PYRAMID, types.STAT, types.TEXT].includes(type) && <DataTransformationControls />}
           </>
       }
       {/* restrict to dev only for now */}
