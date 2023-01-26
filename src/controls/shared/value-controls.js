@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 
-import { Icons, makeStyles } from '@eqworks/lumen-labs'
+import { TextField, Icons, makeStyles } from '@eqworks/lumen-labs'
 
 import modes from '../../constants/modes'
 import cardTypes from '../../constants/card-types'
@@ -8,7 +8,7 @@ import aggFunctions from '../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../store'
 import PluralLinkedSelect from '../../components/plural-linked-select'
 import WidgetControlCard from '../shared/components/widget-control-card'
-import { renderRow, renderSection, renderSuperSection } from './util'
+import { renderItem, renderRow, renderSection, renderSuperSection } from './util'
 import MutedBarrier from './muted-barrier'
 import CustomSelect from '../../components/custom-select'
 import types from '../../constants/types'
@@ -20,24 +20,45 @@ const classes = makeStyles({
   valueContainer: {
     width: '100%',
   },
+  textContainer: {
+    width: '100%',
+    '& .textfield-container': {
+      display: 'inline',
+      '& form': {
+        '& div': {
+          '& textarea': {
+            letterSpacing: '.1em',
+          },
+        },
+      },
+    },
+  },
+})
+
+const textfieldClasses = Object.freeze({
+  container: 'textfield-container',
 })
 
 const ValueControls = () => {
   // common actions
-  const userUpdate = useStoreActions(actions => actions.userUpdate)
-  const resetValue = useStoreActions(actions => actions.resetValue)
+  const { userUpdate, resetValue } = useStoreActions(actions => actions)
 
   // common state
-  const type = useStoreState((state) => state.type)
-  const group = useStoreState((state) => state.group)
-  const domain = useStoreState((state) => state.domain)
-  const valueKeys = useStoreState((state) => state.valueKeys)
-  const chart2ValueKeys = useStoreState((state) => state.chart2ValueKeys)
-  const dataHasVariance = useStoreState((state) => state.dataHasVariance)
-  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
-  const addUserControls = useStoreState((state) => state.addUserControls)
-  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
-  const columnNameAliases = useStoreState((state) => state.columnNameAliases || {})
+  const {
+    type,
+    group,
+    domain,
+    valueKeys,
+    chart2ValueKeys,
+    dataHasVariance,
+    columnsAnalysis,
+    addUserControls,
+    widgetControlCardEdit,
+    columnNameAliases,
+  } = useStoreState((state) => state)
+
+  // UI state
+  const mode = useStoreState((state) => state.ui.mode)
 
   const eligibleColumns = useMemo(() =>
     Object.fromEntries(
@@ -53,16 +74,12 @@ const ValueControls = () => {
         && !valueKeys.find(({ key }) => key === c))
     ), [columnsAnalysis, domain.value, valueKeys])
 
-
   const staticQuantity = useMemo(() => {
     if (addUserControls || type === types.PYRAMID) {
       return 2
     }
     return 3
   }, [addUserControls, type])
-
-  // UI state
-  const mode = useStoreState((state) => state.ui.mode)
 
   const renderPluralLinkedSelect = useCallback((valueKeys, eligibleColumns, selectType) => (
     <PluralLinkedSelect
@@ -121,22 +138,34 @@ const ValueControls = () => {
     </div>
   )
 
-  const renderNonGroupedValueKeysSelect = (
-    <CustomSelect
-      fullWidth
-      multiSelect
-      value={valueKeys.map(({ key }) => key)}
-      data={Object.keys(eligibleColumns)}
-      onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
-      icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
-    />
+  const renderNonGroupedValueKeysSelect = renderItem(
+    type === types.TEXT ? 'Text' : 'Columns',
+    type === types.TEXT
+      ? <div className={classes.textContainer}>
+        <TextField.Area
+          classes={textfieldClasses}
+          value={typeof valueKeys[0]?.text === 'string' ? valueKeys[0]?.text : ''}
+          inputProps={{ placeholder: 'Add widget text' }}
+          onChange={(val) => userUpdate(
+            { valueKeys: [{ text: typeof val === 'string' ? val : '' }] }
+          )}
+        />
+      </div>
+      : <CustomSelect
+        fullWidth
+        multiSelect
+        value={valueKeys.map(({ key }) => key)}
+        data={Object.keys(eligibleColumns)}
+        onSelect={(val) => userUpdate({ valueKeys: val.map(v => ({ key: v })) })}
+        icons={Object.values(eligibleColumns).map(({ Icon }) => Icon)}
+      />,
   )
 
   return (
     <MutedBarrier
-      mute={!type || !domain.value || !Object.keys(eligibleColumns)?.length}
-      {...(type && domain.value && !Object.keys(eligibleColumns)?.length &&
-        { message: 'There are no eligible columns in this dataset.' }
+      mute={!type || (type !== types.TEXT && (!domain.value || !Object.keys(eligibleColumns)?.length))}
+      {...(type && (type !== types.TEXT && domain.value && !Object.keys(eligibleColumns)?.length &&
+        { message: 'There are no eligible columns in this dataset.' })
       )}
     >
       <WidgetControlCard
@@ -154,7 +183,7 @@ const ValueControls = () => {
         }}
         title='Value Configuration'
         {...mode === modes.QL && { description: 'Select up to 3 keys, open in editor for more options.' }}
-        enableEdit
+        enableEdit={type !== types.TEXT}
         disableEditButton={mode === modes.QL ||
           (!hasDevAccess() && (valueKeys?.length >= 1 || chart2ValueKeys.length >= 1)) ||
           ((valueKeys.every(({ key }) => !key) && chart2ValueKeys.every(({ key }) => !key)) &&
@@ -165,7 +194,7 @@ const ValueControls = () => {
         {
           group || widgetControlCardEdit[cardTypes.VALUE]
             ? renderRow(null, renderGroupedValueKeysSelect)
-            : renderRow('Columns', renderNonGroupedValueKeysSelect)
+            : renderNonGroupedValueKeysSelect
         }
       </WidgetControlCard>
     </MutedBarrier>
