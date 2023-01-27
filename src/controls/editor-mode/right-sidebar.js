@@ -42,20 +42,23 @@ const textfieldClasses = Object.freeze({
 })
 
 const EditorRightSidebar = () => {
-  const columnNameAliases = useStoreState((state) => state.columnNameAliases)
-  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
-  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
-  const domain = useStoreState((state) => state.domain)
-  const enableLocationPins = useStoreState((state) => state.enableLocationPins)
-  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
-  const isReady = useStoreState((state) => state.isReady)
-  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
-  const showTitleBar = useStoreState((state) => state.showTitleBar)
-  const type = useStoreState((state) => state.type)
-  const update = useStoreActions((state) => state.update)
-  const userUpdate = useStoreActions((state) => state.userUpdate)
-  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
+  const {
+    columnNameAliases,
+    columnsAnalysis,
+    dataIsXWIReport,
+    domain,
+    enableLocationPins,
+    formattedColumnNames,
+    isReady,
+    renderableValueKeys,
+    showTitleBar,
+    type,
+    widgetControlCardEdit,
+  } = useStoreState((state) => state)
+
   const { sharedYAxis } = useStoreState((state) => state.uniqueOptions)
+
+  const { update, userUpdate } = useStoreActions((actions) => actions)
 
   const {
     axisTitles,
@@ -412,18 +415,34 @@ const EditorRightSidebar = () => {
     </>
   )
 
+  const title = useMemo(() => {
+    if (type === types.MAP) {
+      return 'Map Settings'
+    }
+    if (type === types.TABLE) {
+      return 'Table Settings'
+    }
+    if ([types.STAT, types.TEXT].includes(type)) {
+      return 'Widget Settings'
+    }
+  }, [type])
+
   return (
     <EditorSidebarBase>
-      <MutedBarrier mute={!type ||
-        ((type !== types.MAP || (type === types.MAP && !dataIsXWIReport)) &&
-          (!domain?.value || !(renderableValueKeys?.length)))
-      } >
-        <Filters />
-      </MutedBarrier>
-      {type !== types.TABLE &&
+      {type !== types.TEXT &&
+        <MutedBarrier
+          mute={!type ||
+            ((type !== types.MAP || (type === types.MAP && !dataIsXWIReport)) &&
+            (!domain?.value || !(renderableValueKeys?.length)))
+          }
+        >
+          <Filters />
+        </MutedBarrier>
+      }
+      {![types.TABLE, types.TEXT].includes(type) &&
         <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
           <WidgetControlCard
-            title={type === types.MAP ? 'Map Settings' : 'Chart Settings'}
+            title={title}
             enableEdit={hasDevAccess() && type === types.MAP && enableLocationPins}
             disableEditButton={type !== types.MAP || !mapPinTooltipKey?.key}
             type={cardTypes.RIGHT_SIDEBAR}
@@ -468,7 +487,7 @@ const EditorRightSidebar = () => {
           </WidgetControlCard >
         </MutedBarrier>
       }
-      {![types.MAP, types.STAT, types.TABLE].includes(type) &&
+      {![types.MAP, types.STAT, types.TABLE, types.TEXT].includes(type) &&
         <WidgetControlCard title='Color Scheme'>
           <ColorSchemeControls />
         </WidgetControlCard >

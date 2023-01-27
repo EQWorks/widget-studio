@@ -84,7 +84,9 @@ const useStyles = ({ mode, tableExpanded, type, addUserControls }) => makeStyles
     }
     : {
       outerContainer: {
-        padding: addUserControls || type === types.MAP ? 0 : '0.25rem 1rem 1rem 1rem',
+        padding: addUserControls || [types.MAP , types.TEXT].includes(type)
+          ? 0
+          : '0.25rem 1rem 1rem 1rem',
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -98,27 +100,30 @@ const WidgetView = () => {
   const update = useStoreActions((actions) => actions.update)
 
   // widget state
-  const type = useStoreState((state) => state.type)
-  const rows = useStoreState((state) => state.rows)
-  const columns = useStoreState((state) => state.columns)
-  const isReady = useStoreState((state) => state.isReady)
-  const transformedData = useStoreState((state) => state.transformedData)
-  const domain = useStoreState((state) => state.domain)
-  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
-  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
-  const addUserControls = useStoreState((state) => state.addUserControls)
+  const {
+    type,
+    rows,
+    columns,
+    noDataSource,
+    isReady,
+    transformedData,
+    domain,
+    renderableValueKeys,
+    dataIsXWIReport,
+    addUserControls,
+  } = useStoreState((state) => state)
 
   // data source state
-  const dataSourceType = useStoreState((state) => state.dataSource.type)
-  const dataSourceID = useStoreState((state) => state.dataSource.id)
-  const dataReady = useStoreState((state) => state.dataReady)
-  const isLoading = useStoreState((state) => state.isLoading)
+  const { type: dataSourceType, id: dataSourceID } = useStoreState((state) => state.dataSource)
+  const { dataReady, isLoading } = useStoreState((state) => state)
 
   // UI state
-  const mode = useStoreState((state) => state.ui.mode)
-  const showTable = useStoreState((state) => state.ui.showTable)
-  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
-  const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
+  const {
+    mode,
+    showTable,
+    dataSourceLoading,
+    dataSourceError,
+  } = useStoreState((state) => state.ui)
 
   const [tableExpanded, setTableExpanded] = useState(false)
   const [autoExpandedTable, setAutoExpandedTable] = useState(false)
@@ -127,11 +132,11 @@ const WidgetView = () => {
 
   // descriptive message to display when the data source is still loading
   const dataSourceLoadingMessage = useMemo(() => (
-    dataSourceType && dataSourceID ?
+    dataSourceType && dataSourceID && !noDataSource?
       `Loading ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
       :
       'Loading'
-  ), [dataSourceType, dataSourceID])
+  ), [dataSourceType, dataSourceID, noDataSource])
 
   // auto-expand/collapse the table when viz readiness changes
   useEffect(() => {
@@ -147,7 +152,7 @@ const WidgetView = () => {
   // descriptive messages to display when the data source is finished loading but the widget cannot yet be rendered
   const widgetWarning = useMemo(() => {
     let primary, secondary
-    if (!dataSourceID || !dataSourceType) {
+    if ((!dataSourceID || !dataSourceType) && !noDataSource) {
       primary = 'Please select a data source.'
     } else if (dataSourceError === 'Invalid client token') {
       primary = 'No data found.',
@@ -155,17 +160,19 @@ const WidgetView = () => {
     } else if (dataSourceError) {
       primary = 'Something went wrong.'
       secondary = `${dataSourceError}`
-    } else if (!rows.length) {
+    } else if (!rows.length && !noDataSource) {
       primary = 'This data is empty.'
     } else if (!type) {
       primary = 'Select a widget type.'
+    } else if (type === types.TEXT && !renderableValueKeys?.length) {
+      primary = 'Input text to configure your widget.'
     } else if ((!domain?.value || !renderableValueKeys?.length) && !dataIsXWIReport) {
       primary = 'Select columns and configure your widget.'
     } else if (!transformedData?.length) {
       primary = 'This configuration resulted in an empty dataset.'
       secondary = 'Try adjusting your filters.'
     }
-    if (!secondary && dataSourceType && dataSourceType !== dataSourceTypes.MANUAL) {
+    if (!secondary && dataSourceType && dataSourceType !== dataSourceTypes.MANUAL && !noDataSource) {
       secondary = `Successfully loaded ${dataSourceType.charAt(0).toLowerCase() + dataSourceType.slice(1)} ${dataSourceID}`
     }
     if (mode === modes.QL && !(rows?.length) && !(columns?.length)) {
@@ -178,6 +185,7 @@ const WidgetView = () => {
     dataSourceError,
     dataSourceID,
     dataSourceType,
+    noDataSource,
     domain?.value,
     mode,
     renderableValueKeys?.length,
@@ -202,7 +210,9 @@ const WidgetView = () => {
     </div>
   )
 
-  const renderVisualization = isReady && dataReady ? <WidgetAdapter /> : renderWidgetWarning
+  const renderVisualization = isReady && (dataReady || noDataSource)
+    ? <WidgetAdapter />
+    : renderWidgetWarning
 
   return (
     <div className={classes.outerContainer}>

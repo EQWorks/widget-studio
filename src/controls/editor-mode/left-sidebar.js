@@ -31,17 +31,18 @@ const classes = makeStyles({
 })
 
 const EditorLeftSidebar = () => {
-  const userUpdate = useStoreActions(actions => actions.userUpdate)
-  const update = useStoreActions(actions => actions.update)
+  const { userUpdate, update } = useStoreActions(actions => actions)
 
-  const type = useStoreState((state) => state.type)
-  const columns = useStoreState((state) => state.columns)
-  const domain = useStoreState((state) => state.domain)
-  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
-  const numericColumns = useStoreState((state) => state.numericColumns)
-  const addUserControls = useStoreState((state) => state.addUserControls)
-  const addTopCategories = useStoreState((state) => state.addTopCategories)
-  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const {
+    type,
+    columns,
+    domain,
+    dataIsXWIReport,
+    numericColumns,
+    addUserControls,
+    addTopCategories,
+    renderableValueKeys,
+  } = useStoreState((state) => state)
 
   return (
     <EditorSidebarBase isLeft>
@@ -54,9 +55,9 @@ const EditorLeftSidebar = () => {
             <MapValueControls />
           </>
           : <>
-            <DomainControls />
+            {type !== types.TEXT && <DomainControls />}
             <ValueControls />
-            {![types.PYRAMID, types.STAT].includes(type) && <DataTransformationControls />}
+            {![types.PYRAMID, types.STAT, types.TEXT].includes(type) && <DataTransformationControls />}
           </>
       }
       {/* restrict to dev only for now */}

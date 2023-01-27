@@ -276,4 +276,11 @@ Stat.propTypes = {
   uniqueOptions: PropTypes.object.isRequired,
   onAfterPlot: PropTypes.func,
 }
+
+Stat.defaultProps = {
+  title: '',
+  formatData: {},
+  onAfterPlot: () => {},
+}
+
 export default Stat

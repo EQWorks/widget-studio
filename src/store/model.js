@@ -104,6 +104,7 @@ const stateDefaults = [
     },
     resettable: false,
   },
+  { key: 'noDataSource', defaultValue: false, resettable: false },
   { key: 'rows', defaultValue: [], resettable: false },
   { key: 'columns', defaultValue: [], resettable: false },
   { key: 'columnNameAliases', defaultValue: {}, resettable: true },
@@ -206,6 +207,7 @@ export default {
       (state) => state.columnNameAliases,
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
+      (state) => state.noDataSource,
       (state) => state.percentageMode,
       (state) => state.addUserControls,
       (state) => state.userControlHeadline,
@@ -240,6 +242,7 @@ export default {
       columnNameAliases,
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
+      noDataSource,
       percentageMode,
       addUserControls,
       userControlHeadline,
@@ -276,6 +279,7 @@ export default {
       ...(indexKey && { indexKeyTitle: formattedColumnNames[indexKey] } || indexKey),
       uniqueOptions,
       genericOptions,
+      noDataSource,
       dataSource: { type: dataSourceType, id: dataSourceID },
       percentageMode,
       addUserControls,
@@ -467,17 +471,23 @@ export default {
       dataHasVariance,
       dataIsXWIReport,
       formattedColumnNames,
-    ) => (
-      (type === types.MAP ? mapValueKeys : [...valueKeys, ...chart2ValueKeys])
+    ) => {
+      if (type === types.TEXT) {
+        return valueKeys
+      }
+      return (type === types.MAP ? mapValueKeys : [...valueKeys, ...chart2ValueKeys])
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
         .map(({ key, agg, ...rest }) => ({
           ...rest,
           key,
-          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && !dataIsXWIReport ? ` (${agg})` : ''}` || key,
+          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && !dataIsXWIReport
+            ? ` (${agg})`
+            : ''}`
+            || key,
           ...(agg && { agg }),
           ...(type === types.BARLINE && chart2ValueKeys.find(el => el.key === key) && { type: types.LINE }),
         }))
-    )
+    }
   ),
 
   formattedColumnNames: computed(
@@ -500,11 +510,13 @@ export default {
     [
       (state) => state.renderableValueKeys,
       (state) => state.customDataFormat,
+      (state) => state.type,
     ],
     (
       renderableValueKeys,
       customDataFormat,
-    ) => Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
+      type,
+    ) => type !== types.TEXT && Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
       [title, getKeyFormatFunction(key, { ...customDataFormat, ...DATA_KEY_FORMATTING })]
     )))
   ),
@@ -527,6 +539,7 @@ export default {
     [
       (state) => state.rows,
       (state) => state.columns,
+      (state) => state.noDataSource,
       (state) => state.type,
       (state) => state.renderableValueKeys,
       (state) => state.domain,
@@ -538,6 +551,7 @@ export default {
     (
       rows,
       columns,
+      noDataSource,
       type,
       renderableValueKeys,
       domain,
@@ -549,7 +563,7 @@ export default {
       const isXWIReportMap = Boolean(type && type === types.MAP && dataIsXWIReport &&
         columns.length && rows.length && transformedData?.arcData?.length)
       const mapChartReady = type && (type !== types.MAP || mapDataReady)
-      return isXWIReportMap ||
+      return isXWIReportMap || (type && noDataSource && renderableValueKeys.length) ||
         Boolean(mapChartReady && !isLoading && columns.length && rows.length &&
           transformedData?.length && renderableValueKeys.length && domain.value)
     }),

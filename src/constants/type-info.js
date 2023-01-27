@@ -273,4 +273,10 @@ export default {
     mustGroup: false,
     uniqueOptions: {},
   },
+  [types.TEXT]: {
+    icon: Icons.Text,
+    adapter: LocalAdapters[types.TEXT],
+    mustGroup: false,
+    uniqueOptions: {},
+  },
 }
