@@ -19,10 +19,14 @@ export default {
   },
   [types.TABLE]: {
     component: Table,
-    adapt: (data) => ({
-      rows: data,
-      showHeader: false,
-    }),
+    adapt: (data, {title}) => {
+      console.log('title: ', title)
+      return ({
+        rows: data,
+        showHeader: false,
+        barColumns: true
+      })
+    },
   },
   [types.TEXT]: {
     component: Text,

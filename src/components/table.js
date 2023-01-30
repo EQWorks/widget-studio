@@ -102,15 +102,16 @@ const classes = (showHeader) => {
   )
 }
 
-const Table = ({ rows, showHeader }) => {
+const Table = ({ rows, showHeader, barColumns }) => {
   const _rows = useMemo(() => rows || [], [rows])
   const styles = classes(showHeader)
-
+  console.log('barColumns: ', barColumns)
   const renderTable = (
     <LumenTable
       data={_rows}
       downloadFn={jsonToCsv}
       toolbar={showHeader}
+      barColumns={barColumns}
     >
       {Object.keys(_rows[0] || {})?.map((d) => (
         <LumenTable.Column
@@ -122,9 +123,19 @@ const Table = ({ rows, showHeader }) => {
       ))}
     </LumenTable>
   )
+
+  const renderBarTable = (
+    <LumenTable
+      data={_rows}
+      downloadFn={jsonToCsv}
+      toolbar={showHeader}
+      barColumns={barColumns}
+    />
+  )
+
   return (
     <div className={`table-container ${styles.tableContainer}`}>
-      {renderTable}
+      {barColumns ? renderBarTable : renderTable}
     </div>
   )
 }
@@ -132,10 +143,12 @@ const Table = ({ rows, showHeader }) => {
 Table.propTypes = {
   rows: PropTypes.array,
   showHeader: PropTypes.bool,
+  barColumns: PropTypes.bool,
 }
 Table.defaultProps = {
   results: [],
   showHeader: true,
+  barColumns: false,
 }
 
 export default Table

@@ -12,18 +12,22 @@ import { CHART_Z_POSITIONS } from '../../../../constants/viz-options'
 export default {
   [types.BAR]: {
     component: PlotlyBarChart,
-    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
-      data,
-      x: config.groupKeyTitle,
-      y: config.valueKeys.map(({ title }) => title),
-      orientation: uniqueOptions.horizontal ? 'h' : 'v',
-      formatData: config.formatDataFunctions,
-      onAfterPlot,
-      ...(genericOptions.showWidgetTitle && { title }),
-      ...uniqueOptions,
-      ...genericOptions,
-      ...(customColors?.chart && { customColors: customColors?.chart }),
-    }),
+    adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => {
+      console.log('uniqueOptions: ', uniqueOptions)
+      console.log('genericOptions: ', genericOptions)
+      return ({
+        data,
+        x: config.groupKeyTitle,
+        y: config.valueKeys.map(({ title }) => title),
+        orientation: uniqueOptions.horizontal ? 'h' : 'v',
+        formatData: config.formatDataFunctions,
+        onAfterPlot,
+        ...(genericOptions.showWidgetTitle && { title }),
+        ...uniqueOptions,
+        ...genericOptions,
+        ...(customColors?.chart && { customColors: customColors?.chart }),
+      })
+    }
   },
   [types.LINE]: {
     component: PlotlyLineChart,

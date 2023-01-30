@@ -7,25 +7,23 @@ export default {
     'groupFilter': [],
     'valueKeys': [
       {
-        'key': 'submitted_deals',
-        'title': 'Submitted deals',
+        'key': 'lat',
+        'title': 'Lat',
+        'agg': 'sum',
       },
       {
-        'key': 'approved_deals',
-        'title': 'Approved deals',
-      },
-      {
-        'key': 'funded_deals',
-        'title': 'Funded deals',
+        'key': 'lon',
+        'title': 'Lon',
+        'agg': 'sum',
       },
     ],
     'mapValueKeys': [],
     'formatDataFunctions': {},
     'group': true,
-    'groupKey': 'resolution',
+    'groupKey': 'category_name',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Resolution',
+    'groupKeyTitle': 'Category Name',
     'uniqueOptions': {
       'showTicks': true,
       'spline': false,
@@ -62,7 +60,7 @@ export default {
     },
     'dataSource': {
       'type': 'Execution',
-      'id': '1830',
+      'id': '1591',
     },
     'percentageMode': false,
     'presetColors': [
