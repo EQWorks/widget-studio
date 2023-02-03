@@ -7,7 +7,7 @@ import { makeStyles, Button, getTailwindConfigColor, TextField } from '@eqworks/
 import { useStoreState, useStoreActions } from '../../../store'
 import CustomSelect from '../../../components/custom-select'
 import CustomRadio from '../../../components/custom-radio'
-import { COLOR_REPRESENTATIONS, COLOR_RADIO_LABELS } from '../../../constants/color'
+import { COLOR_REPRESENTATIONS, COLOR_RADIO_LABELS, TABLE_COLOR_REPRESENTATIONS } from '../../../constants/color'
 import types from '../../../constants/types'
 import { renderRow } from '../../shared/util'
 
@@ -153,6 +153,11 @@ const ColorSchemeControls = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [color, selectedColorIndex, update])
 
+  const getColorType = useMemo(() => {
+    if (type === types.TABLE) return TABLE_COLOR_REPRESENTATIONS
+    return COLOR_REPRESENTATIONS.map(({ label }) => label)
+  }, [type])
+
   return (
     <div className={styles.outerContainer}>
       {type === types.BARLINE && renderRow(null,
@@ -210,7 +215,7 @@ const ColorSchemeControls = () => {
             selectedOptionTitle: 'normal-case',
             listContainer: 'normal-case',
           }}
-          data={COLOR_REPRESENTATIONS.map(({ label }) => label)}
+          data={getColorType}
           onSelect={v => userUpdate({ ui: { colorRepresentation: COLOR_REPRESENTATIONS.find(({ label }) => label === v) } })}
           value={colorRepresentation.label}
           allowClear={false}
