@@ -1,6 +1,8 @@
 export const tableUniqueOptions = {
   hidePagination: 'hidePagination',
   headerTitle: 'headerTitle',
+  compactTable: 'compactTable',
+  centerHeader: 'centerHeader',
   barColumns: 'barColumns',
   borderType: 'borderType',
   headerColor: 'headerColor',
