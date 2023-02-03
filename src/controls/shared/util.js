@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { getTailwindConfigColor, makeStyles, Checkbox } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles, Checkbox, RadioGroup, Radio } from '@eqworks/lumen-labs'
 
 import CustomToggle from '../../components/custom-toggle'
+import CustomSelect from '../../components/custom-select'
 
 
 const classes = makeStyles({
@@ -86,7 +87,7 @@ const classes = makeStyles({
     display: 'flex',
     alignItems: 'center',
   },
-  toggleTitle: {
+  titleContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -161,7 +162,7 @@ export const renderCheckbox = (title, value, update, disabled = false, key) => (
 
 export const renderToggle = (title, value, update, disabled = false, tooltip) => (
   <div className={classes.itemContainer}>
-    <div className={classes.toggleTitle}>
+    <div className={classes.titleContainer}>
       <div className={classes.title} > {title && `${title}:`} </div>
       {tooltip}
     </div>
@@ -170,5 +171,34 @@ export const renderToggle = (title, value, update, disabled = false, tooltip) =>
       onChange={update}
       disabled={disabled}
     />
+  </div>
+)
+
+export const renderMultiSelect = (title, data, value, update, disabled = false) => (
+  <div className={`${classes.itemContainer} multi-select__root-container`}>
+    <div className={classes.titleContainer}>
+      <div className={classes.title} > {title && `${title}:`} </div>
+    </div>
+    <CustomSelect
+      fullWidth
+      multiSelect
+      data={data}
+      value={value}
+      onSelect={update}
+      disabled={disabled}
+    />
+  </div>
+)
+
+export const renderRadioSelect = (title, data, value, update, disabled = false) => (
+  <div className={`${classes.itemContainer} radio-select__root-container`}>
+    <div className={classes.titleContainer}>
+      <div className={classes.title} > {title && `${title}:`} </div>
+    </div>
+    <RadioGroup name={title} selected={value} align='horizontal'>
+      {data.map((type, index) =>
+        <Radio key={`radio-item-${index}`} label={type} value={type} handleChange={update} disabled={disabled}/>
+      )}
+    </RadioGroup>
   </div>
 )
