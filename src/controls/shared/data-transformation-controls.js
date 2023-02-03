@@ -35,7 +35,7 @@ const DataTransformationControls = () => {
                   'Invert Domain',
                   groupByValue,
                   () => userUpdate({ genericOptions: { groupByValue: !groupByValue } }),
-                  [types.MAP, types.PYRAMID].includes(type)
+                  [types.MAP, types.PYRAMID, types.TABLE].includes(type)
                 )
               }
               {
