@@ -1410,10 +1410,10 @@
     react-iframe "^1.8.0"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.47":
-  version "0.1.0-alpha.50"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-labs/0.1.0-alpha.50/aeae4bac0c02ef58df27fd077e7295e6bff1b9c066f851d6fef86043282f3912#7e53764ca438351e0207f310da07d9f2045c4cb0"
-  integrity sha512-L/SRIGmPZT3oePQO5PX7BNce3kJxfLwZF+qH7LrmEFOBcwmPCa/W7mpyrtAyDNqVDG852kiO3ibJ6dnItva1sQ==
+"@eqworks/lumen-labs@^0.1.0-alpha.52":
+  version "0.1.0-alpha.77"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-labs/0.1.0-alpha.77/f171928a4a23adf0829a7e5156b88252d1b7160e#f171928a4a23adf0829a7e5156b88252d1b7160e"
+  integrity sha512-6oAbIYPTZMrplbO9iGHYwaDltr4pzBzYqUZ2SmTSDC5j04Js5auaDtPLtsnm5wiyz2O4RcZs9iqNuyEBf3jKfA==
   dependencies:
     "@headlessui/react" "^1.4.0"
     clsx "^1.1.1"
@@ -1440,12 +1440,12 @@
     react-window "^1.8.6"
     use-debounce "^7.0.1"
 
-"@eqworks/lumen-table@2.0.0-alpha.10":
-  version "2.0.0-alpha.10"
-  resolved "https://npm.pkg.github.com/download/@eqworks/lumen-table/2.0.0-alpha.10/c31aad32aa36c6a3a7813ea9afa3f26e1e2a5d459e3e925a80d668b692c9de12#e7bf41b387936d80ae392673d7dbb5ed5ed26b38"
-  integrity sha512-mwRgv8BRiweE8z4aleCO3WHBN+5FsCUKvsEZqyW6R/MzExZPZephtpUIu9U98Fn/f95UAa+rSX0fsoJXiQLobQ==
+"@eqworks/lumen-table@2.0.0-alpha.12":
+  version "2.0.0-alpha.12"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-table/2.0.0-alpha.12/eab94abeee422dbc76cd750e9c6ca9a48ebe50f2#eab94abeee422dbc76cd750e9c6ca9a48ebe50f2"
+  integrity sha512-Iw5tYyu18WKZVdEnJGKLuF3G/0uizoL0TCo0j1iwsnabmSWZbpP1sBJEUOKJwELzNzQ8ZH/018eTH7h3FXrQig==
   dependencies:
-    "@eqworks/lumen-labs" "^0.1.0-alpha.47"
+    "@eqworks/lumen-labs" "^0.1.0-alpha.52"
     prop-types "^15.7.2"
     react-table "^7.6.0"
     use-cached "^2.0.0"
