@@ -12,7 +12,7 @@ import {
 } from '../constants/map'
 import types from '../constants/types'
 import { roundToTwoDecimals } from '../util/numeric'
-import { xwiAggData } from '../util/agg-map-xwi'
+import { xMapAggData } from '../util/agg-x-map'
 import { latIsValid, lonIsValid, geoKeyIsValid } from '../util/geo-validation'
 import { dateAggregations, dateSort } from '../constants/time'
 import { columnTypes } from '../constants/columns'
@@ -269,7 +269,7 @@ const useTransformedData = () => {
             }
             return [MAP_VALUE_VIS.targetRadius, MAP_VALUE_VIS.targetFill].includes(mapVis)
           })
-          return xwiAggData({
+          return xMapAggData({
             data: truncatedData,
             groupKey,
             sourcePOIId,

@@ -1,3 +1,4 @@
+import aggFunctions from './agg-functions'
 import {
   COORD_KEYS,
   MAP_GEO_KEYS,
@@ -37,18 +38,19 @@ export const isUniqueKey = ({ k, sourcePOIId, targetPOIId, groupKey }) => {
 
 
 /**
- * xwiAggData - aggregation function for xwi report data
+ * xMapAggData - aggregation function for xwi report data
  * @param { object } param
  * @param { array } param.data - array of data objects
  * @param { array || string } param.groupKey - a string key or an array of keys that is used to group data by
  * @param { string } param.sourcePOIId - string source POI id key
  * @param { string } param.targetPOIId - string target POI id key
  * @param { object } param.columnsAnalysis - object of pairs { column, value } that classifies data column
- * @param { object } formattedColumnNames - object of pairs { column, value } with formatted data keys
- * @param { array } groupFilter - array of domain string values to be used to filter data
+ * @param { object } param.formattedColumnNames - object of pairs { column, value } with formatted data keys
+ * @param { array } param.groupFilter - array of domain string values to be used to filter data
+ * @param { array } param.valueKeys - array of objects for map visualization configuration
  * @returns { array } - array of aggregated data objects
  */
-export const xwiAggData = ({
+export const xMapAggData = ({
   data,
   groupKey,
   sourcePOIId,
@@ -56,6 +58,7 @@ export const xwiAggData = ({
   columnsAnalysis,
   formattedColumnNames,
   groupFilter,
+  valueKeys,
 }) => Object.values(data.reduce((res, r) => {
   if (!groupFilter.length ||
     (groupFilter?.length &&
@@ -71,28 +74,24 @@ export const xwiAggData = ({
     res[group] = res[group] || {}
     Object.entries(r).forEach(([k, v]) => {
       const uniqueKey = isUniqueKey({ k, sourcePOIId, targetPOIId, groupKey })
+      const { agg, title } = valueKeys.find(({ key }) => k === key) || {}
       let finalKey
       // keep coord keys unformatted
       if (Object.values(COORD_KEYS).flat().includes(k)) {
         finalKey = k
-      // } else if (!(columnsAnalysis[k].isNumeric || Object.values(COORD_KEYS).flat().includes(k))) {
-      //   finalKey = formattedColumnNames[k]
-      } else {
+      } else if (!(columnsAnalysis[k].isNumeric || Object.values(COORD_KEYS).flat().includes(k))) {
         finalKey = formattedColumnNames[k]
-      }
-      // else {
-      //   finalKey = formattedColumnNames[k] + ' (sum)'
-      // }
-      if (res[group][finalKey]) {
-        if (columnsAnalysis[k]?.isNumeric && !uniqueKey) {
-          res[group][finalKey] += v
-        } else if (!uniqueKey) {
-          res[group][finalKey].push(v)
-        }
-      } else if (columnsAnalysis[k]?.isNumeric || uniqueKey) {
-        res[group][finalKey] = v
       } else {
-        res[group][finalKey] = [v]
+        finalKey = title
+      }
+
+      if (res[group][finalKey]) {
+        if (columnsAnalysis[k]?.isNumeric && !uniqueKey && agg) {
+          res[group][finalKey] = aggFunctions[agg]([res[group][finalKey], v])
+        }
+      } else if ((columnsAnalysis[k]?.isNumeric && JSON.stringify(valueKeys).includes(finalKey))
+        || uniqueKey) {
+        res[group][finalKey] = v
       }
     })
   }
