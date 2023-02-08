@@ -46,6 +46,7 @@ const EditorRightSidebar = () => {
     columnNameAliases,
     columnsAnalysis,
     dataIsXWIReport,
+    dataHasVariance,
     domain,
     enableLocationPins,
     formattedColumnNames,
@@ -80,6 +81,7 @@ const EditorRightSidebar = () => {
     subPlots,
     titlePosition,
     xAxisLabelLength,
+    addAggregationLabel,
   } = useStoreState((state) => state.genericOptions)
 
   useEffect(() => {
@@ -142,18 +144,6 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showCurrency: v } }),
               )
             }
-            {type === types.PYRAMID && renderItem('x-Axis Labels',
-              <SliderControl
-                style={'right'}
-                range={false}
-                min={1}
-                max={10}
-                value={xAxisLabelLength}
-                update={v => userUpdate({
-                  genericOptions: { xAxisLabelLength: v },
-                })}
-              />
-            )}
           </>,
         )
       }
@@ -175,13 +165,6 @@ const EditorRightSidebar = () => {
                 v => userUpdate({ genericOptions: { showLocationPins: v } }),
               )
             }
-            {type === types.STAT &&
-              renderToggle(
-                'Vertical',
-                showVertical,
-                v => userUpdate({ genericOptions: { showVertical: v } }),
-              )
-            }
             {[types.BAR, types.SCATTER, types.LINE].includes(type) &&
               renderToggle(
                 'Subplots',
@@ -196,6 +179,33 @@ const EditorRightSidebar = () => {
                 showSubPlotTitles,
                 v => userUpdate({ genericOptions: { showSubPlotTitles: v } }),
                 !(type === types.PIE || subPlots),
+              )
+            }
+            {type === types.PYRAMID && renderItem('x-Axis Labels',
+              <SliderControl
+                style={'right'}
+                range={false}
+                min={1}
+                max={10}
+                value={xAxisLabelLength}
+                update={v => userUpdate({
+                  genericOptions: { xAxisLabelLength: v },
+                })}
+              />
+            )}
+            {![types.SCATTER, types.LINE].includes(type) &&
+              renderToggle(
+                'Aggregation',
+                addAggregationLabel,
+                v => userUpdate({ genericOptions: { addAggregationLabel: v } }),
+                !dataHasVariance,
+              )
+            }
+            {type === types.STAT &&
+              renderToggle(
+                'Vertical',
+                showVertical,
+                v => userUpdate({ genericOptions: { showVertical: v } }),
               )
             }
           </>
