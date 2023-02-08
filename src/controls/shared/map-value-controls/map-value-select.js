@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 
 import { Tooltip, Icons, getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
-import CustomSelect from '../../../components/custom-select'
 import PluralLinkedSelect from '../../../components/plural-linked-select'
-import ColumnAliasControls from '../../editor-mode/components/column-alias-controls'
 import types from '../../../constants/type-info'
 import cardTypes from '../../../constants/card-types'
 import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
-import { useStoreState, useStoreActions } from '../../../store'
+import { useStoreState } from '../../../store'
 
 
 const classes = makeStyles({
@@ -52,9 +50,6 @@ const MapValueSelect = ({
   disableSubMessage,
   callback,
 }) => {
-  // common actions
-  const userUpdate = useStoreActions((actions) => actions.userUpdate)
-
   // common state
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
@@ -98,68 +93,32 @@ const MapValueSelect = ({
               </Tooltip>
             </s>
           </div>
-          {dataIsXWIReport ?
-            (
-              <div className={classes.grid}>
-                <div className={`${widgetControlCardEdit[cardTypes.VALUE] ? '' : classes.twoColumns}`}>
-                  <CustomSelect
-                    fullWidth
-                    data={_data}
-                    icons={icons}
-                    value={mapValueKeys[match]?.[PRIMARY_KEY] || ''}
-                    onSelect={val => callback(
-                      match,
-                      {
-                        mapVis,
-                        [PRIMARY_KEY]: val,
-                        [SECONDARY_KEY]: 'sum',
-                      }
-                    )}
-                    onClear={() => {
-                      const valueKeysCopy = JSON.parse(JSON.stringify(mapValueKeys))
-                      valueKeysCopy.splice(match, 1)
-                      userUpdate({ mapValueKeys: valueKeysCopy })
-                    }}
-                    placeholder={'Column'}
-                  />
-                </div>
-                {widgetControlCardEdit[cardTypes.VALUE] &&
-                  <ColumnAliasControls
-                    value={mapValueKeys[match]?.[PRIMARY_KEY] || ''}
-                    disabled={!mapValueKeys[match]?.[PRIMARY_KEY]}
-                  />
-                }
-              </div>
-            ) :
-            (
-              <PluralLinkedSelect
-                staticQuantity={1}
-                headerIcons={[
-                  Icons.Columns,
-                  Icons.Sum,
-                  Icons.Alias,
-                ]}
-                titles={titles}
-                values={mapValueKeys[match] ? [mapValueKeys[match]] : []}
-                valueIcons={icons}
-                callback={(_, v) => callback(
-                  match,
-                  {
-                    mapVis,
-                    [PRIMARY_KEY]: v[PRIMARY_KEY],
-                    [SECONDARY_KEY]: v[SECONDARY_KEY],
-                  }
-                )}
-                data={_data}
-                subData={subData}
-                primaryKey={PRIMARY_KEY}
-                secondaryKey={SECONDARY_KEY}
-                disableSubs={disableSubs}
-                disableSubMessage={disableSubMessage}
-                editMode={widgetControlCardEdit[cardTypes.VALUE]}
-              />
-            )
-          }
+          <PluralLinkedSelect
+            staticQuantity={1}
+            headerIcons={[
+              Icons.Columns,
+              Icons.Sum,
+              Icons.Alias,
+            ]}
+            titles={titles}
+            values={mapValueKeys[match] ? [mapValueKeys[match]] : []}
+            valueIcons={icons}
+            callback={(_, v) => callback(
+              match,
+              {
+                mapVis,
+                [PRIMARY_KEY]: v[PRIMARY_KEY],
+                [SECONDARY_KEY]: v[SECONDARY_KEY],
+              }
+            )}
+            data={_data}
+            subData={subData}
+            primaryKey={PRIMARY_KEY}
+            secondaryKey={SECONDARY_KEY}
+            disableSubs={disableSubs}
+            disableSubMessage={disableSubMessage}
+            editMode={widgetControlCardEdit[cardTypes.VALUE]}
+          />
         </div>
       )
     })
