@@ -480,7 +480,7 @@ export default {
         .map(({ key, agg, ...rest }) => ({
           ...rest,
           key,
-          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && !dataIsXWIReport
+          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance
             ? ` (${agg})`
             : ''}`
             || key,
