@@ -5,6 +5,7 @@ import aggFunctions from '../util/agg-functions'
 import { getRegionPolygons } from '../util/api'
 import {
   MAP_LAYER_GEO_KEYS,
+  MAP_VALUE_VIS,
   GEO_KEY_TYPES,
   GEO_KEY_TYPE_NAMES,
   GEOJSON_KEYS,
@@ -258,8 +259,17 @@ const useTransformedData = () => {
       const sourcePOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.scatterplot.includes(key))
       const targetPOIId = dataKeys?.find(key => MAP_LAYER_GEO_KEYS.targetScatterplot.includes(key))
       const [arcData, sourceData, targetData] =
-        [[sourcePOIId, targetPOIId], sourcePOIId, targetPOIId].map((groupKey) =>
-          xwiAggData({
+        [[sourcePOIId, targetPOIId], sourcePOIId, targetPOIId].map((groupKey, i) => {
+          const valueKeys = renderableValueKeys.filter(({ mapVis }) => {
+            if (i === 0) {
+              return MAP_VALUE_VIS.arcWidth === mapVis
+            }
+            if (i === 1) {
+              return [MAP_VALUE_VIS.radius, MAP_VALUE_VIS.fill].includes(mapVis)
+            }
+            return [MAP_VALUE_VIS.targetRadius, MAP_VALUE_VIS.targetFill].includes(mapVis)
+          })
+          return xwiAggData({
             data: truncatedData,
             groupKey,
             sourcePOIId,
@@ -267,7 +277,8 @@ const useTransformedData = () => {
             columnsAnalysis,
             formattedColumnNames,
             groupFilter,
-          }))
+            valueKeys,
+          })})
       return { arcData, sourceData, targetData }
     }
     return {}
@@ -279,9 +290,10 @@ const useTransformedData = () => {
     dataKeys,
     formattedColumnNames,
     groupFilter,
+    renderableValueKeys,
   ])
 
-  // enrich data with coords for scatterplot & geojson data; special aggregation for xwi-reports
+  // enrich data with coords for scatterplot & geojson data
   const getMapEnrichedData = useCallback(async () => {
     if (type && type === types.MAP && !dataIsXWIReport) {
       let mapEnrichedData = aggregatedData
