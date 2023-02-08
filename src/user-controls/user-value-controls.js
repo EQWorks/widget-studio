@@ -78,6 +78,8 @@ const UserValueControls = () => {
     insightsDataCategories,
   } = useStoreState((state) => state)
 
+  const addAggregationLabel = useStoreState((state) => state.genericOptions.addAggregationLabel)
+
   useEffect(() => {
     if (renderableValueKeys.length) {
       if (categoryFilter && (!dataCategoryKey || !finalUserControlKeyValues.includes(dataCategoryKey))) {
@@ -111,7 +113,7 @@ const UserValueControls = () => {
       const { agg, mapVis } = renderableValueKeys[0]
       const val = {
         key,
-        title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`,
+        title: `${formattedColumnNames[key]}${agg && addAggregationLabel ? ` (${agg})` : ''}`,
         ...(agg && { agg }),
         mapVis,
       }
@@ -129,6 +131,7 @@ const UserValueControls = () => {
     mapValueKeys,
     formattedColumnNames,
     update,
+    addAggregationLabel,
   ])
 
   const onClickHandle = useCallback((key) => {
@@ -162,7 +165,7 @@ const UserValueControls = () => {
       } else {
         const val = {
           key,
-          title: `${formattedColumnNames[key]}${agg ? ` (${agg})` : ''}`,
+          title: `${formattedColumnNames[key]}${agg && addAggregationLabel ? ` (${agg})` : ''}`,
           ...(agg && { agg }),
           mapVis,
         }
@@ -185,6 +188,7 @@ const UserValueControls = () => {
     formattedColumnNames,
     update,
     insightsDataCategories,
+    addAggregationLabel,
   ])
 
   useEffect(() => {
@@ -207,7 +211,7 @@ const UserValueControls = () => {
           onSelect={v => {
             if (v) {
               const { agg, mapVis } = renderableValueKeys[0]
-              const title = `${formattedColumnNames[v]}${agg ? ` (${agg})` : ''}`
+              const title = `${formattedColumnNames[v]}${agg && addAggregationLabel ? ` (${agg})` : ''}`
               const val = {
                 key: v,
                 title,
@@ -232,6 +236,7 @@ const UserValueControls = () => {
     formattedColumnNames,
     mapValueKeys,
     update,
+    addAggregationLabel,
   ])
 
   return (
