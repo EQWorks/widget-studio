@@ -9,6 +9,7 @@ import MapValueSelect from './map-value-select'
 import CustomButton from '../../../components/custom-button'
 import { useStoreActions, useStoreState } from '../../../store'
 import { MAP_LAYER_VALUE_VIS } from '../../../constants/map'
+import aggFunctions from '../../../util/agg-functions'
 
 
 const classes = makeStyles({
@@ -26,13 +27,14 @@ const classes = makeStyles({
   },
 })
 
-const XWIReportValueControls = ({ data, callback }) => {
+const XMapValueControls = ({ data, callback }) => {
   // store actions
   const userUpdate = useStoreActions((actions) => actions.update)
 
   // widget state
   const mapValueKeys = useStoreState((state) => state.mapValueKeys)
   const genericOptions = useStoreState((state) => state.genericOptions)
+  const dataHasVariance = useStoreState((state) => state.dataHasVariance)
 
   const XWI_MAP_LAYERS = useMemo(() => (
     [
@@ -79,7 +81,11 @@ const XWIReportValueControls = ({ data, callback }) => {
             <MapValueSelect
               categories={categories}
               values={mapValueKeys}
+              titles={['Column', 'Operation', 'Alias']}
+              subData={Object.keys(aggFunctions)}
               {...{ data, callback }}
+              disableSubs={!dataHasVariance}
+              disableSubMessage="doesn't require aggregation."
             />
           </MutedBarrier>
         </div>
@@ -88,9 +94,9 @@ const XWIReportValueControls = ({ data, callback }) => {
   )
 }
 
-XWIReportValueControls.propTypes = {
+XMapValueControls.propTypes = {
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
   callback: PropTypes.func.isRequired,
 }
 
-export default XWIReportValueControls
+export default XMapValueControls
