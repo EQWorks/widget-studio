@@ -9,7 +9,6 @@ const classes = makeStyles({
   outerContainer: {
     width: '100%',
     height: '100%',
-    padding: '2rem 3rem',
 
     '& .title-container': {
       display: 'flex',
@@ -124,6 +123,7 @@ const classes = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: '.3125rem',
     fontSize: '0.875rem',
     color: getTailwindConfigColor('secondary-600'),
 
@@ -255,7 +255,7 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions, 
                 {(selectedTrend && selectedTrend.values[i]) && data[0][v.title] &&
                   <div className={`trend-label-container ${classes.trendLabel}`}>
                     {renderTrend(Math.round(calculateTrend(data[0][v.title], Number(selectedTrend.values[i]))))}
-                    &nbsp;vs. {getTitle(selectedTrend.titles[i], v.title)}
+                    vs. {getTitle(selectedTrend.titles[i], v.title)}
                   </div>
                 }
               </div>
