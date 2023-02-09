@@ -85,7 +85,7 @@ const UniqueOptionControls = ({ type }) => {
                     {types.TABLE === type &&
                       renderRadioSelect(
                         name,
-                        getTableRadioSelectionData(k),
+                        getTableRadioSelectionData(k.toUpperCase()),
                         uniqueOptions[k],
                         e => userUpdate({ uniqueOptions: { [k]: e.target.value } })
                       )
