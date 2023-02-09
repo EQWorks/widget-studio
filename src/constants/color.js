@@ -30,5 +30,3 @@ export const COLOR_REPRESENTATIONS = [
 export const COLOR_RADIO_LABELS = {
   [types.BARLINE]: ['Bar', 'Line'],
 }
-
-export const TABLE_COLOR_REPRESENTATIONS = ['HEX']
