@@ -10,19 +10,24 @@ import { renderCheckbox, renderToggle, renderMultiSelect, renderRadioSelect } fr
 import { tableUniqueOptions, borderType, headerColor } from '../../../constants/table-widget'
 
 
-const useStyles = ({ gridCols }) => makeStyles({
-  uniqueOptionsBooleanContainer : {
+const useStyles = ({ gridCols, type }) => makeStyles({
+  uniqueOptionsRootContainer : {
     display: 'grid',
     gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
     alignItems: 'center',
     columnGap: '0.75rem',
 
-    '& .table-bar__select-options': {
-      gridColumn: 'span 2',
+    '& .unique-options-boolean__container': {
+      marginBottom: types.TABLE === type ? '0.7rem' : 'initial',
+    },
 
-      '& .radio-select__root-container': {
-        marginBottom: '0.313rem',
-      },
+    '& .unique-options-string__container': {
+      gridColumn: 'span 2',
+      marginBottom: '0.7rem',
+    },
+
+    '& .unique-options-array__container': {
+      gridColumn: 'span 2',
     },
   },
 })
@@ -50,17 +55,17 @@ const UniqueOptionControls = ({ type }) => {
     if (tableUniqueOptions[type] === 'headerColor') return headerColor
   }
 
-  const classes = useStyles({ gridCols })
+  const classes = useStyles({ gridCols, type })
 
   return (
     <>
-      <div className={classes.uniqueOptionsBooleanContainer}>
+      <div className={classes.uniqueOptionsRootContainer}>
         {Object.entries(typeInfo[type]?.uniqueOptions || {})
           .map(([k, { name, type: _type }], i) => {
             switch (_type) {
               case Boolean: // TODO support types other than bool
                 return (
-                  <div key={i} className='unique-options__item-container'>
+                  <div key={i} className='unique-options-boolean__container'>
                     {types.TABLE !== type &&
                       renderCheckbox(
                         name,
@@ -81,7 +86,7 @@ const UniqueOptionControls = ({ type }) => {
                 )
               case String:
                 return (
-                  <div className='table-bar__select-options'>
+                  <div className='unique-options-string__container'>
                     {types.TABLE === type &&
                       renderRadioSelect(
                         name,
@@ -94,7 +99,7 @@ const UniqueOptionControls = ({ type }) => {
                 )
               case Array:
                 return (
-                  <div className='table-bar__select-options'>
+                  <div className='unique-options-array__container'>
                     {types.TABLE === type &&
                       renderMultiSelect(
                         name,

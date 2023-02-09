@@ -10,4 +10,4 @@ export const tableUniqueOptions = [
 
 export const headerColor = ['white', 'grey']
 
-export const borderType = ['none', 'horizontal', 'vertical', 'around']
+export const borderType = ['horizontal', 'vertical', 'around', 'none']
