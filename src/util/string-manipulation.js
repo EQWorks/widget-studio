@@ -46,3 +46,57 @@ export const truncateString = (fullStr, strLen, separator = ' ... ') => {
  * @returns { string } - capitalized string
  */
 export const capitalize = s => (s?.[0]?.toUpperCase() + s?.slice(1)) || ''
+
+// "vendored" from https://github.com/mdevils/html-entities/blob/68a1a96/src/xml-entities.ts
+const decodeXML = (str) => {
+  const ALPHA_INDEX = {
+    '&lt': '<',
+    '&gt': '>',
+    '&quot': '"',
+    '&apos': '\'',
+    '&amp': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&apos;': '\'',
+    '&amp;': '&',
+  }
+  if (!str || !str.length) {
+    return ''
+  }
+  return str.replace(/&#?[0-9a-zA-Z]+;?/g, (s) => {
+    if (s.charAt(1) === '#') {
+      const code = s.charAt(2).toLowerCase() === 'x' ?
+        parseInt(s.substr(3), 16) :
+        parseInt(s.substr(2))
+
+      if (isNaN(code) || code < -32768 || code > 65535) {
+        return ''
+      }
+      return String.fromCharCode(code)
+    }
+    return ALPHA_INDEX[s] || s
+  })
+}
+
+/**
+ * https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/50813259#50813259
+ * getTextSize - calculates a rendered text width and height in rem
+ * @param { string } text - a text string
+ * @param { number || string } fontWeight - text's font weight
+ * @param { number } fontSize - text's font size in pixels
+ * @param { string } fontFamily - text's font family
+ * @returns { object } - the width and height of the rendered text in rem
+ */
+export const getTextSize = (text, fontWeight, fontSize, fontFamily) => {
+  let font = `${fontWeight} ${fontSize}px ${fontFamily}`
+  let canvas = document.createElement('canvas')
+  let context = canvas.getContext('2d')
+  context.font = font
+  let metrics = typeof text === 'number'
+    ? context.measureText(text)
+    : context.measureText(decodeXML(text))
+  return {
+    width: metrics.width,
+  }
+}
