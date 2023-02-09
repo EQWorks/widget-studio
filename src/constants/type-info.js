@@ -272,8 +272,8 @@ export default {
     adapter: LocalAdapters[types.TABLE],
     mustGroup: false,
     uniqueOptions: {
-      hidePagination: {
-        name: 'Hide Pagination',
+      pagination: {
+        name: 'Pagination',
         type: Boolean,
         defaultValue: false,
       },
@@ -287,8 +287,8 @@ export default {
         type: Boolean,
         defaultValue: false,
       },
-      centerHeader: {
-        name: 'Center Header',
+      centeredHeader: {
+        name: 'Centered Header',
         type: Boolean,
         defaultValue: false,
       },

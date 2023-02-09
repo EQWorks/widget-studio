@@ -21,10 +21,10 @@ export default {
     component: Table,
     adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => {
       const {
-        hidePagination,
+        pagination,
         headerTitle,
         compactTable,
-        centerHeader,
+        centeredHeader,
         barColumns,
         borderType,
         headerColor,
@@ -37,14 +37,14 @@ export default {
         formatData: formatDataFunctions,
         barColumns: barColumns.length ? barColumns : false,
         barColumnsColor: genericOptions?.baseColor?.color1,
-        hidePagination,
+        hidePagination: !pagination,
         headerTitle,
         title,
         defaultStyles: {
           borderType,
           headerColor,
           compactTable,
-          centerHeader,
+          centerHeader: centeredHeader,
         },
       })
     },

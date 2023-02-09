@@ -114,7 +114,7 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
-            {![types.Map, types.TABLE].includes(type) &&
+            {![types.MAP, types.TABLE].includes(type) &&
               renderToggle(
                 'Title',
                 showWidgetTitle,

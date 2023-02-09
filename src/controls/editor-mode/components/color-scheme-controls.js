@@ -131,7 +131,7 @@ const ColorSchemeControls = () => {
     ? [baseColor.color1, Object.keys(baseColor)[0]]
     : [baseColor.color2, Object.keys(baseColor)[1]]
   ,[widgetBaseColor1Selection, baseColor])
-  console.log('colorRepresentation: ', color)
+
   // local state
   const [selectedColorIndex, setSelectedColorIndex] = useState(
     presetColors.indexOf(color) === -1
