@@ -271,7 +271,43 @@ export default {
     icon: Icons.Table,
     adapter: LocalAdapters[types.TABLE],
     mustGroup: false,
-    uniqueOptions: {},
+    uniqueOptions: {
+      pagination: {
+        name: 'Pagination',
+        type: Boolean,
+        defaultValue: false,
+      },
+      headerTitle: {
+        name: 'Header Title',
+        type: Boolean,
+        defaultValue: false,
+      },
+      compactTable: {
+        name: 'Compact Table',
+        type: Boolean,
+        defaultValue: false,
+      },
+      centeredHeader: {
+        name: 'Centered Header',
+        type: Boolean,
+        defaultValue: false,
+      },
+      headerColor: {
+        name: 'Header Color',
+        type: String,
+        defaultValue: 'white',
+      },
+      borderType: {
+        name: 'Border Type',
+        type: String,
+        defaultValue: 'horizontal',
+      },
+      barColumns: {
+        name: 'Bar Columns',
+        type: Array,
+        defaultValue: [],
+      },
+    },
   },
   [types.TEXT]: {
     icon: Icons.Text,

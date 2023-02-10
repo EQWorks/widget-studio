@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { getTailwindConfigColor, makeStyles, Checkbox } from '@eqworks/lumen-labs'
+import { getTailwindConfigColor, makeStyles, Checkbox, RadioGroup, Radio } from '@eqworks/lumen-labs'
 
 import CustomToggle from '../../components/custom-toggle'
+import CustomSelect from '../../components/custom-select'
 
 
 const classes = makeStyles({
@@ -60,6 +61,17 @@ const classes = makeStyles({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+
+    '& .radio-group__root-contaienr': {
+      '& .radio__root-container': {
+        width: '100%',
+        marginRight: '0.75rem',
+
+        '&:last-child': {
+          marginRight: 0,
+        },
+      },
+    },
   },
   itemContainerNoGrow: {
     flex: 0,
@@ -86,7 +98,7 @@ const classes = makeStyles({
     display: 'flex',
     alignItems: 'center',
   },
-  toggleTitle: {
+  titleContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -100,16 +112,27 @@ const classes = makeStyles({
   },
 })
 
+const customRadioClasses = makeStyles({
+  container: {
+    width: '100%',
+    marginRight: '0.75rem',
+
+    '&:last': {
+      marginRight: 0,
+    },
+  },
+})
+
 export const renderSuperSection = (Component) => (
   Component &&
-  <div className={classes.superSection}>
+  <div className={`render-super-section__container ${classes.superSection}`}>
     {Component}
   </div>
 )
 
 export const renderSection = (title, Component) => (
   Component &&
-  <div className={classes.section}>
+  <div className={`render-section__container ${classes.section}`}>
     {title && <div className={classes.sectionTitle}> {`${title}:`} </div>}
     {Component}
   </div>
@@ -160,8 +183,8 @@ export const renderCheckbox = (title, value, update, disabled = false, key) => (
 )
 
 export const renderToggle = (title, value, update, disabled = false, tooltip) => (
-  <div className={classes.itemContainer}>
-    <div className={classes.toggleTitle}>
+  <div className={`toggle__root-container ${classes.itemContainer}`}>
+    <div className={classes.titleContainer}>
       <div className={classes.title} > {title && `${title}:`} </div>
       {tooltip}
     </div>
@@ -170,5 +193,43 @@ export const renderToggle = (title, value, update, disabled = false, tooltip) =>
       onChange={update}
       disabled={disabled}
     />
+  </div>
+)
+
+export const renderMultiSelect = (title, data, value, update, disabled = false) => (
+  <div className={`${classes.itemContainer} multi-select__root-container`}>
+    <div className={classes.titleContainer}>
+      <div className={classes.title} > {title && `${title}:`} </div>
+    </div>
+    <CustomSelect
+      fullWidth
+      multiSelect
+      data={data}
+      value={value}
+      onSelect={update}
+      disabled={disabled}
+    />
+  </div>
+)
+
+export const renderRadioSelect = (title, data, value, update, disabled = false) => (
+  <div className={`${classes.itemContainer} radio-select__root-container`}>
+    <div className={classes.titleContainer}>
+      <div className={classes.title} > {title && `${title}:`} </div>
+    </div>
+    <RadioGroup name={title} selected={value} align='horizontal'>
+      {data.map((type, index) =>
+        <Radio
+          key={`radio-item-${index}`}
+          classes={{
+            container: customRadioClasses.container,
+          }}
+          label={type}
+          value={type}
+          handleChange={update}
+          disabled={disabled}
+        />
+      )}
+    </RadioGroup>
   </div>
 )

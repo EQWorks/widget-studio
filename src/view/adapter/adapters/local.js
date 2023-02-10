@@ -19,10 +19,35 @@ export default {
   },
   [types.TABLE]: {
     component: Table,
-    adapt: (data) => ({
-      rows: data,
-      showHeader: false,
-    }),
+    adapt: (data, { title, uniqueOptions, genericOptions, ...config }) => {
+      const {
+        pagination,
+        headerTitle,
+        compactTable,
+        centeredHeader,
+        barColumns,
+        borderType,
+        headerColor,
+      } = uniqueOptions
+      const { formatDataFunctions } = config
+
+      return ({
+        rows: data,
+        showHeader: false,
+        formatData: formatDataFunctions,
+        barColumns: barColumns.length ? barColumns : false,
+        barColumnsColor: genericOptions?.baseColor?.color1,
+        hidePagination: !pagination,
+        headerTitle,
+        title,
+        defaultStyles: {
+          borderType,
+          headerColor,
+          compactTable,
+          centerHeader: centeredHeader,
+        },
+      })
+    },
   },
   [types.TEXT]: {
     component: Text,

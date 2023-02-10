@@ -114,7 +114,7 @@ const EditorRightSidebar = () => {
       {
         renderRow(null,
           <>
-            {type !== types.MAP &&
+            {![types.MAP, types.TABLE].includes(type) &&
               renderToggle(
                 'Title',
                 showWidgetTitle,
@@ -326,7 +326,7 @@ const EditorRightSidebar = () => {
 
   const renderStyling = (
     <>
-      {![types.MAP, types.STAT].includes(type) && renderItem('Title Position',
+      {![types.MAP, types.STAT, types.TABLE].includes(type) && renderItem('Title Position',
         <CustomDropdown
           selectedString={positions.string[positions.numeric.map(JSON.stringify)
             .indexOf(JSON.stringify(titlePosition))]}
@@ -340,7 +340,7 @@ const EditorRightSidebar = () => {
           />
         </CustomDropdown>
       )}
-      {type !== types.STAT && renderItem('Legend Position',
+      {![types.STAT, types.TABLE].includes(type) && renderItem('Legend Position',
         <CustomDropdown
           disabled={!showLegend}
           selectedString={positions.string[positions.numeric.map(JSON.stringify)
@@ -439,7 +439,7 @@ const EditorRightSidebar = () => {
           <Filters />
         </MutedBarrier>
       }
-      {![types.TABLE, types.TEXT].includes(type) &&
+      {![types.TEXT].includes(type) &&
         <MutedBarrier mute={(!type || !domain?.value || !(renderableValueKeys?.length)) && !isReady} >
           <WidgetControlCard
             title={title}
@@ -469,11 +469,11 @@ const EditorRightSidebar = () => {
                   {renderSection(
                     'Display Options',
                     <>
-                      {renderGenericOptions}
+                      {type !== types.TABLE && renderGenericOptions}
                       {type !== types.MAP && <UniqueOptionControls type={type} />}
                     </>
                   )}
-                  {renderSection('Styling',
+                  {type !== types.TABLE && renderSection('Styling',
                     <>
                       {renderRow(null, renderStyling)}
                       {[types.LINE, types.BAR, types.SCATTER, types.PIE, types.BARLINE].includes(type)
@@ -487,7 +487,7 @@ const EditorRightSidebar = () => {
           </WidgetControlCard >
         </MutedBarrier>
       }
-      {![types.MAP, types.STAT, types.TABLE, types.TEXT].includes(type) &&
+      {![types.MAP, types.STAT, types.TEXT].includes(type) &&
         <WidgetControlCard title='Color Scheme'>
           <ColorSchemeControls />
         </WidgetControlCard >

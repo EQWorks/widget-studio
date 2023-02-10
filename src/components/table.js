@@ -1,10 +1,6 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Parser, transforms } from 'json2csv'
 import { Table as LumenTable } from '@eqworks/lumen-table'
 import { makeStyles } from '@eqworks/lumen-labs'
@@ -46,40 +42,6 @@ const jsonToCsv = ({ data, rows, visibleColumns, visCols = false, filteredRows =
   link.remove()
 }
 
-// formerly from util/helpers
-const formatCell = ({ value }) => {
-  // value is falsey or boolean
-  if (!value || !!value === value) {
-    return mapFalsy[value]
-  }
-  // value is array or object
-  if (typeof value === 'object') {
-    return (
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-        >
-          JSON
-        </AccordionSummary>
-        <AccordionDetails>
-          <pre>{JSON.stringify(value, undefined, 2)}</pre>
-        </AccordionDetails>
-      </Accordion>
-    )
-  }
-  return value
-}
-
-// formerly from util/helpers
-const mapFalsy = {
-  0: '0',
-  undefined: 'Undefined',
-  false: 'False',
-  true: 'True',
-  null: 'NULL',
-  '': 'Unknown',
-}
-
 const classes = (showHeader) => {
   const tableContainerStyle = showHeader ?
     { height: '100%' } : { height: '90%', marginTop: '1rem' }
@@ -88,42 +50,42 @@ const classes = (showHeader) => {
     makeStyles({
       tableContainer: {
         ...tableContainerStyle,
-
-        '& .table-root-container': {
-          display: 'flex',
-          height: '100%',
-
-          '& .table-container': {
-            overflow: 'auto',
-          },
-        },
       },
     })
   )
 }
 
-const Table = ({ rows, showHeader }) => {
+const Table = ({
+  rows,
+  showHeader,
+  formatData,
+  barColumns,
+  barColumnsColor,
+  hidePagination,
+  headerTitle,
+  title,
+  defaultStyles,
+}) => {
   const _rows = useMemo(() => rows || [], [rows])
   const styles = classes(showHeader)
 
   const renderTable = (
     <LumenTable
       data={_rows}
+      formatData={formatData}
       downloadFn={jsonToCsv}
       toolbar={showHeader}
-    >
-      {Object.keys(_rows[0] || {})?.map((d) => (
-        <LumenTable.Column
-          key={d}
-          Header={d}
-          accessor={d}
-          Cell={formatCell}
-        />
-      ))}
-    </LumenTable>
+      barColumns={barColumns}
+      barColumnsColor={barColumnsColor}
+      hidePagination={hidePagination}
+      headerTitle={headerTitle}
+      title={title}
+      defaultStyles={defaultStyles}
+    />
   )
+
   return (
-    <div className={`table-container ${styles.tableContainer}`}>
+    <div className={`widget__table-container ${styles.tableContainer}`}>
       {renderTable}
     </div>
   )
@@ -132,10 +94,27 @@ const Table = ({ rows, showHeader }) => {
 Table.propTypes = {
   rows: PropTypes.array,
   showHeader: PropTypes.bool,
+  formatData: PropTypes.object,
+  barColumns: PropTypes.PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.array,
+  ]),
+  barColumnsColor: PropTypes.string,
+  hidePagination: PropTypes.bool,
+  headerTitle: PropTypes.bool,
+  title: PropTypes.string,
+  defaultStyles: PropTypes.object,
 }
 Table.defaultProps = {
   results: [],
   showHeader: true,
+  formatData: {},
+  barColumns: false,
+  barColumnsColor: '',
+  hidePagination: false,
+  headerTitle: false,
+  title: '',
+  defaultStyles: {},
 }
 
 export default Table
