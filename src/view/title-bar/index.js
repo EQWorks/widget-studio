@@ -287,7 +287,7 @@ const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
           </div>
           {allowOpenInEditor && renderOpenInEditorButton}
         </div>
-        {showTitleBarArrow()}
+        {allowOpenInEditor && showTitleBarArrow()}
       </div>
     )
   }
