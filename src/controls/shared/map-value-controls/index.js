@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react'
 import aggFunctions from '../../../util/agg-functions'
 import { useStoreState, useStoreActions } from '../../../store'
 import MapValueSelect from './map-value-select'
-import XWIReportValueControls from './xwi-report-value-controls'
+import XMapValueControls from './x-map-value-controls'
 import WidgetControlCard from '../components/widget-control-card'
 import cardTypes from '../../../constants/card-types'
 import modes from '../../../constants/modes'
@@ -89,7 +89,7 @@ const MapValueControls = () => {
     >
       {dataIsXWIReport ?
         (
-          <XWIReportValueControls
+          <XMapValueControls
             data={validValueKeys}
             callback={callback}
           />

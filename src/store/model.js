@@ -78,6 +78,7 @@ const stateDefaults = [
       showLabels: false,
       showCurrency: false,
       showVertical: false,
+      addAggregationLabel: false,
       mapHideSourceLayer: false,
       mapHideTargetLayer: false,
       mapHideArcLayer: false,
@@ -459,8 +460,8 @@ export default {
       (state) => state.group,
       (state) => state.type,
       (state) => state.dataHasVariance,
-      (state) => state.dataIsXWIReport,
       (state) => state.formattedColumnNames,
+      (state) => state.genericOptions.addAggregationLabel,
     ],
     (
       valueKeys,
@@ -469,8 +470,8 @@ export default {
       group,
       type,
       dataHasVariance,
-      dataIsXWIReport,
       formattedColumnNames,
+      addAggregationLabel
     ) => {
       if (type === types.TEXT) {
         return valueKeys
@@ -480,7 +481,7 @@ export default {
         .map(({ key, agg, ...rest }) => ({
           ...rest,
           key,
-          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && !dataIsXWIReport
+          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && addAggregationLabel
             ? ` (${agg})`
             : ''}`
             || key,
