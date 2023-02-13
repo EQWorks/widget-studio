@@ -11,10 +11,12 @@ const CustomGlobalToast = (props) => {
   const toastConfig = useStoreState(({ ui: { toastConfig } }) => toastConfig)
 
   return (
-    <div className={clsx('pointer-events-none transition-opacity ease-in-out duration-500 mt-2 absolute flex w-full justify-center', {
-      'opacity-0': !showToast,
-      'opacity-1': showToast,
-    })}>
+    <div className={
+      clsx('pointer-events-none transition-opacity ease-in-out duration-500 mt-2 absolute flex w-full justify-center z-10', {
+        'opacity-0': !showToast,
+        'opacity-1': showToast,
+      })}
+    >
       <Toast
         classes={{
           root: clsx({
