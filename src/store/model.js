@@ -823,7 +823,7 @@ export default {
         showToast: true,
       },
     })
-    setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
+    setTimeout(() => actions.update({ ui: { showToast: false } }), payload.timeout || 3000)
   }),
 
   getScreenshotBase64: thunk(async (actions, payload, { getState }) => {
