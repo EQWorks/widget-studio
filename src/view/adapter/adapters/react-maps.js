@@ -5,6 +5,7 @@ import { useDebounce } from 'use-debounce'
 import { LocusMap } from '@eqworks/react-maps'
 import { makeStyles } from '@eqworks/lumen-labs'
 
+import CustomGlobalToast from '../../../components/custom-global-toast'
 import { useStoreState, useStoreActions } from '../../../store'
 import { getLayerValueKeys } from '../../../util/map-layer-value-functions'
 import { complementaryColor } from '../../../util/color'
@@ -77,11 +78,21 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
     if (useMVTOption && GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && showToastMessage &&
       debouncedCurrentViewport?.zoom < MIN_ZOOM.postalCode - MAP_TOAST_ZOOM_ADJUSTMENT) {
       toast({
-        title: 'Zoom in for postal code visualization!',
-        color: 'warning',
+        title: 'The current zoom level for this map is insuficient for data visualization. Please zoom in to have data visualized at postal code level.',
+        color: 'info',
+        ...(mode === modes.COMPACT && { type: 'semantic-dark' }),
+        timeout: 10000,
       })
     }
-  }, [useMVTOption, toast, mapGroupKey, uniqueOptions, debouncedCurrentViewport, showToastMessage])
+  }, [
+    useMVTOption,
+    mode,
+    toast,
+    mapGroupKey,
+    uniqueOptions,
+    debouncedCurrentViewport,
+    showToastMessage,
+  ])
 
   useEffect(() => {
     if (useMVTOption && GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
@@ -95,6 +106,7 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   if (width > 0 && height > 0) {
     return (
       <div id='LocusMap' className={classes.mapWrapper}>
+        {mode === modes.COMPACT && <CustomGlobalToast />}
         <LocusMap {
           ...{
             dataConfig,
