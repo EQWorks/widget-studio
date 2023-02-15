@@ -10,7 +10,7 @@ import { renderRow, renderItem, renderToggle } from './util'
 import { setMapValueKeys } from '../../util/map-layer-value-functions'
 import { hasDevAccess } from '../../util/access'
 import cardTypes from '../../constants/card-types'
-import { MAP_LAYERS, MAP_LAYER_GEO_KEYS } from '../../constants/map'
+import { MAP_LAYERS, MAP_LAYER_GEO_KEYS, GEO_KEY_TYPES } from '../../constants/map'
 
 
 const classes = makeStyles({
@@ -32,6 +32,7 @@ const MapDomainControls = () => {
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
   const showMVTOption = useStoreState((state) => state.showMVTOption)
   const useMVTOption = useStoreState((state) => state.useMVTOption)
+  const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
 
   const renderControls = renderItem('Column', (
     <CustomSelect
@@ -90,13 +91,14 @@ const MapDomainControls = () => {
           {widgetControlCardEdit[cardTypes.DOMAIN] && renderAlias}
         </>
       )}
-      {/* toggle for MVT or direct geom render for postal codes */}
+      {/* toggle for MVT or geojson geom render for postal codes */}
       {hasDevAccess() && showMVTOption && renderRow('',
         <div className={classes.toggle}>
           {renderToggle(
             'Use MVT Render',
             useMVTOption,
             v => userUpdate({ useMVTOption: v }),
+            groupFSAByPC && GEO_KEY_TYPES.fsa.includes(domain.value),
           )}
         </div>,
       )}
