@@ -380,14 +380,19 @@ export default {
     [
       (state) => state.columns,
       (state) => state.numericColumns,
+      (state) => state.useMVTOption,
     ],
-    (columns, numericColumns) => {
+    (
+      columns,
+      numericColumns,
+      useMVTOption,
+    ) => {
       const dataGeoKeys = columns.filter(({ name }) =>
         MAP_GEO_KEYS.includes(name) && geoKeyHasCoordinates(name, numericColumns))
         .map(({ name }) => name)
       // this allows grouping by FSA when postal code key is present in the data object but no FSA
       if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key)) &&
-        !dataGeoKeys.some(key => GEO_KEY_TYPES.fsa.includes(key))) {
+        !dataGeoKeys.some(key => GEO_KEY_TYPES.fsa.includes(key)) && useMVTOption) {
         // add an artificial geo_ca_fsa key to the validMapGroupKeys if we have postalcode key but no FSA
         dataGeoKeys.push('geo_ca_fsa')
       }
@@ -420,17 +425,23 @@ export default {
     }
   ),
 
-  // determines to use postal code geo key to aggregate by FSA
+  /*
+   * determines to use postal code geo key to aggregate by FSA, but only when using the MVT option
+   * to render polygons, otherwise the geometry from postal codes cannot be used to render FSAs
+   */
   groupFSAByPC: computed(
     [
       (state) => state.mapGroupKey,
       (state) => state.columnsAnalysis,
+      (state) => state.useMVTOption,
     ],
     (
       mapGroupKey,
       columnsAnalysis,
+      useMVTOption,
     ) => GEO_KEY_TYPES.fsa.includes(mapGroupKey) &&
-      !Object.keys(columnsAnalysis).includes(mapGroupKey)
+      !Object.keys(columnsAnalysis).includes(mapGroupKey) &&
+      useMVTOption
   ),
 
   lon: computed(
