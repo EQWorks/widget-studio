@@ -9,7 +9,7 @@ export { default as WidgetManager } from './widget-manager'
 export { default as InsightsDataProvider } from './insights-data-provider'
 
 setup(createElement, undefined, undefined, shouldForwardProp((prop) => {
-  return !['showLegend', 'legendPosition'].includes(prop)
+  return !['showLegend', 'legendPosition', 'isPieTooSmall'].includes(prop)
 }))
 
 export default Widget
