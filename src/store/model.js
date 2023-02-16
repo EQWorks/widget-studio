@@ -478,6 +478,9 @@ export default {
       (state) => state.type,
       (state) => state.dataHasVariance,
       (state) => state.formattedColumnNames,
+      (state) => state.addUserControls,
+      (state) => state.userControlKeyValues,
+      (state) => state.numericColumns,
       (state) => state.genericOptions.addAggregationLabel,
     ],
     (
@@ -488,23 +491,37 @@ export default {
       type,
       dataHasVariance,
       formattedColumnNames,
-      addAggregationLabel
+      addUserControls,
+      userControlKeyValues,
+      numericColumns,
+      addAggregationLabel,
     ) => {
       if (type === types.TEXT) {
         return valueKeys
       }
       return (type === types.MAP ? mapValueKeys : [...valueKeys, ...chart2ValueKeys])
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
-        .map(({ key, agg, ...rest }) => ({
-          ...rest,
-          key,
-          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && addAggregationLabel
-            ? ` (${agg})`
-            : ''}`
-            || key,
-          ...(agg && { agg }),
-          ...(type === types.BARLINE && chart2ValueKeys.find(el => el.key === key) && { type: types.LINE }),
-        }))
+        .map(({ key, agg, ...rest }) => {
+          let visKey = key
+          /*
+           * if a pre-configured widget receives a data set missing the vis key in mapValueKeys,
+           * use the first available key for UserValueControls tabs
+           */
+          if (addUserControls && userControlKeyValues?.length &&
+            type === types.MAP && !numericColumns.includes(key)) {
+            visKey = userControlKeyValues.find(col => numericColumns.includes(col))
+          }
+          return ({
+            ...rest,
+            key: visKey,
+            title: `${formattedColumnNames[visKey]}${group && agg && dataHasVariance && addAggregationLabel
+              ? ` (${agg})`
+              : ''}`
+              || key,
+            ...(agg && { agg }),
+            ...(type === types.BARLINE && chart2ValueKeys.find(el => el.key === visKey) && { type: types.LINE }),
+          })
+        })
     }
   ),
 
@@ -665,6 +682,7 @@ export default {
   undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
   redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
 
+  // either filtering keys for data categories present in the data set or column & insightsDataCategories keys
   finalUserControlKeyValues: computed(
     [
       (state) => state.type,
@@ -748,6 +766,7 @@ export default {
       (state) => state.userControlKeyValues,
       (state) => state.formattedColumnNames,
       (state) => state.insightsDataCategories,
+      (state) => state.numericColumns,
     ],
     (
       type,
@@ -756,13 +775,16 @@ export default {
       userControlKeyValues,
       formattedColumnNames,
       insightsDataCategories,
+      numericColumns,
     ) => {
       if (type === types.MAP && userControlKeyValues.length) {
         if (categoryFilter) {
-          return userControlKeyValues.map(key => ({ title: formattedColumnNames[key], key }))
+          return userControlKeyValues.filter(col => numericColumns.includes(col))
+            .map(key => ({ title: formattedColumnNames[key], key }))
         }
         if (dataCategoryKey) {
-          return userControlKeyValues.filter(val => insightsDataCategories[dataCategoryKey]?.includes(val))
+          return userControlKeyValues.filter(val => insightsDataCategories[dataCategoryKey]?.includes(val) &&
+            numericColumns.includes(val))
             .map(key => ({ title: formattedColumnNames[key], key }))
         }
       }
