@@ -33,16 +33,14 @@ const classes = makeStyles({
 const EditorLeftSidebar = () => {
   const { userUpdate, update } = useStoreActions(actions => actions)
 
-  const {
-    type,
-    columns,
-    domain,
-    dataIsXWIReport,
-    numericColumns,
-    addUserControls,
-    addTopCategories,
-    renderableValueKeys,
-  } = useStoreState((state) => state)
+  const type = useStoreState((state) => state.type)
+  const columns = useStoreState((state) => state.columns)
+  const domain = useStoreState((state) => state.domain)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const numericColumns = useStoreState((state) => state.numericColumns)
+  const addUserControls = useStoreState((state) => state.addUserControls)
+  const addTopCategories = useStoreState((state) => state.addTopCategories)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
 
   return (
     <EditorSidebarBase isLeft>
