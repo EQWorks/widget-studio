@@ -50,10 +50,14 @@ const classes = makeStyles({
 })
 
 const DataSourceControls = () => {
-  const { resetWidget, userUpdate } = useStoreActions((actions) => actions)
+  const resetWidget = useStoreActions((actions) => actions.resetWidget)
+  const userUpdate = useStoreActions((actions) => actions.userUpdate)
 
-  const { type: dataSourceType, id: dataSourceID } = useStoreState((state) => state.dataSource)
-  const { cu, dev, noDataSource } = useStoreState((state) => state)
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
+  const cu = useStoreState((state) => state.cu)
+  const dev = useStoreState((state) => state.dev)
+  const noDataSource = useStoreState((state) => state.noDataSource)
 
   const [executionsLoading, executionsList] = useExecutions()
   const [, savedQueriesList] = useSavedQueries()
