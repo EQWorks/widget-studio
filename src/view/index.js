@@ -100,30 +100,28 @@ const WidgetView = () => {
   const update = useStoreActions((actions) => actions.update)
 
   // widget state
-  const {
-    type,
-    rows,
-    columns,
-    noDataSource,
-    isReady,
-    transformedData,
-    domain,
-    renderableValueKeys,
-    dataIsXWIReport,
-    addUserControls,
-  } = useStoreState((state) => state)
+  const addUserControls = useStoreState((state) => state.addUserControls)
+  const columns = useStoreState((state) => state.columns)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const domain = useStoreState((state) => state.domain)
+  const isReady = useStoreState((state) => state.isReady)
+  const noDataSource = useStoreState((state) => state.noDataSource)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const rows = useStoreState((state) => state.rows)
+  const transformedData = useStoreState((state) => state.transformedData)
+  const type = useStoreState((state) => state.type)
 
   // data source state
-  const { type: dataSourceType, id: dataSourceID } = useStoreState((state) => state.dataSource)
-  const { dataReady, isLoading } = useStoreState((state) => state)
+  const dataReady = useStoreState((state) => state.dataReady)
+  const dataSourceID = useStoreState((state) => state.dataSource.id)
+  const dataSourceType = useStoreState((state) => state.dataSource.type)
+  const isLoading = useStoreState((state) => state.isLoading)
 
   // UI state
-  const {
-    mode,
-    showTable,
-    dataSourceLoading,
-    dataSourceError,
-  } = useStoreState((state) => state.ui)
+  const dataSourceLoading = useStoreState((state) => state.ui.dataSourceLoading)
+  const dataSourceError = useStoreState((state) => state.ui.dataSourceError)
+  const mode = useStoreState((state) => state.ui.mode)
+  const showTable = useStoreState((state) => state.ui.showTable)
 
   const [tableExpanded, setTableExpanded] = useState(false)
   const [autoExpandedTable, setAutoExpandedTable] = useState(false)
