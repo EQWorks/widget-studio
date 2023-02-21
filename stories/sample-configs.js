@@ -1746,14 +1746,15 @@ export default {
     'mapValueKeys': [
       {
         'mapVis': 'fill',
-        'key': 'population',
-        'title': 'Population',
+        'key': 'Total Population',
+        'title': 'Total Population',
       },
     ],
     'formatDataFunctions': {},
     'group': true,
     'groupKey': null,
     'mapGroupKey': 'geo_ca_fsa',
+    'useMVTOption': true,
     'indexKey': null,
     'mapGroupKeyTitle': 'Geo ca fsa',
     'uniqueOptions': {
@@ -1875,7 +1876,7 @@ export default {
     'addUserControls': true,
     'userControlHeadline': 'Benchmark By',
     'userControlKeyValues': [
-      'population',
+      'Total Population',
       'home_value',
       'highest_education_no_education',
       'highest_education_secondary_education',
@@ -1916,6 +1917,7 @@ export default {
     'group': true,
     'groupKey': null,
     'mapGroupKey': 'geo_ca_fsa',
+    'useMVTOption': true,
     'indexKey': null,
     'mapGroupKeyTitle': 'Geo ca fsa',
     'uniqueOptions': {
