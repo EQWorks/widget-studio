@@ -22,7 +22,7 @@ import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection 
 import { positions, sizes, CHART_Z_POSITIONS } from '../../constants/viz-options'
 import types from '../../constants/types'
 import cardTypes from '../../constants/card-types'
-import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
+import { GEO_KEY_TYPES, MAP_LAYER_GEO_KEYS, MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 
 
 const classes = makeStyles({
@@ -55,6 +55,7 @@ const EditorRightSidebar = () => {
     showTitleBar,
     type,
     widgetControlCardEdit,
+    useMVTOption,
   } = useStoreState((state) => state)
 
   const { sharedYAxis } = useStoreState((state) => state.uniqueOptions)
@@ -155,7 +156,10 @@ const EditorRightSidebar = () => {
                 'Labels',
                 showLabels,
                 v => userUpdate({ genericOptions: { showLabels: v } }),
-                JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)
+                JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation) ||
+                (useMVTOption && !(MAP_LAYER_GEO_KEYS.scatterplot.includes(domain.value) ||
+                  GEO_KEY_TYPES.region.includes(domain.value) ||
+                  JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation))),
               )
             }
             {type === types.MAP && enableLocationPins &&
