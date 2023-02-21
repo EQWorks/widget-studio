@@ -112,6 +112,15 @@ const EditorRightSidebar = () => {
     )
   ), [columnsAnalysis])
 
+  const disableLabels = useMemo(() => {
+    const elevationVis = Boolean(renderableValueKeys.find(({ mapVis }) => mapVis === MAP_VALUE_VIS.elevation))
+    return elevationVis ||
+      (useMVTOption &&
+        !(MAP_LAYER_GEO_KEYS.scatterplot.includes(domain.value) ||
+          GEO_KEY_TYPES.region.includes(domain.value))
+      )
+  }, [renderableValueKeys, useMVTOption, domain.value])
+
   const renderGenericOptions = (
     <>
       {
@@ -156,10 +165,7 @@ const EditorRightSidebar = () => {
                 'Labels',
                 showLabels,
                 v => userUpdate({ genericOptions: { showLabels: v } }),
-                JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation) ||
-                (useMVTOption && !(MAP_LAYER_GEO_KEYS.scatterplot.includes(domain.value) ||
-                  GEO_KEY_TYPES.region.includes(domain.value) ||
-                  JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation))),
+                disableLabels,
               )
             }
             {type === types.MAP && enableLocationPins &&
