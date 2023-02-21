@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Icons, makeStyles } from '@eqworks/lumen-labs'
+import { Icons, Tooltip, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../store'
 import CustomSelect from '../../components/custom-select'
@@ -100,6 +100,18 @@ const MapDomainControls = () => {
             v => userUpdate({ useMVTOption: v }),
             (groupFSAByPC && GEO_KEY_TYPES.fsa.includes(domain.value) ||
             GEO_KEY_TYPES.region.includes(domain.value)),
+            <Tooltip
+              description='Choose MVT Render for very large sets of polygons.'
+              width='10.5rem'
+              arrow={false}
+              position='right'
+              classes={{ content: 'overflow-y-visible' }}
+            >
+              <Icons.AlertInformation
+                size='sm'
+                color={getTailwindConfigColor('secondary-500')}
+              />
+            </Tooltip>
           )}
         </div>,
       )}
