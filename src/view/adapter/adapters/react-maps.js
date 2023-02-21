@@ -498,7 +498,12 @@ export default {
           layer: 'text',
           dataId: `${id}-${type}`,
           dataPropertyAccessor: mapLayer === MAP_LAYERS.geojson && useMVTOption ? d => d.properties : d => d,
-          geometry,
+          geometry: mapLayer === MAP_LAYERS.geojson && (!useMVTOption || GEO_KEY_TYPES.region.includes(mapGroupKey))?
+            {
+              ...geometry,
+              geometryAccessor: d => d.properties,
+            } :
+            geometry,
           visualizations: {
             text: {
               value: {
