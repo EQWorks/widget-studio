@@ -380,14 +380,19 @@ export default {
     [
       (state) => state.columns,
       (state) => state.numericColumns,
+      (state) => state.useMVTOption,
     ],
-    (columns, numericColumns) => {
+    (
+      columns,
+      numericColumns,
+      useMVTOption,
+    ) => {
       const dataGeoKeys = columns.filter(({ name }) =>
         MAP_GEO_KEYS.includes(name) && geoKeyHasCoordinates(name, numericColumns))
         .map(({ name }) => name)
       // this allows grouping by FSA when postal code key is present in the data object but no FSA
       if (dataGeoKeys.some(key => GEO_KEY_TYPES.postalcode.includes(key)) &&
-        !dataGeoKeys.some(key => GEO_KEY_TYPES.fsa.includes(key))) {
+        !dataGeoKeys.some(key => GEO_KEY_TYPES.fsa.includes(key)) && useMVTOption) {
         // add an artificial geo_ca_fsa key to the validMapGroupKeys if we have postalcode key but no FSA
         dataGeoKeys.push('geo_ca_fsa')
       }
@@ -407,24 +412,36 @@ export default {
     [
       (state) => state.type,
       (state) => state.columnsAnalysis,
+      (state) => state.rows,
     ],
     (
       type,
       columnsAnalysis,
-    ) => type === types.MAP && GEOJSON_KEYS.every(key => Object.keys(columnsAnalysis).includes(key))
+      rows,
+    ) => {
+      const dataSample = rows[0]
+      return type === types.MAP
+        && GEOJSON_KEYS.every(key => Object.keys(columnsAnalysis)?.includes(key) && dataSample[key])
+    }
   ),
 
-  // determines to use postal code geo key to aggregate by FSA
+  /*
+   * determines to use postal code geo key to aggregate by FSA, but only when using the MVT option
+   * to render polygons, otherwise the geometry from postal codes cannot be used to render FSAs
+   */
   groupFSAByPC: computed(
     [
       (state) => state.mapGroupKey,
       (state) => state.columnsAnalysis,
+      (state) => state.useMVTOption,
     ],
     (
       mapGroupKey,
       columnsAnalysis,
+      useMVTOption,
     ) => GEO_KEY_TYPES.fsa.includes(mapGroupKey) &&
-      !Object.keys(columnsAnalysis).includes(mapGroupKey)
+      !Object.keys(columnsAnalysis).includes(mapGroupKey) &&
+      useMVTOption
   ),
 
   lon: computed(
@@ -461,6 +478,9 @@ export default {
       (state) => state.type,
       (state) => state.dataHasVariance,
       (state) => state.formattedColumnNames,
+      (state) => state.addUserControls,
+      (state) => state.userControlKeyValues,
+      (state) => state.numericColumns,
       (state) => state.genericOptions.addAggregationLabel,
     ],
     (
@@ -471,23 +491,37 @@ export default {
       type,
       dataHasVariance,
       formattedColumnNames,
-      addAggregationLabel
+      addUserControls,
+      userControlKeyValues,
+      numericColumns,
+      addAggregationLabel,
     ) => {
       if (type === types.TEXT) {
         return valueKeys
       }
       return (type === types.MAP ? mapValueKeys : [...valueKeys, ...chart2ValueKeys])
         .filter(({ key, agg }) => key && (agg || !dataHasVariance || !group))
-        .map(({ key, agg, ...rest }) => ({
-          ...rest,
-          key,
-          title: `${formattedColumnNames[key]}${group && agg && dataHasVariance && addAggregationLabel
-            ? ` (${agg})`
-            : ''}`
-            || key,
-          ...(agg && { agg }),
-          ...(type === types.BARLINE && chart2ValueKeys.find(el => el.key === key) && { type: types.LINE }),
-        }))
+        .map(({ key, agg, ...rest }) => {
+          let visKey = key
+          /*
+           * if a pre-configured widget receives a data set missing the vis key in mapValueKeys,
+           * use the first available key for UserValueControls tabs
+           */
+          if (addUserControls && userControlKeyValues?.length &&
+            type === types.MAP && !numericColumns.includes(key)) {
+            visKey = userControlKeyValues.find(col => numericColumns.includes(col))
+          }
+          return ({
+            ...rest,
+            key: visKey,
+            title: `${formattedColumnNames[visKey]}${group && agg && dataHasVariance && addAggregationLabel
+              ? ` (${agg})`
+              : ''}`
+              || key,
+            ...(agg && { agg }),
+            ...(type === types.BARLINE && chart2ValueKeys.find(el => el.key === visKey) && { type: types.LINE }),
+          })
+        })
     }
   ),
 
@@ -648,6 +682,7 @@ export default {
   undoAvailable: computed([state => state.undoQueue], undoQueue => Boolean(undoQueue.length)),
   redoAvailable: computed([state => state.redoQueue], redoQueue => Boolean(redoQueue.length)),
 
+  // either filtering keys for data categories present in the data set or column & insightsDataCategories keys
   finalUserControlKeyValues: computed(
     [
       (state) => state.type,
@@ -731,6 +766,7 @@ export default {
       (state) => state.userControlKeyValues,
       (state) => state.formattedColumnNames,
       (state) => state.insightsDataCategories,
+      (state) => state.numericColumns,
     ],
     (
       type,
@@ -739,13 +775,16 @@ export default {
       userControlKeyValues,
       formattedColumnNames,
       insightsDataCategories,
+      numericColumns,
     ) => {
       if (type === types.MAP && userControlKeyValues.length) {
         if (categoryFilter) {
-          return userControlKeyValues.map(key => ({ title: formattedColumnNames[key], key }))
+          return userControlKeyValues.filter(col => numericColumns.includes(col))
+            .map(key => ({ title: formattedColumnNames[key], key }))
         }
         if (dataCategoryKey) {
-          return userControlKeyValues.filter(val => insightsDataCategories[dataCategoryKey]?.includes(val))
+          return userControlKeyValues.filter(val => insightsDataCategories[dataCategoryKey]?.includes(val) &&
+            numericColumns.includes(val))
             .map(key => ({ title: formattedColumnNames[key], key }))
         }
       }
@@ -817,7 +856,7 @@ export default {
         showToast: true,
       },
     })
-    setTimeout(() => actions.update({ ui: { showToast: false } }), 3000)
+    setTimeout(() => actions.update({ ui: { showToast: false } }), payload.timeout || 3000)
   }),
 
   getScreenshotBase64: thunk(async (actions, payload, { getState }) => {

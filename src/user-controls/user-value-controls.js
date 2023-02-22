@@ -62,21 +62,19 @@ const classes = makeStyles({
 const UserValueControls = () => {
   const update = useStoreActions(actions => actions.userUpdate)
 
-  const {
-    formattedColumnNames,
-    valueKeys,
-    mapValueKeys,
-    renderableValueKeys,
-    type,
-    userControlHeadline,
-    finalUserControlKeyValues,
-    categoryFilter,
-    selectedUserDataControlIndex,
-    dataCategoryKey,
-    categoryKeyValues,
-    selectedCategoryValue,
-    insightsDataCategories,
-  } = useStoreState((state) => state)
+  const categoryFilter = useStoreState((state) => state.categoryFilter)
+  const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
+  const dataCategoryKey = useStoreState((state) => state.dataCategoryKey)
+  const finalUserControlKeyValues = useStoreState((state) => state.finalUserControlKeyValues)
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
+  const insightsDataCategories = useStoreState((state) => state.insightsDataCategories)
+  const mapValueKeys = useStoreState((state) => state.mapValueKeys)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const selectedCategoryValue = useStoreState((state) => state.selectedCategoryValue)
+  const selectedUserDataControlIndex = useStoreState((state) => state.selectedUserDataControlIndex)
+  const type = useStoreState((state) => state.type)
+  const userControlHeadline = useStoreState((state) => state.userControlHeadline)
+  const valueKeys = useStoreState((state) => state.valueKeys)
 
   const addAggregationLabel = useStoreState((state) => state.genericOptions.addAggregationLabel)
 

@@ -6,6 +6,7 @@
  */
 export const getKeyFormatFunction = (key, dataFormatObject) =>
   Object.values(dataFormatObject).find(({ keyList }) =>
-    keyList.find(listKey => key.toLowerCase().includes(listKey) || key.includes(listKey)))
+    keyList.find(listKey => key?.toLowerCase().includes(listKey) || key?.includes(listKey)))
     ?.formatFunction ||
-    dataFormatObject.numericOthers.formatFunction
+    dataFormatObject.numericOthers.formatFunction ||
+    (() => {})

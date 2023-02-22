@@ -18,7 +18,7 @@ const useStyles = ({ type, renderUserControlValues, addTopCategories, topMargin 
     width: '100%',
     height: '100%',
     marginTop: `${topMargin}rem`,
-    paddingTop: type !== types.TEXT ? '1rem' : 0,
+    paddingTop: !([types.MAP, types.TEXT].includes(type) || renderUserControlValues) ? '1rem' : 0,
   },
   widget: {
     ...(addTopCategories && { display: 'flex' }),

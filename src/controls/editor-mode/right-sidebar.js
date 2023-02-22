@@ -22,7 +22,7 @@ import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection 
 import { positions, sizes, CHART_Z_POSITIONS } from '../../constants/viz-options'
 import types from '../../constants/types'
 import cardTypes from '../../constants/card-types'
-import { MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
+import { GEO_KEY_TYPES, MAP_LAYER_GEO_KEYS, MAP_LEGEND_SIZE, MAP_VALUE_VIS } from '../../constants/map'
 
 
 const classes = makeStyles({
@@ -42,47 +42,44 @@ const textfieldClasses = Object.freeze({
 })
 
 const EditorRightSidebar = () => {
-  const {
-    columnNameAliases,
-    columnsAnalysis,
-    dataIsXWIReport,
-    dataHasVariance,
-    domain,
-    enableLocationPins,
-    formattedColumnNames,
-    isReady,
-    renderableValueKeys,
-    showTitleBar,
-    type,
-    widgetControlCardEdit,
-  } = useStoreState((state) => state)
+  const type = useStoreState((state) => state.type)
+  const domain = useStoreState((state) => state.domain)
+  const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
+  const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const columnNameAliases = useStoreState((state) => state.columnNameAliases)
+  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
+  const dataHasVariance = useStoreState((state) => state.dataHasVariance)
+  const isReady = useStoreState((state) => state.isReady)
+  const showTitleBar = useStoreState((state) => state.showTitleBar)
+  const enableLocationPins = useStoreState((state) => state.enableLocationPins)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
+  const useMVTOption = useStoreState((state) => state. useMVTOption)
 
   const { sharedYAxis } = useStoreState((state) => state.uniqueOptions)
 
   const { update, userUpdate } = useStoreActions((actions) => actions)
 
-  const {
-    axisTitles,
-    chart1ZPosition,
-    labelPosition,
-    legendPosition,
-    legendSize,
-    mapPinTooltipKey,
-    showAxisTitles,
-    showCurrency,
-    showLabels,
-    showLegend,
-    showLocationPins,
-    showSubPlotTitles,
-    showTooltip,
-    showVertical,
-    showWidgetTitle,
-    size,
-    subPlots,
-    titlePosition,
-    xAxisLabelLength,
-    addAggregationLabel,
-  } = useStoreState((state) => state.genericOptions)
+  const axisTitles = useStoreState((state) => state.genericOptions.axisTitles)
+  const chart1ZPosition = useStoreState((state) => state.genericOptions.chart1ZPosition)
+  const labelPosition = useStoreState((state) => state.genericOptions.labelPosition)
+  const legendPosition = useStoreState((state) => state.genericOptions.legendPosition)
+  const legendSize = useStoreState((state) => state.genericOptions.legendSize)
+  const mapPinTooltipKey = useStoreState((state) => state.genericOptions.mapPinTooltipKey)
+  const showAxisTitles = useStoreState((state) => state.genericOptions.showAxisTitles)
+  const showCurrency = useStoreState((state) => state.genericOptions.showCurrency)
+  const showLabels = useStoreState((state) => state.genericOptions.showLabels)
+  const showLegend = useStoreState((state) => state.genericOptions.showLegend)
+  const showLocationPins = useStoreState((state) => state.genericOptions.showLocationPins)
+  const showSubPlotTitles = useStoreState((state) => state.genericOptions.showSubPlotTitles)
+  const showTooltip = useStoreState((state) => state.genericOptions.showTooltip)
+  const showVertical = useStoreState((state) => state.genericOptions.showVertical)
+  const showWidgetTitle = useStoreState((state) => state.genericOptions.showWidgetTitle)
+  const subPlots = useStoreState((state) => state.genericOptions.subPlots)
+  const size = useStoreState((state) => state.genericOptions.size)
+  const titlePosition = useStoreState((state) => state.genericOptions.titlePosition)
+  const xAxisLabelLength = useStoreState((state) => state.genericOptions.xAxisLabelLength)
+  const addAggregationLabel = useStoreState((state) => state.genericOptions.addAggregationLabel)
 
   useEffect(() => {
     if (renderableValueKeys?.length <= 1) {
@@ -110,6 +107,15 @@ const EditorRightSidebar = () => {
         .map(([c, { Icon }]) => [c, { Icon }])
     )
   ), [columnsAnalysis])
+
+  const disableLabels = useMemo(() => {
+    const elevationVis = Boolean(renderableValueKeys.find(({ mapVis }) => mapVis === MAP_VALUE_VIS.elevation))
+    return elevationVis ||
+      (useMVTOption &&
+        !(MAP_LAYER_GEO_KEYS.scatterplot.includes(domain.value) ||
+          GEO_KEY_TYPES.region.includes(domain.value))
+      )
+  }, [renderableValueKeys, useMVTOption, domain.value])
 
   const renderGenericOptions = (
     <>
@@ -155,7 +161,7 @@ const EditorRightSidebar = () => {
                 'Labels',
                 showLabels,
                 v => userUpdate({ genericOptions: { showLabels: v } }),
-                JSON.stringify(renderableValueKeys)?.includes(MAP_VALUE_VIS.elevation)
+                disableLabels,
               )
             }
             {type === types.MAP && enableLocationPins &&

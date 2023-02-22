@@ -85,6 +85,9 @@ Object.values(modes).forEach(mode => {
             <Widget {...devProps}
               mode={mode}
               id={id}
+              dataFormat={DATA_KEY_FORMATTING}
+              insightsDataCategories={DATA_CATEGORIES}
+              categoryOrder={CATEGORY_ORDER}
             />
           </div>
         </Authenticated>
@@ -94,13 +97,19 @@ Object.values(modes).forEach(mode => {
         .add(id, () => (
           mode === modes.EDITOR
             ? <div style={{ width: '100vw', height: '100vh', background: 'white' }}>
-              {id === 'dev-map-2' ? renderWidgetAuth : renderWidget}
+              {['dev-map-1', 'dev-map-2', 'dev-map-4', 'dev-map-5'].includes(id) ?
+                renderWidgetAuth :
+                renderWidget
+              }
             </div>
             : <Resizable
               style={{ margin: '1rem' }}
               defaultSize={{ width: '50vw', height: '50vh' }}
             >
-              {id === 'dev-map-2' && mode !== modes.VIEW ? renderWidgetAuth : renderWidget}
+              {['dev-map-1', 'dev-map-2', 'dev-map-4', 'dev-map-5'].includes(id) ?
+                renderWidgetAuth :
+                renderWidget
+              }
             </Resizable >
         ))
     }

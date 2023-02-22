@@ -13,6 +13,7 @@ import manual2001 from './manual-2001.json'
 import manual3000 from './manual-3000.json'
 import manual4000 from './manual-4000.json'
 import manual5000 from './manual-5000.json'
+import manual6000 from './manual-6000.json'
 
 
 export default {
@@ -31,4 +32,5 @@ export default {
   'Manual-3000': manual3000,
   'Manual-4000': manual4000,
   'Manual-5000': manual5000,
+  'Manual-6000': manual6000,
 }

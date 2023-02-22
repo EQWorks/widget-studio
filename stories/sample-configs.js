@@ -1239,39 +1239,43 @@ export default {
   },
   'dev-map-1': {
     'title': 'My example map widget - polygon geojson layer FSA & postal code',
+    'subtitle': '',
+    'subtitleLinkLabel': '',
+    'subtitleHyperlink': '',
     'showTitleBar': true,
     'type': 'map',
-    'filters': [
-      {
-        'key': 'spend',
-        'filter': [
-          0,
-          100,
-        ],
-      },
-    ],
+    'filters': [],
     'groupFilter': [],
     'valueKeys': [],
+    'chart2ValueKeys': [],
     'mapValueKeys': [
       {
-        'mapVis': 'elevation',
-        'key': 'impressions',
-        'title': 'Impressions (sum)',
-        'agg': 'sum',
-      },
-      {
-        'title': 'Spend (sum)',
         'mapVis': 'fill',
-        'key': 'spend',
-        'agg': 'sum',
+        'key': 'Pickup',
+        'title': 'Pickup',
       },
     ],
     'formatDataFunctions': {},
+    'columnNameAliases': {},
+    'formattedColumnNames': {
+      'dealer_id': 'Dealer id',
+      'geo_ca_postalcode': 'Geo ca postalcode',
+      'Dealer': 'Dealer',
+      'geometry': 'Geometry',
+      'type': 'Type',
+      'Sedan': 'Sedan',
+      'Coupe': 'Coupe',
+      'Pickup': 'Pickup',
+      'SUV': 'SUV',
+      'Wagon': 'Wagon',
+      'Luxury': 'Luxury',
+    },
     'group': true,
     'groupKey': null,
-    'mapGroupKey': 'geo_cohort_fsa',
+    'mapGroupKey': 'geo_ca_postalcode',
+    'useMVTOption': false,
     'indexKey': null,
-    'mapGroupKeyTitle': 'Geo cohort fsa',
+    'mapGroupKeyTitle': 'Geo ca postalcode',
     'uniqueOptions': {
       'radius': {
         'value': 10,
@@ -1299,6 +1303,39 @@ export default {
           ],
         ],
       },
+      'targetRadius': {
+        'value': 10,
+        'valueOptions': [
+          5,
+          15,
+        ],
+      },
+      'targetFill': {
+        'value': [
+          39,
+          85,
+          196,
+        ],
+        'valueOptions': [
+          [
+            214,
+            232,
+            253,
+          ],
+          [
+            39,
+            85,
+            196,
+          ],
+        ],
+      },
+      'arcWidth': {
+        'value': 1,
+        'valueOptions': [
+          1,
+          20,
+        ],
+      },
       'elevation': {
         'value': 10000,
       },
@@ -1307,6 +1344,9 @@ export default {
       },
       'opacity': {
         'value': 30,
+      },
+      'size': {
+        'value': 4,
       },
     },
     'genericOptions': {
@@ -1317,12 +1357,23 @@ export default {
       'showAxisTitles': {
         'x': false,
         'y': false,
+        'y2': true,
       },
       'axisTitles': {
         'x': '',
         'y': '',
+        'y2': '',
       },
       'showSubPlotTitles': true,
+      'showLabels': false,
+      'showCurrency': false,
+      'showVertical': false,
+      'addAggregationLabel': false,
+      'mapHideSourceLayer': false,
+      'mapHideTargetLayer': false,
+      'mapHideArcLayer': false,
+      'showLocationPins': false,
+      'mapPinTooltipKey': null,
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -1333,17 +1384,26 @@ export default {
         1,
         0,
       ],
+      'labelPosition': 'Bottom',
       'legendSize': 'Small',
       'baseColor': {
         'color1': '#366fe4',
         'color2': '#faaf15',
       },
+      'xAxisLabelLength': 5,
+      'chart1ZPosition': 'Back',
     },
+    'noDataSource': false,
     'dataSource': {
-      'type': 'Execution',
-      'id': '1389',
+      'type': 'Manual',
+      'id': '6000',
     },
     'percentageMode': false,
+    'addUserControls': false,
+    'userControlHeadline': 'Benchmark By',
+    'userControlKeyValues': [],
+    'addTopCategories': false,
+    'categoryFilter': null,
     'presetColors': [
       '#3232F5',
       '#07A0C3',
@@ -1352,6 +1412,8 @@ export default {
       '#dd1c1a',
       '#366fe4',
     ],
+    'mapTooltipLabelTitles': null,
+    'customColors': {},
   },
   'dev-map-2': {
     'title': 'My example map widget - scatterplot layer',
@@ -1684,14 +1746,15 @@ export default {
     'mapValueKeys': [
       {
         'mapVis': 'fill',
-        'key': 'population',
-        'title': 'Population',
+        'key': 'Total Population',
+        'title': 'Total Population',
       },
     ],
     'formatDataFunctions': {},
     'group': true,
     'groupKey': null,
     'mapGroupKey': 'geo_ca_fsa',
+    'useMVTOption': true,
     'indexKey': null,
     'mapGroupKeyTitle': 'Geo ca fsa',
     'uniqueOptions': {
@@ -1813,7 +1876,7 @@ export default {
     'addUserControls': true,
     'userControlHeadline': 'Benchmark By',
     'userControlKeyValues': [
-      'population',
+      'Total Population',
       'home_value',
       'highest_education_no_education',
       'highest_education_secondary_education',
@@ -1854,6 +1917,7 @@ export default {
     'group': true,
     'groupKey': null,
     'mapGroupKey': 'geo_ca_fsa',
+    'useMVTOption': true,
     'indexKey': null,
     'mapGroupKeyTitle': 'Geo ca fsa',
     'uniqueOptions': {

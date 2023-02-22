@@ -204,7 +204,8 @@ const useTransformedData = () => {
         mapPinTooltipKey && mapPinTooltipKey.key !== finalGroupKey ?
           { key: mapPinTooltipKey.key, title: formattedColumnNames[mapPinTooltipKey.key] } :
           '',
-        ...(!useMVTOption ?
+        // don't add geojson keys when groupFSAByPC or using the MVT option to render polygons
+        ...(!(useMVTOption || groupFSAByPC) ?
           GEOJSON_KEYS.map(key => ({ key, title: key })) :
           []
         ),
@@ -231,6 +232,7 @@ const useTransformedData = () => {
     dataHasVariance,
     mapPinTooltipKey,
     useMVTOption,
+    groupFSAByPC,
   ])
 
   const percentageData = useMemo(() => {
