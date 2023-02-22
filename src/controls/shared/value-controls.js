@@ -44,18 +44,16 @@ const ValueControls = () => {
   const { userUpdate, resetValue } = useStoreActions(actions => actions)
 
   // common state
-  const {
-    type,
-    group,
-    domain,
-    valueKeys,
-    chart2ValueKeys,
-    dataHasVariance,
-    columnsAnalysis,
-    addUserControls,
-    widgetControlCardEdit,
-    columnNameAliases,
-  } = useStoreState((state) => state)
+  const addUserControls = useStoreState((state) => state.addUserControls)
+  const chart2ValueKeys = useStoreState((state) => state.chart2ValueKeys)
+  const columnNameAliases = useStoreState((state) => state.columnNameAliases)
+  const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
+  const dataHasVariance = useStoreState((state) => state.dataHasVariance)
+  const domain = useStoreState((state) => state.domain)
+  const group = useStoreState((state) => state.group)
+  const type = useStoreState((state) => state.type)
+  const valueKeys = useStoreState((state) => state.valueKeys)
+  const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)

@@ -158,31 +158,28 @@ const useStyles = ({ mode, allowOpenInEditor, showTitleBar, type }) => makeStyle
       })
 
 const WidgetTitleBar = ({ allowOpenInEditor, onOpenInEditor }) => {
-  const {
-    update,
-    save,
-    toast,
-    resetWidget,
-    loadData,
-    undo,
-    redo,
-  } = useStoreActions((actions) => actions)
+  const loadData = useStoreActions((actions) => actions.loadData)
+  const redo = useStoreActions((actions) => actions.redo)
+  const resetWidget = useStoreActions((actions) => actions.resetWidget)
+  const save = useStoreActions((actions) => actions.save)
+  const toast= useStoreActions((actions) => actions.toast)
+  const undo = useStoreActions((actions) => actions.undo)
+  const update = useStoreActions((actions) => actions.update)
 
-  const { undoAvailable, redoAvailable } = useStoreState((state) => state)
+  const undoAvailable = useStoreState((state) => state.undoAvailable)
+  const redoAvailable = useStoreState((state) => state.redoAvailable)
 
   // widget state
-  const {
-    dataSource,
-    id,
-    tentativeConfig,
-    config,
-    dev,
-    unsavedChanges,
-    title,
-    isLoading,
-    showTitleBar,
-    type,
-  } = useStoreState((state) => state)
+  const config = useStoreState((state) => state.config)
+  const dataSource = useStoreState((state) => state.dataSource)
+  const dev = useStoreState((state) => state.dev)
+  const id = useStoreState((state) => state.id)
+  const isLoading = useStoreState((state) => state.isLoading)
+  const showTitleBar = useStoreState((state) => state.showTitleBar)
+  const tentativeConfig = useStoreState((state) => state.tentativeConfig)
+  const title = useStoreState((state) => state.title)
+  const type = useStoreState((state) => state.type)
+  const unsavedChanges = useStoreState((state) => state.unsavedChanges)
 
   // UI state
   const mode = useStoreState((state) => state.ui.mode)
