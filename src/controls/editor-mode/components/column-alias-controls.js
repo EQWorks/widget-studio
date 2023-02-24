@@ -58,7 +58,7 @@ const ColumnAliasControls = () => {
   const aliasesReseted =  useStoreState((state) => state.aliasesReseted)
 
   const [localColumnNameAliases, setLocalColumnNameAliases] = useState(columnNameAliases)
-  const [aliasError, setAliasError] = useState(false)
+  const [aliasError, setAliasError] = useState([])
 
   useEffect(() => {
     if (Object.keys(columnNameAliases).length && !aliasesReseted) {
@@ -69,6 +69,19 @@ const ColumnAliasControls = () => {
   const dataColumns = useMemo(() => (
     Object.entries(columnsAnalysis).map(([c, { Icon }]) => ({ key: c, icon: Icon }) )
   ), [columnsAnalysis])
+
+  useEffect(() => {
+    const columnAliases = dataColumns.map(({ key }) => localColumnNameAliases[key] || '')
+    const aliasError = columnAliases.map(alias => {
+      const firstIndex =  columnAliases.findIndex(key => key === alias)
+      const lastIndex =  columnAliases.findLastIndex(key => key === alias)
+      if (!alias || firstIndex === lastIndex) {
+        return false
+      }
+      return true
+    })
+    setAliasError(aliasError)
+  }, [dataColumns, localColumnNameAliases])
 
   return (
     <WidgetControlCard
@@ -95,7 +108,7 @@ const ColumnAliasControls = () => {
             {'Alias'}
           </span>
         </div>
-        {dataColumns?.map((col, i) => {
+        {dataColumns.map((col, i) => {
           return (
             <div key={i} className={classes.row}>
               <div className={classes.columnName}>
@@ -108,16 +121,13 @@ const ColumnAliasControls = () => {
                 value={localColumnNameAliases[col.key]}
                 inputProps={{ placeholder: 'Column title alias' }}
                 onChange={(val) => {
-                  if (Object.values(localColumnNameAliases).includes(val)) {
-                    setAliasError(true)
-                  }
                   setLocalColumnNameAliases({
                     ...localColumnNameAliases,
                     [col.key]: val || '',
                   })
                 }}
-                error={aliasError}
-                helperText={aliasError && 'Alias is already in use!'}
+                error={aliasError[i]}
+                helperText={aliasError[i] && 'Alias is already in use!'}
               />
             </div>
           )})}
@@ -131,6 +141,7 @@ const ColumnAliasControls = () => {
                 columnNameAliases: localColumnNameAliases,
               })
             }}
+            disabled={aliasError.find(key => key === true)}
           >
             submit
           </CustomButton>
