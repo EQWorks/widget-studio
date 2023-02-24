@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { Tooltip, Icons, makeStyles, getTailwindConfigColor } from '@eqworks/lumen-labs'
 
@@ -44,6 +44,15 @@ const EditorLeftSidebar = () => {
   const addTopCategories = useStoreState((state) => state.addTopCategories)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
 
+  const showAdvancedControls = useMemo(() => hasDevAccess()
+    && (type === types.STAT
+      || (type === types.BAR &&
+        (Object.values(TOP_COLUMN_KEYS).every(elem => JSON.stringify(columns).includes(elem))
+        || numericColumns.length > 1))
+      || (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1)
+    )
+  ,[type, columns, numericColumns, renderableValueKeys])
+
   return (
     <EditorSidebarBase isLeft>
       <DataSourceControls />
@@ -61,14 +70,7 @@ const EditorLeftSidebar = () => {
           </>
       }
       {/* restrict to dev only for now */}
-      {hasDevAccess()
-        && (type === types.STAT
-          || (type === types.BAR &&
-            (Object.values(TOP_COLUMN_KEYS).every(elem => JSON.stringify(columns).includes(elem))
-            || numericColumns.length > 1))
-          || (type == types.MAP && numericColumns.length > 0 && renderableValueKeys.length === 1)
-        )
-        &&
+      {showAdvancedControls &&
         <>
           {type === types.STAT && <TrendControls />}
           {type === types.STAT && <PercentageControls />}
