@@ -5,7 +5,7 @@ import { makeStyles, Icons, Tooltip } from '@eqworks/lumen-labs'
 
 import CustomSelect from '../components/custom-select'
 import CustomButton from '../components/custom-button'
-import ColumnAliasControls from '../controls/editor-mode/components/column-alias-controls'
+import ColumnNameAlias from '../controls/editor-mode/components/column-name-alias'
 import { hasDevAccess  } from '../util/access'
 
 
@@ -113,7 +113,7 @@ const LinkedSelect = ({
     </div>
 
   const renderAliasTextfield = (
-    <ColumnAliasControls
+    <ColumnNameAlias
       value={choice || ''}
       disabled={!choice}
     />

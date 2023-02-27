@@ -79,8 +79,8 @@ Object.values(modes).forEach(mode => {
       const renderWidgetAuth = (
         <Authenticated product='locus'>
           <div style={{
-            width: '100vw',
-            height: '100vh',
+            width: '100%',
+            height: '100%',
           }}>
             <Widget {...devProps}
               mode={mode}

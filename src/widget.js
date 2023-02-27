@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
-import clsx from 'clsx'
 import { getTailwindConfigColor, makeStyles } from '@eqworks/lumen-labs'
 
 import modes from './constants/modes'
@@ -30,6 +29,14 @@ const commonClasses = {
     justifyContent: 'end',
     alignItems: 'stretch',
   },
+  widgetView: {
+    display: 'flex',
+    flex: '1 1 0%',
+    alignItems: 'stretch',
+    overflow: 'hidden',
+    minWidth: '0',
+    minHeight: '0',
+  },
 }
 
 const useStyles = (mode = modes.EDITOR) => makeStyles(
@@ -41,7 +48,12 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         display: 'flex',
         flexDirection: 'column',
         width: '100vw',
-        height: '98%',
+        minHeight: '100%',
+      },
+      editorWidgetView: {
+        position: 'sticky',
+        height: 'calc(100vh - 4rem)',
+        top: '3rem',
       },
       ...commonClasses,
     }
@@ -56,6 +68,9 @@ const useStyles = (mode = modes.EDITOR) => makeStyles(
         height: '100%',
         borderRadius: '0.125rem',
         borderWidth: '2px',
+      },
+      viewMode: {
+        height: '100%',
       },
       ...commonClasses,
     }
@@ -214,9 +229,10 @@ const Widget = ({
   }, [staticData, loadData, dataSourceType, dataSourceID, onInsightsDataRequired, id, type])
 
   const renderView = (
-    <div className={clsx('min-h-0 overflow-hidden flex-1 min-w-0 flex items-stretch', {
-      'h-full': mode === modes.VIEW,
-    })}>
+    <div
+      className={`${classes.widgetView} ${mode === modes.EDITOR && classes.editorWidgetView}
+      ${mode === modes.VIEW && classes.viewMode}`}
+    >
       <WidgetView />
     </div>
   )

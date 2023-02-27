@@ -16,7 +16,7 @@ import CustomDropdown from './components/custom-dropdown'
 import ExportControls from './components/export-controls'
 import SliderControl from './components/slider-control'
 import EditableSubtitle from '../../view/title-bar/editable-subtitle'
-import ColumnAliasControls from '../editor-mode/components/column-alias-controls'
+import ColumnNameAlias from './components/column-name-alias'
 import { hasDevAccess  } from '../../util/access'
 import { renderItem, renderSection, renderRow, renderToggle, renderSuperSection } from '../shared/util'
 import { positions, sizes, CHART_Z_POSITIONS } from '../../constants/viz-options'
@@ -246,7 +246,7 @@ const EditorRightSidebar = () => {
           }
           {widgetControlCardEdit[cardTypes.RIGHT_SIDEBAR] &&
             renderItem('Pin Tooltip Key Alias',
-              <ColumnAliasControls
+              <ColumnNameAlias
                 value={mapPinTooltipKey?.key || ''}
                 disabled={!hasDevAccess() || !mapPinTooltipKey?.key }
               />
