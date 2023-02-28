@@ -22,6 +22,8 @@ import {
   GEO_KEY_TYPE_NAMES,
   MAP_VIEW_STATE,
   GEOJSON_KEYS,
+  KEY_ALIASES,
+  XWI_KEY_ALIASES,
 } from '../constants/map'
 import { DATA_KEY_FORMATTING } from '../constants/data-format'
 import { dateAggregations } from '../constants/time'
@@ -83,7 +85,7 @@ const stateDefaults = [
       mapHideTargetLayer: false,
       mapHideArcLayer: false,
       showLocationPins: false,
-      mapPinTooltipKey: null,
+      mapPinTooltipKey: '',
       subPlots: false,
       size: 0.8,
       titlePosition: [0, 0],
@@ -477,11 +479,9 @@ export default {
       (state) => state.group,
       (state) => state.type,
       (state) => state.dataHasVariance,
-      (state) => state.formattedColumnNames,
       (state) => state.addUserControls,
       (state) => state.userControlKeyValues,
       (state) => state.numericColumns,
-      (state) => state.genericOptions.addAggregationLabel,
     ],
     (
       valueKeys,
@@ -490,11 +490,9 @@ export default {
       group,
       type,
       dataHasVariance,
-      formattedColumnNames,
       addUserControls,
       userControlKeyValues,
       numericColumns,
-      addAggregationLabel,
     ) => {
       if (type === types.TEXT) {
         return valueKeys
@@ -514,10 +512,6 @@ export default {
           return ({
             ...rest,
             key: visKey,
-            title: `${formattedColumnNames[visKey]}${group && agg && dataHasVariance && addAggregationLabel
-              ? ` (${agg})`
-              : ''}`
-              || key,
             ...(agg && { agg }),
             ...(type === types.BARLINE && chart2ValueKeys.find(el => el.key === visKey) && { type: types.LINE }),
           })
@@ -530,14 +524,24 @@ export default {
       (state) => state.columns,
       (state) => state.groupFSAByPC,
       (state) => state.columnNameAliases,
+      (state) => state.genericOptions.addAggregationLabel,
+      (state) => state.renderableValueKeys,
+      (state) => state.dataIsXWIReport,
     ],
     (
       columns,
       groupFSAByPC,
       columnNameAliases,
+      addAggregationLabel,
+      renderableValueKeys,
+      dataIsXWIReport,
     ) => (
-      Object.fromEntries(columns.map(({ name }) => [name, columnNameAliases?.[name] || cleanUp(name)])
-        .concat(groupFSAByPC ? [['geo_ca_fsa', cleanUp('geo_ca_fsa')]] : []))
+      Object.fromEntries(columns.map(({ name }) => {
+        const agg = renderableValueKeys.find(({ key }) => key === name)?.agg || ''
+        const nameBase = columnNameAliases?.[name] || (dataIsXWIReport ? XWI_KEY_ALIASES : KEY_ALIASES)[name] || cleanUp(name)
+        const formattedName = nameBase + (agg && addAggregationLabel ? ` (${agg})` : '')
+        return ([name, formattedName]).concat(groupFSAByPC ? [['geo_ca_fsa', cleanUp('geo_ca_fsa')]] : [])
+      }))
     )
   ),
 
@@ -631,7 +635,6 @@ export default {
       (state) => state.renderableValueKeys,
       (state) => state.domain,
       (state) => state.transformedData,
-      (state) => state.formattedColumnNames,
       (state) => state.mapLayer,
       (state) => state.dataIsXWIReport,
     ],
@@ -640,15 +643,13 @@ export default {
       renderableValueKeys,
       domain,
       transformedData,
-      formattedColumnNames,
       mapLayer,
       dataIsXWIReport,
     ) => {
       if (type === types.MAP && !dataIsXWIReport && transformedData?.length) {
         const dataSample = transformedData[0] || {}
         const dataKeys = Object.keys(dataSample)
-        const mapGroupKeyTitle = formattedColumnNames[domain?.value] || null
-        const dataIsValid = mapDataIsValid({ dataSample, mapGroupKeyTitle, renderableValueKeys })
+        const dataIsValid = mapDataIsValid({ dataSample, mapGroupKey: domain.value, renderableValueKeys })
         if (mapLayer === MAP_LAYERS.scatterplot) {
           const latitude = dataKeys.find(key => COORD_KEYS.latitude.includes(key))
           const longitude = dataKeys.find(key => COORD_KEYS.longitude.includes(key))
@@ -656,7 +657,7 @@ export default {
         }
         if (mapLayer === MAP_LAYERS.geojson) {
           return GEO_KEY_TYPES[GEO_KEY_TYPE_NAMES.region].includes(domain?.value) ?
-            mapDataIsValid({ dataSample: dataSample.properties, mapGroupKeyTitle, renderableValueKeys }) :
+            mapDataIsValid({ dataSample: dataSample.properties, mapGroupKey: domain.value, renderableValueKeys }) :
             dataIsValid
         }
       }
