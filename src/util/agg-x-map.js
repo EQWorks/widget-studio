@@ -56,7 +56,6 @@ export const xMapAggData = ({
   sourcePOIId,
   targetPOIId,
   columnsAnalysis,
-  formattedColumnNames,
   groupFilter,
   valueKeys,
 }) => Object.values(data.reduce((res, r) => {
@@ -74,24 +73,14 @@ export const xMapAggData = ({
     res[group] = res[group] || {}
     Object.entries(r).forEach(([k, v]) => {
       const uniqueKey = isUniqueKey({ k, sourcePOIId, targetPOIId, groupKey })
-      const { agg, title } = valueKeys.find(({ key }) => k === key) || {}
-      let finalKey
-      // keep coord keys unformatted
-      if (Object.values(COORD_KEYS).flat().includes(k)) {
-        finalKey = k
-      } else if (!(columnsAnalysis[k].isNumeric || Object.values(COORD_KEYS).flat().includes(k))) {
-        finalKey = formattedColumnNames[k]
-      } else {
-        finalKey = title
-      }
-
-      if (res[group][finalKey]) {
+      const { agg } = valueKeys.find(({ key }) => k === key) || {}
+      if (res[group][k]) {
         if (columnsAnalysis[k]?.isNumeric && !uniqueKey && agg) {
-          res[group][finalKey] = aggFunctions[agg]([res[group][finalKey], v])
+          res[group][k] = aggFunctions[agg]([res[group][k], v])
         }
-      } else if ((columnsAnalysis[k]?.isNumeric && JSON.stringify(valueKeys).includes(finalKey))
+      } else if ((columnsAnalysis[k]?.isNumeric && JSON.stringify(valueKeys).includes(k))
         || uniqueKey) {
-        res[group][finalKey] = v
+        res[group][k] = v
       }
     })
   }
