@@ -8,12 +8,10 @@ export default {
     'valueKeys': [
       {
         'key': ' Dollars Spent ',
-        'title': 'Dollars Spent',
         'agg': 'sum',
       },
       {
         'key': 'Dollars Rewarded',
-        'title': 'Dollars Rewarded',
         'agg': 'sum',
       },
     ],
@@ -23,7 +21,6 @@ export default {
     'groupKey': 'category_name',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Category Name',
     'uniqueOptions': {
       'hidePagination': true,
       'headerTitle': true,
@@ -82,12 +79,10 @@ export default {
     'valueKeys': [
       {
         'key': ' Dollars Spent ',
-        'title': 'Dollars Spent',
         'agg': 'sum',
       },
       {
         'key': 'Dollars Rewarded',
-        'title': 'Dollars Rewarded',
         'agg': 'sum',
       },
     ],
@@ -97,7 +92,6 @@ export default {
     'groupKey': 'category_name',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Category Name',
     'genericOptions': {
       'showWidgetTitle': false,
       'groupByValue': false,
@@ -151,7 +145,6 @@ export default {
     'valueKeys': [
       {
         'key': 'submitted_deals',
-        'title': 'Submitted deals',
       },
     ],
     'mapValueKeys': [],
@@ -160,7 +153,6 @@ export default {
     'groupKey': 'resolution',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Resolution',
     'uniqueOptions': {
       'showTicks': true,
       'spline': false,
@@ -209,12 +201,10 @@ export default {
     'valueKeys': [
       {
         'key': 'submitted_deals',
-        'title': 'Submitted deals',
         'agg': 'sum',
       },
       {
         'key': 'funded_deals',
-        'title': 'funded deals',
         'agg': 'sum',
       },
     ],
@@ -224,7 +214,6 @@ export default {
     'groupKey': 'dealerId',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Dealer Id',
     'uniqueOptions': {
       'showTicks': true,
       'spline': false,
@@ -286,12 +275,10 @@ export default {
     'valueKeys': [
       {
         'key': 'city_clicks',
-        'title': 'City clicks (mean)',
         'agg': 'mean',
       },
       {
         'key': 'city_impressions',
-        'title': 'City impressions (sum)',
         'agg': 'sum',
       },
     ],
@@ -301,7 +288,6 @@ export default {
     'groupKey': 'geo_ca_city',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Geo ca city',
     'uniqueOptions': {
       'showPercentage': true,
       'donut': true,
@@ -347,12 +333,10 @@ export default {
     'valueKeys': [
       {
         'key': 'renters',
-        'title': 'Renters (mean)',
         'agg': 'mean',
       },
       {
         'key': 'owners',
-        'title': 'Owners (mean)',
         'agg': 'mean',
       },
     ],
@@ -362,7 +346,6 @@ export default {
     'groupKey': 'city',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'City',
     'uniqueOptions': {
       'showPercentage': true,
       'donut': false,
@@ -408,12 +391,10 @@ export default {
     'valueKeys': [
       {
         'key': 'Dollars Rewarded',
-        'title': 'Dollars Rewarded (mean)',
         'agg': 'mean',
       },
       {
         'key': 'Number of Transactions',
-        'title': 'Number of Transactions (sum)',
         'agg': 'sum',
       },
     ],
@@ -423,7 +404,6 @@ export default {
     'groupKey': 'consumer_gender',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Consumer gender',
     'uniqueOptions': {
       'donut': false,
       'showPercentage': true,
@@ -496,13 +476,11 @@ export default {
     ],
     'valueKeys': [
       {
-        'title': 'City clicks (mean)',
         'key': 'city_clicks',
         'agg': 'mean',
       },
       {
         'key': 'city_impressions',
-        'title': 'City impressions (sum)',
         'agg': 'sum',
       },
     ],
@@ -514,7 +492,6 @@ export default {
     'mapGroupKey': null,
     'useMVTOption': true,
     'indexKey': null,
-    'groupKeyTitle': 'Geo ca city',
     'uniqueOptions': {
       'donut': false,
       'showPercentage': true,
@@ -540,7 +517,7 @@ export default {
       'mapHideTargetLayer': false,
       'mapHideArcLayer': false,
       'showLocationPins': false,
-      'mapPinTooltipKey': null,
+      'mapPinTooltipKey': '',
       'subPlots': true,
       'size': 0.6,
       'titlePosition': [
@@ -614,12 +591,11 @@ export default {
     'valueKeys': [
       {
         'key': 'converted_users',
-        'title': 'Converted users (mean)',
         'agg': 'mean',
       },
       {
         'key': 'city_clicks',
-        'title': 'City clicks (sum)',
+
         'agg': 'sum',
       },
     ],
@@ -633,7 +609,6 @@ export default {
     'groupKey': 'geo_ca_city',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Geo ca city',
     'uniqueOptions': {
       'stacked': true,
       'showTicks': true,
@@ -682,7 +657,6 @@ export default {
     'valueKeys': [
       {
         'key': 'price',
-        'title': 'Price (mean)',
         'agg': 'mean',
       },
     ],
@@ -692,7 +666,6 @@ export default {
     'groupKey': 'time',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Time',
     'uniqueOptions': {
       'stacked': false,
       'showTicks': true,
@@ -750,12 +723,10 @@ export default {
     'groupFilter': [],
     'valueKeys': [
       {
-        'title': 'Visitation',
         'key': 'visitation',
       },
       {
         'key': 'city',
-        'title': 'City',
       },
     ],
     'mapValueKeys': [],
@@ -764,7 +735,6 @@ export default {
     'groupKey': 'location_category',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Location category',
     'uniqueOptions': {
       'stacked': false,
       'showTicks': true,
@@ -836,20 +806,16 @@ export default {
     'groupFilter': [],
     'valueKeys': [
       {
-        'title': 'Market area',
         'key': 'market_area',
       },
       {
-        'title': 'City',
         'key': 'city',
       },
       {
-        'title': 'Province',
         'key': 'province',
       },
       {
         'key': 'country',
-        'title': 'Country',
       },
     ],
     'mapValueKeys': [],
@@ -858,7 +824,6 @@ export default {
     'groupKey': 'name',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Name',
     'uniqueOptions': {
       'stacked': false,
       'showTicks': true,
@@ -940,11 +905,9 @@ export default {
     'valueKeys': [
       {
         'key': 'clicks',
-        'title': 'Clicks',
       },
       {
         'key': 'revenue',
-        'title': 'Revenue',
       },
     ],
     'mapValueKeys': [],
@@ -953,7 +916,6 @@ export default {
     'groupKey': null,
     'mapGroupKey': null,
     'indexKey': 'impressions',
-    'indexKeyTitle': 'Impressions',
     'uniqueOptions': {
       'spline': true,
       'showTicks': true,
@@ -999,11 +961,9 @@ export default {
     'valueKeys': [
       {
         'key': 'spend',
-        'title': 'Spend',
       },
       {
         'key': 'clicks',
-        'title': 'Clicks',
       },
     ],
     'mapValueKeys': [],
@@ -1012,7 +972,6 @@ export default {
     'groupKey': null,
     'mapGroupKey': null,
     'indexKey': 'impressions',
-    'indexKeyTitle': 'Impressions',
     'uniqueOptions': {
       'spline': false,
       'showTicks': true,
@@ -1061,13 +1020,11 @@ export default {
     'valueKeys': [
       {
         'key': 'visitation',
-        'title': 'Visitation',
       },
     ],
     'chart2ValueKeys': [
       {
         'key': 'city',
-        'title': 'City',
         'type': 'line',
       },
     ],
@@ -1086,7 +1043,6 @@ export default {
     'mapGroupKey': null,
     'useMVTOption': true,
     'indexKey': null,
-    'groupKeyTitle': 'Location category',
     'uniqueOptions': {
       'showTicks': true,
       'showLineMarkers': true,
@@ -1116,7 +1072,7 @@ export default {
       'mapHideTargetLayer': false,
       'mapHideArcLayer': false,
       'showLocationPins': false,
-      'mapPinTooltipKey': null,
+      'mapPinTooltipKey': '',
       'subPlots': false,
       'size': 0.6,
       'titlePosition': [
@@ -1180,7 +1136,6 @@ export default {
     'valueKeys': [
       {
         'key': 'unique_visitors',
-        'title': 'Unique visitors',
       },
     ],
     'mapValueKeys': [],
@@ -1189,7 +1144,6 @@ export default {
     'groupKey': null,
     'mapGroupKey': null,
     'indexKey': 'repeat_visitors',
-    'indexKeyTitle': 'Repeat visitors',
     'uniqueOptions': {
       'showTicks': true,
       'showLines': false,
@@ -1252,7 +1206,6 @@ export default {
       {
         'mapVis': 'fill',
         'key': 'Pickup',
-        'title': 'Pickup',
       },
     ],
     'formatDataFunctions': {},
@@ -1275,7 +1228,6 @@ export default {
     'mapGroupKey': 'geo_ca_postalcode',
     'useMVTOption': false,
     'indexKey': null,
-    'mapGroupKeyTitle': 'Geo ca postalcode',
     'uniqueOptions': {
       'radius': {
         'value': 10,
@@ -1373,7 +1325,7 @@ export default {
       'mapHideTargetLayer': false,
       'mapHideArcLayer': false,
       'showLocationPins': false,
-      'mapPinTooltipKey': null,
+      'mapPinTooltipKey': '',
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -1437,14 +1389,11 @@ export default {
       {
         'mapVis': 'radius',
         'key': 'visits',
-        'title': 'Visits',
         'agg': 'sum',
       },
       {
-        'title:': 'Unique visitors (sum)',
         'mapVis': 'fill',
         'key': 'unique_visitors',
-        'title': 'Unique visitors',
         'agg': 'sum',
       },
     ],
@@ -1456,7 +1405,6 @@ export default {
     'groupKey': null,
     'mapGroupKey': 'poi_id',
     'indexKey': null,
-    'mapGroupKeyTitle': 'Poi id',
     'uniqueOptions': {
       'radius': {
         'value': 10,
@@ -1551,10 +1499,7 @@ export default {
       'mapHideTargetLayer': false,
       'mapHideArcLayer': false,
       'showLocationPins': true,
-      'mapPinTooltipKey': {
-        'key': 'address_city',
-        'title': 'City',
-      },
+      'mapPinTooltipKey': 'address_city',
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
@@ -1729,9 +1674,6 @@ export default {
       '#dd1c1a',
       '#366fe4',
     ],
-    'mapTooltipLabelTitles': {
-      'sourceTitle': 'Poi name',
-    },
   },
   'dev-map-4': {
     'title': 'My example map widget - user value controls',
@@ -1747,7 +1689,6 @@ export default {
       {
         'mapVis': 'fill',
         'key': 'Total Population',
-        'title': 'Total Population',
       },
     ],
     'formatDataFunctions': {},
@@ -1756,7 +1697,6 @@ export default {
     'mapGroupKey': 'geo_ca_fsa',
     'useMVTOption': true,
     'indexKey': null,
-    'mapGroupKeyTitle': 'Geo ca fsa',
     'uniqueOptions': {
       'radius': {
         'value': 10,
@@ -1909,7 +1849,6 @@ export default {
       {
         'mapVis': 'fill',
         'key': 'health_and_beauty',
-        'title': 'Health and beauty',
         'agg': 'unique',
       },
     ],
@@ -1919,7 +1858,6 @@ export default {
     'mapGroupKey': 'geo_ca_fsa',
     'useMVTOption': true,
     'indexKey': null,
-    'mapGroupKeyTitle': 'Geo ca fsa',
     'uniqueOptions': {
       'radius': {
         'value': 10,
@@ -2068,24 +2006,19 @@ export default {
     'groupFilter': [],
     'valueKeys': [
       {
-        'title': '0-50%',
         'key': 'hh_income_0_50',
       },
       {
-        'title': '50-100%',
         'key': 'hh_income_50_100',
       },
       {
-        'title': '100-150%',
         'key': 'hh_income_100_150',
       },
       {
-        'title': '150-200%',
         'key': 'hh_income_150_200',
       },
       {
         'key': 'hh_income_200_over',
-        'title': '200%+',
       },
     ],
     'mapValueKeys': [],
@@ -2094,7 +2027,6 @@ export default {
     'groupKey': 'resolution',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Resolution',
     'uniqueOptions': {
       'stacked': false,
       'showTicks': true,
@@ -2162,12 +2094,10 @@ export default {
     'valueKeys': [
       {
         'key': 'converted_users',
-        'title': 'Converted users (mean)',
         'agg': 'mean',
       },
       {
         'key': 'city_clicks',
-        'title': 'City clicks (sum)',
         'agg': 'sum',
       },
     ],
@@ -2177,7 +2107,6 @@ export default {
     'groupKey': 'geo_ca_city',
     'mapGroupKey': null,
     'indexKey': null,
-    'groupKeyTitle': 'Geo ca city',
     'uniqueOptions': {
       'showPercentage': false,
       'showTicks': true,
@@ -2263,7 +2192,7 @@ export default {
       'mapHideTargetLayer': false,
       'mapHideArcLayer': false,
       'showLocationPins': false,
-      'mapPinTooltipKey': null,
+      'mapPinTooltipKey': '',
       'subPlots': false,
       'size': 0.8,
       'titlePosition': [
