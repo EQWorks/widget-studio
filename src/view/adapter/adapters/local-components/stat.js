@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { getTailwindConfigColor, Icons, makeStyles } from '@eqworks/lumen-labs'
-import { capitalize } from '../../../../util/string-manipulation'
+import { capitalizeWords } from '../../../../util/string-manipulation'
 import clsx from 'clsx'
 
 
@@ -159,7 +159,16 @@ const conditionalClasses = ({ showVertical, values, labelPosition, selectedPerce
   ),
 })
 
-const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions, onAfterPlot }) => {
+const Stat = ({
+  data,
+  title,
+  values,
+  formattedColumnNames,
+  formatData,
+  genericOptions,
+  uniqueOptions,
+  onAfterPlot,
+}) => {
   const statRef = useRef(null)
   const { showLabels, showCurrency, showWidgetTitle, showVertical, labelPosition } = genericOptions
   const { selectedTrend, selectedPercentage } = uniqueOptions
@@ -207,11 +216,11 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions, 
   }
 
   const getTitle = (title, label) => {
-    let _title = capitalize(title.replaceAll('_', ' '))
+    let _title = title
     if (label) {
-      _title = _title.replaceAll(`${label} `, '')
+      _title = _title.replaceAll(`${label}`, '')
     }
-    return _title
+    return capitalizeWords(_title.replaceAll('_', ' '))
   }
 
   return (
@@ -221,27 +230,27 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions, 
         <div className={_conditionalClasses().contentContainer}>
           {
             values?.map((v, i) => (
-              <div key={v.title} className={_conditionalClasses().itemContainer}>
-                {data[0][v.title] &&
+              <div key={v.key} className={_conditionalClasses().itemContainer}>
+                {data[0][v.key] &&
                   <div className={_conditionalClasses().itemWrapper}>
                     <div className={_conditionalClasses(i).item}>
                       <div className={classes.value}>
                         {showCurrency && '$'}
-                        {typeof formatData[v.title] === 'function' ?
-                          formatData[v.title](data[0][v.title]) :
-                          Number(data[0][v.title]).toLocaleString('en-US', { maximumFractionDigits: 2 })
+                        {typeof formatData[v.key] === 'function' ?
+                          formatData[v.key](data[0][v.key]) :
+                          Number(data[0][v.key]).toLocaleString('en-US', { maximumFractionDigits: 2 })
                         }
                       </div>
                       {showLabels &&
                           <div className={classes.label}>
-                            {v.title}
+                            {formattedColumnNames[v.key]}
                           </div>
                       }
                     </div>
-                    {(selectedPercentage && selectedPercentage.values[i]) && data[0][v.title] &&
+                    {(selectedPercentage && selectedPercentage.values[i]) && data[0][v.key] &&
                         <div className={_conditionalClasses(i).item}>
                           <div className={classes.value}>
-                            {showCurrency && '$'}{renderValue(data[0][v.title], Number(selectedPercentage.values[i]))}
+                            {showCurrency && '$'}{renderValue(data[0][v.key], Number(selectedPercentage.values[i]))}
                           </div>
                           {showLabels &&
                             <div className={classes.label}>
@@ -252,10 +261,10 @@ const Stat = ({ data, title, values, formatData, genericOptions, uniqueOptions, 
                     }
                   </div>
                 }
-                {(selectedTrend && selectedTrend.values[i]) && data[0][v.title] &&
+                {(selectedTrend && selectedTrend.values[i]) && data[0][v.key] &&
                   <div className={`trend-label-container ${classes.trendLabel}`}>
-                    {renderTrend(Math.round(calculateTrend(data[0][v.title], Number(selectedTrend.values[i]))))}
-                    vs. {getTitle(selectedTrend.titles[i], v.title)}
+                    {renderTrend(Math.round(calculateTrend(data[0][v.key], Number(selectedTrend.values[i]))))}
+                    vs. {getTitle(selectedTrend.titles[i], v.key)}
                   </div>
                 }
               </div>
@@ -271,6 +280,7 @@ Stat.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string,
+  formattedColumnNames: PropTypes.object.isRequired,
   formatData: PropTypes.objectOf(PropTypes.func),
   genericOptions: PropTypes.object.isRequired,
   uniqueOptions: PropTypes.object.isRequired,
