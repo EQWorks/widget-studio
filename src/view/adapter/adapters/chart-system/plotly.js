@@ -14,8 +14,8 @@ export default {
     component: PlotlyBarChart,
     adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
-      x: config.groupKeyTitle,
-      y: config.valueKeys.map(({ title }) => title),
+      x: config.groupKey,
+      y: config.valueKeys.map(({ key }) => key),
       orientation: uniqueOptions.horizontal ? 'h' : 'v',
       formatData: config.formatDataFunctions,
       onAfterPlot,
@@ -29,8 +29,8 @@ export default {
     component: PlotlyLineChart,
     adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
-      x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
-      y: config.valueKeys.map(({ title }) => title),
+      x: config.group ? config.groupKey : config.indexKey,
+      y: config.valueKeys.map(({ key }) => key),
       formatData: config.formatDataFunctions,
       onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
@@ -43,9 +43,9 @@ export default {
     component: PlotlyBarLineChart,
     adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
-      x: config.groupKeyTitle,
-      y: config.valueKeys.map(({ title }) => title),
-      y2: config.chart2ValueKeys.map(({ title }) => title),
+      x: config.groupKey,
+      y: config.valueKeys.map(({ key }) => key),
+      y2: config.chart2ValueKeys.map(({ key }) => key),
       formatData: config.formatDataFunctions,
       onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
@@ -59,8 +59,8 @@ export default {
     component: PlotlyPieChart,
     adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
-      label: config.groupKeyTitle,
-      values: config.valueKeys.map(({ title }) => title),
+      label: config.groupKey,
+      values: config.valueKeys.map(({ key }) => key),
       onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
       ...uniqueOptions,
@@ -72,8 +72,8 @@ export default {
     component: PlotlyScatterChart,
     adapt: (data, { title, uniqueOptions, genericOptions, onAfterPlot, customColors, ...config }) => ({
       data,
-      x: config.group ? config.groupKeyTitle : config.indexKeyTitle,
-      y: config.valueKeys.map(({ title }) => title),
+      x: config.group ? config.groupKey : config.indexKey,
+      y: config.valueKeys.map(({ key }) => key),
       formatData: config.formatDataFunctions,
       onAfterPlot,
       ...(genericOptions.showWidgetTitle && { title }),
@@ -88,8 +88,8 @@ export default {
       const { xAxisLabelLength, showWidgetTitle } = genericOptions
       return ({
         data,
-        x: config.valueKeys.map(({ title }) => title),
-        y: [config.groupKeyTitle],
+        x: config.valueKeys.map(({ key }) => key),
+        y: [config.groupKey],
         formatData: config.formatDataFunctions,
         xAxisLabelLength,
         onAfterPlot,
