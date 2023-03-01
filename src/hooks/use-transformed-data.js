@@ -34,7 +34,6 @@ const useTransformedData = () => {
   const group = useStoreState((state) => state.group)
   const groupKey = useStoreState((state) => state.groupKey)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
-  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const mapGroupKey = useStoreState((state) => state.mapGroupKey)
   const validMapGroupKeys = useStoreState((state) => state.validMapGroupKeys)
   const groupFSAByPC = useStoreState((state) => state.groupFSAByPC)
@@ -178,7 +177,7 @@ const useTransformedData = () => {
   // if grouping enabled, aggregate each column from renderableValueKeys in groupedData according to defined 'agg' property
   const aggregatedData = useMemo(() => {
     if (!group || (type === types.MAP && dataIsXWIReport)) return null
-    const formattedDomain = formattedColumnNames[finalGroupKey]
+    const domain = finalGroupKey
     if (domainIsDate && dateAggregations[dateAggregation]) {
       // extra grouping required if Domain is date
       const { groupFn, sortFn } = dateAggregations[dateAggregation]
@@ -192,39 +191,38 @@ const useTransformedData = () => {
           return acc
         }, {})
       return Object.entries(dateGroupedData).map(([k, v]) => ({
-        [formattedDomain]: k,
-        ...Object.fromEntries(renderableValueKeys.map(({ key, agg = 'sum', title }) => (
-          [title, aggFunctions[agg](v.map(_v => _v[key]).flat())]
+        [domain]: k,
+        ...Object.fromEntries(renderableValueKeys.map(({ key, agg = 'sum' }) => (
+          [key, aggFunctions[agg](v.map(_v => _v[key]).flat())]
         ))),
-      })).sort((a, b) => sortFn(a[formattedDomain], b[formattedDomain]))
+      })).sort((a, b) => sortFn(a[domain], b[domain]))
     }
     return Object.entries(filteredGroupedData).map(([group, values]) => {
       let aggKeys = [
         ...renderableValueKeys,
-        mapPinTooltipKey && mapPinTooltipKey.key !== finalGroupKey ?
-          { key: mapPinTooltipKey.key, title: formattedColumnNames[mapPinTooltipKey.key] } :
+        mapPinTooltipKey && mapPinTooltipKey !== finalGroupKey ?
+          { key: mapPinTooltipKey } :
           '',
         // don't add geojson keys when groupFSAByPC or using the MVT option to render polygons
         ...(!(useMVTOption || groupFSAByPC) ?
-          GEOJSON_KEYS.map(key => ({ key, title: key })) :
+          GEOJSON_KEYS.map(key => ({ key })) :
           []
         ),
       ].filter(el => el)
 
-      return aggKeys.reduce((res, { key, agg, title }) => {
+      return aggKeys.reduce((res, { key, agg }) => {
         const val = dataHasVariance && agg
           ? aggFunctions[agg](values[key])
           : values?.[key]?.[0]
-        res[title] = val
+        res[key] = val
         return res
-      }, { [formattedDomain]: group })
+      }, { [domain]: group })
     })
   }, [
     group,
     type,
     dataIsXWIReport,
     domainIsDate,
-    formattedColumnNames,
     dateAggregation,
     filteredGroupedData,
     renderableValueKeys,
@@ -240,8 +238,8 @@ const useTransformedData = () => {
       return null
     }
     const sums = Object.fromEntries(
-      renderableValueKeys.map(({ title }) => (
-        [title, aggregatedData.reduce((_acc, el) => _acc + el[title], 0)]
+      renderableValueKeys.map(({ key }) => (
+        [key, aggregatedData.reduce((_acc, el) => _acc + el[key], 0)]
       ))
     )
     const res = aggregatedData.map(d => (
@@ -277,7 +275,6 @@ const useTransformedData = () => {
             sourcePOIId,
             targetPOIId,
             columnsAnalysis,
-            formattedColumnNames,
             groupFilter,
             valueKeys,
           })})
@@ -290,7 +287,6 @@ const useTransformedData = () => {
     truncatedData,
     columnsAnalysis,
     dataKeys,
-    formattedColumnNames,
     groupFilter,
     renderableValueKeys,
   ])
@@ -305,7 +301,7 @@ const useTransformedData = () => {
             if (latIsValid(d[lat]) && lonIsValid(d[lon])) {
               return [...acc, d]
             }
-            const { [lat]: [_lat], [lon]: [_lon] } = groupedData[d[formattedColumnNames[mapGroupKey]]]
+            const { [lat]: [_lat], [lon]: [_lon] } = groupedData[d[mapGroupKey]]
             return latIsValid(_lat) && lonIsValid(_lon) ?
               [
                 ...acc,
@@ -323,7 +319,6 @@ const useTransformedData = () => {
         }
       }
       if (GEO_KEY_TYPES.region.includes(mapGroupKey)) {
-        const formattedDomain = formattedColumnNames[mapGroupKey]
         const regions = Object.keys(filteredGroupedData).reduce((acc, region) =>
           geoKeyIsValid({ geoKey: GEO_KEY_TYPE_NAMES.region, d: region.toUpperCase().trim() }) ?
             [...acc, region.toUpperCase().trim()] :
@@ -344,7 +339,7 @@ const useTransformedData = () => {
         }
         if (regionPolygons && mapEnrichedData.length) {
           return mapEnrichedData.reduce((acc, regionData) => {
-            const regionName = regionData[formattedDomain].toUpperCase().trim()
+            const regionName = regionData[mapGroupKey].toUpperCase().trim()
             const { type, coordinates } = regionPolygons[regionName] || {}
             return regionPolygons[regionName] ?
               [
@@ -367,16 +362,9 @@ const useTransformedData = () => {
         if (useMVTOption) {
           const geoKey = Object.keys(GEO_KEY_TYPES)
             .find(type => GEO_KEY_TYPES[type].includes(mapGroupKey))
-          const formattedDomain = formattedColumnNames[mapGroupKey]
           return mapEnrichedData.reduce((acc, d) =>
-            geoKeyIsValid({ geoKey, d: d[formattedDomain]?.replace(' ', '').toUpperCase() }) ?
-              [
-                ...acc,
-                {
-                  ...d,
-                  formattedDomain: d[formattedDomain]?.replace(' ', '').toUpperCase(),
-                },
-              ] :
+            geoKeyIsValid({ geoKey, d: d[mapGroupKey]?.replace(' ', '').toUpperCase() }) ?
+              [...acc, d] :
               acc
           , [])
         }
@@ -391,7 +379,6 @@ const useTransformedData = () => {
     filteredGroupedData,
     mapGroupKey,
     groupedData,
-    formattedColumnNames,
     showLocationPins,
     useMVTOption,
     lat,
@@ -402,19 +389,12 @@ const useTransformedData = () => {
   const indexedData = useMemo(() => {
     if (group || dataIsXWIReport) return null
     const sortFn = domainIsDate
-      ? (a, b) => dateSort(a[formattedColumnNames[indexKey]], b[formattedColumnNames[indexKey]])
-      : (a, b) => (a[formattedColumnNames[indexKey]] - b[formattedColumnNames[indexKey]])
+      ? (a, b) => dateSort(a[indexKey], b[indexKey])
+      : (a, b) => (a[indexKey] - b[indexKey])
     return (
-      truncatedData
-        .map(d => Object.fromEntries(
-          Object.entries(d)
-            .map(
-              ([k, v]) => [formattedColumnNames[k], v]
-            )
-        ))
-        .sort(sortFn)
+      truncatedData.sort(sortFn)
     )
-  }, [domainIsDate, formattedColumnNames, group, indexKey, truncatedData, dataIsXWIReport])
+  }, [domainIsDate, group, indexKey, truncatedData, dataIsXWIReport])
 
   // update transformedData
   useEffect(() => {
