@@ -11,6 +11,7 @@ export default {
       data,
       title,
       values: valueKeys,
+      formattedColumnNames: config.formattedColumnNames,
       formatData: config.formatDataFunctions,
       genericOptions,
       uniqueOptions,
@@ -29,11 +30,12 @@ export default {
         borderType,
         headerColor,
       } = uniqueOptions
-      const { formatDataFunctions } = config
+      const { formattedColumnNames, formatDataFunctions } = config
 
       return ({
         rows: data,
         showHeader: false,
+        formattedColumnNames,
         formatData: formatDataFunctions,
         barColumns: barColumns.length ? barColumns : false,
         barColumnsColor: genericOptions?.baseColor?.color1,
