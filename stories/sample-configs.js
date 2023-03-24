@@ -556,18 +556,20 @@ export default {
     ],
     'mapTooltipLabelTitles': null,
     'customColors': {
-      'chart': [
-        '#004C86',
-        '#CF7047',
-        '#1F7F79',
-        '#B24456',
-        '#582A7D',
-        '#D3A642',
-        '#3175AC',
-        '#7A002D',
-        '#437345',
-        '#802C6D',
-      ],
+      'chart': {
+        'color1': [
+          '#004C86',
+          '#CF7047',
+          '#1F7F79',
+          '#B24456',
+          '#582A7D',
+          '#D3A642',
+          '#3175AC',
+          '#7A002D',
+          '#437345',
+          '#802C6D',
+        ],
+      },
       'map': {
         'targetLayerColor': '',
         'iconColor': '#CF7047',
