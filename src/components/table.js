@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Parser, transforms } from 'json2csv'
 import { Table as LumenTable } from '@eqworks/lumen-table'
-import { makeStyles } from '@eqworks/lumen-labs'
+import { makeStyles, Accordion, Icons } from '@eqworks/lumen-labs'
 
 
 /* based on https://github.com/EQWorks/lumen-table/blob/af9f54cbb6e8c6e7a44e1bf44645f5da631a14e1/src/table-toolbar/download.js#L15-L44 */
@@ -42,6 +42,35 @@ const jsonToCsv = ({ data, rows, visibleColumns, visCols = false, filteredRows =
   link.remove()
 }
 
+// formerly from util/helpers
+const formatCell = ({ value, index }) => {
+  // value is falsey or boolean
+  if (!value || !!value === value) {
+    return mapFalsy[value]
+  }
+  // value is array or object
+  if (typeof value === 'object') {
+    return (
+      <Accordion key={index} className='accordion__container' color='secondary'>
+        <Accordion.Panel header='JSON' ExpandIcon={<Icons.ChevronDown />} alignIcon='end'>
+          <pre>{JSON.stringify(value, undefined, 2)}</pre>
+        </Accordion.Panel>
+      </Accordion>
+    )
+  }
+  return value
+}
+
+// formerly from util/helpers
+const mapFalsy = {
+  0: '0',
+  undefined: 'Undefined',
+  false: 'False',
+  true: 'True',
+  null: 'NULL',
+  '': 'Unknown',
+}
+
 const classes = (showHeader) => {
   const tableContainerStyle = showHeader ?
     { height: '100%' } : { height: '90%', marginTop: '1rem' }
@@ -72,6 +101,13 @@ const Table = ({
   const renderTable = (
     <LumenTable
       data={_rows}
+      columns={
+        Object.keys(_rows[0] || {})?.map((key, index) => ({
+          Header: key,
+          accessor: key,
+          Cell: ({ value }) => formatCell({ value, index }),
+        }))
+      }
       formatData={formatData}
       downloadFn={jsonToCsv}
       toolbar={showHeader}
@@ -114,7 +150,10 @@ Table.defaultProps = {
   hidePagination: false,
   headerTitle: false,
   title: '',
-  defaultStyles: {},
+  defaultStyles: {
+    headerColor: 'white',
+    borderType: 'horizontal',
+  },
 }
 
 export default Table
