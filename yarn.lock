@@ -1418,10 +1418,10 @@
     react-window "^1.8.6"
     use-debounce "^7.0.1"
 
-"@eqworks/lumen-table@^2.0.0-alpha.18":
-  version "2.0.0-alpha.18"
-  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-table/2.0.0-alpha.18/f0073c3baed368d01fb6b38a212c67b3eb92f50e#f0073c3baed368d01fb6b38a212c67b3eb92f50e"
-  integrity sha512-ZI1KAL6E9yTw/MX3o0ANcFcQxJKYdZlAJHYWOmqAjXzw6+tM/tNGbNVcfMJwALxVG0dqe5j2Nt0HDqkO3vakPw==
+"@eqworks/lumen-table@^2.0.0-alpha.19":
+  version "2.0.0-alpha.19"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-table/2.0.0-alpha.19/8e84c859dd530ecf39701bba1b5e7b40d178d59c#8e84c859dd530ecf39701bba1b5e7b40d178d59c"
+  integrity sha512-t+MM26YutuI1va+82FFs4gp0gGSAdGKx7uYzV6oExbGk0ylpS4jdLEF12VP/WY+xurNFkHRaG43qReSH+PfFRw==
   dependencies:
     "@eqworks/lumen-labs" "^0.1.0-alpha.77"
     prop-types "^15.7.2"
