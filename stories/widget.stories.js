@@ -97,7 +97,7 @@ Object.values(modes).forEach(mode => {
         .add(id, () => (
           mode === modes.EDITOR
             ? <div style={{ width: '100vw', height: '100vh', background: 'white' }}>
-              {['dev-map-1', 'dev-map-2', 'dev-map-4', 'dev-map-5'].includes(id) ?
+              {['dev-stat-1', 'dev-map-1', 'dev-map-2', 'dev-map-4', 'dev-map-5'].includes(id) ?
                 renderWidgetAuth :
                 renderWidget
               }
@@ -106,7 +106,7 @@ Object.values(modes).forEach(mode => {
               style={{ margin: '1rem' }}
               defaultSize={{ width: '50vw', height: '50vh' }}
             >
-              {['dev-map-1', 'dev-map-2', 'dev-map-4', 'dev-map-5'].includes(id) ?
+              {['dev-stat-1','dev-map-1', 'dev-map-2', 'dev-map-4', 'dev-map-5'].includes(id) ?
                 renderWidgetAuth :
                 renderWidget
               }
