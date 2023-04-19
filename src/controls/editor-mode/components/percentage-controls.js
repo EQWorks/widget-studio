@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 
 import { useStoreState, useStoreActions } from '../../../store'
 
+import { useGroupFilterValue } from '../../../hooks/use-group-filter'
 import WidgetControlCard from '../../shared/components/widget-control-card'
 import { renderRow } from '../../shared/util'
 import MutedBarrier from '../../shared/muted-barrier'
@@ -15,22 +16,14 @@ const PercentageControls = () => {
 
   const domain = useStoreState((state) => state.domain)
   const type = useStoreState((state) => state.type)
-  const groups = useStoreState((state) => state.groups)
   const renderableValueKeys = useStoreState((state) => state.renderableValueKeys)
-  const groupFilter = useStoreState((state) => state.groupFilter)
   const uniqueOptions = useStoreState((state) => state.uniqueOptions)
   const columns = useStoreState((state) => state.columns)
   const rows = useStoreState((state) => state.rows)
 
   const availableColumns = useMemo(() => columns.map(val => val.name), [columns] )
 
-  const getCurrentGroupFilter = () => {
-    let _groupFilter = groupFilter
-    if (groups.length === 1) {
-      _groupFilter = groups
-    }
-    return _groupFilter
-  }
+  const currentGroupFilter = useGroupFilterValue()
 
   const handleOnSelect = (val) => {
     const values = []
@@ -40,7 +33,7 @@ const PercentageControls = () => {
       const objectKeys = Object.keys(row)
       objectKeys.forEach(k => {
         val.forEach((v, i) => {
-          if (row[domain.value].toString() === getCurrentGroupFilter()[0] && !k.localeCompare(v)) {
+          if (row[domain.value].toString() === currentGroupFilter[0] && !k.localeCompare(v)) {
             if (renderableValueKeys[i].agg) {
               if (!(k in getAggTrendObject)) {
                 getAggTrendObject[k] = []
@@ -67,7 +60,7 @@ const PercentageControls = () => {
   }
 
   return (
-    <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !getCurrentGroupFilter().length}>
+    <MutedBarrier mute={!type || !domain.value || !renderableValueKeys.length || !currentGroupFilter.length}>
       <WidgetControlCard
         title='Percentage Configuration'
         clear={() => resetValue({ uniqueOptions })}
