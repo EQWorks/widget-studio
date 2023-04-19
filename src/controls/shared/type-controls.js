@@ -226,11 +226,11 @@ const WidgetTypeControls = () => {
                           group: mustGroup,
                           ...(
                             mustGroup !== group && {
-                              groupFilter: [],
                               valueKeys: [],
                               ...(domain?.key && { [domain.key]: null }),
                             }
                           ),
+                          groupFilter: [],
                           chart2ValueKeys: [],
                           type,
                           uniqueOptions:
