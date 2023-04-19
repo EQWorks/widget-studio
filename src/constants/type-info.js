@@ -255,7 +255,7 @@ export default {
   [types.STAT]: {
     icon: Icons.Hash,
     adapter: LocalAdapters[types.STAT],
-    mustGroup: false,
+    mustGroup: true,
     uniqueOptions: {
       selectedTrend: {
         titles: [],
@@ -270,7 +270,7 @@ export default {
   [types.TABLE]: {
     icon: Icons.Table,
     adapter: LocalAdapters[types.TABLE],
-    mustGroup: false,
+    mustGroup: true,
     uniqueOptions: {
       pagination: {
         name: 'Pagination',
