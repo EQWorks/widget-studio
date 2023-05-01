@@ -1370,10 +1370,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-"@eqworks/chart-system@0.10.0-alpha.1":
-  version "0.10.0-alpha.1"
-  resolved "https://npm.pkg.github.com/download/@EQWorks/chart-system/0.10.0-alpha.1/eb03b6f60868b0479662b7542d1d64ca9847c118#eb03b6f60868b0479662b7542d1d64ca9847c118"
-  integrity sha512-IouZMy6mgAUBXmG2DWQEI6Z+tyL1kzzBAoy/Iz0PrS1XgBfyr7WX84R8XkoRI/iH/qtzvRLvb86J9RExpO6VHg==
+"@eqworks/chart-system@^0.10.1":
+  version "0.10.1"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/chart-system/0.10.1/fb5f6eb703af208ba7b1848dc1dd808df1f49d87#fb5f6eb703af208ba7b1848dc1dd808df1f49d87"
+  integrity sha512-UvFBmJt1FlRaI50rxIMJf4jOHiAxcVsD55R/RGR+XrbZZx1iQ1hOnsSnBIcSSKdK8SdRuJY9sx7py5Dv4Zy7Ng==
   dependencies:
     "@nivo/bar" "^0.62.0"
     "@nivo/core" "^0.62.0"
@@ -1412,7 +1412,7 @@
     react-iframe "^1.8.0"
     react-router-prop-types "^1.0.4"
 
-"@eqworks/lumen-labs@^0.1.0-alpha.77", "@eqworks/lumen-labs@^0.1.0-alpha.78":
+"@eqworks/lumen-labs@^0.1.0-alpha.78":
   version "0.1.0-alpha.78"
   resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-labs/0.1.0-alpha.78/76dd7afc7181a80fc2708a195d6d45a3cc743ccf#76dd7afc7181a80fc2708a195d6d45a3cc743ccf"
   integrity sha512-XGQX/2DmDcAzWgI8LUiMJCTi31rdvVLnMbVh4mX2M0BfJZ/9kqZFiMcBnpnNvZF0CxLWtktHk2ACM6IorP/WSQ==
@@ -1427,12 +1427,27 @@
     react-window "^1.8.6"
     use-debounce "^7.0.1"
 
-"@eqworks/lumen-table@^2.0.0-alpha.19":
-  version "2.0.0-alpha.19"
-  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-table/2.0.0-alpha.19/8e84c859dd530ecf39701bba1b5e7b40d178d59c#8e84c859dd530ecf39701bba1b5e7b40d178d59c"
-  integrity sha512-t+MM26YutuI1va+82FFs4gp0gGSAdGKx7uYzV6oExbGk0ylpS4jdLEF12VP/WY+xurNFkHRaG43qReSH+PfFRw==
+"@eqworks/lumen-labs@^0.1.0-alpha.80":
+  version "0.1.0-alpha.80"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-labs/0.1.0-alpha.80/dbf38f543b64a3b41c7cd8e612958523866b0d10#dbf38f543b64a3b41c7cd8e612958523866b0d10"
+  integrity sha512-v7fs4HApsrAlGciwUFRmRJ/l5Su2QAUk350O3Tr3io7co24lkS4CWLjZt5I5KIWmKQENln48/5OSp6jZSZcdIQ==
   dependencies:
-    "@eqworks/lumen-labs" "^0.1.0-alpha.77"
+    "@headlessui/react" "^1.4.0"
+    clsx "^1.1.1"
+    goober "^2.0.39"
+    moment "^2.29.1"
+    prop-types "^15.7.2"
+    react-resize-detector "^6.7.6"
+    react-virtualized-auto-sizer "^1.0.5"
+    react-window "^1.8.6"
+    use-debounce "^7.0.1"
+
+"@eqworks/lumen-table@^2.0.0-alpha.20":
+  version "2.0.0-alpha.20"
+  resolved "https://npm.pkg.github.com/download/@EQWorks/lumen-table/2.0.0-alpha.20/4cf6fbc54352cfc9d058b01fbe21fb66eee8ec6b#4cf6fbc54352cfc9d058b01fbe21fb66eee8ec6b"
+  integrity sha512-Cq2cBQAuwh47QQL3e9MmsrNmSmpFn2df8Xj8UBs4+uf8R65tea5RxeR/5RwolhekUvN8CpOmqAupmlbvk3FH1g==
+  dependencies:
+    "@eqworks/lumen-labs" "^0.1.0-alpha.80"
     prop-types "^15.7.2"
     react-table "^7.6.0"
     use-cached "^2.0.0"
