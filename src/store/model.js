@@ -207,6 +207,7 @@ export default {
       (state) => state.genericOptions,
       (state) => state.uniqueOptions,
       (state) => state.isReady,
+      (state) => state.columnNameAliases,
       (state) => state.formattedColumnNames,
       (state) => state.dataSource,
       (state) => state.noDataSource,
@@ -241,6 +242,7 @@ export default {
       genericOptions,
       uniqueOptions,
       isReady,
+      columnNameAliases,
       formattedColumnNames,
       { type: dataSourceType, id: dataSourceID },
       noDataSource,
@@ -268,6 +270,7 @@ export default {
       mapValueKeys: type === types.MAP ? renderableValueKeys : [],
       formatDataKey,
       formatDataFunctions,
+      columnNameAliases,
       formattedColumnNames,
       group,
       groupKey,
@@ -549,8 +552,8 @@ export default {
       renderableValueKeys,
       customDataFormat,
       type,
-    ) => type !== types.TEXT && Object.fromEntries(renderableValueKeys.map(({ key, title }) => (
-      [title, getKeyFormatFunction(key, { ...customDataFormat, ...DATA_KEY_FORMATTING })]
+    ) => type !== types.TEXT && Object.fromEntries(renderableValueKeys.map(({ key }) => (
+      [key, getKeyFormatFunction(key, { ...customDataFormat, ...DATA_KEY_FORMATTING })]
     )))
   ),
 
