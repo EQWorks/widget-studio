@@ -108,3 +108,13 @@ export const DATA_KEY_FORMATTING = {
 }
 
 export const CATEGORY_ORDER = ['Top Spending', 'Frequently Transacting']
+
+export const CUSTOM_LEGEND_LAYER_TITLES = {
+  sourceTitle: 'Dealer',
+  targetTitle: 'Competitor',
+}
+
+export const CUSTOM_TOOLTIP_TITLES = {
+  sourceTitle: 'poi_name',
+  targetTitle: 'target_poi_name',
+}
