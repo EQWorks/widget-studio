@@ -473,6 +473,7 @@ const WidgetManager = ({
               mode='editor'
               {...{ wl, cu, saveWithInsightsData, filters, dataFormat, insightsDataCategories,
                 categoryOrder, mapTooltipLabelTitles, customXMapLegendLayerTitles }}
+              mapGroupKey='geo_ca_fsa'
             />
           </CustomModal>
         )
@@ -617,6 +618,7 @@ const WidgetManager = ({
                         {...{ wl, cu, saveWithInsightsData, filters, dataFormat,
                           insightsDataCategories, categoryOrder, mapTooltipLabelTitles, customXMapLegendLayerTitles,
                         }}
+                        mapGroupKey='geo_ca_fsa'
                       />
                     </InsightsDataProvider>
                   }
@@ -627,6 +629,7 @@ const WidgetManager = ({
                         mode='view_only'
                         {...{ filters, wl, cu, dataFormat, insightsDataCategories, categoryOrder,
                           mapTooltipLabelTitles, customXMapLegendLayerTitles }}
+                        mapGroupKey='geo_ca_fsa'
                       />
                   }
                   {!currentlyViewing &&
