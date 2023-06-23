@@ -96,9 +96,10 @@ const Widget = ({
   config: _config,
   sampleData,
   sampleConfigs,
-  mapTooltipLabelTitles,
   mapGroupKey,
   useMVTOption,
+  mapTooltipLabelTitles,
+  customXMapLegendLayerTitles,
   customColors,
   dataFormat,
   insightsDataCategories,
@@ -178,6 +179,7 @@ const Widget = ({
       ...(dataFormat && { customDataFormat: dataFormat }),
       ...(insightsDataCategories && { insightsDataCategories }),
       ...(categoryOrder && { categoryOrder }),
+      ...(customXMapLegendLayerTitles && { customXMapLegendLayerTitles }),
     })
     // use manually passed data if available
     if (_rows?.length && _columns?.length) {
@@ -215,7 +217,7 @@ const Widget = ({
   }, [filters, _columns, _config, _id, _mode, _rows, cu, executionID, id, initDone, loadConfig,
     loadConfigByID, sampleConfigs, sampleData, staticData, update, wl, dataSourceType,
     onInsightsDataRequired, saveWithInsightsData, mapTooltipLabelTitles, mapGroupKey, useMVTOption,
-    onWidgetRender, customColors, dataFormat, insightsDataCategories, categoryOrder])
+    onWidgetRender, customColors, dataFormat, insightsDataCategories, categoryOrder, customXMapLegendLayerTitles])
 
   // load data if source changes
   useEffect(() => {
@@ -289,7 +291,11 @@ Widget.propTypes = {
   onWidgetRender: PropTypes.func,
   saveWithInsightsData: PropTypes.bool,
   dataProviderResponse: PropTypes.object,
-  mapTooltipLabelTitles: PropTypes.object,
+  mapTooltipLabelTitles: PropTypes.shape({
+    title: PropTypes.string,
+    sourceTitle: PropTypes.string,
+    targetTitle: PropTypes.string,
+  }),
   mapGroupKey: PropTypes.string,
   useMVTOption: PropTypes.bool,
   customColors: PropTypes.shape({
@@ -306,6 +312,10 @@ Widget.propTypes = {
   dataFormat: PropTypes.object,
   insightsDataCategories: PropTypes.object,
   categoryOrder: PropTypes.arrayOf(PropTypes.string),
+  customXMapLegendLayerTitles: PropTypes.shape({
+    sourceTitle: PropTypes.string,
+    targetTitle: PropTypes.string,
+  }),
 }
 
 Widget.defaultProps = {
@@ -335,6 +345,7 @@ Widget.defaultProps = {
   dataFormat: null,
   insightsDataCategories: null,
   categoryOrder: null,
+  customXMapLegendLayerTitles: null,
 }
 
 export default withQueryClient(withStore(Widget))
