@@ -334,6 +334,8 @@ const WidgetManager = ({
   dataFormat,
   insightsDataCategories,
   categoryOrder,
+  mapTooltipLabelTitles,
+  customXMapLegendLayerTitles,
 }) => {
   const [selectedReport, setSelectedReport] = useState(null)
   const [selectedDashboard, setSelectedDashboard] = useState(null)
@@ -469,7 +471,8 @@ const WidgetManager = ({
             <Widget
               className={classes.newWidget}
               mode='editor'
-              {...{ wl, cu, saveWithInsightsData, filters, dataFormat, insightsDataCategories, categoryOrder }}
+              {...{ wl, cu, saveWithInsightsData, filters, dataFormat, insightsDataCategories,
+                categoryOrder, mapTooltipLabelTitles, customXMapLegendLayerTitles }}
             />
           </CustomModal>
         )
@@ -612,7 +615,7 @@ const WidgetManager = ({
                         id={currentlyViewing}
                         mode='view_only'
                         {...{ wl, cu, saveWithInsightsData, filters, dataFormat,
-                          insightsDataCategories, categoryOrder,
+                          insightsDataCategories, categoryOrder, mapTooltipLabelTitles, customXMapLegendLayerTitles,
                         }}
                       />
                     </InsightsDataProvider>
@@ -622,7 +625,8 @@ const WidgetManager = ({
                         key={currentlyViewing}
                         id={currentlyViewing}
                         mode='view_only'
-                        {...{ filters, wl, cu, dataFormat, insightsDataCategories, categoryOrder }}
+                        {...{ filters, wl, cu, dataFormat, insightsDataCategories, categoryOrder,
+                          mapTooltipLabelTitles, customXMapLegendLayerTitles }}
                       />
                   }
                   {!currentlyViewing &&
@@ -665,6 +669,15 @@ WidgetManager.propTypes = {
   dataFormat: PropTypes.object,
   insightsDataCategories: PropTypes.object,
   categoryOrder: PropTypes.arrayOf(PropTypes.string),
+  customXMapLegendLayerTitles: PropTypes.shape({
+    sourceTitle: PropTypes.string,
+    targetTitle: PropTypes.string,
+  }),
+  mapTooltipLabelTitles: PropTypes.shape({
+    title: PropTypes.string,
+    sourceTitle: PropTypes.string,
+    targetTitle: PropTypes.string,
+  }),
 }
 WidgetManager.defaultProps = {
   wl: -1,
@@ -678,6 +691,8 @@ WidgetManager.defaultProps = {
   dataFormat: null,
   insightsDataCategories: null,
   categoryOrder: null,
+  mapTooltipLabelTitles: null,
+  customXMapLegendLayerTitles: null,
 }
 
 
