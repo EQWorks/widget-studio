@@ -138,7 +138,7 @@ Map.defaultProps = {
 
 export default {
   component: Map,
-  adapt: (data, { wl, mapInitViewState, genericOptions, uniqueOptions, ...config }) => {
+  adapt: (data, { mapInitViewState, genericOptions, uniqueOptions, ...config }) => {
     const {
       mapGroupKey,
       mapValueKeys,
@@ -148,6 +148,7 @@ export default {
       useMVTOption,
       customColors,
       formattedColumnNames,
+      customXMapLegendLayerTitles,
     } = config
     const {
       baseColor,
@@ -252,26 +253,18 @@ export default {
     const targetLayerValueKeys =
       getLayerValueKeys({ mapValueKeys, dataKeys, data: data?.targetData, layer: MAP_LAYERS.targetScatterplot })
 
-    // TO DO: move this logic out to Cox app
     const getFinalLayerTitle = i => {
       let layerTitle
       if (isXWIReportMap) {
-        if (wl === 2456) {
-          layerTitle = i === 0 ? data?.arcData?.[0]?.['poi_name'] || 'Dealer' : 'Competitor'
-        } else {
-          layerTitle = i === 0 ? 'Source Layer' : 'Target Layer'
+        if (i === 0) {
+          layerTitle = data?.arcData?.[0]?.['poi_name'] || customXMapLegendLayerTitles.sourceTitle || 'Source Layer'
+        }
+        else {
+          layerTitle = customXMapLegendLayerTitles.targetTitle || 'Target Layer'
         }
       }
       return layerTitle
     }
-
-    // TO DO: move this logic out to Cox app
-    const finalMapTooltipLabelTitles = wl === 2456 ?
-      {
-        sourceTitle: 'poi_name',
-        targetTitle: 'target_poi_name',
-      } :
-      mapTooltipLabelTitles
 
     let layerConfig = isXWIReportMap ?
       [
@@ -300,8 +293,8 @@ export default {
           interactions: {
             tooltip: {
               tooltipKeys: {
-                tooltipTitle1: finalMapTooltipLabelTitles?.sourceTitle || sourcePOIId,
-                tooltipTitle2: finalMapTooltipLabelTitles?.targetTitle || targetPOIId,
+                tooltipTitle1: mapTooltipLabelTitles?.sourceTitle || sourcePOIId,
+                tooltipTitle2: mapTooltipLabelTitles?.targetTitle || targetPOIId,
                 metricKeys: arcLayerValueKeys,
               },
             },
@@ -352,8 +345,8 @@ export default {
             tooltip: {
               tooltipKeys: {
                 tooltipTitle1: i === 0 ?
-                  finalMapTooltipLabelTitles?.sourceTitle || sourcePOIId :
-                  finalMapTooltipLabelTitles?.targetTitle || targetPOIId,
+                  mapTooltipLabelTitles?.sourceTitle || sourcePOIId :
+                  mapTooltipLabelTitles?.targetTitle || targetPOIId,
                 metricKeys: longitude === targetLon ? targetLayerValueKeys : sourceLayerValueKeys,
               },
             },
