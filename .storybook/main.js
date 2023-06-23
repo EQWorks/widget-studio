@@ -11,10 +11,4 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials"
   ],
-  webpackFinal: async (config) => {
-    config.node = {
-      fs: 'empty'
-    };
-    return config
-  }
 }
