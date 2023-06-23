@@ -29,7 +29,7 @@ export const MAP_LAYER_VALUE_VIS = {
   scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
   targetScatterplot: [MAP_VALUE_VIS.targetFill, MAP_VALUE_VIS.targetRadius],
   geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
-  MVT: [MAP_VALUE_VIS.fill],
+  MVT: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
   arc: [MAP_VALUE_VIS.arcWidth],
   icon: [],
 }
