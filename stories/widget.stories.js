@@ -15,7 +15,13 @@ import CustomSelect from '../src/components/custom-select'
 import WlCuSelector from './wl-cu-selector'
 import withQueryClient from '../src/util/with-query-client'
 import InsightsDataProvider from '../src/insights-data-provider'
-import { DATA_CATEGORIES, DATA_KEY_FORMATTING, CATEGORY_ORDER } from './constants'
+import {
+  DATA_CATEGORIES,
+  DATA_KEY_FORMATTING,
+  CATEGORY_ORDER,
+  CUSTOM_LEGEND_LAYER_TITLES,
+  CUSTOM_TOOLTIP_TITLES,
+} from './constants'
 
 
 const DEFAULT_WL = 2456
@@ -244,6 +250,8 @@ storiesOf('Widget Management with Insights Data saved configuration', module)
             dataFormat={DATA_KEY_FORMATTING}
             insightsDataCategories={DATA_CATEGORIES}
             categoryOrder={CATEGORY_ORDER}
+            mapTooltipLabelTitles={CUSTOM_TOOLTIP_TITLES}
+            customXMapLegendLayerTitles={CUSTOM_LEGEND_LAYER_TITLES}
           />
         </WlCuControlsProvider>
       </QueryClientProvider>
