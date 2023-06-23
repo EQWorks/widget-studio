@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to GitHub pages
         run: yarn storybook-to-ghpages --ci
         env:
-          GH_TOKEN: EQWorks:${{ secrets.CD_GITHUB_TOKEN }}
+          GH_TOKEN: EQWorks:${{ secrets.GITHUB_TOKEN }}
           STORYBOOK_API_HOST: "https://api.locus.place"
           STORYBOOK_API_STAGE: "dev"
           STORYBOOK_KEY_WARDEN_HOST: "https://auth.eqworks.io"
