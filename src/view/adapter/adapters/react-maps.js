@@ -29,8 +29,6 @@ import {
   MAP_VIEW_STATE,
   MAP_TOAST_ZOOM_ADJUSTMENT,
   LABEL_OFFSET,
-  KEY_ALIASES,
-  XWI_KEY_ALIASES,
   ONE_ICON_SIZE,
 } from '../../../constants/map'
 
@@ -145,13 +143,13 @@ export default {
   adapt: (data, { wl, mapInitViewState, genericOptions, uniqueOptions, ...config }) => {
     const {
       mapGroupKey,
-      mapGroupKeyTitle,
       mapValueKeys,
       formatDataKey,
       formatDataFunctions,
       mapTooltipLabelTitles,
       useMVTOption,
       customColors,
+      formattedColumnNames,
     } = config
     const {
       baseColor,
@@ -231,7 +229,7 @@ export default {
 
     if (mapLayer === MAP_LAYERS.geojson) {
       geometry = {
-        geoKey: mapGroupKeyTitle,
+        geoKey: mapGroupKey,
       }
 
       mapGroupKeyType = Object.keys(GEO_KEY_TYPES)
@@ -262,7 +260,7 @@ export default {
       let layerTitle
       if (isXWIReportMap) {
         if (wl === 2456) {
-          layerTitle = i === 0 ? data?.arcData?.[0]?.['Poi name'] || 'Dealer' : 'Competitor'
+          layerTitle = i === 0 ? data?.arcData?.[0]?.['poi_name'] || 'Dealer' : 'Competitor'
         } else {
           layerTitle = i === 0 ? 'Source Layer' : 'Target Layer'
         }
@@ -273,8 +271,8 @@ export default {
     // TO DO: move this logic out to Cox app
     const finalMapTooltipLabelTitles = wl === 2456 ?
       {
-        sourceTitle: 'Poi name',
-        targetTitle: 'Target poi name',
+        sourceTitle: 'poi_name',
+        targetTitle: 'target_poi_name',
       } :
       mapTooltipLabelTitles
 
@@ -289,13 +287,13 @@ export default {
           },
           visualizations: Object.fromEntries(
             MAP_LAYER_VALUE_VIS.arc.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
-              const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
+              const visKey = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.key
               const visValue = uniqueOptions[vis]?.value
               return [
                 vis,
                 {
-                  value: keyTitle ?
-                    { field: keyTitle } :
+                  value: visKey ?
+                    { field: visKey } :
                     visValue,
                   valueOptions: uniqueOptions[vis]?.valueOptions,
                   dataScale: LAYER_SCALE,
@@ -316,7 +314,7 @@ export default {
             layerTitle: 'Arc Layer',
           },
           // TO DO: move this logic out to Cox app
-          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
+          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : formattedColumnNames,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           schemeColor: customColors?.map?.baseColor || baseColor.color1,
@@ -335,18 +333,18 @@ export default {
           geometry: { longitude, latitude },
           visualizations: Object.fromEntries(
             MAP_LAYER_VALUE_VIS.scatterplot.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
-              const keyTitle = mapValueKeys.find(({ mapVis }) =>
+              const visKey = mapValueKeys.find(({ mapVis }) =>
                 (i === 1 && vis === MAP_VALUE_VIS.fill && mapVis === MAP_VALUE_VIS.targetFill) ||
                 (i === 1 && vis === MAP_VALUE_VIS.radius && mapVis === MAP_VALUE_VIS.targetRadius) ||
                 (mapVis === vis && !(i === 1 && (mapVis === MAP_VALUE_VIS.fill || mapVis === MAP_VALUE_VIS.radius))))
-                ?.title
+                ?.key
               const visValue = uniqueOptions[vis]?.value
 
               return [
                 vis,
                 {
-                  value: keyTitle ?
-                    { field: keyTitle } :
+                  value: visKey ?
+                    { field: visKey } :
                     visValue,
                   valueOptions: uniqueOptions[vis]?.valueOptions,
                   dataScale: LAYER_SCALE,
@@ -369,7 +367,7 @@ export default {
             layerTitle: getFinalLayerTitle(i),
           },
           // TO DO: move this logic out to Cox app
-          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
+          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : formattedColumnNames,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           // we don't apply opacity to icon layer for POI locations
@@ -390,15 +388,15 @@ export default {
           geometry,
           visualizations: Object.fromEntries(
             MAP_LAYER_VALUE_VIS[mapLayer]?.concat(Object.keys(MAP_VIS_OTHERS)).map(vis => {
-              const keyTitle = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.title
-              const fillKeyTitle = mapValueKeys.find(({ mapVis }) => mapVis === MAP_VALUE_VIS.fill)?.title
+              const visKey = mapValueKeys.find(({ mapVis }) => mapVis === vis)?.key
+              const fillKey = mapValueKeys.find(({ mapVis }) => mapVis === MAP_VALUE_VIS.fill)?.key
               let value = vis === MAP_VALUE_VIS.elevation ? 0 : uniqueOptions[vis]?.value
-              if (keyTitle) {
-                value = { field: keyTitle }
+              if (visKey) {
+                value = { field: visKey }
               }
               // this config will help setting up the MVT polygons not part of data invisible
-              if (mapLayer === MAP_LAYERS.MVT && fillKeyTitle && vis === MAP_VIS_OTHERS.lineColor) {
-                value = { field: fillKeyTitle }
+              if (mapLayer === MAP_LAYERS.MVT && fillKey && vis === MAP_VIS_OTHERS.lineColor) {
+                value = { field: fillKey }
               }
               /*
               * we only allow to set the max elevation value, keeping the min=0, therefore,
@@ -418,15 +416,15 @@ export default {
                 },
               ]
             })),
-          keyAliases: KEY_ALIASES,
+          keyAliases: formattedColumnNames,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {
             tooltip: {
               tooltipKeys: {
                 tooltipTitle1: mapLayer === MAP_LAYERS.scatterplot ?
-                  mapTooltipLabelTitles?.title || mapGroupKeyTitle :
-                  mapGroupKeyTitle,
+                  mapTooltipLabelTitles?.title || mapGroupKey :
+                  mapGroupKey,
                 tooltipTitle1Accessor: [MAP_LAYERS.geojson, MAP_LAYERS.MVT].includes(mapLayer) && useMVTOption ?
                   d => d.properties :
                   d => d,
@@ -464,15 +462,15 @@ export default {
             text: {
               value: {
                 title: i === 0 ?
-                  mapTooltipLabelTitles?.sourceTitle || 'Poi id' :
-                  mapTooltipLabelTitles?.targetTitle || 'Target poi id',
+                  mapTooltipLabelTitles?.sourceTitle || 'poi_id' :
+                  mapTooltipLabelTitles?.targetTitle || 'target_poi_id',
                 valueKeys: mapValueKeys.filter(({ mapVis }) => (i === 0 ?
                   // filter the visualisations for source layer
                   MAP_LAYER_VALUE_VIS.scatterplot :
                   // filter the visualisations for target layer
                   MAP_LAYER_VALUE_VIS.targetScatterplot)
                   .includes(mapVis))
-                  .map(vis => vis.title),
+                  .map(vis => vis.key),
               },
             },
             size: { value: 12 },
@@ -481,7 +479,7 @@ export default {
             },
           },
           // TO DO: move this logic out to Cox app
-          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : XWI_KEY_ALIASES,
+          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : formattedColumnNames,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {},
@@ -508,16 +506,16 @@ export default {
             text: {
               value: {
                 title: mapLayer === mapLayer === MAP_LAYERS.scatterplot ?
-                  mapTooltipLabelTitles?.title || mapGroupKeyTitle :
-                  mapGroupKeyTitle,
-                valueKeys: mapValueKeys.map(vis => vis.title),
+                  mapTooltipLabelTitles?.title || mapGroupKey :
+                  mapGroupKey,
+                valueKeys: mapValueKeys.map(vis => vis.key),
               },
             },
             pixelOffset: {
               value: pixelOffset({ mapLayer, radiusValue }),
             },
           },
-          keyAliases: KEY_ALIASES,
+          keyAliases: formattedColumnNames,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {},
@@ -544,15 +542,16 @@ export default {
               ],
             )
           ),
-          interactions: mapPinTooltipKey?.title ?
+          interactions: mapPinTooltipKey ?
             {
               tooltip: {
                 tooltipKeys: {
-                  tooltipTitle1: mapPinTooltipKey.title,
+                  tooltipTitle1: mapPinTooltipKey,
                 },
               },
             } :
             {},
+          keyAliases: formattedColumnNames,
           schemeColor: customColors?.map?.iconColor || complementaryColor({ baseColor: baseColor.color1 }),
           initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
         },

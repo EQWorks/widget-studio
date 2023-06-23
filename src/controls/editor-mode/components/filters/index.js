@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import {  Icons } from '@eqworks/lumen-labs'
 
 import { useStoreState, useStoreActions } from '../../../../store'
+import { useGroupFilterValue } from '../../../../hooks/use-group-filter'
 import WidgetControlCard from '../../../shared/components/widget-control-card'
 import { renderSection, renderRow } from '../../../shared/util'
 import PluralLinkedSelect from '../../../../components/plural-linked-select'
@@ -28,6 +29,8 @@ const Filters = () => {
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const type = useStoreState((state) => state.type)
 
+  const groupFilterValue = useGroupFilterValue()
+
   const filterData = useMemo(() => (
     Object.fromEntries(Object.entries(columnsAnalysis)
       .filter(([, { min, max, isNumeric }]) => isNumeric && min !== max)
@@ -35,17 +38,6 @@ const Filters = () => {
   ), [columnsAnalysis])
 
   const renderGroupFilter = () => {
-    const getGroupFilterValue = () => {
-      if (type === types.STAT) {
-        let _groupFilter = groupFilter
-        if (groups.length === 1) {
-          _groupFilter = groups
-        }
-        return _groupFilter[0] ?? ''
-      }
-      return groupFilter ?? []
-    }
-
     if (domainIsDate) {
       return <DateDomainFilter/>
     }
@@ -55,7 +47,7 @@ const Filters = () => {
         fullWidth
         multiSelect={type === types.STAT ? false : true}
         data={groups}
-        value={getGroupFilterValue()}
+        value={groupFilterValue}
         onSelect={val => userUpdate({ groupFilter: type === types.STAT ? [val] : val })}
         placeholder={group && domain.value ? `Select ${domain.value}(s) to display` : 'N/A'}
         disabled={!group || !domain.value}

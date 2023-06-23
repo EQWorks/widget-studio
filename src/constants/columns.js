@@ -10,7 +10,7 @@ export const EXCLUDE_NUMERIC = [
   ...ID_KEYS,
 ]
 
-export const EXCLUDE_NUMERIC_ENDINGS = ['name', 'type', 'id']
+export const EXCLUDE_NUMERIC_ENDINGS = ['name', 'type', '_id', 'Id', 'ID']
 
 export const columnTypes = [
   'Numeric',
@@ -28,7 +28,7 @@ export const columnTypeInfo = {
       const res = !isNaN(v)
       return name === undefined
         ? res
-        : res && !EXCLUDE_NUMERIC_ENDINGS.some(key => name.endsWith('_' + key)) &&
+        : res && !EXCLUDE_NUMERIC_ENDINGS.some(key => name.endsWith(key)) &&
          !EXCLUDE_NUMERIC.includes(name)
     },
   },
@@ -54,7 +54,10 @@ export const columnTypeInfo = {
     ],
     Icon: Icons.Table, // looks like a calendar
     validate: (v, name) => {
-      if (!isString(v) || name.endsWith('_id')) {
+      if (!isString(v) ||
+        EXCLUDE_NUMERIC_ENDINGS.some(key => name.endsWith(key)) ||
+        EXCLUDE_NUMERIC.includes(name)
+      ) {
         return false
       }
       const sample = new Date(v)

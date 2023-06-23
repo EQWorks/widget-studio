@@ -39,10 +39,3 @@ export const truncateString = (fullStr, strLen, separator = ' ... ') => {
          separator +
          fullStr?.toString()?.substring(fullStr.length + 1 - endChars)
 }
-
-/**
- * truncateString - returns capitalized string, by seleting the first letter of the string
- * @param { string } s - string to format
- * @returns { string } - capitalized string
- */
-export const capitalize = s => (s?.[0]?.toUpperCase() + s?.slice(1)) || ''

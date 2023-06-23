@@ -48,13 +48,12 @@ const EditorRightSidebar = () => {
   const dataIsXWIReport = useStoreState((state) => state.dataIsXWIReport)
   const columnsAnalysis = useStoreState((state) => state.columnsAnalysis)
   const columnNameAliases = useStoreState((state) => state.columnNameAliases)
-  const formattedColumnNames = useStoreState((state) => state.formattedColumnNames)
   const dataHasVariance = useStoreState((state) => state.dataHasVariance)
   const isReady = useStoreState((state) => state.isReady)
   const showTitleBar = useStoreState((state) => state.showTitleBar)
   const enableLocationPins = useStoreState((state) => state.enableLocationPins)
   const widgetControlCardEdit = useStoreState((state) => state.widgetControlCardEdit)
-  const useMVTOption = useStoreState((state) => state. useMVTOption)
+  const useMVTOption = useStoreState((state) => state.useMVTOption)
 
   const { sharedYAxis } = useStoreState((state) => state.uniqueOptions)
 
@@ -87,19 +86,6 @@ const EditorRightSidebar = () => {
     }
   }, [renderableValueKeys?.length, update])
 
-  // update mapPinTooltipKey.title if alias changes
-  useEffect(() => {
-    if (mapPinTooltipKey?.key && mapPinTooltipKey.title !== formattedColumnNames[mapPinTooltipKey.key]) {
-      update({
-        genericOptions: {
-          mapPinTooltipKey: {
-            title: formattedColumnNames[mapPinTooltipKey.key],
-          },
-        },
-      })
-    }
-  }, [mapPinTooltipKey, formattedColumnNames, update])
-
   const eligibleTooltipKeys = useMemo(() => (
     Object.fromEntries(
       Object.entries(columnsAnalysis)
@@ -110,12 +96,12 @@ const EditorRightSidebar = () => {
 
   const disableLabels = useMemo(() => {
     const elevationVis = Boolean(renderableValueKeys.find(({ mapVis }) => mapVis === MAP_VALUE_VIS.elevation))
-    return elevationVis ||
+    return type === types.MAP && (elevationVis ||
       (useMVTOption &&
         !(MAP_LAYER_GEO_KEYS.scatterplot.includes(domain.value) ||
           GEO_KEY_TYPES.region.includes(domain.value))
-      )
-  }, [renderableValueKeys, useMVTOption, domain.value])
+      ))
+  }, [type, renderableValueKeys, useMVTOption, domain.value])
 
   const renderGenericOptions = (
     <>
@@ -225,18 +211,15 @@ const EditorRightSidebar = () => {
                 fullWidth
                 data={Object.keys(eligibleTooltipKeys)}
                 icons={Object.values(eligibleTooltipKeys).map(({ Icon }) => Icon)}
-                value={mapPinTooltipKey?.key}
+                value={mapPinTooltipKey}
                 onSelect={val => userUpdate({
                   genericOptions: {
-                    mapPinTooltipKey: {
-                      key: val,
-                      title: formattedColumnNames[val],
-                    },
+                    mapPinTooltipKey: val,
                   },
                 })}
                 onClear={() => userUpdate({
                   genericOptions: {
-                    mapPinTooltipKey: null,
+                    mapPinTooltipKey: '',
                   },
                 })}
                 placeholder='Select column'
@@ -247,8 +230,8 @@ const EditorRightSidebar = () => {
           {widgetControlCardEdit[cardTypes.RIGHT_SIDEBAR] &&
             renderItem('Pin Tooltip Key Alias',
               <ColumnNameAlias
-                value={mapPinTooltipKey?.key || ''}
-                disabled={!hasDevAccess() || !mapPinTooltipKey?.key }
+                value={mapPinTooltipKey || ''}
+                disabled={!hasDevAccess() || !mapPinTooltipKey }
               />
             )
           }
@@ -347,7 +330,7 @@ const EditorRightSidebar = () => {
           selectedString={positions.string[positions.numeric.map(JSON.stringify)
             .indexOf(JSON.stringify(titlePosition))]}
           classes={{ menu: classes.xyDropdownMenu }}
-          disabled={!showWidgetTitle && (!showSubPlotTitles || !subPlots)}
+          disabled={!showWidgetTitle}
         >
           <XYSelect
             value={titlePosition}
@@ -460,12 +443,12 @@ const EditorRightSidebar = () => {
           <WidgetControlCard
             title={title}
             enableEdit={hasDevAccess() && type === types.MAP && enableLocationPins}
-            disableEditButton={type !== types.MAP || !mapPinTooltipKey?.key}
+            disableEditButton={type !== types.MAP || !mapPinTooltipKey}
             type={cardTypes.RIGHT_SIDEBAR}
             {...(hasDevAccess() && type === types.MAP && enableLocationPins && {
               clear: () => {
                 Object.keys(columnNameAliases).forEach(key => {
-                  if (mapPinTooltipKey?.key === key) {
+                  if (mapPinTooltipKey === key) {
                     delete columnNameAliases[key]
                   }
                 })
@@ -473,7 +456,7 @@ const EditorRightSidebar = () => {
                   aliasesReseted: true,
                   columnNameAliases,
                   genericOptions: {
-                    mapPinTooltipKey: null,
+                    mapPinTooltipKey: '',
                   },
                 })
               },

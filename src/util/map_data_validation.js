@@ -1,4 +1,3 @@
-export const mapDataIsValid = ({ dataSample, mapGroupKeyTitle, renderableValueKeys }) => {
-  return Boolean(dataSample?.[mapGroupKeyTitle] && renderableValueKeys?.length &&
-    renderableValueKeys.every(key => Object.keys(dataSample || {}).includes(key.title)))
-}
+export const mapDataIsValid = ({ dataSample, mapGroupKey, renderableValueKeys }) =>
+  Boolean(dataSample?.[mapGroupKey] && renderableValueKeys?.length &&
+    renderableValueKeys.every(({ key })=> Object.keys(dataSample || {}).includes(key)))

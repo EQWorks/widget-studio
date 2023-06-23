@@ -5,7 +5,7 @@ import { cleanUp } from './string-manipulation'
 // used for Tooltip list of data { key: value } to display for xwi report when no data visualization is selected
 export const getLayerValueKeys = ({ mapValueKeys, dataKeys, data, layer }) => {
   let layerValueKeys = mapValueKeys.filter(o => MAP_LAYER_VALUE_VIS[layer].includes(o.mapVis))
-    .map(o => o.title)
+    .map(o => o.key)
   if (!layerValueKeys.length) {
     layerValueKeys = dataKeys.filter(col => !isNaN(data?.[0]?.[col]) &&
       !EXCLUDE_NUMERIC.some(key => cleanUp(key) === col || key === col) &&
