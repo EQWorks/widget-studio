@@ -32,8 +32,6 @@ import {
   ONE_ICON_SIZE,
 } from '../../../constants/map'
 
-import { COX_XWI_KEY_ALIASES } from '../../../constants/client-specific'
-
 
 const useStyles = ({ width, height, marginTop }) => makeStyles({
   mapWrapper: {
@@ -241,8 +239,7 @@ export default {
           tileGeom: `${process.env.TEGOLA_SERVER_URL || process.env.STORYBOOK_TEGOLA_SERVER_URL}/maps/${mapGroupKeyType}/{z}/{x}/{y}.vector.pbf?`, // <ignore scan-env>
           tileData: data,
         }
-        const elevationVis = JSON.stringify(mapValueKeys)?.includes(MAP_VALUE_VIS.elevation)
-        mapLayer = elevationVis ? mapLayer : MAP_LAYERS.MVT
+        mapLayer = MAP_LAYERS.MVT
       }
     }
 
@@ -313,8 +310,7 @@ export default {
             showLegend: true,
             layerTitle: 'Arc Layer',
           },
-          // TO DO: move this logic out to Cox app
-          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : formattedColumnNames,
+          keyAliases: formattedColumnNames,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           schemeColor: customColors?.map?.baseColor || baseColor.color1,
@@ -366,8 +362,7 @@ export default {
             showLegend: true,
             layerTitle: getFinalLayerTitle(i),
           },
-          // TO DO: move this logic out to Cox app
-          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : formattedColumnNames,
+          keyAliases: formattedColumnNames,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           // we don't apply opacity to icon layer for POI locations
@@ -478,8 +473,7 @@ export default {
               value:  [radiusValue + LABEL_OFFSET.point, 0 - radiusValue - LABEL_OFFSET.point],
             },
           },
-          // TO DO: move this logic out to Cox app
-          keyAliases: wl === 2456 ? COX_XWI_KEY_ALIASES : formattedColumnNames,
+          keyAliases: formattedColumnNames,
           formatDataKey,
           formatDataValue: formatDataFunctions,
           interactions: {},
