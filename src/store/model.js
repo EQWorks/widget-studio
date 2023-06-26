@@ -178,6 +178,7 @@ const stateDefaults = [
   { key: 'customXMapLegendLayerTitles', defaultValue: {}, resettable: false },
   { key: 'insightsDataCategories', defaultValue: {}, resettable: false },
   { key: 'categoryOrder', defaultValue: [], resetable: false },
+  { key: 'showPostalToast', defaultValue: false, resettable: true },
 ]
 
 export default {
