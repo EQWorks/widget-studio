@@ -29,7 +29,7 @@ export const MAP_LAYER_VALUE_VIS = {
   scatterplot: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.radius],
   targetScatterplot: [MAP_VALUE_VIS.targetFill, MAP_VALUE_VIS.targetRadius],
   geojson: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
-  MVT: [MAP_VALUE_VIS.fill],
+  MVT: [MAP_VALUE_VIS.fill, MAP_VALUE_VIS.elevation],
   arc: [MAP_VALUE_VIS.arcWidth],
   icon: [],
 }
@@ -188,9 +188,6 @@ export const LABEL_OFFSET = {
   point: 5,
   polygon: -30,
 }
-
-// 0.5 is an empirical value which controls better when the toast message should be displayed for postal code vis
-export const MAP_TOAST_ZOOM_ADJUSTMENT = 0.5
 
 export const CENSUS_REGEX = {
   postalcode: /^([A-Z][0-9]){3}/g,

@@ -175,8 +175,10 @@ const stateDefaults = [
   { key: 'customColors', defaultValue: {}, resettable: false },
   { key: 'customColorProp', defaultValue: null, resettable: false },
   { key: 'customDataFormat', defaultValue: {}, resettable: false },
+  { key: 'customXMapLegendLayerTitles', defaultValue: {}, resettable: false },
   { key: 'insightsDataCategories', defaultValue: {}, resettable: false },
   { key: 'categoryOrder', defaultValue: [], resetable: false },
+  { key: 'showPostalToast', defaultValue: false, resettable: true },
 ]
 
 export default {
@@ -221,6 +223,7 @@ export default {
       (state) => state.dateAggregation,
       (state) => state.mapTooltipLabelTitles,
       (state) => state.customColors,
+      (state) => state.customXMapLegendLayerTitles,
     ],
     (
       title,
@@ -256,6 +259,7 @@ export default {
       dateAggregation,
       mapTooltipLabelTitles,
       customColors,
+      customXMapLegendLayerTitles,
     ) => ({
       title,
       subtitle,
@@ -291,6 +295,7 @@ export default {
       dateAggregation,
       mapTooltipLabelTitles,
       customColors,
+      customXMapLegendLayerTitles,
     })),
 
   config: computed(
