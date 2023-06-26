@@ -189,9 +189,6 @@ export const LABEL_OFFSET = {
   polygon: -30,
 }
 
-// 0.5 is an empirical value which controls better when the toast message should be displayed for postal code vis
-export const MAP_TOAST_ZOOM_ADJUSTMENT = 0.5
-
 export const CENSUS_REGEX = {
   postalcode: /^([A-Z][0-9]){3}/g,
   fsa: /^[A-Z][0-9][A-Z]/g,
