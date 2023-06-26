@@ -44,17 +44,16 @@ const useStyles = ({ width, height, marginTop }) => makeStyles({
 })
 
 const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
+  const update = useStoreActions(actions => actions.update)
   const toast = useStoreActions(actions => actions.toast)
   const { mode, onWidgetRender } = useStoreState(state => state.ui)
   const mapGroupKey = useStoreState(state => state.mapGroupKey)
-  const uniqueOptions = useStoreState(state => state.uniqueOptions)
   const addUserControls = useStoreState((state) => state.addUserControls)
   const userControlKeyValues = useStoreState((state) => state.userControlKeyValues)
-  const useMVTOption = useStoreState((state) => state.useMVTOption)
+  const showPostalToast = useStoreState((state) => state.showPostalToast)
 
   const [currentViewport, setCurrentViewport] = useState({})
   const [debouncedCurrentViewport] = useDebounce(currentViewport, 500)
-  const [showToastMessage, setShowToastMessage] = useState(false)
 
   const haveUserControls = useMemo(() => Boolean(addUserControls && userControlKeyValues.length),
     [addUserControls, userControlKeyValues])
@@ -71,39 +70,35 @@ const Map = ({ width, height, dataConfig, layerConfig, mapConfig }) => {
   const classes = useStyles({ width, height, marginTop: finalMarginTop })
 
   useEffect(() => {
-    if (useMVTOption && GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && showToastMessage &&
-      debouncedCurrentViewport?.zoom < MIN_ZOOM.postalCode - MAP_TOAST_ZOOM_ADJUSTMENT) {
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) && showPostalToast) {
       toast({
         title: `Your current map zoom level is too low for data visualization.
          Please zoom in to view data visualizations at postal code level.`,
         color: 'info',
         ...(mode === modes.COMPACT && { type: 'semantic-dark' }),
-        timeout: 8000,
+        timeout: 6000,
       })
     }
   }, [
-    useMVTOption,
     mode,
     toast,
     mapGroupKey,
-    uniqueOptions,
-    debouncedCurrentViewport,
-    showToastMessage,
+    showPostalToast,
   ])
 
   useEffect(() => {
-    if (useMVTOption && GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
+    if (GEO_KEY_TYPES.postalcode.includes(mapGroupKey) &&
       debouncedCurrentViewport?.zoom < MIN_ZOOM.postalCode) {
-      setShowToastMessage(true)
+      update({ showPostalToast: true })
     } else {
-      setShowToastMessage(false)
+      update({ showPostalToast: false })
     }
-  }, [useMVTOption, mapGroupKey, debouncedCurrentViewport])
+  }, [update, mapGroupKey, debouncedCurrentViewport])
 
   if (width > 0 && height > 0) {
     return (
       <div id='LocusMap' className={classes.mapWrapper}>
-        {mode === modes.COMPACT && showToastMessage &&
+        {mode === modes.COMPACT && showPostalToast &&
           <CustomGlobalToast />
         }
         <LocusMap {
@@ -429,8 +424,7 @@ export default {
             MIN_ZOOM.postalCode :
             MIN_ZOOM.defaultValue,
           maxZoom: mapLayer === MAP_LAYERS.geojson ? MAX_ZOOM.geojson : MAX_ZOOM.defaultValue,
-          // restrict initial zoom-in to data for postal code polygons & MVT render; the browser might not be able to handle it
-          initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
+          initialViewportDataAdjustment: !useMVTOption,
         },
       ]
 
@@ -540,7 +534,7 @@ export default {
             {},
           keyAliases: formattedColumnNames,
           schemeColor: customColors?.map?.iconColor || complementaryColor({ baseColor: baseColor.color1 }),
-          initialViewportDataAdjustment: !(mapGroupKeyIsPostalcode && useMVTOption),
+          initialViewportDataAdjustment: !useMVTOption,
         },
       ]
     }
