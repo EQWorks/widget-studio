@@ -27,7 +27,6 @@ import {
   MIN_ZOOM,
   MAX_ZOOM,
   MAP_VIEW_STATE,
-  MAP_TOAST_ZOOM_ADJUSTMENT,
   LABEL_OFFSET,
   ONE_ICON_SIZE,
 } from '../../../constants/map'
