@@ -59,7 +59,7 @@ const WidgetAdapter = () => {
   const selectedUserDataControlIndex = useStoreState((state) => state.selectedUserDataControlIndex)
   const categoryKeyValues = useStoreState((state) => state.categoryKeyValues)
   const userValueDropdownSelect = useStoreState((state) => state.userValueDropdownSelect)
-  const wl = useStoreState((state) => state.wl)
+  const showPostalToast = useStoreState((state) => state.showPostalToast)
   const mapInitViewState = useStoreState((state) => state.mapInitViewState)
   const { onWidgetRender } = useStoreState((state) => state.ui)
 
@@ -97,9 +97,11 @@ const WidgetAdapter = () => {
   // memoize the correct adapter
   const { component, adapt } = useMemo(() => typeInfo[type].adapter, [type])
 
+  const finalData = useMemo(() => (showPostalToast || !transformedData) ? [] : transformedData, [showPostalToast, transformedData])
+
   // pass the processed data to the rendering adapter and memoize the results
-  const adaptedDataAndConfig = useMemo(() => adapt(transformedData ?? [], { ...config, wl, mapInitViewState, onAfterPlot: onWidgetRender })
-    , [adapt, config, transformedData, wl, mapInitViewState, onWidgetRender])
+  const adaptedDataAndConfig = useMemo(() => adapt(finalData, { ...config, mapInitViewState, onAfterPlot: onWidgetRender })
+    , [adapt, config, mapInitViewState, onWidgetRender, finalData])
 
   // render the component
   return (
